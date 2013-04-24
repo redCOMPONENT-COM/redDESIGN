@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="2.5.0" method="upgrade">
+	<name>COM_REDDESING</name>
+	<creationDate>April 2013</creationDate>
+	<author>redCOMPONENT.com</author>
+	<authorEmail>email@redcomponent.com</authorEmail>
+	<authorUrl>www.redcomponent.com</authorUrl>
+	<copyright>(c) redCOMPONENT.com</copyright>
+	<license>GNU/GPL</license>
+	<version>1.0.0</version>
+	<description>COM_REDDESIGN_XML_DESC</description>
+	<scriptfile>install.php</scriptfile>
+	<install folder="component/admin">
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install/mysql/install.sql</file>
+			<file driver="mysqli" charset="utf8">sql/install/mysql/install.sql</file>
+		</sql>
+	</install>
+	<uninstall folder="component/admin">
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install/mysql/uninstall.sql</file>
+			<file driver="mysqli" charset="utf8">sql/install/mysql/uninstall.sql</file>
+		</sql>
+	</uninstall>
+	<update>
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql</schemapath>
+			<schemapath type="mysqli">sql/updates/mysql</schemapath>
+		</schemas>
+	</update>
+	<!-- Frontend -->
+	<files folder="component/site">
+		<folder>controllers</folder>
+		<folder>helpers</folder>
+		<folder>language</folder>
+		<folder>models</folder>
+		<folder>views</folder>
+		<filename>controller.php</filename>
+		<filename>dispatcher.php</filename>
+		<filename>reddesign.php</filename>
+		<filename>index.html</filename>
+	</files>
+	<!-- Backend -->
+	<administration>
+		<menu>COM_REDDESIGN</menu>
+		<files folder="component/admin">
+			<folder>controllers</folder>
+			<folder>helpers</folder>
+			<folder>language</folder>
+			<folder>models</folder>
+			<folder>sql</folder>
+			<folder>tables</folder>
+			<folder>views</folder>
+			<filename>index.html</filename>
+		</files>
+		<!--languages folder="component/admin">
+				<language tag="en-GB">language/en-GB/en-GB.com_reddesing.ini</language>
+				<language tag="en-GB">language/en-GB/en-GB.com_reddesing.sys.ini</language>
+		</languages -->
+	</administration>
+	<!-- Media folder -->
+	<media destination="com_reddesign" folder="media/com_reddesing">
+		<folder>assets</folder>
+	</media>
+	<!-- Libraries to install -->
+	<libraries>
+		<!-- library name="reddesing" /-->
+	</libraries>
+	<!-- Modules to install -->
+	<modules>
+		<!--module name="reddesing" group="content" /-->
+	</modules>
+	<!-- Plugins to install -->
+	<plugins>
+		<!--plugin name="reddesing" group="content" /-->
+		<!--plugin name="reddesing" group="system" /-->
+	</plugins>
+</extension>
