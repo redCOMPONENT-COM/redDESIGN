@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     redDESIGN
+ * @package     RedDesign
  * @subpackage  Installer
  *
  * @copyright   Copyright (C) 2013 redCOMPONENT.com. All rights reserved.
@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 /**
  * Component installer class
  *
- * @package     redDESIGN
+ * @package     RedDesign
  * @subpackage  Installer
  * @since       2.0
  *
@@ -46,7 +46,6 @@ class Com_ReddesignInstallerScript
 	 */
 	function uninstall($parent)
 	{
-
 	}
 
 	/**
@@ -74,7 +73,6 @@ class Com_ReddesignInstallerScript
      */
 	function preflight($type, $parent)
 	{
-
 	}
 
 	/**
@@ -214,6 +212,7 @@ class Com_ReddesignInstallerScript
 		{
 			$this->installer = new JInstaller;
 		}
+
 		return $this->installer;
 	}
 
@@ -248,12 +247,12 @@ class Com_ReddesignInstallerScript
 
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
-		
+
 		$query->select("extension_id")
 			->from($db->quoteName("#__extensions"))
 			->where("type='library'")
 			->where("element=" . $db->Quote('lib_fof'));
-		
+
 		$db->setQuery($query);
 		$db->query();
 
