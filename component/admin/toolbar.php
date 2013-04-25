@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 /**
  * RedDesign Toolbar
  *
- * @package     RedShop2.Component
+ * @package     RedDesign.Component
  * @subpackage  Administrator.Dispatcher
  *
  * @since       2.0
