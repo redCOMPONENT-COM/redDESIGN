@@ -30,17 +30,19 @@
 	</update>
 	<!-- Frontend -->
 	<files folder="component/site">
-		<folder>language</folder>
 		<folder>views</folder>
 		<filename>dispatcher.php</filename>
 		<filename>index.html</filename>
 		<filename>reddesign.php</filename>
 	</files>
+	<languages folder="component/site">
+		<language tag="en-GB">language/en-GB/en-GB.com_reddesign.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.com_reddesign.sys.ini</language>
+	</languages>
 	<!-- Backend -->
 	<administration>
 		<menu>COM_REDDESIGN</menu>
 		<files folder="component/admin">
-			<folder>language</folder>
 			<folder>sql</folder>
 			<folder>views</folder>
 			<folder>fields</folder>
@@ -51,10 +53,10 @@
 			<filename>reddesign.php</filename>
 			<filename>toolbar.php</filename>
 		</files>
-		<!--languages folder="component/admin">
-				<language tag="en-GB">language/en-GB/en-GB.com_reddesing.ini</language>
-				<language tag="en-GB">language/en-GB/en-GB.com_reddesing.sys.ini</language>
-		</languages -->
+		<languages folder="component/admin">
+				<language tag="en-GB">language/en-GB/en-GB.com_reddesign.ini</language>
+				<language tag="en-GB">language/en-GB/en-GB.com_reddesign.sys.ini</language>
+		</languages>
 	</administration>
 	<!-- Media folder -->
 	<media destination="com_reddesign" folder="media">
