@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
-	<name>COM_REDDESING</name>
+	<name>COM_REDDESIGN</name>
 	<creationDate>April 2013</creationDate>
 	<author>redCOMPONENT.com</author>
 	<authorEmail>email@redcomponent.com</authorEmail>
@@ -9,7 +9,6 @@
 	<license>GNU/GPL</license>
 	<version>1.0.0</version>
 	<description>COM_REDDESIGN_XML_DESC</description>
-	<scriptfile>install.php</scriptfile>
 	<install folder="component/admin">
 		<sql>
 			<file driver="mysql" charset="utf8">sql/install/mysql/install.sql</file>
@@ -54,25 +53,27 @@
 			<filename>toolbar.php</filename>
 		</files>
 		<languages folder="component/admin">
-				<language tag="en-GB">language/en-GB/en-GB.com_reddesign.ini</language>
-				<language tag="en-GB">language/en-GB/en-GB.com_reddesign.sys.ini</language>
+			<language tag="en-GB">language/en-GB/en-GB.com_reddesign.ini</language>
+			<language tag="en-GB">language/en-GB/en-GB.com_reddesign.sys.ini</language>
 		</languages>
 	</administration>
 	<!-- Media folder -->
 	<media destination="com_reddesign" folder="media">
 		<folder>assets</folder>
 	</media>
+	<!-- Install FoF and package modules and plugins -->
+	<scriptfile>script.reddesign.php</scriptfile>
 	<!-- Libraries to install -->
 	<libraries>
-		<!-- library name="reddesing" /-->
+		<!-- library name="reddesign" /-->
 	</libraries>
 	<!-- Modules to install -->
 	<modules>
-		<!--module name="reddesing" group="content" /-->
+		<!--module name="reddesign" group="content" /-->
 	</modules>
 	<!-- Plugins to install -->
 	<plugins>
-		<!--plugin name="reddesing" group="content" /-->
-		<!--plugin name="reddesing" group="system" /-->
+		<!--plugin name="reddesign" group="content" /-->
+		<!--plugin name="reddesign" group="system" /-->
 	</plugins>
 </extension>
