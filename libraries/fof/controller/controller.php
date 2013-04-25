@@ -222,6 +222,15 @@ class FOFController extends JObject
 	{
 		static $instances = array();
 
+		// Make sure $config is an array
+		if (is_object($config))
+		{
+			$config = (array)$config;
+		} elseif (!is_array($config))
+		{
+			$config = array();
+		}
+
 		$hash = $option . $view;
 
 		if (!array_key_exists($hash, $instances))
@@ -244,6 +253,15 @@ class FOFController extends JObject
 	 */
 	public static function &getTmpInstance($option = null, $view = null, $config = array())
 	{
+		// Make sure $config is an array
+		if (is_object($config))
+		{
+			$config = (array)$config;
+		} elseif (!is_array($config))
+		{
+			$config = array();
+		}
+
 		// Determine the option (component name) and view
 		$config['option'] = !is_null($option) ? $option : $this->input->getCmd('option', 'com_foobar');
 		$config['view'] = !is_null($view) ? $view : $this->input->getCmd('view', 'cpanel');
@@ -337,17 +355,21 @@ class FOFController extends JObject
 	 */
 	public function __construct($config = array())
 	{
+		// Make sure $config is an array
+		if (is_object($config))
+		{
+			$config = (array)$config;
+		} elseif (!is_array($config))
+		{
+			$config = array();
+		}
+
 		$this->methods = array();
 		$this->message = null;
 		$this->messageType = 'message';
 		$this->paths = array();
 		$this->redirect = null;
 		$this->taskMap = array();
-
-		if (defined('JDEBUG') && JDEBUG)
-		{
-			JLog::addLogger(array('text_file' => 'fofcontroller.log.php'), JLog::ALL, array('controller'));
-		}
 
 		// Cache the config
 		$this->config = $config;
@@ -409,8 +431,19 @@ class FOFController extends JObject
 		}
 
 		// Get the default values for the component and view names
-		$this->component = $this->input->get('option', 'com_filter', 'cmd');
-		$this->view = $this->input->get('view', 'cpanel', 'cmd');
+		$classNameParts = FOFInflector::explode(get_class($this));
+		if (count($classNameParts) == 3)
+		{
+			$defComponent = "com_" . $classNameParts[0];
+			$defView = $classNameParts[2];
+		}
+		else
+		{
+			$defComponent = 'com_foobar';
+			$defView = 'cpanel';
+		}
+		$this->component = $this->input->get('option', $defComponent, 'cmd');
+		$this->view = $this->input->get('view', $defView, 'cmd');
 		$this->layout = $this->input->get('layout', null, 'cmd');
 
 		// Overrides from the config
@@ -684,7 +717,7 @@ class FOFController extends JObject
 
 			if (!$result)
 			{
-				return false;
+				throw new Exception(JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
 			}
 		}
 
@@ -708,16 +741,7 @@ class FOFController extends JObject
 		{
 			JResponse::setHeader('Status', '400 Bad Request', true);
 
-			if (version_compare(JVERSION, '3.0', 'ge'))
-			{
-				throw new Exception('Bad Request', 400);
-			}
-			else
-			{
-				JError::raiseError(400, 'Bad Request');
-			}
-
-			return false;
+			throw new Exception('Bad Request', 400);
 		}
 
 		$this->doTask = $doTask;
@@ -732,7 +756,7 @@ class FOFController extends JObject
 
 			if (!$result)
 			{
-				return false;
+				throw new Exception(JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
 			}
 		}
 
@@ -1419,6 +1443,7 @@ class FOFController extends JObject
 		{
 			$app = JFactory::getApplication();
 			$app->redirect($this->redirect, $this->message, $this->messageType);
+			return true;
 		}
 
 		return false;
@@ -1727,6 +1752,15 @@ class FOFController extends JObject
 	{
 		if (!is_object($this->_modelObject))
 		{
+			// Make sure $config is an array
+			if (is_object($config))
+			{
+				$config = (array)$config;
+			} elseif (!is_array($config))
+			{
+				$config = array();
+			}
+
 			if (!empty($this->modelName))
 			{
 				$parts = FOFInflector::explode($this->modelName);
@@ -1760,6 +1794,15 @@ class FOFController extends JObject
 	 */
 	public function getModel($name = '', $prefix = '', $config = array())
 	{
+		// Make sure $config is an array
+		if (is_object($config))
+		{
+			$config = (array)$config;
+		} elseif (!is_array($config))
+		{
+			$config = array();
+		}
+
 		if (empty($name))
 		{
 			$name = $this->getName();
@@ -1808,6 +1851,15 @@ class FOFController extends JObject
 	{
 		if (!is_object($this->_viewObject))
 		{
+			// Make sure $config is an array
+			if (is_object($config))
+			{
+				$config = (array)$config;
+			} elseif (!is_array($config))
+			{
+				$config = array();
+			}
+
 			$prefix = null;
 			$viewName = null;
 			$viewType = null;
@@ -1908,6 +1960,15 @@ class FOFController extends JObject
 	{
 		static $views;
 
+		// Make sure $config is an array
+		if (is_object($config))
+		{
+			$config = (array)$config;
+		} elseif (!is_array($config))
+		{
+			$config = array();
+		}
+
 		if (!isset($views))
 		{
 			$views = array();
@@ -1949,6 +2010,15 @@ class FOFController extends JObject
 	 */
 	protected function createModel($name, $prefix = '', $config = array())
 	{
+		// Make sure $config is an array
+		if (is_object($config))
+		{
+			$config = (array)$config;
+		} elseif (!is_array($config))
+		{
+			$config = array();
+		}
+
 		$result = null;
 
 		// Clean the model name
@@ -1988,6 +2058,15 @@ class FOFController extends JObject
 	 */
 	protected function createView($name, $prefix = '', $type = '', $config = array())
 	{
+		// Make sure $config is an array
+		if (is_object($config))
+		{
+			$config = (array)$config;
+		} elseif (!is_array($config))
+		{
+			$config = array();
+		}
+
 		$result = null;
 
 		// Clean the view name

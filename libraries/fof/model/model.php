@@ -186,6 +186,15 @@ class FOFModel extends JObject
 	 */
 	public static function &getAnInstance($type, $prefix = '', $config = array())
 	{
+		// Make sure $config is an array
+		if (is_object($config))
+		{
+			$config = (array)$config;
+		} elseif (!is_array($config))
+		{
+			$config = array();
+		}
+
 		$type = preg_replace('/[^A-Z0-9_\.-]/i', '', $type);
 		$modelClass = $prefix . ucfirst($type);
 		$result = false;
@@ -342,6 +351,15 @@ class FOFModel extends JObject
 	 */
 	public static function &getTmpInstance($type, $prefix = '', $config = array())
 	{
+		// Make sure $config is an array
+		if (is_object($config))
+		{
+			$config = (array)$config;
+		} elseif (!is_array($config))
+		{
+			$config = array();
+		}
+
 		$ret = self::getAnInstance($type, $prefix, $config)
 			->getClone()
 			->clearState()
@@ -447,6 +465,15 @@ class FOFModel extends JObject
 	 */
 	public function __construct($config = array())
 	{
+		// Make sure $config is an array
+		if (is_object($config))
+		{
+			$config = (array)$config;
+		} elseif (!is_array($config))
+		{
+			$config = array();
+		}
+
 		// Get the input
 		if (array_key_exists('input', $config))
 		{
@@ -953,7 +980,11 @@ class FOFModel extends JObject
 				if (!empty($error))
 				{
 					$this->setError($error);
-			JFactory::getSession()->set($this->getHash() . 'savedata', serialize($table->getProperties(true)));
+					$session = JFactory::getSession();
+					$tableprops = $table->getProperties(true);
+					unset($tableprops['input']);
+					$hash = $this->getHash() . 'savedata';
+					$session->set($hash, serialize($tableprops));
 				}
 			}
 
@@ -1536,6 +1567,15 @@ class FOFModel extends JObject
 	 */
 	protected function &_createTable($name, $prefix = 'Table', $config = array())
 	{
+		// Make sure $config is an array
+		if (is_object($config))
+		{
+			$config = (array)$config;
+		} elseif (!is_array($config))
+		{
+			$config = array();
+		}
+
 		$result = null;
 
 		// Clean the model name

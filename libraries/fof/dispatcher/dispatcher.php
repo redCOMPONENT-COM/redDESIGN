@@ -343,20 +343,6 @@ class FOFDispatcher extends JObject
 		$controller = FOFController::getTmpInstance($option, $view, $config);
 		$status = $controller->execute($task);
 
-		if ($status === false)
-		{
-			JResponse::setHeader('Status', '403 Forbidden', true);
-
-			if (version_compare(JVERSION, '3.0', 'ge'))
-			{
-				throw new Exception(JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
-			}
-			else
-			{
-				return JError::raiseError('403', JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'));
-			}
-		}
-
 		if (!$this->onAfterDispatch())
 		{
 			JResponse::setHeader('Status', '403 Forbidden', true);
@@ -377,7 +363,10 @@ class FOFDispatcher extends JObject
 		if ($format == 'html')
 		{
 			// In HTML views perform a redirection
-			$controller->redirect();
+			if ($controller->redirect())
+			{
+				return;
+			}
 		}
 		else
 		{
@@ -404,7 +393,7 @@ class FOFDispatcher extends JObject
 		$task = FOFInflector::isPlural($view) ? 'browse' : 'edit';
 
 		// Get a potential ID, we might need it later
-		$id = $this->input->get('id', null);
+		$id = $this->input->get('id', null, 'int');
 
 		if ($id == 0)
 		{
@@ -483,7 +472,7 @@ class FOFDispatcher extends JObject
 		$this->_originalPhpScript = '';
 
 		// We have no Application Helper (there is no Application!), so I have to define these constants manually
-		$option = $this->input->get('option');
+		$option = $this->input->get('option', '', 'cmd');
 		if($option)
 		{
 			if(!defined('JPATH_COMPONENT'))
@@ -588,7 +577,7 @@ class FOFDispatcher extends JObject
 					break;
 
 				case 'QueryString_TOTP':
-					$encryptedData = $this->input->get('_fofauthentication', '');
+					$encryptedData = $this->input->get('_fofauthentication', '', 'raw');
 
 					if (empty($encryptedData))
 					{
@@ -616,7 +605,7 @@ class FOFDispatcher extends JObject
 					break;
 
 				case 'QueryString_Plaintext':
-					$jsonencoded = $this->input->get('_fofauthentication', '');
+					$jsonencoded = $this->input->get('_fofauthentication', '', 'raw');
 
 					if (empty($jsonencoded))
 					{
@@ -637,8 +626,8 @@ class FOFDispatcher extends JObject
 
 				case 'SplitQueryString_Plaintext':
 					$authInfo = array(
-						'username'	 => $this->input->get('_fofauthentication_username', ''),
-						'password'	 => $this->input->get('_fofauthentication_password', ''),
+						'username'	 => $this->input->get('_fofauthentication_username', '', 'raw'),
+						'password'	 => $this->input->get('_fofauthentication_password', '', 'raw'),
 					);
 
 					if (empty($authInfo['username']))
