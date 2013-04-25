@@ -16,6 +16,6 @@ defined('_JEXEC') or die;
  *
  * @since       2.0
  */
-class RedShop2Dispatcher extends FOFDispatcher
+class ReddesignDispatcher extends FOFDispatcher
 {
 }
