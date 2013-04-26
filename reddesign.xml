@@ -40,7 +40,7 @@
 	</languages>
 	<!-- Backend -->
 	<administration>
-		<menu>COM_REDDESIGN</menu>
+		<menu img="media/com_reddesign/assets/images/reddesign_16.png">COM_REDDESIGN</menu>
 		<files folder="component/admin">
 			<folder>sql</folder>
 			<folder>views</folder>
