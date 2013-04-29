@@ -101,3 +101,24 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_config` (
   PRIMARY KEY  (`id`)
 );
 
+--
+-- Table structure for table `#_reddesign_fonts`
+--
+
+CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
+  `reddesign_font_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR (255),
+  `slug` VARCHAR (255),
+  `enabled` tinyint(3) NOT NULL DEFAULT '1',
+  `ordering` int(10) NOT NULL DEFAULT '0',
+  `created_by` bigint(20) NOT NULL DEFAULT '0',
+  `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by` bigint(20) NOT NULL DEFAULT '0',
+  `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `locked_by` bigint(20) NOT NULL DEFAULT '0',
+  `locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `file` VARCHAR(255)  NOT NULL ,
+  `defaultwidth` VARCHAR (255),
+  `defaultheight` VARCHAR (255),
+   PRIMARY KEY (`reddesign_font_id`)
+) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;
