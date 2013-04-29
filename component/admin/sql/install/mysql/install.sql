@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
   `locked_by` bigint(20) NOT NULL DEFAULT '0',
   `locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `file` VARCHAR(255)  NOT NULL ,
-  `defaultwidth` VARCHAR (255),
-  `defaultheight` VARCHAR (255),
+  `default_width` VARCHAR (255),
+  `default_height` VARCHAR (255),
    PRIMARY KEY (`reddesign_font_id`)
 ) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;
