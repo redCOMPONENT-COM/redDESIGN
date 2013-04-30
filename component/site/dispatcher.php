@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
  * @package     RedDesign.Component
  * @subpackage  Site
  *
- * @since       2.0
+ * @since       1.0
  */
 class ReddesignDispatcher extends FOFDispatcher
 {

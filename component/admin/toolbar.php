@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
  * @package     RedDesign.Component
  * @subpackage  Administrator.Dispatcher
  *
- * @since       2.0
+ * @since       1.0
  */
 class ReddesignToolbar extends FOFToolbar
 {
