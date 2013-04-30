@@ -13,7 +13,8 @@ defined('_JEXEC') or die;
  *
  * @package     RedDesign
  * @subpackage  Installer
- * @since       2.0
+ *
+ * @since       1.0
  *
  */
 class Com_ReddesignInstallerScript
@@ -86,10 +87,10 @@ class Com_ReddesignInstallerScript
 	function postflight($type, $parent)
 	{
 		// Install FoF
-		$fofInstallationStatus 	= $this->_installFOF($parent);
+		$this->_installFOF($parent);
 
 		// Install Akeeba Straper
-		$straperStatus 			= $this->_installStraper($parent);
+		$this->_installStraper($parent);
 
 	}
 
@@ -362,7 +363,7 @@ class Com_ReddesignInstallerScript
 	/**
 	 * Install Akeeba strapper
 	 *
-	 * @param $parent
+	 * @param   $parent
 	 *
 	 * @return array
 	 */
@@ -374,28 +375,35 @@ class Com_ReddesignInstallerScript
 		JLoader::import('joomla.filesystem.folder');
 		JLoader::import('joomla.filesystem.file');
 		JLoader::import('joomla.utilities.date');
-		$source = $src.'/libraries/strapper';
-		$target = JPATH_ROOT.'/media/akeeba_strapper';
+		$source = $src . '/libraries/strapper';
+		$target = JPATH_ROOT . '/media/akeeba_strapper';
 
 		$haveToInstallStraper = false;
-		if(!JFolder::exists($target)) {
+		if(!JFolder::exists($target))
+		{
 			$haveToInstallStraper = true;
-		} else {
+		}
+		else
+		{
 			$straperVersion = array();
-			if(JFile::exists($target.'/version.txt')) {
-				$rawData = JFile::read($target.'/version.txt');
+			if(JFile::exists($target.'/version.txt'))
+			{
+				$rawData = JFile::read($target . '/version.txt');
 				$info = explode("\n", $rawData);
 				$straperVersion['installed'] = array(
 					'version'	=> trim($info[0]),
 					'date'		=> new JDate(trim($info[1]))
 				);
-			} else {
+			}
+			else
+			{
 				$straperVersion['installed'] = array(
 					'version'	=> '0.0',
 					'date'		=> new JDate('2011-01-01')
 				);
 			}
-			$rawData = JFile::read($source.'/version.txt');
+
+			$rawData = JFile::read($source . '/version.txt');
 			$info = explode("\n", $rawData);
 			$straperVersion['package'] = array(
 				'version'	=> trim($info[0]),
@@ -406,18 +414,24 @@ class Com_ReddesignInstallerScript
 		}
 
 		$installedStraper = false;
-		if($haveToInstallStraper) {
+
+		if($haveToInstallStraper)
+		{
 			$versionSource = 'package';
 			$installer = new JInstaller;
 			$installedStraper = $installer->install($source);
-		} else {
+		}
+		else
+		{
 			$versionSource = 'installed';
 		}
 
-		if(!isset($straperVersion)) {
+		if(!isset($straperVersion))
+		{
 			$straperVersion = array();
-			if(JFile::exists($target.'/version.txt')) {
-				$rawData = JFile::read($target.'/version.txt');
+			if(JFile::exists($target.'/version.txt'))
+			{
+				$rawData = JFile::read($target . '/version.txt');
 				$info = explode("\n", $rawData);
 				$straperVersion['installed'] = array(
 					'version'	=> trim($info[0]),
@@ -429,7 +443,8 @@ class Com_ReddesignInstallerScript
 					'date'		=> new JDate('2011-01-01')
 				);
 			}
-			$rawData = JFile::read($source.'/version.txt');
+
+			$rawData = JFile::read($source . '/version.txt');
 			$info = explode("\n", $rawData);
 			$straperVersion['package'] = array(
 				'version'	=> trim($info[0]),
@@ -438,8 +453,9 @@ class Com_ReddesignInstallerScript
 			$versionSource = 'installed';
 		}
 
-		if(!($straperVersion[$versionSource]['date'] instanceof JDate)) {
-			$straperVersion[$versionSource]['date'] = new JDate();
+		if(!($straperVersion[$versionSource]['date'] instanceof JDate))
+		{
+			$straperVersion[$versionSource]['date'] = new JDate;
 		}
 
 		return array(
