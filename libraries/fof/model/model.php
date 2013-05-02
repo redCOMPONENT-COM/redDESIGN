@@ -1657,7 +1657,19 @@ class FOFModel extends JObject
 						break;
 
 					default:
-						$query->where('(' . $db->qn($fieldname) . '=' . $db->q($filterState) . ')');
+						if (is_array($filterState))
+						{
+							$tmp = array();
+							foreach ($filterState as $k => $v)
+							{
+								$tmp[] = $db->q($v);
+							}
+							$query->where('(' . $db->qn($fieldname) . ' IN(' . implode(',', $tmp) . '))');
+						}
+						else
+						{
+							$query->where('(' . $db->qn($fieldname) . '=' . $db->q($filterState) . ')');
+						}
 						break;
 				}
 			}
@@ -1792,6 +1804,22 @@ class FOFModel extends JObject
 	 */
 	protected function populateState()
 	{
+	}
+
+	/**
+	 * Applies view access level filtering for the specified user. Useful to
+	 * filter a front-end items listing.
+	 *
+	 * @param   integer  $userID  The user ID to use. Skip it to use the currently logged in user.
+	 *
+	 * @return  FOFModel  Reference to self
+	 */
+	public function applyAccessFiltering($userID = null)
+	{
+		$user = JFactory::getUser($userID);
+		$this->setState('access', $user->getAuthorisedViewLevels());
+
+		return $this;
 	}
 
 	/**

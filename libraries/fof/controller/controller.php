@@ -63,6 +63,13 @@ class FOFController extends JObject
 	protected $config = array();
 
 	/**
+	 * An instance of FOFConfigProvider to provision configuration overrides
+	 *
+	 * @var    FOFConfigProvider
+	 */
+	protected $configProvider = null;
+
+	/**
 	 * Set to true to enable CSRF protection on selected tasks. The possible
 	 * values are:
 	 * 0	Disabled; no token checks are performed
@@ -262,9 +269,33 @@ class FOFController extends JObject
 			$config = array();
 		}
 
+		// Get an input object
+		if (array_key_exists('input', $config))
+		{
+			$input = $config['input'];
+		}
+		else
+		{
+			$input = null;
+		}
+
+		if (array_key_exists('input_options', $config))
+		{
+			$input_options = $config['input_options'];
+		}
+		else
+		{
+			$input_options = array();
+		}
+
+		if (!($input instanceof FOFInput))
+		{
+			$input = new FOFInput($input, $input_options);
+		}
+
 		// Determine the option (component name) and view
-		$config['option'] = !is_null($option) ? $option : $this->input->getCmd('option', 'com_foobar');
-		$config['view'] = !is_null($view) ? $view : $this->input->getCmd('view', 'cpanel');
+		$config['option'] = !is_null($option) ? $option : $input->getCmd('option', 'com_foobar');
+		$config['view'] = !is_null($view) ? $view : $input->getCmd('view', 'cpanel');
 
 		// Get the class base name, e.g. FoobarController
 		$classBaseName = ucfirst(str_replace('com_', '', $config['option'])) . 'Controller';
@@ -402,6 +433,9 @@ class FOFController extends JObject
 		{
 			$this->input = new FOFInput($input, $input_options);
 		}
+
+		// Load the configuration provider
+		$this->configProvider = new FOFConfigProvider;
 
 		// Determine the methods to exclude from the base class.
 		$xMethods = get_class_methods('FOFController');
@@ -569,6 +603,17 @@ class FOFController extends JObject
 		{
 			$this->autoRouting = $config['autoRouting'];
 		}
+
+		// Apply task map
+		$taskmap = $this->configProvider->get($this->component . '.views.' . FOFInflector::singularize($this->view) . '.taskmap');
+		if (is_array($taskmap) && !empty($taskmap))
+		{
+			foreach ($taskmap as $aliasedtask => $realmethod)
+			{
+				$this->registerTask($aliasedtask, $realmethod);
+			}
+		}
+
 	}
 
 	/**
@@ -2074,6 +2119,11 @@ class FOFController extends JObject
 		$classPrefix = preg_replace('/[^A-Z0-9_]/i', '', $prefix);
 		$viewType = preg_replace('/[^A-Z0-9_]/i', '', $type);
 
+		if (!isset($config['input']))
+		{
+			$config['input'] = $this->input;
+		}
+
 		if (($config['input'] instanceof FOFInput))
 		{
 			$tmpInput = $config['input'];
@@ -2306,6 +2356,10 @@ class FOFController extends JObject
 		{
 			return true;
 		}
+		elseif (empty($area))
+		{
+			return true;
+		}
 		else
 		{
 			return JFactory::getUser()->authorise($area, $this->component);
@@ -2342,7 +2396,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeAccesspublic()
 	{
-		return $this->checkACL('core.edit.state');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.accesspublic', 'core.edit.state');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2352,7 +2408,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeAccessregistered()
 	{
-		return $this->checkACL('core.edit.state');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.accessregistered', 'core.edit.state');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2362,7 +2420,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeAccessspecial()
 	{
-		return $this->checkACL('core.edit.state');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.accessspecial', 'core.edit.state');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2372,7 +2432,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeAdd()
 	{
-		return $this->checkACL('core.create');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.add', 'core.create');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2382,7 +2444,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeApply()
 	{
-		return $this->checkACL('core.edit');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.apply', 'core.edit');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2396,7 +2460,9 @@ class FOFController extends JObject
 
 		if ($isAdmin)
 		{
-			return $this->checkACL('core.manage');
+			$privilege = $this->configProvider->get($this->component . '.views.' .
+				FOFInflector::singularize($this->view) . '.acl.browse', 'core.manage');
+			return $this->checkACL($privilege);
 		}
 		else
 		{
@@ -2411,7 +2477,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeCancel()
 	{
-		return $this->checkACL('core.edit');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.cancel', 'core.edit');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2421,7 +2489,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeEdit()
 	{
-		return $this->checkACL('core.edit');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.edit', 'core.edit');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2431,7 +2501,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeOrderdown()
 	{
-		return $this->checkACL('core.edit.state');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.orderdown', 'core.edit.state');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2441,7 +2513,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeOrderup()
 	{
-		return $this->checkACL('core.edit.state');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.orderup', 'core.edit.state');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2451,7 +2525,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforePublish()
 	{
-		return $this->checkACL('core.edit.state');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.publish', 'core.edit.state');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2461,7 +2537,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeRemove()
 	{
-		return $this->checkACL('core.delete');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.remove', 'core.delete');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2471,7 +2549,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeSave()
 	{
-		return $this->checkACL('core.edit');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.save', 'core.edit');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2481,7 +2561,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeSavenew()
 	{
-		return $this->checkACL('core.edit');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.savenew', 'core.edit');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2491,7 +2573,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeSaveorder()
 	{
-		return $this->checkACL('core.edit.state');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.saveorder', 'core.edit.state');
+		return $this->checkACL($privilege);
 	}
 
 	/**
@@ -2501,7 +2585,9 @@ class FOFController extends JObject
 	 */
 	protected function onBeforeUnpublish()
 	{
-		return $this->checkACL('core.edit.state');
+		$privilege = $this->configProvider->get($this->component . '.views.' .
+			FOFInflector::singularize($this->view) . '.acl.unpublish', 'core.edit.state');
+		return $this->checkACL($privilege);
 	}
 
 	/**

@@ -338,18 +338,29 @@ class FOFRenderJoomla extends FOFRenderAbstract
 
 		$html = '';
 
-		if ($validate = $form->getAttribute('validate'))
+		$validate = $form->getAttribute('validate');
+		$class = '';
+
+		if (!empty($validate))
 		{
 			JHTML::_('behavior.formvalidation');
 			$class = ' class="form-validate"';
 			$this->loadValidationScript($form);
 		}
+
+		// Check form enctype. Use enctype="multipart/form-data" to upload binary files in your form.
+		$template_form_enctype = $form->getAttribute('enctype');
+
+		if (!empty($template_form_enctype))
+		{
+			$enctype = ' enctype="' . $form->getAttribute('enctype') . '" ';
+		}
 		else
 		{
-			$class = '';
+			$enctype = '';
 		}
 
-		$html .= '<form action="index.php" method="post" name="adminForm" id="adminForm"' . $class . '>' . PHP_EOL;
+		$html .= '<form action="index.php" method="post" name="adminForm" id="adminForm"' . $enctype . $class . '>' . PHP_EOL;
 		$html .= "\t" . '<input type="hidden" name="option" value="' . $input->getCmd('option') . '" />' . PHP_EOL;
 		$html .= "\t" . '<input type="hidden" name="view" value="' . $input->getCmd('view', 'edit') . '" />' . PHP_EOL;
 		$html .= "\t" . '<input type="hidden" name="task" value="" />' . PHP_EOL;
@@ -383,7 +394,10 @@ class FOFRenderJoomla extends FOFRenderAbstract
 				$label = $field->label;
 				$input = $field->input;
 
-				$html .= "\t\t\t" . $label . PHP_EOL;
+				if (!is_null($title))
+				{
+					$html .= "\t\t\t" . $label . PHP_EOL;
+				}
 				$html .= "\t\t\t" . $input . PHP_EOL;
 			}
 
