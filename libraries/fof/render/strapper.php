@@ -817,7 +817,19 @@ ENDJS;
 			$class = '';
 		}
 
-		$html .= '<form action="index.php" method="post" name="adminForm" id="adminForm" class="form-horizontal' . $class . '">' . PHP_EOL;
+		// Check form enctype. Use enctype="multipart/form-data" to upload binary files in your form.
+		$template_form_enctype = $form->getAttribute('enctype');
+
+		if (!empty($template_form_enctype))
+		{
+			$enctype = ' enctype="' . $form->getAttribute('enctype') . '" ';
+		}
+		else
+		{
+			$enctype = '';
+		}
+
+		$html .= '<form action="index.php" method="post" name="adminForm" id="adminForm"' . $enctype . ' class="form-horizontal' . $class . '">' . PHP_EOL;
 		$html .= "\t" . '<input type="hidden" name="option" value="' . $input->getCmd('option') . '" />' . PHP_EOL;
 		$html .= "\t" . '<input type="hidden" name="view" value="' . $input->getCmd('view', 'edit') . '" />' . PHP_EOL;
 		$html .= "\t" . '<input type="hidden" name="task" value="" />' . PHP_EOL;
@@ -854,23 +866,31 @@ ENDJS;
 
 				$input = $field->input;
 
-				$html .= "\t\t\t" . '<div class="control-group">' . PHP_EOL;
-				$html .= "\t\t\t\t" . '<label class="control-label ' . $labelClass . '" for="' . $field->id . '">' . PHP_EOL;
-				$html .= "\t\t\t\t" . JText::_($title) . PHP_EOL;
-				if ($required)
+				if (!is_null($title))
 				{
-					$html .= ' *';
+
+					$html .= "\t\t\t" . '<div class="control-group">' . PHP_EOL;
+					$html .= "\t\t\t\t" . '<label class="control-label ' . $labelClass . '" for="' . $field->id . '">' . PHP_EOL;
+					$html .= "\t\t\t\t" . JText::_($title) . PHP_EOL;
+					if ($required)
+					{
+						$html .= ' *';
+					}
+					$html .= "\t\t\t\t" . '</label>' . PHP_EOL;
+					$html .= "\t\t\t\t" . '<div class="controls">' . PHP_EOL;
+					$html .= "\t\t\t\t" . $input . PHP_EOL;
+					if (!empty($description))
+					{
+						$html .= "\t\t\t\t" . '<span class="help-block">';
+						$html .= JText::_($description) . '</span>' . PHP_EOL;
+					}
+					$html .= "\t\t\t\t" . '</div>' . PHP_EOL;
+					$html .= "\t\t\t" . '</div>' . PHP_EOL;
 				}
-				$html .= "\t\t\t\t" . '</label>' . PHP_EOL;
-				$html .= "\t\t\t\t" . '<div class="controls">' . PHP_EOL;
-				$html .= "\t\t\t\t" . $input . PHP_EOL;
-				if (!empty($description))
+				else
 				{
-					$html .= "\t\t\t\t" . '<span class="help-block">';
-					$html .= JText::_($description) . '</span>' . PHP_EOL;
+					$html .= "\t\t\t\t" . $input . PHP_EOL;
 				}
-				$html .= "\t\t\t\t" . '</div>' . PHP_EOL;
-				$html .= "\t\t\t" . '</div>' . PHP_EOL;
 			}
 
 			$html .= "\t" . '</div>' . PHP_EOL;

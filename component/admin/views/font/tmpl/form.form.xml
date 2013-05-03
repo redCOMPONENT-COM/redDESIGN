@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form>
+<form
+		enctype="multipart/form-data">
 	<fieldset name="basic_configuration"
 			  label="COM_REDDESIGN_FONT_TITLE"
 			  description="COM_REDDESIGN_FONT_TITLE_DESC"
 			  class="span12"
 			>
-		<field name="file" type="file"
+		<field name="fontfile" type="file"
 			   label="COM_REDDESIGN_FONT_FIELD_FILE"
 			   description="COM_REDDESIGN_FONT_FIELD_FILE_DESC"
 				/>

@@ -44,6 +44,8 @@
 		<files folder="component/admin">
 			<folder>sql</folder>
 			<folder>views</folder>
+			<folder>controllers</folder>
+			<folder>models</folder>
 			<folder>fields</folder>
 			<filename>access.xml</filename>
 			<filename>config.xml</filename>
