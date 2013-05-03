@@ -6,7 +6,7 @@
 			  description="COM_REDDESIGN_FONT_TITLE_DESC"
 			  class="span12"
 			>
-		<field name="file" type="file"
+		<field name="fontfile" type="file"
 			   label="COM_REDDESIGN_FONT_FIELD_FILE"
 			   description="COM_REDDESIGN_FONT_FIELD_FILE_DESC"
 				/>
