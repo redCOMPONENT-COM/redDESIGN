@@ -39,7 +39,7 @@ $option = 'com_reddesign';
 		</a>
 	</div>
 	<div class="icon">
-		<a href="index.php?option=<?php echo $option ?>&view=help">
+		<a href="http://wiki.redcomponent.com/index.php?title=redDESIGN:Table_of_Contents" target="_blank">
 			<img
 				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_help_48.png"
 				border="0" alt="<?php echo JText::_('COM_REDDESING_CPANEL_ICON_HELP_ALT') ?>"/>
