@@ -127,7 +127,7 @@ class ReddesignModelFont extends FOFModel
 	{
 		if (empty($file['name']))
 		{
-			$this->setError(JText::_('COM_REDDESIGN_ERROR_UPLOAD_INPUT'));
+			$this->setError(JText::_('COM_REDDESIGN_FONT_ERROR_UPLOAD_INPUT'));
 
 			return false;
 		}
@@ -136,7 +136,7 @@ class ReddesignModelFont extends FOFModel
 
 		if ($file['name'] !== JFile::makesafe($file['name']))
 		{
-			$this->setError(JText::_('COM_REDDESIGN_ERROR_WARNFILENAME'));
+			$this->setError(JText::_('COM_REDDESIGN_FONT_ERROR_FILE_NAME'));
 
 			return false;
 		}
@@ -148,7 +148,7 @@ class ReddesignModelFont extends FOFModel
 
 		if (!in_array($format, $allowable))
 		{
-			$this->setError(JText::_('COM_REDDESIGN_ERROR_WARNFILEEXTENSION'));
+			$this->setError(JText::_('COM_REDDESIGN_FONT_ERROR_WRONG_FILE_EXTENSION'));
 
 			return false;
 		}
@@ -158,15 +158,15 @@ class ReddesignModelFont extends FOFModel
 
 		if ($maxSize > 0 && (int) $file['size'] > $maxSize)
 		{
-			$this->setError(JText::_('COM_REDDESIGN_ERROR_WARNFILETOOLARGE'));
+			$this->setError(JText::_('COM_REDDESIGN_FONT_ERROR_FILE_TOOLARGE'));
 
 			return false;
 		}
 
 		// Only allow ttf fonts mime type
-		if ($file['type'] == 'application/octet-stream')
+		if (!$file['type'] == 'application/octet-stream')
 		{
-			$this->setError(JText::_('COM_REDDESIGN_ERROR_WARNINVALIDMIME'));
+			$this->setError(JText::_('COM_REDDESIGN_FONT_ERROR_INVALID_MIME'));
 
 			return false;
 		}

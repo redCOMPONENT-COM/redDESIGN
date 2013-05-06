@@ -33,15 +33,22 @@ class ReddesignControllerFont extends FOFController
 	/**
 	 * Uploads the font file
 	 *
+	 * @param   array  &$data  data filled in the edit form
+	 *
 	 * @return  boolean  Returns true on success
 	 */
-	public function onBeforeApplySave()
+	public function onBeforeApplySave(&$data)
 	{
 		$file = JRequest::getVar('fontfile', '', 'files', 'array');
 
 		$model			= $this->getThisModel();
+
+		// Upload the font file
 		$uploaded_file	= $model->uploadFile($file);
 
-		// $uploaded_file['filepath'];
+		// Update the database with the new path of the font file
+		$data['fontfile'] = $uploaded_file['filepath'];
+
+		return $data;
 	}
 }
