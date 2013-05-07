@@ -19,7 +19,7 @@ $option = 'com_reddesign';
 
 <div id="cpanel" class="span12">
 	<div class="icon">
-		<a href="index.php?option=<?php echo $option ?>&view=designtypes">
+		<a href="index.php?option=<?php echo $option ?>&view=designs">
 			<img
 				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_designarea_48.png"
 				border="0" alt="<?php echo JText::_('COM_REDDESING_CPANEL_ICON_DESGIGNTYPE_ALT') ?>"/>
