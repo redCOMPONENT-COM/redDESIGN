@@ -18,4 +18,17 @@ defined('_JEXEC') or die;
  */
 class ReddesignToolbar extends FOFToolbar
 {
+	/**
+	 * Prepares the toolbar for Cpanel view
+	 *
+	 * @return void
+	 */
+	public function onCpanelsBrowse()
+	{
+		// Set the toolbar title
+		JToolBarHelper::title(JText::_('COM_REDDESIGN_CPANEL_TITLE_DASHBOARD'), 'reddesign');
+
+		// Add Components options (see config.xml)
+		JToolBarHelper::preferences('com_reddesign');
+	}
 }
