@@ -12,7 +12,7 @@ JLoader::import('joomla.filesystem.file');
 
 
 /**
- * Font Controller.
+ * Font Model.
  *
  * @package     RedDesign.Component
  * @subpackage  Administrator
