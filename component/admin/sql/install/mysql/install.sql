@@ -122,3 +122,23 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
   `default_height` VARCHAR (255),
    PRIMARY KEY (`reddesign_font_id`)
 ) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;
+
+
+--
+-- Table structure for table `#_reddesign_fonts`
+--
+
+CREATE TABLE IF NOT EXISTS `#__reddesign_designs` (
+	`reddesign_design_id` int(11) NOT NULL AUTO_INCREMENT,
+	`title` VARCHAR (255),
+	`slug` VARCHAR (255),
+	`enabled` tinyint(3) NOT NULL DEFAULT '1',
+	`ordering` int(10) NOT NULL DEFAULT '0',
+	`created_by` bigint(20) NOT NULL DEFAULT '0',
+	`created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`modified_by` bigint(20) NOT NULL DEFAULT '0',
+	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`locked_by` bigint(20) NOT NULL DEFAULT '0',
+	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	PRIMARY KEY (`reddesign_design_id`)
+) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;
