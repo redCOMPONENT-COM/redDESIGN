@@ -9,11 +9,8 @@
 	<headerset>
 		<header name="ordering" type="ordering" sortable="true" tdwidth="1%" />
 		<header name="reddesign_font_id" type="rowselect" tdwidth="20" />
-		<header name="title" type="fieldsearchable" sortable="true"
-				buttons="yes" buttonclass="btn"
-				/>
-		<header name="file" type="field" sortable="true" tdwidth="25%" />
-		<header name="enabled" type="published" sortable="true" tdwidth="8%" />
+		<header name="title" type="fieldsearchable" sortable="true" buttons="yes" buttonclass="btn" />
+		<header name="enabled" type="published" sortable="true" tdwidth="9%" />
 	</headerset>
 
 	<fieldset name="items">
@@ -22,9 +19,8 @@
 		<field name="title" type="text"
 			   show_link="true"
 			   url="index.php?option=com_reddesign&amp;view=font&amp;id=[ITEM:ID]"
-			   empty_replacement="(no title)"
+			   empty_replacement="COM_REDDESIGN_FONTS_NO_TITLE"
 				/>
-		<field name="file" type="text" />
 		<field name="enabled" type="published"/>
 	</fieldset>
 </form>
