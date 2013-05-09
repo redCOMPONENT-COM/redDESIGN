@@ -1,0 +1,78 @@
+<?php
+/**
+ * @package     RedDesign.Component
+ * @subpackage  Administrator
+ *
+ * @copyright   Copyright (C) 2013 redCOMPONENT.com. All rights reserved.
+ * @license     GNU General Public License version 2 or later, see LICENSE.
+ */
+
+defined('_JEXEC') or die();
+
+JHTML::_('behavior.framework');
+?>
+
+<form action="index.php" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data" class="form-horizontal">
+	<input type="hidden" name="option" value="com_reddesign">
+	<input type="hidden" name="view" value="font">
+	<input type="hidden" name="task" value="">
+	<input type="hidden" name="reddesign_font_id" value="<?php echo $this->item->reddesign_font_id; ?>">
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
+	<div id="basic_configuration" class="span12">
+		<h3>Add/edit Font</h3>
+		<div class="control-group">
+			<label class="control-label " for="fontfile">
+				<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_FILE'); ?>
+			</label>
+			<div class="controls">
+				<input type="file" name="fontfile" id="fontfile" value="<?php echo $this->item->fontfile; ?>">
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_TITLE_DESC'); ?></span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label " for="title">
+				<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_TITLE'); ?>
+				*				</label>
+			<div class="controls">
+				<input type="text" name="title" id="title" value="<?php echo $this->item->title; ?>" class="inputbox required" size="50">
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_FIELD_TITLE_DESC'); ?></span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label todo-label todo-label-main" for="default_width">
+				<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_DEFAULT_WIDTH'); ?>
+				*				</label>
+			<div class="controls">
+				<input type="text" name="default_width" id="default_width" value="<?php echo $this->item->default_width; ?>" class="inputbox required" size="50">
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_FIELD_DEFAULT_WIDTH_DESC'); ?></span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label todo-label todo-label-main" for="default_height">
+				<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_DEFAULT_HEIGHT'); ?>
+				*				</label>
+			<div class="controls">
+				<input type="text" name="default_height" id="default_height" value="<?php echo $this->item->default_height; ?>" class="inputbox required" size="50">
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_FIELD_DEFAULT_HEIGHT_DESC'); ?></span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label todo-label" for="enabled">
+				<?php echo JText::_('JSTATUS'); ?>
+			</label>
+			<div class="controls">
+				<?php echo JHTML::_(
+					'select.booleanlist',
+					'enabled',
+					'class="inputbox"',
+					$this->item->enabled,
+					JText::_('JPUBLISHED'),
+					JText::_('JUNPUBLISHED')
+				);
+
+				?>
+				<span class="help-block"><?php echo JText::_('JFIELD_PUBLISHED_DESC'); ?></span>
+			</div>
+		</div>
+	</div>
+</form>
