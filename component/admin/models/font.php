@@ -173,4 +173,31 @@ class ReddesignModelFont extends FOFModel
 
 		return true;
 	}
+
+	/**
+	 * Creates a image based on a ttf font file to show the look and feel of the font.
+	 *
+	 * @param   string  $font_file  the path to a .ttf font file
+	 *
+	 * @return  string
+	 */
+	public function createFontPreviewThumb($font_file)
+	{
+		$text		= 'AbCdeFG 0123456789';
+		$img 		= imagecreatetruecolor(400, 30);
+
+		// Font color
+		$white = imagecolorallocate($img, 255, 255, 255);
+		$black = imagecolorallocate($img, 0, 0, 0);
+
+		imagefilledrectangle($img, 0, 0, 399, 29, $white);
+
+
+		imagettftext($img, 20, 20, 10, 20, $black, $font_file, $text);
+
+		$font_thumb = substr($font_file, 0, -3) . 'png';
+		imagepng($img, $font_thumb);
+
+		return $font_thumb;
+	}
 }

@@ -31,7 +31,7 @@ class ReddesignControllerFont extends FOFController
 	}
 
 	/**
-	 * Uploads the font file
+	 * Uploads the font file and generates a image preview of the font
 	 *
 	 * @param   array  &$data  data filled in the edit form
 	 *
@@ -46,8 +46,12 @@ class ReddesignControllerFont extends FOFController
 		// Upload the font file
 		$uploaded_file	= $model->uploadFile($file);
 
+		// Create a image preview of the Font
+		$font_thumb = $model->createFontPreviewThumb($uploaded_file['filepath']);
+
 		// Update the database with the new path of the font file
-		$data['fontfile'] = $uploaded_file['filepath'];
+		$data['fontfile']	= $uploaded_file['filepath'];
+		$data['fontthumb']	= $font_thumb;
 
 		return $data;
 	}
