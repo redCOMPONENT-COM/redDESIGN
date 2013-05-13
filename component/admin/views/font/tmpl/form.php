@@ -23,10 +23,10 @@ JHTML::_('behavior.framework');
 		<?php if (!empty($this->item->fontfile) && !empty($this->item->fontthumb)) : ?>
 		<div class="control-group">
 			<label class="control-label ">
-					<p><?php echo JText::_('COM_REDDESIGN_FONT_THUMB_PREVIEW') ?>:
+				<?php echo JText::_('COM_REDDESIGN_FONT_THUMB_PREVIEW') ?>:
 			</label>
 			<div class="controls">
-					<img src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/fonts/') . $this->item->fontthumb; ?>">
+					<img style="border: 1px black solid;" src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/fonts/') . $this->item->fontthumb; ?>">
 			</div>
 		</div>
 		<?php endif; ?>
