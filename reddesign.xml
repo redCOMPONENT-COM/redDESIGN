@@ -46,6 +46,7 @@
 			<folder>views</folder>
 			<folder>controllers</folder>
 			<folder>models</folder>
+			<folder>tables</folder>
 			<folder>fields</folder>
 			<filename>access.xml</filename>
 			<filename>config.xml</filename>
