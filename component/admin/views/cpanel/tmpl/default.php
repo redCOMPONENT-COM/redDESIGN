@@ -18,6 +18,9 @@ $option = 'com_reddesign';
 ?>
 
 <div id="cpanel" class="span12">
+	<?php if (extension_loaded('gd') && function_exists('gd_info')) : ?>
+		 <p class="alert"><?php echo JText::_('RED_REDDESING_CPANEL_ERROR_CANT_FIND_GD_LIBRARY'); ?></p>
+	<?php endif; ?>
 	<div class="icon">
 		<a href="index.php?option=<?php echo $option ?>&view=designs">
 			<img
