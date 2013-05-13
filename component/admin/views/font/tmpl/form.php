@@ -20,6 +20,16 @@ JHTML::_('behavior.framework');
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 	<div id="basic_configuration" class="span12">
 		<h3>Add/edit Font</h3>
+		<?php if (!empty($this->item->fontfile) && !empty($this->item->fontthumb)) : ?>
+		<div class="control-group">
+			<label class="control-label ">
+					<p><?php echo JText::_('COM_REDDESIGN_FONT_THUMB_PREVIEW') ?>:
+			</label>
+			<div class="controls">
+					<img src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/fonts/') . $this->item->fontthumb; ?>">
+			</div>
+		</div>
+		<?php endif; ?>
 		<div class="control-group">
 			<label class="control-label " for="fontfile">
 				<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_FILE'); ?>

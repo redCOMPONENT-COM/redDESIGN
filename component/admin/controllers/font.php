@@ -47,10 +47,10 @@ class ReddesignControllerFont extends FOFController
 		$uploaded_file	= $model->uploadFile($file);
 
 		// Create a image preview of the Font
-		$font_thumb = $model->createFontPreviewThumb($uploaded_file['filepath']);
+		$font_thumb = $model->createFontPreviewThumb($uploaded_file['mangled_filename']);
 
 		// Update the database with the new path of the font file
-		$data['fontfile']	= $uploaded_file['filepath'];
+		$data['fontfile']	= $uploaded_file['mangled_filename'];
 		$data['fontthumb']	= $font_thumb;
 
 		return $data;

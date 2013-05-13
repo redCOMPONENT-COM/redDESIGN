@@ -57,7 +57,7 @@ class ReddesignModelFont extends FOFModel
 			{
 				$mangledname = sha256($sig);
 			}
-			elseif(function_exists('sha1'))
+			elseif (function_exists('sha1'))
 			{
 				$mangledname = sha1($sig);
 			}
@@ -90,7 +90,7 @@ class ReddesignModelFont extends FOFModel
 			{
 				$mime = mime_content_type($filepath);
 			}
-			elseif(function_exists('finfo_open'))
+			elseif (function_exists('finfo_open'))
 			{
 				$finfo = finfo_open(FILEINFO_MIME_TYPE);
 				$mime = finfo_file($finfo, $filepath);
@@ -102,10 +102,10 @@ class ReddesignModelFont extends FOFModel
 
 			// Return the file info
 			return array(
-				'original_filename'	=> $file['name'],
-				'mangled_filename'	=> $mangledname,
-				'mime_type'			=> $mime,
-				'filepath'			=> $filepath
+				'original_filename' => $file['name'],
+				'mangled_filename' => $mangledname . '.ttf',
+				'mime_type' => $mime,
+				'filepath' => $filepath
 			);
 		}
 		else
@@ -183,21 +183,109 @@ class ReddesignModelFont extends FOFModel
 	 */
 	public function createFontPreviewThumb($font_file)
 	{
-		$text		= 'AbCdeFG 0123456789';
-		$img 		= imagecreatetruecolor(400, 30);
+		$font_file_location = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $font_file;
 
-		// Font color
-		$white = imagecolorallocate($img, 255, 255, 255);
-		$black = imagecolorallocate($img, 0, 0, 0);
+		$text = 'Lorem ipsum';
 
-		imagefilledrectangle($img, 0, 0, 399, 29, $white);
+		$im = $this->imagettfJustifytext(
+			$text,
+			$font_file_location,
+			2,
+			2
+		);
 
-
-		imagettftext($img, 20, 20, 10, 20, $black, $font_file, $text);
-
+		// Creates the Font thumb .png file
 		$font_thumb = substr($font_file, 0, -3) . 'png';
-		imagepng($img, $font_thumb);
+		imagepng(
+			$im,
+			JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $font_thumb
+		);
 
 		return $font_thumb;
+	}
+
+	/**
+	 * Function for create image from text with selected font. Justify text in image (0-Left, 1-Right, 2-Center).
+	 *
+	 * @param   String  $text     String to convert into the Image.
+	 * @param   String  $font     Font name of the text. Kip font file in same folder.
+	 * @param   int     $Justify  Justify text in image (0-Left, 1-Right, 2-Center).
+	 * @param   int     $Leading  Space between lines.
+	 * @param   int     $W        Width of the Image.
+	 * @param   int     $H        Hight of the Image.
+	 * @param   int     $X        x-coordinate of the text into the image.
+	 * @param   int     $Y        y-coordinate of the text into the image.
+	 * @param   int     $fsize    Font size of text.
+	 * @param   array   $color    RGB color array for text color.
+	 * @param   array   $bgcolor  RGB color array for background.
+	 *
+	 * @return   resource  image resource
+	 */
+	private function imagettfJustifytext($text, $font, $Justify = 2, $Leading = 0, $W = 0, $H = 0, $X = 0, $Y = 0, $fsize = 20, $color = array(0x0, 0x0, 0x0), $bgcolor = array(0xFF, 0xFF, 0xFF))
+	{
+		$angle = 0;
+		$_bx = imageTTFBbox($fsize, 0, $font, $text);
+
+		// Array of lines
+		$s = explode('\n', $text);
+
+		// Number of lines
+		$nL = count($s);
+
+		// If Width not initialized by programmer then it will detect and assign perfect width.
+		$W = ($W == 0) ? abs($_bx[2] - $_bx[0]) : $W;
+
+		// If Height not initialized by programmer then it will detect and assign perfect height.
+		$H = ($H == 0) ? abs($_bx[5] - $_bx[3]) + ($nL > 1 ? ($nL * $Leading) : 0) : $H;
+
+		$im = imagecreate($W + 2, $H + 8)
+			or die("Cannot Initialize new GD image stream");
+
+		// RGB color background.
+		$background_color = imagecolorallocate($im, $bgcolor[0], $bgcolor[1], $bgcolor[2]);
+
+		// RGB color text.
+		$text_color = imagecolorallocate($im, $color[0], $color[1], $color[2]);
+
+		if ($Justify == 0)
+		{
+			// Justify Left
+			imagettftext($im, $fsize, $angle, $X, $fsize, $text_color, $font, $text);
+		}
+		else
+		{
+			// Create alpha-nummeric string with all international characters - both upper- and lowercase
+			$alpha = range("a", "z");
+			$alpha = $alpha . strtoupper($alpha) . range(0, 9);
+
+			// Use the string to determine the height of a line
+			$_b = imageTTFBbox($fsize, 0, $font, $alpha);
+			$_H = abs($_b[5] - $_b[3]);
+			$__H = 4;
+
+			for ($i = 0; $i < $nL; $i++)
+			{
+				$_b = imageTTFBbox($fsize, 0, $font, $s[$i]);
+				$_W = abs($_b[2] - $_b[0]);
+
+				// Justify Right
+				if ($Justify == 1)
+				{
+					$_X = $W - $_W;
+				}
+				else
+				{
+					// Justify Center
+					$_X = abs($W / 2) - abs($_W / 2);
+				}
+
+				// Defining the Y coordinate.
+				$__H += $_H;
+				imagettftext($im, $fsize, $angle, $_X, $__H, $text_color, $font, $s[$i]);
+				$__H += $Leading;
+			}
+		}
+
+		return $im;
 	}
 }
