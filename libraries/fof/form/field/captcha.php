@@ -16,7 +16,7 @@ JFormHelper::loadFieldClass('text');
  * @package  FrameworkOnFramework
  * @since    2.0
  */
-class FOFFormFieldButton extends FOFFormFieldText implements FOFFormField
+class FOFFormFieldCaptcha extends JFormFieldCaptcha implements FOFFormField
 {
 
 	protected $static;
@@ -67,31 +67,22 @@ class FOFFormFieldButton extends FOFFormFieldText implements FOFFormField
 	 *
 	 * @return  string  The field HTML
 	 */
-	public function getInput()
+	public function getStatic()
 	{
-		$this->label = '';
-
-		$text = $this->element['text'];
-		$class = $this->element['class'] ? (string) $this->element['class'] : '';
-		$icon = $this->element['icon'] ? (string) $this->element['icon'] : '';
-		$onclick = $this->element['onclick'] ? 'onclick="' . (string) $this->element['onclick'] . '"' : '';
-
-		$this->value = JText::_($text);
-
-		if ($icon)
-		{
-			$icon = '<span class="icon ' . $icon . '"></span>';
-		}
-
-		return '<button id="' . $this->id . '" class="btn ' . $class . '" ' .
-			$onclick .'>' .
-			$icon .
-			htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8') .
-			'</button>';
+		return $this->getInput();
 	}
 
-	protected function getTitle()
+	/**
+	 * Get the rendering of this field type for a repeatable (grid) display,
+	 * e.g. in a view listing many item (typically a "browse" task)
+	 *
+	 * @since 2.0
+	 *
+	 * @return  string  The field HTML
+	 */
+	public function getRepeatable()
 	{
-		return null;
+		return $this->getInput();
 	}
+
 }
