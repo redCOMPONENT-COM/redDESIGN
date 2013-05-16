@@ -29,7 +29,7 @@ JHTML::_('behavior.framework');
 					<img style="border: 1px black solid;" src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/fonts/') . $this->item->fontthumb; ?>">
 			</div>
 		</div>
-		<?php endif; ?>
+		<?php else : ?>
 		<div class="control-group">
 			<label class="control-label " for="fontfile">
 				<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_FILE'); ?>
@@ -39,6 +39,7 @@ JHTML::_('behavior.framework');
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_TITLE_DESC'); ?></span>
 			</div>
 		</div>
+		<?php endif; ?>
 		<div class="control-group">
 			<label class="control-label " for="title">
 				<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_TITLE'); ?>
