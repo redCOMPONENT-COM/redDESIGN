@@ -29,7 +29,7 @@ JHTML::_('behavior.framework');
 					<img style="border: 1px black solid;" src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/fonts/') . $this->item->fontthumb; ?>">
 			</div>
 		</div>
-		<?php endif; ?>
+		<?php else : ?>
 		<div class="control-group">
 			<label class="control-label " for="fontfile">
 				<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_FILE'); ?>
@@ -39,6 +39,7 @@ JHTML::_('behavior.framework');
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_TITLE_DESC'); ?></span>
 			</div>
 		</div>
+		<?php endif; ?>
 		<div class="control-group">
 			<label class="control-label " for="title">
 				<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_TITLE'); ?>
@@ -46,24 +47,6 @@ JHTML::_('behavior.framework');
 			<div class="controls">
 				<input type="text" name="title" id="title" value="<?php echo $this->item->title; ?>" class="inputbox required" size="50">
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_FIELD_TITLE_DESC'); ?></span>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label todo-label todo-label-main" for="default_width">
-				<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_DEFAULT_WIDTH'); ?>
-				*				</label>
-			<div class="controls">
-				<input type="text" name="default_width" id="default_width" value="<?php echo $this->item->default_width; ?>" class="inputbox required" size="50">
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_FIELD_DEFAULT_WIDTH_DESC'); ?></span>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label todo-label todo-label-main" for="default_height">
-				<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_DEFAULT_HEIGHT'); ?>
-				*				</label>
-			<div class="controls">
-				<input type="text" name="default_height" id="default_height" value="<?php echo $this->item->default_height; ?>" class="inputbox required" size="50">
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_FIELD_DEFAULT_HEIGHT_DESC'); ?></span>
 			</div>
 		</div>
 		<div class="control-group">
