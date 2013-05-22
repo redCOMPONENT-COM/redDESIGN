@@ -10,11 +10,6 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.framework');
-JHtml::_('behavior.modal');
-
-$lang = JFactory::getLanguage();
-$option = 'com_reddesign';
 ?>
 
 <div id="cpanel" class="span12">
@@ -25,7 +20,7 @@ $option = 'com_reddesign';
 		<p class="alert"><?php echo JText::_('RED_REDDESING_CPANEL_ERROR_CANT_FIND_IMAGICK_LIBRARY'); ?></p>
 	<?php endif; ?>
 	<div class="icon">
-		<a href="index.php?option=<?php echo $option ?>&view=designs">
+		<a href="index.php?option=com_reddesign&view=designs">
 			<img
 				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_designarea_48.png"
 				border="0" alt="<?php echo JText::_('COM_REDDESING_CPANEL_ICON_DESGIGNTYPE_ALT') ?>"/>
@@ -35,7 +30,7 @@ $option = 'com_reddesign';
 		</a>
 	</div>
 	<div class="icon">
-		<a href="index.php?option=<?php echo $option ?>&view=fonts">
+		<a href="index.php?option=com_reddesign&view=fonts">
 			<img
 				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_fonts_48.png"
 				border="0" alt="<?php echo JText::_('COM_REDDESING_CPANEL_ICON_FONTS_ALT') ?>"/>
@@ -55,7 +50,7 @@ $option = 'com_reddesign';
 		</a>
 	</div>
 	<div class="icon">
-		<a href="index.php?option=<?php echo $option ?>&view=configuration">
+		<a href="index.php?option=com_reddesign&view=configuration">
 			<img
 				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_configuration_48.png"
 				border="0" alt="<?php echo JText::_('COM_REDDESING_CPANEL_ICON_CONFIGURATION_ALT') ?>"/>
