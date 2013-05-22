@@ -41,17 +41,21 @@ class ReddesignControllerFont extends FOFController
 	{
 		$file = JRequest::getVar('fontfile', '', 'files', 'array');
 
-		$model			= $this->getThisModel();
+		// If file has been uploaded, process it
+		if (!empty($file['name']) && !empty($file['type']))
+		{
+			$model			= $this->getThisModel();
 
-		// Upload the font file
-		$uploaded_file	= $model->uploadFile($file);
+			// Upload the font file
+			$uploaded_file	= $model->uploadFile($file);
 
-		// Create a image preview of the Font
-		$font_thumb = $model->createFontPreviewThumb($uploaded_file['mangled_filename']);
+			// Create a image preview of the Font
+			$font_thumb = $model->createFontPreviewThumb($uploaded_file['mangled_filename']);
 
-		// Update the database with the new path of the font file
-		$data['fontfile']	= $uploaded_file['mangled_filename'];
-		$data['fontthumb']	= $font_thumb;
+			// Update the database with the new path of the font file
+			$data['fontfile']	= $uploaded_file['mangled_filename'];
+			$data['fontthumb']	= $font_thumb;
+		}
 
 		return $data;
 	}

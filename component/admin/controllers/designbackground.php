@@ -43,17 +43,21 @@ class ReddesignControllerDesignbackground extends FOFController
 	{
 		$file = JRequest::getVar('epsfile', '', 'files', 'array');
 
-		$model			= $this->getThisModel();
+		// If file has been uploaded, process it
+		if (!empty($file['name']) && !empty($file['type']))
+		{
+			$model			= $this->getThisModel();
 
-		// Upload the font file
-		$uploaded_file	= $model->uploadFile($file);
+			// Upload the font file
+			$uploaded_file	= $model->uploadFile($file);
 
-		// Create a image preview of the EPS
-		$jpegpreviewfile = $model->createBackgroundPreview($uploaded_file['mangled_filename']);
+			// Create a image preview of the EPS
+			$jpegpreviewfile = $model->createBackgroundPreview($uploaded_file['mangled_filename']);
 
-		// Update the database with the new path of the EPS file and its thumb
-		$data['epsfile']			= $uploaded_file['mangled_filename'];
-		$data['jpegpreviewfile']	= $jpegpreviewfile;
+			// Update the database with the new path of the EPS file and its thumb
+			$data['epsfile']			= $uploaded_file['mangled_filename'];
+			$data['jpegpreviewfile']	= $jpegpreviewfile;
+		}
 
 		return $data;
 	}
