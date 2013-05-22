@@ -1,1 +1,7 @@
 .icon-48-reddesign { background-image: url(../images/reddesign_48.png) }
+
+.form-container { clear: both; }
+
+.submenu-container { padding-bottom: 25px; }
+
+.submenu-link { float: left; margin-right: 15px; }
