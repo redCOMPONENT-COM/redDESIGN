@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerFont extends FOFController
+class ReddesignControllerDesignbackground extends FOFController
 {
 	/**
 	 * Constructor to set the right model
@@ -27,19 +27,21 @@ class ReddesignControllerFont extends FOFController
 	{
 		parent::__construct($config);
 
-		$this->modelName = 'font';
+		$this->modelName = 'designbackground';
 	}
 
 	/**
-	 * Uploads the font file and generates a image preview of the font
+	 * Uploads the EPS-Background file and generates a JPG image preview of the EPS
 	 *
 	 * @param   array  &$data  data filled in the edit form
 	 *
 	 * @return  boolean  Returns true on success
+	 *
+	 * @see http://en.wikipedia.org/wiki/Encapsulated_PostScript
 	 */
 	public function onBeforeApplySave(&$data)
 	{
-		$file = JRequest::getVar('fontfile', '', 'files', 'array');
+		$file = JRequest::getVar('epsfile', '', 'files', 'array');
 
 		// If file has been uploaded, process it
 		if (!empty($file['name']) && !empty($file['type']))
@@ -49,12 +51,12 @@ class ReddesignControllerFont extends FOFController
 			// Upload the font file
 			$uploaded_file	= $model->uploadFile($file);
 
-			// Create a image preview of the Font
-			$font_thumb = $model->createFontPreviewThumb($uploaded_file['mangled_filename']);
+			// Create a image preview of the EPS
+			$jpegpreviewfile = $model->createBackgroundPreview($uploaded_file['mangled_filename']);
 
-			// Update the database with the new path of the font file
-			$data['fontfile']	= $uploaded_file['mangled_filename'];
-			$data['fontthumb']	= $font_thumb;
+			// Update the database with the new path of the EPS file and its thumb
+			$data['epsfile']			= $uploaded_file['mangled_filename'];
+			$data['jpegpreviewfile']	= $jpegpreviewfile;
 		}
 
 		return $data;
