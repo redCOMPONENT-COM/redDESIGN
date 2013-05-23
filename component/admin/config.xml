@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
+    <fieldset
+            name="general_configuration"
+            label="COM_REDDESIGN_GENERAL_CONFIGURATION"
+            description="COM_REDDESIGN_GENERAL_CONFIGURATION_DESC"
+            >
+
+        <field
+            name="max_eps_file_size"
+            type="text"
+            size="5"
+            default="2"
+            label="COM_REDDESIGN_MAX_EPS_FILE_SIZE"
+            description="COM_REDDESIGN_MAX_EPS_FILE_SIZE_DESC"
+            />
+    </fieldset>
+
 	<fieldset
 			name="permissions"
 			label="JCONFIG_PERMISSIONS_LABEL"

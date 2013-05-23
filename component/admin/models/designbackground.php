@@ -117,6 +117,8 @@ class ReddesignModelDesignbackground extends FOFModel
 	 */
 	private function canUpload($file)
 	{
+		$params = JComponentHelper::getParams('com_reddesign');
+
 		if (empty($file['name']))
 		{
 			$this->setError(JText::_('COM_REDDESIGN_DESIGNBACKGROUND_ERROR_UPLOAD_INPUT'));
@@ -145,8 +147,8 @@ class ReddesignModelDesignbackground extends FOFModel
 			return false;
 		}
 
-		// Max font file size is 2 Mb
-		$maxSize = (int) (2 * 1024 * 1024);
+		// Max file size is set by config.xml
+		$maxSize = (int) ($params->get('max_eps_file_size', 2) * 1024 * 1024);
 
 		if ($maxSize > 0 && (int) $file['size'] > $maxSize)
 		{
