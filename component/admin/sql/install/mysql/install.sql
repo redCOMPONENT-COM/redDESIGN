@@ -1,4 +1,8 @@
 --
+-- OLD SCHEMA (old joomla 2.5 redDESIGN)
+--
+
+--
 -- Table structure for table `#__reddesign_area`
 --
 
@@ -100,6 +104,14 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_config` (
   `preview_text_size` tinyint(4) NOT NULL,
   PRIMARY KEY  (`id`)
 );
+
+
+
+--
+-- NEW SCHEMA (new FoF redDESIGN)
+--
+
+
 
 --
 -- Table structure for table `#_reddesign_fonts`
