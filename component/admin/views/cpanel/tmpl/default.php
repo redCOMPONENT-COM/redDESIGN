@@ -49,16 +49,6 @@ defined('_JEXEC') or die;
 				</span>
 		</a>
 	</div>
-	<div class="icon">
-		<a href="index.php?option=com_reddesign&view=configuration">
-			<img
-				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_configuration_48.png"
-				border="0" alt="<?php echo JText::_('COM_REDDESING_CPANEL_ICON_CONFIGURATION_ALT') ?>"/>
-				<span>
-					<?php echo JText::_('COM_REDDESING_CPANEL_ICON_CONFIGURATION') ?><br/>
-				</span>
-		</a>
-	</div>
 </div>
 
 <div style="clear: both;"></div>
