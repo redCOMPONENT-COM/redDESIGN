@@ -97,13 +97,15 @@ class ReddesignModelDesignbackground extends FOFModel
 			$mime = 'application/postscript';
 		}
 
-		// Return the file info
-		return array(
+		$result_file = array(
 			'original_filename' => $file['name'],
 			'mangled_filename' => $mangledname . '.eps',
 			'mime_type' => $mime,
 			'filepath' => $filepath
 		);
+
+		// Return the file info
+		return $result_file;
 	}
 
 	/**
@@ -154,7 +156,7 @@ class ReddesignModelDesignbackground extends FOFModel
 		}
 
 		// Only allow eps valid mime types
-		$okMIMETypes = 'application/postscript, application/eps, application/x-eps, image/eps, image/x-eps';
+		$okMIMETypes = 'application/postscript,application/eps,application/x-eps,image/eps,image/x-eps';
 		$validFileTypes = explode(",", $okMIMETypes);
 
 		// If the temp file does not have ok MIME, return
