@@ -16,7 +16,7 @@ defined('_JEXEC') or die();
 	<input type="hidden" name="reddesign_designbackground_id" value="<?php echo $this->item->reddesign_designbackground_id; ?>">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 	<div id="basic_configuration" class="span12">
-		<h3>Add/edit Font</h3>
+		<h3><?php echo JText::_('COM_REDDESIGN_TITLE_DESIGNBACKGROUNDS_EDIT'); ?></h3>
 		<?php if (!empty($this->item->epsfile) && !empty($this->item->jpegpreviewfile)) : ?>
 			<div class="control-group">
 				<label class="control-label ">
