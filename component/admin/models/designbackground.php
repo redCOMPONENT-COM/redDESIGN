@@ -22,7 +22,7 @@ JLoader::import('joomla.filesystem.file');
 class ReddesignModelDesignbackground extends FOFModel
 {
 	/**
-	 * Moves an uploaded font file to the media://com_reddesing/assets/font
+	 * Moves an uploaded EPS file to the media://com_reddesing/assets/backgrounds/
 	 * under a random name and returns a full file definition array, or false if
 	 * the upload failed for any reason.
 	 *
@@ -109,7 +109,7 @@ class ReddesignModelDesignbackground extends FOFModel
 	}
 
 	/**
-	 * Checks if the font file can be uploaded
+	 * Checks if the EPS file can be uploaded. This is a security check.
 	 *
 	 * @param   array  $file  File information
 	 *
@@ -158,8 +158,8 @@ class ReddesignModelDesignbackground extends FOFModel
 		}
 
 		// Only allow eps valid mime types
-		$okMIMETypes = 'application/postscript,application/eps,application/x-eps,image/eps,image/x-eps';
-		$validFileTypes = explode(",", $okMIMETypes);
+		$okMIMETypes = 'application/postscript, application/eps, application/x-eps, image/eps,image/x-eps';
+		$validFileTypes = array_map('trim', explode(",", $okMIMETypes));
 
 		// If the temp file does not have ok MIME, return
 		if (!in_array($file['type'], $validFileTypes))
@@ -173,20 +173,20 @@ class ReddesignModelDesignbackground extends FOFModel
 	}
 
 	/**
-	 * Creates a image based on a eps font file to show the look and feel of the font.
+	 * Creates a image based on a eps file to show the look and feel of the background into media://com_reddesing/assets/backgrounds/
 	 *
-	 * @param   string  $font_file  the path to a .eps font file
+	 * @param   string  $eps_file  the path to a .eps file
 	 *
 	 * @return  string
 	 */
-	public function createBackgroundPreview($font_file)
+	public function createBackgroundPreview($eps_file)
 	{
-		$font_file_location = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $font_file;
+		$eps_file_location = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $eps_file;
 
 		// Read EPS
 		$im = new Imagick;
 		$im->setResolution(100, 100);
-		$im->readImage($font_file_location);
+		$im->readImage($eps_file_location);
 
 		// Convert to jpg
 		$im->setCompression(Imagick::COMPRESSION_JPEG);
@@ -195,9 +195,9 @@ class ReddesignModelDesignbackground extends FOFModel
 		$im->setImageFormat('jpeg');
 
 		// Create the Background thumb .jpg file name
-		$thumb_name = substr($font_file, 0, -3) . 'jpg';
+		$thumb_name = substr($eps_file, 0, -3) . 'jpg';
 
-		// Write image on server
+		// Write image to the media://com_reddesing/assets/backgrounds/
 		$im->writeImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $thumb_name);
 		$im->clear();
 		$im->destroy();
