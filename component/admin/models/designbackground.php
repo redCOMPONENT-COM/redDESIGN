@@ -204,4 +204,25 @@ class ReddesignModelDesignbackground extends FOFModel
 
 		return $thumb_name;
 	}
+
+	/**
+	 * Return a list of designs.
+	 *
+	 * @return   array  List of designs.
+	 */
+	public function getDesigns()
+	{
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true);
+		$query->select(array('reddesign_design_id', 'title'))
+			->from('#__reddesign_designs')
+			->order('ordering ASC');
+
+		$db->setQuery($query);
+
+		$designs_list = $db->loadObjectList();
+
+		return $designs_list;
+	}
 }
