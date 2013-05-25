@@ -45,7 +45,7 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 	<input type="hidden" value="" name="hidemainmenu">
 	<input type="hidden" value="id" name="filter_order">
 	<input type="hidden" value="DESC" name="filter_order_Dir">
-	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 	<table id="itemsList" class="table table-striped">
 		<thead>
 		<tr>
@@ -85,8 +85,9 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 		</tr>
 		</thead>
 		<tbody>
-		<?php if($count = count($this->items)): ?>
-			<?php $i = -1; $m = 1; ?>
+		<?php if ($count = count($this->items)): ?>
+			<?php $i = -1;
+			$m = 1; ?>
 			<?php foreach ($this->items as $item) : ?>
 				<?php
 				$i++; $m = 1-$m;
@@ -124,7 +125,7 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 						</td>
 					<?php endif; ?>
 					<td align="left">
-						<a href="index.php?option=com_akeebasubs&view=customfield&id=<?php echo $item->reddesign_designs_id ?>">
+						<a href="index.php?option=com_reddesign&view=design&id=<?php echo $item->reddesign_design_id ?>">
 							<strong><?php echo $this->escape(JText::_($item->title)) ?></strong>
 						</a>
 						<p class="smallsub">
@@ -138,16 +139,16 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 			<?php endforeach ?>
 		<?php else: ?>
 			<tr>
-				<td colspan="20">
-					<?php echo  JText::_('COM_AKEEBASUBS_COMMON_NORECORDS') ?>
+				<td colspan="3">
+					<?php echo JText::_('COM_REDDESIGN_COMMON_NORECORDS') ?>
 				</td>
 			</tr>
 		<?php endif; ?>
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="20">
-					<?php if($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>
+				<td colspan="3">
+					<?php if ($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>
 				</td>
 			</tr>
 		</tfoot>
