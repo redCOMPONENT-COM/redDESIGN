@@ -55,6 +55,9 @@ class ReddesignControllerFont extends FOFController
 			// Update the database with the new path of the font file
 			$data['fontfile']	= $uploaded_file['mangled_filename'];
 			$data['fontthumb']	= $font_thumb;
+
+			// Update the database with the font file name
+			$data['title'] = $model->getFontFileName($uploaded_file['filepath']);
 		}
 
 		return $data;
