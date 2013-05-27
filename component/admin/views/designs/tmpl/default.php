@@ -9,8 +9,6 @@
 
 defined('_JEXEC') or die();
 
-$hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
-
 ?>
 
 <div id="designs" class="submenu-container">
@@ -20,24 +18,14 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 		</a>
 	</div>
 	<div class="submenu-link">
-		<a href="index.php?option=com_reddesign&view=background">
-			<?php echo JText::_('COM_REDDESING_BACKGROUND') ?>
-		</a>
-	</div>
-	<div class="submenu-link">
-		<a href="index.php?option=com_reddesign&view=designarea">
-			<?php echo JText::_('COM_REDDESING_DESIGN_AREA') ?>
-		</a>
-	</div>
-	<div class="submenu-link">
-		<a href="index.php?option=com_reddesign&view=fontsizes">
-			<?php echo JText::_('COM_REDDESING_FONT_SIZES') ?>
+		<a href="index.php?option=com_reddesign&view=designbackgrounds">
+			<?php echo JText::_('COM_REDDESING_BACKGROUNDS') ?>
 		</a>
 	</div>
 </div>
 
 <div class="form-container">
-	<formid="adminForm" name="adminForm" method="post" action="index.php">
+	<form id="adminForm" name="adminForm" method="post" action="index.php">
 	<input type="hidden" value="com_reddesign" name="option">
 	<input type="hidden" value="designs" name="view">
 	<input type="hidden" value="browse" name="task">
@@ -54,7 +42,7 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 				<?php echo JHTML::_('grid.order', $this->items); ?>
 			</th>
 			<th width="20">
-				<input type="checkbox" onclick="Joomla.checkAll(this)" title="Check All" value="" name="checkall-toggle">
+				<input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(this);" />
 			</th>
 			<th>
 				<?php echo JHTML::_('grid.sort', 'JGLOBAL_TITLE', 'title', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
@@ -80,7 +68,7 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 				</nobr>
 			</td>
 			<td>
-				<?php //echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
+				<?php  ?>
 			</td>
 		</tr>
 		</thead>
@@ -95,35 +83,15 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 				$ordering = $this->lists->order == 'ordering';
 				?>
 				<tr class="<?php echo 'row'.$m; ?>">
-					<?php if($hasAjaxOrderingSupport === false): ?>
-						<td class="order" align="center">
-							<span><?php echo $this->pagination->orderUpIcon( $i, true, 'orderup', 'Move Up', $ordering ); ?></span>
-							<span><?php echo $this->pagination->orderDownIcon( $i, $count, true, 'orderdown', 'Move Down', $ordering ); ?></span>
-							<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
-							<input type="text" name="order[]" size="5" value="<?php echo $item->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
-						</td>
-					<?php endif; ?>
-					<?php if($hasAjaxOrderingSupport !== false): ?>
-						<td class="order nowrap center hidden-phone">
-							<?php if ($this->perms->editstate) :
-								$disableClassName = '';
-								$disabledLabel	  = '';
-								if (!$hasAjaxOrderingSupport['saveOrder']) :
-									$disabledLabel    = JText::_('JORDERINGDISABLED');
-									$disableClassName = 'inactive tip-top';
-								endif; ?>
-								<span class="sortable-handler <?php echo $disableClassName?>" title="<?php echo $disabledLabel?>" rel="tooltip">
-					<i class="icon-menu"></i>
-				</span>
-								<input type="text" style="display:none"  name="order[]" size="5"
-								       value="<?php echo $item->ordering;?>" class="input-mini text-area-order " />
-							<?php else : ?>
-								<span class="sortable-handler inactive" >
-					<i class="icon-menu"></i>
-				</span>
-							<?php endif; ?>
-						</td>
-					<?php endif; ?>
+					<td class="order" align="center" width="8%">
+						<span><?php echo $this->pagination->orderUpIcon( $i, true, 'orderup', 'Move Up', $ordering ); ?></span>
+						<span><?php echo $this->pagination->orderDownIcon( $i, $count, true, 'orderdown', 'Move Down', $ordering ); ?></span>
+						<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
+						<input type="text" name="order[]" size="5" value="<?php echo $item->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
+					</td>
+					<td>
+						<?php echo JHTML::_('grid.id', $i, $item->reddesign_design_id, false); ?>
+					</td>
 					<td align="left">
 						<a href="index.php?option=com_reddesign&view=design&id=<?php echo $item->reddesign_design_id ?>">
 							<strong><?php echo $this->escape(JText::_($item->title)) ?></strong>
@@ -132,14 +100,15 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 							(<span><?php echo $this->escape($item->slug) ?></span>)
 						</p>
 					</td>
-					<td align="center">
+
+					<td align="center" width="9%">
 						<?php echo JHTML::_('grid.published', $item, $i); ?>
 					</td>
 				</tr>
 			<?php endforeach ?>
 		<?php else: ?>
 			<tr>
-				<td colspan="3">
+				<td colspan="4">
 					<?php echo JText::_('COM_REDDESIGN_COMMON_NORECORDS') ?>
 				</td>
 			</tr>
@@ -147,7 +116,7 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="3">
+				<td colspan="4">
 					<?php if ($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>
 				</td>
 			</tr>
