@@ -217,6 +217,29 @@ class ReddesignModelDesignbackground extends FOFModel
 		$query = $db->getQuery(true);
 		$query->select(array('reddesign_design_id', 'title'))
 			->from('#__reddesign_designs')
+			->where('enabled = 1')
+			->order('ordering ASC');
+
+		$db->setQuery($query);
+
+		$designs_list = $db->loadObjectList();
+
+		return $designs_list;
+	}
+
+	/**
+	 * Return a list of fonts available in the system.
+	 *
+	 * @return   array  List of object  in the system.
+	 */
+	public function getFonts()
+	{
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true);
+		$query->select(array('reddesign_font_id', 'title'))
+			->from('#__reddesign_fonts')
+			->where('enabled = 1')
 			->order('ordering ASC');
 
 		$db->setQuery($query);
