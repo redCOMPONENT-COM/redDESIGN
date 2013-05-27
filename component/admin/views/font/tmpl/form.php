@@ -21,10 +21,17 @@ JHTML::_('behavior.framework');
 	<div id="basic_configuration" class="span12">
 		<h3>
 			<?php echo JText::_('COM_REDDESIGN_FONT_TITLE'); ?>
-			<?php if (!empty($this->item->title)) : ?>
-				<?php echo ': ' . $this->item->title; ?>
-			<?php endif; ?>
 		</h3>
+		<?php if (!empty($this->item->title)) : ?>
+		<div class="control-group">
+			<label class="control-label ">
+				Font name:
+			</label>
+			<div class="controls">
+				<h4><?php echo $this->item->title; ?></h4>
+			</div>
+		</div>
+		<?php endif; ?>
 		<?php if (!empty($this->item->fontfile) && !empty($this->item->fontthumb)) : ?>
 		<div class="control-group">
 			<label class="control-label ">
