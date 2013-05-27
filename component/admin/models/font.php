@@ -288,4 +288,27 @@ class ReddesignModelFont extends FOFModel
 
 		return $im;
 	}
+
+	/**
+	 * Returns the font name from a specific .ttf file using an external helper
+	 *
+	 * @param   string  $ttf_file  The .ttf resource file
+	 *
+	 * @return  string|false
+	 */
+	public function getFontFileName($ttf_file)
+	{
+		// Get the font name from the .ttf file
+		require_once JPATH_COMPONENT_ADMINISTRATOR . '/helpers/classTTFInfo.php';
+
+		$ttf = new ttf;
+		$ttf_info = $ttf->get_friendly_ttf_name($ttf_file);
+
+		if (empty($ttf_info['fullfontname']))
+		{
+			return false;
+		}
+
+		return $ttf_info['fullfontname'];
+	}
 }

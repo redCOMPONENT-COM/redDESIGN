@@ -19,7 +19,19 @@ JHTML::_('behavior.framework');
 	<input type="hidden" name="reddesign_font_id" value="<?php echo $this->item->reddesign_font_id; ?>">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 	<div id="basic_configuration" class="span12">
-		<h3><?php echo JText::_('COM_REDDESIGN_FONT_TITLE'); ?></h3>
+		<h3>
+			<?php echo JText::_('COM_REDDESIGN_FONT_TITLE'); ?>
+		</h3>
+		<?php if (!empty($this->item->title)) : ?>
+		<div class="control-group">
+			<label class="control-label ">
+				Font name:
+			</label>
+			<div class="controls">
+				<h4><?php echo $this->item->title; ?></h4>
+			</div>
+		</div>
+		<?php endif; ?>
 		<?php if (!empty($this->item->fontfile) && !empty($this->item->fontthumb)) : ?>
 		<div class="control-group">
 			<label class="control-label ">
@@ -40,15 +52,6 @@ JHTML::_('behavior.framework');
 			</div>
 		</div>
 		<?php endif; ?>
-		<div class="control-group">
-			<label class="control-label " for="title">
-				<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_TITLE'); ?>
-				*				</label>
-			<div class="controls">
-				<input type="text" name="title" id="title" value="<?php echo $this->item->title; ?>" class="inputbox required" size="50">
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_FIELD_TITLE_DESC'); ?></span>
-			</div>
-		</div>
 		<div class="control-group">
 			<label class="control-label todo-label" for="enabled">
 				<?php echo JText::_('JSTATUS'); ?>
