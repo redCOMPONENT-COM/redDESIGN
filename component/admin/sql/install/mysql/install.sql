@@ -175,3 +175,14 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designbackgrounds` (
 	`design` int(11) NOT NULL COMMENT 'foreing key of #__reddesign_designs',
 	PRIMARY KEY (`reddesign_designbackground_id`)
 ) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;
+
+--
+-- Table structure for table `#__reddesign_backgroundfonts`
+--
+CREATE TABLE IF NOT EXISTS `#__reddesign_backgroundfonts`(
+	`reddesign_designbackground_id` int(11) NOT NULL COMMENT 'foreing key of #__reddesign_designbackgrounds',
+	`reddesign_font_id` int(11) NOT NULL COMMENT 'foreing key of #__reddesign_fonts',
+	PRIMARY KEY (  `reddesign_designbackground_id` ,  `reddesign_font_id` ),
+	INDEX (  `reddesign_designbackground_id` ),
+	INDEX (  `reddesign_font_id` )
+) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;
