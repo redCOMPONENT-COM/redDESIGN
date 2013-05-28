@@ -34,6 +34,7 @@ class ReddesignViewDesignbackground extends FOFViewHtml
 
 		$this->assign('item', $model->getItem());
 		$this->assign('designs_list', $model->getDesigns());
+		$this->assign('fonts_list', $model->getFonts());
 
 		return true;
 	}
