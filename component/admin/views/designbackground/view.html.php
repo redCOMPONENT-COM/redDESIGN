@@ -21,6 +21,23 @@ defined('_JEXEC') or die;
 class ReddesignViewDesignbackground extends FOFViewHtml
 {
 	/**
+	 * Initialize JS and CSS files for the image selector
+	 *
+	 * @param   string  $tpl  The template to use
+	 *
+	 * @return  boolean|null False if we can't render anything	 *
+	 */
+	public function display($tpl = null)
+	{
+		$document = JFactory::getDocument();
+		$document->addScript(rtrim(JURI::base(),'/').'/../media/com_reddesign/assets/js/jquery.imgareaselect.pack.js');
+		//$document->addScript(rtrim(JURI::base(),'/').'/../media/com_reddesign/assets/js/jquery.min.js');
+		$document->addStyleSheet(rtrim(JURI::base(),'/').'/../media/com_reddesign/assets/css/imgareaselect-animated.css');
+
+		parent::display($tpl);
+	}
+
+	/**
 	 * Before adding or editing a background gets the designs list
 	 *
 	 * @param   null  $tpl  Template to load
@@ -29,7 +46,8 @@ class ReddesignViewDesignbackground extends FOFViewHtml
 	 */
 	public function onAdd($tpl = null)
 	{
-		JRequest::setVar('hidemainmenu', true);
+		//JRequest::setVar('hidemainmenu', true);
+		$this->input->setVar('hidemainmenu', true);
 		$model = $this->getModel();
 
 		$this->assign('item', $model->getItem());
