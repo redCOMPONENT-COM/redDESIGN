@@ -58,7 +58,7 @@ defined('_JEXEC') or die();
 					$options[] = JHTML::_('select.option', $design->reddesign_design_id, $design->title);
 				endforeach;
 
-				echo JHTML::_('select.genericlist', $options, 'design', 'class="inputbox"', 'value', 'text', $this->item->design);
+				echo JHTML::_('select.genericlist', $options, 'reddesign_design_id', 'class="inputbox"', 'value', 'text', $this->item->reddesign_design_id);
 				?>
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_FIELD_DESIGN_DESC'); ?></span>
 			</div>
