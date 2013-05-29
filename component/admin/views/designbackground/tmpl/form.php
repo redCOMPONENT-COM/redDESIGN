@@ -24,8 +24,8 @@ defined('_JEXEC') or die();
 				</label>
 				<div class="controls">
 					<script type="text/javascript">
-						$(document).ready(function () {
-							$('img#background').imgAreaSelect({
+						jQuery(document).ready(function ($) {
+							jQuery('img#background').imgAreaSelect({
 								handles: true
 								//onSelectEnd: someFunction
 							});

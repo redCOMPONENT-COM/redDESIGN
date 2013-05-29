@@ -31,7 +31,6 @@ class ReddesignViewDesignbackground extends FOFViewHtml
 	{
 		$document = JFactory::getDocument();
 		$document->addScript(rtrim(JURI::base(),'/').'/../media/com_reddesign/assets/js/jquery.imgareaselect.pack.js');
-		//$document->addScript(rtrim(JURI::base(),'/').'/../media/com_reddesign/assets/js/jquery.min.js');
 		$document->addStyleSheet(rtrim(JURI::base(),'/').'/../media/com_reddesign/assets/css/imgareaselect-animated.css');
 
 		parent::display($tpl);
