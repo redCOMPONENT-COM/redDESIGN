@@ -23,7 +23,15 @@ defined('_JEXEC') or die();
 					<?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_THUMB_PREVIEW') ?>:
 				</label>
 				<div class="controls">
-					<img src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->item->jpegpreviewfile; ?>">
+					<script type="text/javascript">
+						$(document).ready(function () {
+							$('img#background').imgAreaSelect({
+								handles: true
+								//onSelectEnd: someFunction
+							});
+						});
+					</script>
+					<img id="background" src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->item->jpegpreviewfile; ?>">
 				</div>
 			</div>
 			<div class="control-group">
@@ -58,7 +66,7 @@ defined('_JEXEC') or die();
 					$options[] = JHTML::_('select.option', $design->reddesign_design_id, $design->title);
 				endforeach;
 
-				echo JHTML::_('select.genericlist', $options, 'design', 'class="inputbox"', 'value', 'text', $this->item->design);
+				echo JHTML::_('select.genericlist', $options, 'reddesign_design_id', 'class="inputbox"', 'value', 'text', $this->item->reddesign_design_id);
 				?>
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_FIELD_DESIGN_DESC'); ?></span>
 			</div>

@@ -90,10 +90,10 @@ defined('_JEXEC') or die();
 							<input type="text" name="order[]" size="5" value="<?php echo $item->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
 						</td>
 						<td>
-							<?php echo JHTML::_('grid.id', $i, $item->reddesign_design_id, false); ?>
+							<?php echo JHTML::_('grid.id', $i, $item->reddesign_designbackground_id, false); ?>
 						</td>
 						<td align="left">
-							<a href="index.php?option=com_reddesign&view=design&id=<?php echo $item->reddesign_design_id ?>">
+							<a href="index.php?option=com_reddesign&view=designbackground&id=<?php echo $item->reddesign_designbackground_id ?>">
 								<strong><?php echo $this->escape(JText::_($item->title)) ?></strong>
 							</a>
 							<p class="smallsub">
