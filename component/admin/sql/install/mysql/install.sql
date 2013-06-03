@@ -2,8 +2,6 @@
 -- NEW SCHEMA (new FoF redDESIGN)
 --
 
-
-
 --
 -- Table structure for table `#_reddesign_fonts`
 --
@@ -63,7 +61,13 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designbackgrounds` (
 	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`epsfile` VARCHAR(255)  NOT NULL,
 	`jpegpreviewfile` varchar(255) NOT NULL,
-	`design` int(11) NOT NULL COMMENT 'foreing key of #__reddesign_designs',
+	`area_x1` int(11) NOT NULL COMMENT 'x coordinate top left corner',
+	`area_y1` int(11) NOT NULL COMMENT 'y coordinate top left corner',
+	`area_x2` int(11) NOT NULL COMMENT 'x coordinate bottom right corner',
+	`area_y2` int(11) NOT NULL COMMENT 'y coordinate bottom right corner',
+	`area_width` int(11) NOT NULL COMMENT 'selection width',
+	`area_height` int(11) NOT NULL COMMENT 'selection height',
+	`reddesign_design_id` int(11) NOT NULL COMMENT 'foreing key of #__reddesign_designs',
 	PRIMARY KEY (`reddesign_designbackground_id`)
 ) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;
 
