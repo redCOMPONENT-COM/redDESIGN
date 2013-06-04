@@ -67,6 +67,11 @@ $height = $this->item->area_height;
 					</script>
 					<img id="background"
 					     src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->item->jpegpreviewfile; ?>">
+						<span
+							class="help-block">
+							<br/>
+							<span class="label label-info"><?php echo  JText::_('COM_REDDESIGN_COMMON_ATTENTION') ?>
+							</span> <?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_THUMB_PREVIEW_DESC'); ?></span>
 				</div>
 			</div>
 			<div class="control-group">
