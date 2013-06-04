@@ -78,7 +78,7 @@ defined('_JEXEC') or die();
 			<div class="control-group">
 				<label class="control-label " for="title">
 					<?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_FIELD_TITLE'); ?>
-					* </label>
+					</label>
 
 				<div class="controls">
 					<input type="text" name="title" id="title" value="<?php echo $this->item->title; ?>"
