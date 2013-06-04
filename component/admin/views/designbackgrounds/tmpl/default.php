@@ -13,7 +13,7 @@ defined('_JEXEC') or die();
 
 <div id="designs" class="submenu-container">
 	<div class="submenu-link">
-		<a href="index.php?option=com_reddesign&view=generalinfo">
+		<a href="index.php?option=com_reddesign&view=designs">
 			<?php echo JText::_('COM_REDDESING_GENERAL_INFO') ?>
 		</a>
 	</div>
