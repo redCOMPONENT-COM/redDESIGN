@@ -67,7 +67,7 @@ defined('_JEXEC') or die();
 						});
 					</script>
 					<img id="background"
-					     src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->item->jpegpreviewfile; ?>">
+					     src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->item->jpegpreviewfile; ?>" />
 						<span
 							class="help-block">
 							<br/>
