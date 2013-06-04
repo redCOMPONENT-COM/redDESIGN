@@ -8,6 +8,13 @@
  */
 
 defined('_JEXEC') or die();
+
+$x1 = $this->item->area_x1;
+$y1 = $this->item->area_y1;
+$x2 = $this->item->area_x2;
+$y2 = $this->item->area_y2;
+$width = $this->item->area_width;
+$height = $this->item->area_height;
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data"
       class="form-horizontal">
@@ -46,12 +53,14 @@ defined('_JEXEC') or die();
 						jQuery(document).ready(function ($) {
 							jQuery('img#background').imgAreaSelect({
 								handles: true,
-								x1: <?php echo $this->item->area_x1; ?>,
-								y1: <?php echo $this->item->area_y1; ?>,
-								x2: <?php echo $this->item->area_x2; ?>,
-								y2: <?php echo $this->item->area_y2; ?>,
-								area_width: <?php echo $this->item->area_width; ?>,
-								area_height: <?php echo $this->item->area_height; ?>,
+								<?php if(!empty($x1) && !empty($y1) && !empty($x2) && !empty($y2) && !empty($width) && !empty($height) ) : ?>
+								x1: <?php echo $x1; ?>,
+								y1: <?php echo $y1; ?>,
+								x2: <?php echo $x2; ?>,
+								y2: <?php echo $y2; ?>,
+								area_width: <?php echo $width; ?>,
+								area_height: <?php echo $height; ?>,
+								<?php endif; ?>
 								onSelectEnd: populateSelectorData
 							});
 						});
