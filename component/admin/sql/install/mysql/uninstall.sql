@@ -1,12 +1,12 @@
-DROP TABLE IF EXISTS `#__reddesign_area`;
-DROP TABLE IF EXISTS `#__reddesign_designtype`;
-DROP TABLE IF EXISTS `#__reddesign_image`;
-DROP TABLE IF EXISTS `#__reddesign_redshop`;
-DROP TABLE IF EXISTS `#__reddesign_order`;
-DROP TABLE IF EXISTS `#__reddesign_template`;
-DROP TABLE IF EXISTS `#__reddesign_config`;
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
+DROP TABLE IF EXISTS `#__reddesign_backgrounds_fonts`;
 DROP TABLE IF EXISTS `#__reddesign_fonts`;
 DROP TABLE IF EXISTS `#__reddesign_designs`;
 DROP TABLE IF EXISTS `#__reddesign_designbackgrounds`;
-DROP TABLE IF EXISTS `#__reddesign_backgroundfont`;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
