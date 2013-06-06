@@ -17,8 +17,8 @@ defined('_JEXEC') or die();
 	<input type="hidden" name="task" value="">
 	<input type="hidden" name="reddesign_designbackground_id"
 	       value="<?php echo $this->item->reddesign_designbackground_id; ?>">
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 	<?php if (!empty($this->item->epsfile) && !empty($this->item->jpegpreviewfile)) : ?>
-		<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 		<input type="hidden" id="area_x1" name="area_x1" value="<?php echo $this->item->area_x1; ?>">
 		<input type="hidden" id="area_y1" name="area_y1" value="<?php echo $this->item->area_y1; ?>">
 		<input type="hidden" id="area_x2" name="area_x2" value="<?php echo $this->item->area_x2; ?>">
