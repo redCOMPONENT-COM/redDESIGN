@@ -25,6 +25,6 @@ defined('_JEXEC') or die();
 				</label>
 			<?php endforeach; ?>
 		</fieldset>
-		<span class="help-block"><?php echo JText::_('JFIELD_PUBLISHED_DESC'); ?></span>
+		<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_FIELD_AVAILABLE_FONTS_DESC'); ?></span>
 	</div>
 </div>

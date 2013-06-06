@@ -34,11 +34,32 @@ defined('_JEXEC') or die();
 						class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_FIELD_TITLE_DESC'); ?></span>
 			</div>
 		</div>
+		<div class="control-group">
+			<label class="control-label todo-label" for="enabled">
+				<?php echo JText::_('JSTATUS'); ?>
+			</label>
+
+			<div class="controls">
+				<?php echo JHTML::_(
+					'select.booleanlist',
+					'enabled',
+					'class="inputbox"',
+					$this->item->enabled,
+					JText::_('JPUBLISHED'),
+					JText::_('JUNPUBLISHED')
+				);
+				?>
+				<span class="help-block"><?php echo JText::_('JFIELD_PUBLISHED_DESC'); ?></span>
+			</div>
+		</div>
 		<?php if (!empty($this->item->epsfile) && !empty($this->item->jpegpreviewfile)) : ?>
+			<h4><?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_SUBTITLE_AREA'); ?></h4>
 			<?php echo $this->loadTemplate('preview'); ?>
 		<?php else : ?>
+			<h4><?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_SUBTITLE_UPLOAD'); ?></h4>
 			<?php echo $this->loadTemplate('upload'); ?>
 		<?php endif; ?>
+		<h4><?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_SUBTITLE_DESIGN'); ?></h4>
 		<div class="control-group">
 			<label class="control-label " for="reddesign_design_id">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_FIELD_DESIGN'); ?>
@@ -58,27 +79,15 @@ defined('_JEXEC') or die();
 					class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_FIELD_DESIGN_DESC'); ?></span>
 			</div>
 		</div>
-		<?php if (!empty($this->fonts_list)) : ?>
+		<h4><?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_SUBTITLE_FONTS'); ?></h4>
+		<?php if (empty($this->fonts_list)) : ?>
+			<div class="alert">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+				<strong><?php echo JText::_('COM_REDDESIGN_COMMON_WARNING'); ?></strong> <?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_NO_FONTS'); ?>
+			</div>
+		<?php else : ?>
 			<?php echo $this->loadTemplate('fonts'); ?>
 		<?php endif; ?>
-		<div class="control-group">
-			<label class="control-label todo-label" for="enabled">
-				<?php echo JText::_('JSTATUS'); ?>
-			</label>
-
-			<div class="controls">
-				<?php echo JHTML::_(
-					'select.booleanlist',
-					'enabled',
-					'class="inputbox"',
-					$this->item->enabled,
-					JText::_('JPUBLISHED'),
-					JText::_('JUNPUBLISHED')
-				);
-				?>
-				<span class="help-block"><?php echo JText::_('JFIELD_PUBLISHED_DESC'); ?></span>
-			</div>
-		</div>
 	</div>
 </form>
 
