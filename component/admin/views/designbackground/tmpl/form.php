@@ -18,17 +18,10 @@ defined('_JEXEC') or die();
 	<input type="hidden" name="reddesign_designbackground_id"
 	       value="<?php echo $this->item->reddesign_designbackground_id; ?>">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
-	<?php if (!empty($this->item->epsfile) && !empty($this->item->jpegpreviewfile)) : ?>
-		<input type="hidden" id="area_x1" name="area_x1" value="<?php echo $this->item->area_x1; ?>">
-		<input type="hidden" id="area_y1" name="area_y1" value="<?php echo $this->item->area_y1; ?>">
-		<input type="hidden" id="area_x2" name="area_x2" value="<?php echo $this->item->area_x2; ?>">
-		<input type="hidden" id="area_y2" name="area_y2" value="<?php echo $this->item->area_y2; ?>">
-		<input type="hidden" id="area_width" name="area_width" value="<?php echo $this->item->area_width; ?>">
-		<input type="hidden" id="area_height" name="area_height" value="<?php echo $this->item->area_height; ?>">
-	<?php endif; ?>
 
 	<div id="basic_configuration" class="span12">
 		<h3><?php echo JText::_('COM_REDDESIGN_TITLE_DESIGNBACKGROUNDS_EDIT'); ?></h3>
+
 		<div class="control-group">
 			<label class="control-label " for="title">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_FIELD_TITLE'); ?>
@@ -36,7 +29,7 @@ defined('_JEXEC') or die();
 
 			<div class="controls">
 				<input type="text" name="title" id="title" value="<?php echo $this->item->title; ?>"
-					   class="inputbox required" size="50">
+				       class="inputbox required" size="50">
 					<span
 						class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_FIELD_TITLE_DESC'); ?></span>
 			</div>

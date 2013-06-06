@@ -1,7 +1,29 @@
-.icon-48-reddesign { background-image: url(../images/reddesign_48.png) }
+.icon-48-reddesign {
+    background-image: url(../images/reddesign_48.png)
+}
 
-.form-container { clear: both; }
+.form-container {
+    clear: both;
+}
 
-.submenu-container { padding-bottom: 25px; }
+.submenu-container {
+    padding-bottom: 25px;
+}
 
-.submenu-link { float: left; margin-right: 15px; }
+.submenu-link {
+    float: left;
+    margin-right: 15px;
+}
+
+.left {
+    float: left;
+}
+
+.clear-both {
+    clear: both;
+}
+
+.left-clear-both {
+    float: left;
+    clear: both;
+}
