@@ -282,8 +282,6 @@ class ReddesignModelDesignbackground extends FOFModel
 			$background_fonts_list[] = $value['reddesign_font_id'];
 		}
 
-dump($background_fonts_list);
-
 		return $background_fonts_list;
 	}
 
