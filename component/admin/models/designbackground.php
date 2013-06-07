@@ -248,4 +248,83 @@ class ReddesignModelDesignbackground extends FOFModel
 
 		return $designs_list;
 	}
+
+	/**
+	 * This method runs after the data is saved to the $table. It takes care from the 1:N relation between Background and Fonts
+	 *
+	 * @param   FOFTable  &$table  table item with form values
+	 *
+	 * @return  boolean
+	 */
+	protected function onAfterSave(&$table)
+	{
+		// Get the selected fonts in the Edit Form
+		$selected_fonts_in_edit_form	= $this->input->get('background_fonts', array(), 'array');
+
+		// Get the current background being edited
+		$current_background				= (int) $table->reddesign_designbackground_id;
+
+		// Get the current fonts already on that specific Background
+		$db		= $this->getDbo();
+		$query	= $db->getQuery(true);
+
+		$query->select('reddesign_font_id')
+			->from('#__reddesign_backgrounds_fonts')
+			->where('reddesign_designbackground_id = ' . $current_background)
+			->order('reddesign_font_id ASC');
+
+		$db->setQuery($query);
+		$current_fonts_in_relation = $db->loadAssocList();
+
+		// Check if there are differences between current submission and the already stored relation
+		if (sort($selected_fonts_in_edit_form) == sort($current_fonts_in_relation))
+		{
+			// If there has been no changes, just continue normal execution, otherwise refresh the relation data
+			parent::onAfterSave($table);
+		}
+
+		// If there are fonts to delete, REMOVE fonts from the relation
+		$fonts_to_remove = array_diff($current_fonts_in_relation, $selected_fonts_in_edit_form);
+
+		if (!!$fonts_to_remove)
+		{
+			foreach ($fonts_to_remove as $font_to_remove)
+			{
+				// Where conditions for the Query
+				$conditions = array(
+					'reddesign_designbackground_id=' . $db->quote($current_background),
+					'reddesign_font_id = ' . $db->quote($font_to_remove['reddesign_font_id'])
+				);
+
+				$query = $db->getQuery(true);
+
+				$query->delete($db->nameQuote('#__reddesign_backgrounds_fonts'))
+					->where($conditions);
+
+				$db->setQuery($query);
+				$db->query();
+			}
+		}
+
+		// If there are fonts to add, ADD the new fonts in the relation
+		$fonts_to_add = array_diff($selected_fonts_in_edit_form, $current_fonts_in_relation);
+
+		if (!!$fonts_to_add)
+		{
+			$query = $db->getQuery(true);
+
+			$query->insert($db->quoteName('#__reddesign_backgrounds_fonts'))
+				->columns($db->quoteName(array('reddesign_designbackground_id', 'reddesign_font_id')));
+
+			foreach ($selected_fonts_in_edit_form as $selected_font)
+			{
+				$query->values($db->quote($current_background) . ' ,' . $db->quote($selected_font));
+			}
+
+			$db->setQuery($query);
+			$db->query();
+		}
+
+		parent::onAfterSave($table);
+	}
 }
