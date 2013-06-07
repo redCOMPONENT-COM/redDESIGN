@@ -21,6 +21,9 @@ defined('_JEXEC') or die();
 						type="checkbox"
 						name="background_fonts[]"
 						value="<?php echo $font->reddesign_font_id; ?>"
+						<?php if(in_array($font->reddesign_font_id, $this->background_fonts_list)) : ?>
+							checked="checked"
+						<?php endif; ?>
 						/><?php echo $font->title; ?>
 				</label>
 			<?php endforeach; ?>
