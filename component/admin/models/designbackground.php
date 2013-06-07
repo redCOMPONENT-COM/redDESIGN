@@ -244,10 +244,49 @@ class ReddesignModelDesignbackground extends FOFModel
 
 		$db->setQuery($query);
 
-		$designs_list = $db->loadObjectList();
+		$fonts_list = $db->loadObjectList();
 
-		return $designs_list;
+		return $fonts_list;
 	}
+
+	/**
+	 * Return a list of fonts in a Background.
+	 *
+	 * @return   array  List of object in the database relation.
+	 */
+	public function getBackgroundFonts()
+	{
+		$current_background = $this->record->reddesign_designbackground_id;
+
+		if (!$current_background)
+		{
+			return false;
+		}
+
+		$db = $this->getDbo();
+		$query	= $db->getQuery(true);
+
+		$query->select('reddesign_font_id')
+			->from('#__reddesign_backgrounds_fonts')
+			->where('reddesign_designbackground_id = ' . $current_background)
+			->order('reddesign_font_id ASC');
+
+		$db->setQuery($query);
+
+		$result = $db->loadAssocList();
+
+		$background_fonts_list = array();
+
+		foreach ($result as $key => $value)
+		{
+			$background_fonts_list[] = $value['reddesign_font_id'];
+		}
+
+dump($background_fonts_list);
+
+		return $background_fonts_list;
+	}
+
 
 	/**
 	 * This method runs after the data is saved to the $table. It takes care from the 1:N relation between Background and Fonts
