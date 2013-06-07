@@ -29,12 +29,9 @@ class ReddesignViewDesignbackground extends FOFViewHtml
 	 */
 	public function display($tpl = null)
 	{
-		$document = JFactory::getDocument();
-		$document->addScript(rtrim(JURI::base(),'/').'/../media/com_reddesign/assets/js/jquery.imgareaselect.pack.js');
-		$document->addStyleSheet(rtrim(JURI::base(),'/').'/../media/com_reddesign/assets/css/imgareaselect-animated.css');
-
 		$model = $this->getModel();
 		$this->assign('background_fonts_list', $model->getBackgroundFonts());
+
 		parent::display($tpl);
 	}
 

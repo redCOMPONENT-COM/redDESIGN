@@ -8,6 +8,9 @@
  */
 
 defined('_JEXEC') or die();
+
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/jquery.imgareaselect.pack.js');
+FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animated.css');
 ?>
 
 <div class="control-group">
