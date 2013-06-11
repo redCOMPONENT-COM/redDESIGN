@@ -13,6 +13,15 @@ defined('_JEXEC') or die;
 <img class="left" id="background"
 				     src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->item->jpegpreviewfile; ?>"/>
 
-
+<form>
+	<textarea id="BackgroundTxt"></textarea>
+	<div id="PreviewTxt"></div>
+	<script>
+		akeeba.jQuery(document).ready(function(){
+			akeeba.jQuery('#BackgroundTxt').keyup(function(){
+				akeeba.jQuery('#PreviewTxt').html(akeeba.jQuery('#BackgroundTxt').val());
+			});
+		});
+	</script>
 </form>
 
