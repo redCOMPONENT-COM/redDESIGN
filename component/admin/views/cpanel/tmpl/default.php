@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 
 <div id="cpanel" class="span12">
 	<?php if (!extension_loaded('gd') && !function_exists('gd_info')) : ?>
-		 <p class="alert"><?php echo JText::_('RED_REDDESING_CPANEL_ERROR_CANT_FIND_GD_LIBRARY'); ?></p>
+		<p class="alert"><?php echo JText::_('RED_REDDESING_CPANEL_ERROR_CANT_FIND_GD_LIBRARY'); ?></p>
 	<?php endif; ?>
 	<?php if (!extension_loaded('imagick')) : ?>
 		<p class="alert"><?php echo JText::_('RED_REDDESING_CPANEL_ERROR_CANT_FIND_IMAGICK_LIBRARY'); ?></p>
@@ -26,6 +26,16 @@ defined('_JEXEC') or die;
 				border="0" alt="<?php echo JText::_('COM_REDDESING_CPANEL_ICON_DESGIGNTYPE_ALT') ?>"/>
 				<span>
 					<?php echo JText::_('COM_REDDESING_CPANEL_ICON_DESGIGNTYPE') ?><br/>
+				</span>
+		</a>
+	</div>
+	<div class="icon">
+		<a href="index.php?option=com_reddesign&view=designbackgrounds">
+			<img
+				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_designarea_48.png"
+				border="0" alt="<?php echo JText::_('COM_REDDESING_BACKGROUNDS') ?>"/>
+				<span>
+					<?php echo JText::_('COM_REDDESING_BACKGROUNDS') ?><br/>
 				</span>
 		</a>
 	</div>

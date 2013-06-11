@@ -11,19 +11,6 @@ defined('_JEXEC') or die();
 
 ?>
 
-<div id="designs" class="submenu-container">
-	<div class="submenu-link">
-		<a href="index.php?option=com_reddesign&view=designs">
-			<?php echo JText::_('COM_REDDESING_GENERAL_INFO') ?>
-		</a>
-	</div>
-	<div class="submenu-link">
-		<a href="index.php?option=com_reddesign&view=designbackgrounds">
-			<?php echo JText::_('COM_REDDESING_BACKGROUNDS') ?>
-		</a>
-	</div>
-</div>
-
 <div class="form-container">
 	<form id="adminForm" name="adminForm" method="post" action="index.php">
 		<input type="hidden" value="com_reddesign" name="option">
@@ -42,7 +29,7 @@ defined('_JEXEC') or die();
 					<?php echo JHTML::_('grid.order', $this->items); ?>
 				</th>
 				<th width="20">
-					<input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(this);" />
+					<input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(this);"/>
 				</th>
 				<th>
 					<?php echo JHTML::_('grid.sort', 'JGLOBAL_TITLE', 'title', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
@@ -54,7 +41,7 @@ defined('_JEXEC') or die();
 			<tr>
 				<td colspan="3">
 					<input type="text" name="search" id="search"
-					       value="<?php echo $this->escape($this->getModel()->getState('search',''));?>"
+					       value="<?php echo $this->escape($this->getModel()->getState('search', '')); ?>"
 					       class="input-medium" onchange="document.adminForm.submit();"
 					       placeholder="<?php echo JText::_('JGLOBAL_TITLE') ?>"
 						/>
@@ -68,7 +55,7 @@ defined('_JEXEC') or die();
 					</nobr>
 				</td>
 				<td>
-					<?php  ?>
+					<?php ?>
 				</td>
 			</tr>
 			</thead>
@@ -78,16 +65,19 @@ defined('_JEXEC') or die();
 				$m = 1; ?>
 				<?php foreach ($this->items as $item) : ?>
 					<?php
-					$i++; $m = 1-$m;
+					$i++;
+					$m = 1 - $m;
 					$item->published = $item->enabled;
 					$ordering = $this->lists->order == 'ordering';
 					?>
-					<tr class="<?php echo 'row'.$m; ?>">
+					<tr class="<?php echo 'row' . $m; ?>">
 						<td class="order" align="center" width="8%">
-							<span><?php echo $this->pagination->orderUpIcon( $i, true, 'orderup', 'Move Up', $ordering ); ?></span>
-							<span><?php echo $this->pagination->orderDownIcon( $i, $count, true, 'orderdown', 'Move Down', $ordering ); ?></span>
-							<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
-							<input type="text" name="order[]" size="5" value="<?php echo $item->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
+							<span><?php echo $this->pagination->orderUpIcon($i, true, 'orderup', 'Move Up', $ordering); ?></span>
+							<span><?php echo $this->pagination->orderDownIcon($i, $count, true, 'orderdown', 'Move Down', $ordering); ?></span>
+							<?php $disabled = $ordering ? '' : 'disabled="disabled"'; ?>
+							<input type="text" name="order[]" size="5"
+							       value="<?php echo $item->ordering; ?>" <?php echo $disabled ?> class="text_area"
+							       style="text-align: center"/>
 						</td>
 						<td>
 							<?php echo JHTML::_('grid.id', $i, $item->reddesign_designbackground_id, false); ?>
@@ -96,6 +86,7 @@ defined('_JEXEC') or die();
 							<a href="index.php?option=com_reddesign&view=designbackground&id=<?php echo $item->reddesign_designbackground_id ?>">
 								<strong><?php echo $this->escape(JText::_($item->title)) ?></strong>
 							</a>
+
 							<p class="smallsub">
 								(<span><?php echo $this->escape($item->slug) ?></span>)
 							</p>
