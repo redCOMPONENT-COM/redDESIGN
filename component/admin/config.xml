@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
+
     <fieldset
             name="general_configuration"
             label="COM_REDDESIGN_GENERAL_CONFIGURATION"
@@ -7,30 +8,62 @@
             >
 
         <field
-            name="max_eps_file_size"
-            type="text"
-            size="5"
-            default="2"
-            label="COM_REDDESIGN_MAX_EPS_FILE_SIZE"
-            description="COM_REDDESIGN_MAX_EPS_FILE_SIZE_DESC"
-            />
+                name="max_eps_file_size"
+                type="text"
+                size="5"
+                default="2"
+                label="COM_REDDESIGN_MAX_EPS_FILE_SIZE"
+                description="COM_REDDESIGN_MAX_EPS_FILE_SIZE_DESC"
+                />
+
+        <field
+                name="eps_bestfit"
+                type="radio"
+                default="1"
+                label="COM_REDMEMBER_EPS_BESTFIT"
+                description="COM_REDMEMBER_EPS_BESTFIT_DESC">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+
+        <field
+                name="max_eps_thumbnail_width"
+                type="text"
+                size="5"
+                default="600"
+                label="COM_REDDESIGN_MAX_EPS_THUMBNAIL_WIDTH"
+                description="COM_REDDESIGN_MAX_EPS_THUMBNAIL_WIDTH_DESC"
+                />
+
+        <field
+                name="max_eps_thumbnail_height"
+                type="text"
+                size="5"
+                default="400"
+                label="COM_REDDESIGN_MAX_EPS_THUMBNAIL_HEIGHT"
+                description="COM_REDDESIGN_MAX_EPS_THUMBNAIL_HEIGHT_DESC"
+                />
+
     </fieldset>
 
-	<fieldset
-			name="permissions"
-			label="JCONFIG_PERMISSIONS_LABEL"
-			description="JCONFIG_PERMISSIONS_DESC"
-			>
-		<field
-				name="rules"
-				type="rules"
-				label="JCONFIG_PERMISSIONS_LABEL"
-				class="inputbox"
-				validate="rules"
-				filter="rules"
-				component="com_helloworld"
-				section="component"
-				/>
-	</fieldset>
+    <fieldset
+            name="permissions"
+            label="JCONFIG_PERMISSIONS_LABEL"
+            description="JCONFIG_PERMISSIONS_DESC"
+            >
+
+        <field
+                name="rules"
+                type="rules"
+                label="JCONFIG_PERMISSIONS_LABEL"
+                class="inputbox"
+                validate="rules"
+                filter="rules"
+                component="com_helloworld"
+                section="component"
+                />
+
+    </fieldset>
+
 </config>
 

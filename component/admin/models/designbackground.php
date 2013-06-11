@@ -26,7 +26,7 @@ class ReddesignModelDesignbackground extends FOFModel
 	 * under a random name and returns a full file definition array, or false if
 	 * the upload failed for any reason.
 	 *
-	 * @param   array  $file  The file descriptor returned by PHP
+	 * @param   array $file  The file descriptor returned by PHP
 	 *
 	 * @return array|bool
 	 */
@@ -111,7 +111,7 @@ class ReddesignModelDesignbackground extends FOFModel
 	/**
 	 * Checks if the EPS file can be uploaded. This is a security check.
 	 *
-	 * @param   array  $file  File information
+	 * @param   array $file  File information
 	 *
 	 * @return  boolean
 	 */
@@ -175,18 +175,34 @@ class ReddesignModelDesignbackground extends FOFModel
 	/**
 	 * Creates a image based on a eps file to show the look and feel of the background into media://com_reddesing/assets/backgrounds/
 	 *
-	 * @param   string  $eps_file  the path to a .eps file
+	 * @param   string $eps_file  the path to a .eps file
 	 *
 	 * @return  string
 	 */
 	public function createBackgroundPreview($eps_file)
 	{
+		$params = JComponentHelper::getParams('com_reddesign');
+		$best_fit = $params->get('eps_bestfit', 1);
+		$max_thumb_width = $params->get('max_eps_thumbnail_width', 600);
+		$max_thumb_height = $params->get('max_eps_thumbnail_height', 400);
+
 		$eps_file_location = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $eps_file;
 
 		// Read EPS
 		$im = new Imagick;
-		$im->setResolution(100, 100);
+		//$im->setResolution(100, 100);
 		$im->readImage($eps_file_location);
+
+		$dimensions = $im->getImageGeometry();
+
+		if ($best_fit && ($dimensions['width'] < $max_thumb_width || $dimensions['height'] < $max_thumb_height))
+		{
+			$im->thumbnailImage($max_thumb_width, $max_thumb_height, true);
+		}
+		else if ($dimensions['width'] > $max_thumb_width || $dimensions['height'] > $max_thumb_height)
+		{
+			$im->thumbnailImage($max_thumb_width, $max_thumb_height, true);
+		}
 
 		// Convert to jpg
 		$im->setCompression(Imagick::COMPRESSION_JPEG);
@@ -264,7 +280,7 @@ class ReddesignModelDesignbackground extends FOFModel
 		}
 
 		$db = $this->getDbo();
-		$query	= $db->getQuery(true);
+		$query = $db->getQuery(true);
 
 		$query->select('reddesign_font_id')
 			->from('#__reddesign_backgrounds_fonts')
@@ -289,21 +305,21 @@ class ReddesignModelDesignbackground extends FOFModel
 	/**
 	 * This method runs after the data is saved to the $table. It takes care from the 1:N relation between Background and Fonts
 	 *
-	 * @param   FOFTable  &$table  table item with form values
+	 * @param   FOFTable &$table  table item with form values
 	 *
 	 * @return  boolean
 	 */
 	protected function onAfterSave(&$table)
 	{
 		// Get the selected fonts in the Edit Form
-		$selectedFontsInEditForm	= $this->input->get('background_fonts', array(), 'array');
+		$selectedFontsInEditForm = $this->input->get('background_fonts', array(), 'array');
 
 		// Get the current background being edited
-		$background				= (int) $table->reddesign_designbackground_id;
+		$background = (int) $table->reddesign_designbackground_id;
 
 		// Get the current fonts already on that specific Background
-		$db		= $this->getDbo();
-		$query	= $db->getQuery(true);
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
 
 		$query->select('reddesign_font_id')
 			->from('#__reddesign_backgrounds_fonts')

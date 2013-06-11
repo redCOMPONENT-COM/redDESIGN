@@ -71,7 +71,7 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 				<img class="left" id="background"
 				     src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->item->jpegpreviewfile; ?>"/>
 
-				<div class="left">
+				<div class="left m-top-15">
 					<div class="control-group">
 						<label for="area_x1" class="control-label">
 							<?php echo JText::_('COM_REDDESIGN_AREA_X1') ?>
