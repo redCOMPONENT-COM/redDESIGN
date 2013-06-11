@@ -12,14 +12,14 @@ JLoader::import('joomla.filesystem.file');
 
 
 /**
- * Designbackground Model.
+ * Background Model.
  *
  * @package     RedDesign.Component
  * @subpackage  Administrator
  *
  * @since       1.0
  */
-class ReddesignModelDesignbackground extends FOFModel
+class ReddesignModelBackground extends FOFModel
 {
 	/**
 	 * Moves an uploaded EPS file to the media://com_reddesing/assets/backgrounds/
@@ -69,7 +69,7 @@ class ReddesignModelDesignbackground extends FOFModel
 		// If we have a name clash, abort the upload
 		if (JFile::exists($filepath))
 		{
-			$this->setError(JText::_('COM_REDDESIGN_ERROR_DESIGNBACKGROUND_FILENAMEALREADYEXIST'));
+			$this->setError(JText::_('COM_REDDESIGN_ERROR_BACKGROUND_FILENAMEALREADYEXIST'));
 
 			return false;
 		}
@@ -77,7 +77,7 @@ class ReddesignModelDesignbackground extends FOFModel
 		// Do the upload
 		if (!JFile::upload($file['tmp_name'], $filepath))
 		{
-			$this->setError(JText::_('COM_REDDESIGN_ERROR_DESIGNBACKGROUND_CANTJFILEUPLOAD'));
+			$this->setError(JText::_('COM_REDDESIGN_ERROR_BACKGROUND_CANTJFILEUPLOAD'));
 
 			return false;
 		}
@@ -121,7 +121,7 @@ class ReddesignModelDesignbackground extends FOFModel
 
 		if (empty($file['name']))
 		{
-			$this->setError(JText::_('COM_REDDESIGN_DESIGNBACKGROUND_ERROR_UPLOAD_INPUT'));
+			$this->setError(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_UPLOAD_INPUT'));
 
 			return false;
 		}
@@ -130,7 +130,7 @@ class ReddesignModelDesignbackground extends FOFModel
 
 		if ($file['name'] !== JFile::makesafe($file['name']))
 		{
-			$this->setError(JText::_('COM_REDDESIGN_DESIGNBACKGROUND_ERROR_FILE_NAME'));
+			$this->setError(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_FILE_NAME'));
 
 			return false;
 		}
@@ -142,7 +142,7 @@ class ReddesignModelDesignbackground extends FOFModel
 
 		if (!in_array($format, $allowable))
 		{
-			$this->setError(JText::_('COM_REDDESIGN_DESIGNBACKGROUND_ERROR_WRONG_FILE_EXTENSION'));
+			$this->setError(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_WRONG_FILE_EXTENSION'));
 
 			return false;
 		}
@@ -152,7 +152,7 @@ class ReddesignModelDesignbackground extends FOFModel
 
 		if ($maxSize > 0 && (int) $file['size'] > $maxSize)
 		{
-			$this->setError(JText::_('COM_REDDESIGN_DESIGNBACKGROUND_ERROR_FILE_TOOLARGE'));
+			$this->setError(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_FILE_TOOLARGE'));
 
 			return false;
 		}
@@ -164,7 +164,7 @@ class ReddesignModelDesignbackground extends FOFModel
 		// If the temp file does not have ok MIME, return
 		if (!in_array($file['type'], $validFileTypes))
 		{
-			$this->setError(JText::_('COM_REDDESIGN_DESIGNBACKGROUND_ERROR_INVALID_MIME'));
+			$this->setError(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_INVALID_MIME'));
 
 			return false;
 		}
@@ -272,7 +272,7 @@ class ReddesignModelDesignbackground extends FOFModel
 	 */
 	public function getBackgroundFonts()
 	{
-		$current_background = $this->record->reddesign_designbackground_id;
+		$current_background = $this->record->reddesign_background_id;
 
 		if (!$current_background)
 		{
@@ -284,7 +284,7 @@ class ReddesignModelDesignbackground extends FOFModel
 
 		$query->select('reddesign_font_id')
 			->from('#__reddesign_backgrounds_fonts')
-			->where('reddesign_designbackground_id = ' . $current_background)
+			->where('reddesign_background_id = ' . $current_background)
 			->order('reddesign_font_id ASC');
 
 		$db->setQuery($query);
@@ -315,7 +315,7 @@ class ReddesignModelDesignbackground extends FOFModel
 		$selectedFontsInEditForm = $this->input->get('background_fonts', array(), 'array');
 
 		// Get the current background being edited
-		$background = (int) $table->reddesign_designbackground_id;
+		$background = (int) $table->reddesign_background_id;
 
 		// Get the current fonts already on that specific Background
 		$db = $this->getDbo();
@@ -323,7 +323,7 @@ class ReddesignModelDesignbackground extends FOFModel
 
 		$query->select('reddesign_font_id')
 			->from('#__reddesign_backgrounds_fonts')
-			->where('reddesign_designbackground_id = ' . $background)
+			->where('reddesign_background_id = ' . $background)
 			->order('reddesign_font_id ASC');
 
 		$db->setQuery($query);
@@ -345,7 +345,7 @@ class ReddesignModelDesignbackground extends FOFModel
 			{
 				// Where conditions for the Query
 				$conditions = array(
-					'reddesign_designbackground_id=' . $db->quote($background),
+					'reddesign_background_id=' . $db->quote($background),
 					'reddesign_font_id = ' . $db->quote($fontToRemove['reddesign_font_id'])
 				);
 
@@ -367,7 +367,7 @@ class ReddesignModelDesignbackground extends FOFModel
 			$query = $db->getQuery(true);
 
 			$query->insert($db->quoteName('#__reddesign_backgrounds_fonts'))
-				->columns($db->quoteName(array('reddesign_designbackground_id', 'reddesign_font_id')));
+				->columns($db->quoteName(array('reddesign_background_id', 'reddesign_font_id')));
 
 			foreach ($selectedFontsInEditForm as $selectedFont)
 			{

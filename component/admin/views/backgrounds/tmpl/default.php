@@ -14,7 +14,7 @@ defined('_JEXEC') or die();
 <div class="form-container">
 	<form id="adminForm" name="adminForm" method="post" action="index.php">
 		<input type="hidden" value="com_reddesign" name="option">
-		<input type="hidden" value="designbackgrounds" name="view">
+		<input type="hidden" value="backgrounds" name="view">
 		<input type="hidden" value="browse" name="task">
 		<input type="hidden" value="" name="boxchecked">
 		<input type="hidden" value="" name="hidemainmenu">
@@ -80,10 +80,10 @@ defined('_JEXEC') or die();
 							       style="text-align: center"/>
 						</td>
 						<td>
-							<?php echo JHTML::_('grid.id', $i, $item->reddesign_designbackground_id, false); ?>
+							<?php echo JHTML::_('grid.id', $i, $item->reddesign_background_id, false); ?>
 						</td>
 						<td align="left">
-							<a href="index.php?option=com_reddesign&view=designbackground&id=<?php echo $item->reddesign_designbackground_id ?>">
+							<a href="index.php?option=com_reddesign&view=background&id=<?php echo $item->reddesign_background_id ?>">
 								<strong><?php echo $this->escape(JText::_($item->title)) ?></strong>
 							</a>
 

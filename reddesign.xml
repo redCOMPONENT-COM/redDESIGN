@@ -31,7 +31,6 @@
 	<files folder="component/site">
 		<folder>views</folder>
 		<folder>controllers</folder>
-		<folder>models</folder>
 		<filename>dispatcher.php</filename>
 		<filename>index.html</filename>
 		<filename>reddesign.php</filename>
