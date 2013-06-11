@@ -15,7 +15,7 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 
 <div class="control-group">
 	<label class="control-label ">
-		<?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_THUMB_PREVIEW') ?>
+		<?php echo JText::_('COM_REDDESIGN_BACKGROUND_THUMB_PREVIEW') ?>
 	</label>
 
 	<div class="controls">
@@ -145,7 +145,7 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 				<span class="label label-info">
 					<?php echo JText::_('COM_REDDESIGN_COMMON_ATTENTION') ?>
 				</span>
-				<?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_THUMB_PREVIEW_DESC'); ?>
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_THUMB_PREVIEW_DESC'); ?>
 			</span>
 		</div>
 	</div>

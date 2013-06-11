@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 /**
- * Design Background View
+ * Background View
  *
  * @package     RedDesign.Component
  * @subpackage  Administrator
@@ -18,7 +18,7 @@ defined('_JEXEC') or die;
  * @since       1.0
  */
 
-class ReddesignViewDesignbackground extends FOFViewHtml
+class ReddesignViewBackground extends FOFViewHtml
 {
 	/**
 	 * Initialize JS and CSS files for the image selector

@@ -18,7 +18,7 @@ defined('_JEXEC') or die;
  */
 class ReddesignDispatcher extends FOFDispatcher
 {
-	public $defaultView = 'reddesign';
+	public $defaultView = 'background';
 
 	public function onBeforeDispatch()
 	{

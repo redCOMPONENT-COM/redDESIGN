@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerDesignbackground extends FOFController
+class ReddesignControllerBackground extends FOFController
 {
 	/**
 	 * Constructor to set the right model
@@ -27,7 +27,7 @@ class ReddesignControllerDesignbackground extends FOFController
 	{
 		parent::__construct($config);
 
-		$this->modelName = 'designbackground';
+		$this->modelName = 'background';
 	}
 
 	/**

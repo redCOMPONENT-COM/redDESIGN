@@ -47,8 +47,8 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designs` (
 -- Table structure for table `#_reddesign_fonts`
 --
 
-CREATE TABLE IF NOT EXISTS `#__reddesign_designbackgrounds` (
-	`reddesign_designbackground_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
+	`reddesign_background_id` int(11) NOT NULL AUTO_INCREMENT,
 	`title` VARCHAR (255),
 	`slug` VARCHAR (255),
 	`enabled` tinyint(3) NOT NULL DEFAULT '1',
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designbackgrounds` (
 	`area_width` int(11) NOT NULL COMMENT 'selection width',
 	`area_height` int(11) NOT NULL COMMENT 'selection height',
 	`reddesign_design_id` int(11) NOT NULL COMMENT 'foreing key of #__reddesign_designs',
-	PRIMARY KEY (`reddesign_designbackground_id`)
+	PRIMARY KEY (`reddesign_background_id`)
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
 -- -----------------------------------------------------
@@ -76,11 +76,11 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designbackgrounds` (
 -- xref of fonts and backgrounds
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds_fonts` (
-	`reddesign_designbackground_id` INT(11) NOT NULL COMMENT 'foreing key of #__reddesign_designbackgrounds',
+	`reddesign_background_id` INT(11) NOT NULL COMMENT 'foreing key of #__reddesign_backgrounds',
 	`reddesign_font_id` INT(11) NOT NULL COMMENT 'foreing key of #__reddesign_fonts',
-	PRIMARY KEY (`reddesign_designbackground_id`, `reddesign_font_id`) ,
-	FOREIGN KEY (`reddesign_designbackground_id` )
-		REFERENCES `#__reddesign_designbackgrounds` (`reddesign_designbackground_id` )
+	PRIMARY KEY (`reddesign_background_id`, `reddesign_font_id`) ,
+	FOREIGN KEY (`reddesign_background_id` )
+		REFERENCES `#__reddesign_backgrounds` (`reddesign_background_id` )
 			ON DELETE CASCADE
 			ON UPDATE NO ACTION,
 	FOREIGN KEY (`reddesign_font_id` )

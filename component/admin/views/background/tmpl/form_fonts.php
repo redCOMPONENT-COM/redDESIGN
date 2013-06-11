@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 ?>
 <div class="control-group">
 	<label class="control-label todo-label" for="enabled">
-		<?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_FIELD_AVAILABLE_FONTS'); ?>
+		<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_AVAILABLE_FONTS'); ?>
 	</label>
 	<div class="controls">
 		<fieldset>
@@ -28,6 +28,6 @@ defined('_JEXEC') or die();
 				</label>
 			<?php endforeach; ?>
 		</fieldset>
-		<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNBACKGROUND_FIELD_AVAILABLE_FONTS_DESC'); ?></span>
+		<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_AVAILABLE_FONTS_DESC'); ?></span>
 	</div>
 </div>

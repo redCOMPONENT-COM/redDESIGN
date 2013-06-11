@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignTableDesignbackground extends FOFTable
+class ReddesignTableBackground extends FOFTable
 {
 	/**
 	 * Removes font related files after erasing the font in database
