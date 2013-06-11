@@ -27,6 +27,6 @@ class ReddesignControllerReddesign extends FOFController
 	 */
 	public function execute($task)
 	{
-		parent::execute('browse');
+		parent::execute('designbackground');
 	}
 }
