@@ -14,18 +14,18 @@ defined('_JEXEC') or die;
 
 <div id="cpanel" class="span12">
 	<?php if (!extension_loaded('gd') && !function_exists('gd_info')) : ?>
-		<p class="alert"><?php echo JText::_('RED_REDDESING_CPANEL_ERROR_CANT_FIND_GD_LIBRARY'); ?></p>
+		<p class="alert"><?php echo JText::_('RED_REDDESIGN_CPANEL_ERROR_CANT_FIND_GD_LIBRARY'); ?></p>
 	<?php endif; ?>
 	<?php if (!extension_loaded('imagick')) : ?>
-		<p class="alert"><?php echo JText::_('RED_REDDESING_CPANEL_ERROR_CANT_FIND_IMAGICK_LIBRARY'); ?></p>
+		<p class="alert"><?php echo JText::_('RED_REDDESIGN_CPANEL_ERROR_CANT_FIND_IMAGICK_LIBRARY'); ?></p>
 	<?php endif; ?>
 	<div class="icon">
 		<a href="index.php?option=com_reddesign&view=designs">
 			<img
 				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_designarea_48.png"
-				border="0" alt="<?php echo JText::_('COM_REDDESING_CPANEL_ICON_DESGIGNTYPE_ALT') ?>"/>
+				border="0" alt="<?php echo JText::_('COM_REDDESIGN_CPANEL_ICON_DESGIGNTYPE_ALT') ?>"/>
 				<span>
-					<?php echo JText::_('COM_REDDESING_CPANEL_ICON_DESGIGNTYPE') ?><br/>
+					<?php echo JText::_('COM_REDDESIGN_CPANEL_ICON_DESGIGNTYPE') ?><br/>
 				</span>
 		</a>
 	</div>
@@ -33,9 +33,9 @@ defined('_JEXEC') or die;
 		<a href="index.php?option=com_reddesign&view=backgrounds">
 			<img
 				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_designarea_48.png"
-				border="0" alt="<?php echo JText::_('COM_REDDESING_BACKGROUNDS') ?>"/>
+				border="0" alt="<?php echo JText::_('COM_REDDESIGN_BACKGROUNDS') ?>"/>
 				<span>
-					<?php echo JText::_('COM_REDDESING_BACKGROUNDS') ?><br/>
+					<?php echo JText::_('COM_REDDESIGN_BACKGROUNDS') ?><br/>
 				</span>
 		</a>
 	</div>
@@ -43,9 +43,9 @@ defined('_JEXEC') or die;
 		<a href="index.php?option=com_reddesign&view=fonts">
 			<img
 				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_fonts_48.png"
-				border="0" alt="<?php echo JText::_('COM_REDDESING_CPANEL_ICON_FONTS_ALT') ?>"/>
+				border="0" alt="<?php echo JText::_('COM_REDDESIGN_CPANEL_ICON_FONTS_ALT') ?>"/>
 				<span>
-					<?php echo JText::_('COM_REDDESING_CPANEL_ICON_FONTS') ?><br/>
+					<?php echo JText::_('COM_REDDESIGN_CPANEL_ICON_FONTS') ?><br/>
 				</span>
 		</a>
 	</div>
@@ -53,9 +53,9 @@ defined('_JEXEC') or die;
 		<a href="http://wiki.redcomponent.com/index.php?title=redDESIGN:Table_of_Contents" target="_blank">
 			<img
 				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_help_48.png"
-				border="0" alt="<?php echo JText::_('COM_REDDESING_CPANEL_ICON_HELP_ALT') ?>"/>
+				border="0" alt="<?php echo JText::_('COM_REDDESIGN_CPANEL_ICON_HELP_ALT') ?>"/>
 				<span>
-					<?php echo JText::_('COM_REDDESING_CPANEL_ICON_HELP') ?><br/>
+					<?php echo JText::_('COM_REDDESIGN_CPANEL_ICON_HELP') ?><br/>
 				</span>
 		</a>
 	</div>

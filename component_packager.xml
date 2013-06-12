@@ -10,37 +10,37 @@
 <!--    - change the package folder path in variable package.dir         -->
 <!--    - execute this PHING build file                                  -->
 <!-- ==================================================================  -->
-<project name="com_reddesing" default="dist">
+<project name="com_reddesign" default="dist">
     <!-- Do initialization stuff -->
-    <property file="build.properties" override="true" />
+    <property file="build.properties" override="true"/>
 
     <property
             name="extension"
             value="${comp.name}"
-            override="true" />
+            override="true"/>
 
     <property
             name="version"
             value="${comp.version}"
-            override="true" />
+            override="true"/>
 
     <!-- Folder where the the extension repository is located  -->
     <property
             name="extpath"
             value="${repo.dir}"
-            override="true" />
+            override="true"/>
 
     <!-- Target dir where packages will be created  -->
     <property
             name="targetdir"
             value="${package.dir}/${extension}/package-${extension}-v${version}"
-            override="true" />
+            override="true"/>
 
     <!-- Version of the redSHOP for witch the module is intended to  -->
     <property
             name="joomla_version"
             value="${joomla.version}"
-            override="true" />
+            override="true"/>
 
     <!-- ============================================  -->
     <!-- Create packages folder                        -->
@@ -48,14 +48,14 @@
     <target name="prepare">
         <!-- Check if the target folder exists. If not, create it -->
         <if>
-            <available file="${targetdir}" type="dir" />
+            <available file="${targetdir}" type="dir"/>
             <then>
-                <echo msg="Removing old ${targetdir}" />
-                <delete dir="${targetdir}" />
+                <echo msg="Removing old ${targetdir}"/>
+                <delete dir="${targetdir}"/>
             </then>
         </if>
-        <echo msg="Making directory to store the packages at ${targetdir}" />
-        <mkdir dir="${targetdir}" />
+        <echo msg="Making directory to store the packages at ${targetdir}"/>
+        <mkdir dir="${targetdir}"/>
 
     </target>
 
@@ -66,53 +66,53 @@
 
     <target name="build" depends="prepare">
 
-        <echo msg="Copying INSTALLER files to build directory..." />
+        <echo msg="Copying INSTALLER files to build directory..."/>
         <copy todir="${targetdir}">
             <fileset dir="${extpath}/">
-                <include name="LICENSE.txt" />
-                <include name="reddesign.xml" />
-                <include name="script.reddesign.php" />
+                <include name="LICENSE.txt"/>
+                <include name="reddesign.xml"/>
+                <include name="script.reddesign.php"/>
             </fileset>
         </copy>
 
-        <echo msg="Copying COMPONENT folder to build directory..." />
+        <echo msg="Copying COMPONENT folder to build directory..."/>
         <copy todir="${targetdir}/component">
             <fileset dir="${extpath}/component">
-                <include name="**" />
-                <exclude name=".*" />
+                <include name="**"/>
+                <exclude name=".*"/>
             </fileset>
         </copy>
 
-        <echo msg="Copying MEDIA folder to build directory..." />
+        <echo msg="Copying MEDIA folder to build directory..."/>
         <copy todir="${targetdir}/media">
             <fileset dir="${extpath}/media">
-                <include name="**" />
-                <exclude name=".*" />
+                <include name="**"/>
+                <exclude name=".*"/>
             </fileset>
         </copy>
 
-		<echo msg="Copying LIBRARIES folder to build directory..." />
-		<copy todir="${targetdir}/libraries">
-			<fileset dir="${extpath}/libraries">
-				<include name="**" />
-				<exclude name=".*" />
-			</fileset>
-		</copy>
+        <echo msg="Copying LIBRARIES folder to build directory..."/>
+        <copy todir="${targetdir}/libraries">
+            <fileset dir="${extpath}/libraries">
+                <include name="**"/>
+                <exclude name=".*"/>
+            </fileset>
+        </copy>
     </target>
 
     <!-- ============================================  -->
     <!-- (DEFAULT)  Target: dist                       -->
     <!-- ============================================  -->
     <target name="dist" depends="build">
-        <echo msg="Creating ZIP archive..." />
+        <echo msg="Creating ZIP archive..."/>
 
         <zip destfile="${targetdir}/../${extension}-v${version}_j${joomla_version}.zip">
             <fileset dir="${targetdir}">
-                <include name="**" />
-                <exclude name=".*" />
+                <include name="**"/>
+                <exclude name=".*"/>
             </fileset>
         </zip>
 
-        <echo msg="Files copied and compressed in build directory OK!" />
+        <echo msg="Files copied and compressed in build directory OK!"/>
     </target>
 </project>

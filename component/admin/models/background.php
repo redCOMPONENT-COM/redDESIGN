@@ -22,7 +22,7 @@ JLoader::import('joomla.filesystem.file');
 class ReddesignModelBackground extends FOFModel
 {
 	/**
-	 * Moves an uploaded EPS file to the media://com_reddesing/assets/backgrounds/
+	 * Moves an uploaded EPS file to the media://com_reddesign/assets/backgrounds/
 	 * under a random name and returns a full file definition array, or false if
 	 * the upload failed for any reason.
 	 *
@@ -173,7 +173,7 @@ class ReddesignModelBackground extends FOFModel
 	}
 
 	/**
-	 * Creates a image based on a eps file to show the look and feel of the background into media://com_reddesing/assets/backgrounds/
+	 * Creates a image based on a eps file to show the look and feel of the background into media://com_reddesign/assets/backgrounds/
 	 *
 	 * @param   string $eps_file  the path to a .eps file
 	 *
@@ -213,7 +213,7 @@ class ReddesignModelBackground extends FOFModel
 		// Create the Background thumb .jpg file name
 		$thumb_name = substr($eps_file, 0, -3) . 'jpg';
 
-		// Write image to the media://com_reddesing/assets/backgrounds/
+		// Write image to the media://com_reddesign/assets/backgrounds/
 		$im->writeImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $thumb_name);
 		$im->clear();
 		$im->destroy();

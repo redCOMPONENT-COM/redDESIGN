@@ -22,11 +22,11 @@ JLoader::import('joomla.filesystem.file');
 class ReddesignModelFont extends FOFModel
 {
 	/**
-	 * Moves an uploaded font file to the media://com_reddesing/assets/font
+	 * Moves an uploaded font file to the media://com_reddesign/assets/font
 	 * under a random name and returns a full file definition array, or false if
 	 * the upload failed for any reason.
 	 *
-	 * @param   array  $file  The file descriptor returned by PHP
+	 * @param   array $file  The file descriptor returned by PHP
 	 *
 	 * @return array|bool
 	 */
@@ -119,7 +119,7 @@ class ReddesignModelFont extends FOFModel
 	/**
 	 * Checks if the font file can be uploaded
 	 *
-	 * @param   array  $file  File information
+	 * @param   array $file  File information
 	 *
 	 * @return  boolean
 	 */
@@ -177,7 +177,7 @@ class ReddesignModelFont extends FOFModel
 	/**
 	 * Creates a image based on a ttf font file to show the look and feel of the font.
 	 *
-	 * @param   string  $font_file  the path to a .ttf font file
+	 * @param   string $font_file  the path to a .ttf font file
 	 *
 	 * @return  string
 	 */
@@ -207,17 +207,17 @@ class ReddesignModelFont extends FOFModel
 	/**
 	 * Function for create image from text with selected font. Justify text in image (0-Left, 1-Right, 2-Center).
 	 *
-	 * @param   String  $text     String to convert into the Image.
-	 * @param   String  $font     Font name of the text. Kip font file in same folder.
-	 * @param   int     $Justify  Justify text in image (0-Left, 1-Right, 2-Center).
-	 * @param   int     $Leading  Space between lines.
-	 * @param   int     $W        Width of the Image.
-	 * @param   int     $H        Hight of the Image.
-	 * @param   int     $X        x-coordinate of the text into the image.
-	 * @param   int     $Y        y-coordinate of the text into the image.
-	 * @param   int     $fsize    Font size of text.
-	 * @param   array   $color    RGB color array for text color.
-	 * @param   array   $bgcolor  RGB color array for background.
+	 * @param   String $text     String to convert into the Image.
+	 * @param   String $font     Font name of the text. Kip font file in same folder.
+	 * @param   int    $Justify  Justify text in image (0-Left, 1-Right, 2-Center).
+	 * @param   int    $Leading  Space between lines.
+	 * @param   int    $W        Width of the Image.
+	 * @param   int    $H        Hight of the Image.
+	 * @param   int    $X        x-coordinate of the text into the image.
+	 * @param   int    $Y        y-coordinate of the text into the image.
+	 * @param   int    $fsize    Font size of text.
+	 * @param   array  $color    RGB color array for text color.
+	 * @param   array  $bgcolor  RGB color array for background.
 	 *
 	 * @return   resource  image resource
 	 */
@@ -239,7 +239,7 @@ class ReddesignModelFont extends FOFModel
 		$H = ($H == 0) ? abs($_bx[5] - $_bx[3]) + ($nL > 1 ? ($nL * $Leading) : 0) : $H;
 
 		$im = imagecreate($W + 2, $H + 8)
-			or die("Cannot Initialize new GD image stream");
+		or die("Cannot Initialize new GD image stream");
 
 		// RGB color background.
 		$background_color = imagecolorallocate($im, $bgcolor[0], $bgcolor[1], $bgcolor[2]);
@@ -292,7 +292,7 @@ class ReddesignModelFont extends FOFModel
 	/**
 	 * Returns the font name from a specific .ttf file using an external helper
 	 *
-	 * @param   string  $ttf_file  The .ttf resource file
+	 * @param   string $ttf_file  The .ttf resource file
 	 *
 	 * @return  string|false
 	 */
