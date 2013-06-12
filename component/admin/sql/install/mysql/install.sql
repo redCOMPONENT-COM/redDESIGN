@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designs` (
 	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`locked_by` bigint(20) NOT NULL DEFAULT '0',
 	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`reddesign_background_id` int(11) NOT NULL,
 	PRIMARY KEY (`reddesign_design_id`)
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
