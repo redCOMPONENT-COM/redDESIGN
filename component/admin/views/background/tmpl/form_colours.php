@@ -18,3 +18,18 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/colorpicker/css/colorpicker.css
 	<input type="text" class="span2" value="" >
 	<span class="add-on"><i style="background-color: rgb(255, 146, 180)"></i></span>
 </div>
+
+<?php
+/*
+The following script loads the color picker. Also adds the akeeba-bootstrap to BODY
+Because Akeeba Strapper only loads the namespaced Twitter Bootstrap if you have wrapped
+the output you want style with an element having the class akeeba-bootstrap.
+see: libraries/strapper/strapper.php => public function bootstrap()
+*/
+?>
+<script>
+	akeeba.jQuery(document).ready(function() {
+		akeeba.jQuery('body').addClass('akeeba-bootstrap');
+		akeeba.jQuery('.color').colorpicker();
+	});
+</script>
