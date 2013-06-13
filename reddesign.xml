@@ -65,6 +65,7 @@
 	<media destination="com_reddesign" folder="media">
 		<folder>assets</folder>
 		<folder>colorpicker</folder>
+		<folder>jpicker</folder>
 	</media>
 	<!-- Install FoF and package modules and plugins -->
 	<scriptfile>script.reddesign.php</scriptfile>
