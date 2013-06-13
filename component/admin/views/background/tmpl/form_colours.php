@@ -21,21 +21,20 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/jpicker/jPicker.css');
 		{
 			akeeba.jQuery('.Multiple').jPicker.defaults.images.clientPath='<?php echo JURI::root() ?>media/com_reddesign/jpicker/images/';
 			akeeba.jQuery('.Multiple').jPicker();
+			akeeba.jQuery(document).on('click', '.deletecolor', function(){
+				jQuery(this).parent().remove();
+			});
+			akeeba.jQuery(document).on('click', '#addcolorpicker', function(){
+				akeeba.jQuery('#addcolorpicker').parent().before('<p><input class="Multiple" name="fontcolors[]" type="text" value="000000" /><a class="btn btn-danger deletecolor"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_COLOURS_REMOVE_COLOR'); ?></a><br /></p>');
+				akeeba.jQuery('.Multiple').last().jPicker();
+			});
 		});
-	function addColor(){
-		akeeba.jQuery('#addcolorpicker').before('<p><input class="Multiple" name="fontcolors[]" type="text" value="000000" /><a class="btn btn-danger" onclick="javascript:removeColor(this)"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_COLOURS_REMOVE_COLOR'); ?></a><br /></p>');
-		akeeba.jQuery('.Multiple').last().jPicker();
-	}
-	function removeColor(elem){
-		$toremove = $(elem);
-		$toremove.parentNode.remove();
-	}
 </script>
 	<p>
 		<input class="Multiple" name="fontcolors[]" type="text" value="000000" /><br />
 	</p>
-	<p id="addcolorpicker">
-		<a class="btn" onclick="javascript:addColor()">
+	<p>
+		<a class="btn" id="addcolorpicker">
 			<?php echo JText::_('COM_REDDESIGN_BACKGROUND_COLOURS_ADD_COLOR'); ?>
 		</a>
 	</p>
