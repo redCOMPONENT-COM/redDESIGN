@@ -9,7 +9,7 @@
 defined('_JEXEC') or die;
 
 /**
- * Font Controller.
+ * Background Controller.
  *
  * @package     RedDesign.Component
  * @subpackage  Administrator
