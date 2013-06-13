@@ -88,6 +88,8 @@ defined('_JEXEC') or die();
 		<?php else : ?>
 			<?php echo $this->loadTemplate('fonts'); ?>
 		<?php endif; ?>
+		<h4><?php echo JText::_('COM_REDDESIGN_BACKGROUND_SUBTITLE_FONTCOLOURS'); ?></h4>
+		<?php echo $this->loadTemplate('colours'); ?>
 	</div>
 </form>
 
