@@ -22,13 +22,20 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/jpicker/jPicker.css');
 			akeeba.jQuery('.Multiple').jPicker.defaults.images.clientPath='<?php echo JURI::root() ?>media/com_reddesign/jpicker/images/';
 			akeeba.jQuery('.Multiple').jPicker();
 		});
+	function addColor(){
+		akeeba.jQuery('#addcolorpicker').before('<p><input class="Multiple" name="fontcolors[]" type="text" value="000000" /><a class="btn btn-danger" onclick="javascript:removeColor(this)"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_COLOURS_REMOVE_COLOR'); ?></a><br /></p>');
+		akeeba.jQuery('.Multiple').last().jPicker();
+	}
+	function removeColor(elem){
+		$toremove = $(elem);
+		$toremove.parentNode.remove();
+	}
 </script>
-<div>
 	<p>
-		<input class="Multiple" type="text" value="000000" /><br />
+		<input class="Multiple" name="fontcolors[]" type="text" value="000000" /><br />
 	</p>
-	<p>
-		<a class="btn" href="#">
+	<p id="addcolorpicker">
+		<a class="btn" onclick="javascript:addColor()">
 			<?php echo JText::_('COM_REDDESIGN_BACKGROUND_COLOURS_ADD_COLOR'); ?>
 		</a>
 	</p>
