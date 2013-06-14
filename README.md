@@ -27,6 +27,9 @@ Commit messages must be in English and has to be formatted like this:
 ### Examples  
 <code>[-] #RR-13 : Undefined variable </code>  
 
+## Link your pull with Issues
+All the task are listed in the issues page: https://github.com/redCOMPONENT-COM/redDESIGN/issues?state=open (remember to filter by milestone).
+
 Every time you submit a Pull make sure to attach the Issue number that you are solving in the "commit" text. You can reference and automatically close issues with commit messages adding any of this texts:
 
 - fixes #xxx
