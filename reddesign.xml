@@ -1,84 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
-	<name>COM_REDDESIGN</name>
-	<creationDate>April 2013</creationDate>
-	<author>redCOMPONENT.com</author>
-	<authorEmail>email@redcomponent.com</authorEmail>
-	<authorUrl>www.redcomponent.com</authorUrl>
-	<copyright>(c) redCOMPONENT.com</copyright>
-	<license>GNU/GPL</license>
-	<version>1.0.0</version>
-	<description>COM_REDDESIGN_XML_DESC</description>
-	<install folder="component/admin">
-		<sql>
-			<file driver="mysql" charset="utf8">sql/install/mysql/install.sql</file>
-			<file driver="mysqli" charset="utf8">sql/install/mysql/install.sql</file>
-		</sql>
-	</install>
-	<uninstall folder="component/admin">
-		<sql>
-			<file driver="mysql" charset="utf8">sql/install/mysql/uninstall.sql</file>
-			<file driver="mysqli" charset="utf8">sql/install/mysql/uninstall.sql</file>
-		</sql>
-	</uninstall>
-	<update>
-		<schemas>
-			<schemapath type="mysql">sql/updates/mysql</schemapath>
-			<schemapath type="mysqli">sql/updates/mysql</schemapath>
-		</schemas>
-	</update>
-	<!-- Frontend -->
-	<files folder="component/site">
-		<folder>views</folder>
-		<folder>controllers</folder>
-		<filename>dispatcher.php</filename>
-		<filename>index.html</filename>
-		<filename>reddesign.php</filename>
-	</files>
-	<languages folder="component/site">
-		<language tag="en-GB">language/en-GB/en-GB.com_reddesign.ini</language>
-		<language tag="en-GB">language/en-GB/en-GB.com_reddesign.sys.ini</language>
-	</languages>
-	<!-- Backend -->
-	<administration>
-		<menu img="../media/com_reddesign/assets/images/reddesign_16.png">COM_REDDESIGN</menu>
-		<files folder="component/admin">
-			<folder>sql</folder>
-			<folder>views</folder>
-			<folder>controllers</folder>
-			<folder>models</folder>
-			<folder>tables</folder>
-			<folder>helpers</folder>
-			<filename>access.xml</filename>
-			<filename>config.xml</filename>
-			<filename>dispatcher.php</filename>
-			<filename>index.html</filename>
-			<filename>reddesign.php</filename>
-			<filename>toolbar.php</filename>
-		</files>
-		<languages folder="component/admin">
-			<language tag="en-GB">language/en-GB/en-GB.com_reddesign.ini</language>
-			<language tag="en-GB">language/en-GB/en-GB.com_reddesign.sys.ini</language>
-		</languages>
-	</administration>
-	<!-- Media folder -->
-	<media destination="com_reddesign" folder="media">
-		<folder>assets</folder>
-		<folder>jpicker</folder>
-	</media>
-	<!-- Install FoF and package modules and plugins -->
-	<scriptfile>script.reddesign.php</scriptfile>
-	<!-- Libraries to install -->
-	<libraries>
-		<!-- library name="reddesign" /-->
-	</libraries>
-	<!-- Modules to install -->
-	<modules>
-		<!--module name="reddesign" group="content" /-->
-	</modules>
-	<!-- Plugins to install -->
-	<plugins>
-		<!--plugin name="reddesign" group="content" /-->
-		<!--plugin name="reddesign" group="system" /-->
-	</plugins>
+    <name>COM_REDDESIGN</name>
+    <creationDate>April 2013</creationDate>
+    <author>redCOMPONENT.com</author>
+    <authorEmail>email@redcomponent.com</authorEmail>
+    <authorUrl>www.redcomponent.com</authorUrl>
+    <copyright>(c) redCOMPONENT.com</copyright>
+    <license>GNU/GPL</license>
+    <version>1.0.0</version>
+    <description>COM_REDDESIGN_XML_DESC</description>
+    <install folder="component/admin">
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install/mysql/install.sql</file>
+            <file driver="mysqli" charset="utf8">sql/install/mysql/install.sql</file>
+        </sql>
+    </install>
+    <uninstall folder="component/admin">
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install/mysql/uninstall.sql</file>
+            <file driver="mysqli" charset="utf8">sql/install/mysql/uninstall.sql</file>
+        </sql>
+    </uninstall>
+    <update>
+        <schemas>
+            <schemapath type="mysql">sql/updates/mysql</schemapath>
+            <schemapath type="mysqli">sql/updates/mysql</schemapath>
+        </schemas>
+    </update>
+    <!-- Frontend -->
+    <files folder="component/site">
+        <folder>views</folder>
+        <folder>controllers</folder>
+        <filename>dispatcher.php</filename>
+        <filename>index.html</filename>
+        <filename>reddesign.php</filename>
+    </files>
+    <languages folder="component/site">
+        <language tag="en-GB">language/en-GB/en-GB.com_reddesign.ini</language>
+        <language tag="en-GB">language/en-GB/en-GB.com_reddesign.sys.ini</language>
+    </languages>
+    <!-- Backend -->
+    <administration>
+        <menu img="../media/com_reddesign/assets/images/reddesign_16.png">COM_REDDESIGN</menu>
+        <files folder="component/admin">
+            <folder>sql</folder>
+            <folder>views</folder>
+            <folder>controllers</folder>
+            <folder>models</folder>
+            <folder>tables</folder>
+            <folder>helpers</folder>
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <filename>dispatcher.php</filename>
+            <filename>index.html</filename>
+            <filename>reddesign.php</filename>
+            <filename>toolbar.php</filename>
+        </files>
+        <languages folder="component/admin">
+            <language tag="en-GB">language/en-GB/en-GB.com_reddesign.ini</language>
+            <language tag="en-GB">language/en-GB/en-GB.com_reddesign.sys.ini</language>
+        </languages>
+    </administration>
+    <!-- Media folder -->
+    <media destination="com_reddesign" folder="media">
+        <folder>assets</folder>
+    </media>
+    <!-- Install FoF and package modules and plugins -->
+    <scriptfile>script.reddesign.php</scriptfile>
+    <!-- Libraries to install -->
+    <libraries>
+        <!-- library name="reddesign" /-->
+    </libraries>
+    <!-- Modules to install -->
+    <modules>
+        <!--module name="reddesign" group="content" /-->
+    </modules>
+    <!-- Plugins to install -->
+    <plugins>
+        <!--plugin name="reddesign" group="content" /-->
+        <!--plugin name="reddesign" group="system" /-->
+    </plugins>
 </extension>
