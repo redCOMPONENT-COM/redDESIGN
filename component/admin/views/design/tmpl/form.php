@@ -10,8 +10,46 @@
 defined('_JEXEC') or die();
 ?>
 
+
+<style type="text/css">
+	#container {
+		width: <?php echo $this->bckgrnd_width; ?>px;
+		height: <?php echo $this->bckgrnd_height; ?>px;
+		position: relative;
+	}
+
+	#image {
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+
+	#text {
+		z-index: 100;
+		position: absolute;
+		color: black;
+		font-family: <?php echo $this->font->slug; ?>;
+		font-size: 24px;
+		font-weight: bold;
+		left: <?php echo $this->background->area_x1; ?>px;
+		top: <?php echo $this->background->area_y1; ?>px;
+	}
+
+	@font-face {
+		font-family: <?php echo $this->font->slug; ?>;
+		src: url(<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/fonts/') . $this->font->fontfile; ?>);
+	}
+
+</style>
+
+<script type="text/javascript">
+	function text() {
+		jQuery('#text').text(jQuery('#image-text').val());
+	}
+</script>
+
 <form action="index.php" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data"
-      class="form-horizontal">
+      class="form-horizontal" style="position:relative;">
 	<input type="hidden" name="option" value="com_reddesign">
 	<input type="hidden" name="view" value="design">
 	<input type="hidden" name="task" value="">
@@ -60,33 +98,37 @@ defined('_JEXEC') or die();
 			</label>
 
 			<div class="controls">
-				<?php
-				$model = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel');
-
-				$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
-
-				$options = array();
-
-				if (count($items)) foreach ($items as $item)
-				{
-					$options[] = JHTML::_('select.option', $item->reddesign_background_id, $item->title);
-				}
-
-				array_unshift($options, JHTML::_('select.option', 0, '- ' . JText::_('COM_REDDESIGN_SELECT_BACKGROUND') . ' -'));
-
-				//$onchange	= $this->element['onchange'] ? ' onchange="'.(string) $this->element['onchange'].'"' : '';
-				$onchange = ' onchange="javascript:"';
-
-				echo JHtml::_('select.genericlist', $options, 'reddesign_background_id', $onchange, 'value', 'text', $this->item->reddesign_background_id);
-				?>
+				<?php echo $this->backgrounds; ?>
 
 				<span class="help-block">
 					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_DESC'); ?>
 				</span>
 
 				<div id="background-image">
-					<img class="left" id="background"
-					     src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->item->jpegpreviewfile; ?>"/>
+
+					<div id="container">
+						<img id="image" alt="<?php echo $this->background->title; ?>"
+						     src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->background->jpegpreviewfile; ?>"/>
+
+						<p id="text">
+							Hello World!
+						</p>
+					</div>
+
+					<div id="image-inputs">
+						<div class="control-group">
+							<label for="image-text" class="control-label">
+								<?php echo JText::_('COM_REDDESIGN_ENTER_TEXT') ?>
+							</label>
+
+							<div class="controls">
+								<input type="text" class="left" id="image-text" name="image-text"
+								       size="50"
+								       value=""
+								       onkeyup="javascript:text();">
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
