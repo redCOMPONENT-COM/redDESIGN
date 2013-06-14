@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
 
 
 --
--- Table structure for table `#_reddesign_fonts`
+-- Table structure for table `#__reddesign_designs`
 --
 
 CREATE TABLE IF NOT EXISTS `#__reddesign_designs` (
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designs` (
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 
 --
--- Table structure for table `#_reddesign_fonts`
+-- Table structure for table `#__reddesign_backgrounds`
 --
 
 CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
 	`area_width` int(11) NOT NULL COMMENT 'selection width',
 	`area_height` int(11) NOT NULL COMMENT 'selection height',
 	`reddesign_design_id` int(11) NOT NULL COMMENT 'foreing key of #__reddesign_designs',
+	`fontcolors` VARCHAR (255)  COMMENT 'list of available colors',
 	PRIMARY KEY (`reddesign_background_id`)
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;
 

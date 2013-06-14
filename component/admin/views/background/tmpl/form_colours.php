@@ -15,21 +15,28 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/jpicker/jPicker.css');
 
 ?>
 
+<p>
+	<input class="Multiple" name="fontcolors[]" type="text" value="000000" /><br />
+</p>
+<p>
+	<a class="btn" id="addcolorpicker">
+		<?php echo JText::_('COM_REDDESIGN_BACKGROUND_COLOURS_ADD_COLOR'); ?>
+	</a>
+</p>
+<p><?php echo $this->fontcolors ?></p>
+
 <script type="text/javascript">
 	akeeba.jQuery(document).ready(
 		function()
 		{
 			akeeba.jQuery('.Multiple').jPicker.defaults.images.clientPath='<?php echo JURI::root() ?>media/com_reddesign/jpicker/images/';
 			akeeba.jQuery('.Multiple').jPicker();
+			akeeba.jQuery(document).on('click', '.deletecolor', function(){
+				jQuery(this).parent().remove();
+			});
+			akeeba.jQuery(document).on('click', '#addcolorpicker', function(){
+				akeeba.jQuery('#addcolorpicker').parent().before('<p><input class="Multiple" name="fontcolors[]" type="text" value="000000" /><a class="btn btn-danger deletecolor"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_COLOURS_REMOVE_COLOR'); ?></a><br /></p>');
+				akeeba.jQuery('.Multiple').last().jPicker();
+			});
 		});
 </script>
-<div>
-	<p>
-		<input class="Multiple" type="text" value="000000" /><br />
-	</p>
-	<p>
-		<a class="btn" href="#">
-			<?php echo JText::_('COM_REDDESIGN_BACKGROUND_COLOURS_ADD_COLOR'); ?>
-		</a>
-	</p>
-</div>
