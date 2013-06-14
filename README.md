@@ -29,9 +29,9 @@ Commit messages must be in English and has to be formatted like this:
 
 Every time you submit a Pull make sure to attach the Issue number that you are solving in the "commit" text. You can reference and automatically close issues with commit messages adding any of this texts:
 
--fixes #xxx
--fixed #xxx
--fix #xxx
--closes #xxx
--close #xxx
--closed #xxx
+- fixes #xxx
+- fixed #xxx
+- fix #xxx
+- closes #xxx
+- close #xxx
+- closed #xxx
