@@ -15,6 +15,16 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/jpicker/jPicker.css');
 
 ?>
 
+<p>
+	<input class="Multiple" name="fontcolors[]" type="text" value="000000" /><br />
+</p>
+<p>
+	<a class="btn" id="addcolorpicker">
+		<?php echo JText::_('COM_REDDESIGN_BACKGROUND_COLOURS_ADD_COLOR'); ?>
+	</a>
+</p>
+<p><?php echo $this->fontcolors ?></p>
+
 <script type="text/javascript">
 	akeeba.jQuery(document).ready(
 		function()
@@ -30,12 +40,3 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/jpicker/jPicker.css');
 			});
 		});
 </script>
-	<p>
-		<input class="Multiple" name="fontcolors[]" type="text" value="000000" /><br />
-	</p>
-	<p>
-		<a class="btn" id="addcolorpicker">
-			<?php echo JText::_('COM_REDDESIGN_BACKGROUND_COLOURS_ADD_COLOR'); ?>
-		</a>
-	</p>
-</div>
