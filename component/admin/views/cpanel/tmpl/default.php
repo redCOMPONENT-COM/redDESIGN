@@ -13,9 +13,6 @@ defined('_JEXEC') or die;
 ?>
 
 <div id="cpanel" class="span12">
-	<?php if (!extension_loaded('gd') && !function_exists('gd_info')) : ?>
-		<p class="alert"><?php echo JText::_('RED_REDDESIGN_CPANEL_ERROR_CANT_FIND_GD_LIBRARY'); ?></p>
-	<?php endif; ?>
 	<?php if (!extension_loaded('imagick')) : ?>
 		<p class="alert"><?php echo JText::_('RED_REDDESIGN_CPANEL_ERROR_CANT_FIND_IMAGICK_LIBRARY'); ?></p>
 	<?php endif; ?>
