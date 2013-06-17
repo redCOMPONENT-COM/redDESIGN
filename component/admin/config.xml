@@ -3,8 +3,8 @@
 
     <fieldset
             name="general_configuration"
-            label="COM_REDDESIGN_GENERAL_CONFIGURATION"
-            description="COM_REDDESIGN_GENERAL_CONFIGURATION_DESC"
+            label="COM_REDDESIGN_CONFIG_GENERAL_CONFIGURATION"
+            description="COM_REDDESIGN_CONFIG_GENERAL_CONFIGURATION_DESC"
             >
 
         <field
@@ -12,16 +12,16 @@
                 type="text"
                 size="5"
                 default="2"
-                label="COM_REDDESIGN_MAX_EPS_FILE_SIZE"
-                description="COM_REDDESIGN_MAX_EPS_FILE_SIZE_DESC"
+                label="COM_REDDESIGN_CONFIG_MAX_EPS_FILE_SIZE"
+                description="COM_REDDESIGN_CONFIG_MAX_EPS_FILE_SIZE_DESC"
                 />
 
         <field
                 name="eps_bestfit"
                 type="radio"
                 default="1"
-                label="COM_REDMEMBER_EPS_BESTFIT"
-                description="COM_REDMEMBER_EPS_BESTFIT_DESC">
+                label="COM_REDDESIGN_CONFIG_EPS_BESTFIT"
+                description="COM_REDDESIGN_CONFIG_EPS_BESTFIT_DESC">
             <option value="0">JNO</option>
             <option value="1">JYES</option>
         </field>
@@ -31,8 +31,8 @@
                 type="text"
                 size="5"
                 default="600"
-                label="COM_REDDESIGN_MAX_EPS_THUMBNAIL_WIDTH"
-                description="COM_REDDESIGN_MAX_EPS_THUMBNAIL_WIDTH_DESC"
+                label="COM_REDDESIGN_CONFIG_MAX_EPS_THUMBNAIL_WIDTH"
+                description="COM_REDDESIGN_CONFIG_MAX_EPS_THUMBNAIL_WIDTH_DESC"
                 />
 
         <field
@@ -40,8 +40,8 @@
                 type="text"
                 size="5"
                 default="400"
-                label="COM_REDDESIGN_MAX_EPS_THUMBNAIL_HEIGHT"
-                description="COM_REDDESIGN_MAX_EPS_THUMBNAIL_HEIGHT_DESC"
+                label="COM_REDDESIGN_CONFIG_MAX_EPS_THUMBNAIL_HEIGHT"
+                description="COM_REDDESIGN_CONFIG_MAX_EPS_THUMBNAIL_HEIGHT_DESC"
                 />
 
     </fieldset>
