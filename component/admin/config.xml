@@ -45,7 +45,105 @@
                 />
 
     </fieldset>
+    <fieldset
+            name="settings_frontend"
+            label="COM_REDDESIGN_CONFIG_SETTINGS_FRONTEND"
+            description="COM_REDDESIGN_CONFIG_SETTINGS_FRONTEND_DESC"
+            >
+        <field
+                name="show_areaname"
+                type="radio"
+                size="5"
+                default="0"
+                label="COM_REDDESIGN_CONFIG_SHOW_AREA_NAME"
+                description="COM_REDDESIGN_CONFIG_SHOW_AREA_NAME_DESC">
 
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+        <field
+                name="show_area_border"
+                type="radio"
+                size="5"
+                default="0"
+                label="COM_REDDESIGN_CONFIG_SHOW_AREA_BORDER_IN_FRONTEND"
+                description="COM_REDDESIGN_CONFIG_SHOW_AREA_BORDER_IN_FRONTEND_DESC">
+
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+    </fieldset>
+    <fieldset
+            name="settings_backend"
+            label="COM_REDDESIGN_CONFIG_SETTINGS_BACKEND"
+            description="COM_REDDESIGN_CONFIG_SETTINGS_BACKEND_DESC"
+            addfieldpath="administrator/components/com_reddesign/models/fields">
+        <field
+                name="show_areaname_backend"
+                type="radio"
+                size="5"
+                default="0"
+                label="COM_REDDESIGN_CONFIG_SHOW_AREA_NAME_IN_BACKEND"
+                description="COM_REDDESIGN_CONFIG_SHOW_AREA_NAME_IN_BACKEND_DESC">
+
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+        <field
+                name="show_area_border_backend"
+                type="radio"
+                size="5"
+                default="0"
+                label="COM_REDDESIGN_CONFIG_SHOW_AREA_BORDER_IN_BACKEND"
+                description="COM_REDDESIGN_CONFIG_SHOW_AREA_BORDER_IN_BACKEND_DESC">
+
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+        <field
+                name="font_preview_text"
+                type="text"
+                size="5"
+                default=""
+                label="COM_REDDESIGN_CONFIG_FONT_PREVIEW_TEXT"
+                description="COM_REDDESIGN_CONFIG_FONT_PREVIEW_TEXT_DESC"
+                />
+        <field
+                name="unit"
+                type="list"
+                size="1"
+                default=""
+                label="COM_REDDESIGN_CONFIG_UNIT"
+                description="COM_REDDESIGN_CONFIG_UNIT_DESC"
+                >
+            <option value="1">px</option>
+            <option value="0.2645833333">mm</option>
+            <option value="0.0264583333">cm</option>
+        </field>
+        <field
+                name="enable_angle"
+                type="radio"
+                default="0"
+                label="COM_REDDESIGN_CONFIG_ENABLE_ANGLE"
+                description="COM_REDDESIGN_CONFIG_ENABLE_ANGLE_DESC">
+
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+        <field
+                name="design_font_size"
+                type="fontsize"
+                default="0"
+                label="COM_REDDESIGN_CONFIG_DEFAULT_DESIGN_SIZE"
+                description="COM_REDDESIGN_CONFIG_DEFAULT_DESIGN_SIZE_DESC"/>
+        <field
+                name="send_user_mail[]"
+                type="userlist"
+                default="0"
+                size="6"
+                label="COM_REDDESIGN_CONFIG_SEND_DESIGN_MAIL_TO"
+                description="COM_REDDESIGN_CONFIG_SEND_DESIGN_MAIL_TO_DESC"/>
+    </fieldset>
     <fieldset
             name="permissions"
             label="JCONFIG_PERMISSIONS_LABEL"
