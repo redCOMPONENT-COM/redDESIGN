@@ -138,19 +138,3 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_redshops` (
   ENGINE =MyISAM
   DEFAULT CHARSET =utf8
   AUTO_INCREMENT =1008;
-
---
--- Table structure for table `#__reddesign_template`
---
-
-CREATE TABLE IF NOT EXISTS `#__reddesign_templates` (
-  `reddesign_template_id` INT(11)      NOT NULL AUTO_INCREMENT,
-  `template_name`         VARCHAR(250) NOT NULL,
-  `template_section`      VARCHAR(250) NOT NULL,
-  `template_desc`         LONGTEXT     NOT NULL,
-  `published`             TINYINT(4)   NOT NULL,
-  PRIMARY KEY (`reddesign_template_id`)
-)
-  ENGINE =MyISAM
-  DEFAULT CHARSET =utf8
-  AUTO_INCREMENT =2;
