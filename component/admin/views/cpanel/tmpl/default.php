@@ -17,22 +17,12 @@ defined('_JEXEC') or die;
 		<p class="alert"><?php echo JText::_('RED_REDDESIGN_CPANEL_ERROR_CANT_FIND_IMAGICK_LIBRARY'); ?></p>
 	<?php endif; ?>
 	<div class="icon">
-		<a href="index.php?option=com_reddesign&view=designs">
+		<a href="index.php?option=com_reddesign&view=designtypes">
 			<img
 				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_designarea_48.png"
 				border="0" alt="<?php echo JText::_('COM_REDDESIGN_CPANEL_ICON_DESGIGNTYPE_ALT') ?>"/>
 				<span>
 					<?php echo JText::_('COM_REDDESIGN_CPANEL_ICON_DESGIGNTYPE') ?><br/>
-				</span>
-		</a>
-	</div>
-	<div class="icon">
-		<a href="index.php?option=com_reddesign&view=backgrounds">
-			<img
-				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_designarea_48.png"
-				border="0" alt="<?php echo JText::_('COM_REDDESIGN_BACKGROUNDS_ALT') ?>"/>
-				<span>
-					<?php echo JText::_('COM_REDDESIGN_BACKGROUNDS') ?><br/>
 				</span>
 		</a>
 	</div>
