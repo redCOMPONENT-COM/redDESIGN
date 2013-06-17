@@ -27,16 +27,6 @@ defined('_JEXEC') or die;
 		</a>
 	</div>
 	<div class="icon">
-		<a href="index.php?option=com_reddesign&view=backgrounds">
-			<img
-				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_designarea_48.png"
-				border="0" alt="<?php echo JText::_('COM_REDDESIGN_BACKGROUNDS_ALT') ?>"/>
-				<span>
-					<?php echo JText::_('COM_REDDESIGN_BACKGROUNDS') ?><br/>
-				</span>
-		</a>
-	</div>
-	<div class="icon">
 		<a href="index.php?option=com_reddesign&view=fonts">
 			<img
 				src="<?php echo rtrim(JURI::base(), '/'); ?>/../media/com_reddesign/assets/images/reddesign_fonts_48.png"
