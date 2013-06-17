@@ -4,7 +4,16 @@
 
 CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
   `reddesign_area_id` INT(11)      NOT NULL AUTO_INCREMENT,
-  `area_name`         VARCHAR(255) NOT NULL,
+	`title` VARCHAR (255),
+	`slug` VARCHAR (255),
+	`enabled` tinyint(3) NOT NULL DEFAULT '1',
+	`ordering` int(10) NOT NULL DEFAULT '0',
+	`created_by` bigint(20) NOT NULL DEFAULT '0',
+	`created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`modified_by` bigint(20) NOT NULL DEFAULT '0',
+	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`locked_by` bigint(20) NOT NULL DEFAULT '0',
+	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `offsetLeft`        INT(11)      NOT NULL,
   `offsetTop`         INT(11)      NOT NULL,
   `height`            INT(11)      NOT NULL,
@@ -35,12 +44,20 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
 
 CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   `reddesign_designtype_id` INT(11)      NOT NULL AUTO_INCREMENT,
-  `designtype_name`         VARCHAR(255) NOT NULL,
+	`title` VARCHAR (255),
+	`slug` VARCHAR (255),
+	`enabled` tinyint(3) NOT NULL DEFAULT '1',
+	`ordering` int(10) NOT NULL DEFAULT '0',
+	`created_by` bigint(20) NOT NULL DEFAULT '0',
+	`created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`modified_by` bigint(20) NOT NULL DEFAULT '0',
+	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`locked_by` bigint(20) NOT NULL DEFAULT '0',
+	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `designtemplate`          BIGINT(20)   NOT NULL,
   `reddesign_autotemplate`  TINYINT(4)   NOT NULL DEFAULT '1',
   `enable_autosize`         INT(11)      NOT NULL,
   `enable_slider`           INT(11)      NOT NULL,
-  `published`               TINYINT(4)   NOT NULL,
   PRIMARY KEY (`reddesign_designtype_id`)
 )
   ENGINE =MyISAM
@@ -52,14 +69,20 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
 
 CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
   `reddesign_font_id` INT(11)      NOT NULL AUTO_INCREMENT,
-  `font_name`         VARCHAR(255) NOT NULL,
-  `font_display_name` VARCHAR(255) NOT NULL,
-  `order`             INT(11)      NOT NULL,
+	`title` VARCHAR (255),
+	`slug` VARCHAR (255),
+	`enabled` tinyint(3) NOT NULL DEFAULT '1',
+	`ordering` int(10) NOT NULL DEFAULT '0',
+	`created_by` bigint(20) NOT NULL DEFAULT '0',
+	`created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`modified_by` bigint(20) NOT NULL DEFAULT '0',
+	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`locked_by` bigint(20) NOT NULL DEFAULT '0',
+	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  `font_display_name` VARCHAR(255) NOT NULL,
   `default_width`     DOUBLE(5, 5) NOT NULL,
   `default_height`    DOUBLE(5, 5) NOT NULL,
   `caps_height`       DOUBLE(5, 5) NOT NULL,
   `baseline_height`   DOUBLE(5, 5) NOT NULL,
-  `published`         INT(11)      NOT NULL,
   PRIMARY KEY (`reddesign_font_id`)
 )
   ENGINE =InnoDB
@@ -88,13 +111,19 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_font_chars` (
 
 CREATE TABLE IF NOT EXISTS `#__reddesign_images` (
   `reddesign_image_id` INT(11)      NOT NULL AUTO_INCREMENT,
-  `image_name`         VARCHAR(255) NOT NULL,
-  `eps_file`           TEXT         NOT NULL,
+	`title` VARCHAR (255),
+	`slug` VARCHAR (255),
+	`enabled` tinyint(3) NOT NULL DEFAULT '1',
+	`ordering` int(10) NOT NULL DEFAULT '0',
+	`created_by` bigint(20) NOT NULL DEFAULT '0',
+	`created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`modified_by` bigint(20) NOT NULL DEFAULT '0',
+	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`locked_by` bigint(20) NOT NULL DEFAULT '0',
+	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  `eps_file`           TEXT         NOT NULL,
   `image_path`         TEXT         NOT NULL,
   `designtype_id`      INT(11)      NOT NULL,
-  `ordering`           INT(11)      NOT NULL,
   `is_PDFbgimage`      TINYINT(4)   NOT NULL,
-  `published`          TINYINT(4)   NOT NULL,
   PRIMARY KEY (`reddesign_image_id`)
 )
   ENGINE =MyISAM
