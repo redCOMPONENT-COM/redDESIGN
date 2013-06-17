@@ -31,27 +31,6 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
   AUTO_INCREMENT =477;
 
 --
--- Table structure for table `#__reddesign_config`
---
-
-CREATE TABLE IF NOT EXISTS `#__reddesign_configs` (
-  `reddesign_config_id`   INT(11)        NOT NULL AUTO_INCREMENT,
-  `show_areaname`         TINYINT(4)     NOT NULL,
-  `show_area_border`      TINYINT(4)     NOT NULL,
-  `show_areaname_backend` TINYINT(4)     NOT NULL,
-  `send_user_mail`        TEXT           NOT NULL,
-  `enable_padding`        INT(11)        NOT NULL,
-  `design_font_size`      LONGTEXT       NOT NULL,
-  `enable_angle`          INT(11)        NOT NULL,
-  `font_preview_text`     VARCHAR(255)   NOT NULL,
-  `unit`                  DOUBLE(10, 10) NOT NULL,
-  PRIMARY KEY (`reddesign_config_id`)
-)
-  ENGINE =MyISAM
-  DEFAULT CHARSET =utf8
-  AUTO_INCREMENT =2;
-
---
 -- Table structure for table `#__reddesign_designtype`
 --
 
