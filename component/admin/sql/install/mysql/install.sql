@@ -54,10 +54,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
 	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`locked_by` bigint(20) NOT NULL DEFAULT '0',
 	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `designtemplate`          BIGINT(20)   NOT NULL,
-  `reddesign_autotemplate`  TINYINT(4)   NOT NULL DEFAULT '1',
-  `enable_autosize`         INT(11)      NOT NULL,
-  `enable_slider`           INT(11)      NOT NULL,
+	`fontsizer` ENUM('auto','slider','dropdown'),
   PRIMARY KEY (`reddesign_designtype_id`)
 )
   ENGINE =MyISAM
