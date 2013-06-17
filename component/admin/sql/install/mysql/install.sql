@@ -27,8 +27,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
   PRIMARY KEY (`reddesign_area_id`)
 )
   ENGINE =MyISAM
-  DEFAULT CHARSET =utf8
-  AUTO_INCREMENT =477;
+  DEFAULT CHARSET =utf8;
 
 --
 -- Table structure for table `#__reddesign_designtype`
@@ -45,8 +44,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   PRIMARY KEY (`reddesign_designtype_id`)
 )
   ENGINE =MyISAM
-  DEFAULT CHARSET =utf8
-  AUTO_INCREMENT =193;
+  DEFAULT CHARSET =utf8;
 
 --
 -- Table structure for table `#__reddesign_font`
@@ -65,8 +63,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
   PRIMARY KEY (`reddesign_font_id`)
 )
   ENGINE =InnoDB
-  DEFAULT CHARSET =utf8
-  AUTO_INCREMENT =6;
+  DEFAULT CHARSET =utf8;
 
 --
 -- Table structure for table `#__reddesign_font_char`
@@ -83,8 +80,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_font_chars` (
   PRIMARY KEY (`reddesign_font_char_id`)
 )
   ENGINE =InnoDB
-  DEFAULT CHARSET =utf8
-  AUTO_INCREMENT =197;
+  DEFAULT CHARSET =utf8;
 
 --
 -- Table structure for table `#__reddesign_image`
@@ -102,8 +98,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_images` (
   PRIMARY KEY (`reddesign_image_id`)
 )
   ENGINE =MyISAM
-  DEFAULT CHARSET =utf8
-  AUTO_INCREMENT =316;
+  DEFAULT CHARSET =utf8;
 
 --
 -- Table structure for table `#__reddesign_order`
@@ -120,8 +115,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_orders` (
   PRIMARY KEY (`reddesign_order_id`)
 )
   ENGINE =MyISAM
-  DEFAULT CHARSET =utf8
-  AUTO_INCREMENT =738;
+  DEFAULT CHARSET =utf8;
 
 --
 -- Table structure for table `#__reddesign_redshop`
@@ -136,5 +130,4 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_redshops` (
   PRIMARY KEY (`reddesign_redshop_id`)
 )
   ENGINE =MyISAM
-  DEFAULT CHARSET =utf8
-  AUTO_INCREMENT =1008;
+  DEFAULT CHARSET =utf8;
