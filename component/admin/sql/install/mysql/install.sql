@@ -93,8 +93,8 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
 
 CREATE TABLE IF NOT EXISTS `#__reddesign_font_chars` (
   `reddesign_font_char_id` INT(11)     NOT NULL AUTO_INCREMENT,
-  `font_id`                INT(11)     NOT NULL,
-  `fontchar`               VARCHAR(10) NOT NULL,
+  `reddesign_font_id`      INT(11)     NOT NULL,
+  `charcter`               VARCHAR(10) NOT NULL,
   `width`                  DOUBLE      NOT NULL,
   `height`                 DOUBLE      NOT NULL,
   `typography`             INT(11)     NOT NULL DEFAULT '1',

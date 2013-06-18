@@ -20,6 +20,57 @@ defined('_JEXEC') or die;
 class ReddesignTableFont extends FOFTable
 {
 	/**
+	 * Performs validation check for field values
+	 *
+	 * @access public
+	 *
+	 * @param void
+	 *
+	 * @return bool
+	 */
+	function check()
+	{
+		$app = JFactory::getApplication();
+
+		if (empty($this->font_file))
+		{
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_EMPTY_FONT_FILE'), 'error');
+
+			return false;
+		}
+
+		if (empty($this->default_width))
+		{
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_EMPTY_DEFAULT_WIDTH'), 'error');
+
+			return false;
+		}
+
+		if (empty($this->default_height))
+		{
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_EMPTY_DEFAULT_HEIGHT'), 'error');
+
+			return false;
+		}
+
+		if (empty($this->default_caps_height))
+		{
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_EMPTY_DEFAULT_CAPS_HEIGHT'), 'error');
+
+			return false;
+		}
+
+		if (empty($this->default_baseline_height))
+		{
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_EMPTY_DEFAULT_BASELINE_HEIGHT'), 'error');
+
+			return false;
+		}
+
+		return parent::check();
+	}
+
+	/**
 	 * Removes font related files after erasing the font in database
 	 *
 	 * @param   int $oid  font database row id
