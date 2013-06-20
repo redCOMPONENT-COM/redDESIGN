@@ -106,12 +106,20 @@
     <target name="dist" depends="build">
         <echo msg="Creating ZIP archive..."/>
 
-        <zip destfile="${targetdir}/../${extension}-v${version}_j${joomla_version}.zip">
-            <fileset dir="${targetdir}">
-                <include name="**"/>
-                <exclude name=".*"/>
-            </fileset>
-        </zip>
+		<!-- Check if the ZIP file already exists. If yes, remove it -->
+		<if>
+			<available file="${package.dir}${extension}/${extension}-v${version}_j${joomla_version}.zip" type="file"/>
+			<then>
+				<delete file="${package.dir}${extension}/${extension}-v${version}_j${joomla_version}.zip" />
+			</then>
+		</if>
+
+		<zip destfile="${targetdir}/../${extension}-v${version}_j${joomla_version}.zip">
+			<fileset dir="${targetdir}">
+				<include name="**"/>
+				<exclude name=".*"/>
+			</fileset>
+		</zip>
 
         <echo msg="Files copied and compressed in build directory OK!"/>
     </target>
