@@ -17,7 +17,7 @@ JHTML::_('behavior.framework');
 	<input type="hidden" name="option" value="com_reddesign">
 	<input type="hidden" name="view" value="background">
 	<input type="hidden" name="task" value="">
-	<input type="hidden" name="reddesign_designtype_id" value="<?php echo $this->input->getInt('designtype', 0); ?>">
+	<input type="hidden" id="reddesign_designtype_id" name="reddesign_designtype_id" value="<?php echo $this->input->getInt('designtype', 0); ?>">
 	<input type="hidden" value="returnurl" name="index.php?option=com_reddesign&view=desingtype&id=<?php echo $this->input->getInt('designtype', 0); ?>">
 	<input type="hidden" name="reddesign_background_id">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
@@ -31,7 +31,7 @@ JHTML::_('behavior.framework');
 				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_TITLE'); ?>
 			</label>
 			<div class="controls">
-				<input type="text" name="title" id="title" value="<?php echo $this->item->title; ?>">
+				<input type="text" name="title" id="bktitle" value="<?php echo $this->item->title; ?>">
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_TITLE_DESC'); ?></span>
 			</div>
 		</div>
@@ -40,7 +40,7 @@ JHTML::_('behavior.framework');
 				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_FILE'); ?>
 			</label>
 			<div class="controls">
-				<input type="file" name="eps_file" id="eps_file" value="">
+				<input type="file" name="eps_file" id="bkeps_file" value="">
 			</div>
 		</div>
 		<div class="control-group">
@@ -64,7 +64,7 @@ JHTML::_('behavior.framework');
 	</div>
 	<p>
 		<a href="#" class="btn" id="closemodal"><?php echo JText::_('JCANCEL'); ?></a>
-		<a href="#" class="btn btn-primary" id="savebackground" onclick="Joomla.submitbutton('save')"><?php echo JText::_('JSAVE'); ?></a>
+		<a href="#" class="btn btn-primary" id="savebackground" onclick="saveBackground()"><?php echo JText::_('JSAVE'); ?></a>
 	</p>
 </form>
 
@@ -78,4 +78,41 @@ JHTML::_('behavior.framework');
 				}
 			);
 		});
+
+	function saveBackground() {
+		var reddesign_designtype_id = akeeba.jQuery('#reddesign_designtype_id').val();
+		var title = akeeba.jQuery('#bktitle').val();
+
+		akeeba.jQuery.ajax({ url: '<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=background&task=ajaxSave&format=raw',
+			data: {
+				reddesign_designtype_id: reddesign_designtype_id,
+				title: title,
+			},
+			type: 'post',
+			success: function (data) {
+				var json = akeeba.jQuery.parseJSON(data);
+				addRow(json);
+				akeeba.jQuery("#ajax-message").removeClass();
+				akeeba.jQuery("#ajax-message").addClass("alert alert-success");
+				akeeba.jQuery("#ajax-message").html(json.message);
+				akeeba.jQuery("#ajax-message").fadeIn("slow");
+				akeeba.jQuery("#ajax-message").fadeOut(3000);
+			},
+			error: function (data) {
+				akeeba.jQuery("#ajax-message").removeClass();
+				akeeba.jQuery("#ajax-message").addClass("alert alert-error");
+				akeeba.jQuery("#ajax-message").html(data);
+				akeeba.jQuery("#ajax-message").fadeIn("slow");
+				akeeba.jQuery("#ajax-message").fadeOut(3000);
+			}
+		});
+
+		akeeba.jQuery('#title').val("");
+	}
+
+
 </script>
+<div id="ajax-message-container" style="height: 25px; padding-bottom: 11px;">
+	<div id="ajax-message" style="display: none;">
+	</div>
+</div>
