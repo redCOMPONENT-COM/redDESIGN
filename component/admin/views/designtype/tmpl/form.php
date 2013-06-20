@@ -10,6 +10,14 @@
 defined('_JEXEC') or die();
 
 JHTML::_('behavior.framework');
+
+// @Todo: this check should be moved to the view
+if (0 == $this->item->reddesing_designtype_id)
+{
+	echo $this->loadTemplate('general');
+}
+else
+{
 ?>
 
 <ul class="nav nav-tabs">
@@ -40,4 +48,4 @@ JHTML::_('behavior.framework');
 		<?php echo $this->loadTemplate('color'); ?>
 	</div>
 </div>
-
+<?php } ?>

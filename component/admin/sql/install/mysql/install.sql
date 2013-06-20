@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   `eps_file`           TEXT NOT NULL,
   `image_path`         TEXT       NOT NULL,
   `designtype_id`      INT(11)    NOT NULL,
-  `is_PDFbgimage`      TINYINT(4) NOT NULL,
+  `isPDFbgimage`      TINYINT(4) NOT NULL,
   PRIMARY KEY (`reddesign_background_id`)
 )
   ENGINE =MyISAM
