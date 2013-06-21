@@ -36,7 +36,7 @@ defined('_JEXEC') or die();
 				<?php echo JText::_('JPUBLISHED'); ?>
 			</label>
 			<div class="controls">
-				<?php echo JHTML::_('select.booleanlist', 'published', null, $this->item->status); ?>
+				<?php echo JHTML::_('select.booleanlist', 'published', null, $this->item->enabled); ?>
 			</div>
 		</div>
 		<div class="control-group">
