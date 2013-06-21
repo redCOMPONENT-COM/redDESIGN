@@ -12,9 +12,6 @@ defined('_JEXEC') or die;
 JHTML::_('behavior.modal');
 
 ?>
-<p>
-	<a class="modal btn btn-primary" href="index.php?option=com_reddesign&view=background&tmpl=component&designtype=<?php echo $this->item->reddesign_designtype_id; ?>">Add</a>
-</p>
 
 <div class="form-container">
 	<form id="background" name="background" method="post" action="index.php">
@@ -87,5 +84,28 @@ JHTML::_('behavior.modal');
 			<?php endif; ?>
 			</tbody>
 		</table>
+
+		<div class="well">
+			<input type="button" class="btn btn-primary" id="addBkBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_ADD'); ?>" />
+		</div>
+		<div id="uploadBkForm" class="well" style="display:none;">
+			<?php echo $this->loadTemplate('backgroundupload'); ?>
+		</div>
+		<script type="text/javascript">
+			akeeba.jQuery(document).ready(
+				function()
+				{
+					akeeba.jQuery(document).on('click', '#addBkBtn', function()
+						{
+							showBackgroundForm()
+						}
+					);
+				});
+
+			function showBackgroundForm() {
+				akeeba.jQuery('#addBkBtn').parent().hide();
+				akeeba.jQuery('#uploadBkForm').fadeIn("slow");
+			}
+		</script>
 	</form>
 </div>
