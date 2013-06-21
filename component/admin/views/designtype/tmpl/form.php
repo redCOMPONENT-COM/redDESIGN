@@ -40,4 +40,3 @@ JHTML::_('behavior.framework');
 		<?php echo $this->loadTemplate('color'); ?>
 	</div>
 </div>
-
