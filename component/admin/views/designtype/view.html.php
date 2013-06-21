@@ -21,18 +21,25 @@ defined('_JEXEC') or die;
 class ReddesignViewDesigntype extends FOFViewHtml
 {
 	/**
-	 * Initialize JS and CSS files for the image selector
+	 * Executes before rendering the page for the Add task.
 	 *
-	 * @param   string  $tpl  The template to use
+	 * @param   string  $tpl  Subtemplate to use
 	 *
-	 * @return  boolean|null False if we can't render anything	 *
+	 * @return  boolean  Return true to allow rendering of the page
 	 */
-	public function display($tpl = null)
+	protected function onAdd($tpl = null)
 	{
-		$backgroundModel = FOFModel::getTmpInstance('Background', 'ReddesignModel')
-			->reddesign_designtype_id($item->reddesign_designtype_id);
-		$this->backgrounds = $backgroundModel->getItemList();
+		JRequest::setVar('hidemainmenu', true);
+		$model 		= $this->getModel();
+		$this->item = $model->getItem();
 
-		parent::display($tpl);
+		if (!empty($this->item->reddesign_designtype_id))
+		{
+			$backgroundModel = FOFModel::getTmpInstance('Background', 'ReddesignModel')
+				->reddesign_designtype_id($this->item->reddesign_designtype_id);
+			$this->backgrounds = $backgroundModel->getItemList();
+		}
+
+		return true;
 	}
 }
