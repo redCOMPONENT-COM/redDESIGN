@@ -100,19 +100,13 @@ JHTML::_('behavior.modal');
 			type: 'post',
 			success: function (data) {
 				var json = akeeba.jQuery.parseJSON(data);
-				addRow(json);
-				akeeba.jQuery("#ajax-message").removeClass();
-				akeeba.jQuery("#ajax-message").addClass("alert alert-success");
-				akeeba.jQuery("#ajax-message").html(json.message);
-				akeeba.jQuery("#ajax-message").fadeIn("slow");
-				akeeba.jQuery("#ajax-message").fadeOut(3000);
+				<?php // @Todo: we need to define a common way to show messages ?>
+
+				<?php // @Todo: should I reload the page and link to #backgrounds tab? ?>
+				location.reload();
 			},
 			error: function (data) {
-				akeeba.jQuery("#ajax-message").removeClass();
-				akeeba.jQuery("#ajax-message").addClass("alert alert-error");
-				akeeba.jQuery("#ajax-message").html(data);
-				akeeba.jQuery("#ajax-message").fadeIn("slow");
-				akeeba.jQuery("#ajax-message").fadeOut(3000);
+				<?php // @Todo: we need to define a common way to show messages ?>
 			}
 		});
 
