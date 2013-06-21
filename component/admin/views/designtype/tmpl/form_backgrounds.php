@@ -86,16 +86,16 @@ JHTML::_('behavior.modal');
 		</table>
 
 		<div class="well">
-			<input type="button" class="btn btn-primary" id="addBkBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_ADD'); ?>" />
+			<input type="button" class="btn btn-primary" id="addBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_ADD'); ?>" />
 		</div>
-		<div id="uploadBkForm" class="well" style="display:none;">
+		<div id="uploadBgForm" class="well" style="display:none;">
 			<?php echo $this->loadTemplate('backgroundupload'); ?>
 		</div>
 		<script type="text/javascript">
 			akeeba.jQuery(document).ready(
 				function()
 				{
-					akeeba.jQuery(document).on('click', '#addBkBtn', function()
+					akeeba.jQuery(document).on('click', '#addBgBtn', function()
 						{
 							showBackgroundForm()
 						}
@@ -103,8 +103,8 @@ JHTML::_('behavior.modal');
 				});
 
 			function showBackgroundForm() {
-				akeeba.jQuery('#addBkBtn').parent().hide();
-				akeeba.jQuery('#uploadBkForm').fadeIn("slow");
+				akeeba.jQuery('#addBgBtn').parent().hide();
+				akeeba.jQuery('#uploadBgForm').fadeIn("slow");
 			}
 		</script>
 	</form>
