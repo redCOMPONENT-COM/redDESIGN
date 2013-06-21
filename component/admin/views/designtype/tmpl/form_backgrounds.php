@@ -76,7 +76,6 @@ JHTML::_('behavior.modal');
 					$i++;
 					$m = 1 - $m;
 					$background->published = $background->enabled;
-					$ordering = $this->lists->order == 'ordering';
 					?>
 					<tr class="<?php echo 'row' . $m; ?>">
 						<td>
