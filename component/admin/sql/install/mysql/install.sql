@@ -91,15 +91,15 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
 -- Table structure for table `#__reddesign_font_char`
 --
 
-CREATE TABLE IF NOT EXISTS `#__reddesign_font_chars` (
-  `reddesign_font_char_id` INT(11)      NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `#__reddesign_chars` (
+  `reddesign_char_id` INT(11)      NOT NULL AUTO_INCREMENT,
   `reddesign_font_id`      INT(11)      NOT NULL,
   `font_char`              VARCHAR(10)  NOT NULL,
   `width`                  DOUBLE(5, 5) NOT NULL,
   `height`                 DOUBLE(5, 5) NOT NULL,
   `typography`             INT(11)      NOT NULL DEFAULT '1',
   `typography_height`      DOUBLE(5, 5) NOT NULL,
-  PRIMARY KEY (`reddesign_font_char_id`)
+  PRIMARY KEY (`reddesign_char_id`)
 )
   ENGINE =InnoDB
   DEFAULT CHARSET =utf8;

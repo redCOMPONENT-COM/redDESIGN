@@ -21,7 +21,7 @@ class ReddesignControllerFont extends FOFController
 	/**
 	 * Constructor to set the right model
 	 *
-	 * @param   array $config  Optional configuration parameters
+	 * @param   array  $config  Optional configuration parameters
 	 */
 	public function __construct($config = array())
 	{
@@ -33,7 +33,7 @@ class ReddesignControllerFont extends FOFController
 	/**
 	 * Uploads the font file and generates a image preview of the font
 	 *
-	 * @param   array &$data  data filled in the edit form
+	 * @param   array  &$data  data filled in the edit form
 	 *
 	 * @return  boolean  Returns true on success
 	 */
@@ -66,12 +66,14 @@ class ReddesignControllerFont extends FOFController
 	 * under a random name and returns a full file definition array, or false if
 	 * the upload failed for any reason.
 	 *
-	 * @param   array $file  The file descriptor returned by PHP
+	 * @param   array  $file  The file descriptor returned by PHP
 	 *
 	 * @return array|bool
 	 */
 	public function uploadFile($file)
 	{
+		$app = JFactory::getApplication();
+
 		if (isset($file['name']))
 		{
 			// Can we upload this file type?
@@ -112,7 +114,7 @@ class ReddesignControllerFont extends FOFController
 			// If we have a name clash, abort the upload
 			if (JFile::exists($filepath))
 			{
-				$this->setError(JText::_('COM_REDDESIGN_ERROR_FONT_FILENAMEALREADYEXIST'));
+				$app->enqueueMessage(JText::_('COM_REDDESIGN_ERROR_FONT_FILENAMEALREADYEXIST'), 'error');
 
 				return false;
 			}
@@ -120,7 +122,7 @@ class ReddesignControllerFont extends FOFController
 			// Do the upload
 			if (!JFile::upload($file['tmp_name'], $filepath))
 			{
-				$this->setError(JText::_('COM_REDDESIGN_ERROR_FONT_CANTJFILEUPLOAD'));
+				$app->enqueueMessage(JText::_('COM_REDDESIGN_ERROR_FONT_CANTJFILEUPLOAD'), 'error');
 
 				return false;
 			}
@@ -150,7 +152,7 @@ class ReddesignControllerFont extends FOFController
 		}
 		else
 		{
-			$this->setError(JText::_('COM_REDDESIGN_ERROR_FONT_NOFILE'));
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_ERROR_FONT_NOFILE'), 'error');
 
 			return false;
 		}
@@ -159,15 +161,17 @@ class ReddesignControllerFont extends FOFController
 	/**
 	 * Checks if the font file can be uploaded
 	 *
-	 * @param   array $file  File information
+	 * @param   array  $file  File information
 	 *
 	 * @return  boolean
 	 */
 	private function canUpload($file)
 	{
+		$app = JFactory::getApplication();
+
 		if (empty($file['name']))
 		{
-			$this->setError(JText::_('COM_REDDESIGN_FONT_ERROR_UPLOAD_INPUT'));
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_UPLOAD_INPUT'), 'error');
 
 			return false;
 		}
@@ -176,7 +180,7 @@ class ReddesignControllerFont extends FOFController
 
 		if ($file['name'] !== JFile::makesafe($file['name']))
 		{
-			$this->setError(JText::_('COM_REDDESIGN_FONT_ERROR_FILE_NAME'));
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_FILE_NAME'), 'error');
 
 			return false;
 		}
@@ -188,7 +192,7 @@ class ReddesignControllerFont extends FOFController
 
 		if (!in_array($format, $allowable))
 		{
-			$this->setError(JText::_('COM_REDDESIGN_FONT_ERROR_WRONG_FILE_EXTENSION'));
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_WRONG_FILE_EXTENSION'), 'error');
 
 			return false;
 		}
@@ -198,7 +202,7 @@ class ReddesignControllerFont extends FOFController
 
 		if ($maxSize > 0 && (int) $file['size'] > $maxSize)
 		{
-			$this->setError(JText::_('COM_REDDESIGN_FONT_ERROR_FILE_TOOLARGE'));
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_FILE_TOOLARGE'), 'error');
 
 			return false;
 		}
@@ -206,7 +210,7 @@ class ReddesignControllerFont extends FOFController
 		// Only allow ttf fonts mime type
 		if (!$file['type'] == 'application/octet-stream')
 		{
-			$this->setError(JText::_('COM_REDDESIGN_FONT_ERROR_INVALID_MIME'));
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_INVALID_MIME'), 'error');
 
 			return false;
 		}
@@ -217,7 +221,7 @@ class ReddesignControllerFont extends FOFController
 	/**
 	 * Creates a image based on a ttf font file to show the look and feel of the font.
 	 *
-	 * @param   string $font_file  the path to a .ttf font file
+	 * @param   string  $font_file  the path to a .ttf font file
 	 *
 	 * @return  string
 	 */
@@ -247,21 +251,22 @@ class ReddesignControllerFont extends FOFController
 	/**
 	 * Function for create image from text with selected font. Justify text in image (0-Left, 1-Right, 2-Center).
 	 *
-	 * @param   String $text     String to convert into the Image.
-	 * @param   String $font     Font name of the text. Kip font file in same folder.
-	 * @param   int    $Justify  Justify text in image (0-Left, 1-Right, 2-Center).
-	 * @param   int    $Leading  Space between lines.
-	 * @param   int    $W        Width of the Image.
-	 * @param   int    $H        Hight of the Image.
-	 * @param   int    $X        x-coordinate of the text into the image.
-	 * @param   int    $Y        y-coordinate of the text into the image.
-	 * @param   int    $fsize    Font size of text.
-	 * @param   array  $color    RGB color array for text color.
-	 * @param   array  $bgcolor  RGB color array for background.
+	 * @param   string  $text     String to convert into the Image.
+	 * @param   string  $font     Font name of the text. Kip font file in same folder.
+	 * @param   int     $Justify  Justify text in image (0-Left, 1-Right, 2-Center).
+	 * @param   int     $Leading  Space between lines.
+	 * @param   int     $W        Width of the Image.
+	 * @param   int     $H        Hight of the Image.
+	 * @param   int     $X        x-coordinate of the text into the image.
+	 * @param   int     $Y        y-coordinate of the text into the image.
+	 * @param   int     $fsize    Font size of text.
+	 * @param   array   $color    RGB color array for text color.
+	 * @param   array   $bgcolor  RGB color array for background.
 	 *
 	 * @return   resource  image resource
 	 */
-	private function imagettfJustifytext($text, $font, $Justify = 2, $Leading = 0, $W = 0, $H = 0, $X = 0, $Y = 0, $fsize = 20, $color = array(0x0, 0x0, 0x0), $bgcolor = array(0xFF, 0xFF, 0xFF))
+	private function imagettfJustifytext($text, $font, $Justify = 2, $Leading = 0, $W = 0, $H = 0, $X = 0, $Y = 0,
+		$fsize = 20, $color = array(0x0, 0x0, 0x0), $bgcolor = array(0xFF, 0xFF, 0xFF))
 	{
 		$angle = 0;
 		$_bx = imageTTFBbox($fsize, 0, $font, $text);
@@ -332,7 +337,7 @@ class ReddesignControllerFont extends FOFController
 	/**
 	 * Returns the font name from a specific .ttf file using an external helper
 	 *
-	 * @param   string $ttf_file  The .ttf resource file
+	 * @param   string  $ttf_file  The .ttf resource file
 	 *
 	 * @return  string|false
 	 */
