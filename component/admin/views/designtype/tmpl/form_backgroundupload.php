@@ -58,8 +58,8 @@ JHTML::_('behavior.modal');
 	</div>
 </div>
 <div class="form-actions">
-	<input type="button" class="btn btn-primary" id="saveBkBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDUPLOAD_UPLOAD'); ?>" />
-	<input type="button" class="btn" id="cancelBkBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDUPLOAD_CANCEL'); ?>" />
+	<input type="button" class="btn btn-primary" id="saveBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDUPLOAD_UPLOAD'); ?>" />
+	<input type="button" class="btn" id="cancelBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDUPLOAD_CANCEL'); ?>" />
 </div>
 
 <div id="ajax-message-container" style="height: 25px; padding-bottom: 11px;">
@@ -71,15 +71,15 @@ JHTML::_('behavior.modal');
 	akeeba.jQuery(document).ready(
 		function()
 		{
-			akeeba.jQuery(document).on('click', '#saveBkBtn', function()
+			akeeba.jQuery(document).on('click', '#saveBgBtn', function()
 				{
 					ajaxSaveBackground()
 				}
 			);
-			akeeba.jQuery(document).on('click', '#cancelBkBtn', function()
+			akeeba.jQuery(document).on('click', '#cancelBgBtn', function()
 				{
-					akeeba.jQuery('#uploadBkForm').fadeOut("slow");
-					akeeba.jQuery('#addBkBtn').parent().show();
+					akeeba.jQuery('#uploadBgForm').fadeOut("slow");
+					akeeba.jQuery('#addBgBtn').parent().show();
 				}
 			);
 		});
