@@ -72,7 +72,7 @@ JHTML::_('behavior.modal');
 					</td>
 					<td align="left">
 						<a class="modal"
-						   href="/media/com_reddesign/assets/backgrounds/<?php echo $background->image_path; ?>">
+						   href="<?php echo JURI::root(); ?>media/com_reddesign/assets/backgrounds/<?php echo $background->image_path; ?>">
 							<strong><?php echo $this->escape(JText::_($background->title)) ?></strong>
 						</a>
 					</td>
