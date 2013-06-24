@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   `modified_on`             DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
   `locked_by`               BIGINT(20) NOT NULL DEFAULT '0',
   `locked_on`               DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `eps_file`                TEXT NOT NULL,
+  `eps_file`                VARCHAR(255),
   `image_path`              TEXT       NOT NULL,
   `reddesign_designtype_id` INT(11)    NOT NULL,
   `isPDFbgimage`            TINYINT(4) NOT NULL,

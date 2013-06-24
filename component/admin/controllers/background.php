@@ -8,8 +8,9 @@
  */
 defined('_JEXEC') or die;
 
+
 /**
- * Font Controller.
+ * Background Controller.
  *
  * @package     RedDesign.Component
  * @subpackage  Administrator
@@ -19,25 +20,46 @@ defined('_JEXEC') or die;
 class ReddesignControllerBackground extends FOFController
 {
 	/**
-	 * Stores a background via AJAX
+	 * Constructor to set the right model
 	 *
-	 * @return void
+	 * @param   array  $config  Optional configuration parameters
 	 */
-	public function ajaxSave()
+	public function __construct($config = array())
 	{
-		$response = array();
+		parent::__construct($config);
 
-		if ($this->applySave())
-		{
-			$response['message'] = JText::sprintf('COM_REDDESIGN_FONT_CHAR_SUCCESSFULLY_SAVED_CHAR', $this->input->getString('font_char', ''));
-			$response['reddesign_designtype_id'] = $this->input->getInt('reddesign_designtype_id', null);
-			$response['title'] = $this->input->getString('title', null);
+		$this->modelName = 'background';
+	}
 
-			echo json_encode($response);
-		}
-		else
+	/**
+	 * Uploads the EPS-Background file and generates a JPG image preview of the EPS
+	 *
+	 * @param   array  &$data  data filled in the edit form
+	 *
+	 * @return  boolean  Returns true on success
+	 *
+	 * @see http://en.wikipedia.org/wiki/Encapsulated_PostScript
+	 */
+	public function onBeforeApplySave(&$data)
+	{
+		$file = JRequest::getVar('bg_eps_file', '', 'files', 'array');
+
+		// If file has been uploaded, process it
+		if (!empty($file['name']) && !empty($file['type']))
 		{
-			echo JText::_('COM_REDDESIGN_BACKGROUND_CANT_SAVE_BACKGROUND');
+			$model			= $this->getThisModel();
+
+			// Upload the font file
+			$uploaded_file	= $model->uploadFile($file);
+
+			// Create a image preview of the EPS
+			$jpegpreviewfile = $model->createBackgroundPreview($uploaded_file['mangled_filename']);
+
+			// Update the database with the new path of the EPS file and its thumb
+			$data['eps_file']			= $uploaded_file['mangled_filename'];
+			$data['image_path']			= $jpegpreviewfile;
 		}
+
+		return $data;
 	}
 }

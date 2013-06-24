@@ -14,100 +14,93 @@ JHTML::_('behavior.modal');
 ?>
 
 <div class="form-container">
-	<form id="background" name="background" method="post" action="index.php">
+	<div class="well">
+		<input type="button" class="btn btn-primary" id="addBgBtn"
+			   value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_ADD'); ?>"/>
+	</div>
+	<div id="uploadBgForm" class="well" style="display:none;">
+		<?php echo $this->loadTemplate('backgroundupload'); ?>
+	</div>
+	<script type="text/javascript">
+		akeeba.jQuery(document).ready(
+			function () {
+				akeeba.jQuery(document).on('click', '#addBgBtn', function () {
+						showBackgroundForm()
+					}
+				);
+			});
 
-		<div class="well">
-			<input type="button" class="btn btn-primary" id="addBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_ADD'); ?>" />
-		</div>
-		<div id="uploadBgForm" class="well" style="display:none;">
-			<?php echo $this->loadTemplate('backgroundupload'); ?>
-		</div>
-		<script type="text/javascript">
-			akeeba.jQuery(document).ready(
-				function()
-				{
-					akeeba.jQuery(document).on('click', '#addBgBtn', function()
-						{
-							showBackgroundForm()
-						}
-					);
-				});
+		function showBackgroundForm() {
+			akeeba.jQuery('#addBgBtn').parent().hide();
+			akeeba.jQuery('#uploadBgForm').fadeIn("slow");
+		}
+	</script>
 
-			function showBackgroundForm() {
-				akeeba.jQuery('#addBgBtn').parent().hide();
-				akeeba.jQuery('#uploadBgForm').fadeIn("slow");
-			}
-		</script>
-
-		<input type="hidden" value="com_reddesign" name="option">
-		<input type="hidden" value="backgrounds" name="view">
-		<input type="hidden" value="browse" name="task">
-		<input type="hidden" value="" name="boxchecked">
-		<input type="hidden" value="" name="hidemainmenu">
-		<input type="hidden" value="id" name="filter_order">
-		<input type="hidden" value="DESC" name="filter_order_Dir">
-		<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
-		<table id="itemsList" class="table table-striped">
-			<thead>
-			<tr>
-				<th width="20">
-					<input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(this);"/>
-				</th>
-				<th>
-					<?php echo JText::_('JGLOBAL_TITLE'); ?>
-				</th>
-				<th>
-					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_EPS_FILE'); ?>
-				</th>
-				<th>
-					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_PRODUCTION_BACKGROUND'); ?>
-				</th>
-				<th width="9%">
-					<?php echo JText::_('JGLOBAL_PUBLISHED'); ?>
-				</th>
-			</tr>
-			</thead>
-			<tbody>
-			<?php if ($count = count($this->backgrounds)): ?>
-				<?php $i = -1;
-				$m = 1; ?>
-				<?php foreach ($this->backgrounds as $background) : ?>
-					<?php
-					$i++;
-					$m = 1 - $m;
-					$background->published = $background->enabled;
-					?>
-					<tr class="<?php echo 'row' . $m; ?>">
-						<td>
-							<?php echo $background->reddesign_background_id; ?>
-						</td>
-						<td align="left">
-							<a class="modal"
-							   href="index.php?option=com_reddesign&view=background&id=<?php echo $background->reddesign_background_id ?>">
-								<strong><?php echo $this->escape(JText::_($background->title)) ?></strong>
-							</a>
-						</td>
-						<td>
-							<?php echo $background->eps_file; ?>
-						</td>
-						<td align="center" width="9%">
-							@ToDo
-						</td>
-						<td align="center" width="9%">
-							<?php echo JHTML::_('grid.published', $background, $i); ?>
-						</td>
-					</tr>
-				<?php endforeach ?>
-			<?php else: ?>
-				<tr>
-					<td colspan="3">
-						<?php echo JText::_('COM_REDDESIGN_COMMON_NORECORDS') ?>
+	<table id="itemsList" class="table table-striped">
+		<thead>
+		<tr>
+			<th>
+				<?php echo JText::_('JGLOBAL_TITLE'); ?>
+			</th>
+			<th>
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_EPS_FILE'); ?>
+			</th>
+			<th>
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_PRODUCTION_BACKGROUND'); ?>
+			</th>
+			<th width="9%">
+				<?php echo JText::_('JPUBLISHED'); ?>
+			</th>
+			<th>
+				<?php echo JText::_('JDELETE'); ?>
+			</th>
+		</tr>
+		</thead>
+		<tbody>
+		<?php if ($count = count($this->backgrounds)): ?>
+			<?php $i = -1;
+			$m       = 1; ?>
+			<?php foreach ($this->backgrounds as $background) : ?>
+				<?php
+				$i++;
+				$m                     = 1 - $m;
+				$background->published = $background->enabled;
+				?>
+				<tr class="<?php echo 'row' . $m; ?>">
+					<td>
+						<?php echo $background->reddesign_background_id; ?>
+					</td>
+					<td align="left">
+						<a class="modal"
+						   href="index.php?option=com_reddesign&view=background&id=<?php echo $background->reddesign_background_id ?>">
+							<strong><?php echo $this->escape(JText::_($background->title)) ?></strong>
+						</a>
+					</td>
+					<td>
+						<?php echo $background->eps_file; ?>
+					</td>
+					<td align="center" width="9%">
+						@ToDo
+					</td>
+					<td align="center" width="9%">
+						<?php echo JHTML::_('grid.published', $background, $i); ?>
+					</td>
+					<td>
+						<?php // @ToDo: this delete background feature still needs to be implemented. It wil also have to remove areas, fonts and colors ?>
+						<button type="button" class="btn btn-danger delete">
+							<i class="icon-trash icon-white"></i>
+							<span><?php echo JText::_('JACTION_DELETE'); ?></span>
+						</button>
 					</td>
 				</tr>
-			<?php endif; ?>
-			</tbody>
-		</table>
-
-
-	</form>
+			<?php endforeach ?>
+		<?php else: ?>
+			<tr>
+				<td colspan="3">
+					<?php echo JText::_('COM_REDDESIGN_COMMON_NORECORDS') ?>
+				</td>
+			</tr>
+		<?php endif; ?>
+		</tbody>
+	</table>
 </div>
