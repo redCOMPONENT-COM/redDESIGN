@@ -39,20 +39,20 @@ JHTML::_('behavior.modal');
 	<table id="itemsList" class="table table-striped">
 		<thead>
 		<tr>
-			<th>
-				<?php echo JText::_('JGLOBAL_TITLE'); ?>
+			<th width="9%">
+				<?php echo JText::_('ID'); ?>
 			</th>
 			<th>
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_EPS_FILE'); ?>
 			</th>
-			<th>
+			<th width="9%">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_PRODUCTION_BACKGROUND'); ?>
 			</th>
 			<th width="9%">
 				<?php echo JText::_('JPUBLISHED'); ?>
 			</th>
-			<th>
-				<?php echo JText::_('JDELETE'); ?>
+			<th width="115">
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_REMOVE'); ?>
 			</th>
 		</tr>
 		</thead>
@@ -72,12 +72,9 @@ JHTML::_('behavior.modal');
 					</td>
 					<td align="left">
 						<a class="modal"
-						   href="index.php?option=com_reddesign&view=background&id=<?php echo $background->reddesign_background_id ?>">
+						   href="/media/com_reddesign/assets/backgrounds/<?php echo $background->image_path; ?>">
 							<strong><?php echo $this->escape(JText::_($background->title)) ?></strong>
 						</a>
-					</td>
-					<td>
-						<?php echo $background->eps_file; ?>
 					</td>
 					<td align="center" width="9%">
 						@ToDo
@@ -89,7 +86,7 @@ JHTML::_('behavior.modal');
 						<?php // @ToDo: this delete background feature still needs to be implemented. It wil also have to remove areas, fonts and colors ?>
 						<button type="button" class="btn btn-danger delete">
 							<i class="icon-trash icon-white"></i>
-							<span><?php echo JText::_('JACTION_DELETE'); ?></span>
+							<span><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_REMOVE'); ?></span>
 						</button>
 					</td>
 				</tr>
