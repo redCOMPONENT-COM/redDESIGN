@@ -167,7 +167,7 @@ defined('_JEXEC') or die();
 <div id="character-settings" class="span12">
 	<h4><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_SPECIFIC_SETTINGS'); ?></h4>
 
-	<p><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_SPECIFIC_SETTINGS_DESC'); ?></p>
+	<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_SPECIFIC_SETTINGS_DESC'); ?></span>
 
 	<div id="ajax-message-container" style="height: 25px; padding-bottom: 11px;">
 		<div id="ajax-message" style="display: none;">
