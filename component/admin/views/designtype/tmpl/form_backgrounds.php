@@ -93,7 +93,7 @@ JHTML::_('behavior.modal');
 			<?php endforeach ?>
 		<?php else: ?>
 			<tr>
-				<td colspan="3">
+				<td colspan="5">
 					<?php echo JText::_('COM_REDDESIGN_COMMON_NORECORDS') ?>
 				</td>
 			</tr>
