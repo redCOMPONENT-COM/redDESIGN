@@ -1,38 +1,3 @@
-.icon-48-reddesign {
-    background-image: url(../images/reddesign_48.png)
-}
-
 .form-container {
     clear: both;
-}
-
-.submenu-container {
-    padding-bottom: 25px;
-}
-
-.submenu-link {
-    float: left;
-    margin-right: 15px;
-}
-
-.left {
-    float: left;
-}
-
-.clear-both {
-    clear: both;
-}
-
-.left-clear-both {
-    float: left;
-    clear: both;
-}
-
-.m-top-15 {
-    margin-top: 15px;
-}
-
-.character-group {
-    float: left;
-    margin-left: 21px;
 }

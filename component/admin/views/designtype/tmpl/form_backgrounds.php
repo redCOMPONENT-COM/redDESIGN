@@ -57,7 +57,7 @@ JHTML::_('behavior.modal');
 		</tr>
 		</thead>
 		<tbody>
-		<?php if ($count = count($this->backgrounds)): ?>
+		<?php if ($count = count($this->backgrounds)) : ?>
 			<?php $i = -1;
 			$m       = 1; ?>
 			<?php foreach ($this->backgrounds as $background) : ?>
@@ -91,7 +91,7 @@ JHTML::_('behavior.modal');
 					</td>
 				</tr>
 			<?php endforeach ?>
-		<?php else: ?>
+		<?php else : ?>
 			<tr>
 				<td colspan="5">
 					<?php echo JText::_('COM_REDDESIGN_COMMON_NORECORDS') ?>

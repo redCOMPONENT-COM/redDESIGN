@@ -29,17 +29,34 @@ class ReddesignViewDesigntype extends FOFViewHtml
 	 */
 	protected function onAdd($tpl = null)
 	{
-		JRequest::setVar('hidemainmenu', true);
+		$this->input->setVar('hidemainmenu', true);
 
-		$model 				= $this->getModel();
-		$this->item 		= $model->getItem();
-		$this->activeTab 	= JFactory::getApplication()->input->getString('tab', 'general');
+		$model 						= $this->getModel();
+		$this->item 				= $model->getItem();
+		$this->activeTab 			= JFactory::getApplication()->input->getString('tab', 'general');
+		$this->document 			= JFactory::getDocument();		
+		$this->areas 				= null;
+		$this->productionBackground = null;
 
 		if (!empty($this->item->reddesign_designtype_id))
 		{
-			$backgroundModel = FOFModel::getTmpInstance('Background', 'ReddesignModel')
-				->reddesign_designtype_id($this->item->reddesign_designtype_id);
+			$backgroundModel = FOFModel::getTmpInstance('Background', 'ReddesignModel')->reddesign_designtype_id($this->item->reddesign_designtype_id);
 			$this->backgrounds = $backgroundModel->getItemList();
+
+			$areas = array();
+
+			foreach ($this->backgrounds as $background)
+			{
+				if ($background->isPDFbgimage)
+				{
+					$this->productionBackground = $background;
+
+					$areaModel = FOFModel::getTmpInstance('Area', 'ReddesignModel')->reddesign_background_id($background->reddesign_background_id);
+					$areas = $areaModel->getItemList();
+				}
+			}
+
+			$this->areas = $areas;
 		}
 
 		return true;
