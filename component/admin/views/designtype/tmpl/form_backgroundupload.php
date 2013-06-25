@@ -20,7 +20,7 @@ defined('_JEXEC') or die;
 		   value="<?php echo $this->item->reddesign_designtype_id; ?>">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 
-	<div id="basic_configuration">
+	<div id="backgrounds-configuration">
 		<h3><?php echo JText::_('COM_REDDESIGN_BACKGROUND_TITLE'); ?></h3>
 
 		<div class="control-group">
@@ -72,9 +72,9 @@ defined('_JEXEC') or die;
 	</div>
 	<div class="form-actions">
 		<input type="button" class="btn btn-primary" id="saveBgBtn"
-			   value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDUPLOAD_UPLOAD'); ?>"/>
+			   value="<?php echo JText::_('COM_REDDESIGN_COMMON_UPLOAD'); ?>"/>
 		<input type="button" class="btn" id="cancelBgBtn"
-			   value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDUPLOAD_CANCEL'); ?>"/>
+			   value="<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>"/>
 	</div>
 
 	<div id="ajax-message-container" style="height: 25px; padding-bottom: 11px;">
