@@ -30,8 +30,10 @@ class ReddesignViewDesigntype extends FOFViewHtml
 	protected function onAdd($tpl = null)
 	{
 		JRequest::setVar('hidemainmenu', true);
-		$model 		= $this->getModel();
-		$this->item = $model->getItem();
+
+		$model 				= $this->getModel();
+		$this->item 		= $model->getItem();
+		$this->activeTab 	= JFactory::getApplication()->input->getString('tab', 'general');
 
 		if (!empty($this->item->reddesign_designtype_id))
 		{
