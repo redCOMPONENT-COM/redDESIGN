@@ -48,7 +48,7 @@ defined('_JEXEC') or die;
 			</label>
 
 			<div class="controls">
-				<select name="bg_isPDFbgimage" id="bg_isPDFbgimage">
+				<select name="isPDFbgimage" id="bg_isPDFbgimage">
 					<option value="0" selected="selected"><?php echo JText::_('JNO'); ?></option>
 					<option value="1"><?php echo JText::_('JYES'); ?></option>
 				</select>
@@ -62,7 +62,7 @@ defined('_JEXEC') or die;
 			</label>
 
 			<div class="controls">
-				<select name="bg_status" id="bg_status">
+				<select name="status" id="bg_status">
 					<option value="1" selected="selected"><?php echo JText::_('JYES'); ?></option>
 					<option value="0"><?php echo JText::_('JNO'); ?></option>
 				</select>
@@ -75,11 +75,6 @@ defined('_JEXEC') or die;
 			   value="<?php echo JText::_('COM_REDDESIGN_COMMON_UPLOAD'); ?>"/>
 		<input type="button" class="btn" id="cancelBgBtn"
 			   value="<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>"/>
-	</div>
-
-	<div id="ajax-message-container" style="height: 25px; padding-bottom: 11px;">
-		<div id="ajax-message" style="display: none;">
-		</div>
 	</div>
 </form>
 

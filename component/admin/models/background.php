@@ -190,6 +190,7 @@ class ReddesignModelBackground extends FOFModel
 
 		// Read EPS
 		$im = new Imagick;
+		//$im->setResolution(100, 100);
 		$im->readImage($eps_file_location);
 
 		$dimensions = $im->getImageGeometry();

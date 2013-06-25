@@ -70,7 +70,7 @@ class ReddesignControllerFont extends FOFController
 	 *
 	 * @return array|bool
 	 */
-	public function uploadFile($file)
+	private function uploadFile($file)
 	{
 		$app = JFactory::getApplication();
 
@@ -225,7 +225,7 @@ class ReddesignControllerFont extends FOFController
 	 *
 	 * @return  string
 	 */
-	public function createFontPreviewThumb($font_file)
+	private function createFontPreviewThumb($font_file)
 	{
 		$font_file_location = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $font_file;
 

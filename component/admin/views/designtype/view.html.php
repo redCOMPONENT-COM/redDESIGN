@@ -31,10 +31,11 @@ class ReddesignViewDesigntype extends FOFViewHtml
 	{
 		$this->input->setVar('hidemainmenu', true);
 
-		$this->document = JFactory::getDocument();
-		$model			= $this->getModel();
-		$this->item		= $model->getItem();
-		$this->areas = null;
+		$model 						= $this->getModel();
+		$this->item 				= $model->getItem();
+		$this->activeTab 			= JFactory::getApplication()->input->getString('tab', 'general');
+		$this->document 			= JFactory::getDocument();		
+		$this->areas 				= null;
 		$this->productionBackground = null;
 
 		if (!empty($this->item->reddesign_designtype_id))
