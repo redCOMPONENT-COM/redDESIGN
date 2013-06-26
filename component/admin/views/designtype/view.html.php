@@ -27,14 +27,14 @@ class ReddesignViewDesigntype extends FOFViewHtml
 	 *
 	 * @return  boolean  Return true to allow rendering of the page
 	 */
-	protected function onAdd($tpl = null)
+	public function display($tpl = null)
 	{
 		$this->input->setVar('hidemainmenu', true);
 
 		$model 						= $this->getModel();
 		$this->item 				= $model->getItem();
 		$this->activeTab 			= JFactory::getApplication()->input->getString('tab', 'general');
-		$this->document 			= JFactory::getDocument();		
+		$this->document 			= JFactory::getDocument();
 		$this->areas 				= null;
 		$this->productionBackground = null;
 
@@ -59,6 +59,6 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			$this->areas = $areas;
 		}
 
-		return true;
+		parent::display();
 	}
 }

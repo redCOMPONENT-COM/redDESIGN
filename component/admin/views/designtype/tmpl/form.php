@@ -10,16 +10,37 @@
 defined('_JEXEC') or die();
 
 JHTML::_('behavior.framework');
+
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/jquery.imgareaselect.pack.js');
+FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animated.css');
 ?>
 
+<script>
+	akeeba.jQuery(document).ready(
+		function () {
+			akeeba.jQuery('#<?php echo $this->activeTab; ?>').addClass('active');
+			akeeba.jQuery('#<?php echo $this->activeTab; ?>Link').parent().addClass('active');
+		}
+	);
+
+    /**
+     * Function to clear area selection drawn over other tabs due to auto zIndex
+	 */
+	function clearAreaSelection() {
+		var imageAreaSelection = akeeba.jQuery("img#background").imgAreaSelect({ instance: true });
+		imageAreaSelection.cancelSelection();
+	}
+</script>
+
 <ul class="nav nav-tabs">
-	<li><a href="#general" id="generalLink" data-toggle="tab">General tab</a></li>
-	<li><a href="#backgrounds" id="backgroundsLink" data-toggle="tab">Backgrounds</a></li>
+	<li><a href="#general" id="generalLink" data-toggle="tab" onclick="clearAreaSelection();">General tab</a></li>
+	<li><a href="#backgrounds" id="backgroundsLink" data-toggle="tab" onclick="clearAreaSelection();">Backgrounds</a></li>
 	<li><a href="#design-areas" id="design-areasLink"  data-toggle="tab">Design areas</a></li>
-	<li><a href="#fonts" id="fontsLink" data-toggle="tab">Fonts</a></li>
+	<li><a href="#fonts" id="fontsLink" data-toggle="tab" onclick="clearAreaSelection();">Fonts</a></li>
 	<li><a href="#fonts-sizes" id="fonts-sizesLink"  data-toggle="tab">Fonts sizes</a></li>
-	<li><a href="#color" id="colorLink"  data-toggle="tab">Color</a></li>
+	<li><a href="#color" id="colorLink"  data-toggle="tab" onclick="clearAreaSelection();">Color</a></li>
 </ul>
+
 <div id="my-tab-content" class="tab-content">
 	<div class="tab-pane" id="general">
 		<?php echo $this->loadTemplate('general'); ?>
@@ -40,12 +61,3 @@ JHTML::_('behavior.framework');
 		<?php echo $this->loadTemplate('color'); ?>
 	</div>
 </div>
-
-<script>
-	akeeba.jQuery(document).ready(
-		function () {
-			akeeba.jQuery('#<?php echo $this->activeTab; ?>').addClass('active')
-			akeeba.jQuery('#<?php echo $this->activeTab; ?>Link').parent().addClass('active')
-		}
-	);
-</script>
