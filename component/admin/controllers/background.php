@@ -62,7 +62,6 @@ class ReddesignControllerBackground extends FOFController
 		$data['eps_file']			= $uploaded_file['mangled_filename'];
 		$data['image_path']			= $jpegpreviewfile;
 
-
 		return $data;
 	}
 

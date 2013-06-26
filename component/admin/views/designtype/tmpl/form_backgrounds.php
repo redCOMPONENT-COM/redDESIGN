@@ -9,8 +9,6 @@
 
 defined('_JEXEC') or die;
 
-JHTML::_('behavior.modal');
-
 ?>
 
 <div class="form-container">
@@ -52,7 +50,7 @@ JHTML::_('behavior.modal');
 				<?php echo JText::_('JPUBLISHED'); ?>
 			</th>
 			<th width="115">
-				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_REMOVE'); ?>
+				<?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?>
 			</th>
 		</tr>
 		</thead>
@@ -85,7 +83,7 @@ JHTML::_('behavior.modal');
 					<td>
 						<?php // @ToDo: this delete background feature still needs to be implemented. It wil also have to remove areas, fonts and colors ?>
 						<button type="button" class="btn btn-danger delete">
-							<i class="icon-trash icon-white"></i>
+							<i class="icon-minus icon-white"></i>
 							<span><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_REMOVE'); ?></span>
 						</button>
 					</td>

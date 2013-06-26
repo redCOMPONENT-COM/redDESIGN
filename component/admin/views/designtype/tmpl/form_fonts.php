@@ -9,8 +9,6 @@
 
 defined('_JEXEC') or die();
 
-$this->document->addScript(FOFTemplateUtils::parsePath('media://com_reddesign/assets/js/jquery.imgareaselect.pack.js'));
-$this->document->addScript(FOFTemplateUtils::parsePath('media://com_reddesign/assets/js/areaselect.js'));
 ?>
 
 <div id="fonts-settings" class="span12">
