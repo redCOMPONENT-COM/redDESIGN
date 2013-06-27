@@ -13,6 +13,11 @@ JHTML::_('behavior.framework');
 
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/jquery.imgareaselect.pack.js');
 FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animated.css');
+
+// If is a new design don't show tabs
+if (empty($this->item->reddesign_designtype_id)) :
+	echo $this->loadTemplate('general');
+else :
 ?>
 
 <script>
@@ -61,3 +66,5 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 		<?php echo $this->loadTemplate('color'); ?>
 	</div>
 </div>
+
+<?php endif;
