@@ -38,8 +38,10 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->areas 				= null;
 		$this->productionBackground = null;
 
+		// If it's not a new design
 		if (!empty($this->item->reddesign_designtype_id))
 		{
+			// Get all the backgrounds that belongs to this Designtype item
 			$backgroundModel = FOFModel::getTmpInstance('Background', 'ReddesignModel')->reddesign_designtype_id($this->item->reddesign_designtype_id);
 			$this->backgrounds = $backgroundModel->getItemList();
 
@@ -47,18 +49,22 @@ class ReddesignViewDesigntype extends FOFViewHtml
 
 			foreach ($this->backgrounds as $background)
 			{
+				// Get the background image that has been selected to be the Production PDF file image
 				if ($background->isPDFbgimage)
 				{
 					$this->productionBackground = $background;
 
+					// Get all areas existing in the database for this specific background
 					$areaModel = FOFModel::getTmpInstance('Area', 'ReddesignModel')->reddesign_background_id($background->reddesign_background_id);
 					$areas = $areaModel->getItemList();
 				}
 			}
 
 			$this->areas = $areas;
+
+			parent::display();
 		}
 
-		parent::display();
+		parent::display('general');
 	}
 }
