@@ -105,7 +105,8 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 			var areaWidth  = akeeba.jQuery('#areaWidth').val();
 			var areaHeight = akeeba.jQuery('#areaHeight').val();
 
-			akeeba.jQuery.ajax({ url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxSave&format=raw",
+			akeeba.jQuery.ajax({
+				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxSave&format=raw",
 				data: {
 					title: areaName,
 					reddesign_background_id: <?php echo $this->productionBackground->reddesign_background_id; ?>,
@@ -164,11 +165,67 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 		}
 
         /**
+         * Uses AJAX to update image with areas
+		 */
+		function updateImageAreas() {
+			akeeba.jQuery("#backgroundImageContainer div").remove();
+
+			akeeba.jQuery.ajax({
+				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxGetAreas&format=raw",
+				success: function (data) {
+					var json = akeeba.jQuery.parseJSON(data);
+					akeeba.jQuery.each( json, function( key, value ) {
+						drawArea(value.reddesign_area_id, value.title, value.x1_pos, value.y1_pos, value.width, value.height)
+					});
+				},
+				error: function (data) {
+					akeeba.jQuery("#ajaxMessageAreas").removeClass();
+					akeeba.jQuery("#ajaxMessageAreas").addClass("alert alert-error");
+					akeeba.jQuery("#ajaxMessageAreas").html(data);
+					akeeba.jQuery("#ajaxMessageAreas").fadeIn("slow");
+					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
+				}
+			});
+		}
+
+        /**
          * Function for cancel button
 		 */
 		function cancelArea() {
 			clearSelectionFields();
 			clearAreaSelection();
+			updateImageAreas();
+		}
+
+        /**
+         * Deletes an area.
+		 *
+		 * @param reddesign_area_id
+         */
+		function removeArea(reddesign_area_id) {
+			akeeba.jQuery.ajax({
+				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxRemove&format=raw",
+				data: {
+					reddesign_area_id: reddesign_area_id
+				},
+				type: "post",
+				success: function (data) {
+					akeeba.jQuery("#areaRow" + reddesign_area_id).remove();
+					updateImageAreas();
+					akeeba.jQuery("#ajaxMessageAreas").removeClass();
+					akeeba.jQuery("#ajaxMessageAreas").addClass("alert alert-success");
+					akeeba.jQuery("#ajaxMessageAreas").html(data);
+					akeeba.jQuery("#ajaxMessageAreas").fadeIn("slow");
+					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
+				},
+				error: function (data) {
+					akeeba.jQuery("#ajaxMessageAreas").removeClass();
+					akeeba.jQuery("#ajaxMessageAreas").addClass("alert alert-error");
+					akeeba.jQuery("#ajaxMessageAreas").html(data);
+					akeeba.jQuery("#ajaxMessageAreas").fadeIn("slow");
+					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
+				}
+			});
 		}
 	</script>
 
@@ -193,11 +250,6 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 	<div class="form-container">
 		<h3><?php echo JText::sprintf('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS', $this->productionBackground->title); ?></h3>
 		<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DESC'); ?></span>
-
-		<div id="ajaxMessageAreasContainer" style="height: 25px; padding-bottom: 11px;">
-			<div id="ajaxMessageAreas" style="display: none;">
-			</div>
-		</div>
 
 		<div class="well">
 			<div id="selectorControls" class="row-fluid">
@@ -313,6 +365,7 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 					</div>
 				</div>
 			</div>
+
 			<div class="form-actions">
 				<a id="saveAreaBtn" rel="" class="btn btn-primary"
 				   title="<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>"
@@ -322,6 +375,11 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 				<a id="cancelAreaBtn" rel="" class="btn" onclick="cancelArea();" title="<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>">
 					<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>
 				</a>
+			</div>
+
+			<div id="ajaxMessageAreasContainer" style="height: 25px; padding-bottom: 11px;">
+				<div id="ajaxMessageAreas" style="display: none;">
+				</div>
 			</div>
 		</div>
 
@@ -353,7 +411,7 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 					$i++;
 					$m = 1 - $m;
 					?>
-					<tr class="<?php echo 'row' . $m; ?>">
+					<tr id="areaRow<?php echo $area->reddesign_area_id; ?>" class="<?php echo 'row' . $m; ?>">
 						<td>
 							<?php echo $area->reddesign_area_id; ?>
 						</td>
@@ -377,7 +435,7 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 							<?php echo $area->height; ?>
 						</td>
 						<td>
-							<button type="button" class="btn btn-danger delete">
+							<button type="button" class="btn btn-danger delete" onclick="removeArea(<?php echo $area->reddesign_area_id; ?>);">
 								<i class="icon-minus icon-white"></i>
 								<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>
 							</button>

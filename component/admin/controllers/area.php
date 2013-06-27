@@ -19,7 +19,7 @@ defined('_JEXEC') or die;
 class ReddesignControllerArea extends FOFController
 {
 	/**
-	 * Saves character specific data.
+	 * Saves design areas for AJAX request.
 	 *
 	 * @access public
 	 *
@@ -50,7 +50,7 @@ class ReddesignControllerArea extends FOFController
 	}
 
 	/**
-	 * Saves character specific data.
+	 * Removes design areas for AJAX request.
 	 *
 	 * @access public
 	 *
@@ -69,5 +69,20 @@ class ReddesignControllerArea extends FOFController
 		{
 			echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREA_ERROR_WHILE_REMOVING');
 		}
+	}
+
+	/**
+	 * Gets areas for AJAX request.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function ajaxGetAreas()
+	{
+		$model = $this->getThisModel();
+		$items = $model->getList();
+
+		echo json_encode($items);
 	}
 }
