@@ -48,7 +48,7 @@ class ReddesignControllerChar extends FOFController
 	}
 
 	/**
-	 * Saves character specific data.
+	 * Deletes a specific character from the font view.
 	 *
 	 * @access public
 	 *
