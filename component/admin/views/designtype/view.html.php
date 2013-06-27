@@ -38,6 +38,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->areas 				= null;
 		$this->productionBackground = null;
 
+		// If it's not a new design
 		if (!empty($this->item->reddesign_designtype_id))
 		{
 			$backgroundModel = FOFModel::getTmpInstance('Background', 'ReddesignModel')->reddesign_designtype_id($this->item->reddesign_designtype_id);
@@ -57,8 +58,10 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			}
 
 			$this->areas = $areas;
+
+			parent::display();
 		}
 
-		parent::display();
+		parent::display('general');
 	}
 }
