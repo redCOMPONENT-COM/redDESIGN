@@ -61,10 +61,8 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			}
 
 			$this->areas = $areas;
-
-			parent::display();
 		}
 
-		parent::display('general');
+		parent::display();
 	}
 }
