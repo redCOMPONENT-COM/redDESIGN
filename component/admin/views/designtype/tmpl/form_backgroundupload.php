@@ -15,7 +15,6 @@ defined('_JEXEC') or die;
 	<input type="hidden" name="option" value="com_reddesign">
 	<input type="hidden" name="view" value="background">
 	<input type="hidden" name="task" value="save">
-	<input type="hidden" name="return" value="http://google.com">
 	<input type="hidden" name="reddesign_designtype_id" id="reddesign_designtype_id"
 		   value="<?php echo $this->item->reddesign_designtype_id; ?>">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
