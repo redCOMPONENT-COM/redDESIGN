@@ -63,6 +63,22 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			$this->areas = $areas;
 		}
 
+		$this->alginmentOptions = array(
+			JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_COMMON_SELECT')),
+			JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_COMMON_LEFT')),
+			JHtml::_('select.option', '2', JText::_('COM_REDDESIGN_COMMON_RIGHT')),
+			JHtml::_('select.option', '3', JText::_('COM_REDDESIGN_COMMON_CENTER'))
+		);
+
+		$fontsModel = FOFModel::getTmpInstance('Font', 'ReddesignModel');
+		$this->fonts = $fontsModel->getItemList();
+		$this->fontsOptions = array();
+
+		foreach ($this->fonts as $font)
+		{
+			$this->fontsOptions[] = JHtml::_('select.option', $font->reddesign_font_id, $font->title);
+		}
+
 		parent::display();
 	}
 }

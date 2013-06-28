@@ -70,8 +70,8 @@ defined('_JEXEC') or die();
 	}
 
 	function saveChar(update) {
-		var reddesign_char_id;
-		var reddesign_font_id;
+		var reddesign_char_id = 0;
+		var reddesign_font_id = 0;
 		var font_char;
 		var width;
 		var height;
@@ -179,21 +179,27 @@ defined('_JEXEC') or die();
 		<?php foreach($this->item->chars as $char_settings) : ?>
 			<div id="row_<?php echo $char_settings->reddesign_char_id; ?>" class="row">
 				<div class="control-group character-group">
-					<label for="font_char_<?php echo $char_settings->reddesign_char_id; ?>"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER') ?></label>
+					<label for="font_char_<?php echo $char_settings->reddesign_char_id; ?>">
+						<?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER') ?>
+					</label>
 					<input class="input-mini" type="text" maxlength="1"
 						   value="<?php echo $char_settings->font_char; ?>"
 						   id="font_char_<?php echo $char_settings->reddesign_char_id; ?>"
 						   name="font_char_<?php echo $char_settings->reddesign_char_id; ?>">
 				</div>
 				<div class="control-group character-group"><label for="width">
-						<label for="width"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_WIDTH') ?></label>
+						<label for="width_<?php echo $char_settings->reddesign_char_id; ?>">
+							<?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_WIDTH') ?>
+						</label>
 						<input class="input-small" type="text" maxlength="15"
 							   value="<?php echo $char_settings->width; ?>"
 							   id="width_<?php echo $char_settings->reddesign_char_id; ?>"
 							   name="width_<?php echo $char_settings->reddesign_char_id; ?>">
 				</div>
 				<div class="control-group character-group"><label for="height">
-						<label for="height_<?php echo $char_settings->reddesign_char_id; ?>"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_HEIGHT') ?></label>
+						<label for="height_<?php echo $char_settings->reddesign_char_id; ?>">
+							<?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_HEIGHT') ?>
+						</label>
 						<input class="input-small" type="text" maxlength="15"
 							   value="<?php echo $char_settings->height; ?>"
 							   id="height_<?php echo $char_settings->reddesign_char_id; ?>"
@@ -214,7 +220,9 @@ defined('_JEXEC') or die();
 					</script>
 				</div>
 				<div class="control-group character-group">
-					<label for="typography_height"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY_HEIGHT') ?></label>
+					<label for="typography_height_<?php echo $char_settings->reddesign_char_id; ?>">
+						<?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY_HEIGHT') ?>
+					</label>
 					<input class="input-small" type="text" maxlength="15"
 						   value="<?php echo $char_settings->typography_height; ?>"
 						   id="typography_height_<?php echo $char_settings->reddesign_char_id; ?>"
