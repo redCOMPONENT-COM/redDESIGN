@@ -383,6 +383,17 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 			});
 		}
 
+	function showAreaSettings(areaSettingsRow) {
+		if (akeeba.jQuery("#" + areaSettingsRow).is(":hidden"))
+		{
+			akeeba.jQuery("#" + areaSettingsRow).slideDown(3000);
+		}
+		else
+		{
+			akeeba.jQuery("#" + areaSettingsRow).hide();
+		}
+	}
+
 	</script>
 
 	<style type="text/css">
@@ -523,7 +534,7 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 			</div>
 
 			<div class="form-actions">
-				<a id="saveAreaBtn" rel="" class="btn btn-primary"
+				<a id="saveAreaBtn" rel="" class="btn btn-success"
 				   title="<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>"
 				   onclick="saveArea(akeeba.jQuery('#designAreaId').val());">
 					<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
@@ -552,6 +563,9 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_PROPERTIES'); ?>
 					</th>
 					<th>
+						<?php echo JText::_('COM_REDDESIGN_COMMON_SETTINGS'); ?>
+					</th>
+					<th>
 						<?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?>
 					</th>
 				</tr>
@@ -567,11 +581,12 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 					$i++;
 					$m = 1 - $m;
 					?>
-					<tr id="areaRow<?php echo $area->reddesign_area_id; ?>" class="<?php echo 'row' . $m; ?>">
+					<tr id="areaRow<?php echo $area->reddesign_area_id; ?>"
+						class="<?php echo 'row' . $m; ?>">
 						<td>
 							<?php echo $area->reddesign_area_id; ?>
 						</td>
-						<td>
+						<td class="span4">
 							<a href="#" onclick="selectAreaForEdit(<?php echo $area->reddesign_area_id . ',\'' .
 								$area->title . '\',' .
 								$area->x1_pos . ',' .
@@ -598,10 +613,49 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 							<?php echo $area->height; ?>
 						</td>
 						<td>
+							<button type="button" class="btn btn-primary" onclick="showAreaSettings('areaSettingsRow<?php echo $area->reddesign_area_id; ?>');">
+								<span><?php echo JText::_('COM_REDDESIGN_COMMON_SETTINGS'); ?></span>
+							</button>
+						</td>
+						<td>
 							<button type="button" class="btn btn-danger delete" onclick="removeArea(<?php echo $area->reddesign_area_id; ?>);">
 								<i class="icon-minus icon-white"></i>
 								<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>
 							</button>
+						</td>
+					</tr>
+					<tr id="areaSettingsRow<?php echo $area->reddesign_area_id; ?>"
+						class="<?php echo 'row' . $m; ?> hide">
+						<td colspan="2" class="span4">
+							<div id="designTypesFonts<?php echo $area->reddesign_area_id; ?>" class="control-group">
+								<label for="<?php echo 'areaFontAlignment' . $area->reddesign_area_id; ?>">
+									<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALIGNMENT') ?>
+								</label>
+								<?php echo JHtml::_('select.genericlist',
+									$this->alginmentOptions,
+									'areaFontAlignment' . $area->reddesign_area_id,
+									'',
+									'value',
+									'text',
+									$area->textalign
+								);?>
+							</div>
+							<div id="designTypesFonts<?php echo $area->reddesign_area_id; ?>" class="control-group">
+								<label for="<?php echo 'areaFonts' . $area->reddesign_area_id; ?>">
+									<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALLOWED_FONTS') ?>
+								</label>
+								<?php echo JHtml::_('select.genericlist',
+									$this->fontsOptions,
+									'areaFonts' . $area->reddesign_area_id . '[]',
+									' multiple="multiple" ',
+									'value',
+									'text',
+									$area->font_id
+								);?>
+							</div>
+						</td>
+						<td colspan="3">
+							@TODO Colors
 						</td>
 					</tr>
 				<?php endforeach ?>
