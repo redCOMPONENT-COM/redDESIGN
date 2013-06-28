@@ -1,3 +1,8 @@
 .form-container {
     clear: both;
 }
+
+.character-group {
+    float: left;
+    margin-left: 21px;
+}

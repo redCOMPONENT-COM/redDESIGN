@@ -22,6 +22,40 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 
 	<script type="text/javascript">
 
+		/**
+		 * Initiate imgAreaSelect plugin
+		 */
+		akeeba.jQuery(document).ready(
+			function ($) {
+				akeeba.jQuery("img#background").imgAreaSelect({
+					handles: true,
+					onInit: clearSelectionFields,
+					onSelectEnd: populateSelectionFields
+				});
+			});
+
+		/**
+		 * Selects area with given parameters. Used onkeyup event in parameter input fields.
+		 *
+		 * @param x1
+		 * @param y1
+		 * @param x2
+		 * @param y2
+		 * @param width
+		 * @param height
+		 */
+		function selectArea(x1, y1, x2, y2, width, height) {
+			akeeba.jQuery("img#background").imgAreaSelect({
+				handles: true,
+				x1: x1,
+				y1: y1,
+				x2: x2,
+				y2: y2,
+				area_width: width,
+				area_height: height
+			});
+		}
+
         /**
          * Populates parameter fields from selected area
 		 *
@@ -35,12 +69,12 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 			}
 			else
 			{
-				akeeba.jQuery('#areaX1').val(selection.x1);
-				akeeba.jQuery('#areaY1').val(selection.y1);
-				akeeba.jQuery('#areaX2').val(selection.x2);
-				akeeba.jQuery('#areaY2').val(selection.y2);
-				akeeba.jQuery('#areaWidth').val(selection.width);
-				akeeba.jQuery('#areaHeight').val(selection.height);
+				akeeba.jQuery("#areaX1").val(selection.x1);
+				akeeba.jQuery("#areaY1").val(selection.y1);
+				akeeba.jQuery("#areaX2").val(selection.x2);
+				akeeba.jQuery("#areaY2").val(selection.y2);
+				akeeba.jQuery("#areaWidth").val(selection.width);
+				akeeba.jQuery("#areaHeight").val(selection.height);
 			}
 		}
 
@@ -48,48 +82,16 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
          * Clears parameter input fields. Used when select area is not displayed anymore.
 		 */
 		function clearSelectionFields() {
-			akeeba.jQuery('#areaName').val('');
-			akeeba.jQuery('#areaX1').val('');
-			akeeba.jQuery('#areaY1').val('');
-			akeeba.jQuery('#areaX2').val('');
-			akeeba.jQuery('#areaY2').val('');
-			akeeba.jQuery('#areaWidth').val('');
-			akeeba.jQuery('#areaHeight').val('');
+			akeeba.jQuery("#designAreaId").val("0");
+			akeeba.jQuery("#areaName").val("");
+			akeeba.jQuery("#areaX1").val("");
+			akeeba.jQuery("#areaY1").val("");
+			akeeba.jQuery("#areaX2").val("");
+			akeeba.jQuery("#areaY2").val("");
+			akeeba.jQuery("#areaWidth").val("");
+			akeeba.jQuery("#areaHeight").val("");
 		}
 
-        /**
-         * Selects area with given parameters. Used onkeyup event in parameter input fields.
-		 *
-		 * @param x1
-         * @param y1
-         * @param x2
-         * @param y2
-         * @param width
-         * @param height
-         */
-		function selectArea(x1, y1, x2, y2, width, height) {
-			akeeba.jQuery('img#background').imgAreaSelect({
-				handles: true,
-				x1: x1,
-				y1: y1,
-				x2: x2,
-				y2: y2,
-				area_width: width,
-				area_height: height
-			});
-		}
-
-        /**
-         * Initiate imgAreaSelect plugin
-		 */
-		akeeba.jQuery(document).ready(
-			function ($) {
-				akeeba.jQuery('img#background').imgAreaSelect({
-					handles: true,
-					onInit: clearSelectionFields,
-					onSelectEnd: populateSelectionFields
-			});
-		});
 
         /**
          * Saves area into the DB via AJAX. And prepares image for another selection.
@@ -97,17 +99,29 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 		 * @param update
          */
 		function saveArea(update) {
-			var areaName	= akeeba.jQuery('#areaName').val();
-			var areaX1 	= akeeba.jQuery('#areaX1').val();
-			var areaY1 	= akeeba.jQuery('#areaY1').val();
-			var areaX2 	= akeeba.jQuery('#areaX2').val();
-			var areaY2 	= akeeba.jQuery('#areaY2').val();
-			var areaWidth  = akeeba.jQuery('#areaWidth').val();
-			var areaHeight = akeeba.jQuery('#areaHeight').val();
+			var reddesign_area_id;
+			var areaName	= akeeba.jQuery("#areaName").val();
+			var areaX1 	= akeeba.jQuery("#areaX1").val();
+			var areaY1 	= akeeba.jQuery("#areaY1").val();
+			var areaX2 	= akeeba.jQuery("#areaX2").val();
+			var areaY2 	= akeeba.jQuery("#areaY2").val();
+			var areaWidth  = akeeba.jQuery("#areaWidth").val();
+			var areaHeight = akeeba.jQuery("#areaHeight").val();
+
+			if(update != 0)
+			{
+				// if update is not 0 than it holds reddesign_area_id and we are doing update of existing area
+				reddesign_area_id = update;
+			}
+			else
+			{
+				reddesign_area_id = '';
+			}
 
 			akeeba.jQuery.ajax({
 				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxSave&format=raw",
 				data: {
+					reddesign_area_id: reddesign_area_id,
 					title: areaName,
 					reddesign_background_id: <?php echo $this->productionBackground->reddesign_background_id; ?>,
 					x1_pos: areaX1,
@@ -129,8 +143,16 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 					if(update == 0)
 					{
 						drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
-						clearSelectionFields();
+						addAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
 						clearAreaSelection();
+						clearSelectionFields();
+					}
+					else
+					{
+						akeeba.jQuery("#areaDiv" + reddesign_area_id).remove();
+						drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
+						akeeba.jQuery("#areaDiv" + reddesign_area_id).html(areaName + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
+						updateAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
 					}
 				},
 				error: function (data) {
@@ -154,26 +176,131 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
          * @param height
          */
 		function drawArea(reddesign_area_id, title, x1_pos, y1_pos, width, height) {
-			akeeba.jQuery("#backgroundImageContainer").append('<div id="areaDiv' + reddesign_area_id + '">' + title + '</div>');
-			akeeba.jQuery("#areaDiv" + reddesign_area_id).css("position", "absolute");
-			akeeba.jQuery("#areaDiv" + reddesign_area_id).css("top", y1_pos);
-			akeeba.jQuery("#areaDiv" + reddesign_area_id).css("left", x1_pos);
-			akeeba.jQuery("#areaDiv" + reddesign_area_id).css("width", width);
-			akeeba.jQuery("#areaDiv" + reddesign_area_id).css("height", height);
-			akeeba.jQuery("#areaDiv" + reddesign_area_id).css("color","#5B5BA9");
-			akeeba.jQuery("#areaDiv" + reddesign_area_id).css("border","2px solid #5B5BA9");
+			akeeba.jQuery("#backgroundImageContainer").append(
+				'<div id="areaDiv' + reddesign_area_id + '" ' +
+					'style="position: absolute; ' +
+					'width: ' + width + 'px; ' +
+					'height: ' + height + 'px; ' +
+					'left: ' + x1_pos + 'px; ' +
+					'top: ' + y1_pos + 'px; ' +
+					'color: rgb(91, 91, 169); border: 2px solid rgb(91, 91, 169);"' +
+				'>' + title + '</div>');
+		}
+
+        /**
+         * Adds area row to the template table
+		 *
+		 * @param reddesign_area_id
+         * @param title
+         * @param x1_pos
+         * @param y1_pos
+		 * @param x2_pos
+		 * @param y2_pos
+         * @param width
+         * @param height
+         */
+		function addAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, width, height) {
+			var lastClass = akeeba.jQuery("#areasTBody tr").last().attr("class");
+			var rowClass;
+
+			if (lastClass == "row0")
+			{
+				rowClass = "row1";
+			}
+			else
+			{
+				rowClass = "row0";
+			}
+
+			akeeba.jQuery("#areasTBody").append(
+				'<tr id="areaRow' + reddesign_area_id + '" class="' + rowClass + '">' +
+					'<td>' + reddesign_area_id + '</td>' +
+					'<td>' +
+						'<a href="#" onclick="selectAreaForEdit(' + reddesign_area_id + ',\'' +
+																	title + '\',' +
+																	x1_pos + ',' +
+																	y1_pos + ',' +
+																	x2_pos + ',' +
+																	y2_pos + ',' +
+																	width  + ',' +
+																	height + ')">' +
+							'<strong>' + title + '</strong>' +
+						'</a>' +
+					'</td>' +
+					'<td>' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' + x1_pos + ', ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>' + y1_pos + ', ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>' + x2_pos + ', ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>' + y2_pos + ', ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong>' + width + ', ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>' + height + ', ' +
+					'</td>' +
+					'<td>' +
+						'<button type="button" class="btn btn-danger delete" onclick="removeArea(\'' + reddesign_area_id + '\');">' +
+							'<i class="icon-minus icon-white"></i>' +
+							'<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>' +
+						'</button>' +
+					'</td>' +
+				'</tr>'
+			);
+		}
+
+		/**
+		 * Updates area row in the template table
+		 *
+		 * @param reddesign_area_id
+		 * @param title
+		 * @param x1_pos
+		 * @param y1_pos
+		 * @param x2_pos
+		 * @param y2_pos
+		 * @param width
+		 * @param height
+		 */
+		function updateAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, width, height) {
+			akeeba.jQuery("#areaRow" + reddesign_area_id).html(
+				'<td>' + reddesign_area_id + '</td>' +
+				'<td>' +
+					'<a href="#" onclick="selectAreaForEdit(' + reddesign_area_id + ',\'' +
+						title + '\',' +
+						x1_pos + ',' +
+						y1_pos + ',' +
+						x2_pos + ',' +
+						y2_pos + ',' +
+						width  + ',' +
+						height + ')">' +
+						'<strong>' + title + '</strong>' +
+					'</a>' +
+				'</td>' +
+				'<td>' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' + x1_pos + ', ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>' + y1_pos + ', ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>' + x2_pos + ', ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>' + y2_pos + ', ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong>' + width + ', ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>' + height + ', ' +
+				'</td>' +
+				'<td>' +
+					'<button type="button" class="btn btn-danger delete" onclick="removeArea(\'' + reddesign_area_id + '\');">' +
+						'<i class="icon-minus icon-white"></i>' +
+						'<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>' +
+					'</button>' +
+				'</td>'
+			);
 		}
 
         /**
          * Uses AJAX to update image with areas
 		 */
 		function updateImageAreas() {
+			var json;
+
 			akeeba.jQuery("#backgroundImageContainer div").remove();
 
 			akeeba.jQuery.ajax({
 				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxGetAreas&format=raw",
 				success: function (data) {
-					var json = akeeba.jQuery.parseJSON(data);
+					json = akeeba.jQuery.parseJSON(data);
 					akeeba.jQuery.each( json, function( key, value ) {
 						drawArea(value.reddesign_area_id, value.title, value.x1_pos, value.y1_pos, value.width, value.height)
 					});
@@ -186,6 +313,33 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
 				}
 			});
+		}
+
+		/**
+		 * Selects area for edit and populates field data accordingly
+		 *
+		 * @param reddesign_area_id
+		 * @param title
+		 * @param x1_pos
+		 * @param y1_pos
+		 * @param x2_pos
+		 * @param y2_pos
+		 * @param width
+		 * @param height
+		 */
+		function selectAreaForEdit(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, width, height) {
+			akeeba.jQuery("#designAreaId").val(reddesign_area_id);
+			akeeba.jQuery("#areaName").val(title);
+			akeeba.jQuery("#areaX1").val(x1_pos);
+			akeeba.jQuery("#areaY1").val(y1_pos);
+			akeeba.jQuery("#areaX2").val(x2_pos);
+			akeeba.jQuery("#areaY2").val(y2_pos);
+			akeeba.jQuery("#areaWidth").val(width);
+			akeeba.jQuery("#areaHeight").val(height);
+
+			selectArea(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
+
+			akeeba.jQuery("#areaDiv" + reddesign_area_id).html(title + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
 		}
 
         /**
@@ -227,6 +381,7 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 				}
 			});
 		}
+
 	</script>
 
 	<style type="text/css">
@@ -247,7 +402,7 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 		<?php endforeach; ?>
 	</style>
 
-	<div class="form-container">
+	<div>
 		<h3><?php echo JText::sprintf('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS', $this->productionBackground->title); ?></h3>
 		<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DESC'); ?></span>
 
@@ -400,7 +555,7 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 					</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="areasTBody">
 			<?php if ($count = count($this->areas)) : ?>
 				<?php
 				$i = -1;
@@ -416,8 +571,15 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 							<?php echo $area->reddesign_area_id; ?>
 						</td>
 						<td>
-							<a href="#">
-								<strong><?php echo $this->escape(JText::_($area->title)) ?></strong>
+							<a href="#" onclick="selectAreaForEdit(<?php echo $area->reddesign_area_id . ',\'' .
+								$area->title . '\',' .
+								$area->x1_pos . ',' .
+								$area->y1_pos . ',' .
+								$area->x2_pos . ',' .
+								$area->y2_pos . ',' .
+								$area->width . ',' .
+								$area->height; ?>);">
+								<strong><?php echo $area->title; ?></strong>
 							</a>
 						</td>
 						<td>
@@ -426,9 +588,9 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>
 							<?php echo $area->y1_pos; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>
-							<?php echo $area->x1_pos; ?>,
+							<?php echo $area->x2_pos; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>
-							<?php echo $area->y1_pos; ?>,
+							<?php echo $area->y2_pos; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong>
 							<?php echo $area->width; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>
