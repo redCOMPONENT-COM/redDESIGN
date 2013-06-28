@@ -62,6 +62,19 @@ class ReddesignControllerBackground extends FOFController
 		$data['eps_file']			= $uploaded_file['mangled_filename'];
 		$data['image_path']			= $jpegpreviewfile;
 
+		// If this new background will be the PDF Production background switch it against the previous production background
+dump($data, 'data');
+		if ((int) $data['isPDFbgimage'])
+		{
+dump($data['isPDFbgimage'], 'data');
+			$backgroundsModel	= $this->getModel('backgrounds');
+dump($backgroundsModel,'background model');
+			$designId			= $this->input->files->getInt('bg_eps_file', null);
+
+			// Set all other backgrounds as non PDF backgrounds
+			$backgroundsModel->unsetAllPDFBg($designId);
+		}
+
 		return $data;
 	}
 
