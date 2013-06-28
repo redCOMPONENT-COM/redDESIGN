@@ -9,12 +9,15 @@
 
 defined('_JEXEC') or die;
 
+$return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->reddesign_designtype_id . '&tab=backgrounds';
+
 ?>
 <form id="background" name="background" method="post" action="index.php" enctype="multipart/form-data">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 	<input type="hidden" name="option" value="com_reddesign">
 	<input type="hidden" name="view" value="background">
 	<input type="hidden" name="task" value="save">
+	<input type="hidden" name="returnurl" value="<?php echo base64_encode($return_url); ?>>
 	<input type="hidden" name="reddesign_designtype_id" id="reddesign_designtype_id"
 		   value="<?php echo $this->item->reddesign_designtype_id; ?>">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
