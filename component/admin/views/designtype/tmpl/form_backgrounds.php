@@ -9,6 +9,7 @@
 
 defined('_JEXEC') or die;
 
+JHTML::_('behavior.modal');
 ?>
 
 <div class="form-container">
@@ -36,7 +37,7 @@ defined('_JEXEC') or die;
 	<form id="backgrounds_form" name="backgrounds" method="post" action="index.php">
 		<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 		<input type="hidden" name="option" value="com_reddesign">
-		<input type="hidden" name="view" value="backgrounds">
+		<input type="hidden" name="view" value="background">
 		<input type="hidden" name="task" id="backgrounds_task" value="">
 		<input type="hidden" name="backgrounds_reddesign_background_id"
 			   id="backgrounds_reddesign_background_id"
