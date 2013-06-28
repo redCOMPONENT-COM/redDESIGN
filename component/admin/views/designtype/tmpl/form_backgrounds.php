@@ -39,12 +39,13 @@ JHTML::_('behavior.modal');
 		<input type="hidden" name="option" value="com_reddesign">
 		<input type="hidden" name="view" value="background">
 		<input type="hidden" name="task" id="backgrounds_task" value="">
-		<input type="hidden" name="backgrounds_reddesign_background_id"
+		<input type="hidden" name="reddesign_background_id"
 			   id="backgrounds_reddesign_background_id"
 			   value="">
-		<input type="hidden" name="backgrounds_reddesign_designtype_id"
+		<input type="hidden" name="reddesign_designtype_id"
 			   id="backgrounds_reddesign_designtype_id"
 			   value="<?php echo $this->item->reddesign_designtype_id; ?>">
+		<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 		<table id="itemsList" class="table table-striped">
 			<thead>
 			<tr>
@@ -105,8 +106,9 @@ JHTML::_('behavior.modal');
 							<?php echo JHTML::_('grid.published', $background, $i); ?>
 						</td>
 						<td>
-							<?php // @ToDo: this delete background feature still needs to be implemented. It wil also have to remove areas, fonts and colors ?>
-							<button type="button" class="btn btn-danger delete">
+							<button type="button"
+									class="btn btn-danger delete"
+									onclick="removeBg('<?php echo $background->reddesign_background_id; ?>')" >
 								<i class="icon-minus icon-white"></i>
 								<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>
 							</button>
@@ -132,6 +134,19 @@ JHTML::_('behavior.modal');
 		backgrounds_reddesign_background_id = bgid;
 
 		akeeba.jQuery('#backgrounds_task').val('setPDFbg');
+		akeeba.jQuery('#backgrounds_reddesign_background_id').val(bgid);
+		akeeba.jQuery('#backgrounds_form').submit();
+	}
+	function removeBg(bgid) {
+		akeeba.jQuery('#backgrounds_task').val('remove');
+		<?php $return_url_removeBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->reddesign_designtype_id . '&tab=backgrounds'; ?>
+		akeeba.jQuery('#backgrounds_form').
+			append(
+				akeeba.jQuery('<input/>')
+					.attr('type', 'hidden')
+					.attr('name', 'returnurl')
+					.val('<?php echo base64_encode($return_url_removeBg) ?>')
+			);
 		akeeba.jQuery('#backgrounds_reddesign_background_id').val(bgid);
 		akeeba.jQuery('#backgrounds_form').submit();
 	}
