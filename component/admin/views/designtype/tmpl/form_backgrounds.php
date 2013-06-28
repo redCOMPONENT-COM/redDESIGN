@@ -9,6 +9,7 @@
 
 defined('_JEXEC') or die;
 
+JHTML::_('behavior.modal');
 ?>
 
 <div class="form-container">
