@@ -66,6 +66,7 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 			if(selection.width == 0 || selection.height == 0)
 			{
 				clearSelectionFields();
+				updateImageAreas();
 			}
 			else
 			{
