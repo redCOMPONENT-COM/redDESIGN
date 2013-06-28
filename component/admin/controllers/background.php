@@ -20,6 +20,18 @@ defined('_JEXEC') or die;
 class ReddesignControllerBackground extends FOFController
 {
 	/**
+	 * Constructor to set the right model
+	 *
+	 * @param   array  $config  Optional configuration parameters
+	 */
+	public function __construct($config = array())
+	{
+		parent::__construct($config);
+
+		$this->modelName = 'background';
+	}
+
+	/**
 	 * Uploads the EPS-Background file and generates a JPG image preview of the EPS
 	 *
 	 * @param   array  &$data  data filled in the edit form
@@ -63,13 +75,10 @@ class ReddesignControllerBackground extends FOFController
 		$data['image_path']			= $jpegpreviewfile;
 
 		// If this new background will be the PDF Production background switch it against the previous production background
-dump($data, 'data');
 		if ((int) $data['isPDFbgimage'])
 		{
-dump($data['isPDFbgimage'], 'data');
-			$backgroundsModel	= $this->getModel('backgrounds');
-dump($backgroundsModel,'background model');
-			$designId			= $this->input->files->getInt('bg_eps_file', null);
+			$backgroundsModel	= $this->getThisModel();
+			$designId			= (int) $data['reddesign_designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
 			$backgroundsModel->unsetAllPDFBg($designId);
@@ -279,5 +288,34 @@ dump($backgroundsModel,'background model');
 		$im->destroy();
 
 		return $thumb_name;
+	}
+
+	/**
+	 * Method to set the a background as the PDF background.
+	 *
+	 * @since	1.0
+	 *
+	 * @return void
+	 */
+	public function setPDFbg()
+	{
+		$designId	= $this->input->getInt('backgrounds_reddesign_designtype_id', '');
+		$bgId		= $this->input->getInt('backgrounds_reddesign_background_id', '');
+
+		$model = $this->getThisModel();
+
+		$app = JFactory::getApplication();
+
+		if (!$model->setAsPDFbg($designId, $bgId))
+		{
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_ERROR_SWITCHING_PDF_BG'), 'error');
+		}
+		else
+		{
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_PDF_BG_UPDATED'));
+		}
+
+		$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . $designId . '&tab=backgrounds');
+		$this->redirect();
 	}
 }
