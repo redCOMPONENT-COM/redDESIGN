@@ -1,7 +1,7 @@
 <?php
 /**
- * @package     RedDesign.Component
- * @subpackage  Administrator
+ * @package    RedDesign.Component
+ * @subpackage Administrator
  *
  * @copyright   Copyright (C) 2013 redCOMPONENT.com. All rights reserved.
  * @license     GNU General Public License version 2 or later, see LICENSE.
@@ -383,16 +383,24 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 			});
 		}
 
-	function showAreaSettings(areaSettingsRow) {
-		if (akeeba.jQuery("#" + areaSettingsRow).is(":hidden"))
-		{
-			akeeba.jQuery("#" + areaSettingsRow).slideDown(3000);
+        /**
+         * This function helps jquery slide effect because it doesn't work well with table rows
+		 *
+		 * @param reddesign_area_id
+         */
+		function showAreaSettings(reddesign_area_id) {
+			if (akeeba.jQuery("#areaSettingsRow" + reddesign_area_id).is(":hidden"))
+			{
+				akeeba.jQuery("#areaSettingsRow" + reddesign_area_id).show();
+				akeeba.jQuery("#areaSettingsDiv" + reddesign_area_id).slideToggle(1000);
+			}
+			else
+			{
+				akeeba.jQuery("#areaSettingsDiv" + reddesign_area_id).slideToggle(1000, function () {
+					akeeba.jQuery("#areaSettingsRow" + reddesign_area_id).hide();
+				});
+			}
 		}
-		else
-		{
-			akeeba.jQuery("#" + areaSettingsRow).hide();
-		}
-	}
 
 	</script>
 
@@ -613,7 +621,9 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 							<?php echo $area->height; ?>
 						</td>
 						<td>
-							<button type="button" class="btn btn-primary" onclick="showAreaSettings('areaSettingsRow<?php echo $area->reddesign_area_id; ?>');">
+							<button type="button"
+									class="btn btn-primary"
+									onclick="showAreaSettings(<?php echo $area->reddesign_area_id; ?>);">
 								<span><?php echo JText::_('COM_REDDESIGN_COMMON_SETTINGS'); ?></span>
 							</button>
 						</td>
@@ -626,36 +636,38 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 					</tr>
 					<tr id="areaSettingsRow<?php echo $area->reddesign_area_id; ?>"
 						class="<?php echo 'row' . $m; ?> hide">
-						<td colspan="2" class="span4">
-							<div id="designTypesFonts<?php echo $area->reddesign_area_id; ?>" class="control-group">
-								<label for="<?php echo 'areaFontAlignment' . $area->reddesign_area_id; ?>">
-									<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALIGNMENT') ?>
-								</label>
-								<?php echo JHtml::_('select.genericlist',
-									$this->alginmentOptions,
-									'areaFontAlignment' . $area->reddesign_area_id,
-									'',
-									'value',
-									'text',
-									$area->textalign
-								);?>
+						<td colspan="5" >
+							<div id="areaSettingsDiv<?php echo $area->reddesign_area_id; ?>" class="hide">
+								<div id="designTypesFonts<?php echo $area->reddesign_area_id; ?>" class="control-group">
+									<label for="<?php echo 'areaFontAlignment' . $area->reddesign_area_id; ?>">
+										<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALIGNMENT') ?>
+									</label>
+									<?php echo JHtml::_('select.genericlist',
+										$this->alginmentOptions,
+										'areaFontAlignment' . $area->reddesign_area_id,
+										'',
+										'value',
+										'text',
+										$area->textalign
+									);?>
+								</div>
+								<div id="designTypesFonts<?php echo $area->reddesign_area_id; ?>" class="control-group">
+									<label for="<?php echo 'areaFonts' . $area->reddesign_area_id; ?>">
+										<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALLOWED_FONTS') ?>
+									</label>
+									<?php echo JHtml::_('select.genericlist',
+										$this->fontsOptions,
+										'areaFonts' . $area->reddesign_area_id . '[]',
+										' multiple="multiple" ',
+										'value',
+										'text',
+										$area->font_id
+									);?>
+								</div>
+								<div>
+									@TODO Colors
+								</div>
 							</div>
-							<div id="designTypesFonts<?php echo $area->reddesign_area_id; ?>" class="control-group">
-								<label for="<?php echo 'areaFonts' . $area->reddesign_area_id; ?>">
-									<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALLOWED_FONTS') ?>
-								</label>
-								<?php echo JHtml::_('select.genericlist',
-									$this->fontsOptions,
-									'areaFonts' . $area->reddesign_area_id . '[]',
-									' multiple="multiple" ',
-									'value',
-									'text',
-									$area->font_id
-								);?>
-							</div>
-						</td>
-						<td colspan="3">
-							@TODO Colors
 						</td>
 					</tr>
 				<?php endforeach ?>
