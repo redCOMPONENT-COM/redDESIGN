@@ -256,11 +256,11 @@ defined('_JEXEC') or die();
 				<label for="font_char"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER') ?></label>
 				<input class="input-mini" type="text" value="" maxlength="1" id="font_char" name="font_char">
 			</div>
-			<div class="control-group character-group"><label for="width">
+			<div class="control-group character-group">
 					<label for="width"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_WIDTH') ?></label>
 					<input class="input-small" type="text" value="" maxlength="15" id="width" name="width">
 			</div>
-			<div class="control-group character-group"><label for="height">
+			<div class="control-group character-group">
 					<label for="height"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_HEIGHT') ?></label>
 					<input class="input-small" type="text" value="" maxlength="15" id="height" name="height">
 			</div>
