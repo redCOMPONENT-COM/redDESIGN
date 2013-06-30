@@ -237,13 +237,101 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>' + height + ', ' +
 					'</td>' +
 					'<td>' +
+						'<button type="button" class="btn btn-primary" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
+							'<span><?php echo JText::_('COM_REDDESIGN_COMMON_SETTINGS'); ?></span>' +
+						'</button>' +
+					'</td>' +
+					'<td>' +
 						'<button type="button" class="btn btn-danger delete" onclick="removeArea(\'' + reddesign_area_id + '\');">' +
 							'<i class="icon-minus icon-white"></i>' +
 							'<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>' +
 						'</button>' +
 					'</td>' +
+				'</tr>' +
+				'<tr id="areaSettingsRow' + reddesign_area_id + '"	class="' + rowClass + ' hide">' +
+					'<td colspan="5" >' +
+						'<div id="areaSettingsDiv' + reddesign_area_id + '" class="hide">' +
+							'<div class="span3">' +
+								'<div class="control-group">' +
+									'<label for="areaFontAlignment' + reddesign_area_id + '">' +
+										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALIGNMENT') ?>' +
+									'</label>' +
+									'<select id="areaFontAlignment' + reddesign_area_id + '" name="areaFontAlignment' + reddesign_area_id + '"></select>' +
+								'</div>' +
+								'<div class="control-group">' +
+									'<label for="areaFonts' + reddesign_area_id + '">' +
+										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALLOWED_FONTS') ?>' +
+									'</label>' +
+									'<select id="areaFonts' + reddesign_area_id + '" name="areaFonts' + reddesign_area_id + '[]" multiple="multiple"></select>' +
+								'</div>' +
+							'</div>' +
+							<?php if($this->item->fontsizer != 'auto') : ?>
+							'<div class="span4">' +
+								<?php if($this->item->fontsizer == 'dropdown') : ?>
+								'<div class="control-group">' +
+									'<label for="fontsizerDropdown' + reddesign_area_id + '">' +
+										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>' +
+									'</label>' +
+									'<textarea class="input-small" style="resize: none;" id="fontsizerDropdown' + reddesign_area_id + '"rows="7"></textarea>' +
+									'<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC') ?></span>' +
+								'</div>' +
+								<?php elseif($this->item->fontsizer == 'slider') : ?>
+								'<div class="control-group">' +
+									'<label for="fontsizerSliderDefault' + reddesign_area_id + '">' +
+										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_FONT_SIZE') ?>' +
+									'</label>' +
+									'<input class="input-small" type="text" value="" maxlength="3" ' +
+											'id="fontsizerSliderDefault' + reddesign_area_id + '" name="fontsizerSliderDefault' + reddesign_area_id + '">' +
+								'</div>' +
+								'<div class="control-group">' +
+									'<label for="fontsizerSliderMin' + reddesign_area_id + '">' +
+										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MIN_FONT_SIZE') ?>' +
+									'</label>' +
+									'<input class="input-small" type="text" value="" maxlength="3" ' +
+											'id=fontsizerSliderMin' + reddesign_area_id + '" name="fontsizerSliderMin' + reddesign_area_id + '">' +
+								'</div>' +
+								'<div class="control-group">' +
+									'<label for="fontsizerSliderMax' + reddesign_area_id + '">' +
+										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAX_FONT_SITE') ?>' +
+									'</label>' +
+									'<input class="input-small" type="text" value="" maxlength="3" ' +
+											'id="fontsizerSliderMax' + reddesign_area_id + '" name="fontsizerSliderMax' + reddesign_area_id + '">' +
+								'</div>' +
+								<?php endif; ?>
+							'</div>' +
+							<?php endif; ?>
+							'<div>' +
+								'@TODO Colors' +
+							'</div>' +
+							'<div class="span12" style="text-align: center;">' +
+								'<button type="button" class="btn btn-success" ' +
+									'onclick="saveAreaSettings(' + reddesign_area_id + ');">' +
+									'<span><?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?></span>' +
+								'</button>' +
+								'<button type="button" class="btn" ' +
+									'onclick="showAreaSettings(' + reddesign_area_id + ');">' +
+									'<span><?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?></span>' +
+								'</button>' +
+							'</div>' +
+						'</div>' +
+					'</td>' +
 				'</tr>'
 			);
+
+			<?php foreach($this->alginmentOptions as  $alginmentOption) : ?>
+				akeeba.jQuery('#areaFontAlignment' + reddesign_area_id).append(
+					'<option value="<?php echo $alginmentOption->value; ?>">' +
+						'<?php echo $alginmentOption->text; ?>' +
+					'</option>'
+				);
+			<?php endforeach; ?>
+
+			<?php foreach($this->fontsOptions as  $fontsOption) : ?>
+				akeeba.jQuery('#areaFonts' + reddesign_area_id).append(
+					'<option value="<?php echo $fontsOption->value; ?>">' +
+						'<?php echo $fontsOption->text; ?>' +
+					'</option>');
+			<?php endforeach; ?>
 		}
 
 		/**
@@ -366,6 +454,7 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 				type: "post",
 				success: function (data) {
 					akeeba.jQuery("#areaRow" + reddesign_area_id).remove();
+					akeeba.jQuery("#areaSettingsRow" + reddesign_area_id).remove();
 					updateImageAreas();
 					akeeba.jQuery("#ajaxMessageAreas").removeClass();
 					akeeba.jQuery("#ajaxMessageAreas").addClass("alert alert-success");
@@ -413,8 +502,8 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 			var fontsizerSliderDefault = akeeba.jQuery("#fontsizerSliderDefault" + reddesign_area_id).val();
 			var fontsizerSliderMin = akeeba.jQuery("#fontsizerSliderMin" + reddesign_area_id).val();
 			var fontsizerSliderMax = akeeba.jQuery("#fontsizerSliderMax" + reddesign_area_id).val();
-			var areaFonts = akeeba.jQuery('[name="areaFonts' + reddesign_area_id + '[]"]').val(); console.log(areaFonts);
-console.log(areaFonts);
+			var areaFonts = akeeba.jQuery('[name="areaFonts' + reddesign_area_id + '[]"]').val();
+
 			akeeba.jQuery.ajax({
 				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxSave&format=raw",
 				data: {
@@ -705,7 +794,7 @@ console.log(areaFonts);
 											' multiple="multiple" ',
 											'value',
 											'text',
-											$area->font_id
+											explode(',', $area->font_id)
 										);?>
 									</div>
 								</div>
@@ -716,10 +805,9 @@ console.log(areaFonts);
 											<label for="<?php echo 'fontsizerDropdown' . $area->reddesign_area_id; ?>">
 												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>
 											</label>
-											<textarea class="input-mini" style="resize: none;"
+											<textarea class="input-small" style="resize: none;"
 													  id="<?php echo 'fontsizerDropdown' . $area->reddesign_area_id; ?>"
-													  rows="7">
-											</textarea>
+													  rows="7"><?php echo $area->font_size; ?></textarea>
 											<span class="help-block">
 												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC') ?>
 											</span>
@@ -731,7 +819,7 @@ console.log(areaFonts);
 											</label>
 											<input class="input-small"
 												   type="text"
-												   value=""
+												   value="<?php echo $area->defaultFontSize; ?>"
 												   maxlength="3"
 												   id="<?php echo 'fontsizerSliderDefault' . $area->reddesign_area_id; ?>"
 												   name="<?php echo 'fontsizerSliderDefault' . $area->reddesign_area_id; ?>">
@@ -742,7 +830,7 @@ console.log(areaFonts);
 											</label>
 											<input class="input-small"
 												   type="text"
-												   value=""
+												   value="<?php echo $area->minFontSize; ?>"
 												   maxlength="3"
 												   id="<?php echo 'fontsizerSliderMin' . $area->reddesign_area_id; ?>"
 												   name="<?php echo 'fontsizerSliderMin' . $area->reddesign_area_id; ?>">
@@ -753,7 +841,7 @@ console.log(areaFonts);
 											</label>
 											<input class="input-small"
 												   type="text"
-												   value=""
+												   value="<?php echo $area->maxFontSize; ?>"
 												   maxlength="3"
 												   id="<?php echo 'fontsizerSliderMax' . $area->reddesign_area_id; ?>"
 												   name="<?php echo 'fontsizerSliderMax' . $area->reddesign_area_id; ?>">
