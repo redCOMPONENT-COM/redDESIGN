@@ -1,7 +1,7 @@
 <?php
 /**
- * @package    RedDesign.Component
- * @subpackage Administrator
+ * @package     RedDesign.Component
+ * @subpackage  Administrator
  *
  * @copyright   Copyright (C) 2013 redCOMPONENT.com. All rights reserved.
  * @license     GNU General Public License version 2 or later, see LICENSE.
@@ -402,6 +402,49 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 			}
 		}
 
+        /**
+         * Saves settings for an area
+		 *
+		 * @param reddesign_area_id
+         */
+		function saveAreaSettings(reddesign_area_id) {
+			var areaFontAlignment = akeeba.jQuery("#areaFontAlignment" + reddesign_area_id).val();
+			var fontsizerDropdown = akeeba.jQuery("#fontsizerDropdown" + reddesign_area_id).val();
+			var fontsizerSliderDefault = akeeba.jQuery("#fontsizerSliderDefault" + reddesign_area_id).val();
+			var fontsizerSliderMin = akeeba.jQuery("#fontsizerSliderMin" + reddesign_area_id).val();
+			var fontsizerSliderMax = akeeba.jQuery("#fontsizerSliderMax" + reddesign_area_id).val();
+			var areaFonts = akeeba.jQuery('[name="areaFonts' + reddesign_area_id + '[]"]').val(); console.log(areaFonts);
+console.log(areaFonts);
+			akeeba.jQuery.ajax({
+				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxSave&format=raw",
+				data: {
+					reddesign_area_id: reddesign_area_id,
+					textalign: areaFontAlignment,
+					font_id: areaFonts,
+					font_size: fontsizerDropdown,
+					defaultFontSize: fontsizerSliderDefault,
+					minFontSize: fontsizerSliderMin,
+					maxFontSize: fontsizerSliderMax
+				},
+				type: "post",
+				success: function (data) {
+					var json = akeeba.jQuery.parseJSON(data);
+					akeeba.jQuery("#ajaxMessageAreas").removeClass();
+					akeeba.jQuery("#ajaxMessageAreas").addClass("alert alert-success");
+					akeeba.jQuery("#ajaxMessageAreas").html(json.message);
+					akeeba.jQuery("#ajaxMessageAreas").fadeIn("slow");
+					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
+				},
+				error: function (data) {
+					akeeba.jQuery("#ajaxMessageAreas").removeClass();
+					akeeba.jQuery("#ajaxMessageAreas").addClass("alert alert-error");
+					akeeba.jQuery("#ajaxMessageAreas").html(data);
+					akeeba.jQuery("#ajaxMessageAreas").fadeIn("slow");
+					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
+				}
+			});
+		}
+
 	</script>
 
 	<style type="text/css">
@@ -724,14 +767,14 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 								<div class="span12" style="text-align: center;">
 									<button type="button"
 											class="btn btn-success"
-											onclick="saveSettings(<?php echo $area->reddesign_area_id; ?>);">
+											onclick="saveAreaSettings(<?php echo $area->reddesign_area_id; ?>);">
 										<span>
 											<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
 										</span>
 									</button>
 									<button type="button"
 											class="btn"
-											onclick="cancelSettings(<?php echo $area->reddesign_area_id; ?>);">
+											onclick="showAreaSettings(<?php echo $area->reddesign_area_id; ?>);">
 										<span>
 											<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>
 										</span>
