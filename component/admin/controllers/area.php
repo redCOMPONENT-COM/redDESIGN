@@ -29,6 +29,14 @@ class ReddesignControllerArea extends FOFController
 	{
 		$response = array();
 
+		$fontIds = $this->input->getString('font_id', '');
+
+		if (!empty($fontIds))
+		{
+			$fontIds = implode(',', $fontIds);
+			$this->input->set('font_id', $fontIds);
+		}
+
 		if ($this->applySave())
 		{
 			$response['reddesign_area_id'] = $this->input->getInt('id', null);
