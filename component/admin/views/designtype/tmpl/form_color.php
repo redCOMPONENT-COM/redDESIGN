@@ -16,6 +16,9 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/colorpicker.css');
 var NOarea = parseInt(<?php echo count($this->areas);?>);
 var rDesign = jQuery.noConflict();
 
+/**
+ * Function for hide color picker
+ */
 function HideColorPicker(element,reddesign_area_id)
 {
 	if(element.value==1)
@@ -29,7 +32,13 @@ function HideColorPicker(element,reddesign_area_id)
 		akeeba.jQuery("#saveAllColorbtn"+reddesign_area_id).hide();
 	}
 }
-
+/**
+ * saves color codes into the DB via AJAX.
+ *
+ * @param reddesign_area_id
+ *
+ * @param  update
+ */
 function addNewcolor(reddesign_area_id, update =0)
 {
 	var newcolor = true;
@@ -122,6 +131,13 @@ function addRow(colors)
 			'</tr>'
 		);
 }
+/**
+ * Delete color codes into the DB via AJAX.
+ *
+ * @param r
+ *
+ * @param  reddesign_area_id
+ */
 function deletecolor(r,reddesign_area_id)
 {
 	var i=r.parentNode.parentNode.parentNode.rowIndex;
