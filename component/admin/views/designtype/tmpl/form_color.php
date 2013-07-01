@@ -30,47 +30,56 @@ function HideColorPicker(element,reddesign_area_id)
 	}
 }
 
-function addNewcolor(tableRef,reddesign_area_id)
+function addNewcolor(reddesign_area_id, update =0)
 {
-
-	var color_code = document.getElementById('reddesign_color_code'+reddesign_area_id).value;
-	var allowAllColor = akeeba.jQuery("input[name='allcolor"+reddesign_area_id+"']:checked").val();
-
-	if(allowAllColor!=1)
+	var newcolor = true;
+	if(update==1)
 	{
-		if(color_code == 1)
-		{
-			color_code = "";
-			var color_code = "#"+document.getElementById('color_code'+reddesign_area_id).value;
-		} else
-		{
-			var color_code = color_code+",#"+document.getElementById('color_code'+reddesign_area_id).value;
-		}
-	} else
-	{
-		color_code = 1;
+		var newcolor = false;
 	}
-	document.getElementById('reddesign_color_code'+reddesign_area_id).value = color_code;
+
+	var allowAllColor = akeeba.jQuery("input[name='allcolor"+reddesign_area_id+"']:checked").val();
+	if(allowAllColor==1)
+	{
+		finalColorCode = 1;
+	}
+	else
+	{
+		var colorCodes = document.getElementsByName('colour_id'+reddesign_area_id+'[]');
+		var arr = [];
+		for (var i = 0; i < colorCodes.length ; i++) {
+		    var aControl = colorCodes[i].value;
+		    arr.push(aControl);
+		}
+		var finalColorCode = arr.join(",");
+		if(newcolor)
+		{
+			finalColorCode = finalColorCode+",#"+document.getElementById('color_code'+reddesign_area_id).value;
+		}
+	}
 	// For AJAX save
 	akeeba.jQuery.ajax({
 		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxColorSave&format=raw",
 		data: {
 			reddesign_area_id:reddesign_area_id,
-			color_code: color_code
+			color_code: finalColorCode
 		},
 		type: "post",
 		success: function (data) {
 			var json = akeeba.jQuery.parseJSON(data);
-			addRow(json);
+			if(newcolor)
+				addRow(json);
 			if(allowAllColor==1)
 			{
 				removeRow(json);
 			}
+
 			akeeba.jQuery("#ajaxMessageColor"+reddesign_area_id).removeClass();
 			akeeba.jQuery("#ajaxMessageColor"+reddesign_area_id).addClass("alert alert-success");
 			akeeba.jQuery("#ajaxMessageColor"+reddesign_area_id).html(json.message);
 			akeeba.jQuery("#ajaxMessageColor"+reddesign_area_id).fadeIn("slow");
 			akeeba.jQuery("#ajaxMessageColor"+reddesign_area_id).fadeOut(3000);
+			akeeba.jQuery("#ajaxMessageColor"+reddesign_area_id).show();
 		},
 		error: function (data) {
 			akeeba.jQuery("#ajaxMessageColor"+reddesign_area_id).removeClass();
@@ -78,6 +87,7 @@ function addNewcolor(tableRef,reddesign_area_id)
 			akeeba.jQuery("#ajaxMessageColor"+reddesign_area_id).html(data);
 			akeeba.jQuery("#ajaxMessageColor"+reddesign_area_id).fadeIn("slow");
 			akeeba.jQuery("#ajaxMessageColor"+reddesign_area_id).fadeOut(3000);
+			akeeba.jQuery("#ajaxMessageColor"+reddesign_area_id).show();
 		}
 	});
 	// End Ajax save
@@ -105,18 +115,19 @@ function addRow(colors)
 			'<tr>' +
 				'<td>'+TDinnerHTML+'</td>'+
 				'<td><div>'+cccode+'</div><input type="hidden" value="'+cccode+'" class="code_image'+colors.reddesign_area_id+'" name="code_image'+colors.reddesign_area_id+'[]"  id="code_image'+colors.reddesign_area_id+'"><input type="hidden" name="is_image'+colors.reddesign_area_id+'[]" value="'+is_img+'" id="is_image'+colors.reddesign_area_id+'"></td>'+
-				'<td><input type="hidden" name="colour_id'+colors.reddesign_area_id+'[]" id="colour_id'+colors.reddesign_area_id+'">'+
+				'<td><div><input type="hidden" name="colour_id'+colors.reddesign_area_id+'[]" id="colour_id'+colors.reddesign_area_id+'" value="'+cccode+'">'+
 			            '<input value="Delete" onclick="deletecolor(this,'+colors.reddesign_area_id+')" class="button" type="button" >'+
+				'</div>'+
 				'</td>'+
 			'</tr>'
 		);
 }
-function deletecolor(r,id)
+function deletecolor(r,reddesign_area_id)
 {
 	var i=r.parentNode.parentNode.parentNode.rowIndex;
-	document.getElementById('extra_table'+id).deleteRow(i);
+	document.getElementById('extra_table'+reddesign_area_id).deleteRow(i);
 	// Do AJAX Delete
-
+	addNewcolor(reddesign_area_id, update=1);
 	// End
 }
 </script>
@@ -156,7 +167,7 @@ foreach ($this->areas as $area)
 			</div>
 		</div>
 		<div id="saveAllColorbtn<?php echo $area->reddesign_area_id;?>" <?php echo $btnstyle;?>>
-			<input name="addvalue<?php echo $area->reddesign_area_id;?>" id="addvalue<?php echo $area->reddesign_area_id;?>" class="button" value="<?php echo JText::_( 'COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_ALL_COLOR')?>" onclick="addNewcolor('extra_table<?php echo $area->reddesign_area_id;?>','<?php echo $area->reddesign_area_id;?>');" type="button" >
+			<input name="addvalue<?php echo $area->reddesign_area_id;?>" id="addvalue<?php echo $area->reddesign_area_id;?>" class="button" value="<?php echo JText::_( 'COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_ALL_COLOR')?>" onclick="addNewcolor('<?php echo $area->reddesign_area_id;?>',0);" type="button" >
 			<div id="ajaxMessageColorContainer" style="height: 25px; padding-bottom: 11px;">
 					<div id="ajaxMessageColor<?php echo $area->reddesign_area_id;?>" style="display: block;">
 					</div>
@@ -168,7 +179,7 @@ foreach ($this->areas as $area)
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_TEXT'); ?>
 			</label>
 			<div class="controls">
-				<input class="color" value="" id="color_code<?php echo $area->reddesign_area_id;?>" name="color_code<?php echo $area->reddesign_area_id;?>">&nbsp;&nbsp;<input name="addvalue<?php echo $area->reddesign_area_id;?>" id="addvalue<?php echo $area->reddesign_area_id;?>" class="button" value="<?php echo JText::_( 'COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR')?>" onclick="addNewcolor('extra_table<?php echo $area->reddesign_area_id;?>','<?php echo $area->reddesign_area_id;?>');" type="button" >
+				<input class="color" value="" id="color_code<?php echo $area->reddesign_area_id;?>" name="color_code<?php echo $area->reddesign_area_id;?>">&nbsp;&nbsp;<input name="addvalue<?php echo $area->reddesign_area_id;?>" id="addvalue<?php echo $area->reddesign_area_id;?>" class="button" value="<?php echo JText::_( 'COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR')?>" onclick="addNewcolor('<?php echo $area->reddesign_area_id;?>',0);" type="button" >
 			</div>
 			<div id="ajaxMessageColorContainer" style="height: 25px; padding-bottom: 11px;">
 				<div id="ajaxMessageColor<?php echo $area->reddesign_area_id;?>" style="display: block;">
@@ -208,7 +219,7 @@ foreach ($this->areas as $area)
 									<input type="hidden" name="is_image<?php echo $area->reddesign_area_id?>[]" value="0" id="is_image'.$area->reddesign_area_id.'">
 									<input type="hidden" class="code_image<?php echo $area->reddesign_area_id?>" name="code_image<?php echo $area->reddesign_area_id?>[]" value="<?php echo $colorData[$j] ?>" id="code_image<?php echo $area->reddesign_area_id?>">
 									<input value="Delete" onclick="deletecolor(this,<?php echo$area->reddesign_area_id?>)" class="button" type="button" />
-									<input type="hidden" name="colour_id<?php echo $area->reddesign_area_id?>[]" id="colour_id<?php echo $area->reddesign_area_id?>">
+									<input type="hidden" name="colour_id<?php echo $area->reddesign_area_id?>[]" id="colour_id<?php echo $area->reddesign_area_id?>" value="<?php echo $colorData[$j] ?>">
 								</div>
 							</td>
 							</tr>
