@@ -299,8 +299,8 @@ class ReddesignControllerBackground extends FOFController
 	 */
 	public function setPDFbg()
 	{
-		$designId	= $this->input->getInt('backgrounds_reddesign_designtype_id', '');
-		$bgId		= $this->input->getInt('backgrounds_reddesign_background_id', '');
+		$designId	= $this->input->getInt('reddesign_designtype_id', '');
+		$bgId		= $this->input->getInt('reddesign_background_id', '');
 
 		$model = $this->getThisModel();
 
