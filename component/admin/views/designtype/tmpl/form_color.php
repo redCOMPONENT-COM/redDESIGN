@@ -101,6 +101,12 @@ function addNewcolor(reddesign_area_id, update =0)
 	});
 	// End Ajax save
 }
+/**
+ * removes color code row.
+ *
+ * @param colors
+ *
+ */
 function removeRow(colors)
 {
 	akeeba.jQuery("#extra_table"+colors.reddesign_area_id).html("");
