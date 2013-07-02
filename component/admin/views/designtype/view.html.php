@@ -75,7 +75,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 				$colorCode = 0;
 			}
 
-			$lists['allcolor' . $areas[$i]->reddesign_area_id] = JHTML::_('select.booleanlist', 'allcolor' . $area->reddesign_area_id, 'class="inputbox" onclick="HideColorPicker(this, \'' . $area->reddesign_area_id . '\');"', $colorCode);
+			$lists['allcolor' . $area->reddesign_area_id] = JHTML::_('select.booleanlist', 'allcolor' . $area->reddesign_area_id, 'class="inputbox" onclick="HideColorPicker(this, \'' . $area->reddesign_area_id . '\');"', $colorCode);
 		}
 
 		$this->lists = $lists;

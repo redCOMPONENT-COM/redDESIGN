@@ -9,7 +9,7 @@
 
 defined('_JEXEC') or die();
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/colorpicker/jscolor.js');
-FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/colorpicker.css');
+FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 
 ?>
 <script type="text/javascript">
@@ -32,8 +32,9 @@ function HideColorPicker(element,reddesign_area_id)
 		akeeba.jQuery("#saveAllColorbtn"+reddesign_area_id).hide();
 	}
 }
+
 /**
- * saves color codes into the DB via AJAX.
+ * Saves color codes into the DB via AJAX.
  *
  * @param reddesign_area_id
  *
@@ -101,8 +102,9 @@ function addNewcolor(reddesign_area_id, update)
 	});
 	// End Ajax save
 }
+
 /**
- * removes color code row.
+ * Removes color code row.
  *
  * @param colors
  *
@@ -111,6 +113,7 @@ function removeRow(colors)
 {
 	akeeba.jQuery("#extra_table"+colors.reddesign_area_id).html("");
 }
+
 function addRow(colors)
 {
 		var cccode = colors.color_code.split(",");
@@ -129,14 +132,21 @@ function addRow(colors)
 		akeeba.jQuery("#extra_table"+colors.reddesign_area_id).append(
 			'<tr>' +
 				'<td>'+TDinnerHTML+'</td>'+
-				'<td><div>'+cccode+'</div><input type="hidden" value="'+cccode+'" class="code_image'+colors.reddesign_area_id+'" name="code_image'+colors.reddesign_area_id+'[]"  id="code_image'+colors.reddesign_area_id+'"><input type="hidden" name="is_image'+colors.reddesign_area_id+'[]" value="'+is_img+'" id="is_image'+colors.reddesign_area_id+'"></td>'+
-				'<td><div><input type="hidden" name="colour_id'+colors.reddesign_area_id+'[]" id="colour_id'+colors.reddesign_area_id+'" value="'+cccode+'">'+
+				'<td>'+
+					'<div>'+cccode+'</div>'+
+					'<input type="hidden" value="'+cccode+'" class="code_image'+colors.reddesign_area_id+'" name="code_image'+colors.reddesign_area_id+'[]"  id="code_image'+colors.reddesign_area_id+'">'+
+					'<input type="hidden" name="is_image'+colors.reddesign_area_id+'[]" value="'+is_img+'" id="is_image'+colors.reddesign_area_id+'">'+
+				'</td>'+
+				'<td>'+
+					'<div>'+
+						'<input type="hidden" name="colour_id'+colors.reddesign_area_id+'[]" id="colour_id'+colors.reddesign_area_id+'" value="'+cccode+'">'+
 			            '<input value="Delete" onclick="deletecolor(this,'+colors.reddesign_area_id+')" class="button" type="button" >'+
-				'</div>'+
+					'</div>'+
 				'</td>'+
 			'</tr>'
 		);
 }
+
 /**
  * Delete color codes into the DB via AJAX.
  *
@@ -152,6 +162,7 @@ function deletecolor(r,reddesign_area_id)
 	addNewcolor(reddesign_area_id, update=1);
 	// End
 }
+
 </script>
 
 <div class="form-container" >

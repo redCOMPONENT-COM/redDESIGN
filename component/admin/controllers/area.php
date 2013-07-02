@@ -97,8 +97,6 @@ class ReddesignControllerArea extends FOFController
 	/**
 	 * Saves design colors for AJAX request.
 	 *
-	 * @access public
-	 *
 	 * @return void
 	 */
 	public function ajaxColorSave()
