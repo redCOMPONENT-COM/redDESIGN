@@ -553,11 +553,11 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			});
 		}
 
-		/**
-         * Adds new color row
-	 *
-	 * @param reddesign_area_id
-         */
+	/**
+	* Adds new color row
+	*
+	* @param reddesign_area_id
+	*/
 	function addNewcolor(reddesign_area_id)
 	{
 		var color_code = akeeba.jQuery("#color_code" + reddesign_area_id).val();
@@ -581,10 +581,10 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 	}
 
 	/**
-     * Hides colorpicker
-	 *
-	 * @param reddesign_area_id
-     */
+	* Hides colorpicker
+	*
+	* @param reddesign_area_id
+	*/
 	function hideColorPicker(reddesign_area_id)
 	{
 		if(akeeba.jQuery("input[name='allColor"+reddesign_area_id+"']:checked").val()==1)
@@ -598,10 +598,10 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 	}
 
 	/**
-     * Delete color code from DB and remove that color row
-	 *
-	 * @param reddesign_area_id
-     */
+	* Delete color code from DB and remove that color row
+	*
+	* @param reddesign_area_id
+	*/
 	function deleteColor(r,reddesign_area_id)
 	{
 		var i=r.parentNode.parentNode.parentNode.rowIndex;
