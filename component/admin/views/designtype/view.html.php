@@ -86,6 +86,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 				JHtml::_('select.option', '3', JText::_('COM_REDDESIGN_COMMON_CENTER'))
 			);
 
+			// Get all fonts in the system to be choosen or not for the current design
 			$fontsModel = FOFModel::getTmpInstance('Font', 'ReddesignModel');
 			$this->fonts = $fontsModel->getItemList();
 			$this->fontsOptions = array();
