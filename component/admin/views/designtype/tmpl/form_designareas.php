@@ -10,7 +10,9 @@
 defined('_JEXEC') or die();
 
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/jquery.imgareaselect.pack.js');
-FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animated.css');
+FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/imgareaselect-animated.css');
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/colorpicker/jscolor.js');
+FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 ?>
 
 <?php if (empty($this->productionBackground)) : ?>
@@ -503,6 +505,22 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 			var fontsizerSliderMin = akeeba.jQuery("#fontsizerSliderMin" + reddesign_area_id).val();
 			var fontsizerSliderMax = akeeba.jQuery("#fontsizerSliderMax" + reddesign_area_id).val();
 			var areaFonts = akeeba.jQuery('[name="areaFonts' + reddesign_area_id + '[]"]').val();
+			var colorCodes = akeeba.jQuery('[name="colorCodes' + reddesign_area_id + '[]"]');
+			var allowAllColor = akeeba.jQuery("input[name='allColor"+reddesign_area_id+"']:checked").val();
+			if(allowAllColor==1)
+			{
+				colorCodes = 1;
+				akeeba.jQuery("#extra_table"+reddesign_area_id).html("");
+			}
+			else
+			{
+				var arr = [];
+				for (var i = 0; i < colorCodes.length ; i++) {
+				    var colorCode = "#"+colorCodes[i].value;
+				    arr.push(colorCode);
+				}
+				colorCodes = arr.join(",");
+			}
 
 			akeeba.jQuery.ajax({
 				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxSave&format=raw",
@@ -513,7 +531,8 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 					font_size: fontsizerDropdown,
 					defaultFontSize: fontsizerSliderDefault,
 					minFontSize: fontsizerSliderMin,
-					maxFontSize: fontsizerSliderMax
+					maxFontSize: fontsizerSliderMax,
+					color_code: colorCodes
 				},
 				type: "post",
 				success: function (data) {
@@ -533,6 +552,66 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 				}
 			});
 		}
+
+		/**
+         * Adds new color row
+	 *
+	 * @param reddesign_area_id
+         */
+	function addNewcolor(reddesign_area_id)
+	{
+		var color_code = akeeba.jQuery("#color_code" + reddesign_area_id).val();
+		if(color_code!="")
+		{
+			colorcode = "#"+color_code;
+		}
+
+		akeeba.jQuery("#extra_table"+reddesign_area_id).append(
+			'<tr>' +
+				'<td><div class="colorSelector_list" ><div style=" background-color:'+colorcode+'" >&nbsp;</div></div></td>'+
+				'<td><div>'+colorcode+'</div><input type="hidden" value="'+color_code+'" class="colorCodes'+reddesign_area_id+'" name="colorCodes'+reddesign_area_id+'[]"  id="colorCodes'+reddesign_area_id+'">'+
+				'<td>'+
+				  '<div>'+
+					'<input type="hidden" name="colour_id'+reddesign_area_id+'[]" id="colour_id'+reddesign_area_id+'" value="'+color_code+'">'+
+			            	'<input value="Delete" onclick="deleteColor(this,'+reddesign_area_id+')" class="button" type="button" >'+
+				  '</div>'+
+				'</td>'+
+			'</tr>'
+		);
+	}
+
+	/**
+     * Hides colorpicker
+	 *
+	 * @param reddesign_area_id
+     */
+	function hideColorPicker(reddesign_area_id)
+	{
+		if(akeeba.jQuery("input[name='allColor"+reddesign_area_id+"']:checked").val()==1)
+		{
+			akeeba.jQuery("#colorPicker"+reddesign_area_id).hide();
+		}
+		else
+		{
+			akeeba.jQuery("#colorPicker"+reddesign_area_id).show();
+		}
+	}
+
+	/**
+     * Delete color code from DB and remove that color row
+	 *
+	 * @param reddesign_area_id
+     */
+	function deleteColor(r,reddesign_area_id)
+	{
+		var i=r.parentNode.parentNode.parentNode.rowIndex;
+		document.getElementById('extra_table'+reddesign_area_id).deleteRow(i);
+
+		// Do AJAX Delete
+		saveAreaSettings(reddesign_area_id);
+		// End
+	}
+
 
 	</script>
 
@@ -849,8 +928,87 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 									<?php endif; ?>
 								</div>
 								<?php endif; ?>
-								<div>
-									@TODO Colors
+								<div class="span5">
+									<?php
+									$colorCode = $area->color_code;
+
+									if ($colorCode == 1 || $colorCode == '1')
+									{
+										$style = "style='display:none;'";
+									}
+									else
+									{
+										$style = "style='display:block;'";
+									}
+									?>
+
+									<div class="control-group">
+										<label class="control-label ">
+											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR'); ?>
+										</label>
+										<div class="controls">
+											<?php echo $this->lists['allColor' . $area->reddesign_area_id];?>
+											<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR_DESC'); ?></span>
+										</div>
+									</div>
+									<div id="colorPicker<?php echo $area->reddesign_area_id;?>" <?php echo $style;?>>
+										<div class="control-group" >
+											<label class="control-label ">
+												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_TEXT'); ?>
+											</label>
+											<div class="controls">
+												<input class="color" value="" id="color_code<?php echo $area->reddesign_area_id;?>" name="color_code<?php echo $area->reddesign_area_id;?>">&nbsp;&nbsp;<input name="addvalue<?php echo $area->reddesign_area_id;?>" id="addvalue<?php echo $area->reddesign_area_id;?>" class="button" value="<?php echo JText::_( 'COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR')?>" onclick="addNewcolor('<?php echo $area->reddesign_area_id;?>');" type="button" >
+											</div>
+											<div id="ajaxMessageColorContainer" style="height: 25px; padding-bottom: 11px;">
+												<div id="ajaxMessageColor<?php echo $area->reddesign_area_id;?>" style="display: block;">
+												</div>
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label ">
+												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ALLOWED_COLOR'); ?>
+											</label>
+											<div class="controls">
+												<table class="loadcolor" id="extra_table<?php echo $area->reddesign_area_id;?>" cellpadding="2" cellspacing="2">
+													<?php
+
+													if (@$this->lists["color_" . $area->reddesign_area_id] != "1" )
+													{
+														if (strpos(@$this->lists["color_" . $area->reddesign_area_id], "#") !== false)
+														{
+															$colorData = explode(",", $this->lists["color_" . $area->reddesign_area_id]);
+
+															for ($j = 0;$j < count($colorData); $j++)
+															{
+															?>
+																<tr valign="top" class="color">
+																<td>
+																	<div class="colorSelector_list">
+																		<div style="background-color:<?php echo $colorData[$j]?>">&nbsp;</div>
+																	</div>
+																</td>
+																<td>
+																	<div><?php echo $colorData[$j] ?></div><input type="hidden" class="colorCodes<?php echo $area->reddesign_area_id?>" name="colorCodes<?php echo $area->reddesign_area_id?>[]" value="<?php echo $colorData[$j] ?>" id="colorCodes<?php echo $area->reddesign_area_id?>">
+																</td>
+																<td>
+																	<div>
+
+
+																		<input value="Delete" onclick="deleteColor(this,<?php echo$area->reddesign_area_id?>)" class="button" type="button" />
+																		<input type="hidden" name="colour_id<?php echo $area->reddesign_area_id?>[]" id="colour_id<?php echo $area->reddesign_area_id?>" value="<?php echo $colorData[$j] ?>">
+																	</div>
+																</td>
+																</tr>
+															<?php
+															}
+														}
+													}
+													?>
+												</table>
+												<input type="hidden" name="reddesign_color_code<?php echo $area->reddesign_area_id?>" id="reddesign_color_code<?php echo $area->reddesign_area_id?>" value="<?php echo $area->color_code?>">
+											</div>
+										</div>
+									</div>
 								</div>
 								<div class="span12" style="text-align: center;">
 									<button type="button"
