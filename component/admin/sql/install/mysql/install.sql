@@ -101,7 +101,11 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_chars` (
   `height`                 DOUBLE(5, 5) NOT NULL,
   `typography`             INT(11)      NOT NULL DEFAULT '1',
   `typography_height`      DOUBLE(5, 5) NOT NULL,
-  PRIMARY KEY (`reddesign_char_id`)
+  PRIMARY KEY (`reddesign_char_id`),
+  FOREIGN KEY (`reddesign_font_id` )
+    REFERENCES `#__reddesign_fonts` (`reddesign_font_id` )
+      ON DELETE CASCADE
+      ON UPDATE NO ACTION
 )
   ENGINE = InnoDB
   DEFAULT CHARSET =utf8
