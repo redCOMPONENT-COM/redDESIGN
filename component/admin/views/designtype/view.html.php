@@ -63,6 +63,8 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			$this->areas = $areas;
 		}
 
+		$lists = array();
+
 		foreach ($this->areas as $area)
 		{
 			$lists["color_" . $area->reddesign_area_id] = $area->color_code;

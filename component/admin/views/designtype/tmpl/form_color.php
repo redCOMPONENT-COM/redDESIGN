@@ -39,7 +39,7 @@ function HideColorPicker(element,reddesign_area_id)
  *
  * @param  update
  */
-function addNewcolor(reddesign_area_id, update =0)
+function addNewcolor(reddesign_area_id, update)
 {
 	var newcolor = true;
 	if(update==1)
