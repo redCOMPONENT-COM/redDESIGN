@@ -573,7 +573,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				'<td>'+
 				  '<div>'+
 					'<input type="hidden" name="colour_id'+reddesign_area_id+'[]" id="colour_id'+reddesign_area_id+'" value="'+color_code+'">'+
-			            	'<input value="Delete" onclick="deleteColor(this,'+reddesign_area_id+')" class="button" type="button" >'+
+					'<input value="Delete" onclick="deleteColor(this,'+reddesign_area_id+')" class="button" type="button" >'+
 				  '</div>'+
 				'</td>'+
 			'</tr>'
@@ -992,8 +992,6 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 																</td>
 																<td>
 																	<div>
-
-
 																		<input value="Delete" onclick="deleteColor(this,<?php echo$area->reddesign_area_id?>)" class="button" type="button" />
 																		<input type="hidden" name="colour_id<?php echo $area->reddesign_area_id?>[]" id="colour_id<?php echo $area->reddesign_area_id?>" value="<?php echo $colorData[$j] ?>">
 																	</div>
