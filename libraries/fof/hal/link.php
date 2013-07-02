@@ -1,14 +1,17 @@
 <?php
 /**
- * @package    FrameworkOnFramework
- * @subpackage hal
- * @copyright  Copyright (C) 2010 - 2012 Akeeba Ltd. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @package     FrameworkOnFramework
+ * @subpackage  hal
+ * @copyright   Copyright (C) 2010 - 2012 Akeeba Ltd. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die();
 
 /**
  * Implementation of the Hypertext Application Language link in PHP.
+ *
+ * @package  FrameworkOnFramework
+ * @since    2.1
  */
 class FOFHalLink
 {
@@ -69,6 +72,12 @@ class FOFHalLink
 		{
 			throw new Exception('A HAL link must always have a non-empty href');
 		}
+
+		$this->_href = $href;
+		$this->_templated = $templated;
+		$this->_name = $name;
+		$this->_hreflang = $hreflang;
+		$this->_title = $title;
 	}
 
 	/**
@@ -108,6 +117,8 @@ class FOFHalLink
 	 *
 	 * @param   string  $name   The name of the property to set, sans the underscore
 	 * @param   mixed   $value  The value of the property to set
+	 *
+	 * @return  void
 	 */
 	public function __set($name, $value)
 	{
