@@ -1,3 +1,4 @@
+SET foreign_key_checks = 0;
 --
 -- Table structure for table `#__reddesign_area`
 --
@@ -33,10 +34,15 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
   `maxFontSize`               INT(11)     NOT NULL,
   `maxline`                   INT(150)    NOT NULL,
   `fedcolor`                  VARCHAR(60) NOT NULL,
-  PRIMARY KEY (`reddesign_area_id`)
+  PRIMARY KEY (`reddesign_area_id`),
+  FOREIGN KEY (`reddesign_background_id`)
+    REFERENCES `#__reddesign_backgrounds` (`reddesign_background_id`)
+      ON DELETE CASCADE
+      ON UPDATE NO ACTION
 )
-  ENGINE =MyISAM
-  DEFAULT CHARSET =utf8;
+  ENGINE = InnoDB
+  DEFAULT CHARSET =utf8
+  DEFAULT COLLATE=utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_designtype`
@@ -170,3 +176,5 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_redshops` (
   ENGINE = InnoDB
   DEFAULT CHARSET =utf8
   DEFAULT COLLATE=utf8_general_ci;
+
+SET foreign_key_checks = 1;
