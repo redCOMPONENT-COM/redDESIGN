@@ -272,96 +272,102 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				'<tr id="areaSettingsRow' + reddesign_area_id + '"	class="' + rowClass + ' hide">' +
 					'<td colspan="5" >' +
 						'<div id="areaSettingsDiv' + reddesign_area_id + '" class="hide">' +
-							'<div class="span3">' +
-								'<div class="control-group">' +
-									'<label for="areaFontAlignment' + reddesign_area_id + '">' +
-										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALIGNMENT') ?>' +
-									'</label>' +
-									'<select id="areaFontAlignment' + reddesign_area_id + '" name="areaFontAlignment' + reddesign_area_id + '"></select>' +
-								'</div>' +
-								'<div class="control-group">' +
-									'<label for="areaFonts' + reddesign_area_id + '">' +
-										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALLOWED_FONTS') ?>' +
-									'</label>' +
-									'<select id="areaFonts' + reddesign_area_id + '" name="areaFonts' + reddesign_area_id + '[]" multiple="multiple"></select>' +
-								'</div>' +
-							'</div>' +
-							<?php if($this->item->fontsizer != 'auto') : ?>
-							'<div class="span6">' +
-								<?php if($this->item->fontsizer == 'dropdown') : ?>
-								'<div class="control-group">' +
-									'<label for="fontsizerDropdown' + reddesign_area_id + '">' +
-										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>' +
-									'</label>' +
-									'<textarea class="input-small" style="resize: none;" id="fontsizerDropdown' + reddesign_area_id + '"rows="7"></textarea>' +
-									'<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC') ?></span>' +
-								'</div>' +
-								<?php elseif($this->item->fontsizer == 'slider') : ?>
-								'<div class="control-group">' +
-									'<label for="fontsizerSliderDefault' + reddesign_area_id + '">' +
-										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_FONT_SIZE') ?>' +
-									'</label>' +
-									'<input class="input-small" type="text" value="" maxlength="3" ' +
-											'id="fontsizerSliderDefault' + reddesign_area_id + '" name="fontsizerSliderDefault' + reddesign_area_id + '">' +
-								'</div>' +
-								'<div class="control-group">' +
-									'<label for="fontsizerSliderMin' + reddesign_area_id + '">' +
-										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MIN_FONT_SIZE') ?>' +
-									'</label>' +
-									'<input class="input-small" type="text" value="" maxlength="3" ' +
-											'id=fontsizerSliderMin' + reddesign_area_id + '" name="fontsizerSliderMin' + reddesign_area_id + '">' +
-								'</div>' +
-								'<div class="control-group">' +
-									'<label for="fontsizerSliderMax' + reddesign_area_id + '">' +
-										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAX_FONT_SITE') ?>' +
-									'</label>' +
-									'<input class="input-small" type="text" value="" maxlength="3" ' +
-											'id="fontsizerSliderMax' + reddesign_area_id + '" name="fontsizerSliderMax' + reddesign_area_id + '">' +
-								'</div>' +
-								<?php endif; ?>
-							'</div>' +
-							<?php endif; ?>
-							'<div class="span6">' +
-								'<div class="control-group">'+
-									'<label class="control-label ">'+
-										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR'); ?>'+
-									'</label>'+
-									'<div class="controls">'+
-										'<input type="radio"  name="allColor' + reddesign_area_id + '" value ="0" class="inputbox" onclick="hideColorPicker(' + reddesign_area_id + ');" checked="checked"> No' +
-										'<input type="radio"  name="allColor' + reddesign_area_id + '" value ="1" class="inputbox" onclick="hideColorPicker(' + reddesign_area_id + ');"> Yes' +
-										'<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR_DESC'); ?></span>'+
+							'<div class="row">'+
+								'<div class="span6">'+
+									'<div class="row">'+
+										'<div class="span3">' +
+											'<div class="control-group">' +
+												'<label for="areaFontAlignment' + reddesign_area_id + '">' +
+													'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALIGNMENT') ?>' +
+												'</label>' +
+												'<select id="areaFontAlignment' + reddesign_area_id + '" name="areaFontAlignment' + reddesign_area_id + '"></select>' +
+											'</div>' +
+											'<div class="control-group">' +
+												'<label for="areaFonts' + reddesign_area_id + '">' +
+													'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALLOWED_FONTS') ?>' +
+												'</label>' +
+												'<select id="areaFonts' + reddesign_area_id + '" name="areaFonts' + reddesign_area_id + '[]" multiple="multiple"></select>' +
+											'</div>' +
+										'</div>' +
+										<?php if($this->item->fontsizer != 'auto') : ?>
+										'<div class="span3">' +
+											<?php if($this->item->fontsizer == 'dropdown') : ?>
+											'<div class="control-group">' +
+												'<label for="fontsizerDropdown' + reddesign_area_id + '">' +
+													'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>' +
+												'</label>' +
+												'<textarea class="input-small" style="resize: none;" id="fontsizerDropdown' + reddesign_area_id + '"rows="7"></textarea>' +
+												'<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC') ?></span>' +
+											'</div>' +
+											<?php elseif($this->item->fontsizer == 'slider') : ?>
+											'<div class="control-group">' +
+												'<label for="fontsizerSliderDefault' + reddesign_area_id + '">' +
+													'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_FONT_SIZE') ?>' +
+												'</label>' +
+												'<input class="input-small" type="text" value="" maxlength="3" ' +
+														'id="fontsizerSliderDefault' + reddesign_area_id + '" name="fontsizerSliderDefault' + reddesign_area_id + '">' +
+											'</div>' +
+											'<div class="control-group">' +
+												'<label for="fontsizerSliderMin' + reddesign_area_id + '">' +
+													'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MIN_FONT_SIZE') ?>' +
+												'</label>' +
+												'<input class="input-small" type="text" value="" maxlength="3" ' +
+														'id=fontsizerSliderMin' + reddesign_area_id + '" name="fontsizerSliderMin' + reddesign_area_id + '">' +
+											'</div>' +
+											'<div class="control-group">' +
+												'<label for="fontsizerSliderMax' + reddesign_area_id + '">' +
+													'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAX_FONT_SITE') ?>' +
+												'</label>' +
+												'<input class="input-small" type="text" value="" maxlength="3" ' +
+														'id="fontsizerSliderMax' + reddesign_area_id + '" name="fontsizerSliderMax' + reddesign_area_id + '">' +
+											'</div>' +
+											<?php endif; ?>
+										'</div>' +
+										<?php endif; ?>
 									'</div>'+
 								'</div>'+
-								'<div id="colorPicker' + reddesign_area_id + '">'+
-									'<div class="control-group" >'+
-										'<label class="control-label ">'+
-											'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_TEXT'); ?>'+
-										'</label>'+
-										'<div class="controls">'+
-											'<input class="color" value="" id="color_code' + reddesign_area_id + '" name="color_code' + reddesign_area_id + '">&nbsp;&nbsp;<input name="addvalue' + reddesign_area_id + '" id="addvalue' + reddesign_area_id + '" class="button" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR')?>" onclick="addNewcolor(' + reddesign_area_id + ');" type="button" >'+
-										'</div>'+
-									'</div>'+
+								'<div class="span6">' +
 									'<div class="control-group">'+
 										'<label class="control-label ">'+
-											'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ALLOWED_COLOR'); ?>'+
+											'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR'); ?>'+
 										'</label>'+
 										'<div class="controls">'+
-											'<table class="loadcolor" id="extra_table' + reddesign_area_id + '" cellpadding="2" cellspacing="2">'+
-											'</table>'+
+											'<input type="radio"  name="allColor' + reddesign_area_id + '" value ="0" class="inputbox" onclick="hideColorPicker(' + reddesign_area_id + ');" checked="checked"> No' +
+											'<input type="radio"  name="allColor' + reddesign_area_id + '" value ="1" class="inputbox" onclick="hideColorPicker(' + reddesign_area_id + ');"> Yes' +
+											'<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR_DESC'); ?></span>'+
 										'</div>'+
 									'</div>'+
-								'</div>'+
-							'</div>' +
-							'<div class="span12" style="text-align: center;">' +
-								'<button type="button" class="btn btn-success" ' +
-									'onclick="saveAreaSettings(' + reddesign_area_id + ');">' +
-									'<span><?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?></span>' +
-								'</button>' +
-								'<button type="button" class="btn" ' +
-									'onclick="showAreaSettings(' + reddesign_area_id + ');">' +
-									'<span><?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?></span>' +
-								'</button>' +
-							'</div>' +
+									'<div id="colorPicker' + reddesign_area_id + '">'+
+										'<div class="control-group" >'+
+											'<label class="control-label ">'+
+												'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_TEXT'); ?>'+
+											'</label>'+
+											'<div class="controls">'+
+												'<input class="color" value="" id="color_code' + reddesign_area_id + '" name="color_code' + reddesign_area_id + '">&nbsp;&nbsp;<input name="addvalue' + reddesign_area_id + '" id="addvalue' + reddesign_area_id + '" class="button" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR')?>" onclick="addNewcolor(' + reddesign_area_id + ');" type="button" >'+
+											'</div>'+
+										'</div>'+
+										'<div class="control-group">'+
+											'<label class="control-label ">'+
+												'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ALLOWED_COLOR'); ?>'+
+											'</label>'+
+											'<div class="controls">'+
+												'<table class="loadcolor" id="extra_table' + reddesign_area_id + '" cellpadding="2" cellspacing="2">'+
+												'</table>'+
+											'</div>'+
+										'</div>'+
+									'</div>'+
+								'</div>' +
+								'<div class="span12" style="text-align: center;">' +
+									'<button type="button" class="btn btn-success" ' +
+										'onclick="saveAreaSettings(' + reddesign_area_id + ');">' +
+										'<span><?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?></span>' +
+									'</button>' +
+									'<button type="button" class="btn" ' +
+										'onclick="showAreaSettings(' + reddesign_area_id + ');">' +
+										'<span><?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?></span>' +
+									'</button>' +
+								'</div>' +
+							'</div>'+
 						'</div>' +
 					'</td>' +
 				'</tr>'
@@ -904,85 +910,85 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 							<div id="areaSettingsDiv<?php echo $area->reddesign_area_id; ?>" class="hide">
 								<div id="row">
 									<div class="span6">
-										<div class="span3">
-											<div class="control-group">
-												<label for="<?php echo 'areaFontAlignment' . $area->reddesign_area_id; ?>">
-													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALIGNMENT') ?>
-												</label>
-												<?php echo JHtml::_('select.genericlist',
-													$this->alginmentOptions,
-													'areaFontAlignment' . $area->reddesign_area_id,
-													'',
-													'value',
-													'text',
-													$area->textalign
-												);?>
-											</div>
-											<div class="control-group">
-												<label for="<?php echo 'areaFonts' . $area->reddesign_area_id; ?>">
-													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALLOWED_FONTS') ?>
-												</label>
-												<?php echo JHtml::_('select.genericlist',
-													$this->fontsOptions,
-													'areaFonts' . $area->reddesign_area_id . '[]',
-													' multiple="multiple" ',
-													'value',
-													'text',
-													explode(',', $area->font_id)
-												);?>
-											</div>
-										</div>
 										<div class="row">
-												<?php if($this->item->fontsizer != 'auto') : ?>
-												<div class="span3">
-													<?php if($this->item->fontsizer == 'dropdown') : ?>
-														<div class="control-group">
-															<label for="<?php echo 'fontsizerDropdown' . $area->reddesign_area_id; ?>">
-																<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>
-															</label>
-															<textarea class="input-small" style="resize: none;"
-																	  id="<?php echo 'fontsizerDropdown' . $area->reddesign_area_id; ?>"
-																	  rows="7"><?php echo $area->font_size; ?></textarea>
-															<span class="help-block">
-																<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC') ?>
-															</span>
-														</div>
-													<?php elseif($this->item->fontsizer == 'slider') : ?>
-														<div class="control-group">
-															<label for="<?php echo 'fontsizerSliderDefault' . $area->reddesign_area_id; ?>">
-																<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_FONT_SIZE') ?>
-															</label>
-															<input class="input-small"
-																   type="text"
-																   value="<?php echo $area->defaultFontSize; ?>"
-																   maxlength="3"
-																   id="<?php echo 'fontsizerSliderDefault' . $area->reddesign_area_id; ?>"
-																   name="<?php echo 'fontsizerSliderDefault' . $area->reddesign_area_id; ?>">
-														</div>
-														<div class="control-group">
-															<label for="<?php echo 'fontsizerSliderMin' . $area->reddesign_area_id; ?>">
-																<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MIN_FONT_SIZE') ?>
-															</label>
-															<input class="input-small"
-																   type="text"
-																   value="<?php echo $area->minFontSize; ?>"
-																   maxlength="3"
-																   id="<?php echo 'fontsizerSliderMin' . $area->reddesign_area_id; ?>"
-																   name="<?php echo 'fontsizerSliderMin' . $area->reddesign_area_id; ?>">
-														</div>
-														<div class="control-group">
-															<label for="<?php echo 'fontsizerSliderMax' . $area->reddesign_area_id; ?>">
-																<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAX_FONT_SITE') ?>
-															</label>
-															<input class="input-small"
-																   type="text"
-																   value="<?php echo $area->maxFontSize; ?>"
-																   maxlength="3"
-																   id="<?php echo 'fontsizerSliderMax' . $area->reddesign_area_id; ?>"
-																   name="<?php echo 'fontsizerSliderMax' . $area->reddesign_area_id; ?>">
-														</div>
-													<?php endif; ?>
+											<div class="span3">
+												<div class="control-group">
+													<label for="<?php echo 'areaFontAlignment' . $area->reddesign_area_id; ?>">
+														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALIGNMENT') ?>
+													</label>
+													<?php echo JHtml::_('select.genericlist',
+														$this->alginmentOptions,
+														'areaFontAlignment' . $area->reddesign_area_id,
+														'',
+														'value',
+														'text',
+														$area->textalign
+													);?>
 												</div>
+												<div class="control-group">
+													<label for="<?php echo 'areaFonts' . $area->reddesign_area_id; ?>">
+														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALLOWED_FONTS') ?>
+													</label>
+													<?php echo JHtml::_('select.genericlist',
+														$this->fontsOptions,
+														'areaFonts' . $area->reddesign_area_id . '[]',
+														' multiple="multiple" ',
+														'value',
+														'text',
+														explode(',', $area->font_id)
+													);?>
+												</div>
+											</div>
+											<?php if($this->item->fontsizer != 'auto') : ?>
+											<div class="span3">
+												<?php if($this->item->fontsizer == 'dropdown') : ?>
+													<div class="control-group">
+														<label for="<?php echo 'fontsizerDropdown' . $area->reddesign_area_id; ?>">
+															<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>
+														</label>
+														<textarea class="input-small" style="resize: none;"
+																  id="<?php echo 'fontsizerDropdown' . $area->reddesign_area_id; ?>"
+																  rows="7"><?php echo $area->font_size; ?></textarea>
+														<span class="help-block">
+															<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC') ?>
+														</span>
+													</div>
+												<?php elseif($this->item->fontsizer == 'slider') : ?>
+													<div class="control-group">
+														<label for="<?php echo 'fontsizerSliderDefault' . $area->reddesign_area_id; ?>">
+															<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_FONT_SIZE') ?>
+														</label>
+														<input class="input-small"
+															   type="text"
+															   value="<?php echo $area->defaultFontSize; ?>"
+															   maxlength="3"
+															   id="<?php echo 'fontsizerSliderDefault' . $area->reddesign_area_id; ?>"
+															   name="<?php echo 'fontsizerSliderDefault' . $area->reddesign_area_id; ?>">
+													</div>
+													<div class="control-group">
+														<label for="<?php echo 'fontsizerSliderMin' . $area->reddesign_area_id; ?>">
+															<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MIN_FONT_SIZE') ?>
+														</label>
+														<input class="input-small"
+															   type="text"
+															   value="<?php echo $area->minFontSize; ?>"
+															   maxlength="3"
+															   id="<?php echo 'fontsizerSliderMin' . $area->reddesign_area_id; ?>"
+															   name="<?php echo 'fontsizerSliderMin' . $area->reddesign_area_id; ?>">
+													</div>
+													<div class="control-group">
+														<label for="<?php echo 'fontsizerSliderMax' . $area->reddesign_area_id; ?>">
+															<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAX_FONT_SITE') ?>
+														</label>
+														<input class="input-small"
+															   type="text"
+															   value="<?php echo $area->maxFontSize; ?>"
+															   maxlength="3"
+															   id="<?php echo 'fontsizerSliderMax' . $area->reddesign_area_id; ?>"
+															   name="<?php echo 'fontsizerSliderMax' . $area->reddesign_area_id; ?>">
+													</div>
+												<?php endif; ?>
+											</div>
 											<?php endif; ?>
 										</div>
 									</div>
