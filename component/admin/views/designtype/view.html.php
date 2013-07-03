@@ -61,39 +61,40 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			}
 
 			$this->areas = $areas;
-		}
 
-		$lists = array();
+			$lists = array();
 
-		foreach ($this->areas as $area)
-		{
-			$lists["color_" . $area->reddesign_area_id] = $area->color_code;
-			$colorCode = $area->color_code;
-
-			if ($colorCode != 1 || $colorCode != '1')
+			foreach ($this->areas as $area)
 			{
-				$colorCode = 0;
+				$lists["color_" . $area->reddesign_area_id] = $area->color_code;
+				$colorCode = $area->color_code;
+
+				if ($colorCode != 1 || $colorCode != '1')
+				{
+					$colorCode = 0;
+				}
+
+				$lists['allcolor' . $area->reddesign_area_id] = JHTML::_('select.booleanlist', 'allcolor' . $area->reddesign_area_id, 'class="inputbox" onclick="HideColorPicker(this, \'' . $area->reddesign_area_id . '\');"', $colorCode);
 			}
 
-			$lists['allColor' . $area->reddesign_area_id] = JHTML::_('select.booleanlist', 'allColor' . $area->reddesign_area_id, 'class="inputbox" onclick="hideColorPicker(\'' . $area->reddesign_area_id . '\');"', $colorCode);
-		}
+			$this->lists = $lists;
 
-		$this->lists = $lists;
+			$this->alginmentOptions = array(
+				JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_COMMON_SELECT')),
+				JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_COMMON_LEFT')),
+				JHtml::_('select.option', '2', JText::_('COM_REDDESIGN_COMMON_RIGHT')),
+				JHtml::_('select.option', '3', JText::_('COM_REDDESIGN_COMMON_CENTER'))
+			);
 
-		$this->alginmentOptions = array(
-			JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_COMMON_SELECT')),
-			JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_COMMON_LEFT')),
-			JHtml::_('select.option', '2', JText::_('COM_REDDESIGN_COMMON_RIGHT')),
-			JHtml::_('select.option', '3', JText::_('COM_REDDESIGN_COMMON_CENTER'))
-		);
+			// Get all fonts in the system to be choosen or not for the current design
+			$fontsModel = FOFModel::getTmpInstance('Font', 'ReddesignModel');
+			$this->fonts = $fontsModel->getItemList();
+			$this->fontsOptions = array();
 
-		$fontsModel = FOFModel::getTmpInstance('Font', 'ReddesignModel');
-		$this->fonts = $fontsModel->getItemList();
-		$this->fontsOptions = array();
-
-		foreach ($this->fonts as $font)
-		{
-			$this->fontsOptions[] = JHtml::_('select.option', $font->reddesign_font_id, $font->title);
+			foreach ($this->fonts as $font)
+			{
+				$this->fontsOptions[] = JHtml::_('select.option', $font->reddesign_font_id, $font->title);
+			}
 		}
 
 		parent::display();

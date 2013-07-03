@@ -95,6 +95,25 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			akeeba.jQuery("#areaHeight").val("");
 		}
 
+        /**
+         * Makes sure that the area has a name, alert otherwise
+		 *
+		 * @param update
+         */
+		function preSaveArea(update) {
+			if(!akeeba.jQuery("#areaName").val())
+			{
+				akeeba.jQuery("#formMessageAreas").removeClass();
+				akeeba.jQuery("#formMessageAreas").addClass("alert alert-error");
+				akeeba.jQuery("#formMessageAreas").html("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_NO_AREA_NAME'); ?>");
+				akeeba.jQuery("#formMessageAreas").fadeIn("slow");
+				akeeba.jQuery("#formMessageAreas").fadeOut(3000);
+			}
+			else
+			{
+				saveArea(update);
+			}
+		}
 
         /**
          * Saves area into the DB via AJAX. And prepares image for another selection.
@@ -751,11 +770,13 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					</div>
 				</div>
 			</div>
-
 			<div class="form-actions">
+				<div id="formMessageAreasContainer">
+						<div id="formMessageAreas" style="display: none;"></div>
+				</div>
 				<a id="saveAreaBtn" rel="" class="btn btn-success"
 				   title="<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>"
-				   onclick="saveArea(akeeba.jQuery('#designAreaId').val());">
+				   onclick="preSaveArea(akeeba.jQuery('#designAreaId').val());">
 					<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
 				</a>
 				<a id="cancelAreaBtn" rel="" class="btn" onclick="cancelArea();" title="<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>">

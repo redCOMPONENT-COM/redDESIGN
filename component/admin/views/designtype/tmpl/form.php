@@ -41,8 +41,6 @@ else :
 	<li><a href="#general" id="generalLink" data-toggle="tab" onclick="clearAreaSelection();">General tab</a></li>
 	<li><a href="#backgrounds" id="backgroundsLink" data-toggle="tab" onclick="clearAreaSelection();">Backgrounds</a></li>
 	<li><a href="#design-areas" id="design-areasLink"  data-toggle="tab">Design areas</a></li>
-	<li><a href="#fonts" id="fontsLink" data-toggle="tab" onclick="clearAreaSelection();">Fonts</a></li>
-	<li><a href="#fonts-sizes" id="fonts-sizesLink"  data-toggle="tab">Fonts sizes</a></li>
 	<li><a href="#color" id="colorLink"  data-toggle="tab" onclick="clearAreaSelection();">Color</a></li>
 </ul>
 
@@ -55,12 +53,6 @@ else :
 	</div>
 	<div class="tab-pane" id="design-areas">
 		<?php echo $this->loadTemplate('designareas'); ?>
-	</div>
-	<div class="tab-pane" id="fonts">
-		<?php echo $this->loadTemplate('fonts'); ?>
-	</div>
-	<div class="tab-pane" id="fonts-sizes">
-		<?php echo $this->loadTemplate('fontsizes'); ?>
 	</div>
 	<div class="tab-pane" id="color">
 		<?php echo $this->loadTemplate('color'); ?>

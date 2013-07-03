@@ -57,8 +57,9 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   `fontsizer`               ENUM('auto', 'slider', 'dropdown'),
   PRIMARY KEY (`reddesign_designtype_id`)
 )
-  ENGINE =MyISAM
-  DEFAULT CHARSET =utf8;
+  ENGINE = InnoDB
+  DEFAULT CHARSET =utf8
+  DEFAULT COLLATE=utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_font`
@@ -84,8 +85,9 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
   `default_baseline_height` DOUBLE(5, 5) NOT NULL,
   PRIMARY KEY (`reddesign_font_id`)
 )
-  ENGINE =InnoDB
-  DEFAULT CHARSET =utf8;
+  ENGINE = InnoDB
+  DEFAULT CHARSET =utf8
+  DEFAULT COLLATE=utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_font_char`
@@ -99,10 +101,15 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_chars` (
   `height`                 DOUBLE(5, 5) NOT NULL,
   `typography`             INT(11)      NOT NULL DEFAULT '1',
   `typography_height`      DOUBLE(5, 5) NOT NULL,
-  PRIMARY KEY (`reddesign_char_id`)
+  PRIMARY KEY (`reddesign_char_id`),
+  FOREIGN KEY (`reddesign_font_id` )
+    REFERENCES `#__reddesign_fonts` (`reddesign_font_id` )
+      ON DELETE CASCADE
+      ON UPDATE NO ACTION
 )
-  ENGINE =InnoDB
-  DEFAULT CHARSET =utf8;
+  ENGINE = InnoDB
+  DEFAULT CHARSET =utf8
+  DEFAULT COLLATE=utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_backgrounds`
@@ -126,8 +133,9 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   `isPDFbgimage`            TINYINT(4) NOT NULL,
   PRIMARY KEY (`reddesign_background_id`)
 )
-  ENGINE =MyISAM
-  DEFAULT CHARSET =utf8;
+  ENGINE = InnoDB
+  DEFAULT CHARSET =utf8
+  DEFAULT COLLATE=utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_order`
@@ -143,8 +151,9 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_orders` (
   `reddesign_background_id`   INT(11)      NOT NULL,
   PRIMARY KEY (`reddesign_order_id`)
 )
-  ENGINE =MyISAM
-  DEFAULT CHARSET =utf8;
+  ENGINE = InnoDB
+  DEFAULT CHARSET =utf8
+  DEFAULT COLLATE=utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_redshop`
@@ -158,5 +167,6 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_redshops` (
   `reddesign_enable`     TINYINT(4)   NOT NULL,
   PRIMARY KEY (`reddesign_redshop_id`)
 )
-  ENGINE =MyISAM
-  DEFAULT CHARSET =utf8;
+  ENGINE = InnoDB
+  DEFAULT CHARSET =utf8
+  DEFAULT COLLATE=utf8_general_ci;
