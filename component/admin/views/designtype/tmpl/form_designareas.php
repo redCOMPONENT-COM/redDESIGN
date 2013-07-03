@@ -586,7 +586,7 @@ FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animat
 							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_NAME'); ?>
 						</label>
 						<div class="controls">
-							<input type="text" id="areaName" name="areaName" value="">
+							<input type="text" id="areaName" name="areaName" required="required" value="">
 						</div>
 					</div>
 					<div class="control-group">
