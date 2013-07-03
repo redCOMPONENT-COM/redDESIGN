@@ -312,7 +312,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 													'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MIN_FONT_SIZE') ?>' +
 												'</label>' +
 												'<input class="input-small" type="text" value="" maxlength="3" ' +
-														'id=fontsizerSliderMin' + reddesign_area_id + '" name="fontsizerSliderMin' + reddesign_area_id + '">' +
+														'id="fontsizerSliderMin' + reddesign_area_id + '" name="fontsizerSliderMin' + reddesign_area_id + '">' +
 											'</div>' +
 											'<div class="control-group">' +
 												'<label for="fontsizerSliderMax' + reddesign_area_id + '">' +
