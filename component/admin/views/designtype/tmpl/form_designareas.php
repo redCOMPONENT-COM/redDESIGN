@@ -321,7 +321,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 								<?php endif; ?>
 							'</div>' +
 							<?php endif; ?>
-							'<div>' +
+							'<div class="span6">' +
 								'<div class="control-group">'+
 									'<label class="control-label ">'+
 										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR'); ?>'+
@@ -981,7 +981,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 									<?php endif; ?>
 								</div>
 								<?php endif; ?>
-								<div class="span5">
+								<div class="span6">
 									<?php
 									$colorCode = $area->color_code;
 
