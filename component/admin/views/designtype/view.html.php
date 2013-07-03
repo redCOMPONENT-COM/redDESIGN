@@ -62,6 +62,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 
 			$this->areas = $areas;
 
+			// Get allColor radio input type for each area
 			$lists = array();
 
 			foreach ($this->areas as $area)

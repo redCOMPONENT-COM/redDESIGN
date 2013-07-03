@@ -322,7 +322,35 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 							'</div>' +
 							<?php endif; ?>
 							'<div>' +
-								'@TODO Colors' +
+								'<div class="control-group">'+
+									'<label class="control-label ">'+
+										'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR'); ?>'+
+									'</label>'+
+									'<div class="controls">'+
+										'<input type="radio"  name="allColor' + reddesign_area_id + '" value ="0" class="inputbox" onclick="hideColorPicker(' + reddesign_area_id + ');" checked="checked"> No' +
+										'<input type="radio"  name="allColor' + reddesign_area_id + '" value ="1" class="inputbox" onclick="hideColorPicker(' + reddesign_area_id + ');"> Yes' +
+										'<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR_DESC'); ?></span>'+
+									'</div>'+
+								'</div>'+
+								'<div id="colorPicker' + reddesign_area_id + '">'+
+									'<div class="control-group" >'+
+										'<label class="control-label ">'+
+											'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_TEXT'); ?>'+
+										'</label>'+
+										'<div class="controls">'+
+											'<input class="color" value="" id="color_code' + reddesign_area_id + '" name="color_code' + reddesign_area_id + '">&nbsp;&nbsp;<input name="addvalue' + reddesign_area_id + '" id="addvalue' + reddesign_area_id + '" class="button" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR')?>" onclick="addNewcolor(' + reddesign_area_id + ');" type="button" >'+
+										'</div>'+
+									'</div>'+
+									'<div class="control-group">'+
+										'<label class="control-label ">'+
+											'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ALLOWED_COLOR'); ?>'+
+										'</label>'+
+										'<div class="controls">'+
+											'<table class="loadcolor" id="extra_table' + reddesign_area_id + '" cellpadding="2" cellspacing="2">'+
+											'</table>'+
+										'</div>'+
+									'</div>'+
+								'</div>'+
 							'</div>' +
 							'<div class="span12" style="text-align: center;">' +
 								'<button type="button" class="btn btn-success" ' +
@@ -339,6 +367,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				'</tr>'
 			);
 
+
 			<?php foreach($this->alginmentOptions as  $alginmentOption) : ?>
 				akeeba.jQuery('#areaFontAlignment' + reddesign_area_id).append(
 					'<option value="<?php echo $alginmentOption->value; ?>">' +
@@ -353,6 +382,9 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						'<?php echo $fontsOption->text; ?>' +
 					'</option>');
 			<?php endforeach; ?>
+
+			//for colorpicker
+			jscolor.init();
 		}
 
 		/**
