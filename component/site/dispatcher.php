@@ -18,7 +18,10 @@ defined('_JEXEC') or die;
  */
 class ReddesignDispatcher extends FOFDispatcher
 {
-	public $defaultView = 'background';
+	/**
+	 * @var   string  $defaultView  The default view of the component site
+	 */
+	public $defaultView = 'designtype';
 
 	public function onBeforeDispatch()
 	{
