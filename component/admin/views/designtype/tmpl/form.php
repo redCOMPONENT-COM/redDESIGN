@@ -21,6 +21,7 @@ else :
 ?>
 
 <script>
+	/* This function set the active Tab based on &tab= url value. General is the default. See view.html.php  */
 	akeeba.jQuery(document).ready(
 		function () {
 			akeeba.jQuery('#<?php echo $this->activeTab; ?>').addClass('active');
@@ -41,7 +42,6 @@ else :
 	<li><a href="#general" id="generalLink" data-toggle="tab" onclick="clearAreaSelection();">General tab</a></li>
 	<li><a href="#backgrounds" id="backgroundsLink" data-toggle="tab" onclick="clearAreaSelection();">Backgrounds</a></li>
 	<li><a href="#design-areas" id="design-areasLink"  data-toggle="tab">Design areas</a></li>
-	<li><a href="#color" id="colorLink"  data-toggle="tab" onclick="clearAreaSelection();">Color</a></li>
 </ul>
 
 <div id="my-tab-content" class="tab-content">
@@ -53,9 +53,6 @@ else :
 	</div>
 	<div class="tab-pane" id="design-areas">
 		<?php echo $this->loadTemplate('designareas'); ?>
-	</div>
-	<div class="tab-pane" id="color">
-		<?php echo $this->loadTemplate('color'); ?>
 	</div>
 </div>
 
