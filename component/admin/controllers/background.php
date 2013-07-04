@@ -227,7 +227,7 @@ class ReddesignControllerBackground extends FOFController
 		}
 
 		// Only allow eps valid mime types
-		$okMIMETypes = 'application/postscript, application/eps, application/x-eps, image/eps,image/x-eps';
+		$okMIMETypes = 'application/postscript, application/eps, application/x-eps, image/eps, image/x-eps, application/download, application/x-download, application/force-download';
 		$validFileTypes = array_map('trim', explode(",", $okMIMETypes));
 
 		// If the temp file does not have ok MIME, return
