@@ -53,13 +53,19 @@ class ReddesignControllerBackground extends FOFController
 			$this->redirect();
 		}
 
-		// Upload the font file
+		// Upload the background file
 		$uploaded_file	= $this->uploadFile($file);
 
 		if (!$uploaded_file)
 		{
 			$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
 			$this->redirect();
+		}
+
+		// Add a name to background if user haven't set it with the background file name
+		if (empty($data['title']))
+		{
+			$data['title'] = $file['name'];
 		}
 
 		// Create a image preview of the EPS
