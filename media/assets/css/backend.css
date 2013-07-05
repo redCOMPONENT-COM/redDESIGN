@@ -7,6 +7,9 @@
     margin-left: 21px;
 }
 
+.icon-48-reddesign {
+    background-image: url(../images/reddesign_48.png);
+}
 .areSettingRowheight {
  	height: 210px !important;
 }
