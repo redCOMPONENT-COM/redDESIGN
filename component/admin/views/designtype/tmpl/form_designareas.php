@@ -11,7 +11,8 @@ defined('_JEXEC') or die();
 
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/jquery.imgareaselect.pack.js');
 FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/imgareaselect-animated.css');
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/colorpicker/jscolor.js');
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/colorpicker.js');
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
 FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 ?>
 
@@ -34,6 +35,13 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					onInit: clearSelectionFields,
 					onSelectEnd: populateSelectionFields
 				});
+				<?php foreach ($this->areas as  $area) : ?>
+					var reddesign_area_id = parseInt(<?php echo $area->reddesign_area_id;?>);
+					akeeba.jQuery('#colorpickerHolderC' + reddesign_area_id).ColorPicker({flat: true,
+						onChange: function (hsb, hex, rgb) {
+						document.getElementById('color_code'+reddesign_area_id).value = hex; // Edited
+					}});
+				<?php endforeach; ?>
 			});
 
 		/**
@@ -326,37 +334,51 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 										<?php endif; ?>
 									'</div>'+
 								'</div>'+
-								'<div class="span6">' +
+								'<div class="span3">' +
 									'<div class="control-group">'+
 										'<label class="control-label ">'+
 											'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR'); ?>'+
 										'</label>'+
 										'<div class="controls">'+
-											'<input type="radio"  name="allColor' + reddesign_area_id + '" value ="0" class="inputbox" onclick="hideColorPicker(' + reddesign_area_id + ');" checked="checked"> No' +
-											'<input type="radio"  name="allColor' + reddesign_area_id + '" value ="1" class="inputbox" onclick="hideColorPicker(' + reddesign_area_id + ');"> Yes' +
+											'<input  class="inputbox" type="radio"  name="allColor' + reddesign_area_id + '" value ="0"  onclick="hideColorPicker(' + reddesign_area_id + ');" checked="checked"><label class="radiobtn"  for="allColor' + reddesign_area_id + '">No</label>&nbsp;' +
+											'<input class="inputbox" type="radio"  name="allColor' + reddesign_area_id + '" value ="1"  onclick="hideColorPicker(' + reddesign_area_id + ');"><label class="radiobtn"  for="allColor' + reddesign_area_id + '">Yes</label>' +
 											'<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR_DESC'); ?></span>'+
 										'</div>'+
 									'</div>'+
+									'<div id="allowedColorsRow' + reddesign_area_id + '">' +
+									'<div class="control-group">' +
+										'<div class="controls">' +
+											'<input type="text" class="input-small" value="" id="color_code' + reddesign_area_id + '" name="color_code' + reddesign_area_id + '">&nbsp;' +
+											'<button type="button" class="btn btn-small btn-success" onclick="addNewcolor(' + reddesign_area_id + ');">' +
+											'<span><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR'); ?></span>' +
+											'</button>' +
+										'</div>' +
+									'</div>' +
+									'<div class="control-group">'+
+										'<label class="control-label ">'+
+											'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ALLOWED_COLOR'); ?>'+
+										'</label>'+
+										'<div class="controls">'+
+											'<table class="loadcolor" id="extra_table' + reddesign_area_id + '" cellpadding="2" cellspacing="2">'+
+											'</table>' +
+										'</div>' +
+									'</div>' +
+									'</div>' +
+								'</div>' +
+								'<div class="span3 areSettingRowheight">' +
 									'<div id="colorPicker' + reddesign_area_id + '">'+
 										'<div class="control-group" >'+
 											'<label class="control-label ">'+
 												'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_TEXT'); ?>'+
 											'</label>'+
 											'<div class="controls">'+
-												'<input class="color" value="" id="color_code' + reddesign_area_id + '" name="color_code' + reddesign_area_id + '">&nbsp;&nbsp;<input name="addvalue' + reddesign_area_id + '" id="addvalue' + reddesign_area_id + '" class="button" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR')?>" onclick="addNewcolor(' + reddesign_area_id + ');" type="button" >'+
-											'</div>'+
-										'</div>'+
-										'<div class="control-group">'+
-											'<label class="control-label ">'+
-												'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ALLOWED_COLOR'); ?>'+
-											'</label>'+
-											'<div class="controls">'+
-												'<table class="loadcolor" id="extra_table' + reddesign_area_id + '" cellpadding="2" cellspacing="2">'+
-												'</table>'+
+												'<p id="colorpickerHolderC' + reddesign_area_id + '"></p>'+
 											'</div>'+
 										'</div>'+
 									'</div>'+
-								'</div>' +
+								'</div>'+
+							'</div>' +
+							'<div class="row">' +
 								'<div class="span12" style="text-align: center;">' +
 									'<button type="button" class="btn btn-success" ' +
 										'onclick="saveAreaSettings(' + reddesign_area_id + ');">' +
@@ -390,7 +412,11 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			<?php endforeach; ?>
 
 			//for colorpicker
-			jscolor.init();
+			//for colorpicker
+			akeeba.jQuery('#colorpickerHolderC' + reddesign_area_id).ColorPicker({flat: true,
+				onChange: function (hsb, hex, rgb) {
+				document.getElementById('color_code'+reddesign_area_id).value = hex; // Edited
+			}});
 		}
 
 		/**
@@ -630,7 +656,11 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				'<td>'+
 				  '<div>'+
 					'<input type="hidden" name="colour_id'+reddesign_area_id+'[]" id="colour_id'+reddesign_area_id+'" value="'+color_code+'">'+
-					'<input value="Delete" onclick="deleteColor(this,'+reddesign_area_id+')" class="button" type="button" >'+
+					'<button type="button" class="btn btn-small btn-danger delete" onclick="deleteColor(this,' + reddesign_area_id + ');">' +
+						'<i class="icon-minus icon-white"></i>'+
+						'<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>' +
+
+					'</button>' +
 				  '</div>'+
 				'</td>'+
 			'</tr>'
@@ -647,10 +677,12 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		if(akeeba.jQuery("input[name='allColor"+reddesign_area_id+"']:checked").val()==1)
 		{
 			akeeba.jQuery("#colorPicker"+reddesign_area_id).hide();
+			akeeba.jQuery("#allowedColorsRow"+reddesign_area_id).hide();
 		}
 		else
 		{
 			akeeba.jQuery("#colorPicker"+reddesign_area_id).show();
+			akeeba.jQuery("#allowedColorsRow"+reddesign_area_id).show();
 		}
 	}
 
@@ -992,7 +1024,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 											<?php endif; ?>
 										</div>
 									</div>
-									<div class="span6">
+									<div class="span3">
 										<?php
 										$colorCode = $area->color_code;
 
@@ -1015,60 +1047,73 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 												<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR_DESC'); ?></span>
 											</div>
 										</div>
+										<div id="allowedColorsRow<?php echo $area->reddesign_area_id;?>" <?php echo $style;?>>
+										<div class="control-group">
+											<div class="controls">
+												<input type="text" class="input-small" value="" id="color_code<?php echo $area->reddesign_area_id;?>" name="color_code<?php echo $area->reddesign_area_id;?>">
+												<button type="button" class="btn btn-small btn-success" onclick="addNewcolor('<?php echo $area->reddesign_area_id;?>');">
+												<span><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR'); ?></span>
+												</button>
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label ">
+												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ALLOWED_COLOR'); ?>
+											</label>
+											<div class="controls">
+												<table class="loadcolor" id="extra_table<?php echo $area->reddesign_area_id;?>" cellpadding="2" cellspacing="2">
+													<?php
+
+													if (@$this->lists["color_" . $area->reddesign_area_id] != "1" )
+													{
+														if (strpos(@$this->lists["color_" . $area->reddesign_area_id], "#") !== false)
+														{
+															$colorData = explode(",", $this->lists["color_" . $area->reddesign_area_id]);
+
+															for ($j = 0;$j < count($colorData); $j++)
+															{
+																$colorCodeVal = str_replace("#","", $colorData[$j]);
+															?>
+																<tr valign="top" class="color">
+																<td>
+																	<div class="colorSelector_list">
+																		<div style="background-color:<?php echo $colorData[$j]?>">&nbsp;</div>
+																	</div>
+																</td>
+																<td>
+																	<div><?php echo $colorData[$j] ?></div><input type="hidden" class="colorCodes<?php echo $area->reddesign_area_id?>" name="colorCodes<?php echo $area->reddesign_area_id?>[]" value="<?php echo $colorCodeVal; ?>" id="colorCodes<?php echo $area->reddesign_area_id?>">
+																</td>
+																<td>
+																	<div>
+																		<button type="button" class="btn btn-small btn-danger delete" onclick="deleteColor(this,'<?php echo $area->reddesign_area_id?>');">
+																			<i class="icon-minus icon-white"></i>
+																			<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>
+																		</button>
+																		<input type="hidden" name="colour_id<?php echo $area->reddesign_area_id?>[]" id="colour_id<?php echo $area->reddesign_area_id?>" value="<?php echo $colorData[$j] ?>">
+																	</div>
+																</td>
+																</tr>
+															<?php
+															}
+														}
+													}
+													?>
+												</table>
+												<input type="hidden" name="reddesign_color_code<?php echo $area->reddesign_area_id?>" id="reddesign_color_code<?php echo $area->reddesign_area_id?>" value="<?php echo $area->color_code?>">
+											</div>
+										</div>
+										</div>
+									</div>
+									<div class="span3 areSettingRowheight">
 										<div id="colorPicker<?php echo $area->reddesign_area_id;?>" <?php echo $style;?>>
 											<div class="control-group" >
 												<label class="control-label ">
 													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_TEXT'); ?>
 												</label>
 												<div class="controls">
-													<input class="color" value="" id="color_code<?php echo $area->reddesign_area_id;?>" name="color_code<?php echo $area->reddesign_area_id;?>">&nbsp;&nbsp;<input name="addvalue<?php echo $area->reddesign_area_id;?>" id="addvalue<?php echo $area->reddesign_area_id;?>" class="button" value="<?php echo JText::_( 'COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR')?>" onclick="addNewcolor('<?php echo $area->reddesign_area_id;?>');" type="button" >
+													<p id="colorpickerHolderC<?php echo $area->reddesign_area_id;?>"></p>
 												</div>
-												<div id="ajaxMessageColorContainer" style="height: 25px; padding-bottom: 11px;">
-													<div id="ajaxMessageColor<?php echo $area->reddesign_area_id;?>" style="display: block;">
-													</div>
-												</div>
-											</div>
-											<div class="control-group">
-												<label class="control-label ">
-													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ALLOWED_COLOR'); ?>
-												</label>
-												<div class="controls">
-													<table class="loadcolor" id="extra_table<?php echo $area->reddesign_area_id;?>" cellpadding="2" cellspacing="2">
-														<?php
 
-														if (@$this->lists["color_" . $area->reddesign_area_id] != "1" )
-														{
-															if (strpos(@$this->lists["color_" . $area->reddesign_area_id], "#") !== false)
-															{
-																$colorData = explode(",", $this->lists["color_" . $area->reddesign_area_id]);
-
-																for ($j = 0;$j < count($colorData); $j++)
-																{
-																?>
-																	<tr valign="top" class="color">
-																	<td>
-																		<div class="colorSelector_list">
-																			<div style="background-color:<?php echo $colorData[$j]?>">&nbsp;</div>
-																		</div>
-																	</td>
-																	<td>
-																		<div><?php echo $colorData[$j] ?></div><input type="hidden" class="colorCodes<?php echo $area->reddesign_area_id?>" name="colorCodes<?php echo $area->reddesign_area_id?>[]" value="<?php echo $colorData[$j] ?>" id="colorCodes<?php echo $area->reddesign_area_id?>">
-																	</td>
-																	<td>
-																		<div>
-																			<input value="Delete" onclick="deleteColor(this,<?php echo$area->reddesign_area_id?>)" class="button" type="button" />
-																			<input type="hidden" name="colour_id<?php echo $area->reddesign_area_id?>[]" id="colour_id<?php echo $area->reddesign_area_id?>" value="<?php echo $colorData[$j] ?>">
-																		</div>
-																	</td>
-																	</tr>
-																<?php
-																}
-															}
-														}
-														?>
-													</table>
-													<input type="hidden" name="reddesign_color_code<?php echo $area->reddesign_area_id?>" id="reddesign_color_code<?php echo $area->reddesign_area_id?>" value="<?php echo $area->color_code?>">
-												</div>
 											</div>
 										</div>
 									</div>

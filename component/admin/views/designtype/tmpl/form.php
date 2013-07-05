@@ -54,9 +54,6 @@ else :
 	<div class="tab-pane" id="design-areas">
 		<?php echo $this->loadTemplate('designareas'); ?>
 	</div>
-	<div class="tab-pane" id="color">
-		<?php echo $this->loadTemplate('color'); ?>
-	</div>
 </div>
 
 <?php endif;
