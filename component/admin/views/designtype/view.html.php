@@ -62,11 +62,12 @@ class ReddesignViewDesigntype extends FOFViewHtml
 
 			$this->areas = $areas;
 
-			$lists = array();
+			// Get allColor radio input type for each area
+			$colorCodes = array();
 
 			foreach ($this->areas as $area)
 			{
-				$lists["color_" . $area->reddesign_area_id] = $area->color_code;
+				$colorCodes["color_" . $area->reddesign_area_id] = $area->color_code;
 				$colorCode = $area->color_code;
 
 				if ($colorCode != 1 || $colorCode != '1')
@@ -74,10 +75,10 @@ class ReddesignViewDesigntype extends FOFViewHtml
 					$colorCode = 0;
 				}
 
-				$lists['allcolor' . $area->reddesign_area_id] = JHTML::_('select.booleanlist', 'allcolor' . $area->reddesign_area_id, 'class="inputbox" onclick="HideColorPicker(this, \'' . $area->reddesign_area_id . '\');"', $colorCode);
+				$colorCodes['allColor' . $area->reddesign_area_id] = JHTML::_('select.booleanlist', 'allColor' . $area->reddesign_area_id, 'class="inputbox" onclick="hideColorPicker(\'' . $area->reddesign_area_id . '\');"', $colorCode);
 			}
 
-			$this->lists = $lists;
+			$this->colorCodes = $colorCodes;
 
 			$this->alginmentOptions = array(
 				JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_COMMON_SELECT')),

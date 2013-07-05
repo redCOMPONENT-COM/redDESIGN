@@ -6,3 +6,7 @@
     float: left;
     margin-left: 21px;
 }
+
+.areSettingRowheight {
+ 	height: 210px !important;
+}

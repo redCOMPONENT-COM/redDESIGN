@@ -94,25 +94,4 @@ class ReddesignControllerArea extends FOFController
 		echo json_encode($items);
 	}
 
-	/**
-	 * Saves design colors for AJAX request.
-	 *
-	 * @return void
-	 */
-	public function ajaxColorSave()
-	{
-		$response = array();
-
-		if ($this->applySave())
-		{
-			$response['reddesign_area_id'] = $this->input->getInt('reddesign_area_id', null);
-			$response['color_code']		= $this->input->getString('color_code', '');
-			$response['message']		= JText::sprintf('COM_REDDESIGN_DESIGNTYPE_COLOR_SAVED');
-			echo json_encode($response);
-		}
-		else
-		{
-			echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREA_CANT_SAVE');
-		}
-	}
 }
