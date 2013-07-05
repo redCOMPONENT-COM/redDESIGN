@@ -1043,7 +1043,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR'); ?>
 											</label>
 											<div class="controls">
-												<?php echo $this->lists['allColor' . $area->reddesign_area_id];?>
+												<?php echo $this->colorCodes['allColor' . $area->reddesign_area_id];?>
 												<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR_DESC'); ?></span>
 											</div>
 										</div>
@@ -1064,11 +1064,11 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 												<table class="loadcolor" id="extra_table<?php echo $area->reddesign_area_id;?>" cellpadding="2" cellspacing="2">
 													<?php
 
-													if (@$this->lists["color_" . $area->reddesign_area_id] != "1" )
+													if (@$this->colorCodes["color_" . $area->reddesign_area_id] != "1" )
 													{
-														if (strpos(@$this->lists["color_" . $area->reddesign_area_id], "#") !== false)
+														if (strpos(@$this->colorCodes["color_" . $area->reddesign_area_id], "#") !== false)
 														{
-															$colorData = explode(",", $this->lists["color_" . $area->reddesign_area_id]);
+															$colorData = explode(",", $this->colorCodes["color_" . $area->reddesign_area_id]);
 
 															for ($j = 0;$j < count($colorData); $j++)
 															{
