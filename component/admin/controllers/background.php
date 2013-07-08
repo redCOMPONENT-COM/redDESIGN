@@ -47,38 +47,38 @@ class ReddesignControllerBackground extends FOFController
 		// If file has has not been uploaded
 		if (empty($file['name']) || empty($file['type']))
 		{
-			$app = JFactory::getApplication();
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_FILE'), 'error');
-			$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
-			$this->redirect();
+			// If is a new background and the file is not attached return error
+			if (!$data['reddesign_background_id'])
+			{
+				$app = JFactory::getApplication();
+				$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_FILE'), 'error');
+				$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
+				$this->redirect();
+			}
 		}
-
-		// Upload the background file
-		$uploaded_file	= $this->uploadFile($file);
-
-		if (!$uploaded_file)
+		else
 		{
-			$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
-			$this->redirect();
+			// Upload the background file
+			$uploaded_file	= $this->uploadFile($file);
+
+			if (!$uploaded_file)
+			{
+				$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
+				$this->redirect();
+			}
+
+			// Create a image preview of the EPS
+			$jpegpreviewfile = $this->createBackgroundPreview($uploaded_file['mangled_filename']);
+
+			if (!$jpegpreviewfile)
+			{
+				return false;
+			}
+
+			// Update the database with the new path of the EPS file and its thumb
+			$data['eps_file']			= $uploaded_file['mangled_filename'];
+			$data['image_path']			= $jpegpreviewfile;
 		}
-
-		// Add a name to background if user haven't set it with the background file name
-		if (empty($data['title']))
-		{
-			$data['title'] = $file['name'];
-		}
-
-		// Create a image preview of the EPS
-		$jpegpreviewfile = $this->createBackgroundPreview($uploaded_file['mangled_filename']);
-
-		if (!$jpegpreviewfile)
-		{
-			return false;
-		}
-
-		// Update the database with the new path of the EPS file and its thumb
-		$data['eps_file']			= $uploaded_file['mangled_filename'];
-		$data['image_path']			= $jpegpreviewfile;
 
 		// If this new background will be the PDF Production background switch it against the previous production background
 		if ((int) $data['isPDFbgimage'])

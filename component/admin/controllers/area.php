@@ -93,5 +93,4 @@ class ReddesignControllerArea extends FOFController
 
 		echo json_encode($items);
 	}
-
 }
