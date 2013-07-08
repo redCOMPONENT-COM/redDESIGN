@@ -81,9 +81,11 @@ JHTML::_('behavior.modal');
 							<?php echo $background->reddesign_background_id; ?>
 						</td>
 						<td align="left">
-							<a class="modal"
-							   href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/' . $background->image_path); ?>">
+							<a href="#">
 								<strong><?php echo $this->escape(JText::_($background->title)) ?></strong>
+							</a>&nbsp;<a class="modal btn btn-mini"
+							   href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/' . $background->image_path); ?>">
+								<?php echo JText::_('COM_REDDESIGN_BACKGROUNDS_THUMB_PREVIEW'); ?>
 							</a>
 						</td>
 						<td align="center" width="9%" class="switchBg">
@@ -107,7 +109,7 @@ JHTML::_('behavior.modal');
 						</td>
 						<td>
 							<button type="button"
-									class="btn btn-danger delete"
+									class="btn btn-danger delete btn-mini"
 									onclick="removeBg('<?php echo $background->reddesign_background_id; ?>')" >
 								<i class="icon-minus icon-white"></i>
 								<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>
