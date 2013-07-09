@@ -19,6 +19,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 	<input type="hidden" name="task" value="save">
 	<input type="hidden" name="returnurl" value="<?php echo base64_encode($return_url); ?>" />
 	<input type="hidden" name="reddesign_designtype_id" id="background_reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>" />
+	<input type="hidden" name="reddesign_background_id" id="reddesign_background_id" value="" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 
 	<div id="backgrounds-configuration">
@@ -38,7 +39,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 			<label class="control-label " for="bg_eps_file">
 				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_FILE'); ?>
 			</label>
-
 			<div class="controls">
 				<input type="file" name="bg_eps_file" id="bg_eps_file" value="">
 			</div>
@@ -58,12 +58,12 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label todo-label" for="bg_status">
+			<label class="control-label todo-label" for="bg_enabled">
 				<?php echo JText::_('JPUBLISHED'); ?>
 			</label>
 
 			<div class="controls">
-				<select name="status" id="bg_status">
+				<select name="enabled" id="bg_enabled">
 					<option value="1" selected="selected"><?php echo JText::_('JYES'); ?></option>
 					<option value="0"><?php echo JText::_('JNO'); ?></option>
 				</select>
@@ -88,8 +88,13 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 				}
 			);
 			akeeba.jQuery(document).on('click', '#cancelBgBtn', function () {
-					akeeba.jQuery('#uploadBgForm').fadeOut("slow");
-					akeeba.jQuery('#addBgBtn').parent().show();
+					akeeba.jQuery("#reddesign_background_id").val('');
+					akeeba.jQuery("#bg_title").val('');
+					akeeba.jQuery("#bg_isPDFbgimage").val('0');
+					akeeba.jQuery("#bg_enabled").val('1');
+
+					akeeba.jQuery('#backgroundForm').fadeOut("fast");
+					akeeba.jQuery('#addBgBtn').parent().fadeIn("fast");
 				}
 			);
 		});
