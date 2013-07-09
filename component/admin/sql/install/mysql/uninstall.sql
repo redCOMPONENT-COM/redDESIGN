@@ -6,8 +6,7 @@ DROP TABLE IF EXISTS `#__reddesign_designtypes`;
 DROP TABLE IF EXISTS `#__reddesign_fonts`;
 DROP TABLE IF EXISTS `#__reddesign_chars`;
 DROP TABLE IF EXISTS `#__reddesign_backgrounds`;
-DROP TABLE IF EXISTS `#__reddesign_orders`;
-DROP TABLE IF EXISTS `#__reddesign_redshops`;
-DROP TABLE IF EXISTS `#__reddesign_templates`;
+DROP TABLE IF EXISTS `#__reddesign_parts`;
+DROP TABLE IF EXISTS `#__reddesign_accessories`;
 
 SET foreign_key_checks = 1;
