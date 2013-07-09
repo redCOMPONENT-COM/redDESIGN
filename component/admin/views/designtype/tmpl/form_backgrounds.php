@@ -14,8 +14,7 @@ JHTML::_('behavior.modal');
 
 <div class="form-container">
 	<div class="well">
-		<input type="button" class="btn btn-primary" id="addBgBtn"
-			   value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_ADD'); ?>"/>
+		<input type="button" class="btn btn-primary" id="addBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_ADD'); ?>"/>
 	</div>
 	<div id="backgroundForm" class="well" style="display:none;">
 		<?php echo $this->loadTemplate('background'); ?>
@@ -25,13 +24,8 @@ JHTML::_('behavior.modal');
 		<input type="hidden" name="option" value="com_reddesign">
 		<input type="hidden" name="view" value="background">
 		<input type="hidden" name="task" id="backgrounds_task" value="">
-		<input type="hidden" name="reddesign_background_id"
-			   id="backgrounds_reddesign_background_id"
-			   value="">
-		<input type="hidden" name="reddesign_designtype_id"
-			   id="backgrounds_reddesign_designtype_id"
-			   value="<?php echo $this->item->reddesign_designtype_id; ?>">
-		<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
+		<input type="hidden" name="reddesign_background_id" id="backgrounds_reddesign_background_id" value="">
+		<input type="hidden" name="reddesign_designtype_id" id="backgrounds_reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>">
 		<table id="itemsList" class="table table-striped">
 			<thead>
 			<tr>
@@ -54,12 +48,14 @@ JHTML::_('behavior.modal');
 			</thead>
 			<tbody>
 			<?php if ($count = count($this->backgrounds)) : ?>
-				<?php $i = -1;
-				$m       = 1; ?>
+				<?php
+				$i = -1;
+				$m = 1;
+				?>
 				<?php foreach ($this->backgrounds as $background) : ?>
 					<?php
 					$i++;
-					$m                     = 1 - $m;
+					$m = 1 - $m;
 					$background->published = $background->enabled;
 					?>
 					<tr class="<?php echo 'row' . $m; ?>">
@@ -67,18 +63,17 @@ JHTML::_('behavior.modal');
 							<?php echo $background->reddesign_background_id; ?>
 						</td>
 						<td align="left">
-							<a href="#" class="editBackground"
-							   onclick="selectBackgroundForEdit(<?php echo "'$background->reddesign_background_id', '$background->title', '$background->isPDFbgimage', '$background->enabled'"; ?>)">
-								<strong><?php echo $this->escape(JText::_($background->title)) ?></strong>
-							</a>&nbsp;<a class="modal btn btn-mini"
-							   href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/' . $background->image_path); ?>">
-								<?php echo JText::_('COM_REDDESIGN_BACKGROUNDS_THUMB_PREVIEW'); ?>
+							<a href="#" class="editBackground" onclick="selectBackgroundForEdit(<?php echo "'$background->reddesign_background_id', '$background->title', '$background->isPDFbgimage', '$background->enabled'"; ?>)">
+								<strong><?php echo $background->title; ?></strong>
+							</a>
+							&nbsp;
+							<a class="modal btn btn-mini" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/' . $background->image_path); ?>">
+								<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
 							</a>
 						</td>
 						<td align="center" width="9%" class="switchBg">
 							<?php if (!$background->isPDFbgimage) : ?>
-								<a class="jgrid" href="javascript:void(0);"
-									onclick="setPDFbg('<?php echo $background->reddesign_background_id; ?>')" >
+								<a class="jgrid" href="javascript:void(0);" onclick="setPDFbg('<?php echo $background->reddesign_background_id; ?>')" >
 									<span class="state notdefault">
 										<span class="text">Default</span>
 									</span>
@@ -95,15 +90,12 @@ JHTML::_('behavior.modal');
 							<?php echo JHTML::_('grid.published', $background, $i); ?>
 						</td>
 						<td>
-							<button type="button"
-									class="btn btn-danger delete btn-mini"
-									onclick="removeBg('<?php echo $background->reddesign_background_id; ?>')" >
+							<button type="button" class="btn btn-danger delete btn-mini" onclick="removeBg('<?php echo $background->reddesign_background_id; ?>')" >
 								<i class="icon-minus icon-white"></i>
 								<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>
 							</button>
 						</td>
 					</tr>
-					<?php // Modify background form ?>
 					<tr class="hide">
 					</tr>
 				<?php endforeach ?>
@@ -162,6 +154,7 @@ JHTML::_('behavior.modal');
 	 * Selects background for edit and populates field data accordingly
 	 */
 	function selectBackgroundForEdit(reddesign_background_id, title, isPDFbgimage, enabled) {
+		akeeba.jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_TITLE_BACKGROUNDS_EDIT'); ?>");
 		akeeba.jQuery("#reddesign_background_id").val(reddesign_background_id);
 		akeeba.jQuery("#bg_title").val(title);
 		akeeba.jQuery("#bg_isPDFbgimage").val(isPDFbgimage);

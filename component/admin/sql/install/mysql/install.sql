@@ -61,6 +61,8 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   `locked_by`               BIGINT(20) NOT NULL DEFAULT '0',
   `locked_on`               DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
   `fontsizer`               ENUM('auto', 'slider', 'dropdown'),
+  `sample_image`            VARCHAR(255),
+  `sample_thumb`            VARCHAR(255),
   PRIMARY KEY (`reddesign_designtype_id`)
 )
   ENGINE = InnoDB
@@ -122,21 +124,21 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_chars` (
 --
 
 CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
-  `reddesign_background_id` INT(11)    NOT NULL AUTO_INCREMENT,
+  `reddesign_background_id` INT(11)      NOT NULL AUTO_INCREMENT,
   `title`                   VARCHAR(255),
   `slug`                    VARCHAR(255),
-  `enabled`                 TINYINT(3) NOT NULL DEFAULT '1',
-  `ordering`                INT(10)    NOT NULL DEFAULT '0',
-  `created_by`              BIGINT(20) NOT NULL DEFAULT '0',
-  `created_on`              DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified_by`             BIGINT(20) NOT NULL DEFAULT '0',
-  `modified_on`             DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `locked_by`               BIGINT(20) NOT NULL DEFAULT '0',
-  `locked_on`               DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `enabled`                 TINYINT(3)   NOT NULL DEFAULT '1',
+  `ordering`                INT(10)      NOT NULL DEFAULT '0',
+  `created_by`              BIGINT(20)   NOT NULL DEFAULT '0',
+  `created_on`              DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by`             BIGINT(20)   NOT NULL DEFAULT '0',
+  `modified_on`             DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `locked_by`               BIGINT(20)   NOT NULL DEFAULT '0',
+  `locked_on`               DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
   `eps_file`                VARCHAR(255),
-  `image_path`              TEXT       NOT NULL,
-  `reddesign_designtype_id` INT(11)    NOT NULL,
-  `isPDFbgimage`            TINYINT(4) NOT NULL,
+  `image_path`              VARCHAR(255) NOT NULL,
+  `isPDFbgimage`            TINYINT(4)   NOT NULL,
+  `reddesign_designtype_id` INT(11)      NOT NULL,
   PRIMARY KEY (`reddesign_background_id`)
 )
   ENGINE = InnoDB
@@ -144,34 +146,55 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   DEFAULT COLLATE=utf8_general_ci;
 
 --
--- Table structure for table `#__reddesign_order`
+-- Table structure for table `#__reddesign_elements`
 --
 
-CREATE TABLE IF NOT EXISTS `#__reddesign_orders` (
-  `reddesign_order_id`        BIGINT(20)   NOT NULL AUTO_INCREMENT,
-  `order_id`                  BIGINT(20)   NOT NULL,
-  `product_id`                BIGINT(20)   NOT NULL,
-  `order_item_id`             INT(11)      NOT NULL,
-  `reddesignfile`             VARCHAR(255) NOT NULL,
-  `designhdnargs`             TEXT         NOT NULL,
-  `reddesign_background_id`   INT(11)      NOT NULL,
-  PRIMARY KEY (`reddesign_order_id`)
+CREATE TABLE IF NOT EXISTS `#__reddesign_parts` (
+  `reddesign_part_id`       INT(11)      NOT NULL AUTO_INCREMENT,
+  `title`                   VARCHAR(255),
+  `slug`                    VARCHAR(255),
+  `enabled`                 TINYINT(3)   NOT NULL DEFAULT '1',
+  `ordering`                INT(10)      NOT NULL DEFAULT '0',
+  `created_by`              BIGINT(20)   NOT NULL DEFAULT '0',
+  `created_on`              DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by`             BIGINT(20)   NOT NULL DEFAULT '0',
+  `modified_on`             DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `locked_by`               BIGINT(20)   NOT NULL DEFAULT '0',
+  `locked_on`               DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `description`             TEXT,
+  `image`                   VARCHAR(255),
+  `thumbnail`               VARCHAR(255),
+  `stock`                   FLOAT        NOT NULL,
+  `price`                   FLOAT        NOT NULL,
+  `reddesign_designtype_id` INT(11)      NOT NULL,
+  PRIMARY KEY (`reddesign_part_id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET =utf8
   DEFAULT COLLATE=utf8_general_ci;
 
 --
--- Table structure for table `#__reddesign_redshop`
+-- Table structure for table `#__reddesign_accessories`
 --
 
-CREATE TABLE IF NOT EXISTS `#__reddesign_redshops` (
-  `reddesign_redshop_id` BIGINT(20)   NOT NULL AUTO_INCREMENT,
-  `product_id`           BIGINT(20)   NOT NULL,
-  `designtype_id`        BIGINT(20)   NOT NULL,
-  `shoppergroups`        VARCHAR(255) NOT NULL,
-  `reddesign_enable`     TINYINT(4)   NOT NULL,
-  PRIMARY KEY (`reddesign_redshop_id`)
+CREATE TABLE IF NOT EXISTS `#__reddesign_accessories` (
+  `reddesign_accessory_id`   INT(11)    NOT NULL AUTO_INCREMENT,
+  `title`                    VARCHAR(255),
+  `slug`                     VARCHAR(255),
+  `enabled`                  TINYINT(3) NOT NULL DEFAULT '1',
+  `ordering`                 INT(10)    NOT NULL DEFAULT '0',
+  `created_by`               BIGINT(20) NOT NULL DEFAULT '0',
+  `created_on`               DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by`              BIGINT(20) NOT NULL DEFAULT '0',
+  `modified_on`              DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `locked_by`                BIGINT(20) NOT NULL DEFAULT '0',
+  `locked_on`                DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `description`              TEXT,
+  `image_path`               VARCHAR(255),
+  `stock`                    FLOAT      NOT NULL,
+  `price`                    FLOAT      NOT NULL,
+  `required`                 TINYINT(3) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`reddesign_accessory_id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET =utf8

@@ -9,7 +9,7 @@
 
 defined('_JEXEC') or die;
 
-$return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->reddesign_designtype_id . '&tab=backgrounds';
+$returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->reddesign_designtype_id . '&tab=parts';
 
 ?>
 <form id="background" name="background" method="post" action="index.php" enctype="multipart/form-data">
@@ -17,52 +17,66 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 	<input type="hidden" name="option" value="com_reddesign">
 	<input type="hidden" name="view" value="background">
 	<input type="hidden" name="task" value="save">
-	<input type="hidden" name="returnurl" value="<?php echo base64_encode($return_url); ?>" />
+	<input type="hidden" name="returnurl" value="<?php echo base64_encode($returnUrl); ?>" />
 	<input type="hidden" name="reddesign_designtype_id" id="background_reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>" />
-	<input type="hidden" name="reddesign_background_id" id="reddesign_background_id" value="" />
+	<input type="hidden" name="reddesign_part_id" id="reddesign_part_id" value="" />
 
 	<div id="backgrounds-configuration">
-		<h3 id="backgroundTitle"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_TITLE'); ?></h3>
+		<h3 id="backgroundTitle"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_TITLE'); ?></h3>
 
+		<div class="control-group">
+			<label class="control-label" for="part_title">
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_FIELD_TITLE'); ?>
+			</label>
+
+			<div class="controls">
+				<input type="text" name="title" id="part_title" value="">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label " for="image">
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_IMAGE'); ?>
+			</label>
+			<div class="controls">
+				<input type="file" name="image" id="image" value="">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label " for="thumbnail">
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_THUMBNAIL'); ?>
+			</label>
+			<div class="controls">
+				<input type="file" name="thumbnail" id="thumbnail" value="">
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_THUMBNAIL_DESC'); ?></span>
+			</div>
+		</div>
 		<div class="control-group">
 			<label class="control-label ">
-				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_TITLE'); ?>
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_PRICE'); ?>
 			</label>
 
 			<div class="controls">
-				<input type="text" name="title" id="bg_title" value="">
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_TITLE_DESC'); ?></span>
+				<input type="text" name="price" id="price" value="">
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_PRICE_DESC'); ?></span>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label " for="bg_eps_file">
-				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_FILE'); ?>
-			</label>
-			<div class="controls">
-				<input type="file" name="bg_eps_file" id="bg_eps_file" value="">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label todo-label" for="bg_isPDFbgimage">
-				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_IS_PDF_BG_IMAGE'); ?>
+			<label class="control-label ">
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_STOCK'); ?>
 			</label>
 
 			<div class="controls">
-				<select name="isPDFbgimage" id="bg_isPDFbgimage">
-					<option value="0" selected="selected"><?php echo JText::_('JNO'); ?></option>
-					<option value="1"><?php echo JText::_('JYES'); ?></option>
-				</select>
-				<span
-					class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_IS_PDF_BG_IMAGE_DESC'); ?></span>
+				<input type="text" name="stock" id="stock" value="">
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_STOCK_DESC'); ?></span>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label todo-label" for="bg_enabled">
+			<label class="control-label todo-label" for="part_enabled">
 				<?php echo JText::_('JPUBLISHED'); ?>
 			</label>
 
 			<div class="controls">
-				<select name="enabled" id="bg_enabled">
+				<select name="enabled" id="part_enabled">
 					<option value="1" selected="selected"><?php echo JText::_('JYES'); ?></option>
 					<option value="0"><?php echo JText::_('JNO'); ?></option>
 				</select>
@@ -71,9 +85,9 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 		</div>
 	</div>
 	<div class="form-actions">
-		<input type="button" class="btn btn-success" id="saveBgBtn"
+		<input type="button" class="btn btn-success" id="savePartBtn"
 			   value="<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>"/>
-		<input type="button" class="btn" id="cancelBgBtn"
+		<input type="button" class="btn" id="cancelPartBtn"
 			   value="<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>"/>
 	</div>
 </form>
@@ -99,4 +113,3 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 			);
 		});
 </script>
-

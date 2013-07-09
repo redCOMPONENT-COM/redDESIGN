@@ -41,7 +41,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		// If it's not a new design
 		if (!empty($this->item->reddesign_designtype_id))
 		{
-			// Get all the backgrounds that belongs to this Designtype item
+			// Get all the backgrounds that belongs to this Design Type item.
 			$backgroundModel = FOFModel::getTmpInstance('Background', 'ReddesignModel')->reddesign_designtype_id($this->item->reddesign_designtype_id);
 			$this->backgrounds = $backgroundModel->getItemList();
 
@@ -75,7 +75,11 @@ class ReddesignViewDesigntype extends FOFViewHtml
 					$colorCode = 0;
 				}
 
-				$colorCodes['allColor' . $area->reddesign_area_id] = JHTML::_('select.booleanlist', 'allColor' . $area->reddesign_area_id, 'class="inputbox" onclick="hideColorPicker(\'' . $area->reddesign_area_id . '\');"', $colorCode);
+				$colorCodes['allColor' . $area->reddesign_area_id] = JHTML::_('select.booleanlist',
+																				'allColor' . $area->reddesign_area_id,
+																				'class="inputbox" onclick="hideColorPicker(\'' . $area->reddesign_area_id . '\');"',
+																				$colorCode
+																				);
 			}
 
 			$this->colorCodes = $colorCodes;
@@ -96,6 +100,10 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			{
 				$this->fontsOptions[] = JHtml::_('select.option', $font->reddesign_font_id, $font->title);
 			}
+
+			// Get all the parts that belongs to this Design Type item.
+			$partsModel = FOFModel::getTmpInstance('Part', 'ReddesignModel')->reddesign_designtype_id($this->item->reddesign_designtype_id);
+			$this->parts = $partsModel->getItemList();
 		}
 
 		parent::display();
