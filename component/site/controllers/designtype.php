@@ -19,10 +19,17 @@ defined('_JEXEC') or die;
  */
 class ReddesignControllerDesigntype extends FOFController
 {
+	public function  __construct($config = array())
+	{
+		parent::__construct($config);
+
+		$this->modelName = 'Designtype';
+	}
+
 	public function execute($task)
 	{
 		$this->registerDefaultTask('read');
-
+dump($task, 'task');
 		parent::execute($task);
 	}
 }

@@ -28,14 +28,15 @@ class ReddesignViewDesigntype extends FOFViewHtml
 	 */
 	public function display($tpl = null)
 	{
-		$model 						= $this->getModel();
-
 		// Get Design
+		$model 						= $this->getModel();
 		$this->item 				= $model->getItem();
 
-		// Get all the backgrounds that belongs to this Designtype item
-		$backgroundModel = FOFModel::getTmpInstance('Background', 'ReddesignModel')->reddesign_designtype_id($this->item->reddesign_designtype_id);
-		$this->backgrounds = $backgroundModel->getItemList();
+		$this->backgrounds					= $model->getBackgrounds();
+		$this->previewBackground			= $model->getPreviewBackground();
+		$this->productionBackground			= $model->getProductionBackground();
+		$this->productionBackgroundAreas	= $model->getProductionBackgroundAreas($this->productionBackground->reddesign_background_id);
+		$this->fonts						= $model->getFonts();
 
 		parent::display($tpl);
 	}
