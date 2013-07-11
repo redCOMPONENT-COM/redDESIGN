@@ -142,9 +142,9 @@
                 label="COM_REDDESIGN_CONFIG_UNIT"
                 description="COM_REDDESIGN_CONFIG_UNIT_DESC"
                 >
-            <option value="1">px</option>
-            <option value="0.2645833333">mm</option>
-            <option value="0.0264583333">cm</option>
+            <option value="px">px</option>
+            <option value="mm">mm</option>
+            <option value="cm">cm</option>
         </field>
         <field
                 name="enable_angle"

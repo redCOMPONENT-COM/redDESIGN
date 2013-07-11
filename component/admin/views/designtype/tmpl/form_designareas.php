@@ -15,6 +15,37 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/colorpicker.js');
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
 FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 ?>
+<?php
+$configParams = &JComponentHelper::getParams('com_reddesign');
+$unit = $configParams->get('unit', '1');
+
+if ( $unit == "cm" )
+{
+	$unit = 'cm';
+
+	// (1 px = 0.026458333cm)
+	$pxToUnit = '0.026458333';
+
+	// (1 cm = 37.795275591px)
+	$unitToPx = '37.795275591';
+}
+elseif ( $unit == "mm" )
+{
+	$unit = 'mm';
+
+	// (1 px = 0.264583333mm)
+	$pxToUnit = '0.264583333';
+
+	// (1 mm = 3.779527559px)
+	$unitToPx = '3.779527559';
+}
+else
+{
+	$unit = 'px';
+	$pxToUnit = '1';
+	$unitToPx = '1';
+}
+?>
 
 <?php if (empty($this->productionBackground)) : ?>
 
@@ -24,6 +55,13 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 <?php else : ?>
 
 	<script type="text/javascript">
+
+		/**
+		 * Initiate PX to Unit conversation variables
+		 */
+		var unit = '<?php echo $unit;?>';
+		var pxToUnit = '<?php echo $pxToUnit;?>';
+		var unitToPx = '<?php echo $unitToPx;?>';
 
 		/**
 		 * Initiate imgAreaSelect plugin
@@ -37,8 +75,8 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				});
 				<?php foreach ($this->areas as  $area) : ?>
 					var reddesign_area_id = parseInt(<?php echo $area->reddesign_area_id;?>);
-					akeeba.jQuery('#colorpickerHolderC' + reddesign_area_id).ColorPicker({flat: true,
-						onChange: function (hsb, hex, rgb) {
+					akeeba.jQuery('#colorpickerHolderC' + reddesign_area_id).ColorPicker({flat: true, designId:reddesign_area_id,
+						onChange: function (hsb, hex, rgb, reddesign_area_id) {
 						document.getElementById('color_code'+reddesign_area_id).value = hex; // Edited
 					}});
 				<?php endforeach; ?>
@@ -66,6 +104,35 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			});
 		}
 
+		/**
+		 * Selects area with given parameters. Used onkeyup event in parameter input fields.
+		 *
+		 * @param x1
+		 * @param y1
+		 * @param x2
+		 * @param y2
+		 * @param width
+		 * @param height
+		 */
+		function selectAreaOnKeyUp(x1, y1, x2, y2, width, height) {
+
+			var x1_pos_in_px = parseFloat(x1) * parseFloat(unitToPx);
+			var y1_pos_in_px = parseFloat(y1) * parseFloat(unitToPx);
+			var x2_pos_in_px = parseFloat(x2) * parseFloat(unitToPx);
+			var y2_pos_in_px = parseFloat(y2) * parseFloat(unitToPx);
+			var width_in_px = parseFloat(width) * parseFloat(unitToPx);
+			var height_in_px = parseFloat(height) * parseFloat(unitToPx);
+
+			akeeba.jQuery("img#background").imgAreaSelect({
+				x1: x1_pos_in_px,
+				y1: y1_pos_in_px,
+				x2: x2_pos_in_px,
+				y2: y2_pos_in_px,
+				width : width_in_px,
+				height : height_in_px
+			});
+		}
+
         /**
          * Populates parameter fields from selected area
 		 *
@@ -80,12 +147,20 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			}
 			else
 			{
-				akeeba.jQuery("#areaX1").val(selection.x1);
-				akeeba.jQuery("#areaY1").val(selection.y1);
-				akeeba.jQuery("#areaX2").val(selection.x2);
-				akeeba.jQuery("#areaY2").val(selection.y2);
-				akeeba.jQuery("#areaWidth").val(selection.width);
-				akeeba.jQuery("#areaHeight").val(selection.height);
+				// convert pixel to selected unit
+				var x1_pos_in_unit = parseFloat(selection.x1) * parseFloat(pxToUnit);
+				var y1_pos_in_unit = parseFloat(selection.y1) * parseFloat(pxToUnit);
+				var x2_pos_in_unit = parseFloat(selection.x2) * parseFloat(pxToUnit);
+				var y2_pos_in_unit = parseFloat(selection.y2) * parseFloat(pxToUnit);
+				var width_in_unit = parseFloat(selection.width) * parseFloat(pxToUnit);
+				var height_in_unit = parseFloat(selection.height) * parseFloat(pxToUnit);
+
+				akeeba.jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
+				akeeba.jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
+				akeeba.jQuery("#areaX2").val(x2_pos_in_unit.toFixed(0));
+				akeeba.jQuery("#areaY2").val(y2_pos_in_unit.toFixed(0));
+				akeeba.jQuery("#areaWidth").val(width_in_unit.toFixed(0));
+				akeeba.jQuery("#areaHeight").val(height_in_unit.toFixed(0));
 			}
 		}
 
@@ -138,6 +213,13 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			var areaWidth  = akeeba.jQuery("#areaWidth").val();
 			var areaHeight = akeeba.jQuery("#areaHeight").val();
 
+			var areaX1_in_px = (areaX1 * parseFloat(unitToPx)).toFixed(0);
+			var areaY1_in_px = (areaY1 * parseFloat(unitToPx)).toFixed(0);
+			var areaX2_in_px = (areaX2 * parseFloat(unitToPx)).toFixed(0);
+			var areaY2_in_px = (areaY2 * parseFloat(unitToPx)).toFixed(0);
+			var areaWidth_in_px = (areaWidth * parseFloat(unitToPx)).toFixed(0);
+			var areaHeight_in_px = (areaHeight * parseFloat(unitToPx)).toFixed(0);
+
 			if(update != 0)
 			{
 				// if update is not 0 than it holds reddesign_area_id and we are doing update of existing area
@@ -154,12 +236,12 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					reddesign_area_id: reddesign_area_id,
 					title: areaName,
 					reddesign_background_id: <?php echo $this->productionBackground->reddesign_background_id; ?>,
-					x1_pos: areaX1,
-					y1_pos: areaY1,
-					x2_pos: areaX2,
-					y2_pos: areaY2,
-					width: areaWidth,
-					height: areaHeight
+					x1_pos: areaX1_in_px,
+					y1_pos: areaY1_in_px,
+					x2_pos: areaX2_in_px,
+					y2_pos: areaY2_in_px,
+					width: areaWidth_in_px,
+					height: areaHeight_in_px
 				},
 				type: "post",
 				success: function (data) {
@@ -258,12 +340,12 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						'</a>' +
 					'</td>' +
 					'<td>' +
-						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' + x1_pos + ', ' +
-						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>' + y1_pos + ', ' +
-						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>' + x2_pos + ', ' +
-						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>' + y2_pos + ', ' +
-						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong>' + width + ', ' +
-						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>' + height + ', ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong>' + (width * parseFloat(pxToUnit)).toFixed(0) + ', ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>' + (height * parseFloat(pxToUnit)).toFixed(0) + ', ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' + (x1_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>' + (y1_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>' + (x2_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>' + (y2_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
 					'</td>' +
 					'<td>' +
 						'<button type="button" class="btn btn-primary" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
@@ -447,12 +529,12 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					'</a>' +
 				'</td>' +
 				'<td>' +
-					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' + x1_pos + ', ' +
-					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>' + y1_pos + ', ' +
-					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>' + x2_pos + ', ' +
-					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>' + y2_pos + ', ' +
-					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong>' + width + ', ' +
-					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>' + height + ', ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong>' + (width * parseFloat(pxToUnit)).toFixed(0) + ', ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>' + (height * parseFloat(pxToUnit)).toFixed(0) + ', ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' + (x1_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>' + (y1_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>' + (x2_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>' + (y2_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
 				'</td>' +
 				'<td>' +
 					'<button type="button" class="btn btn-danger delete" onclick="removeArea(\'' + reddesign_area_id + '\');">' +
@@ -504,12 +586,12 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		function selectAreaForEdit(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, width, height) {
 			akeeba.jQuery("#designAreaId").val(reddesign_area_id);
 			akeeba.jQuery("#areaName").val(title);
-			akeeba.jQuery("#areaX1").val(x1_pos);
-			akeeba.jQuery("#areaY1").val(y1_pos);
-			akeeba.jQuery("#areaX2").val(x2_pos);
-			akeeba.jQuery("#areaY2").val(y2_pos);
-			akeeba.jQuery("#areaWidth").val(width);
-			akeeba.jQuery("#areaHeight").val(height);
+			akeeba.jQuery("#areaX1").val((x1_pos * parseFloat(pxToUnit)).toFixed(0));
+			akeeba.jQuery("#areaY1").val((y1_pos * parseFloat(pxToUnit)).toFixed(0));
+			akeeba.jQuery("#areaX2").val((x2_pos * parseFloat(pxToUnit)).toFixed(0));
+			akeeba.jQuery("#areaY2").val((y2_pos * parseFloat(pxToUnit)).toFixed(0));
+			akeeba.jQuery("#areaWidth").val((width * parseFloat(pxToUnit)).toFixed(0));
+			akeeba.jQuery("#areaHeight").val((height * parseFloat(pxToUnit)).toFixed(0));
 
 			selectArea(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
 
@@ -739,78 +821,18 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						</div>
 					</div>
 					<div class="control-group">
-						<label for="areaX1" class="control-label">
-							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_X1'); ?>
-						</label>
-						<div class="controls">
-							<input  type="text" id="areaX1" name="areaX1"
-									value=""
-									onkeyup="selectArea(akeeba.jQuery('#areaX1').val(),
-														akeeba.jQuery('#areaY1').val(),
-														akeeba.jQuery('#areaX2').val(),
-														akeeba.jQuery('#areaY2').val(),
-														akeeba.jQuery('#areaWidth').val(),
-														akeeba.jQuery('#areaHeight').val());">
-						</div>
-					</div>
-					<div class="control-group">
-						<label for="areaY1" class="control-label">
-							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_Y1') ?>
-						</label>
-						<div class="controls">
-							<input  type="text" id="areaY1" name="areaY1"
-									value=""
-									onkeyup="selectArea(akeeba.jQuery('#areaX1').val(),
-														akeeba.jQuery('#areaY1').val(),
-														akeeba.jQuery('#areaX2').val(),
-														akeeba.jQuery('#areaY2').val(),
-														akeeba.jQuery('#areaWidth').val(),
-														akeeba.jQuery('#areaHeight').val());">
-						</div>
-					</div>
-					<div class="control-group">
-						<label for="areaX2" class="control-label">
-							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_X2') ?>
-						</label>
-						<div class="controls">
-							<input  type="text" id="areaX2" name="areaX2"
-									value=""
-									onkeyup="selectArea(akeeba.jQuery('#areaX1').val(),
-														akeeba.jQuery('#areaY1').val(),
-														akeeba.jQuery('#areaX2').val(),
-														akeeba.jQuery('#areaY2').val(),
-														akeeba.jQuery('#areaWidth').val(),
-														akeeba.jQuery('#areaHeight').val());">
-						</div>
-					</div>
-					<div class="control-group">
-						<label for="areaY2" class="control-label">
-							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_Y2') ?>
-						</label>
-						<div class="controls">
-							<input  type="text" id="areaY2" name="areaY2"
-									value=""
-									onkeyup="selectArea(akeeba.jQuery('#areaX1').val(),
-														akeeba.jQuery('#areaY1').val(),
-														akeeba.jQuery('#areaX2').val(),
-														akeeba.jQuery('#areaY2').val(),
-														akeeba.jQuery('#areaWidth').val(),
-														akeeba.jQuery('#areaHeight').val());">
-						</div>
-					</div>
-					<div class="control-group">
 						<label for="areaWidth" class="control-label">
 							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_WIDTH') ?>
 						</label>
 						<div class="controls">
 							<input  type="text" id="areaWidth" name="areaWidth"
 									value=""
-									onkeyup="selectArea(akeeba.jQuery('#areaX1').val(),
+									onkeyup="selectAreaOnKeyUp(akeeba.jQuery('#areaX1').val(),
 														akeeba.jQuery('#areaY1').val(),
 														akeeba.jQuery('#areaX2').val(),
 														akeeba.jQuery('#areaY2').val(),
 														akeeba.jQuery('#areaWidth').val(),
-														akeeba.jQuery('#areaHeight').val());">
+														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $unit ?>
 						</div>
 					</div>
 					<div class="control-group">
@@ -820,12 +842,72 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						<div class="controls">
 							<input  type="text" id="areaHeight" name="areaHeight"
 									value=""
-									onkeyup="selectArea(akeeba.jQuery('#areaX1').val(),
+									onkeyup="selectAreaOnKeyUp(akeeba.jQuery('#areaX1').val(),
 														akeeba.jQuery('#areaY1').val(),
 														akeeba.jQuery('#areaX2').val(),
 														akeeba.jQuery('#areaY2').val(),
 														akeeba.jQuery('#areaWidth').val(),
-														akeeba.jQuery('#areaHeight').val());">
+														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $unit ?>
+						</div>
+					</div>
+					<div class="control-group">
+						<label for="areaX1" class="control-label">
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_X1'); ?>
+						</label>
+						<div class="controls">
+							<input  type="text" id="areaX1" name="areaX1"
+									value=""
+									onkeyup="selectAreaOnKeyUp(akeeba.jQuery('#areaX1').val(),
+														akeeba.jQuery('#areaY1').val(),
+														akeeba.jQuery('#areaX2').val(),
+														akeeba.jQuery('#areaY2').val(),
+														akeeba.jQuery('#areaWidth').val(),
+														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $unit ?>
+						</div>
+					</div>
+					<div class="control-group">
+						<label for="areaY1" class="control-label">
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_Y1') ?>
+						</label>
+						<div class="controls">
+							<input  type="text" id="areaY1" name="areaY1"
+									value=""
+									onkeyup="selectAreaOnKeyUp(akeeba.jQuery('#areaX1').val(),
+														akeeba.jQuery('#areaY1').val(),
+														akeeba.jQuery('#areaX2').val(),
+														akeeba.jQuery('#areaY2').val(),
+														akeeba.jQuery('#areaWidth').val(),
+														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $unit ?>
+						</div>
+					</div>
+					<div class="control-group">
+						<label for="areaX2" class="control-label">
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_X2') ?>
+						</label>
+						<div class="controls">
+							<input  type="text" id="areaX2" name="areaX2"
+									value=""
+									onkeyup="selectAreaOnKeyUp(akeeba.jQuery('#areaX1').val(),
+														akeeba.jQuery('#areaY1').val(),
+														akeeba.jQuery('#areaX2').val(),
+														akeeba.jQuery('#areaY2').val(),
+														akeeba.jQuery('#areaWidth').val(),
+														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $unit ?>
+						</div>
+					</div>
+					<div class="control-group">
+						<label for="areaY2" class="control-label">
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_Y2') ?>
+						</label>
+						<div class="controls">
+							<input  type="text" id="areaY2" name="areaY2"
+									value=""
+									onkeyup="selectAreaOnKeyUp(akeeba.jQuery('#areaX1').val(),
+														akeeba.jQuery('#areaY1').val(),
+														akeeba.jQuery('#areaX2').val(),
+														akeeba.jQuery('#areaY2').val(),
+														akeeba.jQuery('#areaWidth').val(),
+														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $unit ?>
 						</div>
 					</div>
 				</div>
@@ -909,18 +991,18 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 							</a>
 						</td>
 						<td>
-							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong>
-							<?php echo $area->x1_pos; ?>,
-							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>
-							<?php echo $area->y1_pos; ?>,
-							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>
-							<?php echo $area->x2_pos; ?>,
-							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>
-							<?php echo $area->y2_pos; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong>
-							<?php echo $area->width; ?>,
+							<?php echo round($area->width * $pxToUnit); ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>
-							<?php echo $area->height; ?>
+							<?php echo round($area->height * $pxToUnit); ?>
+							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong>
+							<?php echo round($area->x1_pos * $pxToUnit); ?>,
+							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>
+							<?php echo round($area->y1_pos * $pxToUnit); ?>,
+							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>
+							<?php echo round($area->x2_pos * $pxToUnit); ?>,
+							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>
+							<?php echo round($area->y2_pos * $pxToUnit); ?>,
 						</td>
 						<td>
 							<button type="button"
