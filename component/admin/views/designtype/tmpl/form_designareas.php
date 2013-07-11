@@ -537,6 +537,11 @@ else
 					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>' + (y2_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
 				'</td>' +
 				'<td>' +
+					'<button type="button" class="btn btn-primary" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
+						'<span><?php echo JText::_('COM_REDDESIGN_COMMON_SETTINGS'); ?></span>' +
+					'</button>' +
+				'</td>' +
+				'<td>' +
 					'<button type="button" class="btn btn-danger delete" onclick="removeArea(\'' + reddesign_area_id + '\');">' +
 						'<i class="icon-minus icon-white"></i>' +
 						'<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>' +
