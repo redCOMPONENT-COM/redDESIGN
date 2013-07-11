@@ -33,7 +33,10 @@ JHTML::_('behavior.modal');
 					<?php echo JText::_('ID'); ?>
 				</th>
 				<th>
-					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_TITLE'); ?>
+					<?php echo JText::_('COM_REDDESIGN_COMMON_TITLE'); ?>
+				</th>
+				<th>
+					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_IMAGE'); ?>
 				</th>
 				<th>
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_THUMB'); ?>
@@ -46,6 +49,12 @@ JHTML::_('behavior.modal');
 				</th>
 				<th>
 					<?php echo JText::_('JPUBLISHED'); ?>
+				</th>
+				<th>
+					<?php echo JText::_('COM_REDDESIGN_COMMON_REQUIRED'); ?>
+				</th>
+				<th>
+					<?php echo JText::_('COM_REDDESIGN_COMMON_SINGLE_SELECT_GROUP'); ?>
 				</th>
 				<th>
 					<?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?>
@@ -72,13 +81,16 @@ JHTML::_('behavior.modal');
 							<a href="#" class="editPart" onclick="selectPartForEdit()">
 								<strong><?php echo $part->title; ?></strong>
 							</a>
-							&nbsp;
-							<a class="modal btn btn-mini" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/parts/' . $part->part_image); ?>">
-								<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
+						</td>
+						<td>
+							<a class="modal" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/parts/' . $part->image); ?>">
+								<?php echo $part->image; ?>
 							</a>
 						</td>
 						<td>
-							<img src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/parts/' . $part->part_image); ?>" alt="" />
+							<a class="modal" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/parts/thumbnails/' . $part->thumbnail); ?>">
+								<?php echo $part->thumbnail; ?>
+							</a>
 						</td>
 						<td>
 							<?php echo $part->stock; ?>
@@ -87,7 +99,13 @@ JHTML::_('behavior.modal');
 							<?php echo $part->price; ?>
 						</td>
 						<td>
-							<?php echo JHTML::_('grid.published', $part, $i); ?>
+							<?php echo JHTML::_('grid.published', $part->enabled, 'enabled' . $i); ?>
+						</td>
+						<td>
+							<?php echo JHTML::_('grid.published', $part->required, 'required' . $i); ?>
+						</td>
+						<td>
+							<?php echo JHTML::_('grid.published', $part->single_select, 'single_select' . $i); ?>
 						</td>
 						<td>
 							<button type="button" class="btn btn-danger delete btn-mini" onclick="removePart('<?php echo $part->reddesign_part_id; ?>')" >
@@ -101,7 +119,7 @@ JHTML::_('behavior.modal');
 				<?php endforeach ?>
 			<?php else : ?>
 				<tr>
-					<td colspan="7">
+					<td colspan="10">
 						<?php echo JText::_('COM_REDDESIGN_COMMON_NORECORDS') ?>
 					</td>
 				</tr>

@@ -70,6 +70,33 @@
                 label="COM_REDDESIGN_CONFIG_MAX_DESIGNTYPE_THUMBNAIL_HEIGHT"
                 description="COM_REDDESIGN_CONFIG_MAX_DESIGNTYPE_THUMBNAIL_HEIGHT_DESC"
                 />
+
+        <field
+                name="max_part_images_size"
+                type="text"
+                size="5"
+                default="2"
+                label="COM_REDDESIGN_CONFIG_MAX_PART_IMAGE_FILE_SIZE"
+                description="COM_REDDESIGN_CONFIG_MAX_PART_IMAGE_FILE_SIZE_DESC"
+                />
+
+        <field
+                name="max_part_thumbnail_width"
+                type="text"
+                size="5"
+                default="210"
+                label="COM_REDDESIGN_CONFIG_MAX_PART_THUMBNAIL_WIDTH"
+                description="COM_REDDESIGN_CONFIG_MAX_PART_THUMBNAIL_WIDTH_DESC"
+                />
+
+        <field
+                name="max_part_thumbnail_height"
+                type="text"
+                size="5"
+                default="140"
+                label="COM_REDDESIGN_CONFIG_MAX_PART_THUMBNAIL_HEIGHT"
+                description="COM_REDDESIGN_CONFIG_MAX_PART_THUMBNAIL_HEIGHT_DESC"
+                />
     </fieldset>
     <fieldset
             name="settings_frontend"

@@ -35,6 +35,14 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 			</div>
 		</div>
 		<div class="control-group">
+			<label for="enabled" class="control-label">
+				<?php echo JText::_('JPUBLISHED'); ?>
+			</label>
+			<div class="controls">
+				<?php echo JHTML::_('select.booleanlist', 'enabled', null, 1); ?>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label " for="bg_eps_file">
 				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_FILE'); ?>
 			</label>
@@ -54,19 +62,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 				</select>
 				<span
 					class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_IS_PDF_BG_IMAGE_DESC'); ?></span>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label todo-label" for="bg_enabled">
-				<?php echo JText::_('JPUBLISHED'); ?>
-			</label>
-
-			<div class="controls">
-				<select name="enabled" id="bg_enabled">
-					<option value="1" selected="selected"><?php echo JText::_('JYES'); ?></option>
-					<option value="0"><?php echo JText::_('JNO'); ?></option>
-				</select>
-				<span class="help-block"><?php echo JText::_('JFIELD_PUBLISHED_DESC'); ?></span>
 			</div>
 		</div>
 	</div>
