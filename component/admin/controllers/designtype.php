@@ -44,18 +44,19 @@ class ReddesignControllerDesigntype extends FOFController
 	{
 		$imageFile = $this->input->files->get('sample_image', null);
 
-		if (!empty($imageFile))
+		// Code for managing image and thumbnail.
+		if (!empty($imageFile['name']))
 		{
 			require_once JPATH_ADMINISTRATOR . '/components/com_reddesign/helpers/file.php';
 			$fileHelper = new ReddesignHelperFile;
 			$params = JComponentHelper::getParams('com_reddesign');
 
 			$uploadedImageFile = $fileHelper->uploadFile(
-																$imageFile,
-																'designtypes',
-																$params->get('max_designtype_image_size', 2),
-																'jpg,JPG,jpeg,JPEG,png,PNG'
-															);
+															$imageFile,
+															'designtypes',
+															$params->get('max_designtype_image_size', 2),
+															'jpg,JPG,jpeg,JPEG,png,PNG'
+														);
 			$data['sample_image'] = $uploadedImageFile['mangled_filename'];
 
 			$thumbFile = $this->input->files->get('sample_thumb', null);
@@ -74,27 +75,21 @@ class ReddesignControllerDesigntype extends FOFController
 			}
 			else
 			{
-				/*$uploadedThumbFile = $fileHelper->uploadFile(
-																$imageFile,
-																'designtypes/thumbnails',
-																$params->get('max_designtype_image_size', 2),
-																'jpg,JPG,jpeg,JPEG,png,PNG'
-															);*/
 				$dest = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/thumbnails/' . $uploadedImageFile['mangled_filename'];
 				JFile::copy($uploadedImageFile['filepath'], $dest);
 				$data['sample_thumb'] = $uploadedImageFile['mangled_filename'];
 				$uploadedThumbFile['filepath'] = $dest;
 			}
 
-			$im = new Imagick;
-			$im->readImage($uploadedThumbFile['filepath']);
-			$im->thumbnailImage($params->get('max_designtype_thumbnail_width', 210), $params->get('max_designtype_thumbnail_height', 140), true);
-			/*$im->setCompression(Imagick::COMPRESSION_JPEG);
-			$im->setCompressionQuality(100);
-			$im->setImageFormat('jpeg');*/
-			$im->writeImage();
-			$im->clear();
-			$im->destroy();
+			if (JFile::exists($uploadedThumbFile['filepath']))
+			{
+				$im = new Imagick;
+				$im->readImage($uploadedThumbFile['filepath']);
+				$im->thumbnailImage($params->get('max_designtype_thumbnail_width', 210), $params->get('max_designtype_thumbnail_height', 140), true);
+				$im->writeImage();
+				$im->clear();
+				$im->destroy();
+			}
 		}
 
 		return $data;
