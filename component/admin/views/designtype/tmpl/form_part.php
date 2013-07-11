@@ -35,7 +35,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 		</div>
 		<div class="control-group">
 			<label class="control-label " for="image">
-				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_IMAGE'); ?>
+				<?php echo JText::_('COM_REDDESIGN_COMMON_IMAGE'); ?>
 			</label>
 			<div class="controls">
 				<input type="file" name="image" id="image" value="">
@@ -43,11 +43,11 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 		</div>
 		<div class="control-group">
 			<label class="control-label " for="thumbnail">
-				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_THUMBNAIL'); ?>
+				<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
 			</label>
 			<div class="controls">
 				<input type="file" name="thumbnail" id="thumbnail" value="">
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_THUMBNAIL_DESC'); ?></span>
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?></span>
 			</div>
 		</div>
 		<div class="control-group">
