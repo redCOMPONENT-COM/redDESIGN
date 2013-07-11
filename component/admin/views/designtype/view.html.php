@@ -37,6 +37,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->document 			= JFactory::getDocument();
 		$this->areas 				= null;
 		$this->productionBackground = null;
+		$this->editor				= JFactory::getEditor();
 
 		// If it's not a new design
 		if (!empty($this->item->reddesign_designtype_id))

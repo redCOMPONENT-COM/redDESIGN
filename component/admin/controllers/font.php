@@ -232,7 +232,7 @@ class ReddesignControllerFont extends FOFController
 	{
 		$font_file_location = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $font_file;
 
-		$text = 'Lorem ipsum';
+		$text = 'Lorem ipsum.';
 
 		$im = $this->imagettfJustifytext(
 			$text,

@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   `locked_by`               BIGINT(20) NOT NULL DEFAULT '0',
   `locked_on`               DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
   `fontsizer`               ENUM('auto', 'slider', 'dropdown'),
+  `description`             TEXT,
   `sample_image`            VARCHAR(255),
   `sample_thumb`            VARCHAR(255),
   PRIMARY KEY (`reddesign_designtype_id`)
@@ -166,6 +167,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_parts` (
   `thumbnail`               VARCHAR(255),
   `stock`                   FLOAT        NOT NULL,
   `price`                   FLOAT        NOT NULL,
+  `required`                TINYINT(3)   NOT NULL DEFAULT '0',
   `reddesign_designtype_id` INT(11)      NOT NULL,
   PRIMARY KEY (`reddesign_part_id`)
 )
