@@ -16,7 +16,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
 FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 ?>
 <?php
-$configParams = &JComponentHelper::getParams('com_reddesign');
+$configParams = JComponentHelper::getParams('com_reddesign');
 $unit = $configParams->get('unit', '1');
 
 if ( $unit == "cm" )
