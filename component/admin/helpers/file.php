@@ -42,9 +42,14 @@ class ReddesignHelperFile
 		}
 
 		// Check folders
-		if (!JFolder::exists(FOFTemplateUtils::parsePath('media://com_reddesign/assets/designtypes/thumbnails/')))
+		if (!JFolder::exists(FOFTemplateUtils::parsePath('media://com_reddesign/assets/' . $assetsFolder . '/')))
 		{
-			JFolder::create(FOFTemplateUtils::parsePath('media://com_reddesign/assets/designtypes/thumbnails/'));
+			if (!JFolder::create(FOFTemplateUtils::parsePath('media://com_reddesign/assets/' . $assetsFolder . '/')))
+			{
+				$app->enqueueMessage(JText::sprintf('COM_REDDESIGN_FILE_HELPER_CAN_NOT_CREATE_FOLDER', $assetsFolder), 'error');
+
+				return false;
+			}
 		}
 
 		// Get a (very!) randomised name
