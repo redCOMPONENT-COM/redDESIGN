@@ -41,6 +41,12 @@ class ReddesignHelperFile
 			return false;
 		}
 
+		// Check folders
+		if (!JFolder::exists(FOFTemplateUtils::parsePath('media://com_reddesign/assets/designtypes/thumbnails/')))
+		{
+			JFolder::create(FOFTemplateUtils::parsePath('media://com_reddesign/assets/designtypes/thumbnails/'));
+		}
+
 		// Get a (very!) randomised name
 		if (version_compare(JVERSION, '3.0', 'ge'))
 		{
@@ -72,7 +78,7 @@ class ReddesignHelperFile
 		// If we have a name clash, abort the upload
 		if (JFile::exists($filepath))
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_ERROR_BACKGROUND_FILENAMEALREADYEXIST'), 'error');
+			$app->enqueueMessage(JText::sprintf('COM_REDDESIGN_FILE_HELPER_FILENAMEALREADYEXIST', $filepath), 'error');
 
 			return false;
 		}
@@ -80,7 +86,7 @@ class ReddesignHelperFile
 		// Do the upload
 		if (!JFile::upload($file['tmp_name'], $filepath))
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_ERROR_BACKGROUND_CANTJFILEUPLOAD'), 'error');
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_FILE_HELPER_CANTJFILEUPLOAD'), 'error');
 
 			return false;
 		}
@@ -127,7 +133,7 @@ class ReddesignHelperFile
 
 		if (empty($file['name']))
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_UPLOAD_INPUT'), 'error');
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_FILE_HELPER_FILE_NAME_EMPTY'), 'error');
 
 			return false;
 		}
@@ -136,7 +142,7 @@ class ReddesignHelperFile
 
 		if ($file['name'] !== JFile::makesafe($file['name']))
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_FILE_NAME'), 'error');
+			$app->enqueueMessage(JText::sprintf('COM_REDDESIGN_FILE_HELPER_ERROR_FILE_NAME', $file['name']), 'error');
 
 			return false;
 		}
@@ -149,7 +155,7 @@ class ReddesignHelperFile
 
 			if (!in_array($format, $allowable))
 			{
-				$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_WRONG_FILE_EXTENSION'), 'error');
+				$app->enqueueMessage(JText::sprintf('COM_REDDESIGN_FILE_HELPER_ERROR_WRONG_FILE_EXTENSION', $format, $okFileExtensions), 'error');
 
 				return false;
 			}
@@ -160,7 +166,7 @@ class ReddesignHelperFile
 
 		if ($maxSize > 0 && (int) $file['size'] > $maxSize)
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_FILE_TOOLARGE'), 'error');
+			$app->enqueueMessage(JText::sprintf('COM_REDDESIGN_FILE_HELPER_ERROR_FILE_TOOLARGE', $maxFileSize), 'error');
 
 			return false;
 		}
@@ -172,7 +178,7 @@ class ReddesignHelperFile
 
 			if (!in_array($file['type'], $validFileTypes))
 			{
-				$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_INVALID_MIME'));
+				$app->enqueueMessage(JText::sprintf('COM_REDDESIGN_FILE_HELPER_ERROR_INVALID_MIME', $file['type'], $okMIMETypes));
 
 				return false;
 			}
