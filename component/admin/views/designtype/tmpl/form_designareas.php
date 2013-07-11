@@ -340,12 +340,18 @@ else
 						'</a>' +
 					'</td>' +
 					'<td>' +
-						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong>' + (width * parseFloat(pxToUnit)).toFixed(0) + ', ' +
-						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>' + (height * parseFloat(pxToUnit)).toFixed(0) + ', ' +
-						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' + (x1_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
-						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>' + (y1_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
-						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>' + (x2_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
-						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>' + (y2_pos * parseFloat(pxToUnit)).toFixed(0) + ' ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong> ' +
+						(width * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong> ' +
+						(height * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' +
+						(x1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong> ' +
+						(y1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong> ' +
+						(x2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong> ' +
+						(y2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>' +
 					'</td>' +
 					'<td>' +
 						'<button type="button" class="btn btn-primary" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
@@ -529,12 +535,18 @@ else
 					'</a>' +
 				'</td>' +
 				'<td>' +
-					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong>' + (width * parseFloat(pxToUnit)).toFixed(0) + ', ' +
-					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>' + (height * parseFloat(pxToUnit)).toFixed(0) + ', ' +
-					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' + (x1_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
-					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>' + (y1_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
-					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>' + (x2_pos * parseFloat(pxToUnit)).toFixed(0) + ', ' +
-					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>' + (y2_pos * parseFloat(pxToUnit)).toFixed(0) + ' ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong> ' +
+					(width * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong> ' +
+					(height * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' +
+					(x1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong> ' +
+					(y1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong> ' +
+					(x2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong> ' +
+					(y2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?> ' +
 				'</td>' +
 				'<td>' +
 					'<button type="button" class="btn btn-primary" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
@@ -997,17 +1009,17 @@ else
 						</td>
 						<td>
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong>
-							<?php echo round($area->width * $pxToUnit); ?>,
+							<?php echo round($area->width * $pxToUnit) . $unit; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>
-							<?php echo round($area->height * $pxToUnit); ?>,
+							<?php echo round($area->height * $pxToUnit) . $unit; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong>
-							<?php echo round($area->x1_pos * $pxToUnit); ?>,
+							<?php echo round($area->x1_pos * $pxToUnit) . $unit; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>
-							<?php echo round($area->y1_pos * $pxToUnit); ?>,
+							<?php echo round($area->y1_pos * $pxToUnit) . $unit; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>
-							<?php echo round($area->x2_pos * $pxToUnit); ?>,
+							<?php echo round($area->x2_pos * $pxToUnit) . $unit; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>
-							<?php echo round($area->y2_pos * $pxToUnit); ?>
+							<?php echo round($area->y2_pos * $pxToUnit) . $unit; ?>
 						</td>
 						<td>
 							<button type="button"

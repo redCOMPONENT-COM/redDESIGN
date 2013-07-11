@@ -33,8 +33,7 @@ JHTML::_('behavior.framework');
 				</label>
 
 				<div class="controls">
-					<img style="border: 1px black solid;"
-					     src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/fonts/') . $this->item->font_thumb; ?>">
+					<img style="border: 1px black solid;" src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/fonts/') . $this->item->font_thumb; ?>">
 				</div>
 			</div>
 		<?php else : ?>
@@ -44,8 +43,7 @@ JHTML::_('behavior.framework');
 				</label>
 
 				<div class="controls">
-					<input type="file" name="font_file" id="font_file" class="inputbox"
-					       value="<?php echo $this->item->font_file; ?>" required="required">
+					<input type="file" name="font_file" id="font_file" class="inputbox" value="<?php echo $this->item->font_file; ?>" required="required">
 				</div>
 			</div>
 		<?php endif; ?>
@@ -56,9 +54,17 @@ JHTML::_('behavior.framework');
 			</label>
 
 			<div class="controls">
-				<input type="text" value="<?php echo $this->item->title; ?>" maxlength="255" size="32" id="title"
-				       name="title">
+				<input type="text" value="<?php echo $this->item->title; ?>" maxlength="255" size="32" id="title" name="title">
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_TITLE_DESC'); ?></span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="enabled" class="control-label">
+				<?php echo JText::_('JPUBLISHED'); ?>
+			</label>
+			<div class="controls">
+				<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
 			</div>
 		</div>
 
@@ -68,8 +74,7 @@ JHTML::_('behavior.framework');
 			</label>
 
 			<div class="controls">
-				<input type="text" value="<?php echo $this->item->default_width; ?>" maxlength="10" size="32"
-				       id="default_width" name="default_width" required="required">
+				<input type="text" value="<?php echo $this->item->default_width; ?>" maxlength="10" size="32" id="default_width" name="default_width" required="required">
 			</div>
 		</div>
 
@@ -79,8 +84,7 @@ JHTML::_('behavior.framework');
 			</label>
 
 			<div class="controls">
-				<input type="text" value="<?php echo $this->item->default_height; ?>" maxlength="10" size="32"
-				       id="default_height" name="default_height" required="required">
+				<input type="text" value="<?php echo $this->item->default_height; ?>" maxlength="10" size="32" id="default_height" name="default_height" required="required">
 			</div>
 		</div>
 
@@ -90,8 +94,7 @@ JHTML::_('behavior.framework');
 			</label>
 
 			<div class="controls">
-				<input type="text" value="<?php echo $this->item->default_caps_height; ?>" maxlength="10" size="32"
-				       id="default_caps_height" name="default_caps_height" required="required">
+				<input type="text" value="<?php echo $this->item->default_caps_height; ?>" maxlength="10" size="32" id="default_caps_height" name="default_caps_height" required="required">
 			</div>
 		</div>
 
@@ -101,20 +104,7 @@ JHTML::_('behavior.framework');
 			</label>
 
 			<div class="controls">
-				<input type="text" value="<?php echo $this->item->default_baseline_height; ?>" maxlength="10" size="32"
-				       id="default_baseline_height" name="default_baseline_height" required="required">
-			</div>
-		</div>
-
-		<div class="control-group">
-			<label class="control-label todo-label" for="enabled">
-				<?php echo JText::_('JSTATUS'); ?>
-			</label>
-
-			<div class="controls">
-				<?php
-				echo JHTML::_('select.booleanlist', 'enabled', 'class="inputbox"', $this->item->enabled, JText::_('JPUBLISHED'), JText::_('JUNPUBLISHED'));
-				?>
+				<input type="text" value="<?php echo $this->item->default_baseline_height; ?>" maxlength="10" size="32" id="default_baseline_height" name="default_baseline_height" required="required">
 			</div>
 		</div>
 	</div>

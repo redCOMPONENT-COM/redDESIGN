@@ -15,14 +15,14 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 <form id="background" name="background" method="post" action="index.php" enctype="multipart/form-data">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 	<input type="hidden" name="option" value="com_reddesign">
-	<input type="hidden" name="view" value="background">
+	<input type="hidden" name="view" value="part">
 	<input type="hidden" name="task" value="save">
 	<input type="hidden" name="returnurl" value="<?php echo base64_encode($returnUrl); ?>" />
 	<input type="hidden" name="reddesign_designtype_id" id="background_reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>" />
 	<input type="hidden" name="reddesign_part_id" id="reddesign_part_id" value="" />
 
-	<div id="backgrounds-configuration">
-		<h3 id="backgroundTitle"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_TITLE'); ?></h3>
+	<div id="parts-configuration">
+		<h3 id="partTitle"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_TITLE'); ?></h3>
 
 		<div class="control-group">
 			<label class="control-label" for="part_title">
@@ -34,19 +34,27 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label " for="image">
-				<?php echo JText::_('COM_REDDESIGN_COMMON_IMAGE'); ?>
+			<label for="enabled" class="control-label">
+				<?php echo JText::_('JPUBLISHED'); ?>
 			</label>
 			<div class="controls">
-				<input type="file" name="image" id="image" value="">
+				<?php echo JHTML::_('select.booleanlist', 'enabled', null, 1); ?>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label " for="thumbnail">
+			<label class="control-label " for="partImage">
+				<?php echo JText::_('COM_REDDESIGN_COMMON_IMAGE'); ?>
+			</label>
+			<div class="controls">
+				<input type="file" name="partImage" id="partImage" value="">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label " for="partThumbnail">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
 			</label>
 			<div class="controls">
-				<input type="file" name="thumbnail" id="thumbnail" value="">
+				<input type="file" name="partThumbnail" id="partThumbnail" value="">
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?></span>
 			</div>
 		</div>
