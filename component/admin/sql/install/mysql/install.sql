@@ -169,6 +169,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_parts` (
   `price`                   FLOAT        NOT NULL,
   `required`                TINYINT(3)   NOT NULL DEFAULT '0',
   `single_select`           TINYINT(3)   NOT NULL DEFAULT '0',
+  `accessory`               TINYINT(3)   NOT NULL DEFAULT '0',
   `reddesign_designtype_id` INT(11)      NOT NULL,
   PRIMARY KEY (`reddesign_part_id`)
 )

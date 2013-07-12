@@ -16,22 +16,19 @@ defined('_JEXEC') or die();
 			'<div id="row_' + char_settings.reddesign_char_id + '" class="row">' +
 				'<div class="control-group character-group">' +
 					'<label for="font_char_' + char_settings.reddesign_char_id + '"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER') ?></label>' +
-					'<input class="input-mini" type="text" value="' + char_settings.font_char +
-					'" maxlength="1" id="font_char_' + char_settings.reddesign_char_id + '" name="font_char_' + char_settings.reddesign_char_id + '">' +
+					'<input class="input-mini" type="text" value="' + char_settings.font_char + '" maxlength="1" id="font_char_' + char_settings.reddesign_char_id + '" name="font_char_' + char_settings.reddesign_char_id + '">' +
 				'</div>' +
 				'<div class="control-group character-group">' +
 					'<label for="width_' + char_settings.reddesign_char_id + '"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_WIDTH') ?></label>' +
-					'<input class="input-small" type="text" value="' + char_settings.width +
-					'" maxlength="15" id="width_' + char_settings.reddesign_char_id + '" name="width_' + char_settings.reddesign_char_id + '">' +
+					'<input class="input-small" type="text" value="' + char_settings.width + '" maxlength="15" id="width_' + char_settings.reddesign_char_id + '" name="width_' + char_settings.reddesign_char_id + '">' +
 				'</div>' +
 				'<div class="control-group character-group">' +
 					'<label for="height_' + char_settings.reddesign_char_id + '"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_HEIGHT') ?></label>' +
-					'<input class="input-small" type="text" value="' + char_settings.height +
-					'" maxlength="15" id="height_' + char_settings.reddesign_char_id + '" name="height_' + char_settings.reddesign_char_id + '">' +
+					'<input class="input-small" type="text" value="' + char_settings.height + '" maxlength="15" id="height_' + char_settings.reddesign_char_id + '" name="height_' + char_settings.reddesign_char_id + '">' +
 				'</div>' +
 				'<div class="control-group character-group">' +
-					'<label for="typography_' + char_settings.reddesign_char_id + '"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY') ?></label>' +
-					'<select id="typography_' + char_settings.reddesign_char_id + '" name="typography_' + char_settings.reddesign_char_id + '">' +
+					'<label for="typography-' + char_settings.reddesign_char_id + '"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY') ?></label>' +
+					'<select id="typography-' + char_settings.reddesign_char_id + '" name="typography_' + char_settings.reddesign_char_id + '">' +
 						'<option value="0"><?php echo JText::_('COM_REDDESIGN_SELECT_TYPOGRAPHY'); ?></option>' +
 						'<option value="1"><?php echo JText::_('COM_REDDESIGN_FONT_X_HEIGHT'); ?></option>' +
 						'<option value="2"><?php echo JText::_('COM_REDDESIGN_FONT_CAP_HEIGHT'); ?></option>' +
@@ -41,28 +38,19 @@ defined('_JEXEC') or die();
 				'</div>' +
 				'<div class="control-group character-group">' +
 					'<label for="typography_height_' + char_settings.reddesign_char_id + '"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY_HEIGHT') ?></label>' +
-					'<input class="input-small" type="text" value="' + char_settings.typography_height + '" maxlength="15"' +
-					'id="typography_height_' + char_settings.reddesign_char_id + '" name="typography_height_' + char_settings.reddesign_char_id + '">' +
+					'<input class="input-small" type="text" value="' + char_settings.typography_height + '" maxlength="15"' + 'id="typography_height_' + char_settings.reddesign_char_id + '" name="typography_height_' + char_settings.reddesign_char_id + '">' +
 				'</div>' +
 				'<div class="control-group character-group">' +
 					'<label for="add_button_' + char_settings.reddesign_char_id +'">&nbsp;</label>' +
-					'<a id="add_button_' + char_settings.reddesign_char_id + '" rel="" ' +
-						'class="btn btn-success"' +
-						'onclick="saveChar(' + char_settings.reddesign_char_id + ');"' +
-						'title="<?php echo JText::_('COM_REDDESIGN_FONT_SAVE_CHAR'); ?>">' +
-						'<i class="icon-plus icon-white"></i>' +
+					'<a id="add_button_' + char_settings.reddesign_char_id + '" rel="" ' + 'class="btn btn-success btn-mini"' + 'onclick="saveChar(' + char_settings.reddesign_char_id + ');"' + 'title="<?php echo JText::_('COM_REDDESIGN_FONT_SAVE_CHAR'); ?>">' +
 						'<?php echo JText::_('COM_REDDESIGN_FONT_SAVE_CHAR'); ?>' +
 					'</a>' +
 				'</div>' +
 				'<div class="control-group character-group">' +
-				'<label for="remove_button_' + char_settings.reddesign_char_id +'">&nbsp;</label>' +
-				'<a id="remove_button_' + char_settings.reddesign_char_id + '" rel="" ' +
-				' class="btn btn-danger"' +
-				'onclick="removeChar(' + char_settings.reddesign_char_id + ');"' +
-				'title="<?php echo JText::_('COM_REDDESIGN_FONT_REMOVE_CHAR'); ?>">' +
-				'<i class="icon-minus icon-white"></i>' +
-				'<?php echo JText::_('COM_REDDESIGN_FONT_REMOVE_CHAR'); ?>' +
-				'</a>' +
+					'<label for="remove_button_' + char_settings.reddesign_char_id +'">&nbsp;</label>' +
+					'<a id="remove_button_' + char_settings.reddesign_char_id + '" rel="" ' + ' class="btn btn-danger btn-mini"' + 'onclick="removeChar(' + char_settings.reddesign_char_id + ');"' + 'title="<?php echo JText::_('COM_REDDESIGN_FONT_REMOVE_CHAR'); ?>">' +
+					'<?php echo JText::_('COM_REDDESIGN_FONT_REMOVE_CHAR'); ?>' +
+					'</a>' +
 				'</div>' +
 			'</div>'
 		);
@@ -182,28 +170,19 @@ defined('_JEXEC') or die();
 					<label for="font_char_<?php echo $char_settings->reddesign_char_id; ?>">
 						<?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER') ?>
 					</label>
-					<input class="input-mini" type="text" maxlength="1"
-						   value="<?php echo $char_settings->font_char; ?>"
-						   id="font_char_<?php echo $char_settings->reddesign_char_id; ?>"
-						   name="font_char_<?php echo $char_settings->reddesign_char_id; ?>">
+					<input class="input-mini" type="text" maxlength="1" value="<?php echo $char_settings->font_char; ?>" id="font_char_<?php echo $char_settings->reddesign_char_id; ?>" name="font_char_<?php echo $char_settings->reddesign_char_id; ?>">
 				</div>
 				<div class="control-group character-group"><label for="width">
 						<label for="width_<?php echo $char_settings->reddesign_char_id; ?>">
 							<?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_WIDTH') ?>
 						</label>
-						<input class="input-small" type="text" maxlength="15"
-							   value="<?php echo $char_settings->width; ?>"
-							   id="width_<?php echo $char_settings->reddesign_char_id; ?>"
-							   name="width_<?php echo $char_settings->reddesign_char_id; ?>">
+						<input class="input-small" type="text" maxlength="15" value="<?php echo $char_settings->width; ?>" id="width_<?php echo $char_settings->reddesign_char_id; ?>" name="width_<?php echo $char_settings->reddesign_char_id; ?>">
 				</div>
 				<div class="control-group character-group"><label for="height">
 						<label for="height_<?php echo $char_settings->reddesign_char_id; ?>">
 							<?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_HEIGHT') ?>
 						</label>
-						<input class="input-small" type="text" maxlength="15"
-							   value="<?php echo $char_settings->height; ?>"
-							   id="height_<?php echo $char_settings->reddesign_char_id; ?>"
-							   name="height_<?php echo $char_settings->reddesign_char_id; ?>">
+						<input class="input-small" type="text" maxlength="15" value="<?php echo $char_settings->height; ?>" id="height_<?php echo $char_settings->reddesign_char_id; ?>" name="height_<?php echo $char_settings->reddesign_char_id; ?>">
 				</div>
 				<div class="control-group character-group">
 					<label for="typography_<?php echo $char_settings->reddesign_char_id; ?>"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY') ?></label>
@@ -223,28 +202,17 @@ defined('_JEXEC') or die();
 					<label for="typography_height_<?php echo $char_settings->reddesign_char_id; ?>">
 						<?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY_HEIGHT') ?>
 					</label>
-					<input class="input-small" type="text" maxlength="15"
-						   value="<?php echo $char_settings->typography_height; ?>"
-						   id="typography_height_<?php echo $char_settings->reddesign_char_id; ?>"
-						   name="typography_height_<?php echo $char_settings->reddesign_char_id; ?>">
+					<input class="input-small" type="text" maxlength="15" value="<?php echo $char_settings->typography_height; ?>" id="typography_height_<?php echo $char_settings->reddesign_char_id; ?>" name="typography_height_<?php echo $char_settings->reddesign_char_id; ?>">
 				</div>
 				<div class="control-group character-group">
 					<label for="add_button_<?php echo $char_settings->reddesign_char_id; ?>">&nbsp;</label>
-					<a id="add_button_<?php echo $char_settings->reddesign_char_id; ?>" rel=""
-					   class="btn btn-success"
-					   onclick="saveChar(<?php echo $char_settings->reddesign_char_id; ?>);"
-					   title="<?php echo JText::_('COM_REDDESIGN_FONT_SAVE_CHAR'); ?>">
-						<i class="icon-plus icon-white"></i>
+					<a id="add_button_<?php echo $char_settings->reddesign_char_id; ?>" rel="" class="btn btn-success btn-mini" onclick="saveChar(<?php echo $char_settings->reddesign_char_id; ?>);" title="<?php echo JText::_('COM_REDDESIGN_FONT_SAVE_CHAR'); ?>">
 						<?php echo JText::_('COM_REDDESIGN_FONT_SAVE_CHAR'); ?>
 					</a>
 				</div>
 				<div class="control-group character-group">
 					<label for="remove_button_<?php echo $char_settings->reddesign_char_id; ?>">&nbsp;</label>
-					<a id="remove_button_<?php echo $char_settings->reddesign_char_id; ?>" rel=""
-					   class="btn btn-danger"
-					   onclick="removeChar(<?php echo $char_settings->reddesign_char_id; ?>);"
-					   title="<?php echo JText::_('COM_REDDESIGN_FONT_REMOVE_CHAR'); ?>">
-						<i class="icon-minus icon-white"></i>
+					<a id="remove_button_<?php echo $char_settings->reddesign_char_id; ?>" rel="" class="btn btn-danger btn-mini" onclick="removeChar(<?php echo $char_settings->reddesign_char_id; ?>);" title="<?php echo JText::_('COM_REDDESIGN_FONT_REMOVE_CHAR'); ?>">
 						<?php echo JText::_('COM_REDDESIGN_FONT_REMOVE_CHAR'); ?>
 					</a>
 				</div>
@@ -276,18 +244,12 @@ defined('_JEXEC') or die();
 				</select>
 			</div>
 			<div class="control-group character-group">
-				<label
-					for="typography_height"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY_HEIGHT') ?></label>
-				<input class="input-small" type="text" value="" maxlength="15" id="typography_height"
-					   name="typography_height">
+				<label for="typography_height"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY_HEIGHT') ?></label>
+				<input class="input-small" type="text" value="" maxlength="15" id="typography_height" name="typography_height">
 			</div>
 			<div class="control-group character-group">
 				<label for="add_button">&nbsp;</label>
-				<a id="add_button" rel=""
-				   class="btn btn-success"
-				   onclick="saveChar(0);"
-				   title="<?php echo JText::_('COM_REDDESIGN_FONT_SAVE_CHAR'); ?>">
-					<i class="icon-plus icon-white"></i>
+				<a id="add_button" rel="" class="btn btn-success btn-mini" onclick="saveChar(0);" title="<?php echo JText::_('COM_REDDESIGN_FONT_SAVE_CHAR'); ?>">
 					<?php echo JText::_('COM_REDDESIGN_FONT_ADD_CHAR'); ?>
 				</a>
 			</div>

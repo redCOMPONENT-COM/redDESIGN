@@ -51,6 +51,9 @@ JHTML::_('behavior.modal');
 					<?php echo JText::_('JPUBLISHED'); ?>
 				</th>
 				<th>
+					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_IS_ACCESSORY'); ?>
+				</th>
+				<th>
 					<?php echo JText::_('COM_REDDESIGN_COMMON_REQUIRED'); ?>
 				</th>
 				<th>
@@ -78,7 +81,14 @@ JHTML::_('behavior.modal');
 							<?php echo $part->reddesign_part_id; ?>
 						</td>
 						<td>
-							<a href="#" class="editPart" onclick="selectPartForEdit()">
+							<a href="#" class="editPart" onclick="selectPartForEdit(<?php echo $part->reddesign_part_id; ?>,
+																					'<?php echo $part->title; ?>',
+																					<?php echo $part->enabled; ?>,
+																					<?php echo $part->price; ?>,
+																					<?php echo $part->stock; ?>,
+																					<?php echo $part->required; ?>,
+																					<?php echo $part->single_select; ?>,
+																					'<?php echo addslashes($this->escape($part->description)); ?>');">
 								<strong><?php echo $part->title; ?></strong>
 							</a>
 						</td>
@@ -102,14 +112,16 @@ JHTML::_('behavior.modal');
 							<?php echo JHTML::_('grid.published', $part->enabled, 'enabled' . $i); ?>
 						</td>
 						<td>
+							<?php echo JHTML::_('grid.published', $part->accessory, 'accessory' . $i); ?>
+						</td>
+						<td>
 							<?php echo JHTML::_('grid.published', $part->required, 'required' . $i); ?>
 						</td>
 						<td>
 							<?php echo JHTML::_('grid.published', $part->single_select, 'single_select' . $i); ?>
 						</td>
 						<td>
-							<button type="button" class="btn btn-danger delete btn-mini" onclick="removePart('<?php echo $part->reddesign_part_id; ?>')" >
-								<i class="icon-minus icon-white"></i>
+							<button type="button" class="btn btn-danger btn-mini" onclick="removePart('<?php echo $part->reddesign_part_id; ?>')" >
 								<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>
 							</button>
 						</td>
@@ -119,7 +131,7 @@ JHTML::_('behavior.modal');
 				<?php endforeach ?>
 			<?php else : ?>
 				<tr>
-					<td colspan="10">
+					<td colspan="11">
 						<?php echo JText::_('COM_REDDESIGN_COMMON_NORECORDS') ?>
 					</td>
 				</tr>
@@ -144,45 +156,34 @@ JHTML::_('behavior.modal');
 	function removePart(partid) {
 		akeeba.jQuery('#part_task').val('remove');
 		<?php $returnUrlRemovePart = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->reddesign_designtype_id . '&tab=parts'; ?>
-		akeeba.jQuery('#parts_form').
+		akeeba.jQuery('#partsForm').
 			append(
 				akeeba.jQuery('<input/>')
 					.attr('type', 'hidden')
 					.attr('name', 'returnurl')
 					.val('<?php echo base64_encode($returnUrlRemovePart) ?>')
 			);
-		akeeba.jQuery('#parts_reddesign_background_id').val(partid);
-		akeeba.jQuery('#parts_form').submit();
+		akeeba.jQuery('#parts_reddesign_part_id').val(partid);
+		akeeba.jQuery('#partsForm').submit();
 	}
 
 	/**
 	 * Selects background for edit and populates field data accordingly
 	 */
-	function selectPartForEdit(reddesign_background_id, title, isPDFbgimage, enabled) {
-		akeeba.jQuery("#reddesign_background_id").val(reddesign_background_id);
-		akeeba.jQuery("#bg_title").val(title);
-		akeeba.jQuery("#bg_isPDFbgimage").val(isPDFbgimage);
-		akeeba.jQuery("#bg_enabled").val(enabled);
-		showBackgroundForm()
+	function selectPartForEdit(reddesign_part_id, title, enabled, price, stock, required, single_select, description) {
+		akeeba.jQuery("#partTitle").html("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_EDIT'); ?>");
+		akeeba.jQuery("#reddesign_part_id").val(reddesign_part_id);
+		akeeba.jQuery("#part_title").val(title);
+		akeeba.jQuery("#enabled").val(enabled);
+		akeeba.jQuery("#partPrice").val(price);
+		akeeba.jQuery("#partStock").val(stock);
+		akeeba.jQuery("#required").val(required);
+		akeeba.jQuery("#single_select").val(single_select);
+		tinyMCE.activeEditor.setContent(description);
+		showPartForm();
 		akeeba.jQuery("body").animate({
-			'scrollTop':   akeeba.jQuery("#backgroundForm").offset().top
+			'scrollTop':   akeeba.jQuery("#partForm").offset().top
 		}, 1000);
-	}
-
-	/**
-	 * Saves background form activation
-	 */
-	function modifyPart(partid) {
-		akeeba.jQuery('#backgrounds_task').val('save');
-		akeeba.jQuery('#backgrounds_form').
-			append(
-				akeeba.jQuery('<input/>')
-					.attr('type', 'hidden')
-					.attr('name', 'returnurl')
-					.val('<?php echo base64_encode(JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->reddesign_designtype_id . '&tab=backgrounds'); ?>')
-			);
-		akeeba.jQuery('#backgrounds_reddesign_background_id').val(partid);
-		akeeba.jQuery('#backgrounds_form').submit();
 	}
 
 	/**

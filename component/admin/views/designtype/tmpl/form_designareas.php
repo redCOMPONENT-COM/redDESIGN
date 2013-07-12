@@ -354,13 +354,12 @@ else
 						(y2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>' +
 					'</td>' +
 					'<td>' +
-						'<button type="button" class="btn btn-primary" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
+						'<button type="button" class="btn btn-primary btn-mini" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
 							'<span><?php echo JText::_('COM_REDDESIGN_COMMON_SETTINGS'); ?></span>' +
 						'</button>' +
 					'</td>' +
 					'<td>' +
-						'<button type="button" class="btn btn-danger delete" onclick="removeArea(\'' + reddesign_area_id + '\');">' +
-							'<i class="icon-minus icon-white"></i>' +
+						'<button type="button" class="btn btn-danger btn-mini" onclick="removeArea(\'' + reddesign_area_id + '\');">' +
 							'<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>' +
 						'</button>' +
 					'</td>' +
@@ -549,13 +548,12 @@ else
 					(y2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?> ' +
 				'</td>' +
 				'<td>' +
-					'<button type="button" class="btn btn-primary" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
+					'<button type="button" class="btn btn-primary btn-mini" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
 						'<span><?php echo JText::_('COM_REDDESIGN_COMMON_SETTINGS'); ?></span>' +
 					'</button>' +
 				'</td>' +
 				'<td>' +
-					'<button type="button" class="btn btn-danger delete" onclick="removeArea(\'' + reddesign_area_id + '\');">' +
-						'<i class="icon-minus icon-white"></i>' +
+					'<button type="button" class="btn btn-danger btn-mini" onclick="removeArea(\'' + reddesign_area_id + '\');">' +
 						'<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>' +
 					'</button>' +
 				'</td>'
@@ -1023,14 +1021,13 @@ else
 						</td>
 						<td>
 							<button type="button"
-									class="btn btn-primary"
+									class="btn btn-primary btn-mini"
 									onclick="showAreaSettings(<?php echo $area->reddesign_area_id; ?>);">
 								<span><?php echo JText::_('COM_REDDESIGN_COMMON_SETTINGS'); ?></span>
 							</button>
 						</td>
 						<td>
-							<button type="button" class="btn btn-danger delete" onclick="removeArea(<?php echo $area->reddesign_area_id; ?>);">
-								<i class="icon-minus icon-white"></i>
+							<button type="button" class="btn btn-danger btn-mini" onclick="removeArea(<?php echo $area->reddesign_area_id; ?>);">
 								<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>
 							</button>
 						</td>

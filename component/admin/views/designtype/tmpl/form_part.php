@@ -18,11 +18,11 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 	<input type="hidden" name="view" value="part">
 	<input type="hidden" name="task" value="save">
 	<input type="hidden" name="returnurl" value="<?php echo base64_encode($returnUrl); ?>" />
-	<input type="hidden" name="reddesign_designtype_id" id="background_reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>" />
+	<input type="hidden" name="reddesign_designtype_id" id="part_reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>" />
 	<input type="hidden" name="reddesign_part_id" id="reddesign_part_id" value="" />
 
 	<div id="parts-configuration">
-		<h3 id="partTitle"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_TITLE'); ?></h3>
+		<h3 id="partTitle"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_ADD_NEW'); ?></h3>
 		<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_DESC'); ?></span>
 		<div class="control-group">
 			<label class="control-label" for="part_title">
@@ -30,7 +30,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 			</label>
 
 			<div class="controls">
-				<input type="text" name="title" id="part_title" value="">
+				<input type="text" name="title" id="part_title" required="required" value="">
 			</div>
 		</div>
 		<div class="control-group">
@@ -39,6 +39,15 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 			</label>
 			<div class="controls">
 				<?php echo JHTML::_('select.booleanlist', 'enabled', null, 1); ?>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="accessory">
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_IS_ACCESSORY'); ?>
+			</label>
+			<div class="controls">
+				<?php echo JHTML::_('select.booleanlist', 'accessory', null, 1); ?>
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_IS_ACCESSORY_DESC'); ?></span>
 			</div>
 		</div>
 		<div class="control-group">
@@ -121,13 +130,15 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 				}
 			);
 			akeeba.jQuery(document).on('click', '#cancelPartBtn', function () {
-					akeeba.jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_TITLE'); ?>");
+					akeeba.jQuery("#partTitle").html("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_ADD_NEW'); ?>");
 					akeeba.jQuery("#reddesign_part_id").val('');
 					akeeba.jQuery("#part_title").val('');
-					akeeba.jQuery("#image").val('');
-					akeeba.jQuery("#thumbnail").val('');
+					akeeba.jQuery("#enabled").val(1);
 					akeeba.jQuery("#partPrice").val('');
 					akeeba.jQuery("#partStock").val('');
+					akeeba.jQuery("#required").val(1);
+					akeeba.jQuery("#single_select").val(1);
+					tinyMCE.activeEditor.setContent('');
 
 					akeeba.jQuery('#partForm').fadeOut("fast");
 					akeeba.jQuery('#addPartBtn').parent().fadeIn("fast");
