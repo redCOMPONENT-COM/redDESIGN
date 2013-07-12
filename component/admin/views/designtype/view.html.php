@@ -107,7 +107,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			$this->parts = $partsModel->getItemList();
 
 			$configParams = JComponentHelper::getParams('com_reddesign');
-			$this->unit = $configParams->get('unit', '1');
+			$this->unit = $configParams->get('unit', 'px');
 
 			if ($this->unit == 'cm')
 			{
