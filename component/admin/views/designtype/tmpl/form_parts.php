@@ -51,6 +51,9 @@ JHTML::_('behavior.modal');
 					<?php echo JText::_('JPUBLISHED'); ?>
 				</th>
 				<th>
+					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_IS_ACCESSORY'); ?>
+				</th>
+				<th>
 					<?php echo JText::_('COM_REDDESIGN_COMMON_REQUIRED'); ?>
 				</th>
 				<th>
@@ -109,6 +112,9 @@ JHTML::_('behavior.modal');
 							<?php echo JHTML::_('grid.published', $part->enabled, 'enabled' . $i); ?>
 						</td>
 						<td>
+							<?php echo JHTML::_('grid.published', $part->accessory, 'accessory' . $i); ?>
+						</td>
+						<td>
 							<?php echo JHTML::_('grid.published', $part->required, 'required' . $i); ?>
 						</td>
 						<td>
@@ -125,7 +131,7 @@ JHTML::_('behavior.modal');
 				<?php endforeach ?>
 			<?php else : ?>
 				<tr>
-					<td colspan="10">
+					<td colspan="11">
 						<?php echo JText::_('COM_REDDESIGN_COMMON_NORECORDS') ?>
 					</td>
 				</tr>
@@ -165,6 +171,7 @@ JHTML::_('behavior.modal');
 	 * Selects background for edit and populates field data accordingly
 	 */
 	function selectPartForEdit(reddesign_part_id, title, enabled, price, stock, required, single_select, description) {
+		akeeba.jQuery("#partTitle").html("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_EDIT'); ?>");
 		akeeba.jQuery("#reddesign_part_id").val(reddesign_part_id);
 		akeeba.jQuery("#part_title").val(title);
 		akeeba.jQuery("#enabled").val(enabled);
