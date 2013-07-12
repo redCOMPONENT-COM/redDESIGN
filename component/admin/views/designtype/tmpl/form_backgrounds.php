@@ -90,8 +90,7 @@ JHTML::_('behavior.modal');
 							<?php echo JHTML::_('grid.published', $background, $i); ?>
 						</td>
 						<td>
-							<button type="button" class="btn btn-danger delete btn-mini" onclick="removeBg('<?php echo $background->reddesign_background_id; ?>')" >
-								<i class="icon-minus icon-white"></i>
+							<button type="button" class="btn btn-danger btn-mini" onclick="removeBg('<?php echo $background->reddesign_background_id; ?>')" >
 								<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>
 							</button>
 						</td>

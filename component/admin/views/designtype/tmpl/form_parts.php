@@ -108,8 +108,7 @@ JHTML::_('behavior.modal');
 							<?php echo JHTML::_('grid.published', $part->single_select, 'single_select' . $i); ?>
 						</td>
 						<td>
-							<button type="button" class="btn btn-danger delete btn-mini" onclick="removePart('<?php echo $part->reddesign_part_id; ?>')" >
-								<i class="icon-minus icon-white"></i>
+							<button type="button" class="btn btn-danger btn-mini" onclick="removePart('<?php echo $part->reddesign_part_id; ?>')" >
 								<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>
 							</button>
 						</td>
@@ -144,7 +143,7 @@ JHTML::_('behavior.modal');
 	function removePart(partid) {
 		akeeba.jQuery('#part_task').val('remove');
 		<?php $returnUrlRemovePart = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->reddesign_designtype_id . '&tab=parts'; ?>
-		akeeba.jQuery('#parts_form').
+		akeeba.jQuery('#partsForm').
 			append(
 				akeeba.jQuery('<input/>')
 					.attr('type', 'hidden')
@@ -152,7 +151,7 @@ JHTML::_('behavior.modal');
 					.val('<?php echo base64_encode($returnUrlRemovePart) ?>')
 			);
 		akeeba.jQuery('#parts_reddesign_background_id').val(partid);
-		akeeba.jQuery('#parts_form').submit();
+		akeeba.jQuery('#partsForm').submit();
 	}
 
 	/**
