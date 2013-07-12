@@ -105,6 +105,31 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			// Get all the parts that belongs to this Design Type item.
 			$partsModel = FOFModel::getTmpInstance('Part', 'ReddesignModel')->reddesign_designtype_id($this->item->reddesign_designtype_id);
 			$this->parts = $partsModel->getItemList();
+
+			$configParams = JComponentHelper::getParams('com_reddesign');
+			$this->unit = $configParams->get('unit', '1');
+
+			if ($this->unit == 'cm')
+			{
+				// (1 px = 0.026458333cm)
+				$this->pxToUnit = '0.026458333';
+
+				// (1 cm = 37.795275591px)
+				$this->unitToPx = '37.795275591';
+			}
+			elseif ($this->unit == 'mm')
+			{
+				// (1 px = 0.264583333mm)
+				$this->pxToUnit = '0.264583333';
+
+				// (1 mm = 3.779527559px)
+				$this->unitToPx = '3.779527559';
+			}
+			else
+			{
+				$this->pxToUnit = '1';
+				$this->unitToPx = '1';
+			}
 		}
 
 		parent::display();

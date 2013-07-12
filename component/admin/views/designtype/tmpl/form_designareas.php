@@ -16,35 +16,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
 FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 ?>
 <?php
-$configParams = JComponentHelper::getParams('com_reddesign');
-$unit = $configParams->get('unit', '1');
 
-if ( $unit == "cm" )
-{
-	$unit = 'cm';
-
-	// (1 px = 0.026458333cm)
-	$pxToUnit = '0.026458333';
-
-	// (1 cm = 37.795275591px)
-	$unitToPx = '37.795275591';
-}
-elseif ( $unit == "mm" )
-{
-	$unit = 'mm';
-
-	// (1 px = 0.264583333mm)
-	$pxToUnit = '0.264583333';
-
-	// (1 mm = 3.779527559px)
-	$unitToPx = '3.779527559';
-}
-else
-{
-	$unit = 'px';
-	$pxToUnit = '1';
-	$unitToPx = '1';
-}
 ?>
 
 <?php if (empty($this->productionBackground)) : ?>
@@ -59,9 +31,9 @@ else
 		/**
 		 * Initiate PX to Unit conversation variables
 		 */
-		var unit = '<?php echo $unit;?>';
-		var pxToUnit = '<?php echo $pxToUnit;?>';
-		var unitToPx = '<?php echo $unitToPx;?>';
+		var unit = '<?php echo $this->unit;?>';
+		var pxToUnit = '<?php echo $this->pxToUnit;?>';
+		var unitToPx = '<?php echo $this->unitToPx;?>';
 
 		/**
 		 * Initiate imgAreaSelect plugin
@@ -341,17 +313,17 @@ else
 					'</td>' +
 					'<td>' +
 						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong> ' +
-						(width * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+						(width * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong> ' +
-						(height * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+						(height * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' +
-						(x1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+						(x1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong> ' +
-						(y1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+						(y1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong> ' +
-						(x2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+						(x2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong> ' +
-						(y2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>' +
+						(y2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>' +
 					'</td>' +
 					'<td>' +
 						'<button type="button" class="btn btn-primary btn-mini" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
@@ -535,17 +507,17 @@ else
 				'</td>' +
 				'<td>' +
 					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong> ' +
-					(width * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+					(width * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong> ' +
-					(height * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+					(height * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' +
-					(x1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+					(x1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong> ' +
-					(y1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+					(y1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong> ' +
-					(x2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?>, ' +
+					(x2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong> ' +
-					(y2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $unit; ?> ' +
+					(y2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?> ' +
 				'</td>' +
 				'<td>' +
 					'<button type="button" class="btn btn-primary btn-mini" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
@@ -847,7 +819,7 @@ else
 														akeeba.jQuery('#areaX2').val(),
 														akeeba.jQuery('#areaY2').val(),
 														akeeba.jQuery('#areaWidth').val(),
-														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $unit ?>
+														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $this->unit ?>
 						</div>
 					</div>
 					<div class="control-group">
@@ -862,7 +834,7 @@ else
 														akeeba.jQuery('#areaX2').val(),
 														akeeba.jQuery('#areaY2').val(),
 														akeeba.jQuery('#areaWidth').val(),
-														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $unit ?>
+														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $this->unit ?>
 						</div>
 					</div>
 					<div class="control-group">
@@ -877,7 +849,7 @@ else
 														akeeba.jQuery('#areaX2').val(),
 														akeeba.jQuery('#areaY2').val(),
 														akeeba.jQuery('#areaWidth').val(),
-														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $unit ?>
+														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $this->unit ?>
 						</div>
 					</div>
 					<div class="control-group">
@@ -892,7 +864,7 @@ else
 														akeeba.jQuery('#areaX2').val(),
 														akeeba.jQuery('#areaY2').val(),
 														akeeba.jQuery('#areaWidth').val(),
-														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $unit ?>
+														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $this->unit ?>
 						</div>
 					</div>
 					<div class="control-group">
@@ -907,7 +879,7 @@ else
 														akeeba.jQuery('#areaX2').val(),
 														akeeba.jQuery('#areaY2').val(),
 														akeeba.jQuery('#areaWidth').val(),
-														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $unit ?>
+														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $this->unit ?>
 						</div>
 					</div>
 					<div class="control-group">
@@ -922,7 +894,7 @@ else
 														akeeba.jQuery('#areaX2').val(),
 														akeeba.jQuery('#areaY2').val(),
 														akeeba.jQuery('#areaWidth').val(),
-														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $unit ?>
+														akeeba.jQuery('#areaHeight').val());">&nbsp;<?php echo $this->unit ?>
 						</div>
 					</div>
 				</div>
@@ -1007,17 +979,17 @@ else
 						</td>
 						<td>
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong>
-							<?php echo round($area->width * $pxToUnit) . $unit; ?>,
+							<?php echo round($area->width * $this->pxToUnit) . $this->unit; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>
-							<?php echo round($area->height * $pxToUnit) . $unit; ?>,
+							<?php echo round($area->height * $this->pxToUnit) . $this->unit; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong>
-							<?php echo round($area->x1_pos * $pxToUnit) . $unit; ?>,
+							<?php echo round($area->x1_pos * $this->pxToUnit) . $this->unit; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>
-							<?php echo round($area->y1_pos * $pxToUnit) . $unit; ?>,
+							<?php echo round($area->y1_pos * $this->pxToUnit) . $this->unit; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>
-							<?php echo round($area->x2_pos * $pxToUnit) . $unit; ?>,
+							<?php echo round($area->x2_pos * $this->pxToUnit) . $this->unit; ?>,
 							<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>
-							<?php echo round($area->y2_pos * $pxToUnit) . $unit; ?>
+							<?php echo round($area->y2_pos * $this->pxToUnit) . $this->unit; ?>
 						</td>
 						<td>
 							<button type="button"
