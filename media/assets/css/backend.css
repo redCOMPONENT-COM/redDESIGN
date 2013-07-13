@@ -10,6 +10,23 @@
 .icon-48-reddesign {
     background-image: url(../images/reddesign_48.png);
 }
+
+.icon-48-designtypes {
+    background-image: url(../images/reddesign_48.png);
+}
+
+.icon-48-designtype {
+    background-image: url(../images/reddesign_48.png);
+}
+
+.icon-48-fonts {
+    background-image: url(../images/reddesign_fonts_48.png);
+}
+
+.icon-48-font {
+    background-image: url(../images/reddesign_fonts_48.png);
+}
+
 .areSettingRowheight {
  	height: 210px !important;
 }

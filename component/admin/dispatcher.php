@@ -18,6 +18,8 @@ defined('_JEXEC') or die;
  */
 class ReddesignDispatcher extends FOFDispatcher
 {
+	public $defaultView = 'designtypes';
+
 	/**
 	 * Function that gets executed before dispatch the component
 	 *
