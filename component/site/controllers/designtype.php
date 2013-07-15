@@ -19,6 +19,11 @@ defined('_JEXEC') or die;
  */
 class ReddesignControllerDesigntype extends FOFController
 {
+	/**
+	 * Class constructor
+	 *
+	 * @param array $config
+	 */
 	public function  __construct($config = array())
 	{
 		parent::__construct($config);
@@ -26,10 +31,27 @@ class ReddesignControllerDesigntype extends FOFController
 		$this->modelName = 'Designtype';
 	}
 
+	/**
+	 * Executes a task
+	 *
+	 * @param   string  $task  The task to be executed
+	 *
+	 * @return bool|null|void
+	 */
 	public function execute($task)
 	{
 		$this->registerDefaultTask('read');
-dump($task, 'task');
+
 		parent::execute($task);
+	}
+
+	/**
+	 * Returns a customized design image url
+	 *
+	 * @return string
+	 */
+	public function ajaxGetDesign()
+	{
+		die(JURI::base() . 'media/com_reddesign/assets/images/custom_background.png');
 	}
 }

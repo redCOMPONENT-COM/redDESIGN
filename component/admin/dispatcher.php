@@ -36,8 +36,8 @@ class ReddesignDispatcher extends FOFDispatcher
 
 			// @TODO: next line instead of 1 I should attach the md5(version of the component)
 			// AkeebaStrapper::$tag = 1;
-			AkeebaStrapper::bootstrap();
 			AkeebaStrapper::jQueryUI();
+			AkeebaStrapper::bootstrap();
 			AkeebaStrapper::addCSSfile('media://com_reddesign/assets/css/backend.css');
 		}
 
