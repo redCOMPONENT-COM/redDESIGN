@@ -94,6 +94,20 @@ class ReddesignModelDesigntype extends FOFModel
 	}
 
 	/**
+	 * Retrieves the parts belonging to a specific design
+	 *
+	 * @return  array  Returns the array of parts that belonging to a design
+	 */
+	public function getParts()
+	{
+		$partsModel = FOFModel::getTmpInstance('Parts', 'ReddesignModel')->reddesign_designtype_id($this->getId());
+
+		$parts = $partsModel->getItemList();
+
+		return $parts;
+	}
+
+	/**
 	 * Retrieves the fonts in the system
 	 *
 	 * @return  array  Returns the array of fonts

@@ -52,6 +52,8 @@ class ReddesignControllerDesigntype extends FOFController
 	 */
 	public function ajaxGetDesign()
 	{
-		die(JURI::base() . 'media/com_reddesign/assets/images/custom_background.png');
+		$response['image']		   = JURI::base() . 'media/com_reddesign/assets/images/custom_background.png';
+
+		echo json_encode($response);
 	}
 }
