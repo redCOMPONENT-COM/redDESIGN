@@ -13,8 +13,5 @@ JLoader::import('joomla.application.component.controller');
 // Include FoF
 JLoader::import('fof.include');
 
-// Register RedDesign prefix.
-JLoader::registerPrefix('RedDesign', __DIR__);
-
 // Dispatch
 FOFDispatcher::getTmpInstance('com_reddesign')->dispatch();

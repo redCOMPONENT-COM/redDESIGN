@@ -18,7 +18,10 @@ defined('_JEXEC') or die;
  */
 class ReddesignDispatcher extends FOFDispatcher
 {
-	public $defaultView = 'background';
+	/**
+	 * @var   string  $defaultView  The default view of the component site
+	 */
+	public $defaultView = 'designtype';
 
 	public function onBeforeDispatch()
 	{
@@ -31,10 +34,9 @@ class ReddesignDispatcher extends FOFDispatcher
 
 			// @TODO: next line instead of 1 I should attach the md5(version of the component)
 			// AkeebaStrapper::$tag = 1;
-			AkeebaStrapper::bootstrap();
 			AkeebaStrapper::jQuery();
 			AkeebaStrapper::jQueryUI();
-			AkeebaStrapper::addCSSfile('media://com_reddesign/assets/css/backend.css');
+			AkeebaStrapper::bootstrap();
 		}
 
 		return true;
