@@ -108,13 +108,13 @@ defined('_JEXEC') or die();
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=designtype&task=ajaxGetDesign&format=raw",
 			data: JSON.stringify({ Design: design }),
 			contentType: "application/json; charset=utf-8",
-			dataType: "json",
 			success: function(data) {
-				akeeba.jQuery('#background').attr('src', data);
+				var json = akeeba.jQuery.parseJSON(data);
+				akeeba.jQuery('#background').attr('src', json.image);
 				console.log(data);
 			},
 			failure: function(errMsg) {
-				alert(errMsg);
+				alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AJAX_ERROR'); ?>');
 			}
 		});
 	}
