@@ -16,7 +16,7 @@ defined('_JEXEC') or die();
            <img id="dsigntype"
 				 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/designtypes/thumbnails/') . $designtype->sample_thumb; ?>" class="img-polaroid"/>
         </div>
-	<label class="controls">
+		<label class="controls">
            <a href="index.php?option=com_reddesign&id=<?php echo $designtype->reddesign_designtype_id ?>"><strong><?php echo $designtype->title; ?></strong></a> <br/> <?php echo $designtype->description; ?>
         </label>
     </div>
