@@ -60,7 +60,7 @@ class ReddesignControllerDesigntype extends FOFController
 			$thumbFile = $this->input->files->get('sample_thumb', null);
 			$uploadedThumbFile = null;
 
-			// If sample_thumb field is empty than use sample_image.
+			// If sample_thumb field is empty then use sample_image.
 			if (!empty($thumbFile['name']))
 			{
 				$uploadedThumbFile = $fileHelper->uploadFile(

@@ -42,7 +42,16 @@ class ReddesignControllerBackground extends FOFController
 	 */
 	public function onBeforeApplySave(&$data)
 	{
+		// Get Eps if has been added
 		$file = $this->input->files->get('bg_eps_file', null);
+
+		// Get Thumbnail if has been added
+		$thumbFile			= $this->input->files->get('thumbnail', null);
+		$thumbPreviewFile	= null;
+
+		// Get component Params
+		$params = JComponentHelper::getParams('com_reddesign');
+
 
 		// If file has has not been uploaded
 		if (empty($file['name']) || empty($file['type']))
@@ -68,16 +77,58 @@ class ReddesignControllerBackground extends FOFController
 			}
 
 			// Create a image preview of the EPS
-			$jpegpreviewfile = $this->createBackgroundPreview($uploaded_file['mangled_filename']);
+			$jpegPreviewFile = $this->createBackgroundPreview($uploaded_file['mangled_filename']);
 
-			if (!$jpegpreviewfile)
+			if (!$jpegPreviewFile)
 			{
 				return false;
 			}
 
-			// Update the database with the new path of the EPS file and its thumb
-			$data['eps_file']			= $uploaded_file['mangled_filename'];
-			$data['image_path']			= $jpegpreviewfile;
+			// If no thumbnail file has been attached generate one based on the Background EPS
+			if (!$thumbFile['name'])
+			{
+				// Create a image preview thumbnail based on the EPS
+				$im = new Imagick;
+				$im->readImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $jpegPreviewFile);
+				$im->thumbnailImage($params->get('max_designtype_thumbnail_width', 210), $params->get('max_designtype_thumbnail_height', 140), true);
+				$im->writeImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/thumbnails/' . $jpegPreviewFile);
+				$im->clear();
+				$im->destroy();
+				$thumbPreviewFile = $jpegPreviewFile;
+			}
+		}
+
+		// If thumbnail has been attached upload it and set component parameters max size
+		if ($thumbFile['name'])
+		{
+			// Upload the attached thumbnail
+			require_once JPATH_ADMINISTRATOR . '/components/com_reddesign/helpers/file.php';
+			$fileHelper = new ReddesignHelperFile;
+
+			$uploadedThumbFile = $fileHelper->uploadFile(
+				$thumbFile,
+				'backgrounds/thumbnails',
+				$params->get('max_designtype_image_size', 2),
+				'jpg,JPG,jpeg,JPEG,png,PNG,gif,GIF'
+			);
+
+			$im = new Imagick;
+			$im->readImage($uploadedThumbFile['filepath']);
+			$im->thumbnailImage($params->get('max_designtype_thumbnail_width', 210), $params->get('max_designtype_thumbnail_height', 140), true);
+			$im->writeImage($uploadedThumbFile['filepath']);
+			$im->clear();
+			$im->destroy();
+
+			$thumbPreviewFile = $uploadedThumbFile['mangled_filename'];
+		}
+
+		// Update the database with the new path of the EPS file and its thumb
+		$data['eps_file']			= $uploaded_file['mangled_filename'];
+		$data['image_path']			= $jpegPreviewFile;
+
+		if ($thumbPreviewFile)
+		{
+			$data['thumbnail']			= $thumbPreviewFile;
 		}
 
 		// If this new background will be the PDF Production background switch it against the previous production background
@@ -285,15 +336,15 @@ class ReddesignControllerBackground extends FOFController
 
 		$im->setImageFormat('jpeg');
 
-		// Create the Background thumb .jpg file name
-		$thumb_name = substr($eps_file, 0, -3) . 'jpg';
+		// Create the Background preview .jpg file name
+		$image_name = substr($eps_file, 0, -3) . 'jpg';
 
 		// Write image to the media://com_reddesign/assets/backgrounds/
-		$im->writeImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $thumb_name);
+		$im->writeImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $image_name);
 		$im->clear();
 		$im->destroy();
 
-		return $thumb_name;
+		return $image_name;
 	}
 
 	/**

@@ -64,6 +64,34 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 					class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_IS_PDF_BG_IMAGE_DESC'); ?></span>
 			</div>
 		</div>
+		<div class="control-group previewbg">
+			<label class="control-label todo-label" for="bg_price">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_PRICE'); ?>
+			</label>
+			<div class="controls">
+				<input type="text" name="price" id="bg_price" value="">
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC'); ?></span>
+			</div>
+		</div>
+		<div class="control-group previewbg">
+			<label class="control-label todo-label" for="bg_stock">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_STOCK'); ?>
+			</label>
+			<div class="controls">
+				<input type="text" name="stock" id="bg_stock" value="">
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_STOCK_DESC'); ?></span>
+			</div>
+		</div>
+		<div class="control-group previewbg">
+			<label class="control-label " for="bg_thumbnail">
+				<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
+			</label>
+			<div class="controls">
+				<input type="file" name="thumbnail" id="bg_thumbnail" value="">
+				&nbsp;<a href="#" class="modal" id="BgThumbnailLink"></a>
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?></span>
+			</div>
+		</div>
 	</div>
 	<div class="form-actions">
 		<input type="button" class="btn btn-success" id="saveBgBtn"
@@ -73,12 +101,19 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 	</div>
 </form>
 
-
 <script type="text/javascript">
 	akeeba.jQuery(document).ready(
 		function () {
 			akeeba.jQuery(document).on('click', '#saveBgBtn', function () {
 					akeeba.jQuery('#background').submit();
+				}
+			);
+			akeeba.jQuery(document).on('change', '#bg_isPDFbgimage', function () {
+					var op = akeeba.jQuery("#bg_isPDFbgimage option[value='0']:selected");
+					if (op.length)
+						akeeba.jQuery(".previewbg").show();
+					else
+						akeeba.jQuery(".previewbg").hide();
 				}
 			);
 			akeeba.jQuery(document).on('click', '#cancelBgBtn', function () {

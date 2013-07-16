@@ -43,7 +43,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		if (!empty($this->item->reddesign_designtype_id))
 		{
 			// Get all the backgrounds that belongs to this Design Type item.
-			$backgroundModel = FOFModel::getTmpInstance('Background', 'ReddesignModel')->reddesign_designtype_id($this->item->reddesign_designtype_id);
+			$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($this->item->reddesign_designtype_id);
 			$this->backgrounds = $backgroundModel->getItemList();
 
 			$areas = array();

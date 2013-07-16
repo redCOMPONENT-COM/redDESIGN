@@ -52,6 +52,7 @@ class ReddesignControllerDesigntype extends FOFController
 	 */
 	public function ajaxGetDesign()
 	{
+		// @Todo: the ramSign engine for generating images needs to be ported here. Now just a dummy image is returned to frontend editor
 		$response['image']		   = JURI::base() . 'media/com_reddesign/assets/images/custom_background.png';
 
 		echo json_encode($response);
