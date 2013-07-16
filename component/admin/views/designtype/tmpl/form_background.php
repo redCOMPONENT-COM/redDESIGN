@@ -82,6 +82,16 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_STOCK_DESC'); ?></span>
 			</div>
 		</div>
+		<div class="control-group previewbg">
+			<label class="control-label " for="bg_thumbnail">
+				<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
+			</label>
+			<div class="controls">
+				<input type="file" name="thumbnail" id="bg_thumbnail" value="">
+				&nbsp;<a href="#" class="modal" id="BgThumbnailLink"></a>
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?></span>
+			</div>
+		</div>
 	</div>
 	<div class="form-actions">
 		<input type="button" class="btn btn-success" id="saveBgBtn"
@@ -90,7 +100,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 			   value="<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>"/>
 	</div>
 </form>
-
 
 <script type="text/javascript">
 	akeeba.jQuery(document).ready(
