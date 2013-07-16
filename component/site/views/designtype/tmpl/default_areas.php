@@ -10,11 +10,8 @@
 defined('_JEXEC') or die();
 ?>
 <div class="row">
-	<div class="span5">
-		<img id="background"
-			 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"/>
-	</div>
-	<div class="span4">
+	<div class="span9">
+		<h3><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_AREAS_TITLE') ?></h3>
 		<?php foreach($this->productionBackgroundAreas as $area) : ?>
 			<div class="control-group">
 				<label class="control-label ">
@@ -72,57 +69,3 @@ defined('_JEXEC') or die();
 		</div>
 	</div>
 </div>
-
-<script>
-	/**
-	 * Add click event to Customize button
-	 */
-	akeeba.jQuery(document).ready(
-		function () {
-			akeeba.jQuery(document).on('click', '#customizeDesign', function () {
-					// Add spinner to button
-					akeeba.jQuery(this).button('loading');
-					setTimeout(function() {
-						akeeba.jQuery(this).button('reset');
-					}, 3000);
-
-					akeeba.jQuery('#background').attr('src', '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/images/spinner.gif'); ?>');
-					customize();
-				}
-			);
-		});
-
-	/**
-	 * Sends customize data to server and retreives the resulting image
-	 *
-	 * @param update
-	 */
-	function customize() {
-		var design = {
-			areas: []
-		};
-		<?php foreach($this->productionBackgroundAreas as $area) : ?>
-
-		design.areas.push({
-			"id" : 			'<?php echo $area->reddesign_area_id; ?>',
-			"textArea" :	akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
-			"fontArea" : 	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val()
-		});
-		<?php endforeach; ?>
-
-		akeeba.jQuery.ajax({
-			type: "POST",
-			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=designtype&task=ajaxGetDesign&format=raw",
-			data: JSON.stringify({ Design: design }),
-			contentType: "application/json; charset=utf-8",
-			success: function(data) {
-				var json = akeeba.jQuery.parseJSON(data);
-				akeeba.jQuery('#background').attr('src', json.image);
-				console.log(data);
-			},
-			failure: function(errMsg) {
-				alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AJAX_ERROR'); ?>');
-			}
-		});
-	}
-</script>
