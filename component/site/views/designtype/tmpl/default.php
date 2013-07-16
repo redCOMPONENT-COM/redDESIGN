@@ -26,6 +26,7 @@ dump($this->fonts, 'fonts');
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#product" id="productLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_PRODUCT_TAB'); ?></a></li>
 		<li><a href="#customize" id="customizeLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_CUSTOMIZE_TAB'); ?></a></li>
+		<li><a href="#frames" id="framesLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_FRAMES_TAB'); ?></a></li>
 		<li><a href="#parts" id="partsLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_PARTS_TAB'); ?></a></li>
 		<li><a href="#accessories" id="accessoriesLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_ACCESSORIES_TAB'); ?></a></li>
 	</ul>
@@ -36,6 +37,9 @@ dump($this->fonts, 'fonts');
 		</div>
 		<div class="tab-pane" id="customize">
 			<?php echo $this->loadTemplate('customize'); ?>
+		</div>
+		<div class="tab-pane" id="frames">
+			<?php echo $this->loadTemplate('frames'); ?>
 		</div>
 		<div class="tab-pane" id="parts">
 			<?php echo $this->loadTemplate('parts'); ?>
