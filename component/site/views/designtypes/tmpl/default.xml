@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-	<layout title="COM_REDDESIGN_DESIGNTYPES_VIEW_LIST_LAYOUT">
+	<layout title="COM_REDDESIGN_DESIGNTYPES_VIEW_LIST">
 		<message>
-			<![CDATA[COM_REDDESIGN_DESIGNTYPES_VIEW_LIST_LAYOUT_DESC]]>
+			<![CDATA[COM_REDDESIGN_DESIGNTYPES_VIEW_LIST_DESC]]>
 		</message>
 	</layout>
 	<state>
-		<name>COM_REDDESIGN_DESIGNTYPES_VIEW_LIST_LAYOUT</name>
-		<description>COM_REDDESIGN_DESIGNTYPES_VIEW_LIST_LAYOUT_DESC</description>
+		<name>COM_REDDESIGN_DESIGNTYPES_VIEW_LIST</name>
+		<description>COM_REDDESIGN_DESIGNTYPES_VIEW_LIST_DESC</description>
 		<fields name="params">
 			<fieldset name="basic">
 				<field name="navigation_link" type="list" default="0" label="COM_REDDESIGN_SELECT_NAVIGATION_VIEW" description="COM_REDDESIGN_SELECT_NAVIGATION_VIEW_DESC" >

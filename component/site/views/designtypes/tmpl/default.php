@@ -29,8 +29,13 @@ defined('_JEXEC') or die();
 		src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/designtypes/thumbnails/') . $designtype->sample_thumb; ?>" class="img-polaroid"/>
 		</div>
 		<label class="controls">
-			<a href="<?php echo $link ?>"><strong><?php echo $designtype->title; ?></strong></a> <br/> <?php echo substr($designtype->description,0, 150); ?>
-			<p class="readmore"><a href="">Read more: <?php echo $designtype->title; ?></a></p>
+			<a href="<?php echo $link ?>">
+				<span><strong><?php echo $designtype->title; ?></strong></span>
+			</a>
+			<br/><?php echo substr($designtype->description, 0, 150); ?>
+			<p class="readmore">
+				<a href="">Read more: <?php echo $designtype->title; ?></a>
+			</p>
 		</label>
 	</div>
     <?php endforeach; ?>
