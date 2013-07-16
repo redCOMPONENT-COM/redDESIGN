@@ -64,6 +64,24 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 					class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_IS_PDF_BG_IMAGE_DESC'); ?></span>
 			</div>
 		</div>
+		<div class="control-group">
+			<label class="control-label todo-label" for="bg_price">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_PRICE'); ?>
+			</label>
+			<div class="controls">
+				<input type="text" name="price" id="bg_price" value="">
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC'); ?></span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label todo-label" for="bg_stock">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_STOCK'); ?>
+			</label>
+			<div class="controls">
+				<input type="text" name="stock" id="bg_stock" value="">
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_STOCK_DESC'); ?></span>
+			</div>
+		</div>
 	</div>
 	<div class="form-actions">
 		<input type="button" class="btn btn-success" id="saveBgBtn"

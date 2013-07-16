@@ -63,7 +63,7 @@ JHTML::_('behavior.modal');
 							<?php echo $background->reddesign_background_id; ?>
 						</td>
 						<td align="left">
-							<a href="#" class="editBackground" onclick="selectBackgroundForEdit(<?php echo "'$background->reddesign_background_id', '$background->title', '$background->isPDFbgimage', '$background->enabled'"; ?>)">
+							<a href="#" class="editBackground" onclick="selectBackgroundForEdit(<?php echo "'$background->reddesign_background_id', '$background->title', '$background->isPDFbgimage', '$background->enabled', '$background->price', '$background->stock'"; ?>)">
 								<strong><?php echo $background->title; ?></strong>
 							</a>
 							&nbsp;
@@ -152,11 +152,13 @@ JHTML::_('behavior.modal');
 	/**
 	 * Selects background for edit and populates field data accordingly
 	 */
-	function selectBackgroundForEdit(reddesign_background_id, title, isPDFbgimage, enabled) {
+	function selectBackgroundForEdit(reddesign_background_id, title, isPDFbgimage, enabled, price, stock) {
 		akeeba.jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_TITLE_BACKGROUNDS_EDIT'); ?>");
 		akeeba.jQuery("#reddesign_background_id").val(reddesign_background_id);
 		akeeba.jQuery("#bg_title").val(title);
 		akeeba.jQuery("#bg_isPDFbgimage").val(isPDFbgimage);
+		akeeba.jQuery("#bg_price").val(price);
+		akeeba.jQuery("#bg_stock").val(stock);
 		akeeba.jQuery("#bg_enabled").val(enabled);
 		showBackgroundForm()
 		akeeba.jQuery('body').animate({
