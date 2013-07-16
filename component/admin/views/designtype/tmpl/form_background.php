@@ -64,7 +64,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 					class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_IS_PDF_BG_IMAGE_DESC'); ?></span>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group previewbg">
 			<label class="control-label todo-label" for="bg_price">
 				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_PRICE'); ?>
 			</label>
@@ -73,7 +73,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC'); ?></span>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group previewbg">
 			<label class="control-label todo-label" for="bg_stock">
 				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_STOCK'); ?>
 			</label>
@@ -97,6 +97,14 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 		function () {
 			akeeba.jQuery(document).on('click', '#saveBgBtn', function () {
 					akeeba.jQuery('#background').submit();
+				}
+			);
+			akeeba.jQuery(document).on('change', '#bg_isPDFbgimage', function () {
+					var op = akeeba.jQuery("#bg_isPDFbgimage option[value='0']:selected");
+					if (op.length)
+						akeeba.jQuery(".previewbg").show();
+					else
+						akeeba.jQuery(".previewbg").hide();
 				}
 			);
 			akeeba.jQuery(document).on('click', '#cancelBgBtn', function () {

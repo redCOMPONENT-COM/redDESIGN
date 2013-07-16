@@ -160,6 +160,9 @@ JHTML::_('behavior.modal');
 		akeeba.jQuery("#bg_price").val(price);
 		akeeba.jQuery("#bg_stock").val(stock);
 		akeeba.jQuery("#bg_enabled").val(enabled);
+		if (akeeba.jQuery("#bg_isPDFbgimage option[value='1']:selected").length) {
+			akeeba.jQuery(".previewbg").hide();
+		}
 		showBackgroundForm()
 		akeeba.jQuery('body').animate({
 			'scrollTop':   akeeba.jQuery('#backgroundForm').offset().top
