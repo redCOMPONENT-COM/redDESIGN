@@ -14,24 +14,23 @@ JHTML::_('behavior.framework');
 
 <form action="index.php" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data" class="form-horizontal">
 	<input type="hidden" name="option" value="com_reddesign">
-	<input type="hidden" name="view" value="parttype">
+	<input type="hidden" name="view" value="accessory">
 	<input type="hidden" name="task" value="">
-	<input type="hidden" id="reddesign_part_id" name="reddesign_part_id" value="<?php echo $this->item->reddesign_part_id; ?>">
+	<input type="hidden" id="reddesign_accessory_id" name="reddesign_accessory_id" value="<?php echo $this->item->reddesign_accessory_id; ?>">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1">
 
 	<div id="basic_configuration" class="span12">
 		<h3>
-			<?php echo JText::_('COM_REDDESIGN_PART_TITLE'); ?>
+			<?php echo $this->pageTitle; ?>
 		</h3>
 
 		<div class="control-group">
 			<label class="control-label " for="title">
-				<?php echo JText::_('COM_REDDESIGN_PART_FIELD_TITLE'); ?>
+				<?php echo JText::_('COM_REDDESIGN_COMMON_TITLE'); ?>
 			</label>
 
 			<div class="controls">
 				<input type="text" value="<?php echo $this->item->title; ?>" maxlength="255" size="32" id="title" name="title">
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_PART_FIELD_TITLE_DESC'); ?></span>
 			</div>
 		</div>
 
@@ -45,12 +44,12 @@ JHTML::_('behavior.framework');
 		</div>
 
 		<div class="control-group">
-			<label class="control-label" for="single_select">
-				<?php echo JText::_('COM_REDDESIGN_COMMON_SINGLE_SELECT_GROUP'); ?>
+			<label class="control-label" for="required">
+				<?php echo JText::_('COM_REDDESIGN_ACCESSORY_REQUIRED'); ?>
 			</label>
 			<div class="controls">
-				<?php echo JHTML::_('select.booleanlist', 'single_select', null, 1); ?>
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_COMMON_SINGLE_SELECT_GROUP_DESC'); ?></span>
+				<?php echo JHTML::_('select.booleanlist', 'required', null, 1); ?>
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_ACCESSORY_REQUIRED_DESC'); ?></span>
 			</div>
 		</div>
 
@@ -60,7 +59,7 @@ JHTML::_('behavior.framework');
 			</label>
 			<div class="controls">
 				<input type="file" name="sample_image" id="sample_image" value="">
-				<a class="modal" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessorytypes/' . $this->item->sample_image); ?>">
+				<a class="modal" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessories/' . $this->item->sample_image); ?>">
 					<?php echo $this->item->sample_image; ?>
 				</a>
 			</div>
@@ -72,7 +71,7 @@ JHTML::_('behavior.framework');
 			</label>
 			<div class="controls">
 				<input type="file" name="sample_thumb" id="sample_thumb" value="">
-				<a class="modal" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessorytypes/thumbnails/' . $this->item->sample_thumb); ?>">
+				<a class="modal" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessories/thumbnails/' . $this->item->sample_thumb); ?>">
 					<?php echo $this->item->sample_thumb; ?>
 				</a>
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?></span>
@@ -80,14 +79,34 @@ JHTML::_('behavior.framework');
 		</div>
 
 		<div class="control-group">
-			<label class="control-label " for="partDescription">
+			<label class="control-label " for="stock">
+				<?php echo JText::_('COM_REDDESIGN_ACCESSORY_STOCK'); ?>
+			</label>
+
+			<div class="controls">
+				<input type="text" value="<?php echo $this->item->stock; ?>" maxlength="255" size="32" id="stock" name="stock">
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_ACCESSORY_PRICE_DESC'); ?></span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label " for="price">
+				<?php echo JText::_('COM_REDDESIGN_COMMON_TITLE'); ?>
+			</label>
+
+			<div class="controls">
+				<input type="text" value="<?php echo $this->item->price; ?>" maxlength="255" size="32" id="price" name="price">
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_ACCESSORY_PRICE_DESC'); ?></span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label " for="description">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_DESCRIPTION'); ?>
 			</label>
 			<div class="controls">
-				<?php echo $this->editor->display('partDescription', '', 400, 400, 20, 20, false, 'partDescription'); ?>
+				<?php echo $this->editor->display('description', $this->item->description, 400, 400, 20, 20, false); ?>
 			</div>
 		</div>
-	</div>
-
 	</div>
 </form>

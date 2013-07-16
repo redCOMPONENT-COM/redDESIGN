@@ -42,7 +42,6 @@ else :
 	<li><a href="#general"      id="generalLink"       data-toggle="tab" onclick="clearAreaSelection();"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_GENERAL_TAB'); ?></a></li>
 	<li><a href="#backgrounds"  id="backgroundsLink"   data-toggle="tab" onclick="clearAreaSelection();"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS'); ?></a></li>
 	<li><a href="#design-areas" id="design-areasLink"  data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_DESIGN_AREAS'); ?></a></li>
-	<li><a href="#parts"        id="partsLink"         data-toggle="tab" onclick="clearAreaSelection();"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PARTS'); ?></a></li>
 </ul>
 
 <div id="my-tab-content" class="tab-content">
@@ -54,9 +53,6 @@ else :
 	</div>
 	<div class="tab-pane" id="design-areas">
 		<?php echo $this->loadTemplate('designareas'); ?>
-	</div>
-	<div class="tab-pane" id="parts">
-		<?php echo $this->loadTemplate('parts'); ?>
 	</div>
 </div>
 

@@ -10,17 +10,17 @@ defined('_JEXEC') or die;
 
 
 /**
- * Part Controller.
+ * Accessory Controller.
  *
  * @package     RedDesign.Component
  * @subpackage  Administrator
  *
  * @since       1.0
  */
-class ReddesignControllerPart extends FOFController
+class ReddesignControllerAccessory extends FOFController
 {
 	/**
-	 * Uploads image and thumbnail files for the part.
+	 * Uploads image and thumbnail files for the accessory.
 	 *
 	 * @param   array  &$data  data filled in the edit form
 	 *
@@ -28,9 +28,7 @@ class ReddesignControllerPart extends FOFController
 	 */
 	public function onBeforeApplySave(&$data)
 	{
-		$data['description'] = $this->input->getString('partDescription', '');
-
-		$imageFile = $this->input->files->get('partImage', null);
+		$imageFile = $this->input->files->get('sample_image', null);
 
 		// Code for managing image and thumbnail.
 		if (!empty($imageFile['name']))
@@ -41,13 +39,13 @@ class ReddesignControllerPart extends FOFController
 
 			$uploadedImageFile = $fileHelper->uploadFile(
 				$imageFile,
-				'parts',
-				$params->get('max_part_image_size', 2),
+				'accessories',
+				$params->get('max_accessory_image_size', 2),
 				'jpg,JPG,jpeg,JPEG,png,PNG'
 			);
-			$data['image'] = $uploadedImageFile['mangled_filename'];
+			$data['sample_image'] = $uploadedImageFile['mangled_filename'];
 
-			$thumbFile = $this->input->files->get('partThumbnail', null);
+			$thumbFile = $this->input->files->get('sample_thumb', null);
 			$uploadedThumbFile = null;
 
 			// If sample_thumb field is empty than use sample_image.
@@ -55,17 +53,17 @@ class ReddesignControllerPart extends FOFController
 			{
 				$uploadedThumbFile = $fileHelper->uploadFile(
 					$thumbFile,
-					'parts/thumbnails',
-					$params->get('max_part_image_size', 2),
+					'accessories/thumbnails',
+					$params->get('max_accessory_image_size', 2),
 					'jpg,JPG,jpeg,JPEG,png,PNG'
 				);
-				$data['thumbnail'] = $uploadedThumbFile['mangled_filename'];
+				$data['sample_thumb'] = $uploadedThumbFile['mangled_filename'];
 			}
 			else
 			{
-				$dest = JPATH_ROOT . '/media/com_reddesign/assets/parts/thumbnails/' . $uploadedImageFile['mangled_filename'];
+				$dest = JPATH_ROOT . '/media/com_reddesign/assets/accessories/thumbnails/' . $uploadedImageFile['mangled_filename'];
 				JFile::copy($uploadedImageFile['filepath'], $dest);
-				$data['thumbnail'] = $uploadedImageFile['mangled_filename'];
+				$data['sample_thumb'] = $uploadedImageFile['mangled_filename'];
 				$uploadedThumbFile['filepath'] = $dest;
 			}
 
@@ -73,7 +71,7 @@ class ReddesignControllerPart extends FOFController
 			{
 				$im = new Imagick;
 				$im->readImage($uploadedThumbFile['filepath']);
-				$im->thumbnailImage($params->get('max_part_thumbnail_width', 210), $params->get('max_part_thumbnail_height', 140), true);
+				$im->thumbnailImage($params->get('max_accessory_thumbnail_width', 210), $params->get('max_accessory_thumbnail_height', 140), true);
 				$im->writeImage();
 				$im->clear();
 				$im->destroy();

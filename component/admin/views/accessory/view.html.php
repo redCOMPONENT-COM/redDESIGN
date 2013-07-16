@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 /**
- * Accessorytype View
+ * Accessory View
  *
  * @package     RedDesign.Component
  * @subpackage  Administrator
@@ -18,7 +18,7 @@ defined('_JEXEC') or die;
  * @since       1.0
  */
 
-class ReddesignViewAccessorytype extends FOFViewHtml
+class ReddesignViewAccessory extends FOFViewHtml
 {
 	/**
 	 * Executes before rendering the page for the Add task.
@@ -35,13 +35,13 @@ class ReddesignViewAccessorytype extends FOFViewHtml
 		$this->item 				= $model->getItem();
 		$this->editor				= JFactory::getEditor();
 
-		if (empty($this->item->reddesign_accessorytype_id))
+		if (empty($this->item->reddesign_accessory_id))
 		{
-			$this->pageTitle = JText::_('COM_REDDESIGN_ACCESSORYTYPE_ADD_TITLE');
+			$this->pageTitle = JText::_('COM_REDDESIGN_ACCESSORY_ADD_TITLE');
 		}
 		else
 		{
-			$this->pageTitle = JText::_('COM_REDDESIGN_ACCESSORYTYPE_EDIT_TITLE');
+			$this->pageTitle = JText::_('COM_REDDESIGN_ACCESSORY_EDIT_TITLE');
 		}
 
 		parent::display();

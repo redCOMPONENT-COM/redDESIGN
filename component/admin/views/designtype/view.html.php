@@ -109,10 +109,6 @@ class ReddesignViewDesigntype extends FOFViewHtml
 				$this->fontsOptions[] = JHtml::_('select.option', $font->reddesign_font_id, $font->title);
 			}
 
-			// Get all the parts that belongs to this Design Type item.
-			$partsModel = FOFModel::getTmpInstance('Part', 'ReddesignModel')->reddesign_designtype_id($this->item->reddesign_designtype_id);
-			$this->parts = $partsModel->getItemList();
-
 			$configParams = JComponentHelper::getParams('com_reddesign');
 			$this->unit = $configParams->get('unit', 'px');
 
