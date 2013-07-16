@@ -24,6 +24,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 	<div id="parts-configuration">
 		<h3 id="partTitle"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_ADD_NEW'); ?></h3>
 		<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_DESC'); ?></span>
+
 		<div class="control-group">
 			<label class="control-label" for="part_title">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_FIELD_TITLE'); ?>
@@ -32,6 +33,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 			<div class="controls">
 				<input type="text" name="title" id="part_title" required="required" value="">
 			</div>
+
 		</div>
 		<div class="control-group">
 			<label class="control-label" for="enabled">
@@ -41,15 +43,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 				<?php echo JHTML::_('select.booleanlist', 'enabled', null, 1); ?>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label" for="accessory">
-				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_IS_ACCESSORY'); ?>
-			</label>
-			<div class="controls">
-				<?php echo JHTML::_('select.booleanlist', 'accessory', null, 1); ?>
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_IS_ACCESSORY_DESC'); ?></span>
-			</div>
-		</div>
+
 		<div class="control-group">
 			<label class="control-label " for="partImage">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_IMAGE'); ?>
@@ -58,6 +52,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 				<input type="file" name="partImage" id="partImage" value="">
 			</div>
 		</div>
+
 		<div class="control-group">
 			<label class="control-label " for="partThumbnail">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
@@ -67,6 +62,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?></span>
 			</div>
 		</div>
+
 		<div class="control-group">
 			<label class="control-label" for="partPrice">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_PRICE'); ?>
@@ -77,6 +73,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_PRICE_DESC'); ?></span>
 			</div>
 		</div>
+
 		<div class="control-group">
 			<label class="control-label" for="partStock">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_STOCK'); ?>
@@ -87,6 +84,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PART_STOCK_DESC'); ?></span>
 			</div>
 		</div>
+
 		<div class="control-group">
 			<label class="control-label" for="required">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_REQUIRED'); ?>
@@ -95,24 +93,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id='
 				<?php echo JHTML::_('select.booleanlist', 'required', null, 1); ?>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label" for="single_select">
-				<?php echo JText::_('COM_REDDESIGN_COMMON_SINGLE_SELECT_GROUP'); ?>
-			</label>
-			<div class="controls">
-				<?php echo JHTML::_('select.booleanlist', 'single_select', null, 1); ?>
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_COMMON_SINGLE_SELECT_GROUP_DESC'); ?></span>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label " for="partDescription">
-				<?php echo JText::_('COM_REDDESIGN_COMMON_DESCRIPTION'); ?>
-			</label>
-			<div class="controls">
-				<?php echo $this->editor->display('partDescription', '', 400, 400, 20, 20, false, 'partDescription'); ?>
-			</div>
-		</div>
-	</div>
+
 	<div class="form-actions">
 		<input type="button" class="btn btn-success" id="savePartBtn"
 			   value="<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>"/>

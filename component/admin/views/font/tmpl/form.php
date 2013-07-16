@@ -12,13 +12,11 @@ defined('_JEXEC') or die();
 JHTML::_('behavior.framework');
 ?>
 
-<form action="index.php" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data"
-      class="form-horizontal">
+<form action="index.php" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data" class="form-horizontal">
 	<input type="hidden" name="option" value="com_reddesign">
 	<input type="hidden" name="view" value="font">
 	<input type="hidden" name="task" value="">
-	<input type="hidden" id="reddesign_font_id" name="reddesign_font_id"
-	       value="<?php echo $this->item->reddesign_font_id; ?>">
+	<input type="hidden" id="reddesign_font_id" name="reddesign_font_id" value="<?php echo $this->item->reddesign_font_id; ?>">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1">
 
 	<div id="basic_configuration" class="span12">

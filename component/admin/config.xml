@@ -72,6 +72,33 @@
                 />
 
         <field
+                name="max_accessorytype_images_size"
+                type="text"
+                size="5"
+                default="2"
+                label="COM_REDDESIGN_CONFIG_MAX_ACCESSORYTYPE_IMAGE_FILE_SIZE"
+                description="COM_REDDESIGN_CONFIG_MAX_ACCESSORYTYPE_IMAGE_FILE_SIZE_DESC"
+                />
+
+        <field
+                name="max_accessorytype_thumbnail_width"
+                type="text"
+                size="5"
+                default="210"
+                label="COM_REDDESIGN_CONFIG_MAX_ACCESSORYTYPE_THUMBNAIL_WIDTH"
+                description="COM_REDDESIGN_CONFIG_MAX_ACCESSORYTYPE_THUMBNAIL_WIDTH_DESC"
+                />
+
+        <field
+                name="max_accessorytype_thumbnail_height"
+                type="text"
+                size="5"
+                default="140"
+                label="COM_REDDESIGN_CONFIG_MAX_ACCESSORYTYPE_THUMBNAIL_HEIGHT"
+                description="COM_REDDESIGN_CONFIG_MAX_ACCESSORYTYPE_THUMBNAIL_HEIGHT_DESC"
+                />
+
+        <field
                 name="max_part_images_size"
                 type="text"
                 size="5"

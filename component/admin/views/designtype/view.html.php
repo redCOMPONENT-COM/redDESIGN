@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 /**
- * Background View
+ * Designtype View
  *
  * @package     RedDesign.Component
  * @subpackage  Administrator
