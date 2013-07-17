@@ -22,6 +22,8 @@ defined('_JEXEC') or die();
 			{
 				$link  = JRoute::_('index.php?option=com_reddesign&id=' . $designtype->reddesign_designtype_id);
 			}
+
+			$description = ($designtype->intro_description != "") ? $designtype->intro_description:$designtype->intro_description;
 	?>
 	<div class="control-group">
 		<div class="control-label">
@@ -32,9 +34,9 @@ defined('_JEXEC') or die();
 			<a href="<?php echo $link ?>">
 				<span><strong><?php echo $designtype->title; ?></strong></span>
 			</a>
-			<br/><?php echo substr($designtype->description, 0, 150); ?>
+			<br/><?php echo $description; ?>
 			<p class="readmore">
-				<a href="">Read more: <?php echo $designtype->title; ?></a>
+				<a href="#">Read more: <?php echo $designtype->title; ?></a>
 			</p>
 		</label>
 	</div>

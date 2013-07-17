@@ -90,6 +90,22 @@ class ReddesignControllerDesigntype extends FOFController
 			}
 		}
 
+		if (isset($data['description']))
+		{
+			$pattern = '#<hr\s+id=("|\')system-readmore("|\')\s*\/*>#i';
+			$tagPos = preg_match($pattern, $data['description']);
+
+			if ($tagPos == 0)
+			{
+				$data['intro_description'] = $data['description'];
+			}
+			else
+			{
+				$intro_description = preg_split($pattern, $data['description'], 2);
+				$data['intro_description'] = $intro_description[0];
+			}
+		}
+
 		return $data;
 	}
 }
