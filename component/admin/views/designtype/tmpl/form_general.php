@@ -21,8 +21,9 @@ defined('_JEXEC') or die();
 		<h3>
 			<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_HEADER'); ?>
 		</h3>
+
 		<div class="control-group">
-			<label class="control-label ">
+			<label class="control-label " for="title">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_TITLE'); ?>
 			</label>
 			<div class="controls">
@@ -30,14 +31,16 @@ defined('_JEXEC') or die();
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_TITLE_DESC'); ?></span>
 			</div>
 		</div>
+
 		<div class="control-group">
-			<label for="published" class="control-label">
+			<label for="published" class="control-label" for="published">
 				<?php echo JText::_('JPUBLISHED'); ?>
 			</label>
 			<div class="controls">
 				<?php echo JHTML::_('select.booleanlist', 'published', null, $this->item->enabled); ?>
 			</div>
 		</div>
+
 		<div class="control-group">
 			<label class="control-label todo-label" for="enabled">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS'); ?>
@@ -47,6 +50,7 @@ defined('_JEXEC') or die();
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DESC'); ?></span>
 			</div>
 		</div>
+
 		<div class="control-group">
 			<label class="control-label " for="sample_image">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_IMAGE'); ?>
@@ -58,6 +62,7 @@ defined('_JEXEC') or die();
 				</a>
 			</div>
 		</div>
+
 		<div class="control-group">
 			<label class="control-label " for="sample_thumb">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
@@ -70,6 +75,17 @@ defined('_JEXEC') or die();
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?></span>
 			</div>
 		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="">
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_ACCESSORYTYPES'); ?>
+			</label>
+			<div class="controls">
+				<?php echo $this->accessorytypes; ?>
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_ACCESSORYTYPES_DESC'); ?></span>
+			</div>
+		</div>
+
 		<div class="control-group">
 			<label class="control-label " for="description">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_DESCRIPTION'); ?>

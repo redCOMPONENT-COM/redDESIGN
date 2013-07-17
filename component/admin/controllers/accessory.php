@@ -28,7 +28,7 @@ class ReddesignControllerAccessory extends FOFController
 	 */
 	public function onBeforeApplySave(&$data)
 	{
-		$imageFile = $this->input->files->get('sample_image', null);
+		$imageFile = $this->input->files->get('image', null);
 
 		// Code for managing image and thumbnail.
 		if (!empty($imageFile['name']))
@@ -43,12 +43,12 @@ class ReddesignControllerAccessory extends FOFController
 				$params->get('max_accessory_image_size', 2),
 				'jpg,JPG,jpeg,JPEG,png,PNG'
 			);
-			$data['sample_image'] = $uploadedImageFile['mangled_filename'];
+			$data['image'] = $uploadedImageFile['mangled_filename'];
 
-			$thumbFile = $this->input->files->get('sample_thumb', null);
+			$thumbFile = $this->input->files->get('thumbnail', null);
 			$uploadedThumbFile = null;
 
-			// If sample_thumb field is empty than use sample_image.
+			// If thumbnail field is empty than use image.
 			if (!empty($thumbFile['name']))
 			{
 				$uploadedThumbFile = $fileHelper->uploadFile(
@@ -57,13 +57,13 @@ class ReddesignControllerAccessory extends FOFController
 					$params->get('max_accessory_image_size', 2),
 					'jpg,JPG,jpeg,JPEG,png,PNG'
 				);
-				$data['sample_thumb'] = $uploadedThumbFile['mangled_filename'];
+				$data['thumbnail'] = $uploadedThumbFile['mangled_filename'];
 			}
 			else
 			{
 				$dest = JPATH_ROOT . '/media/com_reddesign/assets/accessories/thumbnails/' . $uploadedImageFile['mangled_filename'];
 				JFile::copy($uploadedImageFile['filepath'], $dest);
-				$data['sample_thumb'] = $uploadedImageFile['mangled_filename'];
+				$data['thumbnail'] = $uploadedImageFile['mangled_filename'];
 				$uploadedThumbFile['filepath'] = $dest;
 			}
 

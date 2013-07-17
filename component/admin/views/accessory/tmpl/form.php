@@ -45,34 +45,44 @@ JHTML::_('behavior.framework');
 
 		<div class="control-group">
 			<label class="control-label" for="required">
-				<?php echo JText::_('COM_REDDESIGN_ACCESSORY_REQUIRED'); ?>
+				<?php echo JText::_('COM_REDDESIGN_COMMON_REQUIRED'); ?>
 			</label>
 			<div class="controls">
-				<?php echo JHTML::_('select.booleanlist', 'required', null, 1); ?>
+				<?php echo JHTML::_('select.booleanlist', 'required', null, $this->item->required); ?>
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_ACCESSORY_REQUIRED_DESC'); ?></span>
 			</div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label " for="sample_image">
+			<label class="control-label" for="reddesign_accessorytype_id">
+				<?php echo JText::_('COM_REDDESIGN_ACCESSORY_ACCESSORYTYPE'); ?>
+			</label>
+			<div class="controls">
+				<?php echo $this->accessorytypes; ?>
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_ACCESSORY_ACCESSORYTYPE_DESC'); ?></span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label " for="image">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_IMAGE'); ?>
 			</label>
 			<div class="controls">
-				<input type="file" name="sample_image" id="sample_image" value="">
-				<a class="modal" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessories/' . $this->item->sample_image); ?>">
-					<?php echo $this->item->sample_image; ?>
+				<input type="file" name="image" id="image" value="">
+				<a class="modal" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessories/' . $this->item->image); ?>">
+					<?php echo $this->item->image; ?>
 				</a>
 			</div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label " for="sample_thumb">
+			<label class="control-label " for="thumbnail">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
 			</label>
 			<div class="controls">
-				<input type="file" name="sample_thumb" id="sample_thumb" value="">
-				<a class="modal" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessories/thumbnails/' . $this->item->sample_thumb); ?>">
-					<?php echo $this->item->sample_thumb; ?>
+				<input type="file" name="thumbnail" id="thumbnail" value="">
+				<a class="modal" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessories/thumbnails/' . $this->item->thumbnail); ?>">
+					<?php echo $this->item->thumbnail; ?>
 				</a>
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?></span>
 			</div>
@@ -91,7 +101,7 @@ JHTML::_('behavior.framework');
 
 		<div class="control-group">
 			<label class="control-label " for="price">
-				<?php echo JText::_('COM_REDDESIGN_COMMON_TITLE'); ?>
+				<?php echo JText::_('COM_REDDESIGN_ACCESSORY_PRICE'); ?>
 			</label>
 
 			<div class="controls">

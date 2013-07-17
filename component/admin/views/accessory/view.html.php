@@ -31,9 +31,10 @@ class ReddesignViewAccessory extends FOFViewHtml
 	{
 		$this->input->setVar('hidemainmenu', true);
 
-		$model 						= $this->getModel();
-		$this->item 				= $model->getItem();
-		$this->editor				= JFactory::getEditor();
+		$model                = $this->getModel();
+		$this->item           = $model->getItem();
+		$this->editor         = JFactory::getEditor();
+		$this->accessorytypes = null;
 
 		if (empty($this->item->reddesign_accessory_id))
 		{
@@ -43,6 +44,25 @@ class ReddesignViewAccessory extends FOFViewHtml
 		{
 			$this->pageTitle = JText::_('COM_REDDESIGN_ACCESSORY_EDIT_TITLE');
 		}
+
+		$accessorytypesModel = FOFModel::getTmpInstance('Accessorytypes', 'ReddesignModel');
+		$accessorytypes = $accessorytypesModel->getItemList();
+		$accessorytypesOptions = array();
+
+		foreach ($accessorytypes as $type)
+		{
+			$accessorytypesOptions[] = JHtml::_('select.option', $type->reddesign_accessorytype_id, $type->title);
+		}
+
+		$this->accessorytypes = JHtml::_(
+			'select.genericlist',
+			$accessorytypesOptions,
+			'reddesign_accessorytype_id',
+			'',
+			'value',
+			'text',
+			$this->item->reddesign_accessorytype_id
+		);
 
 		parent::display();
 	}

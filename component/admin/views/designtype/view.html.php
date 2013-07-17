@@ -38,12 +38,33 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->areas 				= null;
 		$this->productionBackground = null;
 		$this->editor				= JFactory::getEditor();
+		$configParams = JComponentHelper::getParams('com_reddesign');
 
 		// Font sizer options for the general tab.
 		$this->sizerOptions = array(
 			JHTML::_('select.option',  'auto', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO')),
 			JHTML::_('select.option',  'slider', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_SLIDER')),
 			JHTML::_('select.option',  'dropdown', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN'))
+		);
+
+		// Accessory types to be included in the frontend
+		$accessorytypesModel = FOFModel::getTmpInstance('Accessorytypes', 'ReddesignModel');
+		$accessorytypes = $accessorytypesModel->getItemList();
+		$accessorytypesOptions = array();
+
+		foreach ($accessorytypes as $type)
+		{
+			$accessorytypesOptions[] = JHtml::_('select.option', $type->reddesign_accessorytype_id, $type->title);
+		}
+
+		$this->accessorytypes = JHtml::_(
+			'select.genericlist',
+			$accessorytypesOptions,
+			'accessorytypes[]',
+			' multiple="multiple" ',
+			'value',
+			'text',
+			explode(',', $this->item->accessorytypes)
 		);
 
 		// If it's not a new design
@@ -109,7 +130,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 				$this->fontsOptions[] = JHtml::_('select.option', $font->reddesign_font_id, $font->title);
 			}
 
-			$configParams = JComponentHelper::getParams('com_reddesign');
+			// Unit for measures
 			$this->unit = $configParams->get('unit', 'px');
 
 			if ($this->unit == 'cm')
