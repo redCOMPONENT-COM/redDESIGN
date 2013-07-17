@@ -90,6 +90,7 @@ class ReddesignControllerDesigntype extends FOFController
 			}
 		}
 
+		// Prepare data for description together with read more option.
 		if (isset($data['description']))
 		{
 			$pattern = '#<hr\s+id=("|\')system-readmore("|\')\s*\/*>#i';
@@ -105,6 +106,10 @@ class ReddesignControllerDesigntype extends FOFController
 				$data['intro_description'] = $intro_description[0];
 			}
 		}
+
+		// Prepare data for the accessorytypes field.
+		$accessorytypes = $this->input->get('accessorytypes', null, 'array');
+		$data['accessorytypes'] = implode(',', $accessorytypes);
 
 		return $data;
 	}

@@ -19,7 +19,7 @@
         <field name="title" type="text"
                show_link="true"
                url="index.php?option=com_reddesign&amp;view=designtype&amp;id=[ITEM:ID]"
-			   empty_replacement="COM_REDDESIGN_DESIGNTYPES_NO_TITLE"
+			   empty_replacement="COM_REDDESIGN_COMMON_NO_TITLE"
                 />
         <field name="enabled" type="published"/>
     </fieldset>
