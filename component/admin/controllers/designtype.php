@@ -60,7 +60,7 @@ class ReddesignControllerDesigntype extends FOFController
 			$thumbFile = $this->input->files->get('sample_thumb', null);
 			$uploadedThumbFile = null;
 
-			// If sample_thumb field is empty than use sample_image.
+			// If sample_thumb field is empty then use sample_image.
 			if (!empty($thumbFile['name']))
 			{
 				$uploadedThumbFile = $fileHelper->uploadFile(
@@ -87,6 +87,22 @@ class ReddesignControllerDesigntype extends FOFController
 				$im->writeImage();
 				$im->clear();
 				$im->destroy();
+			}
+		}
+
+		if (isset($data['description']))
+		{
+			$pattern = '#<hr\s+id=("|\')system-readmore("|\')\s*\/*>#i';
+			$tagPos = preg_match($pattern, $data['description']);
+
+			if ($tagPos == 0)
+			{
+				$data['intro_description'] = $data['description'];
+			}
+			else
+			{
+				$intro_description = preg_split($pattern, $data['description'], 2);
+				$data['intro_description'] = $intro_description[0];
 			}
 		}
 

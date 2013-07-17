@@ -75,7 +75,7 @@ defined('_JEXEC') or die();
 				<?php echo JText::_('COM_REDDESIGN_COMMON_DESCRIPTION'); ?>
 			</label>
 			<div class="controls">
-				<?php echo $this->editor->display('description', $this->item->description, 400, 400, 20, 20, false); ?>
+				<?php echo $this->editor->display('description', $this->item->description, 400, 400, 20, 20, true); ?>
 			</div>
 		</div>
 	</div>

@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   `locked_by`               BIGINT(20) NOT NULL DEFAULT '0',
   `locked_on`               DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
   `fontsizer`               ENUM('auto', 'slider', 'dropdown'),
+  `intro_description`       TEXT,
   `description`             TEXT,
   `sample_image`            VARCHAR(255),
   `sample_thumb`            VARCHAR(255),
@@ -139,6 +140,9 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   `locked_on`               DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
   `eps_file`                VARCHAR(255),
   `image_path`              VARCHAR(255) NOT NULL,
+  `thumbnail`               VARCHAR(255),
+  `stock`                   FLOAT        NOT NULL,
+  `price`                   FLOAT        NOT NULL,
   `isPDFbgimage`            TINYINT(4)   NOT NULL,
   `reddesign_designtype_id` INT(11)      NOT NULL,
   PRIMARY KEY (`reddesign_background_id`)
