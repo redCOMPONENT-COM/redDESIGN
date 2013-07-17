@@ -89,9 +89,15 @@ dump($this->fonts, 'fonts');
 		design.areas.push({
 			"id" : 			'<?php echo $area->reddesign_area_id; ?>',
 			"textArea" :	akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
-			"fontArea" : 	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val()
+			"fontArea" : 	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
+			"fontColor" :	"#000000",
+			"fontSize" :	"22"
 		});
 		<?php endforeach; ?>
+
+		design.background = "2"; // @ToDo
+
+		design.id = "1"; // @ToDo
 
 		akeeba.jQuery.ajax({
 			type: "POST",

@@ -53,6 +53,12 @@ class ReddesignControllerDesigntype extends FOFController
 	public function ajaxGetDesign()
 	{
 		// @Todo: the ramSign engine for generating images needs to be ported here. Now just a dummy image is returned to frontend editor
+		// Here we will import all the requested values using JInput
+		// but right now I'm creating a dummy array that contains all values for generating a image
+		$values = json_decode('{"Design":{"areas":[{"id":"1","textArea":"Mrs. Vipula","fontArea":"1","fontColor":"#000000","fontSize":"22"},{"id":"2","textArea":"Developer at redCOMPONENT","fontColor":"#000000","fontSize":"22"}],"background":"2","id":"1"}}');
+		// var_dump($values) to see the ajax message structure to get the resulting image;
+
+		// Dummy image is returned to frontend editor:
 		$response['image']		   = JURI::base() . 'media/com_reddesign/assets/images/custom_background.png';
 
 		echo json_encode($response);
