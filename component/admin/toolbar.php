@@ -79,23 +79,6 @@ class ReddesignToolbar extends FOFToolbar
 	 *
 	 * @return void
 	 */
-	public function onEdit()
-	{
-		parent::onEdit();
-
-		$view = $this->input->getCmd('view', 'cpanel');
-		JToolBarHelper::title(JText::_('COM_REDDESIGN') . ' - ' . ucfirst($view), $view);
-
-		// Add Components options (see config.xml)
-		JToolBarHelper::divider();
-		JToolBarHelper::preferences('com_reddesign');
-	}
-
-	/**
-	 * Prepares the toolbar for Designtype view
-	 *
-	 * @return void
-	 */
 	public function onAdd()
 	{
 		parent::onAdd();
