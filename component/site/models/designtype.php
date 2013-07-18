@@ -115,17 +115,40 @@ class ReddesignModelDesigntype extends FOFModel
 	}
 
 	/**
-	 * Retrieves the parts belonging to a specific design
+	 * Retrieves the Accessories belonging to a specific design
 	 *
 	 * @return  array  Returns the array of parts that belonging to a design
 	 */
-	public function getParts()
+	public function getAccessories()
 	{
-		$partsModel = FOFModel::getTmpInstance('Parts', 'ReddesignModel')->reddesign_designtype_id($this->getId());
+		$designAccessoryTypesIds = array_map('trim', explode(',', $this->getItem()->accessorytypes));
 
-		$parts = $partsModel->getItemList();
 
-		return $parts;
+		$designAccessoriestypes = array();
+
+		foreach ($designAccessoryTypesIds as $key => $value)
+		{
+			// Get each accessorytype available in current design
+			$accessorytypesModel = FOFModel::getTmpInstance('Accessorytype', 'ReddesignModel');
+			$designAccessoryType = $accessorytypesModel->getItem($value);
+
+			// Check that this Accessorytype is published
+			if ($designAccessoryType->enabled)
+			{
+				// Get the accessories in the Accessorytype
+				$accessoriesModel = FOFModel::getTmpInstance('Accessories', 'ReddesignModel')
+					->reddesign_accessorytype_id($designAccessoryType->reddesign_accessorytype_id);
+				$accessoriesModel->setState('enabled', '1');
+
+				// Set the accessories into the AccessoryType
+				$designAccessoryType->accessories = $accessoriesModel->getItemList(true, 'reddesign_accessory_id');
+
+				// Add the Accessorytype to the Accessorytypes list in the Design
+				$designAccessoriestypes[] = $designAccessoryType;
+			}
+		}
+
+		return $designAccessoriestypes;
 	}
 
 	/**

@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die();
+JHTML::_('behavior.modal');
 
 /* @Todo: remove this dumps once frontend is finished */
 
@@ -17,8 +18,8 @@ dump($this->productionBackground, 'production');
 dump($this->previewBackground, 'preview');
 dump($this->previewBackgrounds, 'preview backgrounds');
 dump($this->productionBackgroundAreas, 'areas');
-dump($this->parts, 'parts');
 dump($this->fonts, 'fonts');
+dump($this->accessorytypes, 'accessoriestypes');
 
 
 ?>
@@ -27,7 +28,6 @@ dump($this->fonts, 'fonts');
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#product" id="productLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_PRODUCT_TAB'); ?></a></li>
 		<li><a href="#customize" id="customizeLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_CUSTOMIZE_TAB'); ?></a></li>
-		<li><a href="#parts" id="partsLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_PARTS_TAB'); ?></a></li>
 		<li><a href="#accessories" id="accessoriesLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_ACCESSORIES_TAB'); ?></a></li>
 	</ul>
 
@@ -42,13 +42,12 @@ dump($this->fonts, 'fonts');
 						 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"/>
 				</div>
 				<div class="span4">
+					<?php if (1 < count($this->previewBackgrounds)) : ?>
 					<?php echo $this->loadTemplate('frames'); ?>
+					<?php endif; ?>
 					<?php echo $this->loadTemplate('areas'); ?>
 				</div>
 			</div>
-		</div>
-		<div class="tab-pane" id="parts">
-			<?php echo $this->loadTemplate('parts'); ?>
 		</div>
 		<div class="tab-pane" id="accessories">
 			<?php echo $this->loadTemplate('accessories'); ?>
@@ -64,12 +63,16 @@ dump($this->fonts, 'fonts');
 		function () {
 			akeeba.jQuery(document).on('click', '#customizeDesign', function () {
 					// Add spinner to button
-					akeeba.jQuery(this).button('loading');
-					setTimeout(function() {
-						akeeba.jQuery(this).button('reset');
-					}, 3000);
+					akeeba.jQuery(this).button('loadingo');
+					setTimeout(
+						function() {
+							akeeba.jQuery(this).button('reset');
+						},
+						3000
+					);
 
-					akeeba.jQuery('#background').attr('src', '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/images/spinner.gif'); ?>');
+					akeeba.jQuery('#background')
+						.attr('src', '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/images/spinner.gif'); ?>');
 					customize();
 				}
 			);
