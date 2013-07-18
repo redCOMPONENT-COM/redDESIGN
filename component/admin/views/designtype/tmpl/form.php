@@ -42,6 +42,13 @@ else :
 	}
 </script>
 
+<?php if (!extension_loaded('gd') && !function_exists('gd_info')) : ?>
+	<p class="alert"><?php echo JText::_('RED_REDDESIGN_CPANEL_ERROR_CANT_FIND_GD_LIBRARY'); ?></p>
+<?php endif; ?>
+	<?php if (!extension_loaded('imagick')) : ?>
+	<p class="alert"><?php echo JText::_('RED_REDDESIGN_CPANEL_ERROR_CANT_FIND_IMAGICK_LIBRARY'); ?></p>
+<?php endif; ?>
+
 <ul class="nav nav-tabs">
 	<li><a href="#general"      id="generalLink"       data-toggle="tab" onclick="clearAreaSelection();"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_GENERAL_TAB'); ?></a></li>
 	<li><a href="#backgrounds"  id="backgroundsLink"   data-toggle="tab" onclick="clearAreaSelection();"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS'); ?></a></li>
