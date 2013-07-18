@@ -76,7 +76,6 @@
     </modules>
     <!-- Plugins to install -->
     <plugins>
-        <!--plugin name="reddesign" group="content" /-->
-        <!--plugin name="reddesign" group="system" /-->
+        <plugin name="redshop" group="reddesign" published="published" />
     </plugins>
 </extension>

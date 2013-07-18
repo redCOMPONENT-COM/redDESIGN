@@ -69,3 +69,18 @@ defined('_JEXEC') or die();
 		</div>
 	</div>
 </div>
+
+<script type="">
+	/**
+	 * Add click event to Customize button
+	 */
+	akeeba.jQuery(document).ready(
+		function () {
+			akeeba.jQuery(document).on('click', '#orderDesign', function () {
+					akeeba.jQuery('#task').val('orderProduct');
+					akeeba.jQuery('#designform').submit();
+				}
+			);
+
+		});
+</script>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="reddesign" method="upgrade">
+    <name>PLG_REDDESIGN_REDSHOP</name>
+    <author>redCOMPONENT.com</author>
+    <creationDate>July 2013</creationDate>
+    <copyright>Copyright (C) 2013 redCOMPONENT.com. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>email@redweb.dk</authorEmail>
+    <authorUrl>www.redcomponent.com</authorUrl>
+    <version>2.5.0</version>
+    <description>PLG_REDDESIGN_REDSHOP_XML_DESCRIPTION</description>
+    <files>
+        <filename plugin="redshop">redshop.php</filename>
+    </files>
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.plg_reddesign_redshop.ini</language>
+        <language tag="en-GB">language/en-GB/en-GB.plg_reddesign_redshop.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field name="defaultCategoryName" type="text"
+                       default="redDESIGN Products"
+                       label="PLG_REDDESIGN_REDSHOP_DEFAULT_CATEGORY_NAME_LABEL"
+                       description="PLG_REDDESIGN_REDSHOP_DEFAULT_CATEGORY_NAME_DESC"
+                       size="5"
+                        />
+                <field name="defaultManufacturerName" type="text"
+                       default="redCOMPONENT"
+                       label="PLG_REDDESIGN_REDSHOP_DEFAULT_MANUFACTURER_NAME_LABEL"
+                       description="PLG_REDDESIGN_REDSHOP_DEFAULT_MANUFACTURER_NAME_DESC"
+                       size="5"
+                        />
+            </fieldset>
+        </fields>
+    </config>
+</extension>

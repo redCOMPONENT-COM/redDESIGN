@@ -12,19 +12,25 @@ JHTML::_('behavior.modal');
 
 /* @Todo: remove this dumps once frontend is finished */
 
-dump($this->item, 'design');
+/*dump($this->item, 'design');
 dump($this->backgrounds, 'backgrounds');
 dump($this->productionBackground, 'production');
 dump($this->previewBackground, 'preview');
 dump($this->previewBackgrounds, 'preview backgrounds');
 dump($this->productionBackgroundAreas, 'areas');
 dump($this->fonts, 'fonts');
-dump($this->accessorytypes, 'accessoriestypes');
+dump($this->accessorytypes, 'accessoriestypes');*/
 
 
 ?>
 <h1><?php echo $this->item->title; ?></h1>
 <form id="designform" name="designform" method="post" action="index.php">
+	<input type="hidden" name="option" value="com_reddesign">
+	<input type="hidden" name="view" value="designtype">
+	<input type="hidden" name="task" value="">
+	<input type="hidden" id="reddesign_designtype_id" name="reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>">
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1">
+
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#product" id="productLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_PRODUCT_TAB'); ?></a></li>
 		<li><a href="#customize" id="customizeLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_CUSTOMIZE_TAB'); ?></a></li>
