@@ -22,7 +22,9 @@ class ReddesignControllerDesigntype extends FOFController
 	/**
 	 * Class constructor
 	 *
-	 * @param array $config
+	 * @param   array  $config  Config.
+	 *
+	 * @access public
 	 */
 	public function  __construct($config = array())
 	{
@@ -37,6 +39,8 @@ class ReddesignControllerDesigntype extends FOFController
 	 * @param   string  $task  The task to be executed
 	 *
 	 * @return bool|null|void
+	 *
+	 * @access public
 	 */
 	public function execute($task)
 	{
@@ -49,6 +53,8 @@ class ReddesignControllerDesigntype extends FOFController
 	 * Returns a customized design image url
 	 *
 	 * @return string
+	 *
+	 * @access public
 	 */
 	public function ajaxGetDesign()
 	{
@@ -62,5 +68,49 @@ class ReddesignControllerDesigntype extends FOFController
 		$response['image']		   = JURI::base() . 'media/com_reddesign/assets/images/custom_background.png';
 
 		echo json_encode($response);
+	}
+
+	/**
+	 * There is event triger inside this function.
+	 *
+	 * @return bool
+	 *
+	 * @access public
+	 */
+	public function orderProduct()
+	{
+		JPluginHelper::importPlugin('reddesign');
+		$dispatcher = JDispatcher::getInstance();
+
+		// Get design type data.
+		$designTypeId    = $this->input->getInt('reddesign_designtype_id', null);
+		$designTypeModel = FOFModel::getTmpInstance('Designtype', 'ReddesignModel')->reddesign_designtype_id($designTypeId);
+		$designType      = $designTypeModel->getItem();
+
+		$data = array();
+		$data['reddesign_designtype_id'] = $designTypeId;
+
+		// @Todo: Here form other data and send it to the plugin via dispatcher.
+
+		// Get accessory data.
+		$accessoryTypes = $designTypeModel->getAccessories();
+		$selectedAccessories = array();
+
+		foreach ($accessoryTypes as $type)
+		{
+			$selectedAccessory = $this->input->getString('accessorytype' . $type->reddesign_accessorytype_id . [], '');
+
+			if (!empty($selectedAccessory))
+			{
+				$selectedAccessories[] = $selectedAccessory;
+			}
+		}
+
+		if (!empty($selectedAccessories))
+		{
+			$data['selectedAccessories'] = $selectedAccessories;
+		}
+
+		$results = $dispatcher->trigger('onOrderButtonClick', $data);
 	}
 }
