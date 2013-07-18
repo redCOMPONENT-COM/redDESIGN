@@ -40,7 +40,9 @@ dump($this->fonts, 'fonts');
 						 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"/>
 				</div>
 				<div class="span4">
+					<?php if (1 < count($this->previewBackgrounds)) : ?>
 					<?php echo $this->loadTemplate('frames'); ?>
+					<?php endif; ?>
 					<?php echo $this->loadTemplate('areas'); ?>
 				</div>
 			</div>
