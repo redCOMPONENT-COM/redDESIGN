@@ -38,6 +38,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->productionBackground			= $model->getProductionBackground();
 		$this->productionBackgroundAreas	= $model->getProductionBackgroundAreas($this->productionBackground->reddesign_background_id);
 		$this->fonts						= $model->getFonts();
+		$this->accessoriestypes				= $model->getAccessories();
 
 		parent::display($tpl);
 	}
