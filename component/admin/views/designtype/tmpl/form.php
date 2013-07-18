@@ -34,7 +34,11 @@ else :
 	 */
 	function clearAreaSelection() {
 		var imageAreaSelection = akeeba.jQuery("img#background").imgAreaSelect({ instance: true });
-		imageAreaSelection.cancelSelection();
+
+		if(typeof imageAreaSelection != 'undefined')
+		{
+			imageAreaSelection.cancelSelection();
+		}
 	}
 </script>
 
