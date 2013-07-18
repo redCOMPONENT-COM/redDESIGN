@@ -1,0 +1,19 @@
+/* Accessories */
+
+a img.accessory-image {
+    height:50px;
+}
+
+.accessory-image-container {
+    padding-right: 10px;
+}
+
+.accessory-selection {
+    border-right: none;
+    vertical-align: middle;
+    width:10px;
+}
+
+.accessory-detail {
+    border-left:none;
+}

@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die();
+JHTML::_('behavior.modal');
 
 /* @Todo: remove this dumps once frontend is finished */
 
@@ -18,7 +19,7 @@ dump($this->previewBackground, 'preview');
 dump($this->previewBackgrounds, 'preview backgrounds');
 dump($this->productionBackgroundAreas, 'areas');
 dump($this->fonts, 'fonts');
-dump($this->accessoriestypes, 'accessoriestypes');
+dump($this->accessorytypes, 'accessoriestypes');
 
 
 ?>

@@ -129,9 +129,8 @@ class ReddesignModelDesigntype extends FOFModel
 		foreach ($designAccessoryTypesIds as $key => $value)
 		{
 			// Get each accessorytype available in current design
-			$accessorytypesModel = FOFModel::getTmpInstance('Accessorytype', 'ReddesignModel')
-				->reddesign_accessorytype_id($value);
-			$designAccessoryType = $accessorytypesModel->getItem();
+			$accessorytypesModel = FOFModel::getTmpInstance('Accessorytype', 'ReddesignModel');
+			$designAccessoryType = $accessorytypesModel->getItem($value);
 
 			// Check that this Accessorytype is published
 			if ($designAccessoryType->enabled)
