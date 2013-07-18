@@ -61,12 +61,16 @@ dump($this->fonts, 'fonts');
 		function () {
 			akeeba.jQuery(document).on('click', '#customizeDesign', function () {
 					// Add spinner to button
-					akeeba.jQuery(this).button('loading');
-					setTimeout(function() {
-						akeeba.jQuery(this).button('reset');
-					}, 3000);
+					akeeba.jQuery(this).button('loadingo');
+					setTimeout(
+						function() {
+							akeeba.jQuery(this).button('reset');
+						},
+						3000
+					);
 
-					akeeba.jQuery('#background').attr('src', '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/images/spinner.gif'); ?>');
+					akeeba.jQuery('#background')
+						.attr('src', '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/images/spinner.gif'); ?>');
 					customize();
 				}
 			);
