@@ -92,37 +92,19 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				</div>
 			</div>
 			<div class="control-group">
-				<?php
-				if (!empty($area->color_code))
-				{
-				?>
+				<?php if (!empty($area->color_code)) : ?>
 				<label class="control-label ">
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_COLOR_CODE'); ?>
-
 				</label>
-				<?php
-				}
-				?>
+				<?php endif; ?>
 				<div class="controls">
-					<?php
-					if (empty($area->color_code))
-					{
-					?>
+					<?php if (empty($area->color_code)) : ?>
 						<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id?>" name="colorCode<?php echo $area->reddesign_area_id?>" value="000000" id="colorCode<?php echo $area->reddesign_area_id?>">
-					<?php
-					}
-					elseif ($area->color_code == 1)
-					{
-					?>
+					<?php elseif ($area->color_code == 1) : ?>
 						<div id="colorSelector<?php echo $area->reddesign_area_id;?>" class="colorSelector"><div style="background-color: #000000"></div></div>
 						<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id?>" name="colorCode<?php echo $area->reddesign_area_id?>" value="000000" id="colorCode<?php echo $area->reddesign_area_id?>">
 						<div id="ColorPickerNote"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLORPICKER_NOTE'); ?></div>
-
-					<?php
-					}
-					else
-					{
-					?>
+					<?php else : ?>
 						<div id="loadColors" style="width:300px;">
 						<table class="table" cellpadding="0" cellspacing="0" border="0" >
 							<tr valign="top" class="color">
@@ -156,14 +138,9 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 							</tr>
 						</table>
 						</div>
-					<?php
-					}
-					?>
+					<?php endif; ?>
 				</div>
-				<?php
-				if (!empty($area->color_code) && $area->color_code != 1)
-				{
-				?>
+				<?php if (!empty($area->color_code) && $area->color_code != 1) : ?>
 				<label class="control-label ">
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DEFAULT_COLOR_CODE'); ?>
 				</label>
@@ -173,9 +150,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					</div>
 					<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id?>" name="colorCode<?php echo $area->reddesign_area_id?>" value="<?php echo $defaultColorVal;?>" id="colorCode<?php echo $area->reddesign_area_id?>">
 				</div>
-				<?php
-				}
-				?>
+				<?php endif; ?>
 			</div>
 		<?php endforeach; ?>
 		<div class="form-actions">
