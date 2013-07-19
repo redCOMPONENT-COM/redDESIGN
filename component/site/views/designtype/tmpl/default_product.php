@@ -8,6 +8,15 @@
  */
 
 defined('_JEXEC') or die();
+
+$pattern = '#<hr\s+id=("|\')system-readmore("|\')\s*\/*>#i';
+$tagPos = preg_match($pattern, $this->item->description);
+
+if ($tagPos != 0)
+{
+	$intro_description = preg_split($pattern, $this->item->description, 2);
+	$this->item->description = $intro_description[0].$intro_description[1];
+}
 ?>
 
 <div class="row">
