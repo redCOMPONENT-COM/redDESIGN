@@ -108,14 +108,14 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					if (empty($area->color_code))
 					{
 					?>
-						<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id?>" name="colorCode<?php echo $area->reddesign_area_id?>[]" value="" id="colorCode<?php echo $area->reddesign_area_id?>">
+						<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id?>" name="colorCode<?php echo $area->reddesign_area_id?>" value="000000" id="colorCode<?php echo $area->reddesign_area_id?>">
 					<?php
 					}
 					elseif ($area->color_code == 1)
 					{
 					?>
 						<div id="colorSelector<?php echo $area->reddesign_area_id;?>" class="colorSelector"><div style="background-color: #000000"></div></div>
-						<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id?>" name="colorCode<?php echo $area->reddesign_area_id?>[]" value="" id="colorCode<?php echo $area->reddesign_area_id?>">
+						<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id?>" name="colorCode<?php echo $area->reddesign_area_id?>" value="000000" id="colorCode<?php echo $area->reddesign_area_id?>">
 						<div id="ColorPickerNote"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLORPICKER_NOTE'); ?></div>
 
 					<?php
@@ -137,6 +137,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 								{
 									$i++;
 									$defaultColor = $colorData[0];
+									$defaultColorVal = str_replace("#","", $colorData[0]);
 									$colorCodeVal = str_replace("#", "", $colorData[$j]);
 								?>
 									<td>
@@ -170,7 +171,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					<div class="colorSelector_list" id="fontColor<?php echo $area->reddesign_area_id?>" >
 						<div  style="background-color:<?php echo $defaultColor;?>;cursor:pointer;">&nbsp;</div>
 					</div>
-					<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id?>" name="colorCode<?php echo $area->reddesign_area_id?>[]" value="" id="colorCode<?php echo $area->reddesign_area_id?>">
+					<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id?>" name="colorCode<?php echo $area->reddesign_area_id?>" value="<?php echo $defaultColorVal;?>" id="colorCode<?php echo $area->reddesign_area_id?>">
 				</div>
 				<?php
 				}
