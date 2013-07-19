@@ -3,6 +3,18 @@
     margin-top:5px;
 }
 
+
+/* Product */
+.product-thumb {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.total, .total p {
+    text-align: center;
+}
+
+
 /* Accessories */
 
 a img.accessory-image {
@@ -24,7 +36,7 @@ a img.accessory-image {
 }
 
 .accessory-type-thumb {
-    width: 64px;
-    height: 64px;
+    max-width: 64px;
+    max-height: 64px;
 }
 

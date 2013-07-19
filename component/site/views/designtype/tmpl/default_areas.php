@@ -43,9 +43,9 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		akeeba.jQuery('#fontColor'+reddesign_area_id).show();
 	}
 </script>
-<div class="row">
-	<div class="span9">
-		<h3><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_AREAS_TITLE') ?></h3>
+<div class="row-fluid">
+	<div class="span12">
+		<h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_AREAS_TITLE') ?></h4>
 		<?php foreach($this->productionBackgroundAreas as $area) : ?>
 			<div class="control-group">
 				<label class="control-label ">
@@ -106,7 +106,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id?>" name="colorCode<?php echo $area->reddesign_area_id?>" value="000000" id="colorCode<?php echo $area->reddesign_area_id?>">
 						<div id="ColorPickerNote"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLORPICKER_NOTE'); ?></div>
 					<?php else : ?>
-						<div id="loadColors" style="width:300px;">
+						<div id="loadColors">
 						<table class="table" cellpadding="0" cellspacing="0" border="0" >
 							<tr valign="top" class="color">
 							<?php
@@ -161,7 +161,6 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>"
 				id="customizeDesign"
 				><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE'); ?></button>
-			<button type="button" class="btn" id="orderDesign"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_ORDER'); ?></button>
 		</div>
 	</div>
 </div>
