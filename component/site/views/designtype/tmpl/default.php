@@ -9,20 +9,8 @@
 
 defined('_JEXEC') or die();
 JHTML::_('behavior.modal');
-
-/* @Todo: remove this dumps once frontend is finished */
-
-/*dump($this->item, 'design');
-dump($this->backgrounds, 'backgrounds');
-dump($this->productionBackground, 'production');
-dump($this->previewBackground, 'preview');
-dump($this->previewBackgrounds, 'preview backgrounds');
-dump($this->productionBackgroundAreas, 'areas');
-dump($this->fonts, 'fonts');
-dump($this->accessorytypes, 'accessoriestypes');*/
-
-
 ?>
+
 <h1><?php echo $this->item->title; ?></h1>
 <form id="designform" name="designform" method="post" action="index.php">
 	<input type="hidden" name="option" value="com_reddesign">
@@ -31,25 +19,23 @@ dump($this->accessorytypes, 'accessoriestypes');*/
 	<input type="hidden" id="reddesign_designtype_id" name="reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1">
 
+	<?php echo $this->loadTemplate('product'); ?>
+
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="#product" id="productLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_PRODUCT_TAB'); ?></a></li>
-		<li><a href="#customize" id="customizeLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_CUSTOMIZE_TAB'); ?></a></li>
+		<li class="active"><a href="#customize" id="customizeLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_CUSTOMIZE_TAB'); ?></a></li>
 		<li><a href="#accessories" id="accessoriesLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_ACCESSORIES_TAB'); ?></a></li>
 	</ul>
 
 	<div id="my-tab-content" class="tab-content">
-		<div class="tab-pane active" id="product">
-			<?php echo $this->loadTemplate('product'); ?>
-		</div>
-		<div class="tab-pane" id="customize">
-			<div class="row">
-				<div class="span5">
+		<div class="tab-pane active" id="customize">
+			<div class="row-fluid">
+				<div class="span6">
 					<img id="background"
 						 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"/>
 				</div>
-				<div class="span4">
+				<div class="span5 offset1 well">
 					<?php if (1 < count($this->previewBackgrounds)) : ?>
-					<?php echo $this->loadTemplate('frames'); ?>
+						<?php echo $this->loadTemplate('frames'); ?>
 					<?php endif; ?>
 					<?php echo $this->loadTemplate('areas'); ?>
 				</div>
@@ -82,7 +68,16 @@ dump($this->accessorytypes, 'accessoriestypes');*/
 					customize();
 				}
 			);
-		});
+			akeeba.jQuery(document).on('click', '.accessory-option', function () {
+					var total = 0;
+					akeeba.jQuery('.accessory-option:checked').each(function () {
+							total += parseInt(akeeba.jQuery(this).val());
+						});
+					akeeba.jQuery('#total').html(total + 'USD$');
+				}
+			);
+		}
+	);
 
 	/**
 	 * Sends customize data to server and retreives the resulting image
@@ -102,12 +97,10 @@ dump($this->accessorytypes, 'accessoriestypes');*/
 			"textArea" :	akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
 			"fontArea" : 	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
 			"fontColor" :	"#000000",
-			"fontSize" :	"22"
+			"fontSize" :	"22",
 			"fontTypeId" :	"1"
 		});
 		<?php endforeach; ?>
-
-
 
 		akeeba.jQuery.ajax({
 			type: "POST",

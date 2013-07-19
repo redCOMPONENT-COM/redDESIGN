@@ -18,13 +18,31 @@ if ($tagPos != 0)
 	$this->item->description = $intro_description[0].$intro_description[1];
 }
 ?>
-
-<div class="row">
-	<div class="span5">
-		<img id="background"
-			 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/designtypes/' . $this->item->sample_image); ?>"/>
+<div class="row-fluid">
+	<div class="span8">
+		<div class="media">
+			<?php if ($this->item->sample_thumb) : ?>
+				<a
+					class="pull-left modal"
+					href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/designtypes/thumbnails/' . $this->item->sample_thumb); ?>">
+					<img
+						class="media-object product-thumb"
+						alt="<?php echo $this->item->title ?>"
+						src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/designtypes/' . $this->item->sample_image); ?>">
+				</a>
+			<?php endif; ?>
+			<div class="media-body">
+				<h4 class="media-heading"><?php echo $this->item->title ?></h4>
+				<?php echo $this->item->description; ?>
+			</div>
+		</div>
 	</div>
-	<div class="span4">
-		<?php echo $this->item->description; ?>
+	<div class="span3 offset1">
+		<div class="total well">
+			<h5><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PRODUCT_TOTAL'); ?>: <span id="total">$32.00 USD</span></h5>
+			<p>
+				<button type="button" class="btn btn-primary" id="orderDesign"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_ORDER'); ?></button>
+			</p>
+		</div>
 	</div>
 </div>

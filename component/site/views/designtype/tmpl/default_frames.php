@@ -9,9 +9,9 @@
 
 defined('_JEXEC') or die();
 ?>
-<h3><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_FRAMES_TITLE') ?></h3>
+<h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_FRAMES_TITLE') ?></h4>
 <?php foreach($this->previewBackgrounds as $frame) : ?>
-<div class="row-fluid">
+<div class="row-fluid top-buffer">
 	<div class="span3">
 		<a href="#">
 			<img
