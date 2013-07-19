@@ -32,9 +32,16 @@ defined('_JEXEC') or die();
 			<tr>
 				<td class="accessory-selection">
 					<?php if($accessorytype->single_select) : ?>
-					<input type="radio" name="accessorytype<?php echo $accessorytype->reddesign_accessorytype_id; ?>[]" value="<?php echo $accessory->price ?>" />
+					<input type="radio"
+						   class="accessory-option"
+						   name="accessorytype<?php echo $accessorytype->reddesign_accessorytype_id; ?>[]"
+						   value="<?php echo $accessory->price ?>" />
 					<?php else : ?>
-					<input type="checkbox" name="accessorytype<?php echo $accessorytype->reddesign_accessorytype_id; ?>" value="<?php echo $accessory->price ?>" />
+					<input
+						class="accessory-option"
+						type="checkbox"
+						name="accessorytype<?php echo $accessorytype->reddesign_accessorytype_id; ?>"
+						value="<?php echo $accessory->price ?>" />
 					<?php endif; ?>
 				</td>
 				<td class="accessory-detail">

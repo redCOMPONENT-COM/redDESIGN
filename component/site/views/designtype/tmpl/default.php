@@ -68,7 +68,16 @@ JHTML::_('behavior.modal');
 					customize();
 				}
 			);
-		});
+			akeeba.jQuery(document).on('click', '.accessory-option', function () {
+					var total = 0;
+					akeeba.jQuery('.accessory-option:checked').each(function () {
+							total += parseInt(akeeba.jQuery(this).val());
+						});
+					akeeba.jQuery('#total').html(total + 'USD$');
+				}
+			);
+		}
+	);
 
 	/**
 	 * Sends customize data to server and retreives the resulting image
@@ -88,12 +97,10 @@ JHTML::_('behavior.modal');
 			"textArea" :	akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
 			"fontArea" : 	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
 			"fontColor" :	"#000000",
-			"fontSize" :	"22"
+			"fontSize" :	"22",
 			"fontTypeId" :	"1"
 		});
 		<?php endforeach; ?>
-
-
 
 		akeeba.jQuery.ajax({
 			type: "POST",
