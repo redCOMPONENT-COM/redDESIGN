@@ -10,17 +10,23 @@
 defined('_JEXEC') or die();
 ?>
 <?php foreach ($this->accessorytypes as $accessorytype) : ?>
-	<div class="paragraphs">
-		<div class="row">
-			<div class="span9">
-				<div class="clearfix content-heading">
-					<h3><?php echo $accessorytype->title ?></h3>
-				</div>
-				<?php echo $accessorytype->description ?>
-			</div>
+	<div class="media">
+		<?php if ($accessorytype->sample_thumb) : ?>
+		<a
+			class="pull-left modal"
+			href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessorytypes/' . $accessorytype->sample_image); ?>">
+			<img
+				class="media-object accessory-type-thumb"
+				alt="<?php echo $accessorytype->title ?>"
+				src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessorytypes/thumbnails/' . $accessorytype->sample_thumb); ?>">
+		</a>
+		<?php endif; ?>
+		<div class="media-body">
+			<h4 class="media-heading"><?php echo $accessorytype->title ?></h4>
+			<?php echo $accessorytype->description ?>
 		</div>
 	</div>
-	<table class="table table-hover">
+	<table class="table table-hover top-buffer">
 		<tbody>
 			<?php foreach ($accessorytype->accessories as $accessory) : ?>
 			<tr>
@@ -39,7 +45,7 @@ defined('_JEXEC') or die();
 								src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessories/thumbnails/' . $accessory->thumbnail); ?>"/>
 						</a>
 					</div>
-					<h4><?php echo $accessory->title ?></h4>
+					<h5><?php echo $accessory->title ?></h5>
 					<?php echo $accessory->description ?>
 				</td>
 			</tr>

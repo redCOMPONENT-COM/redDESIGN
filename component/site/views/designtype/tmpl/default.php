@@ -42,12 +42,12 @@ dump($this->accessorytypes, 'accessoriestypes');*/
 			<?php echo $this->loadTemplate('product'); ?>
 		</div>
 		<div class="tab-pane" id="customize">
-			<div class="row">
-				<div class="span5">
+			<div class="row-fluid">
+				<div class="span6">
 					<img id="background"
 						 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"/>
 				</div>
-				<div class="span4">
+				<div class="span6">
 					<?php if (1 < count($this->previewBackgrounds)) : ?>
 					<?php echo $this->loadTemplate('frames'); ?>
 					<?php endif; ?>

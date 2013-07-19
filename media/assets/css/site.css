@@ -1,3 +1,8 @@
+/* Common */
+.top-buffer {
+    margin-top:5px;
+}
+
 /* Accessories */
 
 a img.accessory-image {
@@ -17,3 +22,9 @@ a img.accessory-image {
 .accessory-detail {
     border-left:none;
 }
+
+.accessory-type-thumb {
+    width: 64px;
+    height: 64px;
+}
+
