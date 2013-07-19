@@ -187,7 +187,7 @@ class ReddesignControllerDesigntype extends FOFController
 
 		foreach ($accessoryTypes as $type)
 		{
-			$selectedAccessory = $this->input->getString('accessorytype' . $type->reddesign_accessorytype_id . [], '');
+			$selectedAccessory = $this->input->getString('accessorytype' . $type->reddesign_accessorytype_id . '[]', '');
 
 			if (!empty($selectedAccessory))
 			{
