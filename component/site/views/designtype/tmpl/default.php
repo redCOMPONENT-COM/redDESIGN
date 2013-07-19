@@ -95,18 +95,19 @@ dump($this->accessorytypes, 'accessoriestypes');*/
 		};
 		<?php foreach($this->productionBackgroundAreas as $area) : ?>
 
+		design.id = "1"; // @ToDo
+		design.backgroundId = "2"; // @ToDo
 		design.areas.push({
 			"id" : 			'<?php echo $area->reddesign_area_id; ?>',
 			"textArea" :	akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
 			"fontArea" : 	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
 			"fontColor" :	"#000000",
 			"fontSize" :	"22"
+			"fontTypeId" :	"1"
 		});
 		<?php endforeach; ?>
 
-		design.background = "2"; // @ToDo
 
-		design.id = "1"; // @ToDo
 
 		akeeba.jQuery.ajax({
 			type: "POST",
@@ -115,7 +116,7 @@ dump($this->accessorytypes, 'accessoriestypes');*/
 			contentType: "application/json; charset=utf-8",
 			success: function(data) {
 				var json = akeeba.jQuery.parseJSON(data);
-				akeeba.jQuery('#background').attr('src', json.image);
+				akeeba.jQuery('img#background').attr('src', json.image);
 				console.log(data);
 			},
 			failure: function(errMsg) {
