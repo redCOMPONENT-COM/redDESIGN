@@ -115,7 +115,7 @@ dump($this->accessorytypes, 'accessoriestypes');*/
 			contentType: "application/json; charset=utf-8",
 			success: function(data) {
 				var json = akeeba.jQuery.parseJSON(data);
-				akeeba.jQuery('#background').attr('src', json.image);
+				akeeba.jQuery('img#background').attr('src', json.image);
 				console.log(data);
 			},
 			failure: function(errMsg) {
