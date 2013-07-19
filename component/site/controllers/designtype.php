@@ -99,7 +99,7 @@ class ReddesignControllerDesigntype extends FOFController
 			}
 
 			$backgroundImage_file_location = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $backgroundImage;
-			$newjpg_file_location = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/customized/' . $mangledname . '.jpg';
+			$newjpg_file_location = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
 
 			foreach ($areas as $area)
 			{
@@ -154,7 +154,7 @@ class ReddesignControllerDesigntype extends FOFController
 		}
 
 		// Dummy image is returned to frontend editor:
-		$response['image']		   = JURI::base() . 'media/com_reddesign/assets/backgrounds/customized/' . $mangledname . '.jpg';
+		$response['image']		   = JURI::base() . 'media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
 
 		echo json_encode($response);
 	}
