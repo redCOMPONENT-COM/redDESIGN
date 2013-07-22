@@ -18,7 +18,9 @@ defined('_JEXEC') or die();
 					<input type="radio"
 						   class="price-modifier"
 						   name="frame"
-						   value="<?php echo $frame->price ?>" />
+						   value="<?php echo $frame->price ?>"
+						   <?php if ($frame->isPreviewbgimage) echo 'checked="checked"'; ?>
+						/>
 			</td>
 			<td class="accessory-detail">
 				<div class="pull-left frame-thumbnail-container">

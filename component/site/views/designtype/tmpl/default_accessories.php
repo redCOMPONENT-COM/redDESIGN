@@ -36,7 +36,7 @@ defined('_JEXEC') or die();
 						   class="price-modifier"
 						   name="<?php echo $accessorytype->title; ?>"
 						   value="<?php echo $accessory->price ?>"
-						   <?php if ($accessory->default) echo 'checked="checked"'; ?>
+						   <?php if ($accessory->isPreviewbgimage) echo 'checked="checked"'; ?>
 						/>
 					<?php else : ?>
 					<input
