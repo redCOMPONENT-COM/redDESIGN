@@ -56,7 +56,8 @@ defined('_JEXEC') or die();
 								src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessories/thumbnails/' . $accessory->thumbnail); ?>"/>
 						</a>
 					</div>
-					<h5><?php echo "$accessory->title (  $accessory->price \$USD )"; ?></h5>
+					<h5><?php echo $accessory->title; ?>
+						&nbsp;<span class="label"><?php echo $accessory->price; ?> $USD</span></h5>
 					<?php echo $accessory->description ?>
 				</td>
 			</tr>

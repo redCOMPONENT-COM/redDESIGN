@@ -26,8 +26,8 @@ defined('_JEXEC') or die();
 						class="img-polaroid frame-thumbnail"
 						src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $frame->thumbnail; ?>"/>
 				</div>
-				<h5><?php echo $frame->title ?></h5>
-				<p><?php echo $frame->price ?> $USD</p>
+				<h5><?php echo $frame->title ?>
+					&nbsp;<span class="label"><?php echo $frame->price; ?> $USD</span></h5>
 			</td>
 		</tr>
 	<?php endforeach; ?>
