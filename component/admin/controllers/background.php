@@ -348,7 +348,7 @@ class ReddesignControllerBackground extends FOFController
 	}
 
 	/**
-	 * Method to set the a background as the PDF background.
+	 * Method to set  a background as the PDF background.
 	 *
 	 * @since	1.0
 	 *
@@ -370,6 +370,35 @@ class ReddesignControllerBackground extends FOFController
 		else
 		{
 			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_PDF_BG_UPDATED'));
+		}
+
+		$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . $designId . '&tab=backgrounds');
+		$this->redirect();
+	}
+
+	/**
+	 * Method to set a background as the Preview default background.
+	 *
+	 * @since	1.0
+	 *
+	 * @return void
+	 */
+	public function setPreviewBg()
+	{
+		$designId	= $this->input->getInt('reddesign_designtype_id', '');
+		$bgId		= $this->input->getInt('reddesign_background_id', '');
+
+		$model = $this->getThisModel();
+
+		$app = JFactory::getApplication();
+
+		if (!$model->setAsPreviewbg($designId, $bgId))
+		{
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_ERROR_SWITCHING_PREVIEW_BG'), 'error');
+		}
+		else
+		{
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_PDF_PREVOEW_UPDATED'));
 		}
 
 		$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . $designId . '&tab=backgrounds');
