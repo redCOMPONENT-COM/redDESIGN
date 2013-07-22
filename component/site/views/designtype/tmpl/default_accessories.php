@@ -33,26 +33,26 @@ defined('_JEXEC') or die();
 				<td class="accessory-selection">
 					<?php if($accessorytype->single_select) : ?>
 					<input type="radio"
-						   class="accessory-option"
-						   name="accessorytype<?php echo $accessorytype->reddesign_accessorytype_id; ?>[]"
+						   class="price-modifier"
+						   name="<?php echo $accessorytype->title; ?>"
 						   value="<?php echo $accessory->price ?>" />
 					<?php else : ?>
 					<input
-						class="accessory-option"
+						class="price-modifier"
 						type="checkbox"
-						name="accessorytype<?php echo $accessorytype->reddesign_accessorytype_id; ?>"
+						name="<?php echo $accessorytype->title; ?>[]"
 						value="<?php echo $accessory->price ?>" />
 					<?php endif; ?>
 				</td>
 				<td class="accessory-detail">
-					<div class="pull-left accessory-image-container">
+					<div class="pull-left accessory-thumbnail-container">
 						<a href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessories/' . $accessory->image); ?>" class="modal">
 							<img
-								class="img-polaroid accessory-image"
+								class="img-polaroid accessory-thumbnail"
 								src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessories/thumbnails/' . $accessory->thumbnail); ?>"/>
 						</a>
 					</div>
-					<h5><?php echo $accessory->title ?></h5>
+					<h5><?php echo "$accessory->title (  $accessory->price \$USD )"; ?></h5>
 					<?php echo $accessory->description ?>
 				</td>
 			</tr>

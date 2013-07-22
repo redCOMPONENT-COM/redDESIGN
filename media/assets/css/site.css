@@ -14,14 +14,24 @@
     text-align: center;
 }
 
+/* Frames */
+img.frame-thumbnail {
+    max-height:50px;
+    max-width:50px;
+}
+
+.frame-thumbnail-container {
+    padding-right: 10px;
+}
 
 /* Accessories */
 
-a img.accessory-image {
-    height:50px;
+a img.accessory-thumbnail {
+    max-height:50px;
+    max-width:50px;
 }
 
-.accessory-image-container {
+.accessory-thumbnail-container {
     padding-right: 10px;
 }
 
