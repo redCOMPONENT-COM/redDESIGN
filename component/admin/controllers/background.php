@@ -398,7 +398,7 @@ class ReddesignControllerBackground extends FOFController
 		}
 		else
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_PDF_PREVOEW_UPDATED'));
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_PDF_PREVIEW_UPDATED'));
 		}
 
 		$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . $designId . '&tab=backgrounds');
