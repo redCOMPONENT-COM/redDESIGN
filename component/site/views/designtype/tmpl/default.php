@@ -73,9 +73,15 @@ JHTML::_('behavior.modal');
 					akeeba.jQuery('.price-modifier:checked').each(function () {
 							total += parseInt(akeeba.jQuery(this).val());
 						});
-					akeeba.jQuery('#total').html(total + 'USD$');
+					akeeba.jQuery('#total').html(total);
 				}
 			);
+			// Calculate default price
+			var total = 0;
+			akeeba.jQuery('.price-modifier:checked').each(function () {
+				total += parseInt(akeeba.jQuery(this).val());
+			});
+			akeeba.jQuery('#total').html(total);
 		}
 	);
 
