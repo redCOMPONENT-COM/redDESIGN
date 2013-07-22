@@ -5,7 +5,7 @@
 
 
 /* Product */
-.product-thumb {
+.product-thumbnail {
     max-width: 100px;
     max-height: 100px;
 }
@@ -25,7 +25,6 @@ img.frame-thumbnail {
 }
 
 /* Accessories */
-
 a img.accessory-thumbnail {
     max-height:50px;
     max-width:50px;
@@ -45,7 +44,7 @@ a img.accessory-thumbnail {
     border-left:none;
 }
 
-.accessory-type-thumb {
+.accessorytype-thumbnail {
     max-width: 64px;
     max-height: 64px;
 }

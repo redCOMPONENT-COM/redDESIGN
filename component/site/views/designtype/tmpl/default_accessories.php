@@ -16,7 +16,7 @@ defined('_JEXEC') or die();
 			class="pull-left modal"
 			href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessorytypes/' . $accessorytype->sample_image); ?>">
 			<img
-				class="media-object accessory-type-thumb"
+				class="media-object accessorytype-thumbnail"
 				alt="<?php echo $accessorytype->title ?>"
 				src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessorytypes/thumbnails/' . $accessorytype->sample_thumb); ?>">
 		</a>

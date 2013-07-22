@@ -26,7 +26,7 @@ if ($tagPos != 0)
 					class="pull-left modal"
 					href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/designtypes/thumbnails/' . $this->item->sample_thumb); ?>">
 					<img
-						class="media-object product-thumb"
+						class="media-object product-thumbnail"
 						alt="<?php echo $this->item->title ?>"
 						src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/designtypes/' . $this->item->sample_image); ?>">
 				</a>

@@ -90,7 +90,7 @@ class ReddesignControllerBackground extends FOFController
 				// Create a image preview thumbnail based on the EPS
 				$im = new Imagick;
 				$im->readImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $jpegPreviewFile);
-				$im->thumbnailImage($params->get('max_designtype_thumbnail_width', 210), $params->get('max_designtype_thumbnail_height', 140), true);
+				$im->thumbnailImage($params->get('max_background_thumbnail_width', 50), $params->get('max_background_thumbnail_height', 50), true);
 				$im->writeImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/thumbnails/' . $jpegPreviewFile);
 				$im->clear();
 				$im->destroy();
