@@ -24,3 +24,4 @@ defined('_JEXEC') or die();
 	</div>
 </div>
 <?php endforeach; ?>
+<input type="hidden" name="reddesign_background_id" id="reddesign_background_id" value="<?php echo $this->previewBackgrounds[0]->reddesign_background_id;?>">

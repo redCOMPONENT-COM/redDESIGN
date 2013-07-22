@@ -58,44 +58,54 @@ class ReddesignControllerDesigntype extends FOFController
 	 */
 	public function ajaxGetDesign()
 	{
-		// @Todo: the ramSign engine for generating images needs to be ported here. Now just a dummy image is returned to frontend editor
-		// Here we will import all the requested values using JInput
-		// but right now I'm creating a dummy array that contains all values for generating a image
-		$values = json_decode('{"Design":{"areas":[{"id":"1","textArea":"Mrs. Vipula","fontArea":"1","fontColor":"#000000","fontSize":"22","fontTypeId":"1"},{"id":"2","textArea":"Developer at redCOMPONENT","fontColor":"#000000","fontSize":"22","fontTypeId":"1"}],"backgroundId":"2","id":"1"}}');
-		// var_dump($values) to see the ajax message structure to get the resulting image;
+		// Initialize session
+		$session 			=& JFactory::getSession();
+
+		// Get reddesign_desingtype_id and reddesign_background_id
+		$reddesign_desingtype_id = $this->input->getInt('reddesign_designtype_id');
+		$reddesign_background_id = $this->input->getInt('reddesign_background_id');
+
+		// Get design type area values
+		$designarea = $this->input->getString('designarea');
+		$values = json_decode($designarea);
 
 		foreach ($values as $value)
 		{
-			$design_id = $value->id;
 			$areas = $value->areas;
-
-			$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($value->id);
-			$this->background = $backgroundModel->getItem($value->backgroundId);
+			$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($reddesign_desingtype_id);
+			$this->background = $backgroundModel->getItem($reddesign_background_id);
 			$backgroundImage = $this->background->image_path;
 
-			// Get a (very!) randomised name
-			if (version_compare(JVERSION, '3.0', 'ge'))
+			if ($session->get('customizedImage'))
 			{
-				$serverkey = JFactory::getConfig()->get('secret', '');
+				$mangledname = $session->get('customizedImage');
 			}
 			else
 			{
-				$serverkey = JFactory::getConfig()->getValue('secret', '');
-			}
+				// Get a (very!) randomised name
+				if (version_compare(JVERSION, '3.0', 'ge'))
+				{
+					$serverkey = JFactory::getConfig()->get('secret', '');
+				}
+				else
+				{
+					$serverkey = JFactory::getConfig()->getValue('secret', '');
+				}
 
-			$sig = $backgroundImage . microtime() . $serverkey;
+				$sig = $backgroundImage . microtime() . $serverkey;
 
-			if (function_exists('sha256'))
-			{
-				$mangledname = sha256($sig);
-			}
-			elseif (function_exists('sha1'))
-			{
-				$mangledname = sha1($sig);
-			}
-			else
-			{
-				$mangledname = md5($sig);
+				if (function_exists('sha256'))
+				{
+					$mangledname = sha256($sig);
+				}
+				elseif (function_exists('sha1'))
+				{
+					$mangledname = sha1($sig);
+				}
+				else
+				{
+					$mangledname = md5($sig);
+				}
 			}
 
 			$backgroundImage_file_location = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $backgroundImage;
@@ -107,12 +117,12 @@ class ReddesignControllerDesigntype extends FOFController
 				$fontColor = $area->fontColor;
 				$fontTypeId = $area->fontTypeId;
 				$fontText = $area->textArea;
-
-				$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area->id);
+				$reddesign_area_id = $area->id;
+				$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($reddesign_area_id);
 				$this->fontType = $fontModel->getItem($fontTypeId);
 
-				$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($value->backgroundId);
-				$this->areaItem = $areaModel->getItem($area->id);
+				$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($reddesign_background_id);
+				$this->areaItem = $areaModel->getItem($reddesign_area_id);
 				/*
 					Text alingment condition
 					1 is left
@@ -143,17 +153,19 @@ class ReddesignControllerDesigntype extends FOFController
 				$fontType_file_location = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $this->fontType->font_file;
 				$line_gap = 0;
 
-			    $cmd = "convert $backgroundImage_file_location  \
-			     		\( $gravity -font $fontType_file_location -pointsize $fontSize -interline-spacing -$line_gap -fill '$fontColor'  -background transparent label:'$fontText' \ -virtual-pixel transparent \
+		        $cmd = "convert $backgroundImage_file_location  \
+			     		\( $gravity -font $fontType_file_location -pointsize $fontSize -interline-spacing -$line_gap -fill '#$fontColor'  -background transparent label:'$fontText' \ -virtual-pixel transparent \
 						\) $gravity -geometry +$offsetLeft+$offsetTop -composite   \
 			      		$newjpg_file_location";
-				exec($cmd);
 
+				exec($cmd);
 				$backgroundImage_file_location = $newjpg_file_location;
+
 			}
 		}
 
-		// Dummy image is returned to frontend editor:
+		// Create seesion to store Image
+		$session->set('customizedImage', $mangledname);
 		$response['image']		   = JURI::base() . 'media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
 
 		echo json_encode($response);

@@ -12,37 +12,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/colorpicker.js');
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
 FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 ?>
-<script type="text/javascript">
-	/**
-	 * Initiate imgAreaSelect plugin
-	 */
-	akeeba.jQuery(document).ready(
-		function ($) {
-			<?php foreach ($this->productionBackgroundAreas as  $area) : ?>
-			var reddesign_area_id = parseInt(<?php echo $area->reddesign_area_id;?>);
-			akeeba.jQuery('#colorSelector' + reddesign_area_id).ColorPicker({
-				designId:reddesign_area_id,
-				color: '#000000',
-				onChange: function (hsb, hex, rgb, reddesign_area_id) {
-					akeeba.jQuery('#colorSelector' +reddesign_area_id+ ' div').css('backgroundColor', '#' + hex);
-					document.getElementById('colorCode'+reddesign_area_id).value = hex; // Edited
-				}
-			});
-			<?php endforeach; ?>
-		});
-	/**
-	 * Set selected color for designarea.
-	 *
-	 * @param reddesign_area_id
-	 * @param colorCode
-	 */
-	function setColorCode(reddesign_area_id, colorCode)
-	{
-		document.getElementById('colorCode'+reddesign_area_id).value = colorCode;
-		akeeba.jQuery('#fontColor'+reddesign_area_id+ ' div').css('backgroundColor', '#' + colorCode);
-		akeeba.jQuery('#fontColor'+reddesign_area_id).show();
-	}
-</script>
+
 <div class="row-fluid">
 	<div class="span12">
 		<h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_AREAS_TITLE') ?></h4>
@@ -57,7 +27,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						name="textArea<?php echo $area->reddesign_area_id; ?>"
 						placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
 						id="textArea<?php echo $area->reddesign_area_id; ?>"
-						value="">
+						value=" ">
 				</div>
 			</div>
 			<div class="control-group">

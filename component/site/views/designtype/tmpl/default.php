@@ -76,6 +76,29 @@ JHTML::_('behavior.modal');
 					akeeba.jQuery('#total').html(total + 'USD$');
 				}
 			);
+
+			<?php foreach ($this->productionBackgroundAreas as  $area) : ?>
+				var reddesign_area_id = parseInt(<?php echo $area->reddesign_area_id;?>);
+				akeeba.jQuery('#colorSelector' + reddesign_area_id).ColorPicker({
+					designId:reddesign_area_id,
+					color: '#000000',
+					onChange: function (hsb, hex, rgb, reddesign_area_id) {
+						akeeba.jQuery('#colorSelector' +reddesign_area_id+ ' div').css('backgroundColor', '#' + hex);
+						document.getElementById('colorCode'+reddesign_area_id).value = hex; // Edited
+					}
+				});
+
+				//setup before functions
+				var typingTimer;
+				var doneTypingInterval = 400;
+
+				//on keyup, start the countdown
+				akeeba.jQuery('#textArea'+reddesign_area_id).keyup(function(){
+				    clearTimeout(typingTimer);
+				    typingTimer = setTimeout(customize, doneTypingInterval);
+
+				});
+			<?php endforeach; ?>
 		}
 	);
 
@@ -88,33 +111,58 @@ JHTML::_('behavior.modal');
 		var design = {
 			areas: []
 		};
+		var reddesign_designtype_id = akeeba.jQuery('#reddesign_designtype_id').val();
+		var reddesign_background_id = akeeba.jQuery('#reddesign_background_id').val();
 		<?php foreach($this->productionBackgroundAreas as $area) : ?>
 
-		design.id = "1"; // @ToDo
-		design.backgroundId = "2"; // @ToDo
 		design.areas.push({
 			"id" : 			'<?php echo $area->reddesign_area_id; ?>',
 			"textArea" :	akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
 			"fontArea" : 	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
-			"fontColor" :	"#000000",
-			"fontSize" :	"22",
-			"fontTypeId" :	"1"
+			"fontColor" :	akeeba.jQuery('#colorCode<?php echo $area->reddesign_area_id; ?>').val(),
+			"fontSize" :	22,
+			"fontTypeId" :	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val()
 		});
 		<?php endforeach; ?>
-
+		design = JSON.stringify({Design: design });
 		akeeba.jQuery.ajax({
-			type: "POST",
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=designtype&task=ajaxGetDesign&format=raw",
-			data: JSON.stringify({ Design: design }),
-			contentType: "application/json; charset=utf-8",
+			data: {reddesign_designtype_id: reddesign_designtype_id, reddesign_background_id: reddesign_background_id, designarea : design},
+			type: "post",
 			success: function(data) {
 				var json = akeeba.jQuery.parseJSON(data);
-				akeeba.jQuery('img#background').attr('src', json.image);
+				d = new Date();
+				akeeba.jQuery('img#background').attr('src', json.image+"?"+d.getTime());
 				console.log(data);
 			},
-			failure: function(errMsg) {
+			error: function(errMsg) {
 				alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AJAX_ERROR'); ?>');
 			}
 		});
+	}
+
+	/**
+	 * Set selected color for designarea.
+	 *
+	 * @param reddesign_area_id
+	 * @param colorCode
+	 */
+	function setColorCode(reddesign_area_id, colorCode)
+	{
+		document.getElementById('colorCode'+reddesign_area_id).value = colorCode;
+		akeeba.jQuery('#fontColor'+reddesign_area_id+ ' div').css('backgroundColor', '#' + colorCode);
+		akeeba.jQuery('#fontColor'+reddesign_area_id).show();
+		customize();
+	}
+
+	/**
+	 * Set selected background for designarea.
+	 *
+	 * @param reddesign_background_id
+	 */
+	function setBackground(reddesign_background_id)
+	{
+		document.getElementById('reddesign_background_id').value = reddesign_background_id;
+		customize();
 	}
 </script>
