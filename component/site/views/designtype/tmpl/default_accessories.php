@@ -35,13 +35,17 @@ defined('_JEXEC') or die();
 					<input type="radio"
 						   class="price-modifier"
 						   name="<?php echo $accessorytype->title; ?>"
-						   value="<?php echo $accessory->price ?>" />
+						   value="<?php echo $accessory->price ?>"
+						   <?php if ($accessory->default) echo 'checked="checked"'; ?>
+						/>
 					<?php else : ?>
 					<input
 						class="price-modifier"
 						type="checkbox"
 						name="<?php echo $accessorytype->title; ?>[]"
-						value="<?php echo $accessory->price ?>" />
+						value="<?php echo $accessory->price ?>"
+						<?php if ($accessory->default) echo 'checked="checked"'; ?>
+						/>
 					<?php endif; ?>
 				</td>
 				<td class="accessory-detail">

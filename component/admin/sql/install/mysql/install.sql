@@ -198,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_accessories` (
   `thumbnail`                  VARCHAR(255),
   `stock`                      FLOAT         NOT NULL,
   `price`                      FLOAT         NOT NULL,
-  `required`                   TINYINT(3)    NOT NULL DEFAULT '0',
+  `isDefault`                   TINYINT(3)    NOT NULL DEFAULT '0',
   `reddesign_accessorytype_id` INT(11)       NOT NULL,
   PRIMARY KEY (`reddesign_accessory_id`),
   FOREIGN KEY (`reddesign_accessorytype_id` )
