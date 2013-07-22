@@ -57,7 +57,7 @@ class ReddesignModelDesigntype extends FOFModel
 	}
 
 	/**
-	 * Retrieve the first available preview background to be used as background for previews
+	 * Retrieve the preview background to be used as background for previews
 	 *
 	 * @return mixed  Returns the array that describes a background or false if there is no preview background
 	 */
@@ -67,13 +67,13 @@ class ReddesignModelDesigntype extends FOFModel
 
 		foreach ($backgrounds as $background)
 		{
-			if (!$background->isPDFbgimage)
+			if ($background->isPreviewbgimage)
 			{
 				return $background;
 			}
 		}
 
-		// If this point is reached means that this design don't have "Preview background", just text
+		// If this point is reached means that this design don't have "Preview background" setted
 		return false;
 	}
 

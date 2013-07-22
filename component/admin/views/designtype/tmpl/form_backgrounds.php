@@ -36,6 +36,9 @@ JHTML::_('behavior.modal');
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_EPS_FILE'); ?>
 				</th>
 				<th width="9%">
+					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_PREVIEW_BACKGROUND'); ?>
+				</th>
+				<th width="9%">
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_PRODUCTION_BACKGROUND'); ?>
 				</th>
 				<th width="9%">
@@ -70,6 +73,21 @@ JHTML::_('behavior.modal');
 							<a class="modal btn btn-mini" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/' . $background->image_path); ?>">
 								<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
 							</a>
+						</td>
+						<td align="center" width="9%" class="switchBg">
+							<?php if (!$background->isPreviewbgimage) : ?>
+								<a class="jgrid" href="javascript:void(0);" onclick="setPreviewbg('<?php echo $background->reddesign_background_id; ?>')" >
+									<span class="state notdefault">
+										<span class="text">Default</span>
+									</span>
+								</a>
+							<?php else : ?>
+								<a class="jgrid">
+									<span class="state default">
+										<span class="text">Default</span>
+									</span>
+								</a>
+							<?php endif; ?>
 						</td>
 						<td align="center" width="9%" class="switchBg">
 							<?php if (!$background->isPDFbgimage) : ?>
@@ -133,6 +151,20 @@ JHTML::_('behavior.modal');
 	}
 
 	/**
+	 *  Set a background as preview file background
+	 */
+	function setPreviewbg(bgid) {
+		var backgrounds_reddesign_background_id;
+
+		backgrounds_reddesign_background_id = bgid;
+
+		akeeba.jQuery('#backgrounds_task').val('setPreviewBg');
+		akeeba.jQuery('#backgrounds_reddesign_background_id').val(bgid);
+		akeeba.jQuery('#backgrounds_form').submit();
+	}
+
+
+	/**
 	 *  Removes a background form activation
 	 */
 	function removeBg(bgid) {
@@ -157,6 +189,7 @@ JHTML::_('behavior.modal');
 		akeeba.jQuery("#reddesign_background_id").val(reddesign_background_id);
 		akeeba.jQuery("#bg_title").val(title);
 		akeeba.jQuery("#bg_isPDFbgimage").val(isPDFbgimage);
+		akeeba.jQuery("#bg_isPreviewbgimage").val(isPreviewbgimage);
 		akeeba.jQuery("#bg_price").val(price);
 		akeeba.jQuery("#bg_stock").val(stock);
 		akeeba.jQuery("#bg_enabled").val(enabled);

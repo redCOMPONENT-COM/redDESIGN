@@ -44,12 +44,12 @@ JHTML::_('behavior.framework');
 		</div>
 
 		<div class="control-group">
-			<label class="control-label" for="required">
-				<?php echo JText::_('COM_REDDESIGN_COMMON_REQUIRED'); ?>
+			<label class="control-label" for="isDefault">
+				<?php echo JText::_('COM_REDDESIGN_ACCESSORY_DEFAULT'); ?>
 			</label>
 			<div class="controls">
-				<?php echo JHTML::_('select.booleanlist', 'required', null, $this->item->required); ?>
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_ACCESSORY_REQUIRED_DESC'); ?></span>
+				<?php echo JHTML::_('select.booleanlist', 'default', null, $this->item->default); ?>
+				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_ACCESSORY_DEFAULT_DESC'); ?></span>
 			</div>
 		</div>
 

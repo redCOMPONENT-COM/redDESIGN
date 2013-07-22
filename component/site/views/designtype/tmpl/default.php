@@ -68,14 +68,20 @@ JHTML::_('behavior.modal');
 					customize();
 				}
 			);
-			akeeba.jQuery(document).on('click', '.accessory-option', function () {
+			akeeba.jQuery(document).on('click', '.price-modifier', function () {
 					var total = 0;
-					akeeba.jQuery('.accessory-option:checked').each(function () {
+					akeeba.jQuery('.price-modifier:checked').each(function () {
 							total += parseInt(akeeba.jQuery(this).val());
 						});
-					akeeba.jQuery('#total').html(total + 'USD$');
+					akeeba.jQuery('#total').html(total);
 				}
 			);
+			// Calculate default price
+			var total = 0;
+			akeeba.jQuery('.price-modifier:checked').each(function () {
+				total += parseInt(akeeba.jQuery(this).val());
+			});
+			akeeba.jQuery('#total').html(total);
 		}
 	);
 

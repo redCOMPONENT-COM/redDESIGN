@@ -143,7 +143,8 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   `thumbnail`               VARCHAR(255),
   `stock`                   FLOAT        NOT NULL,
   `price`                   FLOAT        NOT NULL,
-  `isPDFbgimage`            TINYINT(4)   NOT NULL,
+  `isPDFbgimage`            TINYINT(1)   NOT NULL,
+  `isPreviewbgimage`        TINYINT(1)   NOT NULL,
   `reddesign_designtype_id` INT(11)      NOT NULL,
   PRIMARY KEY (`reddesign_background_id`)
 )
@@ -198,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_accessories` (
   `thumbnail`                  VARCHAR(255),
   `stock`                      FLOAT         NOT NULL,
   `price`                      FLOAT         NOT NULL,
-  `required`                   TINYINT(3)    NOT NULL DEFAULT '0',
+  `isDefault`                   TINYINT(3)    NOT NULL DEFAULT '0',
   `reddesign_accessorytype_id` INT(11)       NOT NULL,
   PRIMARY KEY (`reddesign_accessory_id`),
   FOREIGN KEY (`reddesign_accessorytype_id` )

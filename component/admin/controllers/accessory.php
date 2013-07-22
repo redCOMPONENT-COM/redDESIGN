@@ -71,7 +71,7 @@ class ReddesignControllerAccessory extends FOFController
 			{
 				$im = new Imagick;
 				$im->readImage($uploadedThumbFile['filepath']);
-				$im->thumbnailImage($params->get('max_accessory_thumbnail_width', 210), $params->get('max_accessory_thumbnail_height', 140), true);
+				$im->thumbnailImage($params->get('max_accessory_thumbnail_width', 50), $params->get('max_accessory_thumbnail_height', 50), true);
 				$im->writeImage();
 				$im->clear();
 				$im->destroy();

@@ -82,4 +82,66 @@ class ReddesignModelBackground extends FOFModel
 
 		return true;
 	}
+
+	/**
+	 * Set a specific designtype background as the background for preview
+	 *
+	 * @param   int  $designId  The designtype id
+	 * @param   int  $bgId      The background id
+	 *
+	 * @return bool
+	 */
+	public function setAsPreviewbg($designId, $bgId)
+	{
+		if (!$this->unsetAllPreviewBg($designId))
+		{
+			return false;
+		}
+
+		// Create a new query object.
+		$query = $this->_db->getQuery(true);
+
+		// Update set the specific background as PDF background for production file
+		$query
+			->update($this->_db->qn('#__reddesign_backgrounds'))
+			->set($this->_db->qn('isPreviewbgimage') . ' = ' . $this->_db->q(1))
+			->where($this->_db->qn('reddesign_background_id') . ' = ' . $this->_db->q($bgId));
+
+		$this->_db->setQuery($query);
+
+		if (!$this->_db->execute())
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Set all Backgrounds from a specific design as Not Preview Files
+	 *
+	 * @param   int  $designId  The Design where the backgrounds belogns to.
+	 *
+	 * @return bool
+	 */
+	public function unsetAllPreviewBg($designId)
+	{
+		// Create a new query object.
+		$query = $this->_db->getQuery(true);
+
+		// Update all current design background and set them as none is the background for PDF production file.
+		$query
+			->update($this->_db->qn('#__reddesign_backgrounds'))
+			->set($this->_db->qn('isPreviewbgimage') . ' = ' . $this->_db->q(0))
+			->where($this->_db->qn('reddesign_designtype_id') . ' = ' . $this->_db->q($designId));
+
+		$this->_db->setQuery($query);
+
+		if (!$this->_db->execute())
+		{
+			return false;
+		}
+
+		return true;
+	}
 }
