@@ -122,15 +122,36 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 					akeeba.jQuery('#background').submit();
 				}
 			);
-			akeeba.jQuery(document).on('change', '#bg_isPDFbgimage', function () {
+			akeeba.jQuery(document).on('change', '#bg_isPDFbgimage',
+				function () {
 					var op = akeeba.jQuery("#bg_isPDFbgimage option[value='0']:selected");
 					if (op.length)
+					{
 						akeeba.jQuery(".previewbg").show();
+					}
 					else
+					{
 						akeeba.jQuery(".previewbg").hide();
+						akeeba.jQuery('#bg_isPreviewbgimage').val('0');
+					}
 				}
 			);
-			akeeba.jQuery(document).on('click', '#cancelBgBtn', function () {
+			akeeba.jQuery(document).on('change', '#bg_isPreviewbgimage',
+				function () {
+					var op2 = akeeba.jQuery("#bg_isPreviewbgimage option[value='1']:selected");
+					if (op2.length)
+					{
+						akeeba.jQuery('#bg_isPDFbgimage').val('0');
+						akeeba.jQuery(".previewbg").show();
+					}
+					else
+					{
+						akeeba.jQuery(".previewbg").hide();
+					}
+				}
+			);
+			akeeba.jQuery(document).on('click', '#cancelBgBtn',
+				function () {
 					akeeba.jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_BACKGROUND_TITLE'); ?>");
 					akeeba.jQuery("#reddesign_background_id").val('');
 					akeeba.jQuery("#bg_title").val('');
