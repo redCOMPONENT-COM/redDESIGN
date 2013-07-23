@@ -59,112 +59,109 @@ class ReddesignControllerDesigntype extends FOFController
 	public function ajaxGetDesign()
 	{
 		// Initialize session
-		$session 			=& JFactory::getSession();
+		$session 			= JFactory::getSession();
 
 		// Get reddesign_desingtype_id and reddesign_background_id
 		$reddesign_desingtype_id = $this->input->getInt('reddesign_designtype_id');
 		$reddesign_background_id = $this->input->getInt('reddesign_background_id');
 
-		// Get design type area values
+		// Get designAreas
 		$designarea = $this->input->getString('designarea');
-		$values = json_decode($designarea);
+		$DesignAreas = new JRegistry;
+		$DesignAreas->loadString($designarea, 'JSON');
+		$DesignAreas = $DesignAreas->get('Design');
+		$areas = $DesignAreas->areas;
 
-		foreach ($values as $value)
+		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($reddesign_desingtype_id);
+		$this->background = $backgroundModel->getItem($reddesign_background_id);
+		$backgroundImage = $this->background->image_path;
+
+		if ($session->get('customizedImage') != "")
 		{
-			$areas = $value->areas;
-			$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($reddesign_desingtype_id);
-			$this->background = $backgroundModel->getItem($reddesign_background_id);
-			$backgroundImage = $this->background->image_path;
-
-			if ($session->get('customizedImage'))
+			$mangledname = $session->get('customizedImage');
+		}
+		else
+		{
+			// Get a (very!) randomized name
+			if (version_compare(JVERSION, '3.0', 'ge'))
 			{
-				$mangledname = $session->get('customizedImage');
+				$serverkey = JFactory::getConfig()->get('secret', '');
 			}
 			else
 			{
-				// Get a (very!) randomised name
-				if (version_compare(JVERSION, '3.0', 'ge'))
-				{
-					$serverkey = JFactory::getConfig()->get('secret', '');
-				}
-				else
-				{
-					$serverkey = JFactory::getConfig()->getValue('secret', '');
-				}
-
-				$sig = $backgroundImage . microtime() . $serverkey;
-
-				if (function_exists('sha256'))
-				{
-					$mangledname = sha256($sig);
-				}
-				elseif (function_exists('sha1'))
-				{
-					$mangledname = sha1($sig);
-				}
-				else
-				{
-					$mangledname = md5($sig);
-				}
+				$serverkey = JFactory::getConfig()->getValue('secret', '');
 			}
 
-			$backgroundImage_file_location = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $backgroundImage;
-			$newjpg_file_location = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
+			$sig = $backgroundImage . microtime() . $serverkey;
 
-			foreach ($areas as $area)
+			if (function_exists('sha256'))
 			{
-				$fontSize = $area->fontSize;
-				$fontColor = $area->fontColor;
-				$fontTypeId = $area->fontTypeId;
-				$fontText = $area->textArea;
-				$reddesign_area_id = $area->id;
-				$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($reddesign_area_id);
-				$this->fontType = $fontModel->getItem($fontTypeId);
-
-				$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($reddesign_background_id);
-				$this->areaItem = $areaModel->getItem($reddesign_area_id);
-				/*
-					Text alingment condition
-					1 is left
-					2 is right
-					3 is center
-				 */
-				if ((int) $this->areaItem->textalign == 1)
-				{
-					$gravity = '-gravity NorthWest';
-					$offsetTop = $this->areaItem->y1_pos;
-					$offsetLeft = $this->areaItem->x1_pos;
-				}
-				elseif ((int) $this->areaItem->textalign == 2)
-				{
-					$resource 	= new Imagick($backgroundImage_file_location);
-					$imagewidth = $resource->getImageWidth();
-					$gravity = '-gravity NorthEast';
-					$offsetTop = $this->areaItem->y1_pos;
-					$offsetLeft = $imagewidth - $this->areaItem->x2_pos;
-				}
-				else
-				{
-					$gravity = ' ';
-					$offsetTop = $this->areaItem->y1_pos;
-					$offsetLeft = $this->areaItem->x1_pos + ($this->areaItem->width / 4);
-				}
-
-				$fontType_file_location = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $this->fontType->font_file;
-				$line_gap = 0;
-
-		        $cmd = "convert $backgroundImage_file_location  \
-			     		\( $gravity -font $fontType_file_location -pointsize $fontSize -interline-spacing -$line_gap -fill '#$fontColor'  -background transparent label:'$fontText' \ -virtual-pixel transparent \
-						\) $gravity -geometry +$offsetLeft+$offsetTop -composite   \
-			      		$newjpg_file_location";
-
-				exec($cmd);
-				$backgroundImage_file_location = $newjpg_file_location;
-
+				$mangledname = sha256($sig);
+			}
+			elseif (function_exists('sha1'))
+			{
+				$mangledname = sha1($sig);
+			}
+			else
+			{
+				$mangledname = md5($sig);
 			}
 		}
 
-		// Create seesion to store Image
+		$backgroundImage_file_location = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $backgroundImage;
+		$newjpg_file_location = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
+
+		foreach ($areas as $area)
+		{
+			$fontSize = $area->fontSize;
+			$fontColor = $area->fontColor;
+			$fontTypeId = $area->fontTypeId;
+			$fontText = $area->textArea;
+			$reddesign_area_id = $area->id;
+			$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($reddesign_area_id);
+			$this->fontType = $fontModel->getItem($fontTypeId);
+
+			$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($reddesign_background_id);
+			$this->areaItem = $areaModel->getItem($reddesign_area_id);
+			/*
+				Text alingment condition
+				1 is left
+				2 is right
+				3 is center
+			 */
+			if ((int) $this->areaItem->textalign == 1)
+			{
+				$gravity = '-gravity NorthWest';
+				$offsetTop = $this->areaItem->y1_pos;
+				$offsetLeft = $this->areaItem->x1_pos;
+			}
+			elseif ((int) $this->areaItem->textalign == 2)
+			{
+				$resource 	= new Imagick($backgroundImage_file_location);
+				$imagewidth = $resource->getImageWidth();
+				$gravity = '-gravity NorthEast';
+				$offsetTop = $this->areaItem->y1_pos;
+				$offsetLeft = $imagewidth - $this->areaItem->x2_pos;
+			}
+			else
+			{
+				$gravity = ' ';
+				$offsetTop = $this->areaItem->y1_pos;
+				$offsetLeft = $this->areaItem->x1_pos + ($this->areaItem->width / 4);
+			}
+
+			$fontType_file_location = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $this->fontType->font_file;
+			$line_gap = 0;
+
+		        $cmd = "convert $backgroundImage_file_location  \
+		     		\( $gravity -font $fontType_file_location -pointsize $fontSize -interline-spacing -$line_gap -fill '#$fontColor'  -background transparent label:'$fontText' \ -virtual-pixel transparent \
+					\) $gravity -geometry +$offsetLeft+$offsetTop -composite   \
+		      		$newjpg_file_location";
+			exec($cmd);
+			$backgroundImage_file_location = $newjpg_file_location;
+		}
+
+		// Create session to store Image
 		$session->set('customizedImage', $mangledname);
 		$response['image']		   = JURI::base() . 'media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
 
