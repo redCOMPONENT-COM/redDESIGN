@@ -197,9 +197,15 @@ JHTML::_('behavior.modal');
 			.attr("href", '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/'); ?>' + thumbnail)
 			.text(thumbnail)
 		;
-		if (akeeba.jQuery("#bg_isPDFbgimage option[value='1']:selected").length) {
+		if (akeeba.jQuery("#bg_isPDFbgimage option[value='1']:selected").length)
+		{
 			akeeba.jQuery(".previewbg").hide();
 		}
+		else
+		{
+			akeeba.jQuery(".previewbg").show();
+		}
+
 		showBackgroundForm()
 		akeeba.jQuery('body').animate({
 			'scrollTop':   akeeba.jQuery('#backgroundForm').offset().top
