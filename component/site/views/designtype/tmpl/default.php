@@ -34,9 +34,7 @@ JHTML::_('behavior.modal');
 						 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"/>
 				</div>
 				<div class="span5 offset1 well">
-					<?php if (1 < count($this->previewBackgrounds)) : ?>
-						<?php echo $this->loadTemplate('frames'); ?>
-					<?php endif; ?>
+					<?php echo $this->loadTemplate('frames'); ?>
 					<?php echo $this->loadTemplate('areas'); ?>
 				</div>
 			</div>
