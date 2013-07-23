@@ -39,7 +39,7 @@ if ($tagPos != 0)
 	</div>
 	<div class="span3 offset1">
 		<div class="total well">
-			<h5><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PRODUCT_TOTAL'); ?>: <span id="total">0</span> <?php echo $this->currency; ?></h5>
+			<h5><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PRODUCT_TOTAL'); ?>: <span id="total"></span></h5>
 			<p>
 				<button type="button" class="btn btn-primary" id="orderDesign"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_ORDER'); ?></button>
 			</p>

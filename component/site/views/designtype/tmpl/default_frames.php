@@ -28,8 +28,23 @@ defined('_JEXEC') or die();
 						class="img-polaroid frame-thumbnail"
 						src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $frame->thumbnail; ?>"/>
 				</div>
-				<h5><?php echo $frame->title ?>
-					&nbsp;<span class="label"><?php echo $frame->price . ' ' . $this->currency; ?></span></h5>
+				<h5><?php echo $frame->title; ?></h5>
+				<span class="label">
+					<?php if ($this->params->get('currency_symbol_position_before', '1')) : ?>
+						<?php echo  $this->params->get('currency_symbol', '$'); ?>
+					<?php endif; ?>
+					<?php
+						echo number_format(
+							$frame->price,
+							$this->params->get('decimals', '2'),
+							$this->params->get('currency_decimal_separator', '.'),
+							$this->params->get('currency_thousand_separator', ',')
+						);
+					?>
+					<?php if (!$this->params->get('currency_symbol_position_before', '1')) : ?>
+							<?php echo  $this->params->get('currency_symbol', '$'); ?>
+					<?php endif; ?>
+				</span>
 			</td>
 		</tr>
 	<?php endforeach; ?>

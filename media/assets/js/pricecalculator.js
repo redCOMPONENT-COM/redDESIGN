@@ -12,17 +12,13 @@ akeeba.jQuery(document).ready(
         // onClick calculate current product price adding all price modifiers: frames and accessories
         akeeba.jQuery(document).on('click', '.price-modifier', function () {
                 var total = 0;
+                var formatedTotal = 0;
                 akeeba.jQuery('.price-modifier:checked').each(function () {
                     total += parseFloat(akeeba.jQuery(this).val());
                 });
-                akeeba.jQuery('#total').html(total);
+                formatedTotal = accounting.formatMoney(total);
+                akeeba.jQuery('#total').html(formatedTotal);
             }
         );
-        // Calculate default price
-        var total = 0;
-        akeeba.jQuery('.price-modifier:checked').each(function () {
-            total += parseFloat(akeeba.jQuery(this).val());
-        });
-        akeeba.jQuery('#total').html(total);
     }
 );

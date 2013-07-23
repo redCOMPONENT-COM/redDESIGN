@@ -9,6 +9,7 @@
 
 defined('_JEXEC') or die();
 JHTML::_('behavior.modal');
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/pricecalculator.js');
 
 ?>
@@ -53,7 +54,8 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/pricecalculator.js');
 	 */
 	akeeba.jQuery(document).ready(
 		function () {
-			akeeba.jQuery(document).on('click', '#customizeDesign', function () {
+			akeeba.jQuery(document).on('click', '#customizeDesign',
+				function () {
 					// Add spinner to button
 					akeeba.jQuery(this).button('loadingo');
 					setTimeout(
@@ -92,6 +94,29 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/pricecalculator.js');
 				});
 			<?php endforeach; ?>
 
+			// Price settings:
+			accounting.settings = {
+				currency: {
+					symbol : "<?php echo $this->params->get('currency_symbol', '$'); ?>",
+					format: "<?php echo $this->params->get('currency_symbol_position_before', '1') ? '%s %v' : '%v %s'; ?>",
+					decimal : "<?php echo $this->params->get('currency_decimal_separator', '.'); ?>",
+					thousand: "<?php echo $this->params->get('currency_thousand_separator', ','); ?>",
+					precision : <?php echo $this->params->get('decimals', '2'); ?>
+				},
+				number: {
+					precision : 0,
+					thousand: "<?php echo $this->params->get('currency_thousand_separator', ','); ?>",
+					decimal : "<?php echo $this->params->get('currency_decimal_separator', '.'); ?>"
+				}
+			}
+			// Calculate default price
+			var total = 0;
+			var formatedTotal = 0;
+			akeeba.jQuery('.price-modifier:checked').each(function () {
+				total += parseFloat(akeeba.jQuery(this).val());
+			});
+			formatedTotal = accounting.formatMoney(total);
+			akeeba.jQuery('#total').html(formatedTotal);
 		}
 	);
 
