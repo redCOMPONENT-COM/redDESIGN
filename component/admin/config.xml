@@ -8,12 +8,61 @@
 			>
 
 		<field
-				name="currency"
+				name="currency_symbol"
 				type="text"
 				size="5"
-				default="$USD"
-				label="COM_REDDESIGN_CONFIG_CURRENCY"
-				description="COM_REDDESIGN_CONFIG_CURRENCY_DESC"
+				default="$"
+				label="COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL"
+				description="COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_DESC"
+				/>
+
+		<field
+				name="currency_symbol_position_before"
+				type="list"
+				label="COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION"
+				description="COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_DESC"
+				default="0"
+				class="inputbox">
+			<option
+					value="1">COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_VALUE_1</option>
+			<option
+					value="0">COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_VALUE_2</option>
+		</field>
+		<field
+				name="currency_decimal_separator"
+				type="list"
+				label="COM_REDDESIGN_CONFIG_CURRENCY_DECIMAL_SEPARATOR"
+				description="COM_REDDESIGN_CONFIG_CURRENCY_DECIMAL_SEPARATOR_DESC"
+				default="0"
+				class="inputbox">
+			<option
+					value=".">COM_REDDESIGN_CONFIG_CURRENCY_DECIMAL_SEPARATOR_VALUE_1</option>
+			<option
+					value=",">COM_REDDESIGN_CONFIG_CURRENCY_DECIMAL_SEPARATOR_VALUE_2</option>
+		</field>
+
+		<field
+				name="currency_thousand_separator"
+				type="list"
+				label="COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR"
+				description="COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_DESC"
+				default="0"
+				class="inputbox">
+			<option
+					value=".">COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_VALUE_1</option>
+			<option
+					value=",">COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_VALUE_2</option>
+			<option
+					value=" ">COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_VALUE_3</option>
+		</field>
+
+		<field
+				name="decimals"
+				type="text"
+				size="5"
+				default="2"
+				label="COM_REDDESIGN_CONFIG_DECIMALS"
+				description="COM_REDDESIGN_CONFIG_DECIMALS_DESC"
 				/>
 
 		<field

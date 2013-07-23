@@ -28,10 +28,15 @@ class ReddesignViewDesigntype extends FOFViewHtml
 	 */
 	public function display($tpl = null)
 	{
-		// Get Design
-		$model 						= $this->getModel();
-		$this->item 				= $model->getItem();
+		$model								= $this->getModel();
 
+		// Price visibility parameters
+		$this->params 	= JComponentHelper::getParams('com_reddesign');
+
+		// Get Design
+		$this->item 						= $model->getItem();
+
+		// Get Design related elements
 		$this->backgrounds					= $model->getBackgrounds();
 		$this->previewBackground			= $model->getPreviewBackground();
 		$this->previewBackgrounds			= $model->getPreviewBackgrounds();
@@ -40,7 +45,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->fonts						= $model->getFonts();
 		$this->accessorytypes				= $model->getAccessories();
 
-		$this->currency = JComponentHelper::getParams('com_reddesign')->get('currency', '$USD');
 		parent::display($tpl);
 	}
 }
+
