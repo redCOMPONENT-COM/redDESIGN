@@ -13,7 +13,7 @@ akeeba.jQuery(document).ready(
         akeeba.jQuery(document).on('click', '.price-modifier', function () {
                 var total = 0;
                 akeeba.jQuery('.price-modifier:checked').each(function () {
-                    total += parseInt(akeeba.jQuery(this).val());
+                    total += parseFloat(akeeba.jQuery(this).val());
                 });
                 akeeba.jQuery('#total').html(total);
             }
@@ -21,7 +21,7 @@ akeeba.jQuery(document).ready(
         // Calculate default price
         var total = 0;
         akeeba.jQuery('.price-modifier:checked').each(function () {
-            total += parseInt(akeeba.jQuery(this).val());
+            total += parseFloat(akeeba.jQuery(this).val());
         });
         akeeba.jQuery('#total').html(total);
     }
