@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die();
 JHTML::_('behavior.modal');
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/pricecalculator.js');
+
 ?>
 
 <h1><?php echo $this->item->title; ?></h1>
@@ -66,14 +68,6 @@ JHTML::_('behavior.modal');
 					customize();
 				}
 			);
-			akeeba.jQuery(document).on('click', '.price-modifier', function () {
-					var total = 0;
-					akeeba.jQuery('.price-modifier:checked').each(function () {
-							total += parseInt(akeeba.jQuery(this).val());
-						});
-					akeeba.jQuery('#total').html(total);
-				}
-			);
 
 			<?php foreach ($this->productionBackgroundAreas as  $area) : ?>
 				var reddesign_area_id = parseInt(<?php echo $area->reddesign_area_id;?>);
@@ -98,12 +92,6 @@ JHTML::_('behavior.modal');
 				});
 			<?php endforeach; ?>
 
-			// Calculate default price
-			var total = 0;
-			akeeba.jQuery('.price-modifier:checked').each(function () {
-				total += parseInt(akeeba.jQuery(this).val());
-			});
-			akeeba.jQuery('#total').html(total);
 		}
 	);
 
