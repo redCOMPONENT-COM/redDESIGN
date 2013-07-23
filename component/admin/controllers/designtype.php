@@ -83,7 +83,7 @@ class ReddesignControllerDesigntype extends FOFController
 			{
 				$im = new Imagick;
 				$im->readImage($uploadedThumbFile['filepath']);
-				$im->thumbnailImage($params->get('max_designtype_thumbnail_width', 210), $params->get('max_designtype_thumbnail_height', 140), true);
+				$im->thumbnailImage($params->get('max_designtype_thumbnail_width', 100), $params->get('max_designtype_thumbnail_height', 100), true);
 				$im->writeImage();
 				$im->clear();
 				$im->destroy();

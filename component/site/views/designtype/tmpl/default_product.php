@@ -26,7 +26,7 @@ if ($tagPos != 0)
 					class="pull-left modal"
 					href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/designtypes/thumbnails/' . $this->item->sample_thumb); ?>">
 					<img
-						class="media-object product-thumb"
+						class="media-object product-thumbnail"
 						alt="<?php echo $this->item->title ?>"
 						src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/designtypes/' . $this->item->sample_image); ?>">
 				</a>
@@ -39,7 +39,7 @@ if ($tagPos != 0)
 	</div>
 	<div class="span3 offset1">
 		<div class="total well">
-			<h5><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PRODUCT_TOTAL'); ?>: <span id="total">$32.00 USD</span></h5>
+			<h5><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PRODUCT_TOTAL'); ?>: <span id="total">0</span> $USD</h5>
 			<p>
 				<button type="button" class="btn btn-primary" id="orderDesign"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_ORDER'); ?></button>
 			</p>
