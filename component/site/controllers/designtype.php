@@ -58,6 +58,7 @@ class ReddesignControllerDesigntype extends FOFController
 	 */
 	public function ajaxGetDesign()
 	{
+
 		// Initialize session
 		$session 			= JFactory::getSession();
 
