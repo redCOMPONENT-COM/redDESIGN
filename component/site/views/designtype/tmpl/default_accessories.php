@@ -57,7 +57,7 @@ defined('_JEXEC') or die();
 						</a>
 					</div>
 					<h5><?php echo $accessory->title; ?>
-						&nbsp;<span class="label"><?php echo $accessory->price; ?> $USD</span></h5>
+						&nbsp;<span class="label"><?php echo $accessory->price . ' ' . $this->currency; ?></span></h5>
 					<?php echo $accessory->description ?>
 				</td>
 			</tr>

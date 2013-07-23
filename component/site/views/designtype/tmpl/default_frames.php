@@ -29,7 +29,7 @@ defined('_JEXEC') or die();
 						src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $frame->thumbnail; ?>"/>
 				</div>
 				<h5><?php echo $frame->title ?>
-					&nbsp;<span class="label"><?php echo $frame->price; ?> $USD</span></h5>
+					&nbsp;<span class="label"><?php echo $frame->price . ' ' . $this->currency; ?></span></h5>
 			</td>
 		</tr>
 	<?php endforeach; ?>

@@ -40,6 +40,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->fonts						= $model->getFonts();
 		$this->accessorytypes				= $model->getAccessories();
 
+		$this->currency = JComponentHelper::getParams('com_reddesign')->get('currency', '$USD');
 		parent::display($tpl);
 	}
 }
