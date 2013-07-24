@@ -10,7 +10,6 @@
 defined('_JEXEC') or die();
 JHTML::_('behavior.modal');
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/pricecalculator.js');
 
 ?>
 
@@ -54,6 +53,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/pricecalculator.js');
 	 */
 	akeeba.jQuery(document).ready(
 		function () {
+			// Customize function
 			akeeba.jQuery(document).on('click', '#customizeDesign',
 				function () {
 					// Add spinner to button
@@ -71,6 +71,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/pricecalculator.js');
 				}
 			);
 
+			// Build Areas colors
 			<?php foreach ($this->productionBackgroundAreas as  $area) : ?>
 				var reddesign_area_id = parseInt(<?php echo $area->reddesign_area_id;?>);
 				akeeba.jQuery('#colorSelector' + reddesign_area_id).ColorPicker({
@@ -94,7 +95,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/pricecalculator.js');
 				});
 			<?php endforeach; ?>
 
-			// Price settings:
+			// Define Price settings:
 			accounting.settings = {
 				currency: {
 					symbol : "<?php echo $this->params->get('currency_symbol', '$'); ?>",
@@ -109,6 +110,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/pricecalculator.js');
 					decimal : "<?php echo $this->params->get('currency_decimal_separator', '.'); ?>"
 				}
 			}
+
 			// Calculate default price
 			var total = 0;
 			var formatedTotal = 0;
@@ -117,6 +119,18 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/pricecalculator.js');
 			});
 			formatedTotal = accounting.formatMoney(total);
 			akeeba.jQuery('#total').html(formatedTotal);
+
+			// onClick calculate current product price adding all price modifiers: frames and accessories
+			akeeba.jQuery(document).on('click', '.price-modifier', function () {
+					var total = 0;
+					var formatedTotal = 0;
+					akeeba.jQuery('.price-modifier:checked').each(function () {
+						total += parseFloat(akeeba.jQuery(this).val());
+					});
+					formatedTotal = accounting.formatMoney(total);
+					akeeba.jQuery('#total').html(formatedTotal);
+				}
+			);
 		}
 	);
 
