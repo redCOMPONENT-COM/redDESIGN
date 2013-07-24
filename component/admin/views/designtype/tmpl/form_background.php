@@ -90,9 +90,9 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 					<br/>
 					<?php echo JText::sprintf('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC_DECIMAL_SEPARATOR', $this->params->get('currency_decimal_separator', '.')); ?>
 					<br/>
-					<?php echo JText::sprintf('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC_THOUSAND_SEPARATOR', $this->params->get('currency_thousand_separator', ','); ?>
+					<?php echo JText::sprintf('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC_THOUSAND_SEPARATOR', $this->params->get('currency_thousand_separator', ',')); ?>
 					<br/>
-					<?php echo JText::sprintf('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC_DECIMALS', $this->params->get('decimals', '2'))); ?>
+					<?php echo JText::sprintf('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC_DECIMALS', $this->params->get('decimals', '2')); ?>
 					<br/>
 					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC_NOTE'); ?>
 				</span>
