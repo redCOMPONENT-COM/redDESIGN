@@ -51,66 +51,65 @@ class PlgReddesignShopsRedshop extends JPlugin
 		$db->setQuery($query);
 		$tables = $db->loadAssoc();
 
-		if (count($tables) > 0)
-		{
-			// Check category.
-			$query = $db->getQuery(true);
-			$query->select('*');
-			$query->from('#__redshop_category');
-			$query->where('category_name = ' . $db->quote($params->get('defaultCategoryName', 'redDESIGN Products')));
-			$query->order('category_id ASC');
-			$db->setQuery($query);
-			$category = $db->loadObject();
-
-			// If there is no category with name taken from the plugin's parameter than create one.
-			if (empty($category))
-			{
-				$newCategory = new stdClass;
-				$newCategory->category_name = $params->get('defaultCategoryName', 'redDESIGN Products');
-				$result = $db->insertObject('#__redshop_category', $newCategory);
-
-				if (!$result)
-				{
-					$app->enqueueMessage(JText::_('PLG_REDDESIGN_REDSHOP_CAN_NOT_CREATE_DEFAULT_CATEGORY'), 'notice');
-
-					return false;
-				}
-			}
-
-			// Check manufacturer.
-			$query = $db->getQuery(true);
-			$query->select('*');
-			$query->from('#__redshop_manufacturer');
-			$query->where('manufacturer_name = ' . $db->quote($params->get('defaultManufacturerName', 'redCOMPONENT')));
-			$query->order('manufacturer_id ASC');
-			$db->setQuery($query);
-			$manufacturer = $db->loadObject();
-
-			// If there is no default category, create one.
-			if (empty($manufacturer))
-			{
-				$newManufacturer = new stdClass;
-				$newManufacturer->category_name = $params->get('defaultManufacturerName', 'redCOMPONENT');
-				$result = $db->insertObject('#__redshop_manufacturer', $newManufacturer);
-
-				if (!$result)
-				{
-					$app->enqueueMessage(JText::_('PLG_REDDESIGN_REDSHOP_CAN_NOT_CREATE_DEFAULT_MANUFACTURER'), 'notice');
-
-					return false;
-				}
-			}
-
-			// Make new redSHOP product with data given from redDESIGN.
-
-			// Make new redSHOP order for that new product and for the current user. And redirect to the redSHOP checkout process.
-		}
-		else
+		if (!count($tables))
 		{
 			$app->enqueueMessage(JText::_('PLG_REDDESIGN_REDSHOP_REDSHOP_IS_NOT_INSTALLED'), 'notice');
 
 			return false;
 		}
+
+		// Check category.
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from('#__redshop_category');
+		$query->where('category_name = ' . $db->quote($params->get('defaultCategoryName', 'redDESIGN Products')));
+		$query->order('category_id ASC');
+		$db->setQuery($query);
+		$category = $db->loadObject();
+
+		// If there is no category with name taken from the plugin's parameter then create one.
+		if (empty($category))
+		{
+			$newCategory = new stdClass;
+			$newCategory->category_name = $params->get('defaultCategoryName', 'redDESIGN Products');
+			$result = $db->insertObject('#__redshop_category', $newCategory);
+
+			if (!$result)
+			{
+				$app->enqueueMessage(JText::_('PLG_REDDESIGN_REDSHOP_CAN_NOT_CREATE_DEFAULT_CATEGORY'), 'notice');
+
+				return false;
+			}
+		}
+
+		// Check manufacturer.
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from('#__redshop_manufacturer');
+		$query->where('manufacturer_name = ' . $db->quote($params->get('defaultManufacturerName', 'redCOMPONENT')));
+		$query->order('manufacturer_id ASC');
+		$db->setQuery($query);
+		$manufacturer = $db->loadObject();
+
+		// If there is no default category, create one.
+		if (empty($manufacturer))
+		{
+			$newManufacturer = new stdClass;
+			$newManufacturer->category_name = $params->get('defaultManufacturerName', 'redCOMPONENT');
+			$result = $db->insertObject('#__redshop_manufacturer', $newManufacturer);
+
+			if (!$result)
+			{
+				$app->enqueueMessage(JText::_('PLG_REDDESIGN_REDSHOP_CAN_NOT_CREATE_DEFAULT_MANUFACTURER'), 'notice');
+
+				return false;
+			}
+		}
+
+		// Make new redSHOP product with data given from redDESIGN.
+
+		// Make new redSHOP order for that new product and for the current user. And redirect to the redSHOP checkout process.
+
 
 		return true;
 	}
