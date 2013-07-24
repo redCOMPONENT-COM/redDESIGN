@@ -64,16 +64,8 @@
     <media destination="com_reddesign" folder="media">
         <folder>assets</folder>
     </media>
-    <!-- Install FoF and package modules and plugins -->
+    <!-- Install FoF and Akeeba Strapper libraries -->
     <scriptfile>script.reddesign.php</scriptfile>
-    <!-- Libraries to install -->
-    <libraries>
-        <!-- library name="reddesign" /-->
-    </libraries>
-    <!-- Modules to install -->
-    <modules>
-        <!--module name="reddesign" group="content" /-->
-    </modules>
     <!-- Plugins to install -->
     <plugins>
         <plugin name="redshop" group="reddesign" published="published" />
