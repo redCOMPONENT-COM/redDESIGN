@@ -128,7 +128,7 @@ class ReddesignControllerDesigntype extends FOFController
 			}
 			else
 			{
-				$fontType_file_location = "arial.ttf";
+				$fontType_file_location = $fontType_file_location = JPATH_ROOT . '/media/com_reddesign/assets/fonts/arial.ttf';
 			}
 
 			$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($reddesign_background_id);
