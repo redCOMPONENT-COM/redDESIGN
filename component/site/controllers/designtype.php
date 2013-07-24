@@ -119,8 +119,17 @@ class ReddesignControllerDesigntype extends FOFController
 			$fontTypeId = $area->fontTypeId;
 			$fontText = $area->textArea;
 			$reddesign_area_id = $area->id;
-			$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($reddesign_area_id);
-			$this->fontType = $fontModel->getItem($fontTypeId);
+
+			if ($fontTypeId)
+			{
+				$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($reddesign_area_id);
+				$this->fontType = $fontModel->getItem($fontTypeId);
+				$fontType_file_location = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $this->fontType->font_file;
+			}
+			else
+			{
+				$fontType_file_location = "arial.ttf";
+			}
 
 			$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($reddesign_background_id);
 			$this->areaItem = $areaModel->getItem($reddesign_area_id);
@@ -151,10 +160,9 @@ class ReddesignControllerDesigntype extends FOFController
 				$offsetLeft = $this->areaItem->x1_pos + ($this->areaItem->width / 4);
 			}
 
-			$fontType_file_location = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $this->fontType->font_file;
 			$line_gap = 0;
 
-		        $cmd = "convert $backgroundImage_file_location  \
+	        $cmd = "convert $backgroundImage_file_location  \
 		     		\( $gravity -font $fontType_file_location -pointsize $fontSize -interline-spacing -$line_gap -fill '#$fontColor'  -background transparent label:'$fontText' \ -virtual-pixel transparent \
 					\) $gravity -geometry +$offsetLeft+$offsetTop -composite   \
 		      		$newjpg_file_location";

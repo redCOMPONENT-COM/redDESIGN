@@ -40,7 +40,17 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/slider.css');
 					<?php
 					if (empty($area->font_id))
 					{
-						echo JText::_('COM_REDDESIGN_DESIGNTYPE_NO_FONTS');
+						$defaultFonts = array();
+						$defaultFonts[] = JHTML::_('select.option', 0, 'Arial');
+						echo JHTML::_(
+							'select.genericlist',
+							$defaultFonts,
+							'fontArea' . $area->reddesign_area_id,
+							'class="inputbox" onChange="customize();"',
+							'value',
+							'text',
+							null
+						);
 					}
 					else
 					{
