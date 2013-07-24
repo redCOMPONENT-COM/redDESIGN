@@ -20,6 +20,7 @@ defined('_JEXEC') or die();
 			<td class="accessory-selection">
 					<input type="radio"
 						   class="price-modifier"
+						   onChange ="setBackground(<?php echo $frame->reddesign_background_id;?>);"
 						   name="frame"
 						   value="<?php echo $frame->price ?>"
 						   <?php if ($frame->isPreviewbgimage) echo 'checked="checked"'; ?>
