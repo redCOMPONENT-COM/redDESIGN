@@ -38,7 +38,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->areas 				= null;
 		$this->productionBackground = null;
 		$this->editor				= JFactory::getEditor();
-		$configParams = JComponentHelper::getParams('com_reddesign');
+		$this->params = JComponentHelper::getParams('com_reddesign');
 
 		// Font sizer options for the general tab.
 		$this->sizerOptions = array(
@@ -131,7 +131,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			}
 
 			// Unit for measures
-			$this->unit = $configParams->get('unit', 'px');
+			$this->unit = $this->params->get('unit', 'px');
 
 			if ($this->unit == 'cm')
 			{

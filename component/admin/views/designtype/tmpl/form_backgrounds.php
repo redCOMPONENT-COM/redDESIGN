@@ -190,7 +190,7 @@ JHTML::_('behavior.modal');
 		akeeba.jQuery("#bg_title").val(title);
 		akeeba.jQuery("#bg_isPDFbgimage").val(isPDFbgimage);
 		akeeba.jQuery("#bg_isPreviewbgimage").val(isPreviewbgimage);
-		akeeba.jQuery("#bg_price").val(price);
+		akeeba.jQuery("#bg_price").val(accounting.formatNumber(parseFloat(price)));
 		akeeba.jQuery("#bg_stock").val(stock);
 		akeeba.jQuery("#bg_enabled").val(enabled);
 		akeeba.jQuery("#BgThumbnailLink")

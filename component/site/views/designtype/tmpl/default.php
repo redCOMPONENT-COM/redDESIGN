@@ -105,7 +105,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 					precision : <?php echo $this->params->get('decimals', '2'); ?>
 				},
 				number: {
-					precision : 0,
+					precision : <?php echo $this->params->get('decimals', '2'); ?>,
 					thousand: "<?php echo $this->params->get('currency_thousand_separator', ','); ?>",
 					decimal : "<?php echo $this->params->get('currency_decimal_separator', '.'); ?>"
 				}
