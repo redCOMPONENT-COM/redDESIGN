@@ -11,6 +11,8 @@ defined('_JEXEC') or die();
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/colorpicker.js');
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
 FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/bootstrap-slider.js');
+FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/slider.css');
 ?>
 
 <div class="row-fluid">
