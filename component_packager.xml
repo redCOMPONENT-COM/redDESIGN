@@ -98,6 +98,14 @@
                 <exclude name=".*"/>
             </fileset>
         </copy>
+
+	    <echo msg="Copying PLUGINS folder to build directory..."/>
+	    <copy todir="${targetdir}/plugins">
+		    <fileset dir="${extpath}/plugins">
+			    <include name="**"/>
+			    <exclude name=".*"/>
+		    </fileset>
+	    </copy>
     </target>
 
     <!-- ============================================  -->
