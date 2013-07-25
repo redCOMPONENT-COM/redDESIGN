@@ -83,11 +83,19 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 					}
 				});
 
-				//setup before functions
+				// Setup before functions
 				var typingTimer;
 				var doneTypingInterval = 400;
 
-				//on keyup, start the countdown
+				<?php if ($this->item->fontsizer=="slider") : ?>
+					akeeba.jQuery('#fontSize'+ reddesign_area_id).slider()
+						.on('slide', function(ev){
+							clearTimeout(typingTimer);
+				    			typingTimer = setTimeout(customize, doneTypingInterval);
+						});
+				<?php endif; ?>
+
+				// Onkeyup, start the countdown
 				akeeba.jQuery('#textArea'+reddesign_area_id).keyup(function(){
 				    clearTimeout(typingTimer);
 				    typingTimer = setTimeout(customize, doneTypingInterval);
@@ -152,7 +160,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 			"textArea" :	akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
 			"fontArea" : 	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
 			"fontColor" :	akeeba.jQuery('#colorCode<?php echo $area->reddesign_area_id; ?>').val(),
-			"fontSize" :	22,
+			"fontSize" :	akeeba.jQuery('#fontSize<?php echo $area->reddesign_area_id; ?>').val(),
 			"fontTypeId" :	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val()
 		});
 		<?php endforeach; ?>

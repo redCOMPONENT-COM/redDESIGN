@@ -38,7 +38,17 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					<?php
 					if (empty($area->font_id))
 					{
-						echo JText::_('COM_REDDESIGN_DESIGNTYPE_NO_FONTS');
+						$defaultFonts = array();
+						$defaultFonts[] = JHTML::_('select.option', 0, 'Arial');
+						echo JHTML::_(
+							'select.genericlist',
+							$defaultFonts,
+							'fontArea' . $area->reddesign_area_id,
+							'class="inputbox" onChange="customize();"',
+							'value',
+							'text',
+							null
+						);
 					}
 					else
 					{
@@ -60,6 +70,37 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						);
 					}
 					?>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label ">
+					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_FONTSIZE'); ?>
+				</label>
+				<div class="controls">
+					<?php if ($this->item->fontsizer === 'slider') : ?>
+					<?php
+						FOFTemplateUtils::addJS('media://com_reddesign/assets/js/bootstrap-slider.js');
+						FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/slider.css');
+					?>
+						<input type="hidden" class="span2" value="<?php echo $area->defaultFontSize?>" data-slider-min="<?php echo $area->minFontSize?>" data-slider-max="<?php echo $area->maxFontSize?>" data-slider-value="[<?php echo $area->defaultFontSize?>]" id="fontSize<?php echo $area->reddesign_area_id?>" >
+					<?php elseif ($this->item->fontsizer === 'dropdown') :
+						$areaFontSizes 	= explode(',', $area->font_size);
+						$options 		= array();
+
+						foreach ($areaFontSizes as $key => $value) :
+							$options[] = JHTML::_('select.option', $value, $value);
+						endforeach;
+
+						echo JHTML::_(
+							'select.genericlist',
+							$options,
+							'fontSize' . $area->reddesign_area_id,
+							'class="inputbox" onChange="customize();"',
+							'value',
+							'text',
+							null
+						);
+					      endif; ?>
 				</div>
 			</div>
 			<div class="control-group">

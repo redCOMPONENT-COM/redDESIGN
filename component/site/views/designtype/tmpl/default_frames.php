@@ -13,10 +13,14 @@ defined('_JEXEC') or die();
 <table class="table table-hover top-buffer">
 	<tbody>
 	<?php foreach($this->previewBackgrounds as $frame) : ?>
+	<?php if ($frame->isPreviewbgimage) :
+			$reddesign_background_id = $frame->reddesign_background_id;
+	      endif; ?>
 		<tr>
 			<td class="accessory-selection">
 					<input type="radio"
 						   class="price-modifier"
+						   onChange ="setBackground(<?php echo $frame->reddesign_background_id;?>);"
 						   name="frame"
 						   value="<?php echo $frame->price ?>"
 						   <?php if ($frame->isPreviewbgimage) echo 'checked="checked"'; ?>
@@ -51,5 +55,5 @@ defined('_JEXEC') or die();
 	</tbody>
 </table>
 <?php // @TODO: this following hidden field will have to update it's value according to frame selection; ?>
-<input type="hidden" name="reddesign_background_id" id="reddesign_background_id" value="<?php echo $this->previewBackgrounds[0]->reddesign_background_id;?>">
+<input type="hidden" name="reddesign_background_id" id="reddesign_background_id" value="<?php echo $reddesign_background_id;?>">
 
