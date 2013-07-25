@@ -12,7 +12,7 @@
   position: relative;
 }
 .slider.slider-horizontal {
-  width: 270px;
+  width: 240px;
   height: 20px;
 }
 .slider.slider-horizontal .slider-track {
@@ -73,7 +73,7 @@
   white-space: nowrap;
 }
 .slider-track {
-	
+
   position: absolute;
   cursor: pointer;
   background-color: #CCCCCC;

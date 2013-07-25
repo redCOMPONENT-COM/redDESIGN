@@ -11,18 +11,7 @@ defined('_JEXEC') or die();
 ?>
 <div class="form-horizontal">
     <?php foreach($this->items as $designtype) :
-			if ($this->params->get('navigation_link'))
-			{
-				/*
-					@Todo: update this link when finished details designtype view
-				*/
-				$link  = JRoute::_('index.php?option=com_reddesign&id=' . $designtype->reddesign_designtype_id);
-			}
-			else
-			{
-				$link  = JRoute::_('index.php?option=com_reddesign&id=' . $designtype->reddesign_designtype_id);
-			}
-
+			$link  = JRoute::_('index.php?option=com_reddesign&id=' . $designtype->reddesign_designtype_id);
 			$description = ($designtype->intro_description != "") ? $designtype->intro_description:$designtype->intro_description;
 	?>
 	<div class="control-group">
@@ -36,7 +25,7 @@ defined('_JEXEC') or die();
 			</a>
 			<br/><?php echo $description; ?>
 			<p class="readmore">
-				<a href="#">Read more: <?php echo $designtype->title; ?></a>
+				<a href="<?php echo $link ?>">Read more: <?php echo $designtype->title; ?></a>
 			</p>
 		</label>
 	</div>

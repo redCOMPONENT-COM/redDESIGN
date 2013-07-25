@@ -8,13 +8,5 @@
 	<state>
 		<name>COM_REDDESIGN_DESIGNTYPES_VIEW_LIST</name>
 		<description>COM_REDDESIGN_DESIGNTYPES_VIEW_LIST_DESC</description>
-		<fields name="params">
-			<fieldset name="basic">
-				<field name="navigation_link" type="list" default="0" label="COM_REDDESIGN_SELECT_NAVIGATION_VIEW" description="COM_REDDESIGN_SELECT_NAVIGATION_VIEW_DESC" >
-					<option value="0">COM_REDDESIGN_DESIGNTYPE_FRONT_EDITOR</option>
-					<option value="1">COM_REDDESIGN_DESIGNTYPE_DETAIL_VIEW</option>
-				</field>
-			</fieldset>
-		</fields>
 	</state>
 </metadata>
