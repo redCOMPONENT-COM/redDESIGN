@@ -24,8 +24,14 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	<?php echo $this->loadTemplate('product'); ?>
 
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="#customize" id="customizeLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_CUSTOMIZE_TAB'); ?></a></li>
-		<li><a href="#accessories" id="accessoriesLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_ACCESSORIES_TAB'); ?></a></li>
+		<li class="active">
+			<a href="#customize" id="customizeLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_CUSTOMIZE_TAB'); ?></a>
+		</li>
+		<?php if ($this->accessorytypes) : ?>
+		<li>
+			<a href="#accessories" id="accessoriesLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_ACCESSORIES_TAB'); ?></a>
+		</li>
+		<?php endif; ?>
 	</ul>
 
 	<div id="my-tab-content" class="tab-content">
@@ -41,9 +47,11 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 				</div>
 			</div>
 		</div>
+		<?php if ($this->accessorytypes) : ?>
 		<div class="tab-pane" id="accessories">
 			<?php echo $this->loadTemplate('accessories'); ?>
 		</div>
+		<?php endif; ?>
 	</div>
 </form>
 

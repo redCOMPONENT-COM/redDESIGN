@@ -121,6 +121,11 @@ class ReddesignModelDesigntype extends FOFModel
 	 */
 	public function getAccessories()
 	{
+		if (empty($this->getItem()->accessorytypes))
+		{
+			return false;
+		}
+
 		$designAccessoryTypesIds = array_map('trim', explode(',', $this->getItem()->accessorytypes));
 
 
