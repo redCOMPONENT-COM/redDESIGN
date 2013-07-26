@@ -66,7 +66,7 @@ class ReddesignToolbar extends FOFToolbar
 	{
 		parent::onBrowse();
 
-		$view = $this->input->getCmd('view', 'cpanel');
+		$view = $this->input->getCmd('view', '');
 		JToolBarHelper::title(JText::_('COM_REDDESIGN') . ' - ' . ucfirst($view),  $view);
 
 		// Add Components options (see config.xml)
@@ -83,7 +83,7 @@ class ReddesignToolbar extends FOFToolbar
 	{
 		parent::onAdd();
 
-		$view = $this->input->getCmd('view', 'cpanel');
+		$view = $this->input->getCmd('view', '');
 		JToolBarHelper::title(JText::_('COM_REDDESIGN') . ' - ' . ucfirst($view), $view);
 
 		// Add Components options (see config.xml)
