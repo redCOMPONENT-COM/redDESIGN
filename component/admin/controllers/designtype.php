@@ -109,7 +109,15 @@ class ReddesignControllerDesigntype extends FOFController
 
 		// Prepare data for the accessorytypes field.
 		$accessorytypes = $this->input->get('accessorytypes', null, 'array');
-		$data['accessorytypes'] = implode(',', $accessorytypes);
+
+		if (!$accessorytypes)
+		{
+			$data['accessorytypes'] = '';
+		}
+		else
+		{
+			$data['accessorytypes'] = implode(',', $accessorytypes);
+		}
 
 		return $data;
 	}
