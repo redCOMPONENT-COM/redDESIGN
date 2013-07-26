@@ -189,7 +189,6 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					};
 
 					<?php foreach($this->productionBackgroundAreas as $area) : ?>
-
 					design.areas.push({
 						"id" : 			'<?php echo $area->reddesign_area_id; ?>',
 						"textArea" :	akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
@@ -199,6 +198,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						"fontTypeId" :	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val()
 					});
 					<?php endforeach; ?>
+
 					design = JSON.stringify({Design: design });
 					akeeba.jQuery('#designAreas').val(design);
 					akeeba.jQuery('#designform').submit();
