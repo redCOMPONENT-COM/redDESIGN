@@ -212,15 +212,19 @@ class ReddesignControllerDesigntype extends FOFController
 
 		// Get accessory data.
 		$accessoryTypes = $designTypeModel->getAccessories();
-		$selectedAccessories = array();
 
-		foreach ($accessoryTypes as $type)
+		if (!empty($accessoryTypes))
 		{
-			$selectedAccessory = $this->input->getString('accessorytype' . $type->reddesign_accessorytype_id . '[]', '');
+			$selectedAccessories = array();
 
-			if (!empty($selectedAccessory))
+			foreach ($accessoryTypes as $type)
 			{
-				$selectedAccessories[] = $selectedAccessory;
+				$selectedAccessory = $this->input->getString('accessorytype' . $type->reddesign_accessorytype_id . '[]', '');
+
+				if (!empty($selectedAccessory))
+				{
+					$selectedAccessories[] = $selectedAccessory;
+				}
 			}
 		}
 
