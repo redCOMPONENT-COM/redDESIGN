@@ -48,7 +48,7 @@ JHTML::_('behavior.framework');
 				<?php echo JText::_('COM_REDDESIGN_ACCESSORY_DEFAULT'); ?>
 			</label>
 			<div class="controls">
-				<?php echo JHTML::_('select.booleanlist', 'default', null, $this->item->default); ?>
+				<?php echo JHTML::_('select.booleanlist', 'isDefault', null, $this->item->isDefault); ?>
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_ACCESSORY_DEFAULT_DESC'); ?></span>
 			</div>
 		</div>

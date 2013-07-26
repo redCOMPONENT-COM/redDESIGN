@@ -78,7 +78,7 @@ class ReddesignHelperFile
 		}
 
 		// ...and its full path
-		$filepath = JPath::clean(JPATH_ROOT . '/media/com_reddesign/assets/' . $assetsFolder . '/' . $mangledname . '.' . $fileExtension);
+		$filepath = JPath::clean(JPATH_SITE . '/media/com_reddesign/assets/' . $assetsFolder . '/' . $mangledname . '.' . $fileExtension);
 
 		// If we have a name clash, abort the upload
 		if (JFile::exists($filepath))
