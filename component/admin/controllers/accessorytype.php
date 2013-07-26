@@ -61,7 +61,7 @@ class ReddesignControllerAccessorytype extends FOFController
 			}
 			else
 			{
-				$dest = JPATH_ROOT . '/media/com_reddesign/assets/accessorytypes/thumbnails/' . $uploadedImageFile['mangled_filename'];
+				$dest = JPATH_SITE . '/media/com_reddesign/assets/accessorytypes/thumbnails/' . $uploadedImageFile['mangled_filename'];
 				JFile::copy($uploadedImageFile['filepath'], $dest);
 				$data['sample_thumb'] = $uploadedImageFile['mangled_filename'];
 				$uploadedThumbFile['filepath'] = $dest;
