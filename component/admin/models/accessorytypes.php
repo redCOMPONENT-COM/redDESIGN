@@ -12,17 +12,17 @@ JLoader::import('joomla.filesystem.file');
 
 
 /**
- * Designtype Model.
+ * Accessorytype Model.
  *
  * @package     RedDesign.Component
  * @subpackage  Administrator
  *
  * @since       1.0
  */
-class ReddesignModelDesigntypes extends FOFModel
+class ReddesignModelAccessorytypes extends FOFModel
 {
 	/**
-	 * Deletes one or several designs and it's linked backgrounds
+	 * Deletes one or several Accessorytypes and it's linked accessories
 	 *
 	 * @return  boolean True on success
 	 */
@@ -52,21 +52,21 @@ class ReddesignModelDesigntypes extends FOFModel
 					$query	= $db->getQuery(true);
 
 					$query
-						->select('reddesign_background_id')
-						->from('#__reddesign_backgrounds as bg')
-						->where('bg.reddesign_designtype_id = ' . (int) $id)
-						->order('bg.reddesign_background_id ASC');
+						->select('reddesign_accessory_id')
+						->from('#__reddesign_accessories as ac')
+						->where('ac.reddesign_accessorytype_id = ' . (int) $id)
+						->order('ac.reddesign_accessory_id ASC');
 
 					$db->setQuery($query);
 
 					// Load the results as a list of stdClass objects.
-					$backgrounds = $db->loadObjectList();
+					$accessories = $db->loadObjectList();
 
-					$bgTable = FOFTable::getAnInstance('Background', 'ReddesignTable');
+					$accessoryTable = FOFTable::getAnInstance('Accessory', 'ReddesignTable');
 
-					foreach ($backgrounds as $background)
+					foreach ($accessories as $accessory)
 					{
-						$bgTable->delete($background->reddesign_background_id);
+						$accessoryTable->delete($accessory->reddesign_accessory_id);
 					}
 
 					$this->onAfterDelete($id);
