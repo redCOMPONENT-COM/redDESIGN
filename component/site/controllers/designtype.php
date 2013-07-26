@@ -198,6 +198,17 @@ class ReddesignControllerDesigntype extends FOFController
 		$data['reddesign_designtype_id'] = $designTypeId;
 
 		// @Todo: Here form other data and send it to the plugin via dispatcher.
+		// Get reddesign_background_id
+		$reddesign_background_id = $this->input->getInt('reddesign_background_id');
+		$data['reddesign_background_id'] = $reddesign_background_id;
+
+		// Get designAreas
+		$designarea = $this->input->getString('designAreas');
+		$DesignAreas = new JRegistry;
+		$DesignAreas->loadString($designarea, 'JSON');
+		$DesignAreas = $DesignAreas->get('Design');
+		$areas = $DesignAreas->areas;
+		$data['desingareas'] = $areas;
 
 		// Get accessory data.
 		$accessoryTypes = $designTypeModel->getAccessories();

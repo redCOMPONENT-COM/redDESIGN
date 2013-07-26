@@ -184,6 +184,23 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		function () {
 			akeeba.jQuery(document).on('click', '#orderDesign', function () {
 					akeeba.jQuery('#task').val('orderProduct');
+					var design = {
+						areas: []
+					};
+
+					<?php foreach($this->productionBackgroundAreas as $area) : ?>
+
+					design.areas.push({
+						"id" : 			'<?php echo $area->reddesign_area_id; ?>',
+						"textArea" :	akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
+						"fontArea" : 	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
+						"fontColor" :	akeeba.jQuery('#colorCode<?php echo $area->reddesign_area_id; ?>').val(),
+						"fontSize" :	akeeba.jQuery('#fontSize<?php echo $area->reddesign_area_id; ?>').val(),
+						"fontTypeId" :	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val()
+					});
+					<?php endforeach; ?>
+					design = JSON.stringify({Design: design });
+					akeeba.jQuery('#designAreas').val(design);
 					akeeba.jQuery('#designform').submit();
 				}
 			);

@@ -41,7 +41,7 @@ if ($tagPos != 0)
 		<div class="total well">
 			<h5><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PRODUCT_TOTAL'); ?>: <span id="total"></span></h5>
 			<p>
-				<button type="button" class="btn btn-primary" id="orderDesign"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_ORDER'); ?></button>
+				<button type="submit" class="btn btn-primary" id="orderDesign"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_ORDER'); ?></button>
 			</p>
 		</div>
 	</div>

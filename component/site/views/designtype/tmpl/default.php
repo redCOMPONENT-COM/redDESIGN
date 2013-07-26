@@ -17,7 +17,8 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 <form id="designform" name="designform" method="post" action="index.php">
 	<input type="hidden" name="option" value="com_reddesign">
 	<input type="hidden" name="view" value="designtype">
-	<input type="hidden" name="task" value="">
+	<input type="hidden" name="task" id="task" value="">
+	<input type="hidden" name="designAreas" id="designAreas" value="">
 	<input type="hidden" id="reddesign_designtype_id" name="reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1">
 
