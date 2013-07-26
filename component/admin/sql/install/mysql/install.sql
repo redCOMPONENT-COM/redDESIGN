@@ -201,11 +201,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_accessories` (
   `price`                      FLOAT         NOT NULL,
   `isDefault`                   TINYINT(3)    NOT NULL DEFAULT '0',
   `reddesign_accessorytype_id` INT(11)       NOT NULL,
-  PRIMARY KEY (`reddesign_accessory_id`),
-  FOREIGN KEY (`reddesign_accessorytype_id` )
-    REFERENCES `#__reddesign_accessorytypes` (`reddesign_accessorytype_id` )
-      ON DELETE CASCADE
-      ON UPDATE NO ACTION
+  PRIMARY KEY (`reddesign_accessory_id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET =utf8
