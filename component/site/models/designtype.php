@@ -128,7 +128,6 @@ class ReddesignModelDesigntype extends FOFModel
 
 		$designAccessoryTypesIds = array_map('trim', explode(',', $this->getItem()->accessorytypes));
 
-
 		$designAccessoriestypes = array();
 
 		foreach ($designAccessoryTypesIds as $key => $value)
@@ -140,16 +139,16 @@ class ReddesignModelDesigntype extends FOFModel
 			// Check that this Accessorytype is published
 			if ($designAccessoryType->enabled)
 			{
+				$designAccessoriestypes[$value] = clone $designAccessoryType;
+
 				// Get the accessories in the Accessorytype
-				$accessoriesModel = FOFModel::getTmpInstance('Accessories', 'ReddesignModel')
-					->reddesign_accessorytype_id($designAccessoryType->reddesign_accessorytype_id);
+				$accessoriesModel = FOFModel::getTmpInstance('Accessories', 'ReddesignModel');
 				$accessoriesModel->setState('enabled', '1');
+				$accessoriesModel->setState('reddesign_accessorytype_id', $value);
+				$accessoriesList = $accessoriesModel->getItemList(true, 'reddesign_accessory_id');
 
 				// Set the accessories into the AccessoryType
-				$designAccessoryType->accessories = $accessoriesModel->getItemList(true, 'reddesign_accessory_id');
-
-				// Add the Accessorytype to the Accessorytypes list in the Design
-				$designAccessoriestypes[] = $designAccessoryType;
+				$designAccessoriestypes[$value]->accessories = $accessoriesList;
 			}
 		}
 
