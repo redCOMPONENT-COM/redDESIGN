@@ -40,6 +40,12 @@ class ReddesignTableBackground extends FOFTable
 			JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $this->image_path);
 		}
 
+		// Delete background thumbnail
+		if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/thumbnails/' . $this->thumbnail))
+		{
+			JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/thumbnails/' . $this->thumbnail);
+		}
+
 		parent::onAfterDelete($oid);
 	}
 }
