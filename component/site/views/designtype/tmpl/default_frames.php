@@ -20,9 +20,8 @@ defined('_JEXEC') or die();
 			<td class="accessory-selection">
 					<input type="radio"
 						   class="price-modifier"
-						   onChange ="customize();"
+						   onChange ="setBackground(<?php echo $frame->reddesign_background_id;?>);"
 						   name="frame"
-						   id ="frame"
 						   value="<?php echo $frame->reddesign_background_id ?>"
 						   data-price="<?php echo $frame->price ?>"
 						   <?php if ($frame->isPreviewbgimage) echo 'checked="checked"'; ?>
@@ -56,5 +55,6 @@ defined('_JEXEC') or die();
 	<?php endforeach; ?>
 	</tbody>
 </table>
-
+<?php // @TODO: this following hidden field will have to update it's value according to frame selection; ?>
+<input type="hidden" name="reddesign_background_id" id="reddesign_background_id" value="<?php echo $reddesign_background_id;?>">
 

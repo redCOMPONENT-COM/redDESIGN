@@ -158,7 +158,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	 */
 	function customize() {
 		var reddesign_designtype_id = akeeba.jQuery('#reddesign_designtype_id').val();
-		var reddesign_background_id = akeeba.jQuery('#frame').val();
+		var reddesign_background_id = akeeba.jQuery('#reddesign_background_id').val();
 		var design = {
 			areas: [],
 			reddesign_designtype_id : reddesign_designtype_id,
@@ -206,4 +206,14 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 		customize();
 	}
 
+	/**
+	 * Set selected background for designarea.
+	 *
+	 * @param reddesign_background_id
+	 */
+	function setBackground(reddesign_background_id)
+	{
+		document.getElementById('reddesign_background_id').value = reddesign_background_id;
+		customize();
+	}
 </script>
