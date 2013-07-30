@@ -58,20 +58,19 @@ class ReddesignControllerDesigntype extends FOFController
 	 */
 	public function ajaxGetDesign()
 	{
-
 		// Initialize session
 		$session 			= JFactory::getSession();
 
-		// Get reddesign_desingtype_id and reddesign_background_id
-		$reddesign_desingtype_id = $this->input->getInt('reddesign_designtype_id');
-		$reddesign_background_id = $this->input->getInt('reddesign_background_id');
-
 		// Get designAreas
 		$designarea = $this->input->getString('designarea');
-		$DesignAreas = new JRegistry;
-		$DesignAreas->loadString($designarea, 'JSON');
-		$DesignAreas = $DesignAreas->get('Design');
-		$areas = $DesignAreas->areas;
+		$designAreas = new JRegistry;
+		$designAreas->loadString($designarea, 'JSON');
+		$designAreas = $designAreas->get('Design');
+		$areas = $designAreas->areas;
+
+		// Get reddesign_desingtype_id and reddesign_background_id
+		$reddesign_desingtype_id = $designAreas->reddesign_designtype_id;
+		$reddesign_background_id = $designAreas->reddesign_background_id;
 
 		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($reddesign_desingtype_id);
 		$this->background = $backgroundModel->getItem($reddesign_background_id);
@@ -210,8 +209,7 @@ class ReddesignControllerDesigntype extends FOFController
 		$areas = $DesignAreas->areas;
 		$data['desingareas'] = $areas;
 
-		// Get accessory data.
-		$accessoryTypes = $designTypeModel->getAccessories();
+		$accessoryTypes = $this->input->getString('reddesign_accessorytype_id', '');
 
 		if (!empty($accessoryTypes))
 		{
@@ -219,7 +217,8 @@ class ReddesignControllerDesigntype extends FOFController
 
 			foreach ($accessoryTypes as $type)
 			{
-				$selectedAccessory = $this->input->getString('accessorytype' . $type->reddesign_accessorytype_id . '[]', '');
+				$selectedAccessory ['reddesign_accessorytype_id'] = $type;
+				$selectedAccessory ['accessories'] = $this->input->getString('AccessoryId' . $type, '');
 
 				if (!empty($selectedAccessory))
 				{
