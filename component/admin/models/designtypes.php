@@ -61,11 +61,12 @@ class ReddesignModelDesigntypes extends FOFModel
 
 					// Load the results as a list of stdClass objects.
 					$backgrounds = $db->loadObjectList();
-
 					$bgTable = FOFTable::getAnInstance('Background', 'ReddesignTable');
 
 					foreach ($backgrounds as $background)
 					{
+						// Table needs to be loaded because Background onAfterDelete needs the fields to execute it's task
+						$bgTable->load($background->reddesign_background_id, true);
 						$bgTable->delete($background->reddesign_background_id);
 					}
 
