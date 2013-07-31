@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerAccessory extends FOFController
+class ReddesignControllerAccessories extends FOFController
 {
 	/**
 	 * Uploads image and thumbnail files for the accessory.
@@ -28,6 +28,21 @@ class ReddesignControllerAccessory extends FOFController
 	 */
 	public function onBeforeApplySave(&$data)
 	{
+		// On edit, retrieve from database the old images that will be replaced (later we will remove them to keep system storage resources clean)
+		if (!!$data['reddesign_accessory_id'])
+		{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			$query
+				->select($db->qn(array('image', 'thumbnail')))
+				->from($db->qn('#__reddesign_accessories'))
+				->where($db->qn('reddesign_accessory_id') . ' = ' . $db->q((int) $data['reddesign_accessory_id']));
+
+			$db->setQuery($query);
+			$db->execute();
+			$oldImages = $db->loadObject();
+		}
+
 		$imageFile = $this->input->files->get('image', null);
 
 		// Code for managing image and thumbnail.
@@ -44,6 +59,15 @@ class ReddesignControllerAccessory extends FOFController
 				'jpg,JPG,jpeg,JPEG,png,PNG'
 			);
 			$data['image'] = $uploadedImageFile['mangled_filename'];
+
+			// Delete old Image on edit
+			if (!!$data['reddesign_accessory_id'])
+			{
+				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/accessories/' . $oldImages->image))
+				{
+					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/accessories/' . $oldImages->image);
+				}
+			}
 
 			$thumbFile = $this->input->files->get('thumbnail', null);
 			$uploadedThumbFile = null;
@@ -75,6 +99,15 @@ class ReddesignControllerAccessory extends FOFController
 				$im->writeImage();
 				$im->clear();
 				$im->destroy();
+			}
+
+			// Delete old Thumb on edit
+			if (!!$data['reddesign_accessory_id'])
+			{
+				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/accessories/thumbnails/' . $oldImages->thumbnail))
+				{
+					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/accessories/thumbnails/' . $oldImages->thumbnail);
+				}
 			}
 		}
 

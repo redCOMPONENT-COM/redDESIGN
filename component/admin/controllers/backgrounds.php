@@ -17,20 +17,8 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerBackground extends FOFController
+class ReddesignControllerBackgrounds extends FOFController
 {
-	/**
-	 * Constructor to set the right model
-	 *
-	 * @param   array  $config  Optional configuration parameters
-	 */
-	public function __construct($config = array())
-	{
-		parent::__construct($config);
-
-		$this->modelName = 'background';
-	}
-
 	/**
 	 * Uploads the EPS-Background file and generates a JPG image preview of the EPS
 	 *
@@ -42,6 +30,10 @@ class ReddesignControllerBackground extends FOFController
 	 */
 	public function onBeforeApplySave(&$data)
 	{
+		// Init vars
+		$updatedEPS = false;
+		$updatedThumbnail = false;
+
 		// Get Eps if has been added
 		$file = $this->input->files->get('bg_eps_file', null);
 
@@ -51,7 +43,6 @@ class ReddesignControllerBackground extends FOFController
 
 		// Get component Params
 		$params = JComponentHelper::getParams('com_reddesign');
-
 
 		// If file has has not been uploaded
 		if (empty($file['name']) || empty($file['type']))
@@ -67,6 +58,8 @@ class ReddesignControllerBackground extends FOFController
 		}
 		else
 		{
+			$updatedEPS = true;
+
 			// Upload the background file
 			$uploaded_file	= $this->uploadFile($file);
 
@@ -101,6 +94,8 @@ class ReddesignControllerBackground extends FOFController
 		// If thumbnail has been attached upload it and set component parameters max size
 		if ($thumbFile['name'])
 		{
+			$updatedThumbnail = true;
+
 			// Upload the attached thumbnail
 			require_once JPATH_ADMINISTRATOR . '/components/com_reddesign/helpers/file.php';
 			$fileHelper = new ReddesignHelperFile;
@@ -122,8 +117,53 @@ class ReddesignControllerBackground extends FOFController
 			$thumbPreviewFile = $uploadedThumbFile['mangled_filename'];
 		}
 
-		// Update the database with the new path of the EPS file and its thumb
+		// On edit
+		if (!!$data['reddesign_background_id'])
+		{
+			// If images has been updated remove old images
+			if ($updatedEPS || $updatedThumbnail)
+			{
+				$db = JFactory::getDbo();
+				$query = $db->getQuery(true);
+				$query
+					->select($db->qn(array('eps_file', 'image_path', 'thumbnail')))
+					->from($db->qn('#__reddesign_backgrounds'))
+					->where($db->qn('reddesign_background_id') . ' = ' . $db->q((int) $data['reddesign_background_id']));
+
+				$db->setQuery($query);
+				$db->execute();
+				$oldImages = $db->loadObject();
+
+				if ($updatedEPS)
+				{
+					// Delete old EPS
+					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $oldImages->eps_file))
+					{
+						JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $oldImages->eps_file);
+					}
+
+					// Delete old Image
+					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $oldImages->image_path))
+					{
+						JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $oldImages->image_path);
+					}
+				}
+
+				if ($updatedThumbnail)
+				{
+					// Delete background old thumbnail
+					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/thumbnails/' . $oldImages->thumbnail))
+					{
+						JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/thumbnails/' . $oldImages->thumbnail);
+					}
+				}
+			}
+		}
+
+		// Update the database with the new path of the EPS file
 		$data['eps_file']			= $uploaded_file['mangled_filename'];
+
+		// Update the database with the new path to the image
 		$data['image_path']			= $jpegPreviewFile;
 
 		if ($thumbPreviewFile)

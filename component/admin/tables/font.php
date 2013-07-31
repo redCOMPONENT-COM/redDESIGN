@@ -77,13 +77,13 @@ class ReddesignTableFont extends FOFTable
 	 */
 	protected function onAfterDelete($oid)
 	{
-		// Delete font and font thumb file
+		// Delete font thumb file
 		if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/fonts/' . $this->font_thumb))
 		{
 			JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/fonts/' . $this->font_thumb);
 		}
 
-		// Delete font and font file
+		// Delete font .ttf file
 		if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/fonts/' . $this->font_file))
 		{
 			JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/fonts/' . $this->font_file);

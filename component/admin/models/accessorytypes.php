@@ -39,6 +39,41 @@ class ReddesignModelAccessorytypes extends FOFModel
 					continue;
 				}
 
+				// Remove accessorytype related Images
+				$table->load($id, true);
+
+				// Delete accessorytype image
+				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/accessorytypes/' . $table->sample_image))
+				{
+					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/accessorytypes/' . $table->sample_image);
+				}
+
+				// Delete accessorytype thumbnail
+				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/accessorytypes/thumbnails/' . $table->sample_thumb))
+				{
+					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/accessorytypes/thumbnails/' . $table->sample_thumb);
+				}
+
+				// Remove related Accessories
+				$db		= JFactory::getDbo();
+				$query	= $db->getQuery(true);
+
+				$query
+					->select('reddesign_accessory_id')
+					->from('#__reddesign_accessories as ac')
+					->where('ac.reddesign_accessorytype_id = ' . (int) $id)
+					->order('ac.reddesign_accessory_id ASC');
+
+				$db->setQuery($query);
+				$accessories = $db->loadObjectList();
+
+				$accessoryTable = FOFTable::getAnInstance('Accessory', 'ReddesignTable');
+
+				foreach ($accessories as $accessory)
+				{
+					$accessoryTable->delete($accessory->reddesign_accessory_id);
+				}
+
 				if (!$table->delete($id))
 				{
 					$this->setError($table->getError());
@@ -47,28 +82,6 @@ class ReddesignModelAccessorytypes extends FOFModel
 				}
 				else
 				{
-					// Remove related Backgrounds
-					$db		= JFactory::getDbo();
-					$query	= $db->getQuery(true);
-
-					$query
-						->select('reddesign_accessory_id')
-						->from('#__reddesign_accessories as ac')
-						->where('ac.reddesign_accessorytype_id = ' . (int) $id)
-						->order('ac.reddesign_accessory_id ASC');
-
-					$db->setQuery($query);
-
-					// Load the results as a list of stdClass objects.
-					$accessories = $db->loadObjectList();
-
-					$accessoryTable = FOFTable::getAnInstance('Accessory', 'ReddesignTable');
-
-					foreach ($accessories as $accessory)
-					{
-						$accessoryTable->delete($accessory->reddesign_accessory_id);
-					}
-
 					$this->onAfterDelete($id);
 				}
 			}

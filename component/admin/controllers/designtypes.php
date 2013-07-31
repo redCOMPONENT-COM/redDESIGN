@@ -17,20 +17,8 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerDesigntype extends FOFController
+class ReddesignControllerDesigntypes extends FOFController
 {
-	/**
-	 * Constructor to set the right model
-	 *
-	 * @param   array  $config  Optional configuration parameters
-	 */
-	public function __construct($config = array())
-	{
-		parent::__construct($config);
-
-		$this->modelName = 'designtype';
-	}
-
 	/**
 	 * Uploads image and thumbnail files for the design type.
 	 *
@@ -40,6 +28,21 @@ class ReddesignControllerDesigntype extends FOFController
 	 */
 	public function onBeforeApplySave(&$data)
 	{
+		// On edit, retrieve from database the old images that will be replaced (later we will remove them to keep system storage resources clean)
+		if (!!$data['reddesign_designtype_id'])
+		{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			$query
+				->select($db->qn(array('sample_image', 'sample_thumb')))
+				->from($db->qn('#__reddesign_designtypes'))
+				->where($db->qn('reddesign_designtype_id') . ' = ' . $db->q((int) $data['reddesign_designtype_id']));
+
+			$db->setQuery($query);
+			$db->execute();
+			$oldImages = $db->loadObject();
+		}
+
 		$imageFile = $this->input->files->get('sample_image', null);
 
 		// Code for managing image and thumbnail.
@@ -56,6 +59,15 @@ class ReddesignControllerDesigntype extends FOFController
 															'jpg,JPG,jpeg,JPEG,png,PNG'
 														);
 			$data['sample_image'] = $uploadedImageFile['mangled_filename'];
+
+			// Delete old Image on edit
+			if (!!$data['reddesign_designtype_id'])
+			{
+				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/designtypes/' . $oldImages->sample_image))
+				{
+					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/designtypes/' . $oldImages->sample_image);
+				}
+			}
 
 			$thumbFile = $this->input->files->get('sample_thumb', null);
 			$uploadedThumbFile = null;
@@ -87,6 +99,15 @@ class ReddesignControllerDesigntype extends FOFController
 				$im->writeImage();
 				$im->clear();
 				$im->destroy();
+			}
+
+			// Delete old Thumbnail on edit
+			if (!!$data['reddesign_designtype_id'])
+			{
+				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/designtypes/thumbnails/' . $oldImages->sample_thumb))
+				{
+					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/designtypes/thumbnails/' . $oldImages->sample_thumb);
+				}
 			}
 		}
 
