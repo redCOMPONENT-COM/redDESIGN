@@ -23,13 +23,13 @@
                        default="redDESIGN Products"
                        label="PLG_REDDESIGN_REDSHOP_DEFAULT_CATEGORY_NAME_LABEL"
                        description="PLG_REDDESIGN_REDSHOP_DEFAULT_CATEGORY_NAME_DESC"
-                       size="5"
+                       size="25"
                         />
                 <field name="defaultManufacturerName" type="text"
                        default="redCOMPONENT"
                        label="PLG_REDDESIGN_REDSHOP_DEFAULT_MANUFACTURER_NAME_LABEL"
                        description="PLG_REDDESIGN_REDSHOP_DEFAULT_MANUFACTURER_NAME_DESC"
-                       size="5"
+                       size="25"
                         />
             </fieldset>
         </fields>
