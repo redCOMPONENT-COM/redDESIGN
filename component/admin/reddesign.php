@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 JLoader::import('fof.include');
 
 // Register component prefix.
-JLoader::registerPrefix('RedDesign', __DIR__);
+JLoader::registerPrefix('Reddesign', __DIR__);
 
 // Access check.
 if (!JFactory::getUser()->authorise('core.manage', 'com_reddesign'))
