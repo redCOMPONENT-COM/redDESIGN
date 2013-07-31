@@ -39,6 +39,44 @@ class ReddesignModelDesigntypes extends FOFModel
 					continue;
 				}
 
+				// Remove related Images
+				$table->load($id, true);
+
+				// Delete accessory image
+				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/designtypes/' . $table->sample_image))
+				{
+					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/designtypes/' . $table->sample_image);
+				}
+
+				// Delete accessory thumbnail
+				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/designtypes/thumbnails/' . $table->sample_thumb))
+				{
+					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/designtypes/thumbnails/' . $table->sample_thumb);
+				}
+
+				// Remove related Backgrounds
+				$db		= JFactory::getDbo();
+				$query	= $db->getQuery(true);
+
+				$query
+					->select('reddesign_background_id')
+					->from('#__reddesign_backgrounds as bg')
+					->where('bg.reddesign_designtype_id = ' . (int) $id)
+					->order('bg.reddesign_background_id ASC');
+
+				$db->setQuery($query);
+
+				// Load the results as a list of stdClass objects.
+				$backgrounds = $db->loadObjectList();
+				$bgTable = FOFTable::getAnInstance('Background', 'ReddesignTable');
+
+				foreach ($backgrounds as $background)
+				{
+					// Table needs to be loaded because Background onAfterDelete needs the fields to execute it's task
+					$bgTable->load($background->reddesign_background_id, true);
+					$bgTable->delete($background->reddesign_background_id);
+				}
+
 				if (!$table->delete($id))
 				{
 					$this->setError($table->getError());
@@ -47,29 +85,6 @@ class ReddesignModelDesigntypes extends FOFModel
 				}
 				else
 				{
-					// Remove related Backgrounds
-					$db		= JFactory::getDbo();
-					$query	= $db->getQuery(true);
-
-					$query
-						->select('reddesign_background_id')
-						->from('#__reddesign_backgrounds as bg')
-						->where('bg.reddesign_designtype_id = ' . (int) $id)
-						->order('bg.reddesign_background_id ASC');
-
-					$db->setQuery($query);
-
-					// Load the results as a list of stdClass objects.
-					$backgrounds = $db->loadObjectList();
-					$bgTable = FOFTable::getAnInstance('Background', 'ReddesignTable');
-
-					foreach ($backgrounds as $background)
-					{
-						// Table needs to be loaded because Background onAfterDelete needs the fields to execute it's task
-						$bgTable->load($background->reddesign_background_id, true);
-						$bgTable->delete($background->reddesign_background_id);
-					}
-
 					$this->onAfterDelete($id);
 				}
 			}
