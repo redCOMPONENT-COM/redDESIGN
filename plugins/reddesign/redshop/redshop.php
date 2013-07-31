@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later, see LICENSE.
  */
 defined('_JEXEC') or die('Restricted access');
-
+require_once JPATH_SITE . '/components/com_redshop/helpers/cart.php';
 /**
  * redSHOP Plugin.
  *
@@ -16,7 +16,7 @@ defined('_JEXEC') or die('Restricted access');
  *
  * @since       1.0
  */
-class PlgReddesignShopsRedshop extends JPlugin
+class PlgReddesignRedshop extends JPlugin
 {
 	/**
 	 * Constructor - note in Joomla 2.5 PHP4.x is no longer supported so we can use this.
@@ -40,7 +40,7 @@ class PlgReddesignShopsRedshop extends JPlugin
 	 *
 	 * @access public
 	 */
-	public function onOrderButtonClick()
+	public function onOrderButtonClick($data)
 	{
 		$app    = JFactory::getApplication();
 		$db     = JFactory::getDbo();

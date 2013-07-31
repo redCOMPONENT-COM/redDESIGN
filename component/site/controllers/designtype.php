@@ -173,6 +173,7 @@ class ReddesignControllerDesigntype extends FOFController
 	 */
 	public function orderProduct()
 	{
+		$app    = JFactory::getApplication();
 		JPluginHelper::importPlugin('reddesign');
 		$dispatcher = JDispatcher::getInstance();
 
