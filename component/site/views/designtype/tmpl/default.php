@@ -132,7 +132,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 			var total = 0;
 			var formatedTotal = 0;
 			akeeba.jQuery('.price-modifier:checked').each(function () {
-				total += parseFloat(akeeba.jQuery(this).val());
+				total += parseFloat(akeeba.jQuery(this).attr('data-price'));
 			});
 			formatedTotal = accounting.formatMoney(total);
 			akeeba.jQuery('#total').html(formatedTotal);
@@ -142,7 +142,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 					var total = 0;
 					var formatedTotal = 0;
 					akeeba.jQuery('.price-modifier:checked').each(function () {
-						total += parseFloat(akeeba.jQuery(this).val());
+						total += parseFloat(akeeba.jQuery(this).attr('data-price'));
 					});
 					formatedTotal = accounting.formatMoney(total);
 					akeeba.jQuery('#total').html(formatedTotal);
@@ -157,11 +157,13 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	 * @param update
 	 */
 	function customize() {
-		var design = {
-			areas: []
-		};
 		var reddesign_designtype_id = akeeba.jQuery('#reddesign_designtype_id').val();
 		var reddesign_background_id = akeeba.jQuery('#reddesign_background_id').val();
+		var design = {
+			areas: [],
+			reddesign_designtype_id : reddesign_designtype_id,
+			reddesign_background_id : reddesign_background_id
+		};
 		<?php foreach($this->productionBackgroundAreas as $area) : ?>
 
 		design.areas.push({
@@ -176,7 +178,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 		design = JSON.stringify({Design: design });
 		akeeba.jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=designtype&task=ajaxGetDesign&format=raw",
-			data: {reddesign_designtype_id: reddesign_designtype_id, reddesign_background_id: reddesign_background_id, designarea : design},
+			data: {designarea : design},
 			type: "post",
 			success: function(data) {
 				var json = akeeba.jQuery.parseJSON(data);

@@ -22,7 +22,8 @@ defined('_JEXEC') or die();
 						   class="price-modifier"
 						   onChange ="setBackground(<?php echo $frame->reddesign_background_id;?>);"
 						   name="frame"
-						   value="<?php echo $frame->price ?>"
+						   value="<?php echo $frame->reddesign_background_id ?>"
+						   data-price="<?php echo $frame->price ?>"
 						   <?php if ($frame->isPreviewbgimage) echo 'checked="checked"'; ?>
 						/>
 			</td>
