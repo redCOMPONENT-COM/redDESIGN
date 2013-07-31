@@ -17,20 +17,8 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerBackground extends FOFController
+class ReddesignControllerBackgrounds extends FOFController
 {
-	/**
-	 * Constructor to set the right model
-	 *
-	 * @param   array  $config  Optional configuration parameters
-	 */
-	public function __construct($config = array())
-	{
-		parent::__construct($config);
-
-		$this->modelName = 'background';
-	}
-
 	/**
 	 * Uploads the EPS-Background file and generates a JPG image preview of the EPS
 	 *

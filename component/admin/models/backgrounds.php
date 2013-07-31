@@ -19,7 +19,7 @@ JLoader::import('joomla.filesystem.file');
  *
  * @since       1.0
  */
-class ReddesignModelBackground extends FOFModel
+class ReddesignModelBackgrounds extends FOFModel
 {
 	/**
 	 * Set a specific designtype background as the background for the PDF production file

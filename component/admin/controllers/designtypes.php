@@ -10,7 +10,7 @@ defined('_JEXEC') or die;
 
 
 /**
- * DesignType Controller.
+ * Design Type Controller.
  *
  * @package     RedDesign.Component
  * @subpackage  Administrator
@@ -19,5 +19,94 @@ defined('_JEXEC') or die;
  */
 class ReddesignControllerDesigntypes extends FOFController
 {
-	// Do not remove this empty class FoF needs it to load the right designtypes model on removing designtypes
+	/**
+	 * Uploads image and thumbnail files for the design type.
+	 *
+	 * @param   array  &$data  data filled in the edit form
+	 *
+	 * @return  array  Returns $data.
+	 */
+	public function onBeforeApplySave(&$data)
+	{
+		$imageFile = $this->input->files->get('sample_image', null);
+
+		// Code for managing image and thumbnail.
+		if (!empty($imageFile['name']))
+		{
+			require_once JPATH_ADMINISTRATOR . '/components/com_reddesign/helpers/file.php';
+			$fileHelper = new ReddesignHelperFile;
+			$params = JComponentHelper::getParams('com_reddesign');
+
+			$uploadedImageFile = $fileHelper->uploadFile(
+															$imageFile,
+															'designtypes',
+															$params->get('max_designtype_image_size', 2),
+															'jpg,JPG,jpeg,JPEG,png,PNG'
+														);
+			$data['sample_image'] = $uploadedImageFile['mangled_filename'];
+
+			$thumbFile = $this->input->files->get('sample_thumb', null);
+			$uploadedThumbFile = null;
+
+			// If sample_thumb field is empty then use sample_image.
+			if (!empty($thumbFile['name']))
+			{
+				$uploadedThumbFile = $fileHelper->uploadFile(
+																$thumbFile,
+																'designtypes/thumbnails',
+																$params->get('max_designtype_image_size', 2),
+																'jpg,JPG,jpeg,JPEG,png,PNG'
+															);
+				$data['sample_thumb'] = $uploadedThumbFile['mangled_filename'];
+			}
+			else
+			{
+				$dest = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/thumbnails/' . $uploadedImageFile['mangled_filename'];
+				JFile::copy($uploadedImageFile['filepath'], $dest);
+				$data['sample_thumb'] = $uploadedImageFile['mangled_filename'];
+				$uploadedThumbFile['filepath'] = $dest;
+			}
+
+			if (JFile::exists($uploadedThumbFile['filepath']))
+			{
+				$im = new Imagick;
+				$im->readImage($uploadedThumbFile['filepath']);
+				$im->thumbnailImage($params->get('max_designtype_thumbnail_width', 100), $params->get('max_designtype_thumbnail_height', 100), true);
+				$im->writeImage();
+				$im->clear();
+				$im->destroy();
+			}
+		}
+
+		// Prepare data for description together with read more option.
+		if (isset($data['description']))
+		{
+			$pattern = '#<hr\s+id=("|\')system-readmore("|\')\s*\/*>#i';
+			$tagPos = preg_match($pattern, $data['description']);
+
+			if ($tagPos == 0)
+			{
+				$data['intro_description'] = $data['description'];
+			}
+			else
+			{
+				$intro_description = preg_split($pattern, $data['description'], 2);
+				$data['intro_description'] = $intro_description[0];
+			}
+		}
+
+		// Prepare data for the accessorytypes field.
+		$accessorytypes = $this->input->get('accessorytypes', null, 'array');
+
+		if (!$accessorytypes)
+		{
+			$data['accessorytypes'] = '';
+		}
+		else
+		{
+			$data['accessorytypes'] = implode(',', $accessorytypes);
+		}
+
+		return $data;
+	}
 }
