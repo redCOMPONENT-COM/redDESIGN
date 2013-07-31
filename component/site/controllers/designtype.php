@@ -66,7 +66,7 @@ class ReddesignControllerDesigntype extends FOFController
 		$design->loadString($this->input->getString('designarea'), 'JSON');
 		$design = $design->get('Design');
 
-		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_desingtype_id);
+		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_designtype_id);
 		$this->background = $backgroundModel->getItem($design->reddesign_background_id);
 		$backgroundImage = $this->background->image_path;
 
@@ -179,15 +179,16 @@ class ReddesignControllerDesigntype extends FOFController
 		// Get design type data.
 		$designTypeId    = $this->input->getInt('reddesign_designtype_id', null);
 		$designTypeModel = FOFModel::getTmpInstance('Designtype', 'ReddesignModel')->reddesign_designtype_id($designTypeId);
-		$designType      = $designTypeModel->getItem();
+		$designType      = $designTypeModel->getItem($designTypeId);
 
 		$data = array();
-		$data['reddesign_designtype_id'] = $designTypeId;
+		$data['designType'] = $designType;
 
-		// @Todo: Here form other data and send it to the plugin via dispatcher.
-		// Get reddesign_background_id
+		// Get Background Data
 		$reddesign_background_id = $this->input->getInt('reddesign_background_id');
-		$data['reddesign_background_id'] = $reddesign_background_id;
+		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($reddesign_background_id);
+		$this->background = $backgroundModel->getItem($reddesign_background_id);
+		$data['designBackground'] = $this->background;
 
 		// Get designAreas
 		$design = new JRegistry;
@@ -196,7 +197,23 @@ class ReddesignControllerDesigntype extends FOFController
 
 		$data['desingAreas'] = $design->areas;
 		$data['desingAccessories'] = $design->accessories;
+		$totalDesignPrice = $this->background->price;
 
-		$results = $dispatcher->trigger('onOrderButtonClick', $data);
+		foreach ($design->accessories as $accessoryId)
+		{
+			$accessoryModel = FOFModel::getTmpInstance('Accessory', 'ReddesignModel');
+			$accessory = $accessoryModel->getItem($accessoryId->id);
+			$totalDesignPrice += $accessory->price;
+		}
+
+		$data['desingPrice'] = $totalDesignPrice;
+
+		$results = $dispatcher->trigger('onOrderButtonClick', array($data));
+
+		if ($results)
+		{
+			$link = JRoute::_('index.php?option=com_redshop&view=cart', false);
+			$app->Redirect($link);
+		}
 	}
 }
