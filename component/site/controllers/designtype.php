@@ -61,19 +61,13 @@ class ReddesignControllerDesigntype extends FOFController
 		// Initialize session
 		$session 			= JFactory::getSession();
 
-		// Get designAreas
-		$designarea = $this->input->getString('designarea');
-		$designAreas = new JRegistry;
-		$designAreas->loadString($designarea, 'JSON');
-		$designAreas = $designAreas->get('Design');
-		$areas = $designAreas->areas;
+		// Get design Data
+		$design = new JRegistry;
+		$design->loadString($this->input->getString('designarea'), 'JSON');
+		$design = $design->get('Design');
 
-		// Get reddesign_desingtype_id and reddesign_background_id
-		$reddesign_desingtype_id = $designAreas->reddesign_designtype_id;
-		$reddesign_background_id = $designAreas->reddesign_background_id;
-
-		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($reddesign_desingtype_id);
-		$this->background = $backgroundModel->getItem($reddesign_background_id);
+		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_desingtype_id);
+		$this->background = $backgroundModel->getItem($design->reddesign_background_id);
 		$backgroundImage = $this->background->image_path;
 
 		if ($session->get('customizedImage') != "")
@@ -111,27 +105,21 @@ class ReddesignControllerDesigntype extends FOFController
 		$backgroundImage_file_location = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $backgroundImage;
 		$newjpg_file_location = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
 
-		foreach ($areas as $area)
+		foreach ($design->areas as $area)
 		{
-			$fontSize = $area->fontSize;
-			$fontColor = $area->fontColor;
-			$fontTypeId = $area->fontTypeId;
-			$fontText = $area->textArea;
-			$reddesign_area_id = $area->id;
-
-			if ($fontTypeId)
+			if ($area->fontTypeId)
 			{
-				$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($reddesign_area_id);
-				$this->fontType = $fontModel->getItem($fontTypeId);
+				$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area->id);
+				$this->fontType = $fontModel->getItem($area->fontTypeId);
 				$fontType_file_location = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $this->fontType->font_file;
 			}
 			else
 			{
-				$fontType_file_location = $fontType_file_location = JPATH_ROOT . '/media/com_reddesign/assets/fonts/arial.ttf';
+				$fontType_file_location = JPATH_ROOT . '/media/com_reddesign/assets/fonts/arial.ttf';
 			}
 
-			$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($reddesign_background_id);
-			$this->areaItem = $areaModel->getItem($reddesign_area_id);
+			$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($design->reddesign_background_id);
+			$this->areaItem = $areaModel->getItem($area->id);
 			/*
 				Text alingment condition
 				1 is left
@@ -161,8 +149,8 @@ class ReddesignControllerDesigntype extends FOFController
 
 			$line_gap = 0;
 
-	        $cmd = "convert $backgroundImage_file_location  \
-		     		\( $gravity -font $fontType_file_location -pointsize $fontSize -interline-spacing -$line_gap -fill '#$fontColor'  -background transparent label:'$fontText' \ -virtual-pixel transparent \
+	         $cmd = "convert $backgroundImage_file_location  \
+		     		\( $gravity -font $fontType_file_location -pointsize $area->fontSize -interline-spacing -$line_gap -fill '#$area->fontColor'  -background transparent label:'$area->textArea' \ -virtual-pixel transparent \
 					\) $gravity -geometry +$offsetLeft+$offsetTop -composite   \
 		      		$newjpg_file_location";
 			exec($cmd);
@@ -177,7 +165,7 @@ class ReddesignControllerDesigntype extends FOFController
 	}
 
 	/**
-	 * There is event triger inside this function.
+	 * There is event trigger inside this function.
 	 *
 	 * @return bool
 	 *
@@ -202,35 +190,12 @@ class ReddesignControllerDesigntype extends FOFController
 		$data['reddesign_background_id'] = $reddesign_background_id;
 
 		// Get designAreas
-		$designarea = $this->input->getString('designAreas');
-		$DesignAreas = new JRegistry;
-		$DesignAreas->loadString($designarea, 'JSON');
-		$DesignAreas = $DesignAreas->get('Design');
-		$areas = $DesignAreas->areas;
-		$data['desingareas'] = $areas;
+		$design = new JRegistry;
+		$design->loadString($this->input->getString('designAreas'), 'JSON');
+		$design = $design->get('Design');
 
-		$accessoryTypes = $this->input->getString('reddesign_accessorytype_id', '');
-
-		if (!empty($accessoryTypes))
-		{
-			$selectedAccessories = array();
-
-			foreach ($accessoryTypes as $type)
-			{
-				$selectedAccessory ['reddesign_accessorytype_id'] = $type;
-				$selectedAccessory ['accessories'] = $this->input->getString('AccessoryId' . $type, '');
-
-				if (!empty($selectedAccessory))
-				{
-					$selectedAccessories[] = $selectedAccessory;
-				}
-			}
-		}
-
-		if (!empty($selectedAccessories))
-		{
-			$data['selectedAccessories'] = $selectedAccessories;
-		}
+		$data['desingAreas'] = $design->areas;
+		$data['desingAccessories'] = $design->accessories;
 
 		$results = $dispatcher->trigger('onOrderButtonClick', $data);
 	}

@@ -39,6 +39,7 @@ defined('_JEXEC') or die();
 					<?php if($accessorytype->single_select) : ?>
 					<input type="radio"
 						   class="price-modifier"
+						   id="AccessoryId<?php echo $accessory->reddesign_accessory_id ?>"
 						   name="AccessoryId<?php echo $accessorytype->reddesign_accessorytype_id; ?>[]"
 						   value="<?php echo $accessory->reddesign_accessory_id ?>"
 						   data-price="<?php echo $accessory->price ?>"
@@ -48,6 +49,7 @@ defined('_JEXEC') or die();
 					<input
 						class="price-modifier"
 						type="checkbox"
+						id="AccessoryId<?php echo $accessory->reddesign_accessory_id ?>"
 						name="AccessoryId<?php echo $accessorytype->reddesign_accessorytype_id; ?>[]"
 						value="<?php echo $accessory->reddesign_accessory_id ?>"
 						data-price="<?php echo $accessory->price ?>"
@@ -90,7 +92,6 @@ defined('_JEXEC') or die();
 				</td>
 			</tr>
 			<?php endforeach; ?>
-			<input type="hidden" id="reddesign_accessorytype_id" name="reddesign_accessorytype_id[]" value="<?php echo $accessorytype->reddesign_accessorytype_id; ?>">
 		</tbody>
 	</table>
 <?php endforeach; ?>
