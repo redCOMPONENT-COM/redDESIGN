@@ -41,17 +41,6 @@ class ReddesignHelperFile
 			return false;
 		}
 
-		// Check folders
-		if (!JFolder::exists(FOFTemplateUtils::parsePath('media://com_reddesign/assets/' . $assetsFolder . '/')))
-		{
-			if (!JFolder::create(FOFTemplateUtils::parsePath('media://com_reddesign/assets/' . $assetsFolder . '/')))
-			{
-				$app->enqueueMessage(JText::sprintf('COM_REDDESIGN_FILE_HELPER_CAN_NOT_CREATE_FOLDER', $assetsFolder), 'error');
-
-				return false;
-			}
-		}
-
 		// Get a (very!) randomised name
 		if (version_compare(JVERSION, '3.0', 'ge'))
 		{
