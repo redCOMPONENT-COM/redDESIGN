@@ -143,7 +143,7 @@ class ReddesignModelDesigntypes extends FOFModel
 				$designAccessoriestypes[$value] = clone $designAccessoryType;
 
 				// Get the accessories in the Accessorytype
-				$accessoriesModel = FOFModel::getTmpInstance('Accessoriess', 'ReddesignModel');
+				$accessoriesModel = FOFModel::getTmpInstance('Accessories', 'ReddesignModel');
 				$accessoriesModel->setState('enabled', '1');
 				$accessoriesModel->setState('reddesign_accessorytype_id', $value);
 				$accessoriesList = $accessoriesModel->getItemList(true, 'reddesign_accessory_id');
