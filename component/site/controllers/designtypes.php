@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerDesigntype extends FOFController
+class ReddesignControllerDesigntypes extends FOFController
 {
 	/**
 	 * Class constructor
@@ -30,7 +30,7 @@ class ReddesignControllerDesigntype extends FOFController
 	{
 		parent::__construct($config);
 
-		$this->modelName = 'Designtype';
+		$this->modelName = 'Designtypes';
 	}
 
 	/**
