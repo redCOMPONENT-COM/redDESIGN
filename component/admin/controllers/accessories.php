@@ -44,14 +44,20 @@ class ReddesignControllerAccessories extends FOFController
 		}
 
 		$imageFile = $this->input->files->get('image', null);
+		$thumbFile = $this->input->files->get('thumbnail', null);
+
+		// Import the Helper File class if images are uploaded
+		if (!empty($imageFile['name']) || !empty($thumbFile['name']))
+		{
+			require_once JPATH_ADMINISTRATOR . '/components/com_reddesign/helpers/file.php';
+			$fileHelper = new ReddesignHelperFile;
+
+			$params = JComponentHelper::getParams('com_reddesign');
+		}
 
 		// Code for managing image and thumbnail.
 		if (!empty($imageFile['name']))
 		{
-			require_once JPATH_ADMINISTRATOR . '/components/com_reddesign/helpers/file.php';
-			$fileHelper = new ReddesignHelperFile;
-			$params = JComponentHelper::getParams('com_reddesign');
-
 			$uploadedImageFile = $fileHelper->uploadFile(
 				$imageFile,
 				'accessories',
@@ -68,46 +74,45 @@ class ReddesignControllerAccessories extends FOFController
 					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/accessories/' . $oldImages->image);
 				}
 			}
+		}
 
-			$thumbFile = $this->input->files->get('thumbnail', null);
-			$uploadedThumbFile = null;
+		// If thumbnail field is empty than use image.
+		$uploadedThumbFile = null;
 
-			// If thumbnail field is empty than use image.
-			if (!empty($thumbFile['name']))
-			{
-				$uploadedThumbFile = $fileHelper->uploadFile(
-					$thumbFile,
-					'accessories/thumbnails',
-					$params->get('max_accessory_image_size', 2),
-					'jpg,JPG,jpeg,JPEG,png,PNG'
-				);
-				$data['thumbnail'] = $uploadedThumbFile['mangled_filename'];
-			}
-			else
-			{
-				$dest = JPATH_ROOT . '/media/com_reddesign/assets/accessories/thumbnails/' . $uploadedImageFile['mangled_filename'];
-				JFile::copy($uploadedImageFile['filepath'], $dest);
-				$data['thumbnail'] = $uploadedImageFile['mangled_filename'];
-				$uploadedThumbFile['filepath'] = $dest;
-			}
+		if (!empty($thumbFile['name']))
+		{
+			$uploadedThumbFile = $fileHelper->uploadFile(
+				$thumbFile,
+				'accessories/thumbnails',
+				$params->get('max_accessory_image_size', 2),
+				'jpg,JPG,jpeg,JPEG,png,PNG'
+			);
+			$data['thumbnail'] = $uploadedThumbFile['mangled_filename'];
+		}
+		else
+		{
+			$dest = JPATH_ROOT . '/media/com_reddesign/assets/accessories/thumbnails/' . $uploadedImageFile['mangled_filename'];
+			JFile::copy($uploadedImageFile['filepath'], $dest);
+			$data['thumbnail'] = $uploadedImageFile['mangled_filename'];
+			$uploadedThumbFile['filepath'] = $dest;
+		}
 
-			if (JFile::exists($uploadedThumbFile['filepath']))
-			{
-				$im = new Imagick;
-				$im->readImage($uploadedThumbFile['filepath']);
-				$im->thumbnailImage($params->get('max_accessory_thumbnail_width', 50), $params->get('max_accessory_thumbnail_height', 50), true);
-				$im->writeImage();
-				$im->clear();
-				$im->destroy();
-			}
+		if (JFile::exists($uploadedThumbFile['filepath']))
+		{
+			$im = new Imagick;
+			$im->readImage($uploadedThumbFile['filepath']);
+			$im->thumbnailImage($params->get('max_accessory_thumbnail_width', 50), $params->get('max_accessory_thumbnail_height', 50), true);
+			$im->writeImage();
+			$im->clear();
+			$im->destroy();
+		}
 
-			// Delete old Thumb on edit
-			if (!!$data['reddesign_accessory_id'])
+		// Delete old Thumb on edit
+		if (!!$data['reddesign_accessory_id'])
+		{
+			if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/accessories/thumbnails/' . $oldImages->thumbnail))
 			{
-				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/accessories/thumbnails/' . $oldImages->thumbnail))
-				{
-					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/accessories/thumbnails/' . $oldImages->thumbnail);
-				}
+				JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/accessories/thumbnails/' . $oldImages->thumbnail);
 			}
 		}
 
