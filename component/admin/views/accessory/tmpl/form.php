@@ -75,7 +75,16 @@ JHTML::_('behavior.framework');
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="control-group" id="autoGenerateThumb" style="display: none;">
+			<label class="control-label" for="autoGenerateThumbCheck">
+				<?php echo JText::_('COM_REDDESIGN_COMMON_AUTO_GENERATE_THUMB'); ?>
+			</label>
+			<div class="controls">
+				<input type="checkbox" name="autoGenerateThumbCheck" id="autoGenerateThumbCheck" />
+			</div>
+		</div>
+
+		<div class="control-group" id="thumbnail-group">
 			<label class="control-label " for="thumbnail">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
 			</label>
@@ -120,3 +129,30 @@ JHTML::_('behavior.framework');
 		</div>
 	</div>
 </form>
+
+<script type="text/javascript">
+	akeeba.jQuery("document").ready(
+		function()
+		{
+			akeeba.jQuery("#image").change(
+				function()
+				{
+					akeeba.jQuery('#autoGenerateThumb').fadeIn();
+				}
+			);
+			akeeba.jQuery("#autoGenerateThumbCheck").change(
+				function()
+				{
+					if (akeeba.jQuery("#autoGenerateThumbCheck").is(':checked'))
+					{
+						akeeba.jQuery('#thumbnail-group').fadeOut();
+					}
+					else
+					{
+						akeeba.jQuery('#thumbnail-group').fadeIn();
+					}
+				}
+			);
+		}
+	);
+</script>
