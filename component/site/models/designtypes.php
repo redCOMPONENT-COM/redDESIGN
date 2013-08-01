@@ -19,7 +19,7 @@ JLoader::import('joomla.filesystem.file');
  *
  * @since       1.0
  */
-class ReddesignModelDesigntype extends FOFModel
+class ReddesignModelDesigntypes extends FOFModel
 {
 	/**
 	 * Retrieve all backgrounds from the database that belongs to the current design
@@ -28,7 +28,8 @@ class ReddesignModelDesigntype extends FOFModel
 	 */
 	public function getBackgrounds()
 	{
-		$backgroundModel = FOFModel::getTmpInstance('Background', 'ReddesignModel')->reddesign_designtype_id($this->getId());
+		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel');
+		$backgroundModel->setState('reddesign_designtype_id', $this->getId());
 
 		$backgrounds = $backgroundModel->getItemList();
 
@@ -133,7 +134,7 @@ class ReddesignModelDesigntype extends FOFModel
 		foreach ($designAccessoryTypesIds as $key => $value)
 		{
 			// Get each accessorytype available in current design
-			$accessorytypesModel = FOFModel::getTmpInstance('Accessorytype', 'ReddesignModel');
+			$accessorytypesModel = FOFModel::getTmpInstance('Accessorytypes', 'ReddesignModel');
 			$designAccessoryType = $accessorytypesModel->getItem($value);
 
 			// Check that this Accessorytype is published
@@ -142,7 +143,7 @@ class ReddesignModelDesigntype extends FOFModel
 				$designAccessoriestypes[$value] = clone $designAccessoryType;
 
 				// Get the accessories in the Accessorytype
-				$accessoriesModel = FOFModel::getTmpInstance('Accessories', 'ReddesignModel');
+				$accessoriesModel = FOFModel::getTmpInstance('Accessoriess', 'ReddesignModel');
 				$accessoriesModel->setState('enabled', '1');
 				$accessoriesModel->setState('reddesign_accessorytype_id', $value);
 				$accessoriesList = $accessoriesModel->getItemList(true, 'reddesign_accessory_id');

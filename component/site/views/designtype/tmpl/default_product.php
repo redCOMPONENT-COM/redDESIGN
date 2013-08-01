@@ -32,7 +32,6 @@ if ($tagPos != 0)
 				</a>
 			<?php endif; ?>
 			<div class="media-body">
-				<h4 class="media-heading"><?php echo $this->item->title ?></h4>
 				<?php echo $this->item->description; ?>
 			</div>
 		</div>
