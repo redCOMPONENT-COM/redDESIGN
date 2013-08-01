@@ -44,14 +44,19 @@ class ReddesignControllerDesigntypes extends FOFController
 		}
 
 		$imageFile = $this->input->files->get('sample_image', null);
+		$thumbFile = $this->input->files->get('sample_thumb', null);
+
+		if (!empty($imageFile['name']) || !empty($thumbFile['name']))
+		{
+			require_once JPATH_ADMINISTRATOR . '/components/com_reddesign/helpers/file.php';
+			$fileHelper = new ReddesignHelperFile;
+
+			$params = JComponentHelper::getParams('com_reddesign');
+		}
 
 		// Code for managing image and thumbnail.
 		if (!empty($imageFile['name']))
 		{
-			require_once JPATH_ADMINISTRATOR . '/components/com_reddesign/helpers/file.php';
-			$fileHelper = new ReddesignHelperFile;
-			$params = JComponentHelper::getParams('com_reddesign');
-
 			$uploadedImageFile = $fileHelper->uploadFile(
 															$imageFile,
 															'designtypes',
@@ -68,46 +73,45 @@ class ReddesignControllerDesigntypes extends FOFController
 					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/designtypes/' . $oldImages->sample_image);
 				}
 			}
+		}
 
-			$thumbFile = $this->input->files->get('sample_thumb', null);
-			$uploadedThumbFile = null;
+		$uploadedThumbFile = null;
 
-			// If sample_thumb field is empty then use sample_image.
-			if (!empty($thumbFile['name']))
-			{
-				$uploadedThumbFile = $fileHelper->uploadFile(
-																$thumbFile,
-																'designtypes/thumbnails',
-																$params->get('max_designtype_image_size', 2),
-																'jpg,JPG,jpeg,JPEG,png,PNG'
-															);
-				$data['sample_thumb'] = $uploadedThumbFile['mangled_filename'];
-			}
-			else
-			{
-				$dest = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/thumbnails/' . $uploadedImageFile['mangled_filename'];
-				JFile::copy($uploadedImageFile['filepath'], $dest);
-				$data['sample_thumb'] = $uploadedImageFile['mangled_filename'];
-				$uploadedThumbFile['filepath'] = $dest;
-			}
+		// If sample_thumb field is empty then use sample_image.
+		if (!empty($thumbFile['name']))
+		{
+			$uploadedThumbFile = $fileHelper->uploadFile(
+															$thumbFile,
+															'designtypes/thumbnails',
+															$params->get('max_designtype_image_size', 2),
+															'jpg,JPG,jpeg,JPEG,png,PNG'
+														);
+			$data['sample_thumb'] = $uploadedThumbFile['mangled_filename'];
+		}
+		else
+		{
+			$dest = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/thumbnails/' . $uploadedImageFile['mangled_filename'];
+			JFile::copy($uploadedImageFile['filepath'], $dest);
+			$data['sample_thumb'] = $uploadedImageFile['mangled_filename'];
+			$uploadedThumbFile['filepath'] = $dest;
+		}
 
-			if (JFile::exists($uploadedThumbFile['filepath']))
-			{
-				$im = new Imagick;
-				$im->readImage($uploadedThumbFile['filepath']);
-				$im->thumbnailImage($params->get('max_designtype_thumbnail_width', 100), $params->get('max_designtype_thumbnail_height', 100), true);
-				$im->writeImage();
-				$im->clear();
-				$im->destroy();
-			}
+		if (JFile::exists($uploadedThumbFile['filepath']))
+		{
+			$im = new Imagick;
+			$im->readImage($uploadedThumbFile['filepath']);
+			$im->thumbnailImage($params->get('max_designtype_thumbnail_width', 100), $params->get('max_designtype_thumbnail_height', 100), true);
+			$im->writeImage();
+			$im->clear();
+			$im->destroy();
+		}
 
-			// Delete old Thumbnail on edit
-			if (!!$data['reddesign_designtype_id'])
+		// Delete old Thumbnail on edit
+		if (!!$data['reddesign_designtype_id'])
+		{
+			if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/designtypes/thumbnails/' . $oldImages->sample_thumb))
 			{
-				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/designtypes/thumbnails/' . $oldImages->sample_thumb))
-				{
-					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/designtypes/thumbnails/' . $oldImages->sample_thumb);
-				}
+				JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/designtypes/thumbnails/' . $oldImages->sample_thumb);
 			}
 		}
 
