@@ -31,6 +31,10 @@
                        description="PLG_REDDESIGN_REDSHOP_DEFAULT_MANUFACTURER_NAME_DESC"
                        size="25"
                         />
+                <field name="defaultTemplate" type="template"
+					   label="PLG_REDDESIGN_REDSHOP_DEFAULT_TEMPLATE_LABEL"
+					   description="PLG_REDDESIGN_REDSHOP_DEFAULT_TEMPLATE_DESC"
+					   addfieldpath="administrator/components/com_reddesign/models/fields"/>
             </fieldset>
         </fields>
     </config>
