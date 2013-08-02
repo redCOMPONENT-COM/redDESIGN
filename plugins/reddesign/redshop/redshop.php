@@ -36,6 +36,8 @@ class PlgReddesignRedshop extends JPlugin
 	/**
 	 * Plugin method for event on building new product for redSHOP.
 	 *
+	 * @param   array  $data  An array that holds designInformation
+	 *
 	 * @return bool
 	 *
 	 * @access public
@@ -48,12 +50,11 @@ class PlgReddesignRedshop extends JPlugin
 		$session 			= JFactory::getSession();
 
 		// Check if redSHOP is there.
-	 	$query = 'SHOW TABLES LIKE "' . $db->quoteName('#__redshop_product').'"';
+		$prefix = $db->getPrefix();
+		$tableName = $prefix . 'redshop_product';
+		$query = 'SHOW TABLES LIKE \'' . $tableName . '\'';
 		$db->setQuery($query);
 		$tables = $db->loadAssoc();
-
-		// Temporary have added $tables = 1 as above query is not working for me
-		$tables = 1;
 
 		if (!count($tables))
 		{
@@ -115,18 +116,35 @@ class PlgReddesignRedshop extends JPlugin
 		}
 
 		// Make new redSHOP product with data given from redDESIGN.
-		// Image Upload
+		// Upload product image
 		$src = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $session->get('customizedImage') . '.jpg';
 		chmod($src, 0777);
 		$dest = JPATH_ROOT . '/components/com_redshop/assets/images/product/' . $session->get('customizedImage') . '.jpg';
 		JFile::copy($src, $dest);
 
+		// Count product price and Accessory data
+		$productAccessory = array();
+		$productPrice = $data['designBackground']->price;
+
+		foreach ($data['desingAccessories'] as $accessory)
+		{
+			$productPrice += $accessory->price;
+			$productAccessory[] = $accessory->title;
+		}
+
+		// Add Accessory data in product description
+		$productAccessory = implode(",", $productAccessory);
+		$productDescription = $data['designType']->description . "<br/>" . JText::_('PLG_REDDESIGN_REDSHOP_ACCESSORIES') . " : " . $productAccessory;
+
+		// Insert new Product
 		$newProduct = new stdClass;
 		$newProduct->product_name = $data['designType']->title;
 		$newProduct->product_number = "design" . rand(9999, 999999);
-		$newProduct->product_price = $data['desingPrice'];
+		$newProduct->product_price = $productPrice;
 		$newProduct->product_full_image = $session->get('customizedImage') . '.jpg';
 		$newProduct->product_template = 9;
+		$newProduct->product_s_desc = $data['designType']->intro_description;
+		$newProduct->product_desc = $productDescription;
 		$newProduct->published = 1;
 		$result = $db->insertObject('#__redshop_product', $newProduct);
 		$product_id = $db->insertid();
@@ -136,9 +154,6 @@ class PlgReddesignRedshop extends JPlugin
 		$productCategory->category_id  = $category_id;
 		$productCategory->product_id  = $product_id;
 		$productCategory = $db->insertObject('#__redshop_product_category_xref', $productCategory);
-
-		// @TODO add stock of product in stockroom table
-		// @TODO add accessoryData in redshop
 
 		// Make new redSHOP order for that new product and for the current user. And redirect to the redSHOP checkout process.
 		// Add to cart
