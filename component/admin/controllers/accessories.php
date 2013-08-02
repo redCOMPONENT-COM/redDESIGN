@@ -28,6 +28,8 @@ class ReddesignControllerAccessories extends FOFController
 	 */
 	public function onBeforeApplySave(&$data)
 	{
+		$uploadedThumbFile = null;
+
 		// On edit, retrieve from database the old images that will be replaced (later we will remove them to keep system storage resources clean)
 		if (!!$data['reddesign_accessory_id'])
 		{
@@ -74,11 +76,18 @@ class ReddesignControllerAccessories extends FOFController
 					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/accessories/' . $oldImages->image);
 				}
 			}
+
+			// If no thumbnail has been uploaded and user has checked the generate thumbnail based on uploaded image
+			if (empty($thumbFile['name']) && $this->input->getBool('autoGenerateThumbCheck'))
+			{
+				$dest = JPATH_ROOT . '/media/com_reddesign/assets/accessories/thumbnails/' . $uploadedImageFile['mangled_filename'];
+				JFile::copy($uploadedImageFile['filepath'], $dest);
+				$data['thumbnail'] = $uploadedImageFile['mangled_filename'];
+				$uploadedThumbFile['filepath'] = $dest;
+			}
 		}
 
-		// If thumbnail field is empty than use image.
-		$uploadedThumbFile = null;
-
+		// If a thumbnail has been uploaded
 		if (!empty($thumbFile['name']))
 		{
 			$uploadedThumbFile = $fileHelper->uploadFile(
@@ -89,30 +98,26 @@ class ReddesignControllerAccessories extends FOFController
 			);
 			$data['thumbnail'] = $uploadedThumbFile['mangled_filename'];
 		}
-		else
-		{
-			$dest = JPATH_ROOT . '/media/com_reddesign/assets/accessories/thumbnails/' . $uploadedImageFile['mangled_filename'];
-			JFile::copy($uploadedImageFile['filepath'], $dest);
-			$data['thumbnail'] = $uploadedImageFile['mangled_filename'];
-			$uploadedThumbFile['filepath'] = $dest;
-		}
 
-		if (JFile::exists($uploadedThumbFile['filepath']))
+		if (!is_null($uploadedThumbFile))
 		{
-			$im = new Imagick;
-			$im->readImage($uploadedThumbFile['filepath']);
-			$im->thumbnailImage($params->get('max_accessory_thumbnail_width', 50), $params->get('max_accessory_thumbnail_height', 50), true);
-			$im->writeImage();
-			$im->clear();
-			$im->destroy();
-		}
-
-		// Delete old Thumb on edit
-		if (!!$data['reddesign_accessory_id'])
-		{
-			if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/accessories/thumbnails/' . $oldImages->thumbnail))
+			if (JFile::exists($uploadedThumbFile['filepath']))
 			{
-				JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/accessories/thumbnails/' . $oldImages->thumbnail);
+				$im = new Imagick;
+				$im->readImage($uploadedThumbFile['filepath']);
+				$im->thumbnailImage($params->get('max_accessory_thumbnail_width', 50), $params->get('max_accessory_thumbnail_height', 50), true);
+				$im->writeImage();
+				$im->clear();
+				$im->destroy();
+			}
+
+			// Delete old Thumb on edit
+			if (!!$data['reddesign_accessory_id'])
+			{
+				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/accessories/thumbnails/' . $oldImages->thumbnail))
+				{
+					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/accessories/thumbnails/' . $oldImages->thumbnail);
+				}
 			}
 		}
 
