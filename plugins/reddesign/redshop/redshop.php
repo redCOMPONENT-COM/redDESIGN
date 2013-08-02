@@ -36,7 +36,7 @@ class PlgReddesignRedshop extends JPlugin
 	/**
 	 * Plugin method for event on building new product for redSHOP.
 	 *
-	 * @param   array  $data  An array that holds designInformation
+	 * @param   array  $data  An array that holds design information
 	 *
 	 * @return bool
 	 *
@@ -136,16 +136,32 @@ class PlgReddesignRedshop extends JPlugin
 		$productAccessory = implode(",", $productAccessory);
 		$productDescription = $data['designType']->description . "<br/>" . JText::_('PLG_REDDESIGN_REDSHOP_ACCESSORIES') . " : " . $productAccessory;
 
+		// Get product Template
+		$template_id = $params->get('defaultTemplate');
+
+		if (!$template_id)
+		{
+			$query = $db->getQuery(true);
+			$query->select('*');
+			$query->from('#__redshop_template');
+			$query->where('template_section = "product"');
+			$query->order('template_id ASC');
+			$db->setQuery($query);
+			$productTemplate = $db->loadObject();
+			$template_id = $productTemplate->template_id;
+		}
+
 		// Insert new Product
 		$newProduct = new stdClass;
 		$newProduct->product_name = $data['designType']->title;
 		$newProduct->product_number = "design" . rand(9999, 999999);
 		$newProduct->product_price = $productPrice;
 		$newProduct->product_full_image = $session->get('customizedImage') . '.jpg';
-		$newProduct->product_template = 9;
+		$newProduct->product_template = $template_id;
 		$newProduct->product_s_desc = $data['designType']->intro_description;
 		$newProduct->product_desc = $productDescription;
 		$newProduct->published = 1;
+		$newProduct->manufacturer_id = $manufacturer_id;
 		$result = $db->insertObject('#__redshop_product', $newProduct);
 		$product_id = $db->insertid();
 
