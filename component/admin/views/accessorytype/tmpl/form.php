@@ -104,7 +104,7 @@ JHTML::_('behavior.framework');
 	akeeba.jQuery("document").ready(
 		function()
 		{
-			akeeba.jQuery("#image").change(
+			akeeba.jQuery("#sample_image").change(
 				function()
 				{
 					akeeba.jQuery('#autoGenerateThumb').fadeIn();
