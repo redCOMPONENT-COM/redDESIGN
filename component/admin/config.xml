@@ -23,11 +23,14 @@
 				description="COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_DESC"
 				default="0"
 				class="inputbox">
-			<option
-					value="1">COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_VALUE_1</option>
-			<option
-					value="0">COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_VALUE_2</option>
+			<option value="1">
+                COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_VALUE_1
+            </option>
+			<option value="0">
+                COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_VALUE_2
+            </option>
 		</field>
+
 		<field
 				name="currency_decimal_separator"
 				type="list"
@@ -128,6 +131,7 @@
 				label="COM_REDDESIGN_CONFIG_MAX_DESIGNTYPE_THUMBNAIL_HEIGHT"
 				description="COM_REDDESIGN_CONFIG_MAX_DESIGNTYPE_THUMBNAIL_HEIGHT_DESC"
 				/>
+
 		<field
 				name="max_background_thumbnail_width"
 				type="text"
@@ -147,13 +151,15 @@
 				/>
 
 	</fieldset>
+
 	<fieldset
 			name="accessories"
 			label="COM_REDDESIGN_CONFIG_ACCESSORIES_CONFIGURATION"
 			description="COM_REDDESIGN_CONFIG_ACCESSORIES_CONFIGURATION_DESC"
 			>
+
 		<field
-				name="max_accessorytype_images_size"
+				name="max_accessorytype_image_size"
 				type="text"
 				size="5"
 				default="2"
@@ -180,7 +186,7 @@
 				/>
 
 		<field
-				name="max_accessory_images_size"
+				name="max_accessory_image_size"
 				type="text"
 				size="5"
 				default="2"
@@ -205,70 +211,24 @@
 				label="COM_REDDESIGN_CONFIG_MAX_ACCESSORY_THUMBNAIL_HEIGHT"
 				description="COM_REDDESIGN_CONFIG_MAX_ACCESSORY_THUMBNAIL_HEIGHT_DESC"
 				/>
-	</fieldset>
-	<fieldset
-			name="settings_frontend"
-			label="COM_REDDESIGN_CONFIG_SETTINGS_FRONTEND"
-			description="COM_REDDESIGN_CONFIG_SETTINGS_FRONTEND_DESC"
-			>
-		<field
-				name="show_areaname"
-				type="radio"
-				size="5"
-				default="0"
-				label="COM_REDDESIGN_CONFIG_SHOW_AREA_NAME"
-				description="COM_REDDESIGN_CONFIG_SHOW_AREA_NAME_DESC">
 
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
-		<field
-				name="show_area_border"
-				type="radio"
-				size="5"
-				default="0"
-				label="COM_REDDESIGN_CONFIG_SHOW_AREA_BORDER_IN_FRONTEND"
-				description="COM_REDDESIGN_CONFIG_SHOW_AREA_BORDER_IN_FRONTEND_DESC">
-
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
 	</fieldset>
+
 	<fieldset
 			name="settings_backend"
 			label="COM_REDDESIGN_CONFIG_SETTINGS_BACKEND"
 			description="COM_REDDESIGN_CONFIG_SETTINGS_BACKEND_DESC"
 			addfieldpath="administrator/components/com_reddesign/models/fields">
-		<field
-				name="show_areaname_backend"
-				type="radio"
-				size="5"
-				default="0"
-				label="COM_REDDESIGN_CONFIG_SHOW_AREA_NAME_IN_BACKEND"
-				description="COM_REDDESIGN_CONFIG_SHOW_AREA_NAME_IN_BACKEND_DESC">
 
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
-		<field
-				name="show_area_border_backend"
-				type="radio"
-				size="5"
-				default="0"
-				label="COM_REDDESIGN_CONFIG_SHOW_AREA_BORDER_IN_BACKEND"
-				description="COM_REDDESIGN_CONFIG_SHOW_AREA_BORDER_IN_BACKEND_DESC">
-
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
 		<field
 				name="font_preview_text"
 				type="text"
 				size="5"
-				default=""
+				default="Lorem ipsum."
 				label="COM_REDDESIGN_CONFIG_FONT_PREVIEW_TEXT"
 				description="COM_REDDESIGN_CONFIG_FONT_PREVIEW_TEXT_DESC"
 				/>
+
 		<field
 				name="unit"
 				type="list"
@@ -281,30 +241,9 @@
 			<option value="mm">mm</option>
 			<option value="cm">cm</option>
 		</field>
-		<field
-				name="enable_angle"
-				type="radio"
-				default="0"
-				label="COM_REDDESIGN_CONFIG_ENABLE_ANGLE"
-				description="COM_REDDESIGN_CONFIG_ENABLE_ANGLE_DESC">
 
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
-		<field
-				name="design_font_size"
-				type="fontsize"
-				default="0"
-				label="COM_REDDESIGN_CONFIG_DEFAULT_DESIGN_SIZE"
-				description="COM_REDDESIGN_CONFIG_DEFAULT_DESIGN_SIZE_DESC"/>
-		<field
-				name="send_user_mail[]"
-				type="userlist"
-				default="0"
-				size="6"
-				label="COM_REDDESIGN_CONFIG_SEND_DESIGN_MAIL_TO"
-				description="COM_REDDESIGN_CONFIG_SEND_DESIGN_MAIL_TO_DESC"/>
 	</fieldset>
+
 	<fieldset
 			name="permissions"
 			label="JCONFIG_PERMISSIONS_LABEL"
@@ -325,4 +264,3 @@
 	</fieldset>
 
 </config>
-

@@ -165,12 +165,11 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			</div>
 		<?php endforeach; ?>
 		<div class="form-actions">
-			<button
-				type="button"
-				class="btn btn-success"
-				data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>"
-				id="customizeDesign"
-				><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE'); ?></button>
+			<?php if (!empty($this->productionBackgroundAreas)) : ?>
+			<button type="button" class="btn btn-success" data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>" id="customizeDesign">
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE'); ?>
+			</button>
+			<?php endif; ?>
 		</div>
 	</div>
 </div>
