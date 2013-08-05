@@ -63,7 +63,7 @@ class ReddesignControllerDesigntypes extends FOFController
 
 		// Get design Data
 		$design = new JRegistry;
-		$design->loadString($this->input->getString('designarea'), 'JSON');
+		$design->loadString($this->input->getString('designarea', ''), 'JSON');
 		$design = $design->get('Design');
 
 		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_designtype_id);
@@ -186,14 +186,14 @@ class ReddesignControllerDesigntypes extends FOFController
 		$data['designType'] = $designType;
 
 		// Get Background Data
-		$reddesign_background_id = $this->input->getInt('reddesign_background_id');
+		$reddesign_background_id = $this->input->getInt('reddesign_background_id', null);
 		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($reddesign_background_id);
 		$this->background = $backgroundModel->getItem($reddesign_background_id);
 		$data['designBackground'] = $this->background;
 
 		// Get designAreas
 		$design = new JRegistry;
-		$design->loadString($this->input->getString('designAreas'), 'JSON');
+		$design->loadString($this->input->getString('designAreas', ''), 'JSON');
 		$design = $design->get('Design');
 		$data['desingAreas'] = $design->areas;
 
