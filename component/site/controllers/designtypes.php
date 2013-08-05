@@ -63,7 +63,7 @@ class ReddesignControllerDesigntypes extends FOFController
 
 		// Get design Data
 		$design = new JRegistry;
-		$design->loadString($this->input->getString('designarea'), 'JSON');
+		$design->loadString($this->input->getString('designarea', ''), 'JSON');
 		$design = $design->get('Design');
 
 		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_designtype_id);
@@ -149,10 +149,15 @@ class ReddesignControllerDesigntypes extends FOFController
 
 			$line_gap = 0;
 
-	         $cmd = "convert $backgroundImage_file_location  \
-		     		\( $gravity -font $fontType_file_location -pointsize $area->fontSize -interline-spacing -$line_gap -fill '#$area->fontColor'  -background transparent label:'$area->textArea' \ -virtual-pixel transparent \
+			if (empty($area->fontSize) && $design->fontsizer == 'auto')
+			{
+				$area->fontSize = 24; // TODO: Calculate it!
+			}
+
+			$cmd = "convert $backgroundImage_file_location  \
+					\( $gravity -font $fontType_file_location -pointsize $area->fontSize -interline-spacing -$line_gap -fill '#$area->fontColor'  -background transparent label:'$area->textArea' \ -virtual-pixel transparent \
 					\) $gravity -geometry +$offsetLeft+$offsetTop -composite   \
-		      		$newjpg_file_location";
+					$newjpg_file_location";
 			exec($cmd);
 			$backgroundImage_file_location = $newjpg_file_location;
 		}
@@ -186,14 +191,14 @@ class ReddesignControllerDesigntypes extends FOFController
 		$data['designType'] = $designType;
 
 		// Get Background Data
-		$reddesign_background_id = $this->input->getInt('reddesign_background_id');
+		$reddesign_background_id = $this->input->getInt('reddesign_background_id', null);
 		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($reddesign_background_id);
 		$this->background = $backgroundModel->getItem($reddesign_background_id);
 		$data['designBackground'] = $this->background;
 
 		// Get designAreas
 		$design = new JRegistry;
-		$design->loadString($this->input->getString('designAreas'), 'JSON');
+		$design->loadString($this->input->getString('designAreas', ''), 'JSON');
 		$design = $design->get('Design');
 		$data['desingAreas'] = $design->areas;
 

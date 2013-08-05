@@ -28,13 +28,14 @@ class ReddesignViewDesigntype extends FOFViewHtml
 	 */
 	public function display($tpl = null)
 	{
-		$model								= $this->getModel();
+		$app   = JFactory::getApplication();
+		$model = $this->getModel();
 
 		// Price visibility parameters
-		$this->params 	= JComponentHelper::getParams('com_reddesign');
+		$this->params = JComponentHelper::getParams('com_reddesign');
 
 		// Get Design
-		$this->item 						= $model->getItem();
+		$this->item = $model->getItem();
 
 		// Get Design related elements
 		$this->backgrounds					= $model->getBackgrounds();
@@ -44,6 +45,11 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->productionBackgroundAreas	= $model->getProductionBackgroundAreas($this->productionBackground->reddesign_background_id);
 		$this->fonts						= $model->getFonts();
 		$this->accessorytypes				= $model->getAccessories();
+
+		if (empty($this->productionBackgroundAreas))
+		{
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_DESIGNTYPE_NO_DESIGN_AREAS'), 'notice');
+		}
 
 		parent::display($tpl);
 	}

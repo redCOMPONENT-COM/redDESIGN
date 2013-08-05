@@ -23,6 +23,12 @@ class ReddesignDispatcher extends FOFDispatcher
 	 */
 	public $defaultView = 'designtype';
 
+	/**
+	 * Executes right before the dispatcher tries to instantiate and run the
+	 * controller.
+	 *
+	 * @return  boolean  Return false to abort
+	 */
 	public function onBeforeDispatch()
 	{
 		$result = parent::onBeforeDispatch();

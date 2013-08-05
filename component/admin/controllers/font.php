@@ -231,8 +231,8 @@ class ReddesignControllerFont extends FOFController
 	private function createFontPreviewThumb($font_file)
 	{
 		$font_file_location = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $font_file;
-
-		$text = 'Lorem ipsum.';
+		$params				= JComponentHelper::getParams('com_reddesign');
+		$text				= $params->get('font_preview_text', 'Lorem ipsum.');
 
 		$im = $this->imagettfJustifytext(
 			$text,
