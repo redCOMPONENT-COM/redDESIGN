@@ -149,10 +149,15 @@ class ReddesignControllerDesigntypes extends FOFController
 
 			$line_gap = 0;
 
-	         $cmd = "convert $backgroundImage_file_location  \
-		     		\( $gravity -font $fontType_file_location -pointsize $area->fontSize -interline-spacing -$line_gap -fill '#$area->fontColor'  -background transparent label:'$area->textArea' \ -virtual-pixel transparent \
+			if (empty($area->fontSize) && $design->fontsizer == 'auto')
+			{
+				$area->fontSize = 24; // TODO: Calculate it!
+			}
+
+			$cmd = "convert $backgroundImage_file_location  \
+					\( $gravity -font $fontType_file_location -pointsize $area->fontSize -interline-spacing -$line_gap -fill '#$area->fontColor'  -background transparent label:'$area->textArea' \ -virtual-pixel transparent \
 					\) $gravity -geometry +$offsetLeft+$offsetTop -composite   \
-		      		$newjpg_file_location";
+					$newjpg_file_location";
 			exec($cmd);
 			$backgroundImage_file_location = $newjpg_file_location;
 		}
