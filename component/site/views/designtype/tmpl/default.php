@@ -76,7 +76,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 
 					akeeba.jQuery('#background')
 						.attr('src', '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/images/spinner.gif'); ?>');
-					customize();
+					customize(1);
 				}
 			);
 
@@ -154,42 +154,57 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	/**
 	 * Sends customize data to server and retreives the resulting image
 	 *
-	 * @param update
+	 * @param button Determines whether the call comes from "Customize it!" button or not.
 	 */
-	function customize() {
-		var reddesign_designtype_id = akeeba.jQuery('#reddesign_designtype_id').val();
-		var reddesign_background_id = akeeba.jQuery('#reddesign_background_id').val();
-		var design = {
-			areas: [],
-			reddesign_designtype_id : reddesign_designtype_id,
-			reddesign_background_id : reddesign_background_id
-		};
-		<?php foreach($this->productionBackgroundAreas as $area) : ?>
+	function customize(button = 0) {
+		var customizeOrNot = 0;
+		var autoCustomizeParam = <?php echo $this->params->get('autoCustomize', 1); ?>;
 
-		design.areas.push({
-			"id" : 			'<?php echo $area->reddesign_area_id; ?>',
-			"textArea" :	akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
-			"fontArea" : 	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
-			"fontColor" :	akeeba.jQuery('#colorCode<?php echo $area->reddesign_area_id; ?>').val(),
-			"fontSize" :	akeeba.jQuery('#fontSize<?php echo $area->reddesign_area_id; ?>').val(),
-			"fontTypeId" :	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val()
-		});
-		<?php endforeach; ?>
-		design = JSON.stringify({Design: design });
-		akeeba.jQuery.ajax({
-			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=designtype&task=ajaxGetDesign&format=raw",
-			data: {designarea : design},
-			type: "post",
-			success: function(data) {
-				var json = akeeba.jQuery.parseJSON(data);
-				d = new Date();
-				akeeba.jQuery('img#background').attr('src', json.image+"?"+d.getTime());
-				console.log(data);
-			},
-			error: function(errMsg) {
-				alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AJAX_ERROR'); ?>');
-			}
-		});
+		if(button == 1 && autoCustomizeParam == 0)
+		{
+			customizeOrNot = 1;
+		}
+		else if(button == 0 && (autoCustomizeParam == 1 || autoCustomizeParam == 2))
+		{
+			customizeOrNot = 1;
+		}
+
+		if(customizeOrNot == 1)
+		{
+			var reddesign_designtype_id = akeeba.jQuery('#reddesign_designtype_id').val();
+			var reddesign_background_id = akeeba.jQuery('#reddesign_background_id').val();
+			var design = {
+				areas: [],
+				reddesign_designtype_id : reddesign_designtype_id,
+				reddesign_background_id : reddesign_background_id
+			};
+			<?php foreach($this->productionBackgroundAreas as $area) : ?>
+
+			design.areas.push({
+				"id" : 			'<?php echo $area->reddesign_area_id; ?>',
+				"textArea" :	akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
+				"fontArea" : 	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
+				"fontColor" :	akeeba.jQuery('#colorCode<?php echo $area->reddesign_area_id; ?>').val(),
+				"fontSize" :	akeeba.jQuery('#fontSize<?php echo $area->reddesign_area_id; ?>').val(),
+				"fontTypeId" :	akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val()
+			});
+			<?php endforeach; ?>
+			design = JSON.stringify({Design: design });
+			akeeba.jQuery.ajax({
+				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=designtype&task=ajaxGetDesign&format=raw",
+				data: {designarea : design},
+				type: "post",
+				success: function(data) {
+					var json = akeeba.jQuery.parseJSON(data);
+					d = new Date();
+					akeeba.jQuery('img#background').attr('src', json.image+"?"+d.getTime());
+					console.log(data);
+				},
+				error: function(errMsg) {
+					alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AJAX_ERROR'); ?>');
+				}
+			});
+		}
 	}
 
 	/**
