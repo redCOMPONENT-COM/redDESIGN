@@ -120,12 +120,11 @@ class ReddesignControllerDesigntypes extends FOFController
 
 			$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($design->reddesign_background_id);
 			$this->areaItem = $areaModel->getItem($area->id);
-			/*
-				Text alingment condition
-				1 is left
-				2 is right
-				3 is center
-			 */
+
+			// Text alingment condition
+			// 1 is left
+			// 2 is right
+			// 3 is center
 			if ((int) $this->areaItem->textalign == 1)
 			{
 				$gravity = '-gravity NorthWest';
@@ -149,9 +148,9 @@ class ReddesignControllerDesigntypes extends FOFController
 
 			$line_gap = 0;
 
-			if (empty($area->fontSize) && $design->fontsizer == 'auto')
+			if (empty($area->fontSize))
 			{
-				$area->fontSize = 24; // TODO: Calculate it!
+				$area->fontSize = $this->areaItem->height;
 			}
 
 			$cmd = "convert $backgroundImage_file_location  \
