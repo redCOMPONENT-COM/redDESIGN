@@ -63,7 +63,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 							'select.genericlist',
 							$options,
 							'fontArea' . $area->reddesign_area_id,
-							'class="inputbox"',
+							'class="inputbox" onChange="customize();"',
 							'value',
 							'text',
 							null
@@ -113,7 +113,12 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					<?php if (empty($area->color_code)) : ?>
 						<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id?>" name="colorCode<?php echo $area->reddesign_area_id?>" value="000000" id="colorCode<?php echo $area->reddesign_area_id?>">
 					<?php elseif ($area->color_code == 1) : ?>
-						<div id="colorSelector<?php echo $area->reddesign_area_id;?>" class="colorSelector"><div style="background-color: #000000"></div></div>
+						<div id="colorSelector<?php echo $area->reddesign_area_id;?>" class="colorSelector">
+							<div style="background-color: #000000"></div>
+						</div>
+						<div class="help-block">
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLORS_HELP'); ?>
+						</div>
 						<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id?>" name="colorCode<?php echo $area->reddesign_area_id?>" value="000000" id="colorCode<?php echo $area->reddesign_area_id?>">
 					<?php else : ?>
 						<div id="loadColors">
@@ -165,7 +170,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			</div>
 		<?php endforeach; ?>
 		<div class="form-actions">
-			<?php if (!empty($this->productionBackgroundAreas)) : ?>
+			<?php if (!empty($this->productionBackgroundAreas) && ($this->params->get('autoCustomize', 1) == 0 || $this->params->get('autoCustomize', 1) == 2) ) : ?>
 			<button type="button" class="btn btn-success" data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>" id="customizeDesign">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE'); ?>
 			</button>

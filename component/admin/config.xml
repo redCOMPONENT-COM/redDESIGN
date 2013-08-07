@@ -2,10 +2,34 @@
 <config>
 
 	<fieldset
-			name="eps"
-			label="COM_REDDESIGN_CONFIG_EPS_CONFIGURATION"
-			description="COM_REDDESIGN_CONFIG_EPS_CONFIGURATION_DESC"
+			name="general"
+			label="COM_REDDESIGN_CONFIG_GENERAL_CONFIGURATION"
+			description="COM_REDDESIGN_CONFIG_GENERAL_CONFIGURATION_DESC"
 			>
+
+		<field
+			name="autoCustomize"
+			type="radio"
+			default="1"
+			label="COM_REDDESIGN_CONFIG_AUTOCUSTOMIZE"
+			description="COM_REDDESIGN_CONFIG_AUTOCUSTOMIZE_DESC">
+			<option value="0">COM_REDDESIGN_CONFIG_USE_CUSTOMIZE_BUTTON</option>
+			<option value="1">COM_REDDESIGN_CONFIG_USE_AUTOMATIC_CUSTOMIZATION</option>
+			<option value="2">COM_REDDESIGN_CONFIG_USE_BOTH</option>
+		</field>
+
+		<field
+				name="unit"
+				type="list"
+				size="1"
+				default=""
+				label="COM_REDDESIGN_CONFIG_UNIT"
+				description="COM_REDDESIGN_CONFIG_UNIT_DESC"
+				>
+			<option value="px">px</option>
+			<option value="mm">mm</option>
+			<option value="cm">cm</option>
+		</field>
 
 		<field
 				name="currency_symbol"
@@ -24,11 +48,11 @@
 				default="0"
 				class="inputbox">
 			<option value="1">
-                COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_VALUE_1
-            </option>
+				COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_VALUE_1
+			</option>
 			<option value="0">
-                COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_VALUE_2
-            </option>
+				COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_VALUE_2
+			</option>
 		</field>
 
 		<field
@@ -38,10 +62,12 @@
 				description="COM_REDDESIGN_CONFIG_CURRENCY_DECIMAL_SEPARATOR_DESC"
 				default="0"
 				class="inputbox">
-			<option
-					value=".">COM_REDDESIGN_CONFIG_CURRENCY_DECIMAL_SEPARATOR_VALUE_1</option>
-			<option
-					value=",">COM_REDDESIGN_CONFIG_CURRENCY_DECIMAL_SEPARATOR_VALUE_2</option>
+			<option value=".">
+				COM_REDDESIGN_CONFIG_CURRENCY_DECIMAL_SEPARATOR_VALUE_1
+			</option>
+			<option value=",">
+				COM_REDDESIGN_CONFIG_CURRENCY_DECIMAL_SEPARATOR_VALUE_2
+			</option>
 		</field>
 
 		<field
@@ -51,12 +77,15 @@
 				description="COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_DESC"
 				default="0"
 				class="inputbox">
-			<option
-					value=".">COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_VALUE_1</option>
-			<option
-					value=",">COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_VALUE_2</option>
-			<option
-					value=" ">COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_VALUE_3</option>
+			<option value=".">
+				COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_VALUE_1
+			</option>
+			<option value=",">
+				COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_VALUE_2
+			</option>
+			<option value=" ">
+				COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_VALUE_3
+			</option>
 		</field>
 
 		<field
@@ -67,6 +96,23 @@
 				label="COM_REDDESIGN_CONFIG_DECIMALS"
 				description="COM_REDDESIGN_CONFIG_DECIMALS_DESC"
 				/>
+
+		<field
+			name="font_preview_text"
+			type="text"
+			size="10"
+			default="Lorem ipsum."
+			label="COM_REDDESIGN_CONFIG_FONT_PREVIEW_TEXT"
+			description="COM_REDDESIGN_CONFIG_FONT_PREVIEW_TEXT_DESC"
+			/>
+
+	</fieldset>
+
+	<fieldset
+			name="images"
+			label="COM_REDDESIGN_CONFIG_IMAGES_CONFIGURATION"
+			description="COM_REDDESIGN_CONFIG_IMAGES_CONFIGURATION_DESC"
+			>
 
 		<field
 				name="max_eps_file_size"
@@ -150,14 +196,6 @@
 				description="COM_REDDESIGN_CONFIG_MAX_BACKGROUND_THUMBNAIL_HEIGHT_DESC"
 				/>
 
-	</fieldset>
-
-	<fieldset
-			name="accessories"
-			label="COM_REDDESIGN_CONFIG_ACCESSORIES_CONFIGURATION"
-			description="COM_REDDESIGN_CONFIG_ACCESSORIES_CONFIGURATION_DESC"
-			>
-
 		<field
 				name="max_accessorytype_image_size"
 				type="text"
@@ -211,36 +249,6 @@
 				label="COM_REDDESIGN_CONFIG_MAX_ACCESSORY_THUMBNAIL_HEIGHT"
 				description="COM_REDDESIGN_CONFIG_MAX_ACCESSORY_THUMBNAIL_HEIGHT_DESC"
 				/>
-
-	</fieldset>
-
-	<fieldset
-			name="settings_backend"
-			label="COM_REDDESIGN_CONFIG_SETTINGS_BACKEND"
-			description="COM_REDDESIGN_CONFIG_SETTINGS_BACKEND_DESC"
-			addfieldpath="administrator/components/com_reddesign/models/fields">
-
-		<field
-				name="font_preview_text"
-				type="text"
-				size="5"
-				default="Lorem ipsum."
-				label="COM_REDDESIGN_CONFIG_FONT_PREVIEW_TEXT"
-				description="COM_REDDESIGN_CONFIG_FONT_PREVIEW_TEXT_DESC"
-				/>
-
-		<field
-				name="unit"
-				type="list"
-				size="1"
-				default=""
-				label="COM_REDDESIGN_CONFIG_UNIT"
-				description="COM_REDDESIGN_CONFIG_UNIT_DESC"
-				>
-			<option value="px">px</option>
-			<option value="mm">mm</option>
-			<option value="cm">cm</option>
-		</field>
 
 	</fieldset>
 
