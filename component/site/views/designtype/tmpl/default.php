@@ -160,7 +160,8 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 		var customizeOrNot = 0;
 		var autoCustomizeParam = <?php echo $this->params->get('autoCustomize', 1); ?>;
 
-		if(button == 1 && autoCustomizeParam == 0)
+		// Turn off or on customization according to the settings in config.xml
+		if((button == 1 && autoCustomizeParam == 0) || (button == 1 && autoCustomizeParam == 2))
 		{
 			customizeOrNot = 1;
 		}
