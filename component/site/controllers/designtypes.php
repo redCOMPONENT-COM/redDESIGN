@@ -132,65 +132,48 @@ class ReddesignControllerDesigntypes extends FOFController
 			$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($design->reddesign_background_id);
 			$this->areaItem = $areaModel->getItem($area->id);
 
-			// Create an area image.
-			$areaImage->newImage($this->areaItem->width, $this->areaItem->height, new ImagickPixel('none'));
-
-			// Set color and font.
-			$areaDraw->setFillColor('#' . $area->fontColor);
-			$areaDraw->setFont($fontTypeFileLocation);
-
-			// Set font size
+			// If we need autosize text than take different approach than solution for regular text.
 			if (!empty($area->fontSize))
 			{
+				// Create an area image.
+				$areaImage->newImage($this->areaItem->width, $this->areaItem->height, new ImagickPixel('none'));
+
+				// Set color and font.
+				$areaDraw->setFillColor('#' . $area->fontColor);
+				$areaDraw->setFont($fontTypeFileLocation);
 				$areaDraw->setFontSize($area->fontSize);
-			}
-			else
-			{
+
 				/*
-				 * Font size is height of the em-square. Being a square for the em-square that means that it has same width as height.
-				 * So, we have to calculate width of text's em squares. We just get length of the string/count of how many characters
-				 * string have and divide that on the area width and that is new font size.
+				 * Text alingment condition:
+				 * 1 is left,
+				 * 2 is right,
+				 * 3 is center.
 				 */
-				$stringLength = strlen($area->textArea);
-				$emSquareFontSize = $this->areaItem->width;
-
-				// Don't divide by zero.
-				if ($stringLength != 0)
+				if ((int) $this->areaItem->textalign == 1)
 				{
-					$emSquareFontSize = $this->areaItem->width / $stringLength;
+					$areaDraw->setGravity(Imagick::GRAVITY_WEST);
+				}
+				elseif ((int) $this->areaItem->textalign == 2)
+				{
+					$areaDraw->setGravity(Imagick::GRAVITY_EAST);
+				}
+				else
+				{
+					$areaDraw->setGravity(Imagick::GRAVITY_CENTER);
 				}
 
-				// Consider height. Font size should not be bigger than height.
-				if ($emSquareFontSize > $this->areaItem->height)
-				{
-					$emSquareFontSize = $this->areaItem->height;
-				}
-
-				$area->fontSize = $emSquareFontSize;
-				$areaDraw->setFontSize($area->fontSize);
-			}
-
-			/*
-			 * Text alingment condition:
-			 * 1 is left,
-			 * 2 is right,
-			 * 3 is center.
-			 */
-			if ((int) $this->areaItem->textalign == 1)
-			{
-				$areaDraw->setGravity(Imagick::GRAVITY_WEST);
-			}
-			elseif ((int) $this->areaItem->textalign == 2)
-			{
-				$areaDraw->setGravity(Imagick::GRAVITY_EAST);
+				// Add text to the area image.
+				$areaImage->annotateImage($areaDraw, 0, 0, 0, $area->textArea);
 			}
 			else
 			{
-				$areaDraw->setGravity(Imagick::GRAVITY_CENTER);
+				// Creating auto-sized text.
+				$areaImage->setBackgroundColor(new ImagickPixel('none'));
+				$areaImage->setFont($fontTypeFileLocation);
+				$areaImage->setGravity(Imagick::GRAVITY_CENTER);
+				$areaImage->newPseudoImage($this->areaItem->width, $this->areaItem->height, "caption:" . $area->textArea);
+				$areaImage->colorizeImage('#' . $area->fontColor, 0.0);
 			}
-
-			// Add text to the area image.
-			$areaImage->annotateImage($areaDraw, 0, 0, 0, $area->textArea);
 
 			// Add area image on top of background image.
 			$newImage->compositeImage($areaImage, Imagick::COMPOSITE_DEFAULT, $this->areaItem->x1_pos, $this->areaItem->y1_pos);
