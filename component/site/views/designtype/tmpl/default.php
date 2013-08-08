@@ -100,14 +100,14 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 					akeeba.jQuery('#fontSize'+ reddesign_area_id).slider()
 						.on('slide', function(ev){
 							clearTimeout(typingTimer);
-				    			typingTimer = setTimeout(customize, doneTypingInterval);
+				    			typingTimer = setTimeout(customize(0), doneTypingInterval);
 						});
 				<?php endif; ?>
 
 				// Onkeyup, start the countdown
 				akeeba.jQuery('#textArea'+reddesign_area_id).keyup(function(){
 				    clearTimeout(typingTimer);
-				    typingTimer = setTimeout(customize, doneTypingInterval);
+				    typingTimer = setTimeout(customize(0), doneTypingInterval);
 
 				});
 			<?php endforeach; ?>
@@ -156,7 +156,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	 *
 	 * @param button Determines whether the call comes from "Customize it!" button or not.
 	 */
-	function customize(button) {
+	function customize(button) {console.log(button);
 		var customizeOrNot = 0;
 		var autoCustomizeParam = <?php echo $this->params->get('autoCustomize', 1); ?>;
 
