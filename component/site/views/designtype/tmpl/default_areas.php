@@ -203,16 +203,18 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					});
 					<?php endforeach; ?>
 
-					<?php foreach ($this->accessorytypes as $accessorytype) : ?>
-						<?php foreach ($accessorytype->accessories as $accessory) : ?>
-						if(akeeba.jQuery("#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>").is(':checked'))
-						{
-							design.accessories.push({
-									"id" : akeeba.jQuery('#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>:checked').val()
-							});
-						}
+					<?php if($this->accessorytypes) : ?>
+						<?php foreach ($this->accessorytypes as $accessorytype) : ?>
+							<?php foreach ($accessorytype->accessories as $accessory) : ?>
+							if(akeeba.jQuery("#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>").is(':checked'))
+							{
+								design.accessories.push({
+										"id" : akeeba.jQuery('#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>:checked').val()
+								});
+							}
+							<?php endforeach; ?>
 						<?php endforeach; ?>
-					<?php endforeach; ?>
+					<?php endif; ?>
 
 					design = JSON.stringify({Design: design });
 					akeeba.jQuery('#designAreas').val(design);
