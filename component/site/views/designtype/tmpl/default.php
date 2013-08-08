@@ -156,7 +156,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	 *
 	 * @param button Determines whether the call comes from "Customize it!" button or not.
 	 */
-	function customize(button) {console.log(button);
+	function customize(button) {
 		var customizeOrNot = 0;
 		var autoCustomizeParam = <?php echo $this->params->get('autoCustomize', 1); ?>;
 
