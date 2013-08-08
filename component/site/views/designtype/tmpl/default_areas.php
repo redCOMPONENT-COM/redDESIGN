@@ -27,7 +27,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						name="textArea<?php echo $area->reddesign_area_id; ?>"
 						placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
 						id="textArea<?php echo $area->reddesign_area_id; ?>"
-						value=" ">
+						value="">
 				</div>
 			</div>
 			<div class="control-group">
@@ -44,7 +44,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 							'select.genericlist',
 							$defaultFonts,
 							'fontArea' . $area->reddesign_area_id,
-							'class="inputbox" onChange="customize();"',
+							'class="inputbox" onChange="customize(0);"',
 							'value',
 							'text',
 							null
@@ -63,7 +63,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 							'select.genericlist',
 							$options,
 							'fontArea' . $area->reddesign_area_id,
-							'class="inputbox" onChange="customize();"',
+							'class="inputbox" onChange="customize(0);"',
 							'value',
 							'text',
 							null
@@ -95,7 +95,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 							'select.genericlist',
 							$options,
 							'fontSize' . $area->reddesign_area_id,
-							'class="inputbox" onChange="customize();"',
+							'class="inputbox" onChange="customize(0);"',
 							'value',
 							'text',
 							null

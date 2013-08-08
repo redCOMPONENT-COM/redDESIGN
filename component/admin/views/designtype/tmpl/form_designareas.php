@@ -1021,6 +1021,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 									<div class="span6">
 										<div class="row">
 											<div class="span3">
+												<?php if($this->item->fontsizer != 'auto') : ?>
 												<div class="control-group">
 													<label for="<?php echo 'areaFontAlignment' . $area->reddesign_area_id; ?>">
 														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALIGNMENT') ?>
@@ -1034,6 +1035,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 														$area->textalign
 													);?>
 												</div>
+												<?php endif; ?>
 												<div class="control-group">
 													<label for="<?php echo 'areaFonts' . $area->reddesign_area_id; ?>">
 														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALLOWED_FONTS') ?>
