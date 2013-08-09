@@ -77,7 +77,7 @@ class ReddesignControllerDesigntypes extends FOFController
 			}
 
 			// If no thumbnail has been uploaded and user has checked the generate thumbnail based on uploaded image
-			if (empty($thumbFile['name']) && $this->input->getBool('autoGenerateThumbCheck'))
+			if (empty($thumbFile['name']) && $this->input->getBool('autoGenerateThumbCheck', false))
 			{
 				$dest = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/thumbnails/' . $uploadedImageFile['mangled_filename'];
 				JFile::copy($uploadedImageFile['filepath'], $dest);
