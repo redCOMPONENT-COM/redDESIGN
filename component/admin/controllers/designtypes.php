@@ -30,6 +30,8 @@ class ReddesignControllerDesigntypes extends FOFController
 	{
 		$uploadedThumbFile = null;
 		$params = JComponentHelper::getParams('com_reddesign');
+		$fileHelper = null;
+		$oldImages = null;
 
 		// On edit, retrieve from database the old images that will be replaced (later we will remove them to keep system storage resources clean)
 		if (!!$data['reddesign_designtype_id'])
