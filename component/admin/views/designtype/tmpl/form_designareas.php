@@ -562,6 +562,9 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			akeeba.jQuery("#backgroundImageContainer div").remove();
 
 			akeeba.jQuery.ajax({
+				data: {
+					reddesign_background_id: <?php echo $this->productionBackground->reddesign_background_id; ?>
+				},
 				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxGetAreas&format=raw",
 				success: function (data) {
 					json = akeeba.jQuery.parseJSON(data);
