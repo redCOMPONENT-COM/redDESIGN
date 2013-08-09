@@ -89,6 +89,7 @@ class ReddesignControllerArea extends FOFController
 	public function ajaxGetAreas()
 	{
 		$model = $this->getThisModel();
+		$model->setIDsFromRequest();
 		$items = $model->getList();
 
 		echo json_encode($items);
