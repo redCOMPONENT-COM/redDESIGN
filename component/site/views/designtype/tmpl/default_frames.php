@@ -10,29 +10,30 @@
 defined('_JEXEC') or die();
 ?>
 <h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_FRAMES_TITLE') ?></h4>
-<table class="table table-hover top-buffer">
-	<tbody>
-	<?php foreach($this->previewBackgrounds as $frame) : ?>
-	<?php if ($frame->isPreviewbgimage) :
+<?php foreach($this->previewBackgrounds as $frame) : ?>
+	<?php
+		if ($frame->isPreviewbgimage)
+		{
 			$reddesign_background_id = $frame->reddesign_background_id;
-	      endif; ?>
-		<tr>
-			<td class="accessory-selection">
-					<input type="radio"
-						   class="price-modifier"
-						   onChange ="setBackground(<?php echo $frame->reddesign_background_id;?>);"
-						   name="frame"
-						   value="<?php echo $frame->reddesign_background_id ?>"
-						   data-price="<?php echo $frame->price ?>"
-						   <?php if ($frame->isPreviewbgimage) echo 'checked="checked"'; ?>
-						/>
-			</td>
-			<td class="accessory-detail">
-				<div class="pull-left frame-thumbnail-container">
-					<img
-						class="img-polaroid frame-thumbnail"
-						src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $frame->thumbnail; ?>"/>
-				</div>
+		}
+	?>
+	<div class="frame-container">
+		<div class="frame-selection">
+			<input type="radio"
+				   class="price-modifier"
+				   onChange ="setBackground(<?php echo $frame->reddesign_background_id;?>);"
+				   name="frame"
+				   value="<?php echo $frame->reddesign_background_id ?>"
+				   data-price="<?php echo $frame->price ?>"
+				<?php if ($frame->isPreviewbgimage) echo 'checked="checked"'; ?>
+				/>
+		</div>
+		<div class="frame-detail">
+			<div class="frame-thumbnail-container">
+				<img class="img-polaroid frame-thumbnail"
+					 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $frame->thumbnail; ?>"/>
+			</div>
+			<div class="pull-left">
 				<h5><?php echo $frame->title; ?></h5>
 				<span class="label">
 					<?php if ($this->params->get('currency_symbol_position_before', '1')) : ?>
@@ -47,14 +48,13 @@ defined('_JEXEC') or die();
 						);
 					?>
 					<?php if (!$this->params->get('currency_symbol_position_before', '1')) : ?>
-							<?php echo  $this->params->get('currency_symbol', '$'); ?>
+						<?php echo  $this->params->get('currency_symbol', '$'); ?>
 					<?php endif; ?>
 				</span>
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	</tbody>
-</table>
+			</div>
+		</div>
+	</div>
+<?php endforeach; ?>
 <?php // @TODO: this following hidden field will have to update it's value according to frame selection; ?>
 <input type="hidden" name="reddesign_background_id" id="reddesign_background_id" value="<?php echo $reddesign_background_id;?>">
 

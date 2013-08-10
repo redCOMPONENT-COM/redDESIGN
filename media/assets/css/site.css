@@ -1,6 +1,6 @@
 /* Common */
 .top-buffer {
-    margin-top:5px;
+    margin-top: 5px;
 }
 
 
@@ -15,19 +15,37 @@
 }
 
 /* Frames */
+.frame-container {
+    float: left;
+    min-height: 75px;
+}
+
 img.frame-thumbnail {
-    max-height:50px;
-    max-width:50px;
+    max-height: 50px;
+    max-width: 50px;
 }
 
 .frame-thumbnail-container {
+    float: left;
     padding-right: 10px;
+}
+
+.frame-selection {
+    float: left;
+    width: 10px;
+    margin: 10px 11px 0px 0px;
+}
+
+.frame-detail {
+    float: left;
+    border-left: none;
+    margin-right: 25px;
 }
 
 /* Accessories */
 a img.accessory-thumbnail {
-    max-height:50px;
-    max-width:50px;
+    max-height: 50px;
+    max-width: 50px;
 }
 
 .accessory-thumbnail-container {
@@ -35,13 +53,13 @@ a img.accessory-thumbnail {
 }
 
 .accessory-selection {
-    border-right: none;
     vertical-align: middle;
-    width:10px;
+    border-right: medium none;
+    width: 10px;
 }
 
 .accessory-detail {
-    border-left:none;
+    border-left: medium none;
 }
 
 .accessorytype-thumbnail {
@@ -49,3 +67,7 @@ a img.accessory-thumbnail {
     max-height: 64px;
 }
 
+.customize-it-btn {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}

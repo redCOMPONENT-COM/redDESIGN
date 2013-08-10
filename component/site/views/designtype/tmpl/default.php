@@ -38,12 +38,21 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	<div id="my-tab-content" class="tab-content">
 		<div class="tab-pane active" id="customize">
 			<div class="row-fluid">
-				<div class="span6">
+				<div class="well span12">
+					<?php echo $this->loadTemplate('frames'); ?>
+				</div>
+				<div>
 					<img id="background"
 						 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"/>
 				</div>
-				<div class="span5 offset1 well">
-					<?php echo $this->loadTemplate('frames'); ?>
+				<div class="customize-it-btn">
+					<?php if (!empty($this->productionBackgroundAreas) && ($this->params->get('autoCustomize', 1) == 0 || $this->params->get('autoCustomize', 1) == 2) ) : ?>
+						<button type="button" class="btn btn-success" data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>" id="customizeDesign">
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE'); ?>
+						</button>
+					<?php endif; ?>
+				</div>
+				<div class="well">
 					<?php echo $this->loadTemplate('areas'); ?>
 				</div>
 			</div>

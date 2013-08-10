@@ -38,7 +38,7 @@ class ReddesignDispatcher extends FOFDispatcher
 			// AkeebaStrapper::$tag = 1;
 			AkeebaStrapper::jQueryUI();
 			AkeebaStrapper::bootstrap();
-			AkeebaStrapper::addCSSfile('media://com_reddesign/assets/css/backend.css');
+			AkeebaStrapper::addCSSfile('media://com_reddesign/assets/css/admin.css');
 		}
 
 		return true;
