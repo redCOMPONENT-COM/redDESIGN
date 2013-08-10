@@ -31,7 +31,8 @@ defined('_JEXEC') or die();
 		<div class="frame-detail">
 			<div class="frame-thumbnail-container">
 				<img class="img-polaroid frame-thumbnail"
-					 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $frame->thumbnail; ?>"/>
+					 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $frame->thumbnail; ?>"
+					 alt="<?php echo $frame->title; ?>"/>
 			</div>
 			<div class="pull-left">
 				<h5><?php echo $frame->title; ?></h5>
