@@ -13,9 +13,8 @@ defined('_JEXEC') or die();
 	<div class="media">
 		<?php if ($accessorytype->sample_thumb) : ?>
 			<?php if ($accessorytype->sample_image) : ?>
-			<a
-				class="pull-left modal"
-				href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessorytypes/' . $accessorytype->sample_image); ?>">
+			<a class="pull-left modal"
+			   href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessorytypes/' . $accessorytype->sample_image); ?>">
 			<?php endif; ?>
 			<img
 				class="media-object accessorytype-thumbnail"
@@ -46,13 +45,12 @@ defined('_JEXEC') or die();
 						   <?php if ($accessory->isDefault) echo 'checked="checked"'; ?>
 						/>
 					<?php else : ?>
-					<input
-						class="price-modifier"
-						type="checkbox"
-						id="AccessoryId<?php echo $accessory->reddesign_accessory_id ?>"
-						name="AccessoryId<?php echo $accessorytype->reddesign_accessorytype_id; ?>[]"
-						value="<?php echo $accessory->reddesign_accessory_id ?>"
-						data-price="<?php echo $accessory->price ?>"
+					<input class="price-modifier"
+						   type="checkbox"
+						   id="AccessoryId<?php echo $accessory->reddesign_accessory_id ?>"
+						   name="AccessoryId<?php echo $accessorytype->reddesign_accessorytype_id; ?>[]"
+						   value="<?php echo $accessory->reddesign_accessory_id ?>"
+						   data-price="<?php echo $accessory->price ?>"
 						<?php if ($accessory->isDefault) echo 'checked="checked"'; ?>
 						/>
 					<?php endif; ?>
@@ -63,9 +61,9 @@ defined('_JEXEC') or die();
 						<?php if($accessory->image) : ?>
 							<a href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessories/' . $accessory->image); ?>" class="modal">
 						<?php endif; ?>
-							<img
-								class="img-polaroid accessory-thumbnail"
-								src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessories/thumbnails/' . $accessory->thumbnail); ?>"/>
+							<img class="img-polaroid accessory-thumbnail"
+								 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/accessories/thumbnails/' . $accessory->thumbnail); ?>"
+								 alt="<?php echo $accessory->title; ?>"/>
 						<?php if($accessory->image) : ?>
 							</a>
 						<?php endif; ?>

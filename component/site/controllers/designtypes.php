@@ -188,7 +188,11 @@ class ReddesignControllerDesigntypes extends FOFController
 
 		// Create session to store Image
 		$session->set('customizedImage', $mangledname);
-		$response['image']		   = JURI::base() . 'media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
+		$response['image'] = JURI::base() . 'media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
+
+		$imageSize = getimagesize(JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg');
+		$response['imageWidth'] = $imageSize[0];
+		$response['imageHeight'] = $imageSize[1];
 
 		echo json_encode($response);
 	}
