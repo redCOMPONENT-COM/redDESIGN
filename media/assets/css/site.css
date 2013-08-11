@@ -3,6 +3,14 @@
     margin-top: 5px;
 }
 
+#background-container {
+   clear: both;
+   vertical-align: middle;
+}
+
+#background {
+
+}
 
 /* Product */
 .product-thumbnail {

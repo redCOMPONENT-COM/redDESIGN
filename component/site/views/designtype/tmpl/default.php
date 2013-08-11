@@ -10,7 +10,6 @@
 defined('_JEXEC') or die();
 JHTML::_('behavior.modal');
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
-
 ?>
 
 <h1><?php echo $this->item->title; ?></h1>
@@ -41,7 +40,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 				<div class="well span12">
 					<?php echo $this->loadTemplate('frames'); ?>
 				</div>
-				<div>
+				<div id="background-container">
 					<img id="background"
 						 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"
 						 alt="<?php echo $this->previewBackground->title;?>"/>
@@ -67,15 +66,27 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 </form>
 
 <script>
+	var backgroundContainerWidth;
+	var backgroundContainerHeight;
+
 	/**
-	 * Add click event to Customize button
+	 * Add click event to Customize button.
 	 */
 	akeeba.jQuery(document).ready(
 		function () {
-			// Customize function
+			// Correct radio button selection.
+			akeeba.jQuery("#frame<?php echo $this->previewBackground->reddesign_background_id; ?>").attr('checked', 'checked');
+
+			// Prepare CSS for spinner.gif.
+			akeeba.jQuery('#background-container').css('width', <?php echo $this->imageSize[0]; ?>);
+			akeeba.jQuery('#background-container').css('height', <?php echo $this->imageSize[1]; ?>);
+			backgroundContainerWidth = <?php echo $this->imageSize[0]; ?>;
+			backgroundContainerHeight = <?php echo $this->imageSize[1]; ?>;
+
+			// Customize function.
 			akeeba.jQuery(document).on('click', '#customizeDesign',
 				function () {
-					// Add spinner to button
+					// Add spinner to button.
 					akeeba.jQuery(this).button('loadingo');
 					setTimeout(
 						function() {
@@ -84,13 +95,16 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 						3000
 					);
 
-					akeeba.jQuery('#background')
-						.attr('src', '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/images/spinner.gif'); ?>');
+					akeeba.jQuery('#background').css('margin-top', (backgroundContainerHeight / 2) - 31);
+					akeeba.jQuery('#background').css('margin-left', (backgroundContainerWidth / 2) - 31);
+					akeeba.jQuery('#background').attr('src', '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/images/spinner.gif'); ?>');
+
 					customize(1);
+
 				}
 			);
 
-			// Build Areas colors
+			// Build Areas colors.
 			<?php foreach ($this->productionBackgroundAreas as  $area) : ?>
 				var reddesign_area_id = parseInt(<?php echo $area->reddesign_area_id;?>);
 				akeeba.jQuery('#colorSelector' + reddesign_area_id).ColorPicker({
@@ -102,7 +116,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 					}
 				});
 
-				// Setup before functions
+				// Setup before functions.
 				var typingTimer;
 				var doneTypingInterval = 400;
 
@@ -114,7 +128,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 						});
 				<?php endif; ?>
 
-				// Onkeyup, start the countdown
+				// Onkeyup, start the countdown.
 				akeeba.jQuery('#textArea'+reddesign_area_id).keyup(function(){
 				    clearTimeout(typingTimer);
 				    typingTimer = setTimeout(customize(0), doneTypingInterval);
@@ -122,7 +136,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 				});
 			<?php endforeach; ?>
 
-			// Define Price settings:
+			// Define price settings.
 			accounting.settings = {
 				currency: {
 					symbol : "<?php echo $this->params->get('currency_symbol', '$'); ?>",
@@ -138,7 +152,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 				}
 			}
 
-			// Calculate default price
+			// Calculate default price.
 			var total = 0;
 			var formatedTotal = 0;
 			akeeba.jQuery('.price-modifier:checked').each(function () {
@@ -147,7 +161,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 			formatedTotal = accounting.formatMoney(total);
 			akeeba.jQuery('#total').html(formatedTotal);
 
-			// onClick calculate current product price adding all price modifiers: frames and accessories
+			// onClick calculate current product price adding all price modifiers: frames and accessories.
 			akeeba.jQuery(document).on('click', '.price-modifier', function () {
 					var total = 0;
 					var formatedTotal = 0;
@@ -162,7 +176,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	);
 
 	/**
-	 * Sends customize data to server and retreives the resulting image
+	 * Sends customize data to server and retreives the resulting image.
 	 *
 	 * @param button Determines whether the call comes from "Customize it!" button or not.
 	 */
@@ -170,7 +184,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 		var customizeOrNot = 0;
 		var autoCustomizeParam = <?php echo $this->params->get('autoCustomize', 1); ?>;
 
-		// Turn off or on customization according to the settings in config.xml
+		// Turn off or on customization according to the settings in config.xml.
 		if((button == 1 && autoCustomizeParam == 0) || (button == 1 && autoCustomizeParam == 2))
 		{
 			customizeOrNot = 1;
@@ -209,7 +223,12 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 					var json = akeeba.jQuery.parseJSON(data);
 					d = new Date();
 					akeeba.jQuery('img#background').attr('src', json.image+"?"+d.getTime());
-					console.log(data);
+					akeeba.jQuery('#background').css('margin-top', 0);
+					akeeba.jQuery('#background').css('margin-left', 0);
+					akeeba.jQuery('#background-container').css('width', json.imageWidth);
+					akeeba.jQuery('#background-container').css('height', json.imageHeight);
+					backgroundContainerWidth = json.imageWidth;
+					backgroundContainerHeight = json.imageHeight;
 				},
 				error: function(errMsg) {
 					alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AJAX_ERROR'); ?>');

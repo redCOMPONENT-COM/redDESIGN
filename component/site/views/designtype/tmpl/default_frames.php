@@ -22,10 +22,13 @@ defined('_JEXEC') or die();
 			<input type="radio"
 				   class="price-modifier"
 				   onChange ="setBackground(<?php echo $frame->reddesign_background_id;?>);"
+				   id="frame<?php echo $frame->reddesign_background_id;?>"
 				   name="frame"
 				   value="<?php echo $frame->reddesign_background_id ?>"
 				   data-price="<?php echo $frame->price ?>"
-				<?php if ($frame->isPreviewbgimage) echo 'checked="checked"'; ?>
+				<?php if ($frame->isPreviewbgimage) : ?>
+				   checked="checked"'
+				<?php endif; ?>
 				/>
 		</div>
 		<div class="frame-detail">

@@ -45,6 +45,12 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->productionBackgroundAreas	= $model->getProductionBackgroundAreas($this->productionBackground->reddesign_background_id);
 		$this->fonts						= $model->getFonts();
 		$this->accessorytypes				= $model->getAccessories();
+		$this->imageSize					= getimagesize(FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path);
+
+		if(empty($this->imageSize))
+		{
+			$this->imageSize = array(0, 0);
+		}
 
 		if (empty($this->productionBackgroundAreas))
 		{
