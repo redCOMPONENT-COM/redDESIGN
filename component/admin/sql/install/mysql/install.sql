@@ -203,6 +203,9 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_accessories` (
   `reddesign_accessorytype_id` INT(11)       NOT NULL,
   PRIMARY KEY (`reddesign_accessory_id`)
 )
+  ENGINE = InnoDB
+  DEFAULT CHARSET =utf8
+  DEFAULT COLLATE=utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_orders`
@@ -216,7 +219,6 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_orders` (
   `reddesign_productionfile` TEXT,
   PRIMARY KEY (`reddesign_order_id`)
 )
-
   ENGINE = InnoDB
   DEFAULT CHARSET =utf8
   DEFAULT COLLATE=utf8_general_ci;
