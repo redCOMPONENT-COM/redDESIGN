@@ -232,7 +232,7 @@ class ReddesignControllerDesigntypes extends FOFController
 		$design = $design->get('Design');
 		$data['designAreas'] = $design->areas;
 
-		// Get desingAccessories
+		// Get designAccessories
 		$designAccessories = array();
 
 		foreach ($design->accessories as $accessoryId)
