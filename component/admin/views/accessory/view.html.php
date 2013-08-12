@@ -64,6 +64,18 @@ class ReddesignViewAccessory extends FOFViewHtml
 			$this->item->reddesign_accessorytype_id
 		);
 
+		// Check to ensure that the e-commerce and redDESING have same currency (symbol)
+		$dispatcher	= JDispatcher::getInstance();
+
+		JPluginHelper::importPlugin('reddesign');
+		$result = $dispatcher->trigger('onDesigntypeDisplayCheckCurrency');
+
+		if ($result[0]['wrongCurrency'])
+		{
+			JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_REDDESIGN_CURRENCY_NOT_SET', $result[0]['reddesign_currency_symbol'], $result[0]['ecommerce_currency_symbol']), 'notice');
+		}
+
+
 		parent::display();
 	}
 }

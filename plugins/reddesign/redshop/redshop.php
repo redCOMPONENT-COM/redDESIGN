@@ -41,8 +41,6 @@ class PlgReddesignRedshop extends JPlugin
 	 * @param   array  $data  An array that holds design information
 	 *
 	 * @return bool
-	 *
-	 * @access public
 	 */
 	public function onOrderButtonClick($data)
 	{
@@ -201,8 +199,6 @@ class PlgReddesignRedshop extends JPlugin
 	 * @param   array  $data  An array that holds design information
 	 *
 	 * @return bool
-	 *
-	 * @access public
 	 */
 	public function createPdfProductfile($data)
 	{
@@ -512,10 +508,7 @@ class PlgReddesignRedshop extends JPlugin
 	 * @param   string  $fname  location of image
 	 *
 	 * @return array
-	 *
-	 * @access public
 	 */
-
 	private function readBound($fname)
 	{
 		$contents = array();
@@ -543,5 +536,34 @@ class PlgReddesignRedshop extends JPlugin
 		$boundingbox = explode(" ", trim($b[1]));
 
 		return $boundingbox;
+	}
+
+	/**
+	 * Get redDESING component parameters and compare that currency is same in redDESIGN and redSHOP
+	 *
+	 * @return boolean
+	 */
+	public function onDesigntypeDisplayCheckCurrency()
+	{
+		// Get redSHOP currency
+		require_once JPATH_ADMINISTRATOR . '/components/com_redshop/helpers/redshop.cfg.php';
+		$redshop_currency_symbol	= REDCURRENCY_SYMBOL;
+
+		// Get redDESING currency
+		$params		= JComponentHelper::getParams('com_reddesign');
+		$reddesign_currency_symbol	= $params->get('currency_symbol', null);
+
+		$result = array(
+			'reddesign_currency_symbol' => $reddesign_currency_symbol,
+			'ecommerce_currency_symbol' => $redshop_currency_symbol,
+			'wrongCurrency' => true
+		);
+
+		if (trim($redshop_currency_symbol) == trim($reddesign_currency_symbol))
+		{
+			$result['wrongCurrency'] = false;
+		}
+
+		return $result;
 	}
 }
