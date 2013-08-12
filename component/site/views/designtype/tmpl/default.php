@@ -216,8 +216,8 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 			<?php endforeach; ?>
 			design = JSON.stringify({Design: design });
 			akeeba.jQuery.ajax({
-				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=designtype&task=ajaxGetDesign&format=raw",
-				data: {designarea : design},
+				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=designtype&task=ajaxGetDesign&format=raw&<?php echo JFactory::getSession()->getFormToken(); ?>=1",
+				data: { designarea : design },
 				type: "post",
 				success: function(data) {
 					var json = akeeba.jQuery.parseJSON(data);

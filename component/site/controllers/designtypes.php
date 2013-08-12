@@ -58,6 +58,8 @@ class ReddesignControllerDesigntypes extends FOFController
 	 */
 	public function ajaxGetDesign()
 	{
+		JSession::checkToken('get') or jexit('Invalid Token');
+
 		// Initialize session
 		$session 			= JFactory::getSession();
 
