@@ -234,12 +234,14 @@ class ReddesignControllerDesigntypes extends FOFController
 
 		// Get desingAccessories
 		$desingAccessories = array();
+
 		foreach ($design->accessories as $accessoryId)
 		{
 			$accessoryModel = FOFModel::getTmpInstance('Accessory', 'ReddesignModel');
 			$accessory = $accessoryModel->getItem($accessoryId->id);
 			$desingAccessories[] = $accessory;
 		}
+
 		$data['desingAccessories'] = $desingAccessories;
 
 		$results = $dispatcher->trigger('onOrderButtonClick', array($data));
