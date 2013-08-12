@@ -33,6 +33,7 @@ class ReddesignViewOrders extends FOFViewHtml
 
 		$model    = $this->getModel();
 		$this->orders   = $model->getItemList();
+		$this->orders   = $model->getPaidOrders($this->orders);
 		parent::display();
 	}
 }
