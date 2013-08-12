@@ -190,6 +190,7 @@ class PlgReddesignRedshop extends JPlugin
 		$newProductData['product_price'] = $newProduct->product_price;
 		$rsCarthelper = new rsCarthelper;
 		$rsCarthelper->addProductToCart($newProductData);
+		$rsCarthelper->cartFinalCalculation();
 		$session->set('customizedImage', "");
 
 		return true;
