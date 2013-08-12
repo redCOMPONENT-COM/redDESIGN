@@ -128,7 +128,7 @@ class PlgReddesignRedshop extends JPlugin
 		$productAccessory = array();
 		$productPrice = $data['designBackground']->price;
 
-		foreach ($data['desingAccessories'] as $accessory)
+		foreach ($data['designAccessories'] as $accessory)
 		{
 			$productPrice += $accessory->price;
 			$productAccessory[] = $accessory->title;
@@ -190,6 +190,7 @@ class PlgReddesignRedshop extends JPlugin
 		$newProductData['product_price'] = $newProduct->product_price;
 		$rsCarthelper = new rsCarthelper;
 		$rsCarthelper->addProductToCart($newProductData);
+		$rsCarthelper->cartFinalCalculation();
 		$session->set('customizedImage', "");
 
 		return true;
@@ -209,7 +210,7 @@ class PlgReddesignRedshop extends JPlugin
 		$session = JFactory::getSession();
 		$productionFileName = $session->get('customizedImage');
 
-		$areas = $data['desingAreas'];
+		$areas = $data['designAreas'];
 		$epsText = '';
 		$epsAreaText = '';
 		$epstextfile = '';
