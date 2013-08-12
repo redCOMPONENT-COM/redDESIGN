@@ -204,7 +204,7 @@ class PlgReddesignRedshop extends JPlugin
 	 *
 	 * @access public
 	 */
-	function createPdfProductfile($data)
+	public function createPdfProductfile($data)
 	{
 		$session = JFactory::getSession();
 		$productionFileName = $session->get('customizedImage');
@@ -408,9 +408,13 @@ class PlgReddesignRedshop extends JPlugin
 				$epsfile .= "\n 0 0 translate";
 			}
 			elseif ($image_bound[3] == 0)
+			{
 				$epsfile .= "\n 0 0 translate";
+			}
 			else
+			{
 				$epsfile .= "\n " . $pdfLeftMargin . " " . $pdfTopMargin . " translate";
+			}
 
 			$epsfile .= "\n% 0 0 " . ($imageWidth) . " " . ($imageHeight);
 
@@ -482,13 +486,24 @@ class PlgReddesignRedshop extends JPlugin
 		exec($cmd);
 
 		if (file_exists($tmp_texteps_file))
+		{
 			unlink($tmp_texteps_file);
+		}
+
 		if (file_exists($tmp_eps_file))
+		{
 			unlink($tmp_eps_file);
+		}
+
 		if (file_exists($tmp_eps_image))
+		{
 			unlink($tmp_eps_image);
+		}
+
 		if (file_exists($tmp_bound))
+		{
 			unlink($tmp_bound);
+		}
 	}
 
 	/**
@@ -501,7 +516,7 @@ class PlgReddesignRedshop extends JPlugin
 	 * @access public
 	 */
 
-	function readBound($fname)
+	private function readBound($fname)
 	{
 		$contents = array();
 		$content_str = "";
