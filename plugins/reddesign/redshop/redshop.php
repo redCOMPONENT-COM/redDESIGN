@@ -156,7 +156,6 @@ class PlgReddesignRedshop extends JPlugin
 		// Insert new Product
 		$newProduct = new stdClass;
 		$newProduct->product_name = $data['designType']->title;
-		$newProduct->product_number = "design" . rand(9999, 999999);
 		$newProduct->product_price = $productPrice;
 		$newProduct->product_full_image = $session->get('customizedImage') . '.jpg';
 		$newProduct->product_template = $template_id;
@@ -166,6 +165,12 @@ class PlgReddesignRedshop extends JPlugin
 		$newProduct->manufacturer_id = $manufacturer_id;
 		$result = $db->insertObject('#__redshop_product', $newProduct);
 		$product_id = $db->insertid();
+
+		// Update Product with ProductNumber
+		$updateProduct = new stdClass;
+		$updateProduct->product_id = $product_id;
+		$updateProduct->product_number = "redDESIGN" . $product_id;
+		$result = $db->updateObject('#__redshop_product', $updateProduct, 'product_id');
 
 		// Add Category for new Product
 		$productCategory = new stdClass;
@@ -207,6 +212,7 @@ class PlgReddesignRedshop extends JPlugin
 		$areas = $data['desingAreas'];
 		$epsText = '';
 		$epsAreaText = '';
+		$epstextfile = '';
 
 		$backgroundImageFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']->image_path;
 		$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']->eps_file;
@@ -387,7 +393,6 @@ class PlgReddesignRedshop extends JPlugin
 		$epsfile .= "\n/alignshow		%  (str)  =>  ---";
 		$epsfile .= "\n	{dup stringwidth pop neg 0 rmoveto show} bind def";
 		$epsfile .= "\n/nl { x currentpoint exch pop 16 sub moveto } bind def";
-		$epsfile .= "\n" . $epsfileBox;
 		$epsfile .= "\n%%EndProlog";
 		$epsfile .= "\n%%Page: 1 1";
 		$epsfile .= "\n/pagesave save def";

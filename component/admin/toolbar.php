@@ -47,6 +47,9 @@ class ReddesignToolbar extends FOFToolbar
 					case 'accessories':
 						$newViewsOrder[3] = $view;
 						break;
+					case 'orders':
+						$newViewsOrder[4] = $view;
+						break;
 				}
 			}
 

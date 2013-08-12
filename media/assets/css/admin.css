@@ -43,6 +43,10 @@
     background-image: url(../images/reddesign_48.png);
 }
 
+.icon-48-orders{
+    background-image: url(../images/reddesign_orders_48.png);
+}
+
 .areSettingRowheight {
  	height: 210px !important;
 }
