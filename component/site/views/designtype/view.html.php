@@ -52,6 +52,11 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			$this->imageSize = array(0, 0);
 		}
 
+		if (empty($this->previewBackground) || empty($this->productionBackground))
+		{
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_DESIGNTYPE_NO_BACKGROUNDS'), 'notice');
+		}
+
 		if (empty($this->productionBackgroundAreas))
 		{
 			$app->enqueueMessage(JText::_('COM_REDDESIGN_DESIGNTYPE_NO_DESIGN_AREAS'), 'notice');
