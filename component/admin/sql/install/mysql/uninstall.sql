@@ -8,5 +8,6 @@ DROP TABLE IF EXISTS `#__reddesign_chars`;
 DROP TABLE IF EXISTS `#__reddesign_backgrounds`;
 DROP TABLE IF EXISTS `#__reddesign_accessorytypes`;
 DROP TABLE IF EXISTS `#__reddesign_accessories`;
+DROP TABLE IF EXISTS `#__reddesign_orders`;
 
 SET foreign_key_checks = 1;
