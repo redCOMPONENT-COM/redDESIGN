@@ -230,19 +230,19 @@ class ReddesignControllerDesigntypes extends FOFController
 		$design = new JRegistry;
 		$design->loadString($this->input->getString('designAreas', ''), 'JSON');
 		$design = $design->get('Design');
-		$data['desingAreas'] = $design->areas;
+		$data['designAreas'] = $design->areas;
 
 		// Get desingAccessories
-		$desingAccessories = array();
+		$designAccessories = array();
 
 		foreach ($design->accessories as $accessoryId)
 		{
 			$accessoryModel = FOFModel::getTmpInstance('Accessory', 'ReddesignModel');
 			$accessory = $accessoryModel->getItem($accessoryId->id);
-			$desingAccessories[] = $accessory;
+			$designAccessories[] = $accessory;
 		}
 
-		$data['desingAccessories'] = $desingAccessories;
+		$data['designAccessories'] = $designAccessories;
 
 		$results = $dispatcher->trigger('onOrderButtonClick', array($data));
 
