@@ -124,14 +124,14 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 					akeeba.jQuery('#fontSize'+ reddesign_area_id).slider()
 						.on('slide', function(ev){
 							clearTimeout(typingTimer);
-				    			typingTimer = setTimeout(customize(0), doneTypingInterval);
+				    			typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 						});
 				<?php endif; ?>
 
 				// Onkeyup, start the countdown.
 				akeeba.jQuery('#textArea'+reddesign_area_id).keyup(function(){
 				    clearTimeout(typingTimer);
-				    typingTimer = setTimeout(customize(0), doneTypingInterval);
+				    typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 
 				});
 			<?php endforeach; ?>
