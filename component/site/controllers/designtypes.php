@@ -192,6 +192,8 @@ class ReddesignControllerDesigntypes extends FOFController
 		$session->set('customizedImage', $mangledname);
 		$response['image'] = JURI::base() . 'media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
 
+		$response['imageTitle'] = $this->background->title;
+
 		$imageSize = getimagesize(JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg');
 		$response['imageWidth'] = $imageSize[0];
 		$response['imageHeight'] = $imageSize[1];
