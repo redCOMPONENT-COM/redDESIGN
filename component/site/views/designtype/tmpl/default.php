@@ -95,12 +95,11 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 						3000
 					);
 
+					akeeba.jQuery('#background').attr('src', '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/images/spinner.gif'); ?>');
 					akeeba.jQuery('#background').css('margin-top', (backgroundContainerHeight / 2) - 31);
 					akeeba.jQuery('#background').css('margin-left', (backgroundContainerWidth / 2) - 31);
-					akeeba.jQuery('#background').attr('src', '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/images/spinner.gif'); ?>');
 
 					customize(1);
-
 				}
 			);
 
@@ -193,6 +192,11 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 		{
 			customizeOrNot = 1;
 		}
+		else if(button == 3)
+		{
+			// This is the case when setBackground function is called
+			customizeOrNot = 1;
+		}
 
 		if(customizeOrNot == 1)
 		{
@@ -220,15 +224,25 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 				data: { designarea : design },
 				type: "post",
 				success: function(data) {
-					var json = akeeba.jQuery.parseJSON(data);
-					d = new Date();
-					akeeba.jQuery('img#background').attr('src', json.image+"?"+d.getTime());
-					akeeba.jQuery('#background').css('margin-top', 0);
-					akeeba.jQuery('#background').css('margin-left', 0);
-					akeeba.jQuery('#background-container').css('width', json.imageWidth);
-					akeeba.jQuery('#background-container').css('height', json.imageHeight);
-					backgroundContainerWidth = json.imageWidth;
-					backgroundContainerHeight = json.imageHeight;
+					if (data == 'Invalid Token')
+					{
+						alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_INVALID_TOKEN'); ?>');
+					}
+					else
+					{
+						var json = akeeba.jQuery.parseJSON(data);
+						d = new Date();
+						akeeba.jQuery('#background-container').css('width', json.imageWidth);
+						akeeba.jQuery('#background-container').css('height', json.imageHeight);
+						akeeba.jQuery('#background').attr('alt', '');
+						akeeba.jQuery('#background').attr('src', '');
+						akeeba.jQuery('#background').css('margin-top', 0);
+						akeeba.jQuery('#background').css('margin-left', 0);
+						akeeba.jQuery('#background').attr('src', json.image+"?"+d.getTime());
+						setTimeout(function() { akeeba.jQuery('#background').attr('alt', json.imageTitle); }, 3000);
+						backgroundContainerWidth = json.imageWidth;
+						backgroundContainerHeight = json.imageHeight;
+					}
 				},
 				error: function(errMsg) {
 					alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AJAX_ERROR'); ?>');
@@ -248,6 +262,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 		document.getElementById('colorCode'+reddesign_area_id).value = colorCode;
 		akeeba.jQuery('#fontColor'+reddesign_area_id+ ' div').css('backgroundColor', '#' + colorCode);
 		akeeba.jQuery('#fontColor'+reddesign_area_id).show();
+
 		customize(0);
 	}
 
@@ -259,6 +274,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	function setBackground(reddesign_background_id)
 	{
 		document.getElementById('reddesign_background_id').value = reddesign_background_id;
-		customize(0);
+
+		customize(3);
 	}
 </script>
