@@ -57,8 +57,6 @@ class PlgRedshop_ProductReddesign_Orders extends JPlugin
 	{
 		$app    = JFactory::getApplication();
 		$db     = JFactory::getDbo();
-		$params = $this->params;
-		$session = JFactory::getSession();
 
 		$order_functions = new order_functions;
 		$producthelper = new producthelper;
