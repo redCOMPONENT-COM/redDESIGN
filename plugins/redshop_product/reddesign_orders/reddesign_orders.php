@@ -7,8 +7,16 @@
  * @license     GNU General Public License version 2 or later, see LICENSE.
  */
 defined('_JEXEC') or die('Restricted access');
-require_once JPATH_ADMINISTRATOR . '/components/com_redshop/helpers/order.php';
-require_once JPATH_SITE . '/components/com_redshop/helpers/product.php';
+
+if (JFile::exists(JPATH_ADMINISTRATOR . '/components/com_redshop/helpers/order.php'))
+{
+	require_once JPATH_ADMINISTRATOR . '/components/com_redshop/helpers/order.php';
+}
+
+if (JFile::exists(JPATH_SITE . '/components/com_redshop/helpers/product.php'))
+{
+	require_once JPATH_SITE . '/components/com_redshop/helpers/product.php';
+}
 /**
  * redDesign Order Plugin.
  *

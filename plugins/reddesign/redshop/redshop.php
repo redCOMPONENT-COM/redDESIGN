@@ -7,6 +7,17 @@
  * @license     GNU General Public License version 2 or later, see LICENSE.
  */
 defined('_JEXEC') or die('Restricted access');
+
+if (JFile::exists(JPATH_ADMINISTRATOR . '/components/com_redshop/helpers/redshop.cfg.php'))
+{
+	require_once JPATH_ADMINISTRATOR . '/components/com_redshop/helpers/redshop.cfg.php';
+}
+
+if (JFile::exists(JPATH_SITE . '/components/com_redshop/helpers/cart.php'))
+{
+	require_once JPATH_SITE . '/components/com_redshop/helpers/cart.php';
+}
+
 /**
  * redSHOP Plugin.
  *
@@ -158,20 +169,20 @@ class PlgReddesignRedshop extends JPlugin
 		$newProduct->product_desc = $productDescription;
 		$newProduct->published = 1;
 		$newProduct->manufacturer_id = $manufacturer_id;
-		$result = $db->insertObject('#__redshop_product', $newProduct);
+		$db->insertObject('#__redshop_product', $newProduct);
 		$product_id = $db->insertid();
 
 		// Update Product with ProductNumber
 		$updateProduct = new stdClass;
 		$updateProduct->product_id = $product_id;
 		$updateProduct->product_number = "redDESIGN" . $product_id;
-		$result = $db->updateObject('#__redshop_product', $updateProduct, 'product_id');
+		$db->updateObject('#__redshop_product', $updateProduct, 'product_id');
 
 		// Add Category for new Product
 		$productCategory = new stdClass;
 		$productCategory->category_id  = $category_id;
 		$productCategory->product_id  = $product_id;
-		$productCategory = $db->insertObject('#__redshop_product_category_xref', $productCategory);
+		$db->insertObject('#__redshop_product_category_xref', $productCategory);
 
 		// Generate PDF Production file
 		$this->createPdfProductfile($data);
@@ -183,7 +194,7 @@ class PlgReddesignRedshop extends JPlugin
 		$newProductData['category_id'] = $category_id;
 		$newProductData['quantity'] = 1;
 		$newProductData['product_price'] = $newProduct->product_price;
-		require_once JPATH_SITE . '/components/com_redshop/helpers/cart.php';
+
 		$rsCarthelper = new rsCarthelper;
 		$rsCarthelper->addProductToCart($newProductData);
 		$rsCarthelper->cartFinalCalculation();
@@ -209,7 +220,6 @@ class PlgReddesignRedshop extends JPlugin
 		$epsAreaText = '';
 		$epstextfile = '';
 
-		$backgroundImageFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']->image_path;
 		$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']->eps_file;
 		$pdfFilePath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/pdf/';
 		$epsFilePath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/eps/';
@@ -545,8 +555,7 @@ class PlgReddesignRedshop extends JPlugin
 	public function onDesigntypeDisplayCheckCurrency()
 	{
 		// Get redSHOP currency
-		require_once JPATH_ADMINISTRATOR . '/components/com_redshop/helpers/redshop.cfg.php';
-		$redshop_currency_symbol	= REDCURRENCY_SYMBOL;
+		$redshop_currency_symbol = REDCURRENCY_SYMBOL;
 
 		// Get redDESING currency
 		$params		= JComponentHelper::getParams('com_reddesign');
