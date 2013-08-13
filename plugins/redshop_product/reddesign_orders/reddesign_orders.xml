@@ -17,6 +17,14 @@
         <language tag="en-GB">language/en-GB/en-GB.plg_redshop_product_reddesign_orders.sys.ini</language>
     </languages>
     <config>
-       
+       <fields name="params">
+		 <fieldset name="basic">
+			 <field name="order_filter" type="radio" default="1" label="PLG_REDDESIGN_REDDESIGN_ORDERS_ORDER_FILTER_LABEL"
+                       description="PLG_REDDESIGN_REDDESIGN_ORDERS_ORDER_FILTER_DESC">
+		            <option value="1">Yes</option>
+		            <option value="0">No</option>
+		        </field>
+		</fieldset>
+	</fields>
     </config>
 </extension>
