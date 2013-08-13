@@ -220,15 +220,22 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 				data: { designarea : design },
 				type: "post",
 				success: function(data) {
-					var json = akeeba.jQuery.parseJSON(data);
-					d = new Date();
-					akeeba.jQuery('img#background').attr('src', json.image+"?"+d.getTime());
-					akeeba.jQuery('#background').css('margin-top', 0);
-					akeeba.jQuery('#background').css('margin-left', 0);
-					akeeba.jQuery('#background-container').css('width', json.imageWidth);
-					akeeba.jQuery('#background-container').css('height', json.imageHeight);
-					backgroundContainerWidth = json.imageWidth;
-					backgroundContainerHeight = json.imageHeight;
+					if (data == 'Invalid Token')
+					{
+						alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_INVALID_TOKEN'); ?>');
+					}
+					else
+					{
+						var json = akeeba.jQuery.parseJSON(data);
+						d = new Date();
+						akeeba.jQuery('img#background').attr('src', json.image+"?"+d.getTime());
+						akeeba.jQuery('#background').css('margin-top', 0);
+						akeeba.jQuery('#background').css('margin-left', 0);
+						akeeba.jQuery('#background-container').css('width', json.imageWidth);
+						akeeba.jQuery('#background-container').css('height', json.imageHeight);
+						backgroundContainerWidth = json.imageWidth;
+						backgroundContainerHeight = json.imageHeight;
+					}
 				},
 				error: function(errMsg) {
 					alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AJAX_ERROR'); ?>');
