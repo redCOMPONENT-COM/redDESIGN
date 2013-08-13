@@ -7,9 +7,6 @@
  * @license     GNU General Public License version 2 or later, see LICENSE.
  */
 defined('_JEXEC') or die('Restricted access');
-
-require_once JPATH_ADMINISTRATOR . '/components/com_redshop/helpers/redshop.cfg.php';
-require_once JPATH_SITE . '/components/com_redshop/helpers/cart.php';
 /**
  * redSHOP Plugin.
  *
@@ -186,6 +183,7 @@ class PlgReddesignRedshop extends JPlugin
 		$newProductData['category_id'] = $category_id;
 		$newProductData['quantity'] = 1;
 		$newProductData['product_price'] = $newProduct->product_price;
+		require_once JPATH_SITE . '/components/com_redshop/helpers/cart.php';
 		$rsCarthelper = new rsCarthelper;
 		$rsCarthelper->addProductToCart($newProductData);
 		$rsCarthelper->cartFinalCalculation();
