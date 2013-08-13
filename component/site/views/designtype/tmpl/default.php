@@ -107,11 +107,11 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 			// Build Areas colors.
 			<?php foreach ($this->productionBackgroundAreas as  $area) : ?>
 				var reddesign_area_id = parseInt(<?php echo $area->reddesign_area_id;?>);
-				akeeba.jQuery('#colorSelector' + reddesign_area_id).ColorPicker({
+				akeeba.jQuery('#color-selector' + reddesign_area_id).ColorPicker({
 					designId:reddesign_area_id,
 					color: '#000000',
 					onChange: function (hsb, hex, rgb, reddesign_area_id) {
-						akeeba.jQuery('#colorSelector' +reddesign_area_id+ ' div').css('backgroundColor', '#' + hex);
+						akeeba.jQuery('#color-selector' +reddesign_area_id+ ' div').css('backgroundColor', '#' + hex);
 						document.getElementById('colorCode'+reddesign_area_id).value = hex; // Edited
 					}
 				});

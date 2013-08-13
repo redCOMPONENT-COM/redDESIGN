@@ -108,7 +108,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				<?php if (empty($area->color_code)) : ?>
 					<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id?>" name="colorCode<?php echo $area->reddesign_area_id?>" value="000000" id="colorCode<?php echo $area->reddesign_area_id?>">
 				<?php elseif ($area->color_code == 1) : ?>
-					<div id="colorSelector<?php echo $area->reddesign_area_id;?>" class="colorSelector">
+					<div id="color-selector<?php echo $area->reddesign_area_id;?>" class="colorSelector">
 							<div style="background-color: #000000"></div>
 					</div>
 					<div class="help-block">
