@@ -45,7 +45,7 @@ class PlgRedshop_ProductReddesign_Orders extends JPlugin
 	/**
 	 * Plugin method for event on building new product for redSHOP.
 	 *
-	 * @param   array  $cart  An array that holds cart information
+	 * @param   array  $cart   An array that holds cart information
 	 *
 	 * @param   array  $order  An array that holds order information
 	 *
@@ -53,7 +53,7 @@ class PlgRedshop_ProductReddesign_Orders extends JPlugin
 	 *
 	 * @access public
 	 */
-	public function afterOrderPlace($cart,$order)
+	public function afterOrderPlace($cart, $order)
 	{
 		$app    = JFactory::getApplication();
 		$db     = JFactory::getDbo();
@@ -70,32 +70,34 @@ class PlgRedshop_ProductReddesign_Orders extends JPlugin
 		foreach ($orderProducts as $orderProduct)
 		{
 			$product = $producthelper->getProductById($orderProduct->product_id);
-			if (strstr($product->product_number , "redDESIGN"))
+
+			if (strstr($product->product_number, 'redDESIGN'))
 			{
-			
 				$productionFile = pathinfo($product->product_full_image);
-				$productionFile = "reddesign" . $productionFile['filename'] . '.' . pdf;
+				$productionFile = "reddesign" . $productionFile['filename'] . '.' . 'pdf';
 				$productIds[] = $orderProduct->product_id;
 				$productNumbers[] = $orderProduct->order_item_sku;
 				$productionFiles[] = $productionFile;
-
-			} 
+			}
 		}
-		if(count($productIds)>0)
+
+		if (count($productIds) > 0)
 		{
 			$newOrderProduct = new stdClass;
 			$newOrderProduct->redshop_order_id = $order->order_id;
 			$newOrderProduct->redshop_product_id = implode(",", $productIds);
 			$newOrderProduct->redshop_product_number = implode(",", $productNumbers);
 			$newOrderProduct->reddesign_productionfile = implode(",", $productionFiles);
-			$result = $db->insertObject('#__reddesign_orders', $newOrderProduct);		
+			$result = $db->insertObject('#__reddesign_orders', $newOrderProduct);
+
 			if (!$result)
 			{
 				$app->enqueueMessage(JText::_('PLG_REDDESIGN_REDDESIGN_ORDERS_NOT_SAVED'), 'notice');
+
 				return false;
 			}
 		}
+
 		return true;
 	}
 }
-
