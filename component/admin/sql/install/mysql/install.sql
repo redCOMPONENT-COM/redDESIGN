@@ -1,8 +1,8 @@
 SET foreign_key_checks = 0;
+
 --
 -- Table structure for table `#__reddesign_area`
 --
-
 CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
   `reddesign_area_id`         INT(11)     NOT NULL AUTO_INCREMENT,
   `title`                     VARCHAR(255),
@@ -41,13 +41,12 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
       ON UPDATE NO ACTION
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET =utf8
-  DEFAULT COLLATE=utf8_general_ci;
+  DEFAULT CHARSET = utf8
+  DEFAULT COLLATE = utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_designtype`
 --
-
 CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   `reddesign_designtype_id` INT(11)    NOT NULL AUTO_INCREMENT,
   `title`                   VARCHAR(255),
@@ -69,13 +68,12 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   PRIMARY KEY (`reddesign_designtype_id`)
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET =utf8
-  DEFAULT COLLATE=utf8_general_ci;
+  DEFAULT CHARSET = utf8
+  DEFAULT COLLATE = utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_font`
 --
-
 CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
   `reddesign_font_id`       INT(11)      NOT NULL AUTO_INCREMENT,
   `title`                   VARCHAR(255),
@@ -97,13 +95,12 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
   PRIMARY KEY (`reddesign_font_id`)
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET =utf8
-  DEFAULT COLLATE=utf8_general_ci;
+  DEFAULT CHARSET = utf8
+  DEFAULT COLLATE = utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_font_char`
 --
-
 CREATE TABLE IF NOT EXISTS `#__reddesign_chars` (
   `reddesign_char_id` INT(11)      NOT NULL AUTO_INCREMENT,
   `font_char`              VARCHAR(10)  NOT NULL,
@@ -119,13 +116,12 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_chars` (
       ON UPDATE NO ACTION
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET =utf8
-  DEFAULT COLLATE=utf8_general_ci;
+  DEFAULT CHARSET = utf8
+  DEFAULT COLLATE = utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_backgrounds`
 --
-
 CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   `reddesign_background_id` INT(11)      NOT NULL AUTO_INCREMENT,
   `title`                   VARCHAR(255),
@@ -149,13 +145,12 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   PRIMARY KEY (`reddesign_background_id`)
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET =utf8
-  DEFAULT COLLATE=utf8_general_ci;
+  DEFAULT CHARSET = utf8
+  DEFAULT COLLATE = utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_accessorytypes`
 --
-
 CREATE TABLE IF NOT EXISTS `#__reddesign_accessorytypes` (
   `reddesign_accessorytype_id` INT(11)       NOT NULL AUTO_INCREMENT,
   `title`                      VARCHAR(255),
@@ -175,13 +170,12 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_accessorytypes` (
   PRIMARY KEY (`reddesign_accessorytype_id`)
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET =utf8
-  DEFAULT COLLATE=utf8_general_ci;
+  DEFAULT CHARSET = utf8
+  DEFAULT COLLATE = utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_accessories`
 --
-
 CREATE TABLE IF NOT EXISTS `#__reddesign_accessories` (
   `reddesign_accessory_id`     INT(11)       NOT NULL AUTO_INCREMENT,
   `title`                      VARCHAR(255),
@@ -204,13 +198,12 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_accessories` (
   PRIMARY KEY (`reddesign_accessory_id`)
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET =utf8
-  DEFAULT COLLATE=utf8_general_ci;
+  DEFAULT CHARSET = utf8
+  DEFAULT COLLATE = utf8_general_ci;
 
 --
 -- Table structure for table `#__reddesign_orders`
 --
-
 CREATE TABLE IF NOT EXISTS `#__reddesign_orders` (
   `reddesign_order_id`       INT(11)      NOT NULL AUTO_INCREMENT,
   `redshop_order_id`         INT(11)      NOT NULL,
@@ -220,7 +213,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_orders` (
   PRIMARY KEY (`reddesign_order_id`)
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET =utf8
-  DEFAULT COLLATE=utf8_general_ci;
+  DEFAULT CHARSET = utf8
+  DEFAULT COLLATE = utf8_general_ci;
 
 SET foreign_key_checks = 1;
