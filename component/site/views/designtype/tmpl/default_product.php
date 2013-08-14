@@ -18,6 +18,7 @@ if ($tagPos != 0)
 	$this->item->description = $intro_description[0].$intro_description[1];
 }
 ?>
+
 <div class="row-fluid">
 	<div class="span8">
 		<div class="media">
