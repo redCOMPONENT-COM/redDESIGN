@@ -38,7 +38,6 @@ class ReddesignModelOrders extends FOFModel
 			$orderId[] = $order->redshop_order_id;
 		}
 
-		$orderIds = implode(",", $orderId);
 		$query = $db->getQuery(true);
 		$query->select(array('o.order_id', 'ro.*'));
 		$query->from('#__redshop_orders as o');
