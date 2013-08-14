@@ -39,7 +39,7 @@ class ReddesignViewOrders extends FOFViewHtml
 		$pluginParams = new JRegistry($plugin->params);
 		$order_filter = $pluginParams->get('order_filter', '1');
 
-		if ($order_filter)
+		if ($order_filter && count($this->orders) > 0)
 		{
 			$this->orders   = $model->getPaidOrders($this->orders);
 		}

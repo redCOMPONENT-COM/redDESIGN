@@ -13,9 +13,9 @@ JFormHelper::loadFieldClass('list');
 /**
  * Form Field class for the Joomla Framework.
  *
- * @package        Joomla.Administrator
- * @subpackage     com_redesign
- * @since          1.6
+ * @package     Joomla.Administrator
+ * @subpackage  com_redesign
+ * @since       1.6
  */
 
 class JFormFieldTemplate extends JFormField
@@ -32,10 +32,15 @@ class JFormFieldTemplate extends JFormField
 	 * Method to get a list of redshop product templates
 	 *
 	 * @return    array    The field option objects.
+	 *
 	 * @since    1.6
 	 */
 	protected function getInput()
 	{
+		$productTemplateSelect = array();
+		$productTemplateSelect[0]->template_id = 0;
+		$productTemplateSelect[0]->template_name = JText::_('PLG_REDDESIGN_REDSHOP_SELECT_PRODUCT_TEMPLATE');
+
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
 		$query->select('template_id,template_name ');
@@ -44,8 +49,8 @@ class JFormFieldTemplate extends JFormField
 		$query->order('template_id ASC');
 		$db->setQuery($query);
 		$productTemplates = $db->loadObjectList();
+		$productTemplates = (is_array($productTemplates)) ? array_merge($productTemplateSelect, $productTemplates) : $productTemplateSelect;
 
 		return JHTML::_('select.genericlist', $productTemplates, $this->name, 'class="inputbox"', 'template_id', 'template_name', $this->value, $this->id);
-		
 	}
 }

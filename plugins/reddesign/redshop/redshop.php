@@ -499,10 +499,7 @@ class PlgReddesignRedshop extends JPlugin
 	 */
 	private function readBound($fname)
 	{
-		$contents = array();
-		$content_str = "";
-		$boundingbox = array();
-		$i = 0;
+		$contentStr = "";
 
 		if (!file_exists($fname))
 		{
@@ -515,15 +512,15 @@ class PlgReddesignRedshop extends JPlugin
 		{
 			if (strstr($contents[$f], "%%BoundingBox"))
 			{
-				$content_str = $contents[$f];
+				$contentStr = $contents[$f];
 				break;
 			}
 		}
 
-		$b = explode(":", $content_str);
-		$boundingbox = explode(" ", trim($b[1]));
+		$box = explode(":", $contentStr);
+		$boundingBox = explode(" ", trim($box[1]));
 
-		return $boundingbox;
+		return $boundingBox;
 	}
 
 	/**
