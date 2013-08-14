@@ -286,8 +286,8 @@ class PlgReddesignRedshop extends JPlugin
 
 		$epsText .= "\ngrestore\n";
 
-		$tmp_eps_file = $epsFilePath . "tmp_" . $productionFileName . ".eps";
-		$tmp_texteps_file = $epsFilePath . "tmptext_" . $productionFileName . ".eps";
+		$tmpEpsFile = $epsFilePath . "tmp_" . $productionFileName . ".eps";
+		$tmpTextepsFile = $epsFilePath . "tmptext_" . $productionFileName . ".eps";
 
 		$epsFileName = $epsFilePath . "reddesign" . $productionFileName . ".pdf";
 
@@ -344,21 +344,21 @@ class PlgReddesignRedshop extends JPlugin
 		// Create temp eps file for reading bounding box...
 		$tempfile .= "\n%%EOF";
 
-		$tmp_eps_image = $epsFilePath . "tmp_eps_" . $productionFileName . ".eps";
-		$tmp_eps_pdf = $epsFilePath . "tmp_eps_" . $productionFileName . ".pdf";
-		$tmp_bound = $epsFilePath . "tmp_bound_" . $productionFileName . ".ps";
+		$tmpEpsImage = $epsFilePath . "tmp_eps_" . $productionFileName . ".eps";
+		$tmpBound = $epsFilePath . "tmp_bound_" . $productionFileName . ".ps";
 
-		$fp = fopen($tmp_eps_image, "w");
+		$fp = fopen($tmpEpsImage, "w");
 			fwrite($fp, $tempfile);
 			fclose($fp);
 
 		$imageWidth = $imageWidth + 56.7;
 		$imageHeight = $imageHeight + 56.7;
 
-		$cmd = "gs -dBATCH -dNOPAUSE -sOutputFile=$tmp_bound -sDEVICE=ps2write  \-c '<< /PageSize [$imageWidth $imageHeight]  >> setpagedevice'  -f" . $tmp_eps_image;
+		$cmd = "gs -dBATCH -dNOPAUSE -sOutputFile=$tmpBound -sDEVICE=ps2write  \-c '<< /PageSize
+				[$imageWidth $imageHeight]  >> setpagedevice'  -f" . $tmpEpsImage;
 		exec($cmd);
 
-		$image_bound = $this->readBound($tmp_bound);
+		$imageBound = $this->readBound($tmpBound);
 		$epsfile  = "%!PS-Adobe-3.1 EPSF-3.1";
 		$epsfile .= "\n%%Creator:reddesign";
 		$epsfile .= "\n%%Title:reddesign" . $productionFileName;
@@ -408,11 +408,11 @@ class PlgReddesignRedshop extends JPlugin
 			$epsfile .= "\nBeginEPSF";
 			$epsfile .= "\n 0 0 translate";
 
-			if ($image_bound[0] > 100)
+			if ($imageBound[0] > 100)
 			{
 				$epsfile .= "\n 0 0 translate";
 			}
-			elseif ($image_bound[3] == 0)
+			elseif ($imageBound[3] == 0)
 			{
 				$epsfile .= "\n 0 0 translate";
 			}
@@ -431,39 +431,8 @@ class PlgReddesignRedshop extends JPlugin
 
 		$epsfile .= "\nBeginEPSF";
 		$epsfile .= "\nclear";
-		$bound_width = $image_bound[2] - $image_bound[0];
-		$bound_height = $image_bound[3] - $image_bound[1];
-		$final_y = $image_bound[1] + $imageHeight;
-		$final_x = ($image_bound[0]);
-
-		if ($image_bound[3] == 0)
-		{
-			$final_x = 201;
-			$final_y = 405 + ($imageHeight);
-		}
-		elseif ($image_bound[0] == 0)
-		{
-			$final_x = 201;
-			$final_y = 405 + ($imageHeight);
-		}
-		elseif ($image_bound[0] < 100)
-		{
-			$final_x = $pdfLeftMargin;
-			$final_y = $pdfTopMargin + ($imageHeight);
-		}
-
-		$final_y = $image_bound[1] + $imageHeight;
-		$final_x = ($image_bound[0]);
-
-		if ($image_bound[0] < 100)
-		{
-			$final_x += $pdfLeftMargin;
-			$final_y += $pdfTopMargin;
-		}
-
 		$epsfile .= "\n 0 0 translate";
 		$epstextfile .= $epsfile;
-
 		$epsfile .= "\n%%BeginDocument: text.eps";
 		$epsfile .= "\n" . $epsAreaText;
 		$epsfile .= "\n%%EndDocument";
@@ -472,11 +441,11 @@ class PlgReddesignRedshop extends JPlugin
 		// Create temp eps file for reading bounding box...
 		$epsfile .= "\n%%EOF";
 
-		$fp = fopen($tmp_eps_file, "w");
+		$fp = fopen($tmpEpsFile, "w");
 			fwrite($fp, $epsfile);
 			fclose($fp);
 
-		$fp = fopen($tmp_texteps_file, "w");
+		$fp = fopen($tmpTextepsFile, "w");
 		fwrite($fp, $epstextfile);
 		fclose($fp);
 
@@ -484,30 +453,34 @@ class PlgReddesignRedshop extends JPlugin
 		ob_clean();
 
 		$pdfFileName = $pdfFilePath . "reddesign" . $productionFileName . ".pdf";
-		$cmd = "gs -dBATCH -dNOPAUSE -dNOEPS -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false -sOutputFile=$pdfFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]  >> setpagedevice'  -f" . $tmp_eps_file;
+		$cmd  = "gs -dBATCH -dNOPAUSE -dNOEPS -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
+		$cmd .= " -sOutputFile=$pdfFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]";
+		$cmd .= "  >> setpagedevice'  -f" . $tmpEpsFile;
 		exec($cmd);
 
-		$cmd = "gs -dBATCH -dNOPAUSE  -dNOEPS -dEPSCrop -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true -dSubsetFonts=false -dOptimize=false -sOutputFile=$epsFileName -sDEVICE=pdfwrite  \-c '<< /PageSize [$imageWidth $imageHeight]  >> setpagedevice' -f" . $tmp_texteps_file;
+		$cmd = "gs -dBATCH -dNOPAUSE  -dNOEPS -dEPSCrop -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true -dSubsetFonts=false ";
+		$cmd .= "-dOptimize=false -sOutputFile=$epsFileName -sDEVICE=pdfwrite  \-c '<< /PageSize [$imageWidth $imageHeight]";
+		$cmd .= "  >> setpagedevice' -f" . $tmpTextepsFile;
 		exec($cmd);
 
-		if (file_exists($tmp_texteps_file))
+		if (file_exists($tmpTextepsFile))
 		{
-			unlink($tmp_texteps_file);
+			unlink($tmpTextepsFile);
 		}
 
-		if (file_exists($tmp_eps_file))
+		if (file_exists($tmpEpsFile))
 		{
-			unlink($tmp_eps_file);
+			unlink($tmpEpsFile);
 		}
 
-		if (file_exists($tmp_eps_image))
+		if (file_exists($tmpEpsImage))
 		{
-			unlink($tmp_eps_image);
+			unlink($tmpEpsImage);
 		}
 
-		if (file_exists($tmp_bound))
+		if (file_exists($tmpBound))
 		{
-			unlink($tmp_bound);
+			unlink($tmpBound);
 		}
 	}
 
