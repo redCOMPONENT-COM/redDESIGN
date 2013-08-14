@@ -15,17 +15,11 @@ JFormHelper::loadFieldClass('list');
  *
  * @package     Joomla.Administrator
  * @subpackage  com_redesign
- * @since       1.6
+ * @since       1.0
  */
 
 class JFormFieldTemplate extends JFormField
 {
-	/**
-	 * Template list from redshop products
-	 *
-	 * @var        string
-	 * @since    1.6
-	 */
 	public $type = 'Template';
 
 	/**
@@ -33,7 +27,7 @@ class JFormFieldTemplate extends JFormField
 	 *
 	 * @return    array    The field option objects.
 	 *
-	 * @since    1.6
+	 * @since    1.0
 	 */
 	protected function getInput()
 	{

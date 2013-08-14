@@ -530,12 +530,12 @@ class PlgReddesignRedshop extends JPlugin
 	 */
 	public function onDesigntypeDisplayCheckCurrency()
 	{
-		// Get redSHOP currency
-		$redshop_currency_symbol = REDCURRENCY_SYMBOL;
-
 		// Get redDESING currency
-		$params		= JComponentHelper::getParams('com_reddesign');
-		$reddesign_currency_symbol	= $params->get('currency_symbol', null);
+		$params = JComponentHelper::getParams('com_reddesign');
+		$reddesign_currency_symbol = $params->get('currency_symbol', null);
+
+		// Get redSHOP currency
+		$redshop_currency_symbol = defined('REDCURRENCY_SYMBOL') ? REDCURRENCY_SYMBOL : $reddesign_currency_symbol;
 
 		$result = array(
 			'reddesign_currency_symbol' => $reddesign_currency_symbol,
