@@ -77,12 +77,6 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 			// Correct radio button selection.
 			akeeba.jQuery("#frame<?php echo $this->previewBackground->reddesign_background_id; ?>").attr('checked', 'checked');
 
-			// Prepare CSS for spinner.gif.
-			akeeba.jQuery('#background-container').css('width', <?php echo $this->imageSize[0]; ?>);
-			akeeba.jQuery('#background-container').css('height', <?php echo $this->imageSize[1]; ?>);
-			backgroundContainerWidth = <?php echo $this->imageSize[0]; ?>;
-			backgroundContainerHeight = <?php echo $this->imageSize[1]; ?>;
-
 			// Customize function.
 			akeeba.jQuery(document).on('click', '#customizeDesign',
 				function () {
@@ -94,10 +88,6 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 						},
 						3000
 					);
-
-					akeeba.jQuery('#background').css('margin-top', (backgroundContainerHeight / 2) - 31);
-					akeeba.jQuery('#background').css('margin-left', (backgroundContainerWidth / 2) - 31);
-					akeeba.jQuery('#background').attr('src', '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/images/spinner.gif'); ?>');
 
 					customize(1);
 
