@@ -43,7 +43,17 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 				<div id="background-container">
 					<img id="background"
 						 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"
-						 alt="<?php echo $this->previewBackground->title;?>"/>
+						 alt="<?php echo $this->previewBackground->title;?>" />
+					<div id="progressBar"
+						 style="
+						 	padding-top: <?php echo (((int) $this->imageSize[1]) / 2); ?>px;
+						 	padding-bottom: <?php echo (((int) $this->imageSize[1]) / 2); ?>px;
+							display: none;;
+						 ">
+						<div class="progress progress-striped active">
+							<div class="bar" style="width: 100%;"></div>
+						</div>
+					</div>
 				</div>
 				<div class="customize-it-btn">
 					<?php if (!empty($this->productionBackgroundAreas) && ($this->params->get('autoCustomize', 1) == 0 || $this->params->get('autoCustomize', 1) == 2) ) : ?>
@@ -90,7 +100,6 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 					);
 
 					customize(1);
-
 				}
 			);
 
@@ -171,6 +180,11 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	 * @param button Determines whether the call comes from "Customize it!" button or not.
 	 */
 	function customize(button) {
+
+		// Add the progress bar
+		akeeba.jQuery('#background').hide();
+		akeeba.jQuery('#progressBar').show();
+
 		var customizeOrNot = 0;
 		var autoCustomizeParam = <?php echo $this->params->get('autoCustomize', 1); ?>;
 
@@ -213,12 +227,9 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 					var json = akeeba.jQuery.parseJSON(data);
 					d = new Date();
 					akeeba.jQuery('img#background').attr('src', json.image+"?"+d.getTime());
-					akeeba.jQuery('#background').css('margin-top', 0);
-					akeeba.jQuery('#background').css('margin-left', 0);
-					akeeba.jQuery('#background-container').css('width', json.imageWidth);
-					akeeba.jQuery('#background-container').css('height', json.imageHeight);
-					backgroundContainerWidth = json.imageWidth;
-					backgroundContainerHeight = json.imageHeight;
+					// Remove the progress bar
+					akeeba.jQuery('#background').show();
+					akeeba.jQuery('#progressBar').hide();
 				},
 				error: function(errMsg) {
 					alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AJAX_ERROR'); ?>');
