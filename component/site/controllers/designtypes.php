@@ -253,7 +253,8 @@ class ReddesignControllerDesigntypes extends FOFController
 			$link = JRoute::_('index.php?option=com_redshop&view=cart', false);
 			$app->Redirect($link);
 		}
-		$link = JRoute::_('index.php?option=com_reddesign&view=designtype&id='.$designTypeId, false);
+
+		$link = JRoute::_('index.php?option=com_reddesign&view=designtype&id=' . $designTypeId, false);
 		$app->Redirect($link);
 	}
 }
