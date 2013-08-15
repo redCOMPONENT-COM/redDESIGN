@@ -280,13 +280,15 @@ class ReddesignControllerDesigntypes extends FOFController
 
 			for ($i = 0;$i < count($char);$i++)
 			{
+				$query = $db->getQuery(true);
 				$query
-				->select('width')
-				->from('#__reddesign_chars as chars')
-				->where('binary font_char = "' . $char[$i] . '" AND reddesign_font_id = "' . $fontId . '" ');
+					->select('chars.width')
+					->from('#__reddesign_chars as chars')
+					->where('binary chars.font_char = "' . $char[$i] . '" AND chars.reddesign_font_id = "' . $fontId . '" ');
 
 				$db->setQuery($query);
 				$width 		= $width + $db->loadResult();
+
 			}
 
 			$avgWidth = $width / count($char);
