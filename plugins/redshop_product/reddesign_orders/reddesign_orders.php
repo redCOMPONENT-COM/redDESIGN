@@ -103,8 +103,6 @@ class PlgRedshop_ProductReddesign_Orders extends JPlugin
 	/**
 	 * Get Filtered Orders from redshop
 	 *
-	 * @param   array  $orders  contains information about reddesign orders
-	 *
 	 * @return array
 	 */
 	public function onOrderFilterOrders()
