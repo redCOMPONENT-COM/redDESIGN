@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   `description`             TEXT,
   `sample_image`            VARCHAR(255),
   `sample_thumb`            VARCHAR(255),
+  `related_designtypes`     VARCHAR(255),
   `accessorytypes`          VARCHAR(255),
   PRIMARY KEY (`reddesign_designtype_id`)
 )
