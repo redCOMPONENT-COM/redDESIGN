@@ -181,12 +181,16 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	 */
 	function customize(button) {
 
-		// Add the progress bar
-		akeeba.jQuery('#background').hide();
-		akeeba.jQuery('#progressBar').show();
-
 		var customizeOrNot = 0;
 		var autoCustomizeParam = <?php echo $this->params->get('autoCustomize', 1); ?>;
+
+		<?php
+		/*
+		 * 0 when customize function is called from an element different than button (textbox, font dropdown etc.)
+		 * 1 when customize function is called from the button
+		 * 3 when customize function is called from frames selection radio button
+		 */
+		?>
 
 		// Turn off or on customization according to the settings in config.xml.
 		if((button == 1 && autoCustomizeParam == 0) || (button == 1 && autoCustomizeParam == 2))
@@ -205,6 +209,10 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 
 		if(customizeOrNot == 1)
 		{
+			// Add the progress bar
+			akeeba.jQuery('#background').hide();
+			akeeba.jQuery('#progressBar').show();
+
 			var reddesign_designtype_id = akeeba.jQuery('#reddesign_designtype_id').val();
 			var reddesign_background_id = akeeba.jQuery('#reddesign_background_id').val();
 			var design = {
