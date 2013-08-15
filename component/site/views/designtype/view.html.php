@@ -38,14 +38,13 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->item = $model->getItem();
 
 		// Get Design related elements
-		$this->backgrounds					= $model->getBackgrounds();
-		$this->previewBackground			= $model->getPreviewBackground();
-		$this->previewBackgrounds			= $model->getPreviewBackgrounds();
-		$this->productionBackground			= $model->getProductionBackground();
-		$this->productionBackgroundAreas	= $model->getProductionBackgroundAreas($this->productionBackground->reddesign_background_id);
-		$this->fonts						= $model->getFonts();
-		$this->accessorytypes				= $model->getAccessories();
-		$this->imageSize					= getimagesize(FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path);
+		$this->backgrounds			= $model->getBackgrounds();
+		$this->previewBackground	= $model->getPreviewBackground();
+		$this->previewBackgrounds	= $model->getPreviewBackgrounds();
+		$this->productionBackground = $model->getProductionBackground();
+		$this->fonts				= $model->getFonts();
+		$this->accessorytypes		= $model->getAccessories();
+		$this->relatedDesigntypes	= $model->getRelatedDesigntypes();
 
 		if (empty($this->imageSize))
 		{
@@ -56,13 +55,19 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		{
 			$app->enqueueMessage(JText::_('COM_REDDESIGN_DESIGNTYPE_NO_BACKGROUNDS'), 'notice');
 		}
+		else
+		{
+			$this->productionBackgroundAreas = $model->getProductionBackgroundAreas($this->productionBackground->reddesign_background_id);
+			$this->imageSize = getimagesize(FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path);
+		}
 
 		if (empty($this->productionBackgroundAreas))
 		{
 			$app->enqueueMessage(JText::_('COM_REDDESIGN_DESIGNTYPE_NO_DESIGN_AREAS'), 'notice');
 		}
-
-		parent::display($tpl);
+		else
+		{
+			parent::display($tpl);
+		}
 	}
 }
-
