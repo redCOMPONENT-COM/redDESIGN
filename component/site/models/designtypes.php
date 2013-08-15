@@ -22,9 +22,9 @@ JLoader::import('joomla.filesystem.file');
 class ReddesignModelDesigntypes extends FOFModel
 {
 	/**
-	 * Retrieve all backgrounds from the database that belongs to the current design
+	 * Retrieve all backgrounds from the database that belongs to the current design.
 	 *
-	 * @return array  Array of backgrounds
+	 * @return array  Array of backgrounds.
 	 */
 	public function getBackgrounds()
 	{
@@ -37,9 +37,9 @@ class ReddesignModelDesigntypes extends FOFModel
 	}
 
 	/**
-	 * Retrieve the production file background from the backgrounds list
+	 * Retrieve the production file background from the backgrounds list.
 	 *
-	 * @return mixed  Returns the array that describes a background or false if there is no PDF background
+	 * @return mixed  Returns the array that describes a background or false if there is no PDF background.
 	 */
 	public function getProductionBackground()
 	{
@@ -53,14 +53,14 @@ class ReddesignModelDesigntypes extends FOFModel
 			}
 		}
 
-		// If this point is reached means that this design don't have "Production background", just text
+		// If this point is reached means that this design don't have "Production background", just text.
 		return false;
 	}
 
 	/**
-	 * Retrieve the preview background to be used as background for previews
+	 * Retrieve the preview background to be used as background for previews.
 	 *
-	 * @return mixed  Returns the array that describes a background or false if there is no preview background
+	 * @return mixed  Returns the array that describes a background or false if there is no preview background.
 	 */
 	public function getPreviewBackground()
 	{
@@ -74,14 +74,14 @@ class ReddesignModelDesigntypes extends FOFModel
 			}
 		}
 
-		// If this point is reached means that this design don't have "Preview background" setted
+		// If this point is reached means that this design don't have "Preview background" set.
 		return false;
 	}
 
 	/**
-	 * Retrieve all the backgrounds to be used for previews
+	 * Retrieve all the backgrounds to be used for previews.
 	 *
-	 * @return mixed  Returns the array of preview backgrounds
+	 * @return mixed  Returns the array of preview backgrounds.
 	 */
 	public function getPreviewBackgrounds()
 	{
@@ -100,11 +100,11 @@ class ReddesignModelDesigntypes extends FOFModel
 	}
 
 	/**
-	 * Retrieves the areas belonging to a specific production background
+	 * Retrieves the areas belonging to a specific production background.
 	 *
-	 * @param   int  $productionBackgroundId  The production background id
+	 * @param   int  $productionBackgroundId  The production background id.
 	 *
-	 * @return  array  Returns the array of areas that belongs to a background
+	 * @return  array  Returns the array of areas that belongs to a background.
 	 */
 	public function getProductionBackgroundAreas($productionBackgroundId)
 	{
@@ -116,9 +116,9 @@ class ReddesignModelDesigntypes extends FOFModel
 	}
 
 	/**
-	 * Retrieves the Accessories belonging to a specific design
+	 * Retrieves the Accessories belonging to a specific design.
 	 *
-	 * @return  array  Returns the array of parts that belonging to a design
+	 * @return  array  Returns the array of parts that belonging to a design.
 	 */
 	public function getAccessories()
 	{
@@ -133,22 +133,22 @@ class ReddesignModelDesigntypes extends FOFModel
 
 		foreach ($designAccessoryTypesIds as $key => $value)
 		{
-			// Get each accessorytype available in current design
+			// Get each accessorytype available in current design.
 			$accessorytypesModel = FOFModel::getTmpInstance('Accessorytypes', 'ReddesignModel');
 			$designAccessoryType = $accessorytypesModel->getItem($value);
 
-			// Check that this Accessorytype is published
+			// Check that this Accessorytype is published.
 			if ($designAccessoryType->enabled)
 			{
 				$designAccessoriestypes[$value] = clone $designAccessoryType;
 
-				// Get the accessories in the Accessorytype
+				// Get the accessories in the Accessorytype.
 				$accessoriesModel = FOFModel::getTmpInstance('Accessories', 'ReddesignModel');
 				$accessoriesModel->setState('enabled', '1');
 				$accessoriesModel->setState('reddesign_accessorytype_id', $value);
 				$accessoriesList = $accessoriesModel->getItemList(true, 'reddesign_accessory_id');
 
-				// Set the accessories into the AccessoryType
+				// Set the accessories into the AccessoryType.
 				$designAccessoriestypes[$value]->accessories = $accessoriesList;
 			}
 		}
@@ -157,9 +157,9 @@ class ReddesignModelDesigntypes extends FOFModel
 	}
 
 	/**
-	 * Retrieves the fonts in the system
+	 * Retrieves the fonts in the system.
 	 *
-	 * @return  array  Returns the array of fonts
+	 * @return array Returns the array of fonts.
 	 */
 	public function getFonts()
 	{
@@ -168,5 +168,36 @@ class ReddesignModelDesigntypes extends FOFModel
 		$fonts = $fontsModel->getItemList(false, 'reddesign_font_id');
 
 		return $fonts;
+	}
+
+	/**
+	 * Retrieves related design types.
+	 *
+	 * @return array Returns the array of related design types.
+	 */
+	public function getRelatedDesigntypes()
+	{
+		$relatedDesigntypes    = array();
+		$relatedDesigntypesIds = $this->getItem()->related_designtypes;
+
+		if (empty($relatedDesigntypesIds))
+		{
+			return false;
+		}
+
+		$relatedDesigntypesIds = array_map('trim', explode(',', $relatedDesigntypesIds));
+
+		foreach ($relatedDesigntypesIds as $relatedDesigntypesId)
+		{
+			$model = FOFModel::getTmpInstance('Designtypes', 'ReddesignModel');
+			$item = $model->getItem($relatedDesigntypesId);
+			$type = new stdClass;
+			$type->reddesign_designtype_id = $item->reddesign_designtype_id;
+			$type->title = $item->title;
+
+			$relatedDesigntypes[] = $type;
+		}
+
+		return $relatedDesigntypes;
 	}
 }
