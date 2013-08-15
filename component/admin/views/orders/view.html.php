@@ -29,7 +29,7 @@ class ReddesignViewOrders extends FOFViewHtml
 	 */
 	public function display($tpl = null)
 	{
-		$this->input->setVar('hidemainmenu', true);
+		$this->input->set('hidemainmenu', true);
 
 		$model    = $this->getModel();
 		$this->orders   = $model->getItemList();
