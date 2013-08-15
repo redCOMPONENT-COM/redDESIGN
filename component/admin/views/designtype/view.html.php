@@ -47,7 +47,30 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			JHTML::_('select.option',  'dropdown', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN'))
 		);
 
-		// Accessory types to be included in the frontend
+		// Related design types.
+		$designtypesModel = FOFModel::getTmpInstance('Designtypes', 'ReddesignModel');
+		$designtypes = $designtypesModel->getItemList();
+		$designtypesOptions = array();
+
+		foreach ($designtypes as $designtype)
+		{
+			if ($designtype->reddesign_designtype_id != $this->item->reddesign_designtype_id)
+			{
+				$designtypesOptions[] = JHtml::_('select.option', $designtype->reddesign_designtype_id, $designtype->title);
+			}
+		}
+
+		$this->relatedDesigntypes = JHtml::_(
+			'select.genericlist',
+			$designtypesOptions,
+			'related_designtypes[]',
+			' multiple="multiple" ',
+			'value',
+			'text',
+			explode(',', $this->item->related_designtypes)
+		);
+
+		// Accessory types to be included in the frontend.
 		$accessorytypesModel = FOFModel::getTmpInstance('Accessorytypes', 'ReddesignModel');
 		$accessorytypes = $accessorytypesModel->getItemList();
 		$accessorytypesOptions = array();
@@ -78,12 +101,12 @@ class ReddesignViewDesigntype extends FOFViewHtml
 
 			foreach ($this->backgrounds as $background)
 			{
-				// Get the background image that has been selected to be the Production PDF file image
+				// Get the background image that has been selected to be the Production PDF file image.
 				if ($background->isPDFbgimage)
 				{
 					$this->productionBackground = $background;
 
-					// Get all areas existing in the database for this specific background
+					// Get all areas existing in the database for this specific background.
 					$areaModel = FOFModel::getTmpInstance('Area', 'ReddesignModel')->reddesign_background_id($background->reddesign_background_id);
 					$areas = $areaModel->getItemList();
 				}
@@ -91,7 +114,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 
 			$this->areas = $areas;
 
-			// Get allColor radio input type for each area
+			// Get allColor radio input type for each area.
 			$colorCodes = array();
 
 			foreach ($this->areas as $area)
@@ -120,7 +143,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 				JHtml::_('select.option', '3', JText::_('COM_REDDESIGN_COMMON_CENTER'))
 			);
 
-			// Get all fonts in the system to be choosen or not for the current design
+			// Get all fonts in the system to be choosen or not for the current design.
 			$fontsModel = FOFModel::getTmpInstance('Font', 'ReddesignModel');
 			$this->fonts = $fontsModel->getItemList();
 			$this->fontsOptions = array();
@@ -130,23 +153,23 @@ class ReddesignViewDesigntype extends FOFViewHtml
 				$this->fontsOptions[] = JHtml::_('select.option', $font->reddesign_font_id, $font->title);
 			}
 
-			// Unit for measures
+			// Unit for measures.
 			$this->unit = $this->params->get('unit', 'px');
 
 			if ($this->unit == 'cm')
 			{
-				// (1 px = 0.026458333cm)
+				// Conversion 1 px = 0.026458333cm.
 				$this->pxToUnit = '0.026458333';
 
-				// (1 cm = 37.795275591px)
+				// Conversion 1 cm = 37.795275591px.
 				$this->unitToPx = '37.795275591';
 			}
 			elseif ($this->unit == 'mm')
 			{
-				// (1 px = 0.264583333mm)
+				// Conversion 1 px = 0.264583333mm.
 				$this->pxToUnit = '0.264583333';
 
-				// (1 mm = 3.779527559px)
+				// Conversion 1 mm = 3.779527559px.
 				$this->unitToPx = '3.779527559';
 			}
 			else
@@ -156,7 +179,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			}
 		}
 
-		// Check to ensure that the e-commerce and redDESING have same currency (symbol)
+		// Check to ensure that the e-commerce and redDESING have same currency (symbol).
 		$dispatcher	= JDispatcher::getInstance();
 
 		JPluginHelper::importPlugin('reddesign');
