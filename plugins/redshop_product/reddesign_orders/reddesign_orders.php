@@ -17,6 +17,7 @@ if (JFile::exists(JPATH_SITE . '/components/com_redshop/helpers/product.php'))
 {
 	require_once JPATH_SITE . '/components/com_redshop/helpers/product.php';
 }
+
 /**
  * redDesign Order Plugin.
  *
@@ -102,12 +103,29 @@ class PlgRedshop_ProductReddesign_Orders extends JPlugin
 	/**
 	 * Get Filtered Orders from redshop
 	 *
+	 * @param   array  $orders  contains information about reddesign orders
+	 *
 	 * @return array
 	 */
-	public function onOrderFilterOrders()
+	public function onOrderFilterOrders($orders)
 	{
 		$db     = JFactory::getDbo();
 		$order_filter = $this->params->get('order_filter', 1);
+		$reddesignOrders = array();
+
+		// Check if redSHOP is there.
+		$prefix = $db->getPrefix();
+		$tableName = $prefix . 'redshop_product';
+		$query = 'SHOW TABLES LIKE \'' . $tableName . '\'';
+		$db->setQuery($query);
+		$tables = $db->loadAssoc();
+
+		if (!count($tables))
+		{
+			$app->enqueueMessage(JText::_('PLG_REDDESIGN_REDSDESIGN_ORDERS_ORDERS_ARE_THERE_BUT_REDSHOP_IS_NOT_INSTALLED'), 'notice');
+
+			return $reddesignOrders;
+		}
 
 		$query = $db->getQuery(true);
 		$query->select(array('o.order_id', 'o.order_payment_status as order_status', 'ro.*'));
