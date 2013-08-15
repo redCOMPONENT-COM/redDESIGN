@@ -11,6 +11,7 @@
     <description>PLG_REDDESIGN_REDSHOP_XML_DESCRIPTION</description>
     <files>
         <filename plugin="redshop">redshop.php</filename>
+        <folder>fields</folder>
     </files>
     <languages>
         <language tag="en-GB">language/en-GB/en-GB.plg_reddesign_redshop.ini</language>
@@ -34,7 +35,7 @@
                 <field name="defaultTemplate" type="template"
 					   label="PLG_REDDESIGN_REDSHOP_DEFAULT_TEMPLATE_LABEL"
 					   description="PLG_REDDESIGN_REDSHOP_DEFAULT_TEMPLATE_DESC"
-					   addfieldpath="administrator/components/com_reddesign/models/fields"/>
+					   addfieldpath="plugins/reddesign/redshop/fields"/>
             </fieldset>
         </fields>
     </config>

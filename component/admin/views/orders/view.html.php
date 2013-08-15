@@ -34,14 +34,12 @@ class ReddesignViewOrders extends FOFViewHtml
 		$model    = $this->getModel();
 		$this->orders   = $model->getItemList();
 
-		// Filter orders according to plugin parameter
-		$plugin = &JPluginHelper::getPlugin('redshop_product', 'reddesign_orders');
-		$pluginParams = new JRegistry($plugin->params);
-		$order_filter = $pluginParams->get('order_filter', '1');
-
-		if ($order_filter)
+		if (count($this->orders) > 0)
 		{
-			$this->orders   = $model->getPaidOrders($this->orders);
+			JPluginHelper::importPlugin('redshop_product', 'reddesign_orders');
+			$dispatcher = JDispatcher::getInstance();
+			$reddesignOrders = $dispatcher->trigger('onOrderFilterOrders');
+			$this->orders = $reddesignOrders[0];
 		}
 
 		parent::display();

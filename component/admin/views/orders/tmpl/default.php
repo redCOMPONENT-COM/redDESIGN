@@ -22,6 +22,9 @@ JHTML::_('behavior.framework');
 				<?php echo JText::_('COM_REDDESIGN_ORDERS_REDSHOP_ORDER_ID'); ?>
 			</th>
 			<th>
+				<?php echo JText::_('COM_REDDESIGN_ORDERS_REDSHOP_ORDER_STATUS'); ?>
+			</th>
+			<th>
 				<?php echo JText::_('COM_REDDESIGN_ORDERS_REDSHOP_PRODUCT_NUMBER'); ?>
 			</th>
 			<th >
@@ -48,6 +51,9 @@ JHTML::_('behavior.framework');
 						<a href="index.php?option=com_redshop&view=order_detail&task=edit&cid[]=<?php echo $order->redshop_order_id;?>">
 							<?php echo $order->redshop_order_id; ?>
 						</a>
+					</td>
+					<td>
+						<?php echo $order->order_status; ?>
 					</td>
 					<td align="left">
 							<?php $productNumbers= explode(",", $order->redshop_product_number);

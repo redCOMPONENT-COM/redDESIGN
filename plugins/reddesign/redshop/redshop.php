@@ -8,8 +8,16 @@
  */
 defined('_JEXEC') or die('Restricted access');
 
-require_once JPATH_ADMINISTRATOR . '/components/com_redshop/helpers/redshop.cfg.php';
-require_once JPATH_SITE . '/components/com_redshop/helpers/cart.php';
+if (JFile::exists(JPATH_ADMINISTRATOR . '/components/com_redshop/helpers/redshop.cfg.php'))
+{
+	require_once JPATH_ADMINISTRATOR . '/components/com_redshop/helpers/redshop.cfg.php';
+}
+
+if (JFile::exists(JPATH_SITE . '/components/com_redshop/helpers/cart.php'))
+{
+	require_once JPATH_SITE . '/components/com_redshop/helpers/cart.php';
+}
+
 /**
  * redSHOP Plugin.
  *
@@ -161,20 +169,20 @@ class PlgReddesignRedshop extends JPlugin
 		$newProduct->product_desc = $productDescription;
 		$newProduct->published = 1;
 		$newProduct->manufacturer_id = $manufacturer_id;
-		$result = $db->insertObject('#__redshop_product', $newProduct);
+		$db->insertObject('#__redshop_product', $newProduct);
 		$product_id = $db->insertid();
 
 		// Update Product with ProductNumber
 		$updateProduct = new stdClass;
 		$updateProduct->product_id = $product_id;
 		$updateProduct->product_number = "redDESIGN" . $product_id;
-		$result = $db->updateObject('#__redshop_product', $updateProduct, 'product_id');
+		$db->updateObject('#__redshop_product', $updateProduct, 'product_id');
 
 		// Add Category for new Product
 		$productCategory = new stdClass;
 		$productCategory->category_id  = $category_id;
 		$productCategory->product_id  = $product_id;
-		$productCategory = $db->insertObject('#__redshop_product_category_xref', $productCategory);
+		$db->insertObject('#__redshop_product_category_xref', $productCategory);
 
 		// Generate PDF Production file
 		$this->createPdfProductfile($data);
@@ -186,6 +194,7 @@ class PlgReddesignRedshop extends JPlugin
 		$newProductData['category_id'] = $category_id;
 		$newProductData['quantity'] = 1;
 		$newProductData['product_price'] = $newProduct->product_price;
+
 		$rsCarthelper = new rsCarthelper;
 		$rsCarthelper->addProductToCart($newProductData);
 		$rsCarthelper->cartFinalCalculation();
@@ -209,9 +218,8 @@ class PlgReddesignRedshop extends JPlugin
 		$areas = $data['designAreas'];
 		$epsText = '';
 		$epsAreaText = '';
-		$epstextfile = '';
+		$epsTextFile = '';
 
-		$backgroundImageFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']->image_path;
 		$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']->eps_file;
 		$pdfFilePath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/pdf/';
 		$epsFilePath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/eps/';
@@ -260,8 +268,8 @@ class PlgReddesignRedshop extends JPlugin
 			$offsetLeft = $pdfLeftMargin + $offsetLeft;
 			$offsetTop = $offsetTop + $pdfTopMargin;
 
-			$epsText .= $epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $area->fontSize . "  scalefont setfont\n";
-
+			$epsText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $area->fontSize . "  scalefont setfont\n";
+			$epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $area->fontSize . "  scalefont setfont\n";
 			$epsText .= "\n0 0 0 setrgbcolor";
 			$epsText .= "\ngsave\n";
 
@@ -273,233 +281,212 @@ class PlgReddesignRedshop extends JPlugin
 
 			$epsText .= "\n $offsetLeft $offsetTop moveto";
 			$epsText .= "\n (" . $area->textArea . ")";
-			$epsText .= "\n cshow";
+			$epsText .= "\n show";
 		}
 
 		$epsText .= "\ngrestore\n";
 
-		$tmp_eps_file = $epsFilePath . "tmp_" . $productionFileName . ".eps";
-		$tmp_texteps_file = $epsFilePath . "tmptext_" . $productionFileName . ".eps";
+		$tmpEpsFile = $epsFilePath . "tmp_" . $productionFileName . ".eps";
+		$tmpTextEpsFile = $epsFilePath . "tmptext_" . $productionFileName . ".eps";
 
 		$epsFileName = $epsFilePath . "reddesign" . $productionFileName . ".pdf";
 
-		$tempfile = "%!PS";
-		$tempfile .= "\n%%Creator:reddesign";
-		$tempfile .= "\n%%Title:reddesign" . $productionFileName;
-		$tempfile .= "\n%%LanguageLevel: 3";
-		$tempfile .= "\n%%DocumentData: Clean7Bit";
-		$tempfile .= "\n%%EndComments";
-		$tempfile .= "\n";
-		$tempfile .= "\n%%BeginProlog";
-		$tempfile .= "\n/BeginEPSF {";
-		$tempfile .= "\n/EPSFsave save def";
-		$tempfile .= "\ncount /OpStackSize exch def";
-		$tempfile .= "\n/DictStackSize countdictstack def";
-		$tempfile .= "\n% turn off showpage";
-		$tempfile .= "\n/showpage {} def";
-		$tempfile .= "\n% set up default graphics state";
-		$tempfile .= "\n0 setgray 0 setlinecap";
-		$tempfile .= "\n1 setlinewidth 0 setlinejoin";
-		$tempfile .= "\n10 setmiterlimit [] 0 setdash newpath";
-		$tempfile .= "\n/languagelevel where";
-		$tempfile .= "\n{pop languagelevel 1 ne";
-		$tempfile .= "\n{false setstrokeadjust false setoverprint} if";
-		$tempfile .= "\n} if";
-		$tempfile .= "\n} bind def";
-		$tempfile .= "\n";
-		$tempfile .= "\n/EndEPSF {";
-		$tempfile .= "\ncount OpStackSize sub";
-		$tempfile .= "\ndup 0 lt {neg {pop} repeat} {pop} ifelse";
-		$tempfile .= "\ncountdictstack DictStackSize sub";
-		$tempfile .= "\ndup 0 lt {neg {end} repeat} {pop} ifelse";
-		$tempfile .= "\nEPSFsave restore";
-		$tempfile .= "\n} bind def";
-		$tempfile .= "\n";
-		$tempfile .= "\n%%EndProlog";
-		$tempfile .= "\n%%Page: 1 1";
-		$tempfile .= "\n/pagesave save def";
-		$tempfile .= "\n";
-		$tempfile .= "\n 0 0 translate";
+		$tempFile = "%!PS";
+		$tempFile .= "\n%%Creator:reddesign";
+		$tempFile .= "\n%%Title:reddesign" . $productionFileName;
+		$tempFile .= "\n%%LanguageLevel: 3";
+		$tempFile .= "\n%%DocumentData: Clean7Bit";
+		$tempFile .= "\n%%EndComments";
+		$tempFile .= "\n";
+		$tempFile .= "\n%%BeginProlog";
+		$tempFile .= "\n/BeginEPSF {";
+		$tempFile .= "\n/EPSFsave save def";
+		$tempFile .= "\ncount /OpStackSize exch def";
+		$tempFile .= "\n/DictStackSize countdictstack def";
+		$tempFile .= "\n% turn off showpage";
+		$tempFile .= "\n/showpage {} def";
+		$tempFile .= "\n% set up default graphics state";
+		$tempFile .= "\n0 setgray 0 setlinecap";
+		$tempFile .= "\n1 setlinewidth 0 setlinejoin";
+		$tempFile .= "\n10 setmiterlimit [] 0 setdash newpath";
+		$tempFile .= "\n/languagelevel where";
+		$tempFile .= "\n{pop languagelevel 1 ne";
+		$tempFile .= "\n{false setstrokeadjust false setoverprint} if";
+		$tempFile .= "\n} if";
+		$tempFile .= "\n} bind def";
+		$tempFile .= "\n";
+		$tempFile .= "\n/EndEPSF {";
+		$tempFile .= "\ncount OpStackSize sub";
+		$tempFile .= "\ndup 0 lt {neg {pop} repeat} {pop} ifelse";
+		$tempFile .= "\ncountdictstack DictStackSize sub";
+		$tempFile .= "\ndup 0 lt {neg {end} repeat} {pop} ifelse";
+		$tempFile .= "\nEPSFsave restore";
+		$tempFile .= "\n} bind def";
+		$tempFile .= "\n";
+		$tempFile .= "\n%%EndProlog";
+		$tempFile .= "\n%%Page: 1 1";
+		$tempFile .= "\n/pagesave save def";
+		$tempFile .= "\n";
+		$tempFile .= "\n 0 0 translate";
 
 		if (file_exists($epsFileLocation))
 		{
-			$tempfile .= "\nBeginEPSF";
-			$tempfile .= "\n 0 0 translate";
-			$tempfile .= "\n%%BeginDocument: danske.eps";
-			$tempfile .= "\n(" . $epsFileLocation . ") run";
-			$tempfile .= "\n%%EndDocument";
-			$tempfile .= "\nEndEPSF";
+			$tempFile .= "\nBeginEPSF";
+			$tempFile .= "\n 0 0 translate";
+			$tempFile .= "\n%%BeginDocument: danske.eps";
+			$tempFile .= "\n(" . $epsFileLocation . ") run";
+			$tempFile .= "\n%%EndDocument";
+			$tempFile .= "\nEndEPSF";
 		}
 
-		$tempfile .= "\npagesave restore showpage";
+		$tempFile .= "\npagesave restore showpage";
 
 		// Create temp eps file for reading bounding box...
-		$tempfile .= "\n%%EOF";
+		$tempFile .= "\n%%EOF";
 
-		$tmp_eps_image = $epsFilePath . "tmp_eps_" . $productionFileName . ".eps";
-		$tmp_eps_pdf = $epsFilePath . "tmp_eps_" . $productionFileName . ".pdf";
-		$tmp_bound = $epsFilePath . "tmp_bound_" . $productionFileName . ".ps";
+		$tmpEpsImage = $epsFilePath . "tmp_eps_" . $productionFileName . ".eps";
+		$tmpBound = $epsFilePath . "tmp_bound_" . $productionFileName . ".ps";
 
-		$fp = fopen($tmp_eps_image, "w");
-			fwrite($fp, $tempfile);
+		$fp = fopen($tmpEpsImage, "w");
+			fwrite($fp, $tempFile);
 			fclose($fp);
 
 		$imageWidth = $imageWidth + 56.7;
 		$imageHeight = $imageHeight + 56.7;
 
-		$cmd = "gs -dBATCH -dNOPAUSE -sOutputFile=$tmp_bound -sDEVICE=ps2write  \-c '<< /PageSize [$imageWidth $imageHeight]  >> setpagedevice'  -f" . $tmp_eps_image;
+		$cmd = "gs -dBATCH -dNOPAUSE -sOutputFile=$tmpBound -sDEVICE=ps2write  \-c '<< /PageSize
+				[$imageWidth $imageHeight]  >> setpagedevice'  -f" . $tmpEpsImage;
 		exec($cmd);
 
-		$image_bound = $this->readBound($tmp_bound);
-		$epsfile  = "%!PS-Adobe-3.1 EPSF-3.1";
-		$epsfile .= "\n%%Creator:reddesign";
-		$epsfile .= "\n%%Title:reddesign" . $productionFileName;
-		$epsfile .= "\n%%LanguageLevel: 3";
-		$epsfile .= "\n%%DocumentData: Clean7Bit";
-		$epsfile .= "\n%%EndComments";
-		$epsfile .= "\n";
-		$epsfile .= "\n%%BeginProlog";
-		$epsfile .= "\n/BeginEPSF {";
-		$epsfile .= "\n/EPSFsave save def";
-		$epsfile .= "\ncount /OpStackSize exch def";
-		$epsfile .= "\n/DictStackSize countdictstack def";
-		$epsfile .= "\n% turn off showpage";
-		$epsfile .= "\n/showpage {} def";
-		$epsfile .= "\n% set up default graphics state";
-		$epsfile .= "\n0 setgray 0 setlinecap";
-		$epsfile .= "\n1 setlinewidth 0 setlinejoin";
-		$epsfile .= "\n10 setmiterlimit [] 0 setdash newpath";
-		$epsfile .= "\n/languagelevel where";
-		$epsfile .= "\n{pop languagelevel 1 ne";
-		$epsfile .= "\n{false setstrokeadjust false setoverprint} if";
-		$epsfile .= "\n} if";
-		$epsfile .= "\n} bind def";
-		$epsfile .= "\n";
-		$epsfile .= "\n/EndEPSF {";
-		$epsfile .= "\ncount OpStackSize sub";
-		$epsfile .= "\ndup 0 lt {neg {pop} repeat} {pop} ifelse";
-		$epsfile .= "\ncountdictstack DictStackSize sub";
-		$epsfile .= "\ndup 0 lt {neg {end} repeat} {pop} ifelse";
-		$epsfile .= "\nEPSFsave restore";
-		$epsfile .= "\n} bind def";
-		$epsfile .= "\n";
+		$imageBound = $this->readBound($tmpBound);
+		$epsFile  = "%!PS-Adobe-3.1 EPSF-3.1";
+		$epsFile .= "\n%%Creator:reddesign";
+		$epsFile .= "\n%%Title:reddesign" . $productionFileName;
+		$epsFile .= "\n%%LanguageLevel: 3";
+		$epsFile .= "\n%%DocumentData: Clean7Bit";
+		$epsFile .= "\n%%EndComments";
+		$epsFile .= "\n";
+		$epsFile .= "\n%%BeginProlog";
+		$epsFile .= "\n/BeginEPSF {";
+		$epsFile .= "\n/EPSFsave save def";
+		$epsFile .= "\ncount /OpStackSize exch def";
+		$epsFile .= "\n/DictStackSize countdictstack def";
+		$epsFile .= "\n% turn off showpage";
+		$epsFile .= "\n/showpage {} def";
+		$epsFile .= "\n% set up default graphics state";
+		$epsFile .= "\n0 setgray 0 setlinecap";
+		$epsFile .= "\n1 setlinewidth 0 setlinejoin";
+		$epsFile .= "\n10 setmiterlimit [] 0 setdash newpath";
+		$epsFile .= "\n/languagelevel where";
+		$epsFile .= "\n{pop languagelevel 1 ne";
+		$epsFile .= "\n{false setstrokeadjust false setoverprint} if";
+		$epsFile .= "\n} if";
+		$epsFile .= "\n} bind def";
+		$epsFile .= "\n";
+		$epsFile .= "\n/EndEPSF {";
+		$epsFile .= "\ncount OpStackSize sub";
+		$epsFile .= "\ndup 0 lt {neg {pop} repeat} {pop} ifelse";
+		$epsFile .= "\ncountdictstack DictStackSize sub";
+		$epsFile .= "\ndup 0 lt {neg {end} repeat} {pop} ifelse";
+		$epsFile .= "\nEPSFsave restore";
+		$epsFile .= "\n} bind def";
+		$epsFile .= "\n";
 
-		$epsfile .= "\n/x 1 def";
-		$epsfile .= "\n/cshow		%  (str)  =>  ---";
-		$epsfile .= "\n{ dup stringwidth pop -2 div 0 rmoveto show } bind def";
-		$epsfile .= "\n/alignshow		%  (str)  =>  ---";
-		$epsfile .= "\n	{dup stringwidth pop neg 0 rmoveto show} bind def";
-		$epsfile .= "\n/nl { x currentpoint exch pop 16 sub moveto } bind def";
-		$epsfile .= "\n%%EndProlog";
-		$epsfile .= "\n%%Page: 1 1";
-		$epsfile .= "\n/pagesave save def";
-		$epsfile .= "\n";
+		$epsFile .= "\n/x 1 def";
+		$epsFile .= "\n/cshow		%  (str)  =>  ---";
+		$epsFile .= "\n{ dup stringwidth pop -2 div 0 rmoveto show } bind def";
+		$epsFile .= "\n/alignshow		%  (str)  =>  ---";
+		$epsFile .= "\n	{dup stringwidth pop neg 0 rmoveto show} bind def";
+		$epsFile .= "\n/nl { x currentpoint exch pop 16 sub moveto } bind def";
+		$epsFile .= "\n%%EndProlog";
+		$epsFile .= "\n%%Page: 1 1";
+		$epsFile .= "\n/pagesave save def";
+		$epsFile .= "\n";
 
 		if (file_exists($epsFileLocation))
 		{
-			$epsfile .= "\nBeginEPSF";
-			$epsfile .= "\n 0 0 translate";
+			$epsFile .= "\nBeginEPSF";
+			$epsFile .= "\n 0 0 translate";
 
-			if ($image_bound[0] > 100)
+			if ($imageBound[0] > 100)
 			{
-				$epsfile .= "\n 0 0 translate";
+				$epsFile .= "\n 0 0 translate";
 			}
-			elseif ($image_bound[3] == 0)
+			elseif ($imageBound[3] == 0)
 			{
-				$epsfile .= "\n 0 0 translate";
+				$epsFile .= "\n 0 0 translate";
 			}
 			else
 			{
-				$epsfile .= "\n " . $pdfLeftMargin . " " . $pdfTopMargin . " translate";
+				$epsFile .= "\n " . $pdfLeftMargin . " " . $pdfTopMargin . " translate";
 			}
 
-			$epsfile .= "\n% 0 0 " . ($imageWidth) . " " . ($imageHeight);
+			$epsFile .= "\n% 0 0 " . ($imageWidth) . " " . ($imageHeight);
 
-			$epsfile .= "\n%%BeginDocument: danske.eps";
-			$epsfile .= "\n(" . $epsFileLocation . ") run";
-			$epsfile .= "\n%%EndDocument";
-			$epsfile .= "\nEndEPSF";
+			$epsFile .= "\n%%BeginDocument: danske.eps";
+			$epsFile .= "\n(" . $epsFileLocation . ") run";
+			$epsFile .= "\n%%EndDocument";
+			$epsFile .= "\nEndEPSF";
 		}
 
-		$epsfile .= "\nBeginEPSF";
-		$epsfile .= "\nclear";
-		$bound_width = $image_bound[2] - $image_bound[0];
-		$bound_height = $image_bound[3] - $image_bound[1];
-		$final_y = $image_bound[1] + $imageHeight;
-		$final_x = ($image_bound[0]);
-
-		if ($image_bound[3] == 0)
-		{
-			$final_x = 201;
-			$final_y = 405 + ($imageHeight);
-		}
-		elseif ($image_bound[0] == 0)
-		{
-			$final_x = 201;
-			$final_y = 405 + ($imageHeight);
-		}
-		elseif ($image_bound[0] < 100)
-		{
-			$final_x = $pdfLeftMargin;
-			$final_y = $pdfTopMargin + ($imageHeight);
-		}
-
-		$final_y = $image_bound[1] + $imageHeight;
-		$final_x = ($image_bound[0]);
-
-		if ($image_bound[0] < 100)
-		{
-			$final_x += $pdfLeftMargin;
-			$final_y += $pdfTopMargin;
-		}
-
-		$epsfile .= "\n 0 0 translate";
-		$epstextfile .= $epsfile;
-
-		$epsfile .= "\n%%BeginDocument: text.eps";
-		$epsfile .= "\n" . $epsAreaText;
-		$epsfile .= "\n%%EndDocument";
-		$epsfile .= "\nEndEPSF";
+		$epsFile .= "\nBeginEPSF";
+		$epsFile .= "\nclear";
+		$epsFile .= "\n 0 0 translate";
+		$epsTextFile .= $epsFile;
+		$epsFile .= "\n%%BeginDocument: text.eps";
+		$epsFile .= "\n" . $epsAreaText;
+		$epsFile .= "\n%%EndDocument";
+		$epsFile .= "\nEndEPSF";
 
 		// Create temp eps file for reading bounding box...
-		$epsfile .= "\n%%EOF";
+		$epsFile .= "\n%%EOF";
 
-		$fp = fopen($tmp_eps_file, "w");
-			fwrite($fp, $epsfile);
+		$epsTextFile .= "\n%%BeginDocument: text.eps";
+		$epsTextFile .= "\n" . $epsText;
+		$epsTextFile .= "\n%%EndDocument";
+		$epsTextFile .= "\nEndEPSF";
+		$epsTextFile .= "\n%%EOF";
+
+		$fp = fopen($tmpEpsFile, "w");
+			fwrite($fp, $epsFile);
 			fclose($fp);
 
-		$fp = fopen($tmp_texteps_file, "w");
-		fwrite($fp, $epstextfile);
+		$fp = fopen($tmpTextEpsFile, "w");
+		fwrite($fp, $epsTextFile);
 		fclose($fp);
 
 		// Create pdf ...
 		ob_clean();
 
 		$pdfFileName = $pdfFilePath . "reddesign" . $productionFileName . ".pdf";
-		$cmd = "gs -dBATCH -dNOPAUSE -dNOEPS -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false -sOutputFile=$pdfFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]  >> setpagedevice'  -f" . $tmp_eps_file;
+		$cmd  = "gs -dBATCH -dNOPAUSE -dNOEPS -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
+		$cmd .= " -sOutputFile=$pdfFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]";
+		$cmd .= "  >> setpagedevice'  -f" . $tmpEpsFile;
 		exec($cmd);
 
-		$cmd = "gs -dBATCH -dNOPAUSE  -dNOEPS -dEPSCrop -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true -dSubsetFonts=false -dOptimize=false -sOutputFile=$epsFileName -sDEVICE=pdfwrite  \-c '<< /PageSize [$imageWidth $imageHeight]  >> setpagedevice' -f" . $tmp_texteps_file;
+		$cmd = "gs -dBATCH -dNOPAUSE  -dNOEPS -dEPSCrop -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true -dSubsetFonts=false ";
+		$cmd .= "-dOptimize=false -sOutputFile=$epsFileName -sDEVICE=pdfwrite  \-c '<< /PageSize [$imageWidth $imageHeight]";
+		$cmd .= "  >> setpagedevice' -f" . $tmpTextEpsFile;
 		exec($cmd);
 
-		if (file_exists($tmp_texteps_file))
+		if (file_exists($tmpTextEpsFile))
 		{
-			unlink($tmp_texteps_file);
+			unlink($tmpTextEpsFile);
 		}
 
-		if (file_exists($tmp_eps_file))
+		if (file_exists($tmpEpsFile))
 		{
-			unlink($tmp_eps_file);
+			unlink($tmpEpsFile);
 		}
 
-		if (file_exists($tmp_eps_image))
+		if (file_exists($tmpEpsImage))
 		{
-			unlink($tmp_eps_image);
+			unlink($tmpEpsImage);
 		}
 
-		if (file_exists($tmp_bound))
+		if (file_exists($tmpBound))
 		{
-			unlink($tmp_bound);
+			unlink($tmpBound);
 		}
 	}
 
@@ -512,10 +499,7 @@ class PlgReddesignRedshop extends JPlugin
 	 */
 	private function readBound($fname)
 	{
-		$contents = array();
-		$content_str = "";
-		$boundingbox = array();
-		$i = 0;
+		$contentStr = "";
 
 		if (!file_exists($fname))
 		{
@@ -528,15 +512,15 @@ class PlgReddesignRedshop extends JPlugin
 		{
 			if (strstr($contents[$f], "%%BoundingBox"))
 			{
-				$content_str = $contents[$f];
+				$contentStr = $contents[$f];
 				break;
 			}
 		}
 
-		$b = explode(":", $content_str);
-		$boundingbox = explode(" ", trim($b[1]));
+		$box = explode(":", $contentStr);
+		$boundingBox = explode(" ", trim($box[1]));
 
-		return $boundingbox;
+		return $boundingBox;
 	}
 
 	/**
@@ -546,13 +530,12 @@ class PlgReddesignRedshop extends JPlugin
 	 */
 	public function onDesigntypeDisplayCheckCurrency()
 	{
-		// Get redSHOP currency
-		require_once JPATH_ADMINISTRATOR . '/components/com_redshop/helpers/redshop.cfg.php';
-		$redshop_currency_symbol	= REDCURRENCY_SYMBOL;
-
 		// Get redDESING currency
-		$params		= JComponentHelper::getParams('com_reddesign');
-		$reddesign_currency_symbol	= $params->get('currency_symbol', null);
+		$params = JComponentHelper::getParams('com_reddesign');
+		$reddesign_currency_symbol = $params->get('currency_symbol', null);
+
+		// Get redSHOP currency
+		$redshop_currency_symbol = defined('REDCURRENCY_SYMBOL') ? REDCURRENCY_SYMBOL : $reddesign_currency_symbol;
 
 		$result = array(
 			'reddesign_currency_symbol' => $reddesign_currency_symbol,

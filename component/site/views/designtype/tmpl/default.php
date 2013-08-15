@@ -106,11 +106,11 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 			// Build Areas colors.
 			<?php foreach ($this->productionBackgroundAreas as  $area) : ?>
 				var reddesign_area_id = parseInt(<?php echo $area->reddesign_area_id;?>);
-				akeeba.jQuery('#colorSelector' + reddesign_area_id).ColorPicker({
+				akeeba.jQuery('#color-selector' + reddesign_area_id).ColorPicker({
 					designId:reddesign_area_id,
 					color: '#000000',
 					onChange: function (hsb, hex, rgb, reddesign_area_id) {
-						akeeba.jQuery('#colorSelector' +reddesign_area_id+ ' div').css('backgroundColor', '#' + hex);
+						akeeba.jQuery('#color-selector' +reddesign_area_id+ ' div').css('backgroundColor', '#' + hex);
 						document.getElementById('colorCode'+reddesign_area_id).value = hex; // Edited
 					}
 				});
@@ -123,14 +123,14 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 					akeeba.jQuery('#fontSize'+ reddesign_area_id).slider()
 						.on('slide', function(ev){
 							clearTimeout(typingTimer);
-				    			typingTimer = setTimeout(customize(0), doneTypingInterval);
+				    			typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 						});
 				<?php endif; ?>
 
 				// Onkeyup, start the countdown.
 				akeeba.jQuery('#textArea'+reddesign_area_id).keyup(function(){
 				    clearTimeout(typingTimer);
-				    typingTimer = setTimeout(customize(0), doneTypingInterval);
+				    typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 
 				});
 			<?php endforeach; ?>
@@ -197,6 +197,11 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 		{
 			customizeOrNot = 1;
 		}
+		else if(button == 3)
+		{
+			// This is the case when setBackground function is called
+			customizeOrNot = 1;
+		}
 
 		if(customizeOrNot == 1)
 		{
@@ -224,12 +229,21 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 				data: { designarea : design },
 				type: "post",
 				success: function(data) {
-					var json = akeeba.jQuery.parseJSON(data);
-					d = new Date();
-					akeeba.jQuery('img#background').attr('src', json.image+"?"+d.getTime());
-					// Remove the progress bar
-					akeeba.jQuery('#background').show();
-					akeeba.jQuery('#progressBar').hide();
+					if (data == 'Invalid Token')
+					{
+						alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_INVALID_TOKEN'); ?>');
+					}
+					else
+					{
+						var json = akeeba.jQuery.parseJSON(data);
+						d = new Date();
+						
+						akeeba.jQuery('#background').attr('src', json.image+"?"+d.getTime());
+						setTimeout(function() { akeeba.jQuery('#background').attr('alt', json.imageTitle); }, 3000);
+						// Remove the progress bar
+						akeeba.jQuery('#background').show();
+						akeeba.jQuery('#progressBar').hide();
+					}
 				},
 				error: function(errMsg) {
 					alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AJAX_ERROR'); ?>');
@@ -249,6 +263,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 		document.getElementById('colorCode'+reddesign_area_id).value = colorCode;
 		akeeba.jQuery('#fontColor'+reddesign_area_id+ ' div').css('backgroundColor', '#' + colorCode);
 		akeeba.jQuery('#fontColor'+reddesign_area_id).show();
+
 		customize(0);
 	}
 
@@ -260,6 +275,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	function setBackground(reddesign_background_id)
 	{
 		document.getElementById('reddesign_background_id').value = reddesign_background_id;
-		customize(0);
+
+		customize(3);
 	}
 </script>
