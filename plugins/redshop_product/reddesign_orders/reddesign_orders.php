@@ -98,4 +98,31 @@ class PlgRedshop_ProductReddesign_Orders extends JPlugin
 
 		return true;
 	}
+
+	/**
+	 * Get Filtered Orders from redshop
+	 *
+	 * @return array
+	 */
+	public function onOrderFilterOrders()
+	{
+		$db     = JFactory::getDbo();
+		$order_filter = $this->params->get('order_filter', 1);
+
+		$query = $db->getQuery(true);
+		$query->select(array('o.order_id', 'o.order_payment_status as order_status', 'ro.*'));
+		$query->from('#__redshop_orders as o');
+		$query->join('INNER', '#__reddesign_orders AS ro ON (o.order_id = ro.redshop_order_id)');
+
+		if ($order_filter)
+		{
+			$query->where('o.order_status = "C" and o.order_payment_status = "Paid"');
+		}
+
+		$query->order('o.order_id DESC');
+		$db->setQuery($query);
+		$reddesignOrders = $db->loadObjectList();
+
+		return $reddesignOrders;
+	}
 }
