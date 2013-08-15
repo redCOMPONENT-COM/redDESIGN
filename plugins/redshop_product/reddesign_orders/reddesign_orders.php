@@ -56,8 +56,8 @@ class PlgRedshop_ProductReddesign_Orders extends JPlugin
 	 */
 	public function afterOrderPlace($cart, $order)
 	{
-		$app    = JFactory::getApplication();
-		$db     = JFactory::getDbo();
+		$app = JFactory::getApplication();
+		$db = JFactory::getDbo();
 
 		$order_functions = new order_functions;
 		$producthelper = new producthelper;
@@ -109,7 +109,8 @@ class PlgRedshop_ProductReddesign_Orders extends JPlugin
 	 */
 	public function onOrderFilterOrders($orders)
 	{
-		$db     = JFactory::getDbo();
+		$app = JFactory::getApplication();
+		$db = JFactory::getDbo();
 		$order_filter = $this->params->get('order_filter', 1);
 		$reddesignOrders = array();
 
