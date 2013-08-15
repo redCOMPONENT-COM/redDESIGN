@@ -38,7 +38,7 @@ class ReddesignViewOrders extends FOFViewHtml
 		{
 			JPluginHelper::importPlugin('redshop_product', 'reddesign_orders');
 			$dispatcher = JDispatcher::getInstance();
-			$reddesignOrders = $dispatcher->trigger('onOrderFilterOrders', array($this->orders));
+			$reddesignOrders = $dispatcher->trigger('onOrderFilterOrders');
 			$this->orders = $reddesignOrders[0];
 		}
 

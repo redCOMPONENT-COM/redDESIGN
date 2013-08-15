@@ -107,7 +107,7 @@ class PlgRedshop_ProductReddesign_Orders extends JPlugin
 	 *
 	 * @return array
 	 */
-	public function onOrderFilterOrders($orders)
+	public function onOrderFilterOrders()
 	{
 		$app = JFactory::getApplication();
 		$db = JFactory::getDbo();
