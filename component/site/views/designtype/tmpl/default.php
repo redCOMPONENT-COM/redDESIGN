@@ -45,11 +45,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 						 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"
 						 alt="<?php echo $this->previewBackground->title;?>" />
 					<div id="progressBar"
-						 style="
-						 	padding-top: <?php echo (((int) $this->imageSize[1]) / 2); ?>px;
-						 	padding-bottom: <?php echo (((int) $this->imageSize[1]) / 2); ?>px;
-							display: none;;
-						 ">
+						 style="display: none;">
 						<div class="progress progress-striped active">
 							<div class="bar" style="width: 100%;"></div>
 						</div>
@@ -210,6 +206,9 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 		if(customizeOrNot == 1)
 		{
 			// Add the progress bar
+			var halfBackgroundHeight =  (akeeba.jQuery('#background').height() / 2);
+			akeeba.jQuery('#progressBar').css("padding-top", halfBackgroundHeight + 'px');
+			akeeba.jQuery('#progressBar').css("padding-bottom", halfBackgroundHeight + 'px');
 			akeeba.jQuery('#background').hide();
 			akeeba.jQuery('#progressBar').show();
 
@@ -249,8 +248,8 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 						akeeba.jQuery('#background').attr('src', json.image+"?"+d.getTime());
 						setTimeout(function() { akeeba.jQuery('#background').attr('alt', json.imageTitle); }, 3000);
 						// Remove the progress bar
-						akeeba.jQuery('#background').show();
 						akeeba.jQuery('#progressBar').hide();
+						akeeba.jQuery('#background').show();
 					}
 				},
 				error: function(errMsg) {
