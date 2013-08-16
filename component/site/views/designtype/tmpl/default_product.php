@@ -18,6 +18,7 @@ if ($tagPos != 0)
 	$this->item->description = $intro_description[0].$intro_description[1];
 }
 ?>
+
 <div class="row-fluid">
 	<div class="span8">
 		<div class="media">
@@ -44,4 +45,15 @@ if ($tagPos != 0)
 			</p>
 		</div>
 	</div>
+	<?php if (!empty($this->relatedDesigntypes)) : ?>
+	<div id="related-designtypes" class="span12">
+		<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_RELATED_DESIGNTYPES'); ?> |
+		<?php foreach ($this->relatedDesigntypes as $relatedDesigntype) : ?>
+			<a id="related-designtype<?php echo $relatedDesigntype->reddesign_designtype_id; ?>"
+			   href="<?php echo JRoute::_('index.php?option=com_reddesign&id=' . $relatedDesigntype->reddesign_designtype_id); ?>">
+				<?php echo $relatedDesigntype->title; ?>
+			</a> |
+		<?php endforeach; ?>
+	</div>
+	<?php endif; ?>
 </div>

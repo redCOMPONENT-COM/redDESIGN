@@ -43,7 +43,17 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 				<div id="background-container">
 					<img id="background"
 						 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"
-						 alt="<?php echo $this->previewBackground->title;?>"/>
+						 alt="<?php echo $this->previewBackground->title;?>" />
+					<div id="progressBar"
+						 style="
+						 	padding-top: <?php echo (((int) $this->imageSize[1]) / 2); ?>px;
+						 	padding-bottom: <?php echo (((int) $this->imageSize[1]) / 2); ?>px;
+							display: none;;
+						 ">
+						<div class="progress progress-striped active">
+							<div class="bar" style="width: 100%;"></div>
+						</div>
+					</div>
 				</div>
 				<div class="customize-it-btn">
 					<?php if (!empty($this->productionBackgroundAreas) && ($this->params->get('autoCustomize', 1) == 0 || $this->params->get('autoCustomize', 1) == 2) ) : ?>
@@ -77,12 +87,6 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 			// Correct radio button selection.
 			akeeba.jQuery("#frame<?php echo $this->previewBackground->reddesign_background_id; ?>").attr('checked', 'checked');
 
-			// Prepare CSS for spinner.gif.
-			akeeba.jQuery('#background-container').css('width', <?php echo $this->imageSize[0]; ?>);
-			akeeba.jQuery('#background-container').css('height', <?php echo $this->imageSize[1]; ?>);
-			backgroundContainerWidth = <?php echo $this->imageSize[0]; ?>;
-			backgroundContainerHeight = <?php echo $this->imageSize[1]; ?>;
-
 			// Customize function.
 			akeeba.jQuery(document).on('click', '#customizeDesign',
 				function () {
@@ -94,10 +98,6 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 						},
 						3000
 					);
-
-					akeeba.jQuery('#background').attr('src', '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/images/spinner.gif'); ?>');
-					akeeba.jQuery('#background').css('margin-top', (backgroundContainerHeight / 2) - 31);
-					akeeba.jQuery('#background').css('margin-left', (backgroundContainerWidth / 2) - 31);
 
 					customize(1);
 				}
@@ -180,8 +180,17 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	 * @param button Determines whether the call comes from "Customize it!" button or not.
 	 */
 	function customize(button) {
+
 		var customizeOrNot = 0;
 		var autoCustomizeParam = <?php echo $this->params->get('autoCustomize', 1); ?>;
+
+		<?php
+		/*
+		 * 0 when customize function is called from an element different than button (textbox, font dropdown etc.)
+		 * 1 when customize function is called from the button
+		 * 3 when customize function is called from frames selection radio button
+		 */
+		?>
 
 		// Turn off or on customization according to the settings in config.xml.
 		if((button == 1 && autoCustomizeParam == 0) || (button == 1 && autoCustomizeParam == 2))
@@ -200,6 +209,10 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 
 		if(customizeOrNot == 1)
 		{
+			// Add the progress bar
+			akeeba.jQuery('#background').hide();
+			akeeba.jQuery('#progressBar').show();
+
 			var reddesign_designtype_id = akeeba.jQuery('#reddesign_designtype_id').val();
 			var reddesign_background_id = akeeba.jQuery('#reddesign_background_id').val();
 			var design = {
@@ -232,16 +245,12 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 					{
 						var json = akeeba.jQuery.parseJSON(data);
 						d = new Date();
-						akeeba.jQuery('#background-container').css('width', json.imageWidth);
-						akeeba.jQuery('#background-container').css('height', json.imageHeight);
-						akeeba.jQuery('#background').attr('alt', '');
-						akeeba.jQuery('#background').attr('src', '');
-						akeeba.jQuery('#background').css('margin-top', 0);
-						akeeba.jQuery('#background').css('margin-left', 0);
+						
 						akeeba.jQuery('#background').attr('src', json.image+"?"+d.getTime());
 						setTimeout(function() { akeeba.jQuery('#background').attr('alt', json.imageTitle); }, 3000);
-						backgroundContainerWidth = json.imageWidth;
-						backgroundContainerHeight = json.imageHeight;
+						// Remove the progress bar
+						akeeba.jQuery('#background').show();
+						akeeba.jQuery('#progressBar').hide();
 					}
 				},
 				error: function(errMsg) {
