@@ -268,20 +268,76 @@ class PlgReddesignRedshop extends JPlugin
 			$offsetLeft = $pdfLeftMargin + $offsetLeft;
 			$offsetTop = $offsetTop + $pdfTopMargin;
 
-			$epsText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $area->fontSize . "  scalefont setfont\n";
-			$epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $area->fontSize . "  scalefont setfont\n";
-			$epsText .= "\n0 0 0 setrgbcolor";
-			$epsText .= "\ngsave\n";
+			if ($data['designType']->fontsizer == 'auto')
+			{
+				$AutoSizeData = $session->get('AutoSizeData');
 
-			$epsAreaText .= "\n $offsetLeft $offsetTop moveto";
-			$epsAreaText .= "\n (" . $area->textArea . ") true charpath ";
+				if ($AutoSizeData['FontSize'])
+				{
+					$fontSize = $AutoSizeData['FontSize'];
+				}
 
-			$epsAreaText .= "\n fill";
-			$epsAreaText .= "\n showpage";
+				$noOfLines = count($AutoSizeData['perLineCharArr']);
 
-			$epsText .= "\n $offsetLeft $offsetTop moveto";
-			$epsText .= "\n (" . $area->textArea . ")";
-			$epsText .= "\n show";
+				$bottomoffset = $imageHeight - $this->areaItem->y2_pos + 28.35;
+
+				$maxHeight = $AutoSizeData['maxHeight'];
+				$offsetOverallArea = (($this->areaItem->height - ($fontSize * $maxHeight * $noOfLines)) / 2);
+				$offsetOverallArea = $offsetOverallArea + $bottomoffset;
+
+				$offsetLeft = $this->areaItem->x1_pos + 28.35 + ($this->areaItem->width / 2);
+
+				for ($h = 0;$h < $noOfLines;$h++)
+				{
+					if ($noOfLines == 1)
+					{
+						$offsetTop = ($temp) + 28.35 + $AutoSizeData['PDFoffsetTop'];
+					}
+					else
+					{
+						$gap = 1;
+
+						if ($noOfLines > 3)
+							$gap = ($fontSize * 1.1) / ($noOfLines - 1);
+
+						$gap = $gap / 2;
+
+						$offsetTop = $offsetOverallArea - $gap + ($fontSize * $maxHeight * (($noOfLines - 1) - $h)) * 1.1;
+					}
+
+					$epsText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $fontSize . "  scalefont setfont\n";
+					$epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $fontSize . "  scalefont setfont\n";
+
+					$epsText .= "\n0 0 0 setrgbcolor";
+					$epsText .= "\ngsave\n";
+
+					$epsAreaText .= "\n $offsetLeft $offsetTop moveto";
+					$epsAreaText .= "\n (" . $AutoSizeData['perLineCharArr'][$h] . ") dup stringwidth pop 2 div neg 0 rmoveto true charpath ";
+					$epsAreaText .= "\n fill";
+					$epsAreaText .= "\n showpage";
+
+					$epsText .= "\n $offsetLeft $offsetTop moveto";
+					$epsText .= "\n (" . $AutoSizeData['perLineCharArr'][$h] . ")";
+					$epsText .= "\n cshow";
+				}
+			}
+			else
+			{
+				$epsText .= $epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $area->fontSize . "  scalefont setfont\n";
+
+				$epsText .= "\n0 0 0 setrgbcolor";
+				$epsText .= "\ngsave\n";
+
+				$epsAreaText .= "\n $offsetLeft $offsetTop moveto";
+				$epsAreaText .= "\n (" . $area->textArea . ") true charpath ";
+
+				$epsAreaText .= "\n fill";
+				$epsAreaText .= "\n showpage";
+
+				$epsText .= "\n $offsetLeft $offsetTop moveto";
+				$epsText .= "\n (" . $area->textArea . ")";
+				$epsText .= "\n cshow";
+			}
 		}
 
 		$epsText .= "\ngrestore\n";

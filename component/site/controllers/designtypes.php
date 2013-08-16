@@ -349,6 +349,28 @@ class ReddesignControllerDesigntypes extends FOFController
 
 			$diff = $totalHeight - $charArr->height;
 
+			$PDFoffsetTop = 0;
+
+			$PDFoffsetTop = (($canvasHeight - ($fontSize * $maxHeight)) / 2) * 1.2;
+
+			if (in_array('3', $typoArr) || in_array('4', $typoArr))
+			{
+				$PDFoffsetTop = $PDFoffsetTop + ($fontSize * $fontDetailArr->default_baseline_height * 0.5);
+			}
+
+			$diff = ($totalHeight - $maxHeight) / 2;
+
+			$session = JFactory::getSession();
+
+			$PDFData = array();
+
+			$PDFData['FontSize'] = $fontSize;
+			$PDFData['PDFoffsetTop'] = $PDFoffsetTop;
+			$PDFData['perLineCharArr'] = $perLineChar;
+			$PDFData['maxHeight'] = $maxHeight;
+
+			$session->set('AutoSizeData', $PDFData);
+
 			return array('FontSize' => $fontSize, 'Offset' => $offsetTop);
 	}
 

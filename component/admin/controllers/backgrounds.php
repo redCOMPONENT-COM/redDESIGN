@@ -361,14 +361,7 @@ class ReddesignControllerBackgrounds extends FOFController
 
 		$dimensions = $im->getImageGeometry();
 
-		if ($best_fit && ($dimensions['width'] < $max_thumb_width || $dimensions['height'] < $max_thumb_height))
-		{
-			$im->thumbnailImage($max_thumb_width, $max_thumb_height, true);
-		}
-		elseif ($dimensions['width'] > $max_thumb_width || $dimensions['height'] > $max_thumb_height)
-		{
-			$im->thumbnailImage($max_thumb_width, $max_thumb_height, true);
-		}
+		$im->thumbnailImage($dimensions['width'], $dimensions['height'], true);
 
 		// Convert to jpg
 		$im->setCompression(Imagick::COMPRESSION_JPEG);
