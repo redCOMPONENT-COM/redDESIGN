@@ -288,10 +288,19 @@ class ReddesignControllerDesigntypes extends FOFController
 
 				$db->setQuery($query);
 				$width 		= $width + $db->loadResult();
-
 			}
 
 			$avgWidth = $width / count($char);
+
+			if ($avgWidth == 0)
+			{
+				$avgWidth = $fontDetailArr->default_width;
+			}
+
+			if ($maxHeight == 0)
+			{
+				$maxHeight = $fontDetailArr->default_height;
+			}
 
 			$typoArr = explode(',', $charArr->typography);
 
