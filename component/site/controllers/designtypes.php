@@ -58,6 +58,8 @@ class ReddesignControllerDesigntypes extends FOFController
 	 */
 	public function ajaxGetDesign()
 	{
+		JSession::checkToken('get') or jexit('Invalid Token');
+
 		// Initialize session
 		$session 			= JFactory::getSession();
 
@@ -186,7 +188,7 @@ class ReddesignControllerDesigntypes extends FOFController
 		// Create session to store Image
 		$session->set('customizedImage', $mangledname);
 		$response['image'] = JURI::base() . 'media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
-
+		$response['imageTitle'] = $this->background->title;
 		$imageSize = getimagesize(JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg');
 		$response['imageWidth'] = $imageSize[0];
 		$response['imageHeight'] = $imageSize[1];
@@ -225,27 +227,30 @@ class ReddesignControllerDesigntypes extends FOFController
 		$design = new JRegistry;
 		$design->loadString($this->input->getString('designAreas', ''), 'JSON');
 		$design = $design->get('Design');
-		$data['desingAreas'] = $design->areas;
+		$data['designAreas'] = $design->areas;
 
 		// Get desingAccessories
-		$desingAccessories = array();
+		$designAccessories = array();
 
 		foreach ($design->accessories as $accessoryId)
 		{
 			$accessoryModel = FOFModel::getTmpInstance('Accessory', 'ReddesignModel');
 			$accessory = $accessoryModel->getItem($accessoryId->id);
-			$desingAccessories[] = $accessory;
+			$designAccessories[] = $accessory;
 		}
 
-		$data['desingAccessories'] = $desingAccessories;
+		$data['designAccessories'] = $designAccessories;
 
 		$results = $dispatcher->trigger('onOrderButtonClick', array($data));
 
-		if ($results)
+		if ($results[0])
 		{
 			$link = JRoute::_('index.php?option=com_redshop&view=cart', false);
 			$app->Redirect($link);
 		}
+
+		$link = JRoute::_('index.php?option=com_reddesign&view=designtype&id=' . $designTypeId, false);
+		$app->Redirect($link);
 	}
 
 	/**
