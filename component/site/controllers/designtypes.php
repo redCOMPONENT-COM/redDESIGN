@@ -135,47 +135,44 @@ class ReddesignControllerDesigntypes extends FOFController
 			$this->areaItem = $areaModel->getItem($area->id);
 
 			// If we need autosize text than take different approach than solution for regular text.
-			if (!empty($area->fontSize))
+			if (empty($area->fontSize))
 			{
-				// Create an area image.
-				$areaImage->newImage($this->areaItem->width, $this->areaItem->height, new ImagickPixel('none'));
+				$returnArr = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $this->fontType, $this->areaItem->height, $this->areaItem->width);
+				$area->fontSize = $returnArr['FontSize'];
+				$this->areaItem->textalign = 3;
+			}
 
-				// Set color and font.
-				$areaDraw->setFillColor('#' . $area->fontColor);
-				$areaDraw->setFont($fontTypeFileLocation);
-				$areaDraw->setFontSize($area->fontSize);
+			// Create an area image.
+			$areaImage->newImage($this->areaItem->width, $this->areaItem->height, new ImagickPixel('none'));
 
-				/*
-				 * Text alingment condition:
-				 * 1 is left,
-				 * 2 is right,
-				 * 3 is center.
-				 */
-				if ((int) $this->areaItem->textalign == 1)
-				{
-					$areaDraw->setGravity(Imagick::GRAVITY_WEST);
-				}
-				elseif ((int) $this->areaItem->textalign == 2)
-				{
-					$areaDraw->setGravity(Imagick::GRAVITY_EAST);
-				}
-				else
-				{
-					$areaDraw->setGravity(Imagick::GRAVITY_CENTER);
-				}
+			// Set color and font.
+			$areaDraw->setFillColor('#' . $area->fontColor);
+			$areaDraw->setFont($fontTypeFileLocation);
 
-				// Add text to the area image.
-				$areaImage->annotateImage($areaDraw, 0, 0, 0, $area->textArea);
+			// End Auto size.
+			$areaDraw->setFontSize($area->fontSize);
+
+			/*
+			 * Text alingment condition:
+			 * 1 is left,
+			 * 2 is right,
+			 * 3 is center.
+			 */
+			if ((int) $this->areaItem->textalign == 1)
+			{
+				$areaDraw->setGravity(Imagick::GRAVITY_WEST);
+			}
+			elseif ((int) $this->areaItem->textalign == 2)
+			{
+				$areaDraw->setGravity(Imagick::GRAVITY_EAST);
 			}
 			else
 			{
-				// Creating auto-sized text.
-				$areaImage->setBackgroundColor(new ImagickPixel('none'));
-				$areaImage->setFont($fontTypeFileLocation);
-				$areaImage->setGravity(Imagick::GRAVITY_CENTER);
-				$areaImage->newPseudoImage($this->areaItem->width, $this->areaItem->height, "caption:" . $area->textArea);
-				$areaImage->colorizeImage('#' . $area->fontColor, 0.0);
+				$areaDraw->setGravity(Imagick::GRAVITY_CENTER);
 			}
+
+			// Add text to the area image.
+			$areaImage->annotateImage($areaDraw, 0, 0, 0, $area->textArea);
 
 			// Add area image on top of background image.
 			$newImage->compositeImage($areaImage, Imagick::COMPOSITE_DEFAULT, $this->areaItem->x1_pos, $this->areaItem->y1_pos);
@@ -191,9 +188,7 @@ class ReddesignControllerDesigntypes extends FOFController
 		// Create session to store Image
 		$session->set('customizedImage', $mangledname);
 		$response['image'] = JURI::base() . 'media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
-
 		$response['imageTitle'] = $this->background->title;
-
 		$imageSize = getimagesize(JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg');
 		$response['imageWidth'] = $imageSize[0];
 		$response['imageHeight'] = $imageSize[1];
@@ -234,7 +229,7 @@ class ReddesignControllerDesigntypes extends FOFController
 		$design = $design->get('Design');
 		$data['designAreas'] = $design->areas;
 
-		// Get designAccessories
+		// Get desingAccessories
 		$designAccessories = array();
 
 		foreach ($design->accessories as $accessoryId)
@@ -256,5 +251,168 @@ class ReddesignControllerDesigntypes extends FOFController
 
 		$link = JRoute::_('index.php?option=com_reddesign&view=designtype&id=' . $designTypeId, false);
 		$app->Redirect($link);
+	}
+
+	/**
+	 *	Calculates Font size and Offset when Auto-size is on.
+	 *
+	 * @return array of Font Size and Offset respectively
+	 *
+	 * @access public
+	 */
+	public function getFontSizeOnCharsBase($fontId, $enteredChars, $fontDetailArr, $canvasHeight, $canvasWidth)
+	{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+
+			$char = str_split(mb_convert_encoding(urldecode($enteredChars), "ISO-8859-1", "UTF-8"));
+
+			// Select character settings for a given font.
+			$query
+				->select('max(chars.height) as height, group_concat(typography separator ", ") as typography, typography_height')
+				->from('#__reddesign_chars as chars')
+				->where('chars.reddesign_font_id = ' . $fontId . ' and chars.font_char in("' . implode('","', $char) . '")')
+				->order('chars.reddesign_char_id ASC');
+
+			// Reset the query using our newly populated query object.
+			$db->setQuery($query);
+
+			// Load the results as a list of stdClass objects.
+			$charArr = $db->loadObject();
+			$maxHeight = $charArr->height;
+
+			$width = 0;
+
+			for ($i = 0;$i < count($char);$i++)
+			{
+				$query = $db->getQuery(true);
+				$query
+					->select('chars.width')
+					->from('#__reddesign_chars as chars')
+					->where('binary chars.font_char = "' . $char[$i] . '" AND chars.reddesign_font_id = "' . $fontId . '" ');
+
+				$db->setQuery($query);
+				$width 		= $width + $db->loadResult();
+			}
+
+			$avgWidth = $width / count($char);
+
+			if ($avgWidth == 0)
+			{
+				$avgWidth = $fontDetailArr->default_width;
+			}
+
+			if ($maxHeight == 0)
+			{
+				$maxHeight = $fontDetailArr->default_height;
+			}
+
+			$typoArr = explode(',', $charArr->typography);
+
+			if (in_array('2', $typoArr) && in_array('3', $typoArr) && !in_array(4, $typoArr))
+			{
+				$maxHeight = $maxHeight + $fontDetailArr->default_caps_height;
+			}
+
+			$perLineChar = explode("\n", $enteredChars);
+
+			// @to-do take it from area table.....
+			$maxCharsInSingleLine = max(array_map('strlen', $perLineChar));
+
+			// @to-do take it from area table..
+			$lineCount = count($perLineChar);
+
+			$fontSize = $this->calculateFontSize($maxCharsInSingleLine, $avgWidth, $maxHeight, $lineCount, $canvasHeight, $canvasWidth);
+
+			$totalHeight = $fontDetailArr->default_height + $charArr->typography_height + $fontDetailArr->default_caps_height + $fontDetailArr->default_baseline_height;
+
+			$offsetTop = 0;
+
+			if (in_array('2', $typoArr) && in_array('3', $typoArr) && !in_array('4', $typoArr))
+			{
+				$difference = $totalHeight - $charArr->height - $fontDetailArr->default_caps_height;
+				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
+				$offsetTop = "-" . $offsetTop;
+			}
+			elseif (in_array('3', $typoArr) || in_array('4', $typoArr))
+			{
+				$difference = $totalHeight - ($charArr->height);
+				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
+				$offsetTop = "-" . $offsetTop;
+			}
+			elseif (in_array('2', $typoArr))
+			{
+				$difference = $totalHeight - ( $charArr->height + $fontDetailArr->default_baseline_height);
+				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
+				$offsetTop = "+" . $offsetTop;
+			}else
+			{
+				$difference = $totalHeight - ( $charArr->height + $fontDetailArr->default_baseline_height );
+				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
+				$offsetTop = "-" . $offsetTop;
+			}
+
+			$diff = $totalHeight - $charArr->height;
+
+			$PDFoffsetTop = 0;
+
+			$PDFoffsetTop = (($canvasHeight - ($fontSize * $maxHeight)) / 2) * 1.2;
+
+			if (in_array('3', $typoArr) || in_array('4', $typoArr))
+			{
+				$PDFoffsetTop = $PDFoffsetTop + ($fontSize * $fontDetailArr->default_baseline_height * 0.5);
+			}
+
+			$diff = ($totalHeight - $maxHeight) / 2;
+
+			$session = JFactory::getSession();
+
+			$PDFData = array();
+
+			$PDFData['FontSize'] = $fontSize;
+			$PDFData['PDFoffsetTop'] = $PDFoffsetTop;
+			$PDFData['perLineCharArr'] = $perLineChar;
+			$PDFData['maxHeight'] = $maxHeight;
+
+			$session->set('AutoSizeData', $PDFData);
+
+			return array('FontSize' => $fontSize, 'Offset' => $offsetTop);
+	}
+
+	/**
+	 *	Calculates Font size When Auto-size is on.
+	 *
+	 * @return Intiger
+	 *
+	 * @access public
+	 */
+
+	function calculateFontSize($maxCharsInSingleLine=3, $fontW= 0.5366667, $fontH= 0.77, $lineCount=1, $canvasHeight=504, $canvasWidth=324)
+	{
+		// To find the font size for particular one line, need to divide it by number of lines.
+		$canvasEffectiveHeight = $canvasHeight / $lineCount;
+		$FontSizeByHeightMax = $canvasEffectiveHeight / $fontH;
+		$FontSizeByWidthMax = $canvasWidth / (($fontW) * $maxCharsInSingleLine);
+
+		/*
+		* Mid-Height (eg. char "a,s,u")
+		* Cap-Height (eg. char "b,B,X")
+		* Base-Height (eg. char "j,q,y")
+		*/
+
+		$finalFontSize = 0;
+
+		if ($FontSizeByWidthMax > $FontSizeByHeightMax)
+		{
+			$finalFontSize = $FontSizeByHeightMax;
+			$finalFontSize = $finalFontSize / 1.1;
+		}
+		else
+		{
+			$finalFontSize = $FontSizeByWidthMax;
+			$finalFontSize = $finalFontSize / 1.2;
+		}
+
+		return $finalFontSize;
 	}
 }
