@@ -291,14 +291,16 @@ class PlgReddesignRedshop extends JPlugin
 				{
 					if ($noOfLines == 1)
 					{
-						$offsetTop = ($temp) + 28.35 + $AutoSizeData['PDFoffsetTop'];
+						$offsetTop = 28.35 + $AutoSizeData['PDFoffsetTop'];
 					}
 					else
 					{
 						$gap = 1;
 
 						if ($noOfLines > 3)
+						{
 							$gap = ($fontSize * 1.1) / ($noOfLines - 1);
+						}
 
 						$gap = $gap / 2;
 
