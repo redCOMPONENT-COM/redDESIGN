@@ -61,7 +61,7 @@ class ReddesignControllerDesigntypes extends FOFController
 		JSession::checkToken('get') or jexit('Invalid Token');
 
 		// Initialize session
-		$session 			= JFactory::getSession();
+		$session = JFactory::getSession();
 
 		// Get design Data
 		$design = new JRegistry;

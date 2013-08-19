@@ -35,50 +35,66 @@ JHTML::_('behavior.framework');
 		<tbody>
 		<?php if ($count = count($this->orders)) : ?>
 			<?php
-			$i = -1;
-			$m = 1;
+				$i = -1;
+				$m = 1;
 			?>
 			<?php foreach ($this->orders as $order) : ?>
 				<?php
-				$i++;
-				$m = 1 - $m;
+					$i++;
+					$m = 1 - $m;
 				?>
+
 				<tr class="<?php echo 'row' . $m; ?>">
+
 					<td>
 						<?php echo $order->reddesign_order_id; ?>
 					</td>
+
 					<td>
 						<a href="index.php?option=com_redshop&view=order_detail&task=edit&cid[]=<?php echo $order->redshop_order_id;?>">
 							<?php echo $order->redshop_order_id; ?>
 						</a>
 					</td>
+
 					<td>
 						<?php echo $order->order_status; ?>
 					</td>
+
 					<td align="left">
-							<?php $productNumbers= explode(",", $order->redshop_product_number);
-								  foreach($productNumbers as $productNumber): ?>
-										<div>
-											<a href="index.php?option=com_redshop&view=product_detail&task=edit&cid[]=<?php echo $order->redshop_product_id ?>">
-												<?php echo $productNumber; ?>
-											</a>
-										</div>
-							<?php endforeach; ?>
+						<?php
+							$productIds = explode(",", $order->redshop_product_id);
+							$productNumbers = explode(",", $order->redshop_product_number);
+
+							for ($i = 0; $i < count($productIds); $i++)
+							{
+						?>
+								<div>
+									<a href="index.php?option=com_redshop&view=product_detail&task=edit&cid[]=<?php echo $productIds[$i]; ?>">
+										<?php echo $productNumbers[$i]; ?>
+									</a>
+								</div>
+						<?php
+							}
+						?>
 					</td>
+
 					<td align="left">
-						<?php $productionFiles= explode(",", $order->reddesign_productionfile);
-							  foreach($productionFiles as $productionFile): ?>
-									<div>
-										<a target="_blank" href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $productionFile); ?>">
-											<?php echo JText::_('COM_REDDESIGN_ORDERS_PRODUCTIONFILE'); ?>
-										</a>
-									</div>
+						<?php foreach ($productIds as $productId) : ?>
+								<div>
+									<button class="btn btn-mini" onclick="createProductionFile(<?php echo $productId; ?>);">
+										<span><?php echo JText::_('COM_REDDESIGN_ORDERS_CREATE_PRODUCTION_FILE'); ?></span>
+									</button>
+								</div>
+								<div id="pdf-link<?php echo $productId; ?>">
+								</div>
 						<?php endforeach; ?>
 					</td>
 
 				</tr>
+
 				<tr class="hide">
 				</tr>
+
 			<?php endforeach ?>
 		<?php else : ?>
 			<tr>
@@ -90,3 +106,24 @@ JHTML::_('behavior.framework');
 		</tbody>
 	</table>
 </div>
+
+<script type="text/javascript">
+	/**
+	 * Creates a production file and opens it.
+	 *
+	 * @return void
+	 */
+	function createProductionFile(productId) {
+		akeeba.jQuery.ajax({
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=order&task=createProductionFile&format=raw&<?php echo JFactory::getSession()->getFormToken(); ?>=1",
+			data: { productId : productId },
+			type: "post",
+			success: function(data) {
+				akeeba.jQuery("#pdf-link" + productId).html(data);
+			},
+			error: function(errMsg) {
+				alert(errMsg);
+			}
+		});
+	}
+</script>
