@@ -205,9 +205,10 @@ class ReddesignControllerDesigntypes extends FOFController
 	 */
 	public function orderProduct()
 	{
-		$app    = JFactory::getApplication();
 		JPluginHelper::importPlugin('reddesign');
 		$dispatcher = JDispatcher::getInstance();
+		$app = JFactory::getApplication();
+		$session = JFactory::getSession();
 
 		// Get design type data.
 		$designTypeId    = $this->input->getInt('reddesign_designtype_id', null);
@@ -240,6 +241,8 @@ class ReddesignControllerDesigntypes extends FOFController
 		}
 
 		$data['designAccessories'] = $designAccessories;
+
+		$data['autoSizeData'] = $session->get('AutoSizeData');
 
 		$results = $dispatcher->trigger('onOrderButtonClick', array($data));
 

@@ -65,9 +65,8 @@ class ReddesignViewAccessory extends FOFViewHtml
 		);
 
 		// Check to ensure that the e-commerce and redDESING have same currency (symbol)
-		$dispatcher	= JDispatcher::getInstance();
-
 		JPluginHelper::importPlugin('reddesign');
+		$dispatcher	= JDispatcher::getInstance();
 		$result = $dispatcher->trigger('onDesigntypeDisplayCheckCurrency');
 
 		if ($result[0]['wrongCurrency'])

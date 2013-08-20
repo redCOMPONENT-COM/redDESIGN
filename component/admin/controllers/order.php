@@ -28,22 +28,30 @@ class ReddesignControllerOrder extends FOFController
 		JSession::checkToken('get') or jexit('Invalid Token');
 
 		$productId = $this->input->getInt('productId', null);
-		$pdfFileName = '0';
+		$productionFileName = $this->input->getInt('productionFileName', '0');
 
 		if (!empty($productId))
 		{
 			// Get JSON about design type from product record. It is previously saved by a plugin.
+			JPluginHelper::importPlugin('reddesign');
 			$dispatcher = JDispatcher::getInstance();
-			$data = $dispatcher->trigger('getDesigntypeJSON', $productId);
-			$data = json_decode($data);
+			$data = $dispatcher->trigger('getDesigntypeJSON', array($productId));
+			$data = json_decode($data[0], true);
 
 			if (!empty($data))
 			{
-				$pdfFileName = $this->createPdfProductfile($data);
+				if (!JFile::exists(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/pdf/' . $productionFileName))
+				{
+					$data['productionFileName'] = $productionFileName;
+
+					$this->createPdfProductionFile($data);
+				}
+
+				$productionFileName = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $productionFileName);
 			}
 		}
 
-		echo $pdfFileName;
+		echo $productionFileName;
 	}
 
 	/**
@@ -51,19 +59,18 @@ class ReddesignControllerOrder extends FOFController
 	 *
 	 * @param   array  $data  An array that holds design information
 	 *
-	 * @return bool
+	 * @return  void
 	 */
-	public function createPdfProductfile($data)
+	public function createPdfProductionFile($data)
 	{
-		$session = JFactory::getSession();
-		$productionFileName = $session->get('customizedImage');
+		$productionFileName = $data['productionFileName'];
 
 		$areas = $data['designAreas'];
 		$epsText = '';
 		$epsAreaText = '';
 		$epsTextFile = '';
 
-		$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']->eps_file;
+		$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']['eps_file'];
 		$pdfFilePath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/pdf/';
 		$epsFilePath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/eps/';
 
@@ -82,59 +89,60 @@ class ReddesignControllerOrder extends FOFController
 			if ($area->fontTypeId)
 			{
 				$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area->id);
-				$this->fontType = $fontModel->getItem($area->fontTypeId);
-				$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $this->fontType->font_file;
+				$fontType = $fontModel->getItem($area->fontTypeId);
+				$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $fontType->font_file;
 			}
 			else
 			{
 				$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/arial.ttf';
 			}
 
-			$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($data['designBackground']->reddesign_background_id);
-			$this->areaItem = $areaModel->getItem($area->id);
+			$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($data['designBackground']['reddesign_background_id']);
+			$areaItem = $areaModel->getItem($area->id);
 
-			if ((int) $this->areaItem->textalign == 1)
+			if ((int) $areaItem->textalign == 1)
 			{
-				$offsetLeft = $this->areaItem->x1_pos;
+				$offsetLeft = $areaItem->x1_pos;
 			}
-			elseif ((int) $this->areaItem->textalign == 2)
+			elseif ((int) $areaItem->textalign == 2)
 			{
-				$offsetLeft = $this->areaItem->x2_pos - ($this->areaItem->width / 2);
+				$offsetLeft = $areaItem->x2_pos - ($areaItem->width / 2);
 			}
 			else
 			{
-				$offsetLeft = $this->areaItem->x1_pos + ($this->areaItem->width / 4);
+				$offsetLeft = $areaItem->x1_pos + ($areaItem->width / 4);
 			}
 
-			$offsetTop = $imageHeight - $this->areaItem->y2_pos;
+			$offsetTop = $imageHeight - $areaItem->y2_pos;
 
 			$offsetLeft = $pdfLeftMargin + $offsetLeft;
 			$offsetTop = $offsetTop + $pdfTopMargin;
 
-			if ($data['designType']->fontsizer == 'auto')
+			if ($data['designType']['fontsizer'] == 'auto')
 			{
-				$AutoSizeData = $session->get('AutoSizeData');
+				$autoSizeData = $data['autoSizeData'];
+				$fontSize = 0;
 
-				if ($AutoSizeData['FontSize'])
+				if ($autoSizeData['FontSize'])
 				{
-					$fontSize = $AutoSizeData['FontSize'];
+					$fontSize = $autoSizeData['FontSize'];
 				}
 
-				$noOfLines = count($AutoSizeData['perLineCharArr']);
+				$noOfLines = count($autoSizeData['perLineCharArr']);
 
-				$bottomoffset = $imageHeight - $this->areaItem->y2_pos + 28.35;
+				$bottomoffset = $imageHeight - $areaItem->y2_pos + 28.35;
 
-				$maxHeight = $AutoSizeData['maxHeight'];
-				$offsetOverallArea = (($this->areaItem->height - ($fontSize * $maxHeight * $noOfLines)) / 2);
+				$maxHeight = $autoSizeData['maxHeight'];
+				$offsetOverallArea = (($areaItem->height - ($fontSize * $maxHeight * $noOfLines)) / 2);
 				$offsetOverallArea = $offsetOverallArea + $bottomoffset;
 
-				$offsetLeft = $this->areaItem->x1_pos + 28.35 + ($this->areaItem->width / 2);
+				$offsetLeft = $areaItem->x1_pos + 28.35 + ($areaItem->width / 2);
 
 				for ($h = 0;$h < $noOfLines;$h++)
 				{
 					if ($noOfLines == 1)
 					{
-						$offsetTop = 28.35 + $AutoSizeData['PDFoffsetTop'];
+						$offsetTop = 28.35 + $autoSizeData['PDFoffsetTop'];
 					}
 					else
 					{
@@ -157,12 +165,12 @@ class ReddesignControllerOrder extends FOFController
 					$epsText .= "\ngsave\n";
 
 					$epsAreaText .= "\n $offsetLeft $offsetTop moveto";
-					$epsAreaText .= "\n (" . $AutoSizeData['perLineCharArr'][$h] . ") dup stringwidth pop 2 div neg 0 rmoveto true charpath ";
+					$epsAreaText .= "\n (" . $autoSizeData['perLineCharArr'][$h] . ") dup stringwidth pop 2 div neg 0 rmoveto true charpath ";
 					$epsAreaText .= "\n fill";
 					$epsAreaText .= "\n showpage";
 
 					$epsText .= "\n $offsetLeft $offsetTop moveto";
-					$epsText .= "\n (" . $AutoSizeData['perLineCharArr'][$h] . ")";
+					$epsText .= "\n (" . $autoSizeData['perLineCharArr'][$h] . ")";
 					$epsText .= "\n cshow";
 				}
 			}
@@ -190,11 +198,11 @@ class ReddesignControllerOrder extends FOFController
 		$tmpEpsFile = $epsFilePath . "tmp_" . $productionFileName . ".eps";
 		$tmpTextEpsFile = $epsFilePath . "tmptext_" . $productionFileName . ".eps";
 
-		$epsFileName = $epsFilePath . "reddesign" . $productionFileName . ".pdf";
+		$epsFileName = $epsFilePath . $productionFileName . ".pdf";
 
 		$tempFile = "%!PS";
-		$tempFile .= "\n%%Creator:reddesign";
-		$tempFile .= "\n%%Title:reddesign" . $productionFileName;
+		$tempFile .= "\n%%Creator:redDESIGN";
+		$tempFile .= "\n%%Title:" . $productionFileName;
 		$tempFile .= "\n%%LanguageLevel: 3";
 		$tempFile .= "\n%%DocumentData: Clean7Bit";
 		$tempFile .= "\n%%EndComments";
@@ -261,8 +269,8 @@ class ReddesignControllerOrder extends FOFController
 
 		$imageBound = $this->readBound($tmpBound);
 		$epsFile  = "%!PS-Adobe-3.1 EPSF-3.1";
-		$epsFile .= "\n%%Creator:reddesign";
-		$epsFile .= "\n%%Title:reddesign" . $productionFileName;
+		$epsFile .= "\n%%Creator:redDESIGN";
+		$epsFile .= "\n%%Title:" . $productionFileName;
 		$epsFile .= "\n%%LanguageLevel: 3";
 		$epsFile .= "\n%%DocumentData: Clean7Bit";
 		$epsFile .= "\n%%EndComments";
@@ -359,7 +367,7 @@ class ReddesignControllerOrder extends FOFController
 		// Create pdf ...
 		ob_clean();
 
-		$pdfFileName = $pdfFilePath . "reddesign" . $productionFileName . ".pdf";
+		$pdfFileName = $pdfFilePath . $productionFileName . ".pdf";
 		$cmd  = "gs -dBATCH -dNOPAUSE -dNOEPS -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
 		$cmd .= " -sOutputFile=$pdfFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]";
 		$cmd .= "  >> setpagedevice'  -f" . $tmpEpsFile;
@@ -389,8 +397,6 @@ class ReddesignControllerOrder extends FOFController
 		{
 			unlink($tmpBound);
 		}
-
-		return $pdfFileName;
 	}
 
 	/**

@@ -73,7 +73,34 @@ class PlgRedshop_ProductReddesign_Orders extends JPlugin
 			if (strstr($product->product_number, 'redDESIGN'))
 			{
 				$productionFile = pathinfo($product->product_full_image);
-				$productionFile = "reddesign" . $productionFile['filename'] . '.' . 'pdf';
+
+				// Create file name.
+				// Get a (very!) randomised name
+				if (version_compare(JVERSION, '3.0', 'ge'))
+				{
+					$serverkey = JFactory::getConfig()->get('secret', '');
+				}
+				else
+				{
+					$serverkey = JFactory::getConfig()->getValue('secret', '');
+				}
+
+				$sig = $productionFile['filename'] . microtime() . $serverkey;
+
+				if (function_exists('sha256'))
+				{
+					$productionFile = sha256($sig);
+				}
+				elseif (function_exists('sha1'))
+				{
+					$productionFile = sha1($sig);
+				}
+				else
+				{
+					$productionFile = md5($sig);
+				}
+
+				$productionFile = $productionFile . '.pdf';
 				$productIds[] = $orderProduct->product_id;
 				$productNumbers[] = $orderProduct->order_item_sku;
 				$productionFiles[] = $productionFile;

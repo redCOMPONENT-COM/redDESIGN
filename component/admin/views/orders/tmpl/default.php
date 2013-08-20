@@ -64,6 +64,7 @@ JHTML::_('behavior.framework');
 						<?php
 							$productIds = explode(",", $order->redshop_product_id);
 							$productNumbers = explode(",", $order->redshop_product_number);
+							$productionFiles = explode(",", $order->reddesign_productionfile);
 
 							for ($i = 0; $i < count($productIds); $i++)
 							{
@@ -79,15 +80,15 @@ JHTML::_('behavior.framework');
 					</td>
 
 					<td align="left">
-						<?php foreach ($productIds as $productId) : ?>
-								<div>
-									<button class="btn btn-mini" onclick="createProductionFile(<?php echo $productId; ?>);">
+						<?php for ($i = 0; $i < count($productIds); $i++) : ?>
+								<div class="span4">
+									<button class="btn btn-mini" onclick="createProductionFile(<?php echo $productIds[$i]; ?>, '<?php echo $productionFiles[$i]; ?>');">
 										<span><?php echo JText::_('COM_REDDESIGN_ORDERS_CREATE_PRODUCTION_FILE'); ?></span>
 									</button>
 								</div>
-								<div id="pdf-link<?php echo $productId; ?>">
+								<div id="pdf-link<?php echo $productIds[$i]; ?>">
 								</div>
-						<?php endforeach; ?>
+						<?php endfor; ?>
 					</td>
 
 				</tr>
@@ -113,13 +114,26 @@ JHTML::_('behavior.framework');
 	 *
 	 * @return void
 	 */
-	function createProductionFile(productId) {
+	function createProductionFile(productId, productionFileName) {
+		// Display loader GIF animation.
+		akeeba.jQuery("#pdf-link" + productId).html("<img src='<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/images/ajax-loader.gif'); ?>' alt='AJAX Request' />");
+
 		akeeba.jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=order&task=createProductionFile&format=raw&<?php echo JFactory::getSession()->getFormToken(); ?>=1",
-			data: { productId : productId },
+			data: {
+				productId: productId,
+				productionFileName: productionFileName
+			},
 			type: "post",
 			success: function(data) {
-				akeeba.jQuery("#pdf-link" + productId).html(data);
+				if(data != '0')
+				{
+					akeeba.jQuery("#pdf-link" + productId).html("<a href='" + data + "' target='_blank'><?php echo JText::_('COM_REDDESIGN_ORDERS_OPEN_PDF'); ?></a>");
+				}
+				else
+				{
+					akeeba.jQuery("#pdf-link" + productId).html("<?php echo JText::_('COM_REDDESIGN_ORDERS_CAN_NOT_CREATE_PRODUCTION_FILE'); ?>");
+				}
 			},
 			error: function(errMsg) {
 				alert(errMsg);
