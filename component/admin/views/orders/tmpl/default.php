@@ -15,20 +15,22 @@ JHTML::_('behavior.framework');
 	<table id="itemsList" class="table table-striped">
 		<thead>
 		<tr>
-			<th width="9%">
+			<th class="span1">
 				<?php echo JText::_('ID'); ?>
 			</th>
-			<th width="9%">
+			<th class="span1">
 				<?php echo JText::_('COM_REDDESIGN_ORDERS_REDSHOP_ORDER_ID'); ?>
 			</th>
-			<th>
+			<th class="span2">
 				<?php echo JText::_('COM_REDDESIGN_ORDERS_REDSHOP_ORDER_STATUS'); ?>
 			</th>
-			<th>
+			<th class="span3">
 				<?php echo JText::_('COM_REDDESIGN_ORDERS_REDSHOP_PRODUCT_NUMBER'); ?>
 			</th>
-			<th >
+			<th class="span2">
 				<?php echo JText::_('COM_REDDESIGN_ORDERS_PRODUCTIONFILE'); ?>
+			</th>
+			<th  class="span3">
 			</th>
 		</tr>
 		</thead>
@@ -46,21 +48,21 @@ JHTML::_('behavior.framework');
 
 				<tr class="<?php echo 'row' . $m; ?>">
 
-					<td>
+					<td class="span1">
 						<?php echo $order->reddesign_order_id; ?>
 					</td>
 
-					<td>
+					<td class="span1>
 						<a href="index.php?option=com_redshop&view=order_detail&task=edit&cid[]=<?php echo $order->redshop_order_id;?>">
 							<?php echo $order->redshop_order_id; ?>
 						</a>
 					</td>
 
-					<td>
+					<td class="span2">
 						<?php echo $order->order_status; ?>
 					</td>
 
-					<td align="left">
+					<td align="left" class="span3">
 						<?php
 							$productIds = explode(",", $order->redshop_product_id);
 							$productNumbers = explode(",", $order->redshop_product_number);
@@ -79,16 +81,21 @@ JHTML::_('behavior.framework');
 						?>
 					</td>
 
-					<td align="left">
+					<td class="span2">
 						<?php for ($i = 0; $i < count($productIds); $i++) : ?>
-								<div class="span4">
-									<button class="btn btn-mini" onclick="createProductionFile(<?php echo $productIds[$i]; ?>, '<?php echo $productionFiles[$i]; ?>');">
-										<span><?php echo JText::_('COM_REDDESIGN_ORDERS_CREATE_PRODUCTION_FILE'); ?></span>
-									</button>
-								</div>
-								<div id="pdf-link<?php echo $productIds[$i]; ?>">
-								</div>
+							<button class="btn btn-mini" onclick="createProductionFile(<?php echo $productIds[$i]; ?>, '<?php echo $productionFiles[$i]; ?>');">
+								<span><?php echo JText::_('COM_REDDESIGN_ORDERS_CREATE_PRODUCTION_FILE'); ?></span>
+							</button>
+							<br/><br/>
 						<?php endfor; ?>
+					</td>
+
+					<td class="span3">
+						<?php foreach ($productIds as $productId) : ?>
+							<div id="pdf-link<?php echo $productId; ?>">
+							</div>
+							<br/>
+						<?php endforeach; ?>
 					</td>
 
 				</tr>
