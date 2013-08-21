@@ -28,7 +28,7 @@ class ReddesignControllerOrder extends FOFController
 		JSession::checkToken('get') or jexit('Invalid Token');
 
 		$productId = $this->input->getInt('productId', null);
-		$productionFileName = $this->input->getInt('productionFileName', '0');
+		$productionFileName = $this->input->getString('productionFileName', '0');
 
 		if (!empty($productId))
 		{
@@ -71,25 +71,32 @@ class ReddesignControllerOrder extends FOFController
 		$epsTextFile = '';
 
 		$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']['eps_file'];
+		$previewFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']['image_path'];
 		$pdfFilePath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/pdf/';
 		$epsFilePath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/eps/';
 
-		// Read EPS
+		// Read EPS.
 		$im = new Imagick;
 		$im->readImage($epsFileLocation);
 		$dimensions = $im->getImageGeometry();
 		$imageWidth = $dimensions['width'];
 		$imageHeight = $dimensions['height'];
 
+		// Read preview size, for scaling.
+		$previewImageSize = getimagesize($previewFileLocation);
+
+		// Scaling ratio
+		$ratio = $previewImageSize[0] / $imageWidth;
+
 		$pdfLeftMargin = 28.35;
 		$pdfTopMargin = 28.35;
 
 		foreach ($areas as $area)
 		{
-			if ($area->fontTypeId)
+			if ($area['fontTypeId'])
 			{
-				$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area->id);
-				$fontType = $fontModel->getItem($area->fontTypeId);
+				$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area['id']);
+				$fontType = $fontModel->getItem($area['fontTypeId']);
 				$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $fontType->font_file;
 			}
 			else
@@ -98,7 +105,23 @@ class ReddesignControllerOrder extends FOFController
 			}
 
 			$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($data['designBackground']['reddesign_background_id']);
-			$areaItem = $areaModel->getItem($area->id);
+			$areaItem = $areaModel->getItem($area['id']);
+
+			/*
+			 * Scale back all used measures by using calculated ratio.
+			 * PHP_ROUND_HALF_DOWN is used because test show that measures are scaled in that way.
+			 */
+			$areaItem->width = round($areaItem->width / $ratio, 0, PHP_ROUND_HALF_DOWN);
+			$areaItem->height = round($areaItem->height / $ratio, 0, PHP_ROUND_HALF_DOWN);
+			$areaItem->x1_pos = round($areaItem->x1_pos / $ratio, 0, PHP_ROUND_HALF_DOWN);
+			$areaItem->y1_pos = round($areaItem->y1_pos / $ratio, 0, PHP_ROUND_HALF_DOWN);
+			$areaItem->x2_pos = round($areaItem->x2_pos / $ratio, 0, PHP_ROUND_HALF_DOWN);
+			$areaItem->y2_pos = round($areaItem->y2_pos / $ratio, 0, PHP_ROUND_HALF_DOWN);
+
+			/*
+			 * In the POSTSCRIPT default coordinate system, the origin is in the lower left hand corner of the current page.
+			 * As usual, x increases to the right. But, y increases upward!
+			 */
 
 			if ((int) $areaItem->textalign == 1)
 			{
@@ -113,36 +136,45 @@ class ReddesignControllerOrder extends FOFController
 				$offsetLeft = $areaItem->x1_pos + ($areaItem->width / 4);
 			}
 
-			$offsetTop = $imageHeight - $areaItem->y2_pos;
+			$offsetTop = ($imageHeight - $areaItem->y1_pos) + $pdfTopMargin;
+			$offsetLeft += $pdfLeftMargin;
 
-			$offsetLeft = $pdfLeftMargin + $offsetLeft;
-			$offsetTop = $offsetTop + $pdfTopMargin;
+			$rgbTextColorBuffer = $this->hex2RGB('#' . $area['fontColor']);
+			$rgbTextColor = round($rgbTextColorBuffer['red'] * (1 / 255), 2);
+			$rgbTextColor .= ' ';
+			$rgbTextColor .= round($rgbTextColorBuffer['green'] * (1 / 255), 2);
+			$rgbTextColor .= ' ';
+			$rgbTextColor .= round($rgbTextColorBuffer['blue'] * (1 / 255), 2);
 
 			if ($data['designType']['fontsizer'] == 'auto')
 			{
 				$autoSizeData = $data['autoSizeData'];
 				$fontSize = 0;
 
-				if ($autoSizeData['FontSize'])
+				if ($autoSizeData['fontSize'])
 				{
-					$fontSize = $autoSizeData['FontSize'];
+					$fontSize = $autoSizeData['fontSize'] / $ratio;
 				}
+
+				$autoSizeData['pdfOffsetTop'] = round($autoSizeData['pdfOffsetTop'] / 2, 0, PHP_ROUND_HALF_DOWN);
 
 				$noOfLines = count($autoSizeData['perLineCharArr']);
 
-				$bottomoffset = $imageHeight - $areaItem->y2_pos + 28.35;
+				$bottomoffset = $imageHeight - $areaItem->y2_pos + $pdfTopMargin;
 
 				$maxHeight = $autoSizeData['maxHeight'];
 				$offsetOverallArea = (($areaItem->height - ($fontSize * $maxHeight * $noOfLines)) / 2);
 				$offsetOverallArea = $offsetOverallArea + $bottomoffset;
 
-				$offsetLeft = $areaItem->x1_pos + 28.35 + ($areaItem->width / 2);
+				$offsetLeft = $areaItem->x1_pos + $pdfLeftMargin + ($areaItem->width / 2);
 
 				for ($h = 0;$h < $noOfLines;$h++)
 				{
 					if ($noOfLines == 1)
 					{
-						$offsetTop = 28.35 + $autoSizeData['PDFoffsetTop'];
+						// Because other parts of the algorithm doesn't respect em-square we have to take a constant like 0.15 (15%) of the font size
+						// because there is some empty space between chars and em-square's border.
+						$offsetTop = (($imageHeight - $areaItem->y2_pos) + $pdfTopMargin + ($areaItem->height / 2)) - (($fontSize / 2) - ($fontSize * 0.15));
 					}
 					else
 					{
@@ -161,8 +193,11 @@ class ReddesignControllerOrder extends FOFController
 					$epsText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $fontSize . "  scalefont setfont\n";
 					$epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $fontSize . "  scalefont setfont\n";
 
-					$epsText .= "\n0 0 0 setrgbcolor";
+					$epsText .= "\n$rgbTextColor setrgbcolor";
 					$epsText .= "\ngsave\n";
+
+					$epsAreaText .= "\n$rgbTextColor setrgbcolor";
+					$epsAreaText .= "\ngsave\n";
 
 					$epsAreaText .= "\n $offsetLeft $offsetTop moveto";
 					$epsAreaText .= "\n (" . $autoSizeData['perLineCharArr'][$h] . ") dup stringwidth pop 2 div neg 0 rmoveto true charpath ";
@@ -176,19 +211,24 @@ class ReddesignControllerOrder extends FOFController
 			}
 			else
 			{
-				$epsText .= $epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $area->fontSize . "  scalefont setfont\n";
+				$area['fontSize'] = round($area['fontSize'] / $ratio, 0);
 
-				$epsText .= "\n0 0 0 setrgbcolor";
+				$epsText .= $epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $area['fontSize'] . "  scalefont setfont\n";
+
+				$epsText .= "\n$rgbTextColor setrgbcolor";
 				$epsText .= "\ngsave\n";
 
+				$epsAreaText .= "\n$rgbTextColor setrgbcolor";
+				$epsAreaText .= "\ngsave\n";
+
 				$epsAreaText .= "\n $offsetLeft $offsetTop moveto";
-				$epsAreaText .= "\n (" . $area->textArea . ") true charpath ";
+				$epsAreaText .= "\n (" . $area['textArea'] . ") true charpath ";
 
 				$epsAreaText .= "\n fill";
 				$epsAreaText .= "\n showpage";
 
 				$epsText .= "\n $offsetLeft $offsetTop moveto";
-				$epsText .= "\n (" . $area->textArea . ")";
+				$epsText .= "\n (" . $area['textArea'] . ")";
 				$epsText .= "\n cshow";
 			}
 		}
@@ -430,5 +470,45 @@ class ReddesignControllerOrder extends FOFController
 		$boundingBox = explode(" ", trim($box[1]));
 
 		return $boundingBox;
+	}
+
+	/**
+	 * Convert a hexa decimal color code to its RGB equivalent
+	 *
+	 * @param   string   $hexStr          (hexadecimal color value)
+	 * @param   boolean  $returnAsString  (if set true, returns the value separated by the separator character. Otherwise returns associative array)
+	 * @param   string   $seperator       (to separate RGB values. Applicable only if second parameter is true.)
+	 *
+	 * @return array or string (depending on second parameter. Returns False if invalid hex color value)
+	 */
+	public function hex2RGB($hexStr, $returnAsString = false, $seperator = ',')
+	{
+		// Gets a proper hex string
+		$hexStr = preg_replace("/[^0-9A-Fa-f]/", '', $hexStr);
+		$rgbArray = array();
+
+		if (strlen($hexStr) == 6)
+		{
+			// If a proper hex code, convert using bitwise operation. No overhead... faster.
+			$colorVal = hexdec($hexStr);
+			$rgbArray['red'] = 0xFF & ($colorVal >> 0x10);
+			$rgbArray['green'] = 0xFF & ($colorVal >> 0x8);
+			$rgbArray['blue'] = 0xFF & $colorVal;
+		}
+		elseif (strlen($hexStr) == 3)
+		{
+			// If shorthand notation, need some string manipulations.
+			$rgbArray['red'] = hexdec(str_repeat(substr($hexStr, 0, 1), 2));
+			$rgbArray['green'] = hexdec(str_repeat(substr($hexStr, 1, 1), 2));
+			$rgbArray['blue'] = hexdec(str_repeat(substr($hexStr, 2, 1), 2));
+		}
+		else
+		{
+			// Invalid hex color code.
+			return false;
+		}
+
+		// Returns the rgb string or the associative array.
+		return $returnAsString ? implode($seperator, $rgbArray) : $rgbArray;
 	}
 }

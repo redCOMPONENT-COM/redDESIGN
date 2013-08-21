@@ -94,7 +94,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					$sizeOptions[] = JHTML::_('select.option', $value, $value);
 				endforeach;
 
-				echo JHTML::_('select.genericlist', $options, 'fontSize' . $area->reddesign_area_id, 'class="inputbox" onChange="customize(0);"', 'value', 'text', null);
+				echo JHTML::_('select.genericlist', $sizeOptions, 'fontSize' . $area->reddesign_area_id, 'class="inputbox" onChange="customize(0);"', 'value', 'text', null);
 				?>
 			<?php endif; ?>
 		</div>

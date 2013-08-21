@@ -71,7 +71,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	</div>
 </form>
 
-<script>
+<script type="text/javascript">
 	var backgroundContainerWidth;
 	var backgroundContainerHeight;
 

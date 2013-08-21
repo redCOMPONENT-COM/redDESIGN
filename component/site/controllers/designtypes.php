@@ -138,7 +138,7 @@ class ReddesignControllerDesigntypes extends FOFController
 			if (empty($area->fontSize))
 			{
 				$returnArr = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $this->fontType, $this->areaItem->height, $this->areaItem->width);
-				$area->fontSize = $returnArr['FontSize'];
+				$area->fontSize = $returnArr['fontSize'];
 				$this->areaItem->textalign = 3;
 			}
 
@@ -242,7 +242,7 @@ class ReddesignControllerDesigntypes extends FOFController
 
 		$data['designAccessories'] = $designAccessories;
 
-		$data['autoSizeData'] = $session->get('AutoSizeData');
+		$data['autoSizeData'] = $session->get('autoSizeData');
 
 		$results = $dispatcher->trigger('onOrderButtonClick', array($data));
 
@@ -374,14 +374,14 @@ class ReddesignControllerDesigntypes extends FOFController
 
 			$PDFData = array();
 
-			$PDFData['FontSize'] = $fontSize;
-			$PDFData['PDFoffsetTop'] = $PDFoffsetTop;
+			$PDFData['fontSize'] = $fontSize;
+			$PDFData['pdfOffsetTop'] = $PDFoffsetTop;
 			$PDFData['perLineCharArr'] = $perLineChar;
 			$PDFData['maxHeight'] = $maxHeight;
 
-			$session->set('AutoSizeData', $PDFData);
+			$session->set('autoSizeData', $PDFData);
 
-			return array('FontSize' => $fontSize, 'Offset' => $offsetTop);
+			return array('fontSize' => $fontSize, 'Offset' => $offsetTop);
 	}
 
 	/**
