@@ -18,6 +18,8 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 </h4>
 <?php foreach ($this->productionBackgroundAreas as $area) : ?>
 
+	<input id="textAlign<?php echo $area->reddesign_area_id; ?>" type="hidden" value="<?php echo $area->textalign; ?>" />
+
 	<div class="row-fluid">
 		<div class="span4">
 			<div class="control-group">
@@ -192,7 +194,8 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						"fontArea": akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
 						"fontColor": akeeba.jQuery('#colorCode<?php echo $area->reddesign_area_id; ?>').val(),
 						"fontSize": akeeba.jQuery('#fontSize<?php echo $area->reddesign_area_id; ?>').val(),
-						"fontTypeId": akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val()
+						"fontTypeId": akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
+						"textAlign": akeeba.jQuery('#textAlign<?php echo $area->reddesign_area_id; ?>').val()
 					});
 					<?php endforeach; ?>
 

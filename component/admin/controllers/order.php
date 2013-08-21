@@ -118,27 +118,6 @@ class ReddesignControllerOrder extends FOFController
 			$areaItem->x2_pos = round($areaItem->x2_pos / $ratio, 0, PHP_ROUND_HALF_DOWN);
 			$areaItem->y2_pos = round($areaItem->y2_pos / $ratio, 0, PHP_ROUND_HALF_DOWN);
 
-			/*
-			 * In the POSTSCRIPT default coordinate system, the origin is in the lower left hand corner of the current page.
-			 * As usual, x increases to the right. But, y increases upward!
-			 */
-
-			if ((int) $areaItem->textalign == 1)
-			{
-				$offsetLeft = $areaItem->x1_pos;
-			}
-			elseif ((int) $areaItem->textalign == 2)
-			{
-				$offsetLeft = $areaItem->x2_pos - ($areaItem->width / 2);
-			}
-			else
-			{
-				$offsetLeft = $areaItem->x1_pos + ($areaItem->width / 4);
-			}
-
-			$offsetTop = ($imageHeight - $areaItem->y1_pos) + $pdfTopMargin;
-			$offsetLeft += $pdfLeftMargin;
-
 			$rgbTextColorBuffer = $this->hex2RGB('#' . $area['fontColor']);
 			$rgbTextColor = round($rgbTextColorBuffer['red'] * (1 / 255), 2);
 			$rgbTextColor .= ' ';
@@ -156,8 +135,6 @@ class ReddesignControllerOrder extends FOFController
 					$fontSize = $autoSizeData['fontSize'] / $ratio;
 				}
 
-				$autoSizeData['pdfOffsetTop'] = round($autoSizeData['pdfOffsetTop'] / 2, 0, PHP_ROUND_HALF_DOWN);
-
 				$noOfLines = count($autoSizeData['perLineCharArr']);
 
 				$bottomoffset = $imageHeight - $areaItem->y2_pos + $pdfTopMargin;
@@ -165,6 +142,11 @@ class ReddesignControllerOrder extends FOFController
 				$maxHeight = $autoSizeData['maxHeight'];
 				$offsetOverallArea = (($areaItem->height - ($fontSize * $maxHeight * $noOfLines)) / 2);
 				$offsetOverallArea = $offsetOverallArea + $bottomoffset;
+
+				/*
+				 * In the POSTSCRIPT default coordinate system, the origin is in the lower left hand corner of the current page.
+				 * As usual, x increases to the right. But, y increases upward!
+				 */
 
 				$offsetLeft = $areaItem->x1_pos + $pdfLeftMargin + ($areaItem->width / 2);
 
@@ -212,6 +194,31 @@ class ReddesignControllerOrder extends FOFController
 			else
 			{
 				$area['fontSize'] = round($area['fontSize'] / $ratio, 0);
+
+				/*
+				 * Calculate offset.
+				 * In the POSTSCRIPT default coordinate system, the origin is in the lower left hand corner of the current page.
+				 * As usual, x increases to the right. But, y increases upward!
+				 */
+
+				if ((int) $area['textAlign'] == 1)
+				{
+					// Left.
+					$offsetLeft = $areaItem->x1_pos;
+				}
+				elseif ((int) $area['textAlign'] == 2)
+				{
+					// Right.
+					$offsetLeft = $areaItem->x2_pos - ($areaItem->width / 2);
+				}
+				else
+				{
+					// Center.
+					$offsetLeft = $areaItem->x1_pos + ($areaItem->width / 4);
+				}
+
+				$offsetTop = (($imageHeight - $areaItem->y2_pos) + $pdfTopMargin + ($areaItem->height / 2)) - (($area['fontSize'] / 2) - ($area['fontSize'] * 0.15));
+				$offsetLeft += $pdfLeftMargin;
 
 				$epsText .= $epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $area['fontSize'] . "  scalefont setfont\n";
 
