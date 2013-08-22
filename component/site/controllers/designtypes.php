@@ -69,8 +69,8 @@ class ReddesignControllerDesigntypes extends FOFController
 		$design = $design->get('Design');
 
 		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_designtype_id);
-		$this->background = $backgroundModel->getItem($design->reddesign_background_id);
-		$backgroundImage = $this->background->image_path;
+		$background = $backgroundModel->getItem($design->reddesign_background_id);
+		$backgroundImage = $background->image_path;
 
 		if ($session->get('customizedImage') != "")
 		{
@@ -188,7 +188,7 @@ class ReddesignControllerDesigntypes extends FOFController
 		// Create session to store Image
 		$session->set('customizedImage', $mangledname);
 		$response['image'] = JURI::base() . 'media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
-		$response['imageTitle'] = $this->background->title;
+		$response['imageTitle'] = $background->title;
 		$imageSize = getimagesize(JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg');
 		$response['imageWidth'] = $imageSize[0];
 		$response['imageHeight'] = $imageSize[1];
@@ -221,8 +221,7 @@ class ReddesignControllerDesigntypes extends FOFController
 		// Get Background Data
 		$reddesign_background_id = $this->input->getInt('reddesign_background_id', null);
 		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($reddesign_background_id);
-		$this->background = $backgroundModel->getItem($reddesign_background_id);
-		$data['designBackground'] = $this->background;
+		$data['designBackground'] = $backgroundModel->getItem($reddesign_background_id);
 
 		// Get designAreas
 		$design = new JRegistry;
