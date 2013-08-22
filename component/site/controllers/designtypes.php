@@ -124,12 +124,19 @@ class ReddesignControllerDesigntypes extends FOFController
 				if ($area->fontTypeId)
 				{
 					$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area->id);
-					$this->fontType = $fontModel->getItem($area->fontTypeId);
-					$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $this->fontType->font_file;
+					$fontType = $fontModel->getItem($area->fontTypeId);
+					$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $fontType->font_file;
 				}
 				else
 				{
 					$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/arial.ttf';
+					$fontType = new stdClass;
+					$fontType->title = 'Arial';
+					$fontType->font_file = 'arial.ttf';
+					$fontType->default_width = 0.9;
+					$fontType->default_height = 0.9;
+					$fontType->default_caps_height = 0.9;
+					$fontType->default_baseline_height = 0.9;
 				}
 
 				// Get area.
@@ -139,7 +146,7 @@ class ReddesignControllerDesigntypes extends FOFController
 				// If we need autosize text than take different approach than solution for regular text.
 				if (empty($area->fontSize))
 				{
-					$returnArr = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $this->fontType, $this->areaItem->height, $this->areaItem->width);
+					$returnArr = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $fontType, $this->areaItem->height, $this->areaItem->width);
 					$area->fontSize = $returnArr['fontSize'];
 					$this->areaItem->textalign = 3;
 				}
