@@ -114,69 +114,72 @@ class ReddesignControllerDesigntypes extends FOFController
 		// Add text areas to the background image.
 		foreach ($design->areas as $area)
 		{
-			// Create needed objects.
-			$areaImage = new Imagick;
-			$areaDraw  = new ImagickDraw;
-
-			// Get font.
-			if ($area->fontTypeId)
+			if (!empty($area->textArea))
 			{
-				$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area->id);
-				$this->fontType = $fontModel->getItem($area->fontTypeId);
-				$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $this->fontType->font_file;
+				// Create needed objects.
+				$areaImage = new Imagick;
+				$areaDraw  = new ImagickDraw;
+
+				// Get font.
+				if ($area->fontTypeId)
+				{
+					$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area->id);
+					$this->fontType = $fontModel->getItem($area->fontTypeId);
+					$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $this->fontType->font_file;
+				}
+				else
+				{
+					$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/arial.ttf';
+				}
+
+				// Get area.
+				$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($design->reddesign_background_id);
+				$this->areaItem = $areaModel->getItem($area->id);
+
+				// If we need autosize text than take different approach than solution for regular text.
+				if (empty($area->fontSize))
+				{
+					$returnArr = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $this->fontType, $this->areaItem->height, $this->areaItem->width);
+					$area->fontSize = $returnArr['fontSize'];
+					$this->areaItem->textalign = 3;
+				}
+
+				// Create an area image.
+				$areaImage->newImage($this->areaItem->width, $this->areaItem->height, new ImagickPixel('none'));
+
+				// Set color and font.
+				$areaDraw->setFillColor('#' . $area->fontColor);
+				$areaDraw->setFont($fontTypeFileLocation);
+
+				// End Auto size.
+				$areaDraw->setFontSize($area->fontSize);
+
+				/*
+				 * Text alingment condition:
+				 * 1 is left,
+				 * 2 is right,
+				 * 3 is center.
+				 */
+				if ((int) $this->areaItem->textalign == 1)
+				{
+					$areaDraw->setGravity(Imagick::GRAVITY_WEST);
+				}
+				elseif ((int) $this->areaItem->textalign == 2)
+				{
+					$areaDraw->setGravity(Imagick::GRAVITY_EAST);
+				}
+				else
+				{
+					$areaDraw->setGravity(Imagick::GRAVITY_CENTER);
+				}
+
+				// Add text to the area image.
+				$areaImage->annotateImage($areaDraw, 0, 0, 0, $area->textArea);
+
+				// Add area image on top of background image.
+				$newImage->compositeImage($areaImage, Imagick::COMPOSITE_DEFAULT, $this->areaItem->x1_pos, $this->areaItem->y1_pos);
+				$newImage->writeImage($newjpgFileLocation);
 			}
-			else
-			{
-				$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/arial.ttf';
-			}
-
-			// Get area.
-			$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($design->reddesign_background_id);
-			$this->areaItem = $areaModel->getItem($area->id);
-
-			// If we need autosize text than take different approach than solution for regular text.
-			if (empty($area->fontSize))
-			{
-				$returnArr = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $this->fontType, $this->areaItem->height, $this->areaItem->width);
-				$area->fontSize = $returnArr['fontSize'];
-				$this->areaItem->textalign = 3;
-			}
-
-			// Create an area image.
-			$areaImage->newImage($this->areaItem->width, $this->areaItem->height, new ImagickPixel('none'));
-
-			// Set color and font.
-			$areaDraw->setFillColor('#' . $area->fontColor);
-			$areaDraw->setFont($fontTypeFileLocation);
-
-			// End Auto size.
-			$areaDraw->setFontSize($area->fontSize);
-
-			/*
-			 * Text alingment condition:
-			 * 1 is left,
-			 * 2 is right,
-			 * 3 is center.
-			 */
-			if ((int) $this->areaItem->textalign == 1)
-			{
-				$areaDraw->setGravity(Imagick::GRAVITY_WEST);
-			}
-			elseif ((int) $this->areaItem->textalign == 2)
-			{
-				$areaDraw->setGravity(Imagick::GRAVITY_EAST);
-			}
-			else
-			{
-				$areaDraw->setGravity(Imagick::GRAVITY_CENTER);
-			}
-
-			// Add text to the area image.
-			$areaImage->annotateImage($areaDraw, 0, 0, 0, $area->textArea);
-
-			// Add area image on top of background image.
-			$newImage->compositeImage($areaImage, Imagick::COMPOSITE_DEFAULT, $this->areaItem->x1_pos, $this->areaItem->y1_pos);
-			$newImage->writeImage($newjpgFileLocation);
 		}
 
 		// Free resources.
