@@ -40,14 +40,14 @@ class ReddesignControllerOrder extends FOFController
 
 			if (!empty($data))
 			{
-				if (!JFile::exists(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/pdf/' . $productionFileName))
+				if (!JFile::exists(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/pdf/' . $productionFileName . '.pdf'))
 				{
 					$data['productionFileName'] = $productionFileName;
 
 					$this->createPdfProductionFile($data);
 				}
 
-				$productionFileName = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $productionFileName);
+				$productionFileName = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $productionFileName . '.pdf');
 			}
 		}
 
@@ -253,7 +253,7 @@ class ReddesignControllerOrder extends FOFController
 
 		$tempFile = "%!PS";
 		$tempFile .= "\n%%Creator:redDESIGN";
-		$tempFile .= "\n%%Title:" . $productionFileName;
+		$tempFile .= "\n%%Title:" . $productionFileName . ".pdf";
 		$tempFile .= "\n%%LanguageLevel: 3";
 		$tempFile .= "\n%%DocumentData: Clean7Bit";
 		$tempFile .= "\n%%EndComments";
@@ -321,7 +321,7 @@ class ReddesignControllerOrder extends FOFController
 		$imageBound = $this->readBound($tmpBound);
 		$epsFile  = "%!PS-Adobe-3.1 EPSF-3.1";
 		$epsFile .= "\n%%Creator:redDESIGN";
-		$epsFile .= "\n%%Title:" . $productionFileName;
+		$epsFile .= "\n%%Title:" . $productionFileName . ".pdf";
 		$epsFile .= "\n%%LanguageLevel: 3";
 		$epsFile .= "\n%%DocumentData: Clean7Bit";
 		$epsFile .= "\n%%EndComments";

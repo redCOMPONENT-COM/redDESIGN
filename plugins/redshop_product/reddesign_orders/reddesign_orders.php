@@ -100,7 +100,7 @@ class PlgRedshop_ProductReddesign_Orders extends JPlugin
 					$productionFile = md5($sig);
 				}
 
-				$productionFile = $productionFile . '.pdf';
+				$productionFile = $productionFile;
 				$productIds[] = $orderProduct->product_id;
 				$productNumbers[] = $orderProduct->order_item_sku;
 				$productionFiles[] = $productionFile;
