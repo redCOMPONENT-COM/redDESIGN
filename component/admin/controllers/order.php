@@ -200,6 +200,7 @@ class ReddesignControllerOrder extends FOFController
 				 * In the POSTSCRIPT default coordinate system, the origin is in the lower left hand corner of the current page.
 				 * As usual, x increases to the right. But, y increases upward!
 				 */
+				$alignmentPostScript = '';
 
 				if ((int) $area['textAlign'] == 1)
 				{
@@ -209,12 +210,14 @@ class ReddesignControllerOrder extends FOFController
 				elseif ((int) $area['textAlign'] == 2)
 				{
 					// Right.
-					$offsetLeft = $areaItem->x2_pos - ($areaItem->width / 2);
+					$offsetLeft = $areaItem->x2_pos;
+					$alignmentPostScript = "\n (" . $area['textArea'] . ") dup stringwidth pop neg 0 rmoveto";
 				}
 				else
 				{
 					// Center.
-					$offsetLeft = $areaItem->x1_pos + ($areaItem->width / 4);
+					$offsetLeft = ($areaItem->x1_pos + $areaItem->width + (2 * $pdfLeftMargin)) / 2;
+					$alignmentPostScript = "\n (" . $area['textArea'] . ") dup stringwidth pop 2 div neg 0 rmoveto";
 				}
 
 				$offsetTop = (($imageHeight - $areaItem->y2_pos) + $pdfTopMargin + ($areaItem->height / 2)) - (($area['fontSize'] / 2) - ($area['fontSize'] * 0.15));
@@ -229,6 +232,7 @@ class ReddesignControllerOrder extends FOFController
 				$epsAreaText .= "\ngsave\n";
 
 				$epsAreaText .= "\n $offsetLeft $offsetTop moveto";
+				$epsAreaText .= $alignmentPostScript;
 				$epsAreaText .= "\n (" . $area['textArea'] . ") true charpath ";
 
 				$epsAreaText .= "\n fill";
