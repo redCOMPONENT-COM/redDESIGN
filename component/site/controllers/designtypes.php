@@ -61,7 +61,7 @@ class ReddesignControllerDesigntypes extends FOFController
 		JSession::checkToken('get') or jexit('Invalid Token');
 
 		// Initialize session
-		$session 			= JFactory::getSession();
+		$session = JFactory::getSession();
 
 		// Get design Data
 		$design = new JRegistry;
@@ -138,7 +138,7 @@ class ReddesignControllerDesigntypes extends FOFController
 			if (empty($area->fontSize))
 			{
 				$returnArr = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $this->fontType, $this->areaItem->height, $this->areaItem->width);
-				$area->fontSize = $returnArr['FontSize'];
+				$area->fontSize = $returnArr['fontSize'];
 				$this->areaItem->textalign = 3;
 			}
 
@@ -205,9 +205,10 @@ class ReddesignControllerDesigntypes extends FOFController
 	 */
 	public function orderProduct()
 	{
-		$app    = JFactory::getApplication();
 		JPluginHelper::importPlugin('reddesign');
 		$dispatcher = JDispatcher::getInstance();
+		$app = JFactory::getApplication();
+		$session = JFactory::getSession();
 
 		// Get design type data.
 		$designTypeId    = $this->input->getInt('reddesign_designtype_id', null);
@@ -241,6 +242,8 @@ class ReddesignControllerDesigntypes extends FOFController
 
 		$data['designAccessories'] = $designAccessories;
 
+		$data['autoSizeData'] = $session->get('autoSizeData');
+
 		$results = $dispatcher->trigger('onOrderButtonClick', array($data));
 
 		if ($results[0])
@@ -254,7 +257,13 @@ class ReddesignControllerDesigntypes extends FOFController
 	}
 
 	/**
-	 *	Calculates Font size and Offset when Auto-size is on.
+	 *  Calculates Font size and Offset when Auto-size is on.
+	 *
+	 *  @param   int    $fontId         FontId.
+	 *  @param   array  $enteredChars   EnteredChars.
+	 *  @param   array  $fontDetailArr  FontDetailArr.
+	 *  @param   int    $canvasHeight   CanvasHeight.
+	 *  @param   int    $canvasWidth    CanvasWidth.
 	 *
 	 * @return array of Font Size and Offset respectively
 	 *
@@ -324,9 +333,11 @@ class ReddesignControllerDesigntypes extends FOFController
 
 			$fontSize = $this->calculateFontSize($maxCharsInSingleLine, $avgWidth, $maxHeight, $lineCount, $canvasHeight, $canvasWidth);
 
-			$totalHeight = $fontDetailArr->default_height + $charArr->typography_height + $fontDetailArr->default_caps_height + $fontDetailArr->default_baseline_height;
-
-			$offsetTop = 0;
+			$totalHeight = 0;
+			$totalHeight += $fontDetailArr->default_height;
+			$totalHeight += $charArr->typography_height;
+			$totalHeight += $fontDetailArr->default_caps_height;
+			$totalHeight += $fontDetailArr->default_baseline_height;
 
 			if (in_array('2', $typoArr) && in_array('3', $typoArr) && !in_array('4', $typoArr))
 			{
@@ -352,10 +363,6 @@ class ReddesignControllerDesigntypes extends FOFController
 				$offsetTop = "-" . $offsetTop;
 			}
 
-			$diff = $totalHeight - $charArr->height;
-
-			$PDFoffsetTop = 0;
-
 			$PDFoffsetTop = (($canvasHeight - ($fontSize * $maxHeight)) / 2) * 1.2;
 
 			if (in_array('3', $typoArr) || in_array('4', $typoArr))
@@ -363,31 +370,35 @@ class ReddesignControllerDesigntypes extends FOFController
 				$PDFoffsetTop = $PDFoffsetTop + ($fontSize * $fontDetailArr->default_baseline_height * 0.5);
 			}
 
-			$diff = ($totalHeight - $maxHeight) / 2;
-
 			$session = JFactory::getSession();
 
 			$PDFData = array();
 
-			$PDFData['FontSize'] = $fontSize;
-			$PDFData['PDFoffsetTop'] = $PDFoffsetTop;
+			$PDFData['fontSize'] = $fontSize;
+			$PDFData['pdfOffsetTop'] = $PDFoffsetTop;
 			$PDFData['perLineCharArr'] = $perLineChar;
 			$PDFData['maxHeight'] = $maxHeight;
 
-			$session->set('AutoSizeData', $PDFData);
+			$session->set('autoSizeData', $PDFData);
 
-			return array('FontSize' => $fontSize, 'Offset' => $offsetTop);
+			return array('fontSize' => $fontSize, 'Offset' => $offsetTop);
 	}
 
 	/**
-	 *	Calculates Font size When Auto-size is on.
+	 *  Calculates Font size When Auto-size is on.
 	 *
-	 * @return Intiger
+	 *  @param   int    $maxCharsInSingleLine  maxCharsInSingleLine.
+	 *  @param   float  $fontW                 fontW.
+	 *  @param   float  $fontH                 fontH.
+	 *  @param   int    $lineCount             lineCount.
+	 *  @param   int    $canvasHeight          canvasHeight.
+	 *  @param   int    $canvasWidth           canvasWidth.
+	 *
+	 * @return int
 	 *
 	 * @access public
 	 */
-
-	function calculateFontSize($maxCharsInSingleLine=3, $fontW= 0.5366667, $fontH= 0.77, $lineCount=1, $canvasHeight=504, $canvasWidth=324)
+	public function calculateFontSize($maxCharsInSingleLine=3, $fontW=0.5366667, $fontH=0.77, $lineCount=1, $canvasHeight=504, $canvasWidth=324)
 	{
 		// To find the font size for particular one line, need to divide it by number of lines.
 		$canvasEffectiveHeight = $canvasHeight / $lineCount;
