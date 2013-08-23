@@ -26,14 +26,20 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				<label class="control-label ">
 					<strong><?php echo $area->title; ?></strong>
 				</label>
-
 				<div class="controls">
+				<?php if ($this->item->fontsizer == 'auto') : ?>
+					<textarea
+						name="textArea<?php echo $area->reddesign_area_id; ?>"
+						placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
+						id="textArea<?php echo $area->reddesign_area_id; ?>"></textarea>
+				<?php else : ?>
 					<input
 						type="text"
 						name="textArea<?php echo $area->reddesign_area_id; ?>"
 						placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
 						id="textArea<?php echo $area->reddesign_area_id; ?>"
 						value="">
+				<?php endif; ?>
 				</div>
 			</div>
 		</div>
