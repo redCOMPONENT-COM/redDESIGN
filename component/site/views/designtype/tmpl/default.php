@@ -206,7 +206,8 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 		if(customizeOrNot == 1)
 		{
 			// Add the progress bar
-			var halfBackgroundHeight =  (akeeba.jQuery('#background').height() / 2);
+			var halfBackgroundHeight =  ((akeeba.jQuery('#background').height() / 2)-10);
+			akeeba.jQuery('#background-container').height(akeeba.jQuery('#background').height());
 			akeeba.jQuery('#progressBar').css("padding-top", halfBackgroundHeight + 'px');
 			akeeba.jQuery('#progressBar').css("padding-bottom", halfBackgroundHeight + 'px');
 			akeeba.jQuery('#background').hide();
@@ -244,12 +245,17 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 					{
 						var json = akeeba.jQuery.parseJSON(data);
 						d = new Date();
-						
 						akeeba.jQuery('#background').attr('src', json.image+"?"+d.getTime());
-						setTimeout(function() { akeeba.jQuery('#background').attr('alt', json.imageTitle); }, 3000);
+						setTimeout(function() {
+							akeeba.jQuery('#background').attr('alt', json.imageTitle);
+						}, 3000);
 						// Remove the progress bar
 						akeeba.jQuery('#progressBar').hide();
 						akeeba.jQuery('#background').show();
+						// This timeout returns back to fluid design after 10 seconds in case user changes browser witdh
+						setTimeout(function() {
+							akeeba.jQuery('#background-container').height('auto');
+						}, 5000);
 					}
 				},
 				error: function(errMsg) {
