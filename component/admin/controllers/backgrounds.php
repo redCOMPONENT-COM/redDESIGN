@@ -171,7 +171,7 @@ class ReddesignControllerBackgrounds extends FOFController
 			$data['thumbnail']			= $thumbPreviewFile;
 		}
 
-		// If this new background will be the PDF Production background switch it against the previous production background
+		// If this new background will be the PDF Production background, switch it against the previous production background
 		if ((int) $data['isPDFbgimage'])
 		{
 			$backgroundsModel	= $this->getThisModel();
@@ -179,6 +179,16 @@ class ReddesignControllerBackgrounds extends FOFController
 
 			// Set all other backgrounds as non PDF backgrounds
 			$backgroundsModel->unsetAllPDFBg($designId);
+		}
+
+		// If this new background will be the preview background, switch it against the previous preview background
+		if ((int) $data['isPreviewbgimage'])
+		{
+			$backgroundsModel	= $this->getThisModel();
+			$designId			= (int) $data['reddesign_designtype_id'];
+
+			// Set all other backgrounds as non PDF backgrounds
+			$backgroundsModel->unsetAllPreviewBg($designId);
 		}
 
 		return $data;
