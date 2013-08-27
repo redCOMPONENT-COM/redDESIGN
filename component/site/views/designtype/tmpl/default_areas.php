@@ -23,13 +23,14 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 	<div class="row-fluid">
 		<div class="span4">
 			<div class="control-group">
-				<label class="control-label ">
+				<label class="control-label" for="textArea<?php echo $area->reddesign_area_id; ?>">
 					<strong><?php echo $area->title; ?></strong>
 				</label>
 				<div class="controls">
 				<?php if ($this->item->fontsizer == 'auto') : ?>
 					<textarea
 						name="textArea<?php echo $area->reddesign_area_id; ?>"
+						class="textAreaClass"
 						placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
 						id="textArea<?php echo $area->reddesign_area_id; ?>"
 						required="required"></textarea>
@@ -37,6 +38,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					<input
 						type="text"
 						name="textArea<?php echo $area->reddesign_area_id; ?>"
+						class="textAreaClass"
 						placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
 						id="textArea<?php echo $area->reddesign_area_id; ?>"
 						value=""
@@ -209,15 +211,15 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					<?php endforeach; ?>
 
 					<?php if($this->accessorytypes) : ?>
-					<?php foreach ($this->accessorytypes as $accessorytype) : ?>
-					<?php foreach ($accessorytype->accessories as $accessory) : ?>
-					if (akeeba.jQuery("#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>").is(':checked')) {
-						design.accessories.push({
-							"id": akeeba.jQuery('#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>:checked').val()
-						});
-					}
-					<?php endforeach; ?>
-					<?php endforeach; ?>
+						<?php foreach ($this->accessorytypes as $accessorytype) : ?>
+							<?php foreach ($accessorytype->accessories as $accessory) : ?>
+								if (akeeba.jQuery("#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>").is(':checked')) {
+									design.accessories.push({
+										"id": akeeba.jQuery('#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>:checked').val()
+									});
+								}
+							<?php endforeach; ?>
+						<?php endforeach; ?>
 					<?php endif; ?>
 
 					design = JSON.stringify({Design: design });
@@ -226,5 +228,15 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				}
 			);
 
+	});
+
+	akeeba.jQuery("#designform").submit(function (e) {
+		akeeba.jQuery(".textAreaClass").each(function() {
+			if(akeeba.jQuery(this).val() == "")
+			{
+				alert("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PLEASE_POPULATE_ALL_AREAS'); ?>");
+				return false;
+			}
 		});
+	});
 </script>

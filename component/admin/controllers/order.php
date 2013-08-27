@@ -220,7 +220,8 @@ class ReddesignControllerOrder extends FOFController
 					$alignmentPostScript = "\n (" . $area['textArea'] . ") dup stringwidth pop 2 div neg 0 rmoveto";
 				}
 
-				$offsetTop = (($imageHeight - $areaItem->y2_pos) + $pdfTopMargin + ($areaItem->height / 2)) - (($area['fontSize'] / 2) - ($area['fontSize'] * 0.15));
+				$offsetTop = (($imageHeight - $areaItem->y2_pos) + $pdfTopMargin + ($areaItem->height / 2));
+				$offsetTop -= (($area['fontSize'] / 2) - ($area['fontSize'] * 0.15));
 				$offsetLeft += $pdfLeftMargin;
 
 				$epsText .= $epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $area['fontSize'] . "  scalefont setfont\n";
