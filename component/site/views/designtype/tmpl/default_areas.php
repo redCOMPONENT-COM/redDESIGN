@@ -212,27 +212,27 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						};
 
 						<?php foreach($this->productionBackgroundAreas as $area) : ?>
-						design.areas.push({
-							"id": '<?php echo $area->reddesign_area_id; ?>',
-							"textArea": akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
-							"fontArea": akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
-							"fontColor": akeeba.jQuery('#colorCode<?php echo $area->reddesign_area_id; ?>').val(),
-							"fontSize": akeeba.jQuery('#fontSize<?php echo $area->reddesign_area_id; ?>').val(),
-							"fontTypeId": akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
-							"textAlign": akeeba.jQuery('#textAlign<?php echo $area->reddesign_area_id; ?>').val()
-						});
+							design.areas.push({
+								"id": '<?php echo $area->reddesign_area_id; ?>',
+								"textArea": akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
+								"fontArea": akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
+								"fontColor": akeeba.jQuery('#colorCode<?php echo $area->reddesign_area_id; ?>').val(),
+								"fontSize": akeeba.jQuery('#fontSize<?php echo $area->reddesign_area_id; ?>').val(),
+								"fontTypeId": akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
+								"textAlign": akeeba.jQuery('#textAlign<?php echo $area->reddesign_area_id; ?>').val()
+							});
 						<?php endforeach; ?>
 
 						<?php if($this->accessorytypes) : ?>
-						<?php foreach ($this->accessorytypes as $accessorytype) : ?>
-						<?php foreach ($accessorytype->accessories as $accessory) : ?>
-						if (akeeba.jQuery("#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>").is(':checked')) {
-							design.accessories.push({
-								"id": akeeba.jQuery('#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>:checked').val()
-							});
-						}
-						<?php endforeach; ?>
-						<?php endforeach; ?>
+							<?php foreach ($this->accessorytypes as $accessorytype) : ?>
+								<?php foreach ($accessorytype->accessories as $accessory) : ?>
+								if (akeeba.jQuery("#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>").is(':checked')) {
+									design.accessories.push({
+										"id": akeeba.jQuery('#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>:checked').val()
+									});
+								}
+								<?php endforeach; ?>
+							<?php endforeach; ?>
 						<?php endif; ?>
 
 						design = JSON.stringify({Design: design });
