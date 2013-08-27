@@ -366,10 +366,7 @@ class ReddesignControllerBackgrounds extends FOFController
 
 		// Read EPS
 		$im = new Imagick;
-
 		$im->readImage($eps_file_location);
-
-		$dimensions = $im->getImageGeometry();
 
 		$im->thumbnailImage($max_thumb_width, $max_thumb_height, $best_fit);
 

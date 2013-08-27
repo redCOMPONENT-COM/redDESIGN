@@ -186,12 +186,18 @@ class ReddesignControllerDesigntypes extends FOFController
 				// Add area image on top of background image.
 				$newImage->compositeImage($areaImage, Imagick::COMPOSITE_DEFAULT, $this->areaItem->x1_pos, $this->areaItem->y1_pos);
 				$newImage->writeImage($newjpgFileLocation);
+
+				// Free resources.
+				$areaImage->clear();
+				$areaImage->destroy();
+			}
+			else
+			{
+				$newImage->writeImage($newjpgFileLocation);
 			}
 		}
 
 		// Free resources.
-		$areaImage->clear();
-		$areaImage->destroy();
 		$newImage->clear();
 		$newImage->destroy();
 
