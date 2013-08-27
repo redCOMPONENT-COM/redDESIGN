@@ -23,21 +23,22 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 	<div class="row-fluid">
 		<div class="span4">
 			<div class="control-group">
-				<label class="control-label ">
+				<label class="control-label" for="textArea<?php echo $area->reddesign_area_id; ?>">
 					<strong><?php echo $area->title; ?></strong>
 				</label>
 				<div class="controls">
 				<?php if ($this->item->fontsizer == 'auto') : ?>
 					<textarea
 						name="textArea<?php echo $area->reddesign_area_id; ?>"
+						class="textAreaClass"
 						placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
 						id="textArea<?php echo $area->reddesign_area_id; ?>"
-						required="required"
-						></textarea>
+						required="required"></textarea>
 				<?php else : ?>
 					<input
 						type="text"
 						name="textArea<?php echo $area->reddesign_area_id; ?>"
+						class="textAreaClass"
 						placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
 						id="textArea<?php echo $area->reddesign_area_id; ?>"
 						value=""
@@ -191,41 +192,54 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 	akeeba.jQuery(document).ready(
 		function () {
 			akeeba.jQuery(document).on('click', '#orderDesign', function () {
-					akeeba.jQuery('#task').val('orderProduct');
-					var design = {
-						areas: [],
-						accessories: []
-					};
+					var goodToGo = 1;
 
-					<?php foreach($this->productionBackgroundAreas as $area) : ?>
-					design.areas.push({
-						"id": '<?php echo $area->reddesign_area_id; ?>',
-						"textArea": akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
-						"fontArea": akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
-						"fontColor": akeeba.jQuery('#colorCode<?php echo $area->reddesign_area_id; ?>').val(),
-						"fontSize": akeeba.jQuery('#fontSize<?php echo $area->reddesign_area_id; ?>').val(),
-						"fontTypeId": akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
-						"textAlign": akeeba.jQuery('#textAlign<?php echo $area->reddesign_area_id; ?>').val()
+					akeeba.jQuery(".textAreaClass").each(function() {
+						if(akeeba.jQuery(this).val() == "")
+						{
+							alert("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PLEASE_POPULATE_ALL_AREAS'); ?>");
+							goodToGo = 0;
+							return false;
+						}
 					});
-					<?php endforeach; ?>
 
-					<?php if($this->accessorytypes) : ?>
-					<?php foreach ($this->accessorytypes as $accessorytype) : ?>
-					<?php foreach ($accessorytype->accessories as $accessory) : ?>
-					if (akeeba.jQuery("#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>").is(':checked')) {
-						design.accessories.push({
-							"id": akeeba.jQuery('#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>:checked').val()
-						});
+					if(goodToGo == 1)
+					{
+						akeeba.jQuery('#task').val('orderProduct');
+						var design = {
+							areas: [],
+							accessories: []
+						};
+
+						<?php foreach($this->productionBackgroundAreas as $area) : ?>
+							design.areas.push({
+								"id": '<?php echo $area->reddesign_area_id; ?>',
+								"textArea": akeeba.jQuery('#textArea<?php echo $area->reddesign_area_id; ?>').val(),
+								"fontArea": akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
+								"fontColor": akeeba.jQuery('#colorCode<?php echo $area->reddesign_area_id; ?>').val(),
+								"fontSize": akeeba.jQuery('#fontSize<?php echo $area->reddesign_area_id; ?>').val(),
+								"fontTypeId": akeeba.jQuery('#fontArea<?php echo $area->reddesign_area_id; ?>').val(),
+								"textAlign": akeeba.jQuery('#textAlign<?php echo $area->reddesign_area_id; ?>').val()
+							});
+						<?php endforeach; ?>
+
+						<?php if($this->accessorytypes) : ?>
+							<?php foreach ($this->accessorytypes as $accessorytype) : ?>
+								<?php foreach ($accessorytype->accessories as $accessory) : ?>
+								if (akeeba.jQuery("#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>").is(':checked')) {
+									design.accessories.push({
+										"id": akeeba.jQuery('#AccessoryId<?php echo $accessory->reddesign_accessory_id; ?>:checked').val()
+									});
+								}
+								<?php endforeach; ?>
+							<?php endforeach; ?>
+						<?php endif; ?>
+
+						design = JSON.stringify({Design: design });
+						akeeba.jQuery('#designAreas').val(design);
+						akeeba.jQuery('#designform').submit();
 					}
-					<?php endforeach; ?>
-					<?php endforeach; ?>
-					<?php endif; ?>
-
-					design = JSON.stringify({Design: design });
-					akeeba.jQuery('#designAreas').val(design);
-					akeeba.jQuery('#designform').submit();
 				}
 			);
-
-		});
+	});
 </script>
