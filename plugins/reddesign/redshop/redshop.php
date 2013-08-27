@@ -52,10 +52,10 @@ class PlgReddesignRedshop extends JPlugin
 	 */
 	public function onOrderButtonClick($data)
 	{
-		$app    = JFactory::getApplication();
-		$db     = JFactory::getDbo();
-		$params = $this->params;
-		$session 			= JFactory::getSession();
+		$app     = JFactory::getApplication();
+		$db      = JFactory::getDbo();
+		$params  = $this->params;
+		$session = JFactory::getSession();
 
 		// Check if redSHOP is there.
 		$prefix = $db->getPrefix();
@@ -144,7 +144,6 @@ class PlgReddesignRedshop extends JPlugin
 		// Make new redSHOP product with data given from redDESIGN.
 		// Upload product image
 		$src = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $session->get('customizedImage') . '.jpg';
-		chmod($src, 0777);
 		$dest = JPATH_ROOT . '/components/com_redshop/assets/images/product/' . $session->get('customizedImage') . '.jpg';
 		JFile::copy($src, $dest);
 
