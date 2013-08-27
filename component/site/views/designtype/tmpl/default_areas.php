@@ -33,8 +33,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
 						id="textArea<?php echo $area->reddesign_area_id; ?>"
 						required="required"
-						>
-						</textarea>
+						></textarea>
 				<?php else : ?>
 					<input
 						type="text"
