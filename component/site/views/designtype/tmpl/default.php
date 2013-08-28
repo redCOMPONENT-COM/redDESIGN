@@ -60,6 +60,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 				</div>
 				<div class="well">
 					<?php echo $this->loadTemplate('areas'); ?>
+					<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
 				</div>
 			</div>
 		</div>
@@ -256,6 +257,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 						setTimeout(function() {
 							akeeba.jQuery('#background-container').height('auto');
 						}, 5000);
+						akeeba.jQuery("#autoSizeData").val(JSON.stringify(json.autoSizeData));
 					}
 				},
 				error: function(errMsg) {

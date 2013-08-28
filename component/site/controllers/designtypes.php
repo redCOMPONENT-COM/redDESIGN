@@ -146,8 +146,10 @@ class ReddesignControllerDesigntypes extends FOFController
 				// If we need autosize text than take different approach than solution for regular text.
 				if (empty($area->fontSize))
 				{
-					$returnArr = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $fontType, $this->areaItem->height, $this->areaItem->width);
-					$area->fontSize = $returnArr['fontSize'];
+					$newAutoSizeData = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $fontType, $this->areaItem->height, $this->areaItem->width);
+					$area->fontSize = $newAutoSizeData['fontSize'];
+					$newAutoSizeData['reddesign_area_id'] = $this->areaItem->reddesign_area_id;
+					$autoSizeData[] = $newAutoSizeData;
 					$this->areaItem->textalign = 3;
 				}
 
@@ -208,6 +210,7 @@ class ReddesignControllerDesigntypes extends FOFController
 		$imageSize = getimagesize(JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg');
 		$response['imageWidth'] = $imageSize[0];
 		$response['imageHeight'] = $imageSize[1];
+		$response['autoSizeData'] = $autoSizeData;
 
 		echo json_encode($response);
 	}
@@ -257,7 +260,9 @@ class ReddesignControllerDesigntypes extends FOFController
 
 		$data['designAccessories'] = $designAccessories;
 
-		$data['autoSizeData'] = $session->get('autoSizeData');
+		$autoSizeData = $this->input->getString('autoSizeData', '');
+		$autoSizeData = json_decode($autoSizeData);
+		$data['autoSizeData'] = $autoSizeData;
 
 		$results = $dispatcher->trigger('onOrderButtonClick', array($data));
 
@@ -286,117 +291,73 @@ class ReddesignControllerDesigntypes extends FOFController
 	 */
 	public function getFontSizeOnCharsBase($fontId, $enteredChars, $fontDetailArr, $canvasHeight, $canvasWidth)
 	{
-			$db = JFactory::getDbo();
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		$char = str_split(mb_convert_encoding(urldecode($enteredChars), "ISO-8859-1", "UTF-8"));
+
+		// Select character settings for a given font.
+		$query
+			->select('max(chars.height) as height, group_concat(typography separator ", ") as typography, typography_height')
+			->from('#__reddesign_chars as chars')
+			->where('chars.reddesign_font_id = ' . $fontId . ' and chars.font_char in("' . implode('","', $char) . '")')
+			->order('chars.reddesign_char_id ASC');
+
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+
+		// Load the results as a list of stdClass objects.
+		$charArr = $db->loadObject();
+		$maxHeight = $charArr->height;
+
+		$width = 0;
+
+		for ($i = 0;$i < count($char);$i++)
+		{
 			$query = $db->getQuery(true);
-
-			$char = str_split(mb_convert_encoding(urldecode($enteredChars), "ISO-8859-1", "UTF-8"));
-
-			// Select character settings for a given font.
 			$query
-				->select('max(chars.height) as height, group_concat(typography separator ", ") as typography, typography_height')
+				->select('chars.width')
 				->from('#__reddesign_chars as chars')
-				->where('chars.reddesign_font_id = ' . $fontId . ' and chars.font_char in("' . implode('","', $char) . '")')
-				->order('chars.reddesign_char_id ASC');
-
-			// Reset the query using our newly populated query object.
+				->where('binary chars.font_char = "' . $char[$i] . '" AND chars.reddesign_font_id = "' . $fontId . '" ');
 			$db->setQuery($query);
+			$width 		= $width + $db->loadResult();
+		}
 
-			// Load the results as a list of stdClass objects.
-			$charArr = $db->loadObject();
-			$maxHeight = $charArr->height;
+		$avgWidth = $width / count($char);
 
-			$width = 0;
+		if ($avgWidth == 0)
+		{
+			$avgWidth = $fontDetailArr->default_width;
+		}
 
-			for ($i = 0;$i < count($char);$i++)
-			{
-				$query = $db->getQuery(true);
-				$query
-					->select('chars.width')
-					->from('#__reddesign_chars as chars')
-					->where('binary chars.font_char = "' . $char[$i] . '" AND chars.reddesign_font_id = "' . $fontId . '" ');
+		if ($maxHeight == 0)
+		{
+			$maxHeight = $fontDetailArr->default_height;
+		}
 
-				$db->setQuery($query);
-				$width 		= $width + $db->loadResult();
-			}
+		$typoArr = explode(',', $charArr->typography);
 
-			$avgWidth = $width / count($char);
+		if (in_array('2', $typoArr) && in_array('3', $typoArr) && !in_array(4, $typoArr))
+		{
+			$maxHeight = $maxHeight + $fontDetailArr->default_caps_height;
+		}
 
-			if ($avgWidth == 0)
-			{
-				$avgWidth = $fontDetailArr->default_width;
-			}
+		$perLineChar = explode("\n", $enteredChars);
 
-			if ($maxHeight == 0)
-			{
-				$maxHeight = $fontDetailArr->default_height;
-			}
+		// @to-do take it from area table.....
+		$maxCharsInSingleLine = max(array_map('strlen', $perLineChar));
 
-			$typoArr = explode(',', $charArr->typography);
+		// @to-do take it from area table..
+		$lineCount = count($perLineChar);
 
-			if (in_array('2', $typoArr) && in_array('3', $typoArr) && !in_array(4, $typoArr))
-			{
-				$maxHeight = $maxHeight + $fontDetailArr->default_caps_height;
-			}
+		$fontSize = $this->calculateFontSize($maxCharsInSingleLine, $avgWidth, $maxHeight, $lineCount, $canvasHeight, $canvasWidth);
 
-			$perLineChar = explode("\n", $enteredChars);
+		$autoSizeData = array();
+		$autoSizeData['fontSize'] = $fontSize;
+		$autoSizeData['stringLines'] = $perLineChar;
+		$autoSizeData['maxHeight'] = $maxHeight;
 
-			// @to-do take it from area table.....
-			$maxCharsInSingleLine = max(array_map('strlen', $perLineChar));
-
-			// @to-do take it from area table..
-			$lineCount = count($perLineChar);
-
-			$fontSize = $this->calculateFontSize($maxCharsInSingleLine, $avgWidth, $maxHeight, $lineCount, $canvasHeight, $canvasWidth);
-
-			$totalHeight = 0;
-			$totalHeight += $fontDetailArr->default_height;
-			$totalHeight += $charArr->typography_height;
-			$totalHeight += $fontDetailArr->default_caps_height;
-			$totalHeight += $fontDetailArr->default_baseline_height;
-
-			if (in_array('2', $typoArr) && in_array('3', $typoArr) && !in_array('4', $typoArr))
-			{
-				$difference = $totalHeight - $charArr->height - $fontDetailArr->default_caps_height;
-				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
-				$offsetTop = "-" . $offsetTop;
-			}
-			elseif (in_array('3', $typoArr) || in_array('4', $typoArr))
-			{
-				$difference = $totalHeight - ($charArr->height);
-				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
-				$offsetTop = "-" . $offsetTop;
-			}
-			elseif (in_array('2', $typoArr))
-			{
-				$difference = $totalHeight - ( $charArr->height + $fontDetailArr->default_baseline_height);
-				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
-				$offsetTop = "+" . $offsetTop;
-			}else
-			{
-				$difference = $totalHeight - ( $charArr->height + $fontDetailArr->default_baseline_height );
-				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
-				$offsetTop = "-" . $offsetTop;
-			}
-
-			$PDFoffsetTop = (($canvasHeight - ($fontSize * $maxHeight)) / 2) * 1.2;
-
-			if (in_array('3', $typoArr) || in_array('4', $typoArr))
-			{
-				$PDFoffsetTop = $PDFoffsetTop + ($fontSize * $fontDetailArr->default_baseline_height * 0.5);
-			}
-
-			$session = JFactory::getSession();
-
-			$PDFData = array();
-
-			$PDFData['fontSize'] = $fontSize;
-			$PDFData['pdfOffsetTop'] = $PDFoffsetTop;
-			$PDFData['perLineCharArr'] = $perLineChar;
-			$PDFData['maxHeight'] = $maxHeight;
-
-			$session->set('autoSizeData', $PDFData);
-
-			return array('fontSize' => $fontSize, 'Offset' => $offsetTop);
+		return $autoSizeData;
 	}
 
 	/**
