@@ -76,21 +76,4 @@ class ReddesignToolbar extends FOFToolbar
 		JToolBarHelper::divider();
 		JToolBarHelper::preferences('com_reddesign');
 	}
-
-	/**
-	 * Prepares the toolbar for Designtype view
-	 *
-	 * @return void
-	 */
-	public function onAdd()
-	{
-		parent::onAdd();
-
-		$view = $this->input->getCmd('view', '');
-		JToolBarHelper::title(JText::_('COM_REDDESIGN') . ' - ' . ucfirst($view), $view);
-
-		// Add Components options (see config.xml)
-		JToolBarHelper::divider();
-		JToolBarHelper::preferences('com_reddesign');
-	}
 }
