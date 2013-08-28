@@ -127,7 +127,17 @@ class ReddesignControllerOrder extends FOFController
 
 			if ($data['designType']['fontsizer'] == 'auto')
 			{
-				$autoSizeData = $data['autoSizeData'];
+				$autoSizeDataArray = $data['autoSizeData'];
+				$autoSizeData = null;
+
+				foreach ($autoSizeDataArray as $autoSizeDataElement)
+				{
+					if ($autoSizeDataElement['reddesign_area_id'] == $areaItem->reddesign_area_id)
+					{
+						$autoSizeData = $autoSizeDataElement;
+					}
+				}
+
 				$fontSize = 0;
 
 				if ($autoSizeData['fontSize'])
@@ -135,7 +145,7 @@ class ReddesignControllerOrder extends FOFController
 					$fontSize = $autoSizeData['fontSize'] / $ratio;
 				}
 
-				$noOfLines = count($autoSizeData['perLineCharArr']);
+				$noOfLines = count($autoSizeData['stringLines']);
 
 				$bottomoffset = $imageHeight - $areaItem->y2_pos + $pdfTopMargin;
 
@@ -182,12 +192,12 @@ class ReddesignControllerOrder extends FOFController
 					$epsAreaText .= "\ngsave\n";
 
 					$epsAreaText .= "\n $offsetLeft $offsetTop moveto";
-					$epsAreaText .= "\n (" . $autoSizeData['perLineCharArr'][$h] . ") dup stringwidth pop 2 div neg 0 rmoveto true charpath ";
+					$epsAreaText .= "\n (" . $autoSizeData['stringLines'][$h] . ") dup stringwidth pop 2 div neg 0 rmoveto true charpath ";
 					$epsAreaText .= "\n fill";
 					$epsAreaText .= "\n showpage";
 
 					$epsText .= "\n $offsetLeft $offsetTop moveto";
-					$epsText .= "\n (" . $autoSizeData['perLineCharArr'][$h] . ")";
+					$epsText .= "\n (" . $autoSizeData['stringLines'][$h] . ")";
 					$epsText .= "\n cshow";
 				}
 			}
@@ -220,7 +230,8 @@ class ReddesignControllerOrder extends FOFController
 					$alignmentPostScript = "\n (" . $area['textArea'] . ") dup stringwidth pop 2 div neg 0 rmoveto";
 				}
 
-				$offsetTop = (($imageHeight - $areaItem->y2_pos) + $pdfTopMargin + ($areaItem->height / 2)) - (($area['fontSize'] / 2) - ($area['fontSize'] * 0.15));
+				$offsetTop = (($imageHeight - $areaItem->y2_pos) + $pdfTopMargin + ($areaItem->height / 2));
+				$offsetTop -= (($area['fontSize'] / 2) - ($area['fontSize'] * 0.15));
 				$offsetLeft += $pdfLeftMargin;
 
 				$epsText .= $epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $area['fontSize'] . "  scalefont setfont\n";
