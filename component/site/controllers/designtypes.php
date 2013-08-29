@@ -210,7 +210,11 @@ class ReddesignControllerDesigntypes extends FOFController
 		$imageSize = getimagesize(JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg');
 		$response['imageWidth'] = $imageSize[0];
 		$response['imageHeight'] = $imageSize[1];
-		$response['autoSizeData'] = $autoSizeData;
+
+		if (!empty($autoSizeData))
+		{
+			$response['autoSizeData'] = $autoSizeData;
+		}
 
 		echo json_encode($response);
 	}
