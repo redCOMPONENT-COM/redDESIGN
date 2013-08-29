@@ -13,7 +13,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 ?>
 
 <h1><?php echo $this->item->title; ?></h1>
-<form id="designform" name="designform" method="post" action="index.php">
+<form id="designform" name="designform" method="post" action="index.php" class="row-fluid">
 	<input type="hidden" name="option" value="com_reddesign">
 	<input type="hidden" name="view" value="designtype">
 	<input type="hidden" name="task" id="task" value="">
@@ -37,10 +37,12 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	<div id="my-tab-content" class="tab-content">
 		<div class="tab-pane active" id="customize">
 			<div class="row-fluid">
-				<div class="well span12">
-					<?php echo $this->loadTemplate('frames'); ?>
+				<div class="row-fluid">
+					<div class="well span12">
+						<?php echo $this->loadTemplate('frames'); ?>
+					</div>
 				</div>
-				<div id="background-container">
+				<div id="background-container" class="row-fluid">
 					<img id="background"
 						 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"
 						 alt="<?php echo $this->previewBackground->title;?>" />
@@ -51,16 +53,18 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 						</div>
 					</div>
 				</div>
-				<div class="customize-it-btn">
+				<div class="customize-it-btn row-fluid">
 					<?php if (!empty($this->productionBackgroundAreas) && ($this->params->get('autoCustomize', 1) == 0 || $this->params->get('autoCustomize', 1) == 2) ) : ?>
 						<button type="button" class="btn btn-success" data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>" id="customizeDesign">
 							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE'); ?>
 						</button>
 					<?php endif; ?>
 				</div>
-				<div class="well">
-					<?php echo $this->loadTemplate('areas'); ?>
-					<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
+				<div class="row-fluid">
+					<div class="well span12">
+						<?php echo $this->loadTemplate('areas'); ?>
+						<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
+					</div>
 				</div>
 			</div>
 		</div>

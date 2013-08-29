@@ -22,38 +22,33 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 
 	<div class="row-fluid">
 		<div class="span4">
-			<div class="control-group">
-				<label class="control-label" for="textArea<?php echo $area->reddesign_area_id; ?>">
-					<strong><?php echo $area->title; ?></strong>
-				</label>
-				<div class="controls">
-				<?php if ($this->item->fontsizer == 'auto') : ?>
-					<textarea
-						name="textArea<?php echo $area->reddesign_area_id; ?>"
-						class="textAreaClass"
-						placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
-						id="textArea<?php echo $area->reddesign_area_id; ?>"
-						required="required"></textarea>
-				<?php else : ?>
-					<input
-						type="text"
-						name="textArea<?php echo $area->reddesign_area_id; ?>"
-						class="textAreaClass"
-						placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
-						id="textArea<?php echo $area->reddesign_area_id; ?>"
-						value=""
-						required="required"
-						>
-				<?php endif; ?>
-				</div>
-			</div>
+			<label for="textArea<?php echo $area->reddesign_area_id; ?>">
+				<strong><?php echo $area->title; ?></strong>
+			</label>
+
+			<?php if ($this->item->fontsizer == 'auto') : ?>
+				<textarea
+					name="textArea<?php echo $area->reddesign_area_id; ?>"
+					class="textAreaClass"
+					placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
+					id="textArea<?php echo $area->reddesign_area_id; ?>"
+					required="required"></textarea>
+			<?php else : ?>
+				<input
+					type="text"
+					name="textArea<?php echo $area->reddesign_area_id; ?>"
+					class="textAreaClass"
+					placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
+					id="textArea<?php echo $area->reddesign_area_id; ?>"
+					value=""
+					required="required"
+					>
+			<?php endif; ?>
 		</div>
 		<div class="span4">
-			<p>
-				<label>
-					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_FONT'); ?>
-				</label>
-			</p>
+			<label for="<?php echo 'fontArea' . $area->reddesign_area_id; ?>">
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_FONT'); ?>
+			</label>
 
 			<?php
 			/* FONT SELECTION */
@@ -82,7 +77,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 
 			<?php /* Case 1: automatic font size */ ?>
 			<?php if ($this->item->fontsizer != 'auto') : ?>
-				<label>
+				<label for="<?php echo 'fontArea' . $area->reddesign_area_id; ?>">
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_FONTSIZE'); ?>
 				</label>
 			<?php endif; ?>
@@ -112,74 +107,63 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			<?php endif; ?>
 		</div>
 		<div class="span4">
-			<?php if (!empty($area->color_code)) : ?>
-				<label class="control-label ">
-					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_COLOR_CODE'); ?>
-				</label>
-			<?php endif; ?>
+			<label>
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_COLOR_CODE'); ?>
+			</label>
 
-			<div class="controls">
+			<?php if (empty($area->color_code)) : ?>
+				<input type="hidden" name="colorCode<?php echo $area->reddesign_area_id ?>" value="000000"
+					   id="colorCode<?php echo $area->reddesign_area_id ?>">
+			<?php elseif ($area->color_code == 1) : ?>
+				<div id="color-selector<?php echo $area->reddesign_area_id; ?>" class="colorSelector">
+					<div style="background-color: #000000"></div>
+				</div>
+				<div class="help-block">
+					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLORS_HELP'); ?>
+				</div>
+				<input type="hidden" name="colorCode<?php echo $area->reddesign_area_id ?>" value="000000"
+					   id="colorCode<?php echo $area->reddesign_area_id ?>">
+			<?php else : ?>
+				<div id="loadColors" class="row-fluid">
+					<?php
+						if (strpos($area->color_code, "#") !== false)
+						{
+							$colors = explode(",", $area->color_code);
 
-				<?php if (empty($area->color_code)) : ?>
-					<input type="hidden" name="colorCode<?php echo $area->reddesign_area_id ?>" value="000000"
-						   id="colorCode<?php echo $area->reddesign_area_id ?>">
-				<?php elseif ($area->color_code == 1) : ?>
-					<div id="color-selector<?php echo $area->reddesign_area_id; ?>" class="colorSelector">
-						<div style="background-color: #000000"></div>
-					</div>
-					<div class="help-block">
-						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLORS_HELP'); ?>
-					</div>
-					<input type="hidden" name="colorCode<?php echo $area->reddesign_area_id ?>" value="000000"
-						   id="colorCode<?php echo $area->reddesign_area_id ?>">
-				<?php
-				else : ?>
-					<div id="loadColors">
-						<table class="table" cellpadding="0" cellspacing="0" border="0">
-							<tr valign="top" class="color">
-								<?php
-								$i = 0;
-								if (strpos($area->color_code, "#") !== false)
-								{
-									$colorData = explode(",", $area->color_code);
+							$defaultColor = $colors[0];
+							$defaultColorVal = str_replace('#', '', $colors[0]);
 
-									for ($j = 0; $j < count($colorData); $j++,$i++)
-									{
-										$defaultColor = $colorData[0];
-										$defaultColorVal = str_replace('#', '', $colorData[0]);
-										$colorCodeVal = str_replace('#', '', $colorData[$j]);
-										?>
-										<td>
-											<div class="colorSelector_list">
-												<div
-													onClick="setColorCode(<?php echo $area->reddesign_area_id ?>,'<?php echo $colorCodeVal; ?>');"
-													style="background-color:<?php echo $colorData[$j] ?>;cursor:pointer;">
-													&nbsp;</div>
-											</div>
-										</td>
-									<?php if ($i % 4 == 0) : ?>
-										</tr>
-										<tr>
-									<?php endif; ?>
-								<?php } ?>
-								<?php } ?>
-							</tr>
-						</table>
-					</div>
-					<label class="control-label ">
+							foreach ($colors as $key => $value)
+							{
+								$colorCodeVal = str_replace('#', '', $colors[$key]);
+					?>
+								<div class="colorSelector_list">
+									<div onClick="setColorCode(<?php echo $area->reddesign_area_id; ?>,'<?php echo $colorCodeVal; ?>');"
+										 style="background-color:<?php echo $value; ?>;cursor:pointer;">
+										 &nbsp;
+									</div>
+								</div>
+					<?php
+							}
+						}
+					?>
+				</div>
+
+				<div class="span12">
+					<label for="fontColor<?php echo $area->reddesign_area_id ?>">
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DEFAULT_COLOR_CODE'); ?>
 					</label>
-					<div class="controls">
-						<div class="colorSelector_list" id="fontColor<?php echo $area->reddesign_area_id ?>">
-							<div style="background-color:<?php echo $defaultColor; ?>;cursor:pointer;">&nbsp;</div>
-						</div>
-						<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id ?>"
-							   name="colorCode<?php echo $area->reddesign_area_id ?>"
-							   value="<?php echo $defaultColorVal; ?>"
-							   id="colorCode<?php echo $area->reddesign_area_id ?>">
+					<div class="colorSelector_list" id="fontColor<?php echo $area->reddesign_area_id ?>">
+						<div style="background-color:<?php echo $defaultColor; ?>;cursor:pointer;">&nbsp;</div>
 					</div>
-				<?php endif; ?>
-			</div>
+					<input type="hidden" class="colorCode<?php echo $area->reddesign_area_id ?>"
+							name="colorCode<?php echo $area->reddesign_area_id ?>"
+							value="<?php echo $defaultColorVal; ?>"
+							id="colorCode<?php echo $area->reddesign_area_id ?>">
+				</div>
+
+			<?php endif; ?>
+
 		</div>
 	</div>
 	<hr class="bs-docs-separator">

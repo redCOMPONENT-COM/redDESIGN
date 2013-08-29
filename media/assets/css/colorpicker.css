@@ -264,12 +264,15 @@
 
 .colorSelector_list {
 	-moz-background-clip:border;
--moz-background-inline-policy:continuous;
--moz-background-origin:padding;
-background:transparent url(../images/select.png) repeat scroll 0 0;
-height:36px;
-position:relative;
-width:36px;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	background:transparent url(../images/select.png) no-repeat scroll 0 0;
+	height:36px;
+	position:relative;
+	width:36px;
+	margin-bottom: 10px;
+	margin-right: 10px;
+	float: left;
 }
 
 .colorSelector_list div {
