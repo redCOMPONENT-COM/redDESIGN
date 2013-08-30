@@ -391,8 +391,6 @@ class ReddesignControllerDesigntypes extends FOFController
 		* Base-Height (eg. char "j,q,y")
 		*/
 
-		$finalFontSize = 0;
-
 		if ($FontSizeByWidthMax > $FontSizeByHeightMax)
 		{
 			$finalFontSize = $FontSizeByHeightMax;
