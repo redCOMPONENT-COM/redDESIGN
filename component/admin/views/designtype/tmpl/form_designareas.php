@@ -428,7 +428,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 									'<div id="allowedColorsRow' + reddesign_area_id + '">' +
 									'<div class="control-group">' +
 										'<div class="controls">' +
-											'<input type="text" class="input-small" value="" id="color_code' + reddesign_area_id + '" name="color_code' + reddesign_area_id + '">&nbsp;' +
+											'<input type="text" class="input-small" value="ff0000" id="color_code' + reddesign_area_id + '" name="color_code' + reddesign_area_id + '">&nbsp;' +
 											'<button type="button" class="btn btn-small btn-success" onclick="addNewcolor(' + reddesign_area_id + ');">' +
 											'<span><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR'); ?></span>' +
 											'</button>' +
@@ -1131,7 +1131,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 										<div id="allowedColorsRow<?php echo $area->reddesign_area_id;?>" <?php echo $style;?>>
 										<div class="control-group">
 											<div class="controls">
-												<input type="text" class="input-small" value="" id="color_code<?php echo $area->reddesign_area_id;?>" name="color_code<?php echo $area->reddesign_area_id;?>">
+												<input type="text" class="input-small" value="ff0000" id="color_code<?php echo $area->reddesign_area_id;?>" name="color_code<?php echo $area->reddesign_area_id;?>">
 												<button type="button" class="btn btn-small btn-success" onclick="addNewcolor('<?php echo $area->reddesign_area_id;?>');">
 												<span><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR'); ?></span>
 												</button>
