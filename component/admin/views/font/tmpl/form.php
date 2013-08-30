@@ -10,6 +10,27 @@
 defined('_JEXEC') or die();
 
 JHTML::_('behavior.framework');
+
+if (empty($this->item->default_width))
+{
+	$this->item->default_width = 0.99999;
+}
+
+
+if (empty($this->item->default_height))
+{
+	$this->item->default_height = 0.99999;
+}
+
+if (empty($this->item->default_caps_height))
+{
+	$this->item->default_caps_height = 0.99999;
+}
+
+if (empty($this->item->default_baseline_height))
+{
+	$this->item->default_baseline_height = 0.99999;
+}
 ?>
 <?php if (!extension_loaded('gd') && !function_exists('gd_info')) : ?>
 	<p class="alert"><?php echo JText::_('RED_REDDESIGN_CPANEL_ERROR_CANT_FIND_GD_LIBRARY'); ?></p>
@@ -78,7 +99,13 @@ JHTML::_('behavior.framework');
 			</label>
 
 			<div class="controls">
-				<input type="text" value="<?php echo $this->item->default_width; ?>" maxlength="10" size="32" id="default_width" name="default_width" required="required">
+				<input type="text"
+					   value="<?php echo $this->item->default_width; ?>"
+					   maxlength="10"
+					   size="32"
+					   id="default_width"
+					   name="default_width"
+					   required="required">
 			</div>
 		</div>
 
@@ -88,7 +115,13 @@ JHTML::_('behavior.framework');
 			</label>
 
 			<div class="controls">
-				<input type="text" value="<?php echo $this->item->default_height; ?>" maxlength="10" size="32" id="default_height" name="default_height" required="required">
+				<input type="text"
+					   value="<?php echo $this->item->default_height; ?>"
+					   maxlength="10"
+					   size="32"
+					   id="default_height"
+					   name="default_height"
+					   required="required">
 			</div>
 		</div>
 
@@ -98,7 +131,13 @@ JHTML::_('behavior.framework');
 			</label>
 
 			<div class="controls">
-				<input type="text" value="<?php echo $this->item->default_caps_height; ?>" maxlength="10" size="32" id="default_caps_height" name="default_caps_height" required="required">
+				<input type="text"
+					   value="<?php echo $this->item->default_caps_height; ?>"
+					   maxlength="10"
+					   size="32"
+					   id="default_caps_height"
+					   name="default_caps_height"
+					   required="required">
 			</div>
 		</div>
 
@@ -108,7 +147,13 @@ JHTML::_('behavior.framework');
 			</label>
 
 			<div class="controls">
-				<input type="text" value="<?php echo $this->item->default_baseline_height; ?>" maxlength="10" size="32" id="default_baseline_height" name="default_baseline_height" required="required">
+				<input type="text"
+					   value="<?php echo $this->item->default_baseline_height; ?>"
+					   maxlength="10"
+					   size="32"
+					   id="default_baseline_height"
+					   name="default_baseline_height"
+					   required="required">
 			</div>
 		</div>
 	</div>
