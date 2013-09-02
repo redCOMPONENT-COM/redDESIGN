@@ -460,8 +460,11 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 							'</div>' +
 							'<div class="row">' +
 								'<div class="span12" style="text-align: center;">' +
-									'<button type="button" class="btn btn-success" ' +
-										'onclick="saveAreaSettings(' + reddesign_area_id + ');">' +
+									'<button id="saveAreaSettings<?php echo $area->reddesign_area_id; ?>" ' +
+											'type="button" ' +
+											'class="btn btn-success" ' +
+											'data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVE_AREA_SETTINGS'); ?>" ' +
+											'onclick="saveAreaSettings(' + reddesign_area_id + ');">' +
 										'<span><?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?></span>' +
 									'</button>' +
 									'<button type="button" class="btn" ' +
@@ -675,6 +678,8 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		 * @param reddesign_area_id
          */
 		function saveAreaSettings(reddesign_area_id) {
+			akeeba.jQuery("#saveAreaSettings" + reddesign_area_id).button("loading");
+
 			var areaFontAlignment = akeeba.jQuery("#areaFontAlignment" + reddesign_area_id).val();
 			var fontsizerDropdown = akeeba.jQuery("#fontsizerDropdown" + reddesign_area_id).val();
 			var fontsizerSliderDefault = akeeba.jQuery("#fontsizerSliderDefault" + reddesign_area_id).val();
@@ -718,6 +723,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					akeeba.jQuery("#ajaxMessageAreas").html(json.message);
 					akeeba.jQuery("#ajaxMessageAreas").fadeIn("slow");
 					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
+					setTimeout(function () {akeeba.jQuery("#saveAreaSettings" + reddesign_area_id).button("reset")}, 1000);
 				},
 				error: function (data) {
 					akeeba.jQuery("#ajaxMessageAreas").removeClass();
@@ -1198,10 +1204,12 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 										</div>
 									</div>
 								</div>
-								<div id="row">
+								<div class="row span12 offset5">
 									<div class="span12" style="text-align: center;">
-										<button type="button"
+										<button id="saveAreaSettings<?php echo $area->reddesign_area_id; ?>"
+												type="button"
 												class="btn btn-success"
+												data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVE_AREA_SETTINGS'); ?>"
 												onclick="saveAreaSettings(<?php echo $area->reddesign_area_id; ?>);">
 											<span>
 												<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
