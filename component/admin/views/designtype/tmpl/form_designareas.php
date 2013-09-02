@@ -179,11 +179,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		function preSaveArea(update) {
 			if(!akeeba.jQuery("#areaName").val())
 			{
-				akeeba.jQuery("#formMessageAreas").removeClass();
-				akeeba.jQuery("#formMessageAreas").addClass("alert alert-error");
-				akeeba.jQuery("#formMessageAreas").html("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_NO_AREA_NAME'); ?>");
-				akeeba.jQuery("#formMessageAreas").fadeIn("slow");
-				akeeba.jQuery("#formMessageAreas").fadeOut(3000);
+				alert("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_NO_AREA_NAME'); ?>");
 			}
 			else
 			{
@@ -197,6 +193,8 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		 * @param update
          */
 		function saveArea(update) {
+			akeeba.jQuery("#saveAreaBtn").button("loading");
+
 			var reddesign_area_id;
 			var areaName	= akeeba.jQuery("#areaName").val();
 			var areaX1 	= akeeba.jQuery("#areaX1").val();
@@ -239,11 +237,6 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				type: "post",
 				success: function (data) {
 					var json = akeeba.jQuery.parseJSON(data);
-					akeeba.jQuery("#ajaxMessageAreas").removeClass();
-					akeeba.jQuery("#ajaxMessageAreas").addClass("alert alert-success");
-					akeeba.jQuery("#ajaxMessageAreas").html(json.message);
-					akeeba.jQuery("#ajaxMessageAreas").fadeIn("slow");
-					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
 
 					if(update == 0)
 					{
@@ -259,13 +252,11 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						akeeba.jQuery("#areaDiv" + reddesign_area_id).html(areaName + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
 						updateAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
 					}
+
+					setTimeout(function () {akeeba.jQuery("#saveAreaBtn").button("reset")}, 500);
 				},
 				error: function (data) {
-					akeeba.jQuery("#ajaxMessageAreas").removeClass();
-					akeeba.jQuery("#ajaxMessageAreas").addClass("alert alert-error");
-					akeeba.jQuery("#ajaxMessageAreas").html(data);
-					akeeba.jQuery("#ajaxMessageAreas").fadeIn("slow");
-					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
+					alert(data);
 				}
 			});
 		}
@@ -576,11 +567,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					});
 				},
 				error: function (data) {
-					akeeba.jQuery("#ajaxMessageAreas").removeClass();
-					akeeba.jQuery("#ajaxMessageAreas").addClass("alert alert-error");
-					akeeba.jQuery("#ajaxMessageAreas").html(data);
-					akeeba.jQuery("#ajaxMessageAreas").fadeIn("slow");
-					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
+					alert(data);
 				}
 			});
 		}
@@ -637,18 +624,9 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					akeeba.jQuery("#areaRow" + reddesign_area_id).remove();
 					akeeba.jQuery("#areaSettingsRow" + reddesign_area_id).remove();
 					updateImageAreas();
-					akeeba.jQuery("#ajaxMessageAreas").removeClass();
-					akeeba.jQuery("#ajaxMessageAreas").addClass("alert alert-success");
-					akeeba.jQuery("#ajaxMessageAreas").html(data);
-					akeeba.jQuery("#ajaxMessageAreas").fadeIn("slow");
-					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
 				},
 				error: function (data) {
-					akeeba.jQuery("#ajaxMessageAreas").removeClass();
-					akeeba.jQuery("#ajaxMessageAreas").addClass("alert alert-error");
-					akeeba.jQuery("#ajaxMessageAreas").html(data);
-					akeeba.jQuery("#ajaxMessageAreas").fadeIn("slow");
-					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
+					alert(data);
 				}
 			});
 		}
@@ -717,20 +695,10 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				},
 				type: "post",
 				success: function (data) {
-					var json = akeeba.jQuery.parseJSON(data);
-					akeeba.jQuery("#ajaxMessageAreas").removeClass();
-					akeeba.jQuery("#ajaxMessageAreas").addClass("alert alert-success");
-					akeeba.jQuery("#ajaxMessageAreas").html(json.message);
-					akeeba.jQuery("#ajaxMessageAreas").fadeIn("slow");
-					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
-					setTimeout(function () {akeeba.jQuery("#saveAreaSettings" + reddesign_area_id).button("reset")}, 1000);
+					setTimeout(function () {akeeba.jQuery("#saveAreaSettings" + reddesign_area_id).button("reset")}, 500);
 				},
 				error: function (data) {
-					akeeba.jQuery("#ajaxMessageAreas").removeClass();
-					akeeba.jQuery("#ajaxMessageAreas").addClass("alert alert-error");
-					akeeba.jQuery("#ajaxMessageAreas").html(data);
-					akeeba.jQuery("#ajaxMessageAreas").fadeIn("slow");
-					akeeba.jQuery("#ajaxMessageAreas").fadeOut(3000);
+					alert(data);
 				}
 			});
 		}
@@ -927,22 +895,23 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				</div>
 			</div>
 			<div class="form-actions">
-				<div id="formMessageAreasContainer">
-						<div id="formMessageAreas" style="display: none;"></div>
-				</div>
-				<a id="saveAreaBtn" rel="" class="btn btn-success"
-				   title="<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>"
-				   onclick="preSaveArea(akeeba.jQuery('#designAreaId').val());">
-					<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
-				</a>
-				<a id="cancelAreaBtn" rel="" class="btn" onclick="cancelArea();" title="<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>">
-					<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>
-				</a>
-			</div>
-
-			<div id="ajaxMessageAreasContainer" style="height: 25px; padding-bottom: 11px;">
-				<div id="ajaxMessageAreas" style="display: none;">
-				</div>
+				<button id="saveAreaBtn"
+						class="btn btn-success"
+						data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVING_AREA'); ?>"
+						onclick="preSaveArea(akeeba.jQuery('#designAreaId').val());"
+					>
+					<span>
+						<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
+					</span>
+				</button>
+				<button id="cancelAreaBtn"
+						class="btn"
+						onclick="cancelArea();"
+					>
+					<span>
+						<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>
+					</span>
+				</button>
 			</div>
 		</div>
 
