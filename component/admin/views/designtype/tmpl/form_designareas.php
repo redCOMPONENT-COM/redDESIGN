@@ -348,9 +348,9 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						'</button>' +
 					'</td>' +
 				'</tr>' +
-				'<tr id="areaSettingsRow' + reddesign_area_id + '"	class="' + rowClass + ' hide">' +
+				'<tr id="areaSettingsRow' + reddesign_area_id + '"	class="' + rowClass + ' hide areaSettingsRow">' +
 					'<td colspan="5" >' +
-						'<div id="areaSettingsDiv' + reddesign_area_id + '" class="hide">' +
+
 							'<div class="row">'+
 								'<div class="span6">'+
 									'<div class="row">'+
@@ -434,37 +434,36 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 											'</table>' +
 										'</div>' +
 									'</div>' +
-									'</div>' +
 								'</div>' +
-								'<div class="span3 areSettingRowheight">' +
-									'<div id="colorPicker' + reddesign_area_id + '">'+
-										'<div class="control-group" >'+
-											'<label class="control-label ">'+
-												'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_TEXT'); ?>'+
-											'</label>'+
-											'<div class="controls">'+
-												'<p id="colorpickerHolderC' + reddesign_area_id + '"></p>'+
-											'</div>'+
+							'</div>' +
+							'<div class="span3 areSettingRowheight">' +
+								'<div id="colorPicker' + reddesign_area_id + '">'+
+									'<div class="control-group" >'+
+										'<label class="control-label ">'+
+											'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_TEXT'); ?>'+
+										'</label>'+
+										'<div class="controls">'+
+											'<p id="colorpickerHolderC' + reddesign_area_id + '"></p>'+
 										'</div>'+
 									'</div>'+
 								'</div>'+
-							'</div>' +
-							'<div class="row">' +
-								'<div class="span12" style="text-align: center;">' +
-									'<button id="saveAreaSettings<?php echo $area->reddesign_area_id; ?>" ' +
-											'type="button" ' +
-											'class="btn btn-success" ' +
-											'data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVE_AREA_SETTINGS'); ?>" ' +
-											'onclick="saveAreaSettings(' + reddesign_area_id + ');">' +
-										'<span><?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?></span>' +
-									'</button>' +
-									'<button type="button" class="btn" ' +
-										'onclick="showAreaSettings(' + reddesign_area_id + ');">' +
-										'<span><?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?></span>' +
-									'</button>' +
-								'</div>' +
 							'</div>'+
 						'</div>' +
+						'<div class="row">' +
+							'<div class="span12" style="text-align: center;">' +
+								'<button id="saveAreaSettings<?php echo $area->reddesign_area_id; ?>" ' +
+										'type="button" ' +
+										'class="btn btn-success" ' +
+										'data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVE_AREA_SETTINGS'); ?>" ' +
+										'onclick="saveAreaSettings(' + reddesign_area_id + ');">' +
+									'<span><?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?></span>' +
+								'</button>' +
+								'<button type="button" class="btn" ' +
+									'onclick="showAreaSettings(' + reddesign_area_id + ');">' +
+									'<span><?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?></span>' +
+								'</button>' +
+							'</div>' +
+						'</div>'+
 					'</td>' +
 				'</tr>'
 			);
@@ -637,17 +636,8 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		 * @param reddesign_area_id
          */
 		function showAreaSettings(reddesign_area_id) {
-			if (akeeba.jQuery("#areaSettingsRow" + reddesign_area_id).is(":hidden"))
-			{
-				akeeba.jQuery("#areaSettingsRow" + reddesign_area_id).show();
-				akeeba.jQuery("#areaSettingsDiv" + reddesign_area_id).slideToggle(1000);
-			}
-			else
-			{
-				akeeba.jQuery("#areaSettingsDiv" + reddesign_area_id).slideToggle(1000, function () {
-					akeeba.jQuery("#areaSettingsRow" + reddesign_area_id).hide();
-				});
-			}
+			akeeba.jQuery(".areaSettingsRow").hide();
+			akeeba.jQuery("#areaSettingsRow" + reddesign_area_id).slideToggle("slow");
 		}
 
         /**
@@ -991,9 +981,9 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						</td>
 					</tr>
 					<tr id="areaSettingsRow<?php echo $area->reddesign_area_id; ?>"
-						class="<?php echo 'row' . $m; ?> hide">
+						class="<?php echo 'row' . $m; ?> hide areaSettingsRow">
 						<td colspan="5" >
-							<div id="areaSettingsDiv<?php echo $area->reddesign_area_id; ?>" class="hide">
+
 								<div id="row">
 									<div class="span6">
 										<div class="row">
@@ -1077,10 +1067,10 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 													</div>
 												<?php endif; ?>
 											</div>
-											<?php endif; ?>
-										</div>
+										<?php endif; ?>
 									</div>
-									<div class="span3">
+								</div>
+								<div class="span3">
 										<?php
 										$colorCode = $area->color_code;
 
@@ -1094,16 +1084,16 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 										}
 										?>
 
-										<div class="control-group">
-											<label class="control-label ">
-												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR'); ?>
-											</label>
-											<div class="controls">
-												<?php echo $this->colorCodes['allColor' . $area->reddesign_area_id];?>
-												<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR_DESC'); ?></span>
-											</div>
+									<div class="control-group">
+										<label class="control-label ">
+											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR'); ?>
+										</label>
+										<div class="controls">
+											<?php echo $this->colorCodes['allColor' . $area->reddesign_area_id];?>
+											<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR_DESC'); ?></span>
 										</div>
-										<div id="allowedColorsRow<?php echo $area->reddesign_area_id;?>" <?php echo $style;?>>
+									</div>
+									<div id="allowedColorsRow<?php echo $area->reddesign_area_id;?>" <?php echo $style;?>>
 										<div class="control-group">
 											<div class="controls">
 												<input type="text" class="input-small" value="ff0000" id="color_code<?php echo $area->reddesign_area_id;?>" name="color_code<?php echo $area->reddesign_area_id;?>">
@@ -1157,41 +1147,40 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 												<input type="hidden" name="reddesign_color_code<?php echo $area->reddesign_area_id?>" id="reddesign_color_code<?php echo $area->reddesign_area_id?>" value="<?php echo $area->color_code?>">
 											</div>
 										</div>
-										</div>
 									</div>
-									<div class="span3 areSettingRowheight">
-										<div id="colorPicker<?php echo $area->reddesign_area_id;?>" <?php echo $style;?>>
-											<div class="control-group" >
-												<label class="control-label ">
-													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_TEXT'); ?>
-												</label>
-												<div class="controls">
-													<p id="colorpickerHolderC<?php echo $area->reddesign_area_id;?>"></p>
-												</div>
-
+								</div>
+								<div class="span3 areSettingRowheight">
+									<div id="colorPicker<?php echo $area->reddesign_area_id;?>" <?php echo $style;?>>
+										<div class="control-group" >
+											<label class="control-label ">
+												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_TEXT'); ?>
+											</label>
+											<div class="controls">
+												<p id="colorpickerHolderC<?php echo $area->reddesign_area_id;?>"></p>
 											</div>
+
 										</div>
 									</div>
 								</div>
-								<div class="row span12 offset5">
-									<div class="span12" style="text-align: center;">
-										<button id="saveAreaSettings<?php echo $area->reddesign_area_id; ?>"
-												type="button"
-												class="btn btn-success"
-												data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVE_AREA_SETTINGS'); ?>"
-												onclick="saveAreaSettings(<?php echo $area->reddesign_area_id; ?>);">
-											<span>
-												<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
-											</span>
-										</button>
-										<button type="button"
-												class="btn"
-												onclick="showAreaSettings(<?php echo $area->reddesign_area_id; ?>);">
-											<span>
-												<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>
-											</span>
-										</button>
-									</div>
+							</div>
+							<div class="row span12 offset5">
+								<div class="span12" style="text-align: center;">
+									<button id="saveAreaSettings<?php echo $area->reddesign_area_id; ?>"
+											type="button"
+											class="btn btn-success"
+											data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVE_AREA_SETTINGS'); ?>"
+											onclick="saveAreaSettings(<?php echo $area->reddesign_area_id; ?>);">
+										<span>
+											<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
+										</span>
+									</button>
+									<button type="button"
+											class="btn"
+											onclick="showAreaSettings(<?php echo $area->reddesign_area_id; ?>);">
+										<span>
+											<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>
+										</span>
+									</button>
 								</div>
 							</div>
 						</td>
