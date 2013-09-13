@@ -63,17 +63,17 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		$designTypes = $db->loadObjectList();
 
 		$designTypeOptions = array();
-		$designTypeOptions[] = JHTML::_('select.option', 0, JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_SELECT'));
+		$designTypeOptions[] = JHtml::_('select.option', '0', JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_SELECT'));
 
 		foreach ($designTypes as $designType)
 		{
-			$designTypeOptions[] = JHTML::_('select.option', $designType->reddesign_designtype_id, $designType->title);
+			$designTypeOptions[] = JHtml::_('select.option', $designType->reddesign_designtype_id, $designType->title);
 		}
 
 		$html = '<div>';
 			$html .= '<label for="designType">' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_DESIGN_TYPE') . '</label>';
-			$html .= '<div style="padding-top: 8px" >';
-				$html .= JHtml::_('select.genericlist', $designTypeOptions, 'designType', 'class="inputbox" style=" ', 'value', 'text', 0);
+			$html .= '<div style="padding-top: 7px" >';
+				$html .= JHtml::_('select.genericlist', $designTypeOptions, 'designType', ' class="inputbox" ', 'value', 'text', 0);
 			$html .= '</div>';
 		$html .= '</div>';
 
