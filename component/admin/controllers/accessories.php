@@ -29,16 +29,18 @@ class ReddesignControllerAccessories extends FOFController
 	public function onBeforeApplySave(&$data)
 	{
 		$uploadedThumbFile = null;
+		$oldImages = null;
+		$fileHelper = null;
+		$params = null;
 
 		// On edit, retrieve from database the old images that will be replaced (later we will remove them to keep system storage resources clean)
 		if (!!$data['reddesign_accessory_id'])
 		{
 			$db = JFactory::getDbo();
 			$query = $db->getQuery(true);
-			$query
-				->select($db->qn(array('image', 'thumbnail')))
-				->from($db->qn('#__reddesign_accessories'))
-				->where($db->qn('reddesign_accessory_id') . ' = ' . $db->q((int) $data['reddesign_accessory_id']));
+			$query->select($db->quoteName(array('image', 'thumbnail')));
+			$query->from($db->quoteName('#__reddesign_accessories'));
+			$query->where($db->quoteName('reddesign_accessory_id') . ' = ' . $db->quote((int) $data['reddesign_accessory_id']));
 
 			$db->setQuery($query);
 			$db->execute();
@@ -78,7 +80,7 @@ class ReddesignControllerAccessories extends FOFController
 			}
 
 			// If no thumbnail has been uploaded and user has checked the generate thumbnail based on uploaded image
-			if (empty($thumbFile['name']) && $this->input->getBool('autoGenerateThumbCheck'))
+			if (empty($thumbFile['name']) && $this->input->getBool('autoGenerateThumbCheck', false))
 			{
 				$dest = JPATH_ROOT . '/media/com_reddesign/assets/accessories/thumbnails/' . $uploadedImageFile['mangled_filename'];
 				JFile::copy($uploadedImageFile['filepath'], $dest);
