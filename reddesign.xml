@@ -70,5 +70,6 @@
     <plugins>
         <plugin name="redshop" group="reddesign" published="published" />
         <plugin name="reddesign_orders" group="redshop_product" published="published" />
+		<plugin name="reddesign" group="redshop_product_type" published="published" />
     </plugins>
 </extension>
