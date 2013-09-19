@@ -111,7 +111,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		if (!empty($reddesignDesigntypeId))
 		{
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName(array('reddesign_designtype_id', 'product_id')));
+			$query->select($db->quoteName('reddesign_designtype_id'));
 			$query->from($db->quoteName('#__reddesign_product_mapping'));
 			$query->where($db->quoteName('product_id') . ' = ' . $row->product_id);
 			$db->setQuery($query);
@@ -143,6 +143,41 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 				return $db->query();
 			}
+		}
+	}
+
+	/**
+	 * This function can replace regular product link to one which
+	 * is more suitable for a product type.
+	 *
+	 * @param   object  $product  Product for which we make link.
+	 *
+	 * @return  string $url
+	 */
+	public function createProductLink($product)
+	{
+		if ($product->product_type == 'redDESIGN')
+		{
+			$db = JFactory::getDbo();
+
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('reddesign_designtype_id'));
+			$query->from($db->quoteName('#__reddesign_product_mapping'));
+			$query->where($db->quoteName('product_id') . ' = ' . $product->product_id);
+			$db->setQuery($query);
+
+			$reddesignDesigntypeId = $db->loadResult();
+
+			if ($reddesignDesigntypeId)
+			{
+				$link = JRoute::_('index.php?option=com_reddesign&id=' . $reddesignDesigntypeId);
+			}
+			else
+			{
+				$link = null;
+			}
+
+			return $link;
 		}
 	}
 }
