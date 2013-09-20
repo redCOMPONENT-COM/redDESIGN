@@ -43,13 +43,14 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 * This is used to prevent jQuery conflicts and multiple jQuery loads
 	 * during integration.
 	 *
-	 * @param   object  $data  Product data object.
+	 * @param   object  $data    Product data object.
+	 * @param   string  $layout  Layout of the redSHOP view.
 	 *
 	 * @return bool If true than redSHOP won't load its jQuery file
 	 */
-	public function stopRedshopJQuery($data)
+	public function stopProductRedshopJQuery($data, $layout)
 	{
-		if ($data->product_type == 'redDESIGN')
+		if ($data->product_type == 'redDESIGN' && $layout == 'default')
 		{
 			return true;
 		}
