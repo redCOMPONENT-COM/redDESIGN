@@ -68,7 +68,8 @@
 	<scriptfile>script.reddesign.php</scriptfile>
 	<!-- Plugins to install -->
 	<plugins>
-		<plugin name="redshop" group="reddesign" published="published" />
-		<plugin name="reddesign" group="redshop_product_type" published="published" />
+		<plugin group="reddesign"			 name="redshop_integration" published="published" />
+		<plugin group="redshop_product"		 name="reddesign"			published="published" />
+		<plugin group="redshop_product_type" name="reddesign"			published="published" />
 	</plugins>
 </extension>
