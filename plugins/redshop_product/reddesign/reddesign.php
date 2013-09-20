@@ -39,6 +39,26 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	}
 
 	/**
+	 * Stops loading redSHOP's jQuery file if true is returned.
+	 * This is used to prevent jQuery conflicts and multiple jQuery loads
+	 * during integration.
+	 *
+	 * @param   object  $data    Product data object.
+	 * @param   string  $layout  Layout of the redSHOP view.
+	 *
+	 * @return bool If true than redSHOP won't load its jQuery file
+	 */
+	public function stopProductRedshopJQuery($data, $layout)
+	{
+		if ($data->product_type == 'redDESIGN' && $layout == 'default')
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * This method loads redDESIGN frontend editor into redSHOP
 	 * frontend product detail view.
 	 *
@@ -52,54 +72,45 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	{
 		if ($data->product_type == 'redDESIGN')
 		{
-			// Render the overridable template
+			// Get design type ID
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('reddesign_designtype_id'));
+			$query->from($db->quoteName('#__reddesign_product_mapping'));
+			$query->where($db->quoteName('product_id') . ' = ' . $data->product_id);
+			$db->setQuery($query);
+			$reddesignDesigntypeId = $db->loadResult();
+
+			$inputvars = array(
+				'id'	=> $reddesignDesigntypeId
+			);
+			$input = new FOFInput($inputvars);
+
 			ob_start();
-			require self::getLayoutPath($this->plugin->type, $this->plugin->name, $layout = 'default_');
+			FOFDispatcher::getTmpInstance('com_reddesign', 'designtype', array('input' => $input))->dispatch();
 			$html = ob_get_contents();
 			ob_end_clean();
+
+			$template_desc .= $html;
 		}
 	}
 
 	/**
-	 * Function to get the path to a layout checking overrides.
+	 * This method should create PDF production file. It would be more suitable to
+	 * have afterUpdateOrderStatus event and to create PDF production files on that
+	 * event. But current redSHOP architecture updates order status from hundreds
+	 * of different places instead of one.
+	 * ToDo: Make a control inside redDESIGN which will trigger fuction for deleting
+	 * ToDo: all PDFs related to not paid orders.
 	 *
-	 * @param   string  $type    Plugin type (system, content, etc.)
-	 * @param   string  $name    Name of the plugin
-	 * @param   string  $layout  The layout name
+	 * @param   object  $cart     Cart object.
+	 * @param   object  $rowitem  Order item object.
+	 * @param   int     $i        Some kind of index or maybe even Order item ID.
 	 *
-	 * @return string Path where we have to use to call the layout
+	 * @return void
 	 */
-	public static function getLayoutPath($type, $name, $layout = 'default')
+	public function afterOrderItemSave($cart, $rowitem, $i)
 	{
-		$template = JFactory::getApplication()->getTemplate();
-		$defaultLayout = $layout;
 
-		if (strpos($layout, ':') !== false)
-		{
-			// Get the template and file name from the string
-			$temp = explode(':', $layout);
-			$template = ($temp[0] == '_') ? $template : $temp[0];
-			$layout = $temp[1];
-			$defaultLayout = ($temp[1]) ? $temp[1] : 'default';
-		}
-
-		// Build the template and base path for the layout
-		$tPath = JPATH_THEMES . '/' . $template . '/html/plg_' . $type . '_' . $name . '/' . $layout . '.php';
-		$bPath = JPATH_BASE . '/plugins/' . $type . '/' . $name . '/tmpl/' . $defaultLayout . '.php';
-		$dPath = JPATH_BASE . '/plugins/' . $type . '/' . $name . '/tmpl/' . 'default.php';
-
-		// If the template has a layout override use it
-		if (file_exists($tPath))
-		{
-			return $tPath;
-		}
-		elseif (file_exists($bPath))
-		{
-			return $bPath;
-		}
-		else
-		{
-			return $dPath;
-		}
 	}
 }
