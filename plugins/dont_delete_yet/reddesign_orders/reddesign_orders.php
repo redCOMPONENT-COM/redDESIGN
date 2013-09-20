@@ -44,6 +44,21 @@ class PlgRedshop_ProductReddesign_Orders extends JPlugin
 	}
 
 	/**
+	 * This method loads redDESIGN frontend editor into redSHOP
+	 * frontend product detail view.
+	 *
+	 * @param   string  &$template_desc  The string which contains all of the product view HTML.
+	 * @param   object  &$params         Menu item product view parameters.
+	 * @param   object  $data            Product object.
+	 *
+	 * @return  void
+	 */
+	public function onAfterDisplayProduct(&$template_desc, &$params, $data)
+	{
+		$template_desc .= 'blablabla';
+	}
+
+	/**
 	 * Plugin method for event on building new product for redSHOP.
 	 *
 	 * @param   array  $cart   An array that holds cart information

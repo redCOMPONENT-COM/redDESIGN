@@ -61,8 +61,6 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		 * @param y1
 		 * @param x2
 		 * @param y2
-		 * @param width
-		 * @param height
 		 */
 		function selectArea(x1, y1, x2, y2) {
 			akeeba.jQuery("img#background").imgAreaSelect({
@@ -81,8 +79,6 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		 * @param y1
 		 * @param x2
 		 * @param y2
-		 * @param width
-		 * @param height
 		 */
 		function selectAreaOnKeyUp(x1, y1, x2, y2) {
 			var x1_pos_in_px = parseFloat(x1) * parseFloat(unitToPx);
@@ -411,15 +407,20 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 											'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR'); ?>'+
 										'</label>'+
 										'<div class="controls">'+
-											'<input  class="inputbox" type="radio"  name="allColor' + reddesign_area_id + '" value ="0"  onclick="hideColorPicker(' + reddesign_area_id + ');" checked="checked"><label class="radiobtn"  for="allColor' + reddesign_area_id + '">No</label>&nbsp;' +
-											'<input class="inputbox" type="radio"  name="allColor' + reddesign_area_id + '" value ="1"  onclick="hideColorPicker(' + reddesign_area_id + ');"><label class="radiobtn"  for="allColor' + reddesign_area_id + '">Yes</label>' +
+											'<input  class="inputbox" type="radio"  name="allColor' +
+													reddesign_area_id + '" value ="0"  onclick="hideColorPicker(' + reddesign_area_id +
+													');" checked="checked"><label class="radiobtn"  for="allColor' + reddesign_area_id + '">No</label>&nbsp;' +
+											'<input class="inputbox" type="radio"  name="allColor' +
+													reddesign_area_id + '" value ="1"  onclick="hideColorPicker(' + reddesign_area_id +
+													');"><label class="radiobtn"  for="allColor' + reddesign_area_id + '">Yes</label>' +
 											'<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR_DESC'); ?></span>'+
 										'</div>'+
 									'</div>'+
 									'<div id="allowedColorsRow' + reddesign_area_id + '">' +
 									'<div class="control-group">' +
 										'<div class="controls">' +
-											'<input type="text" class="input-small" value="ff0000" id="color_code' + reddesign_area_id + '" name="color_code' + reddesign_area_id + '">&nbsp;' +
+											'<input type="text" class="input-small" value="ff0000" id="color_code' + reddesign_area_id +
+													'" name="color_code' + reddesign_area_id + '">&nbsp;' +
 											'<button type="button" class="btn btn-small btn-success" onclick="addNewcolor(' + reddesign_area_id + ');">' +
 											'<span><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR'); ?></span>' +
 											'</button>' +
@@ -451,7 +452,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						'</div>' +
 						'<div class="row">' +
 							'<div class="span12" style="text-align: center;">' +
-								'<button id="saveAreaSettings<?php echo $area->reddesign_area_id; ?>" ' +
+								'<button id="saveAreaSettings' + reddesign_area_id + '" ' +
 										'type="button" ' +
 										'class="btn btn-success" ' +
 										'data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVE_AREA_SETTINGS'); ?>" ' +
@@ -708,8 +709,9 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 
 		akeeba.jQuery("#extra_table"+reddesign_area_id).append(
 			'<tr>' +
-				'<td><div class="colorSelector_list" ><div style=" background-color:'+colorcode+'" >&nbsp;</div></div></td>'+
-				'<td><div>'+colorcode+'</div><input type="hidden" value="'+color_code+'" class="colorCodes'+reddesign_area_id+'" name="colorCodes'+reddesign_area_id+'[]"  id="colorCodes'+reddesign_area_id+'">'+
+				'<td><div class="colorSelector_list" ><div style=" background-color:' + colorcode + '" >&nbsp;</div></div></td>' +
+				'<td><div>' + colorcode + '</div><input type="hidden" value="' + color_code + '" class="colorCodes' +
+					reddesign_area_id+'" name="colorCodes'+reddesign_area_id+'[]"  id="colorCodes'+reddesign_area_id+'">'+
 				'<td>'+
 				  '<div>'+
 					'<input type="hidden" name="colour_id'+reddesign_area_id+'[]" id="colour_id'+reddesign_area_id+'" value="'+color_code+'">'+
@@ -745,6 +747,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 	/**
 	* Delete color code from DB and remove that color row
 	*
+	* @param r
 	* @param reddesign_area_id
 	*/
 	function deleteColor(r,reddesign_area_id)
@@ -879,7 +882,9 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 						<img id="background"
 								 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->productionBackground->image_path; ?>"/>
 						<?php foreach($this->areas as $area) : ?>
-							<div id="areaDiv<?php echo $area->reddesign_area_id; ?>"><?php echo $area->title; ?></div>
+							<div id="areaDiv<?php echo $area->reddesign_area_id; ?>">
+								<?php echo $area->title; ?>
+							</div>
 						<?php endforeach; ?>
 					</div>
 				</div>
@@ -1093,10 +1098,15 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 											<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR_DESC'); ?></span>
 										</div>
 									</div>
-									<div id="allowedColorsRow<?php echo $area->reddesign_area_id;?>" <?php echo $style;?>>
+									<div id="allowedColorsRow<?php echo $area->reddesign_area_id?>" <?php echo $style;?>>
 										<div class="control-group">
 											<div class="controls">
-												<input type="text" class="input-small" value="ff0000" id="color_code<?php echo $area->reddesign_area_id;?>" name="color_code<?php echo $area->reddesign_area_id;?>">
+												<input type="text"
+													   class="input-small"
+													   value="ff0000"
+													   id="color_code<?php echo $area->reddesign_area_id;?>"
+													   name="color_code<?php echo $area->reddesign_area_id;?>"
+													/>
 												<button type="button" class="btn btn-small btn-success" onclick="addNewcolor('<?php echo $area->reddesign_area_id;?>');">
 												<span><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR'); ?></span>
 												</button>
@@ -1110,15 +1120,15 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 												<table class="loadcolor" id="extra_table<?php echo $area->reddesign_area_id;?>" cellpadding="2" cellspacing="2">
 													<?php
 
-													if (@$this->colorCodes["color_" . $area->reddesign_area_id] != "1" )
+													if ($this->colorCodes["color_" . $area->reddesign_area_id] != "1" )
 													{
-														if (strpos(@$this->colorCodes["color_" . $area->reddesign_area_id], "#") !== false)
+														if (strpos($this->colorCodes["color_" . $area->reddesign_area_id], "#") !== false)
 														{
 															$colorData = explode(",", $this->colorCodes["color_" . $area->reddesign_area_id]);
 
 															for ($j = 0;$j < count($colorData); $j++)
 															{
-																$colorCodeVal = str_replace("#","", $colorData[$j]);
+																$colorCodeVal = str_replace("#", "", $colorData[$j]);
 															?>
 																<tr valign="top" class="color">
 																<td>
@@ -1127,14 +1137,26 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 																	</div>
 																</td>
 																<td>
-																	<div><?php echo $colorData[$j] ?></div><input type="hidden" class="colorCodes<?php echo $area->reddesign_area_id?>" name="colorCodes<?php echo $area->reddesign_area_id?>[]" value="<?php echo $colorCodeVal; ?>" id="colorCodes<?php echo $area->reddesign_area_id?>">
+																	<div>
+																		<?php echo $colorData[$j]; ?>
+																	</div>
+																	<input type="hidden"
+																		   class="colorCodes<?php echo $area->reddesign_area_id?>"
+																		   name="colorCodes<?php echo $area->reddesign_area_id?>[]"
+																		   value="<?php echo $colorCodeVal; ?>"
+																		   id="colorCodes<?php echo $area->reddesign_area_id?>"
+																		/>
 																</td>
 																<td>
 																	<div>
 																		<button type="button" class="btn btn-small btn-danger delete" onclick="deleteColor(this,'<?php echo $area->reddesign_area_id?>');">
 																			<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>
 																		</button>
-																		<input type="hidden" name="colour_id<?php echo $area->reddesign_area_id?>[]" id="colour_id<?php echo $area->reddesign_area_id?>" value="<?php echo $colorData[$j] ?>">
+																		<input type="hidden"
+																			   name="colour_id<?php echo $area->reddesign_area_id?>[]"
+																			   id="colour_id<?php echo $area->reddesign_area_id?>"
+																			   value="<?php echo $colorData[$j] ?>"
+																			/>
 																	</div>
 																</td>
 																</tr>
@@ -1144,13 +1166,17 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 													}
 													?>
 												</table>
-												<input type="hidden" name="reddesign_color_code<?php echo $area->reddesign_area_id?>" id="reddesign_color_code<?php echo $area->reddesign_area_id?>" value="<?php echo $area->color_code?>">
+												<input type="hidden"
+													   name="reddesign_color_code<?php echo $area->reddesign_area_id?>"
+													   id="reddesign_color_code<?php echo $area->reddesign_area_id?>"
+													   value="<?php echo $area->color_code?>"
+													/>
 											</div>
 										</div>
 									</div>
 								</div>
 								<div class="span3 areSettingRowheight">
-									<div id="colorPicker<?php echo $area->reddesign_area_id;?>" <?php echo $style;?>>
+									<div id="colorPicker<?php echo $area->reddesign_area_id ?>" <?php echo $style;?>>
 										<div class="control-group" >
 											<label class="control-label ">
 												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_TEXT'); ?>

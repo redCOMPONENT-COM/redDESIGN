@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5" type="plugin" group="reddesign" method="upgrade">
-    <name>PLG_REDDESIGN_REDSHOP</name>
+    <name>PLG_REDDESIGN_REDSHOP_INTEGRATION</name>
     <author>redCOMPONENT.com</author>
     <creationDate>July 2013</creationDate>
     <copyright>Copyright (C) 2013 redCOMPONENT.com. All rights reserved.</copyright>
@@ -8,14 +8,14 @@
     <authorEmail>email@redweb.dk</authorEmail>
     <authorUrl>www.redcomponent.com</authorUrl>
     <version>1.0.0</version>
-    <description>PLG_REDDESIGN_REDSHOP_XML_DESCRIPTION</description>
+    <description>PLG_REDDESIGN_REDSHOP_INTEGRATION_DESC</description>
     <files>
-        <filename plugin="redshop">redshop.php</filename>
+        <filename plugin="redshop_integration">redshop_integration.php</filename>
         <folder>fields</folder>
     </files>
     <languages>
-        <language tag="en-GB">language/en-GB/en-GB.plg_reddesign_redshop.ini</language>
-        <language tag="en-GB">language/en-GB/en-GB.plg_reddesign_redshop.sys.ini</language>
+        <language tag="en-GB">language/en-GB/en-GB.plg_reddesign_redshop_integration.ini</language>
+        <language tag="en-GB">language/en-GB/en-GB.plg_reddesign_redshop_integration.sys.ini</language>
     </languages>
     <config>
         <fields name="params">
