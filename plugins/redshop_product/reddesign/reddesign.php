@@ -39,6 +39,25 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	}
 
 	/**
+	 * Stops loading redSHOP's jQuery file if true is returned.
+	 * This is used to prevent jQuery conflicts and multiple jQuery loads
+	 * during integration.
+	 *
+	 * @param   object  $data  Product data object.
+	 *
+	 * @return bool If true than redSHOP won't load its jQuery file
+	 */
+	public function stopRedshopJQuery($data)
+	{
+		if ($data->product_type == 'redDESIGN')
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * This method loads redDESIGN frontend editor into redSHOP
 	 * frontend product detail view.
 	 *
