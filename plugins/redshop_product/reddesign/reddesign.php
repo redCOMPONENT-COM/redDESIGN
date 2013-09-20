@@ -94,4 +94,23 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$template_desc .= $html;
 		}
 	}
+
+	/**
+	 * This method should create PDF production file. It would be more suitable to
+	 * have afterUpdateOrderStatus event and to create PDF production files on that
+	 * event. But current redSHOP architecture updates order status from hundreds
+	 * of different places instead of one.
+	 * ToDo: Make a control inside redDESIGN which will trigger fuction for deleting
+	 * ToDo: all PDFs related to not paid orders.
+	 *
+	 * @param   object  $cart     Cart object.
+	 * @param   object  $rowitem  Order item object.
+	 * @param   int     $i        Some kind of index or maybe even Order item ID.
+	 *
+	 * @return void
+	 */
+	public function afterOrderItemSave($cart, $rowitem, $i)
+	{
+
+	}
 }
