@@ -52,54 +52,26 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	{
 		if ($data->product_type == 'redDESIGN')
 		{
-			// Render the overridable template
+			// Get design type ID
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('reddesign_designtype_id'));
+			$query->from($db->quoteName('#__reddesign_product_mapping'));
+			$query->where($db->quoteName('product_id') . ' = ' . $data->product_id);
+			$db->setQuery($query);
+			$reddesignDesigntypeId = $db->loadResult();
+
+			$inputvars = array(
+				'id'	=> $reddesignDesigntypeId
+			);
+			$input = new FOFInput($inputvars);
+
 			ob_start();
-			require self::getLayoutPath($this->plugin->type, $this->plugin->name, $layout = 'default_');
+			FOFDispatcher::getTmpInstance('com_reddesign', 'designtype', array('input' => $input))->dispatch();
 			$html = ob_get_contents();
 			ob_end_clean();
-		}
-	}
 
-	/**
-	 * Function to get the path to a layout checking overrides.
-	 *
-	 * @param   string  $type    Plugin type (system, content, etc.)
-	 * @param   string  $name    Name of the plugin
-	 * @param   string  $layout  The layout name
-	 *
-	 * @return string Path where we have to use to call the layout
-	 */
-	public static function getLayoutPath($type, $name, $layout = 'default')
-	{
-		$template = JFactory::getApplication()->getTemplate();
-		$defaultLayout = $layout;
-
-		if (strpos($layout, ':') !== false)
-		{
-			// Get the template and file name from the string
-			$temp = explode(':', $layout);
-			$template = ($temp[0] == '_') ? $template : $temp[0];
-			$layout = $temp[1];
-			$defaultLayout = ($temp[1]) ? $temp[1] : 'default';
-		}
-
-		// Build the template and base path for the layout
-		$tPath = JPATH_THEMES . '/' . $template . '/html/plg_' . $type . '_' . $name . '/' . $layout . '.php';
-		$bPath = JPATH_BASE . '/plugins/' . $type . '/' . $name . '/tmpl/' . $defaultLayout . '.php';
-		$dPath = JPATH_BASE . '/plugins/' . $type . '/' . $name . '/tmpl/' . 'default.php';
-
-		// If the template has a layout override use it
-		if (file_exists($tPath))
-		{
-			return $tPath;
-		}
-		elseif (file_exists($bPath))
-		{
-			return $bPath;
-		}
-		else
-		{
-			return $dPath;
+			$template_desc .= $html;
 		}
 	}
 }

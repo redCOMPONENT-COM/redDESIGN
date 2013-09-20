@@ -256,13 +256,9 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 					{
 						var json = akeeba.jQuery.parseJSON(data);
 
-						/*akeeba.jQuery("#background").attr("src", json.image+"?"+d.getTime());
-						setTimeout(function() {
-							akeeba.jQuery("#background").attr("alt", json.imageTitle);
-						}, 3000);*/
 						d = new Date();
 						akeeba.jQuery("#backgroundImage").html('<img alt="' + json.imageTitle + '" src="' + json.image + '?' + d.getTime() + '" id="background" />');
-console.log(json.image);
+
 						// Remove the progress bar
 						akeeba.jQuery("#progressBar").hide();
 						akeeba.jQuery("#background").show();
