@@ -42,13 +42,11 @@ class ReddesignModelDesigntypes extends FOFModel
 				// Remove related Images
 				$table->load($id, true);
 
-				// Delete accessory image
 				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/designtypes/' . $table->sample_image))
 				{
 					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/designtypes/' . $table->sample_image);
 				}
 
-				// Delete accessory thumbnail
 				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/designtypes/thumbnails/' . $table->sample_thumb))
 				{
 					JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/designtypes/thumbnails/' . $table->sample_thumb);

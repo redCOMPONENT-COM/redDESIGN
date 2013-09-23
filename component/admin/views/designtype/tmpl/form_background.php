@@ -20,7 +20,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 	<input type="hidden" name="returnurl" value="<?php echo base64_encode($return_url); ?>" />
 	<input type="hidden" name="reddesign_designtype_id" id="background_reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>" />
 	<input type="hidden" name="reddesign_background_id" id="reddesign_background_id" value="" />
-	<input type="hidden" name="price" id="unformatted_price" value="">
 
 	<div id="backgrounds-configuration">
 		<h3 id="backgroundTitle"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_TITLE'); ?></h3>
@@ -80,34 +79,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 			</div>
 		</div>
 		<div class="control-group previewbg">
-			<label class="control-label todo-label" for="bg_price">
-				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_PRICE'); ?>
-			</label>
-			<div class="controls">
-				<input type="text" name="price_input" id="bg_price" value="">
-				<span class="help-block">
-					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC'); ?>
-					<br/>
-					<?php echo JText::sprintf('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC_DECIMAL_SEPARATOR', $this->params->get('currency_decimal_separator', '.')); ?>
-					<br/>
-					<?php echo JText::sprintf('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC_THOUSAND_SEPARATOR', $this->params->get('currency_thousand_separator', ',')); ?>
-					<br/>
-					<?php echo JText::sprintf('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC_DECIMALS', $this->params->get('decimals', '2')); ?>
-					<br/>
-					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_PRICE_DESC_NOTE'); ?>
-				</span>
-			</div>
-		</div>
-		<div class="control-group previewbg">
-			<label class="control-label todo-label" for="bg_stock">
-				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_STOCK'); ?>
-			</label>
-			<div class="controls">
-				<input type="text" name="stock" id="bg_stock" value="">
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_STOCK_DESC'); ?></span>
-			</div>
-		</div>
-		<div class="control-group previewbg">
 			<label class="control-label " for="bg_thumbnail">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
 			</label>
@@ -131,9 +102,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 		function () {
 			akeeba.jQuery(document).on('click', '#saveBgBtn',
 				function () {
-					var unformatedPrice = 0;
-					unformatedPrice = accounting.unformat(String(akeeba.jQuery('#bg_price').val()));
-					akeeba.jQuery('#unformatted_price').val(unformatedPrice);
 					akeeba.jQuery('#background').submit();
 				}
 			);

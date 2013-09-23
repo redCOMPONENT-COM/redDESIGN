@@ -70,26 +70,6 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			explode(',', $this->item->related_designtypes)
 		);
 
-		// Accessory types to be included in the frontend.
-		$accessorytypesModel = FOFModel::getTmpInstance('Accessorytypes', 'ReddesignModel');
-		$accessorytypes = $accessorytypesModel->getItemList();
-		$accessorytypesOptions = array();
-
-		foreach ($accessorytypes as $type)
-		{
-			$accessorytypesOptions[] = JHtml::_('select.option', $type->reddesign_accessorytype_id, $type->title);
-		}
-
-		$this->accessorytypes = JHtml::_(
-			'select.genericlist',
-			$accessorytypesOptions,
-			'accessorytypes[]',
-			' multiple="multiple" ',
-			'value',
-			'text',
-			explode(',', $this->item->accessorytypes)
-		);
-
 		// If it's not a new design
 		if (!empty($this->item->reddesign_designtype_id))
 		{

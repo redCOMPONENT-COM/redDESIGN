@@ -96,16 +96,6 @@ defined('_JEXEC') or die();
 		</div>
 
 		<div class="control-group">
-			<label class="control-label" for="">
-				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_ACCESSORYTYPES'); ?>
-			</label>
-			<div class="controls">
-				<?php echo $this->accessorytypes; ?>
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_ACCESSORYTYPES_DESC'); ?></span>
-			</div>
-		</div>
-
-		<div class="control-group">
 			<label class="control-label " for="description">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_DESCRIPTION'); ?>
 			</label>
