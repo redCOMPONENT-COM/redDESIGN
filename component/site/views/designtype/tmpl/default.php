@@ -9,8 +9,7 @@
 
 defined('_JEXEC') or die();
 
-JHTML::_('behavior.modal');
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
+JHtml::_('behavior.modal');
 
 ?>
 
@@ -28,11 +27,6 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 		<li class="active">
 			<a href="#customize" id="customizeLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_CUSTOMIZE_TAB'); ?></a>
 		</li>
-		<?php if ($this->accessorytypes) : ?>
-		<li>
-			<a href="#accessories" id="accessoriesLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_ACCESSORIES_TAB'); ?></a>
-		</li>
-		<?php endif; ?>
 	</ul>
 
 	<div id="my-tab-content" class="tab-content">
@@ -71,11 +65,6 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 				</div>
 			</div>
 		</div>
-		<?php if ($this->accessorytypes) : ?>
-		<div class="tab-pane" id="accessories">
-			<?php echo $this->loadTemplate('accessories'); ?>
-		</div>
-		<?php endif; ?>
 	</div>
 </form>
 
@@ -139,43 +128,6 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 				});
 			<?php endforeach; ?>
 
-			// Define price settings.
-			accounting.settings = {
-				currency: {
-					symbol : "<?php echo $this->params->get('currency_symbol', '$'); ?>",
-					format: "<?php echo $this->params->get('currency_symbol_position_before', '1') ? '%s %v' : '%v %s'; ?>",
-					decimal : "<?php echo $this->params->get('currency_decimal_separator', '.'); ?>",
-					thousand: "<?php echo $this->params->get('currency_thousand_separator', ','); ?>",
-					precision : <?php echo $this->params->get('decimals', '2'); ?>
-				},
-				number: {
-					precision : <?php echo $this->params->get('decimals', '2'); ?>,
-					thousand: "<?php echo $this->params->get('currency_thousand_separator', ','); ?>",
-					decimal : "<?php echo $this->params->get('currency_decimal_separator', '.'); ?>"
-				}
-			}
-
-			// Calculate default price.
-			var total = 0;
-			var formatedTotal;
-
-			akeeba.jQuery(".price-modifier:checked").each(function () {
-				total += parseFloat(akeeba.jQuery(this).attr("data-price"));
-			});
-			formatedTotal = accounting.formatMoney(total);
-			akeeba.jQuery("#total").html(formatedTotal);
-
-			// onClick calculate current product price adding all price modifiers: frames and accessories.
-			akeeba.jQuery(document).on("click", ".price-modifier", function () {
-					var total = 0;
-					var formatedTotal = 0;
-					akeeba.jQuery(".price-modifier:checked").each(function () {
-						total += parseFloat(akeeba.jQuery(this).attr("data-price"));
-					});
-					formatedTotal = accounting.formatMoney(total);
-					akeeba.jQuery("#total").html(formatedTotal);
-				}
-			);
 		}
 	);
 

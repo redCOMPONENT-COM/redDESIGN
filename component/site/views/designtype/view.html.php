@@ -30,8 +30,6 @@ class ReddesignViewDesigntype extends FOFViewHtml
 	{
 		$app   = JFactory::getApplication();
 		$model = $this->getModel();
-
-		// Price visibility parameters
 		$this->params = JComponentHelper::getParams('com_reddesign');
 
 		// Get Design
@@ -43,7 +41,6 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->previewBackgrounds	= $model->getPreviewBackgrounds();
 		$this->productionBackground = $model->getProductionBackground();
 		$this->fonts				= $model->getFonts();
-		$this->accessorytypes		= $model->getAccessories();
 		$this->relatedDesigntypes	= $model->getRelatedDesigntypes();
 
 		if (empty($this->imageSize))

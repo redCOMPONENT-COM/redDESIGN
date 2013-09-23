@@ -116,47 +116,6 @@ class ReddesignModelDesigntypes extends FOFModel
 	}
 
 	/**
-	 * Retrieves the Accessories belonging to a specific design.
-	 *
-	 * @return  array  Returns the array of parts that belonging to a design.
-	 */
-	public function getAccessories()
-	{
-		if (empty($this->getItem()->accessorytypes))
-		{
-			return false;
-		}
-
-		$designAccessoryTypesIds = array_map('trim', explode(',', $this->getItem()->accessorytypes));
-
-		$designAccessoriestypes = array();
-
-		foreach ($designAccessoryTypesIds as $key => $value)
-		{
-			// Get each accessorytype available in current design.
-			$accessorytypesModel = FOFModel::getTmpInstance('Accessorytypes', 'ReddesignModel');
-			$designAccessoryType = $accessorytypesModel->getItem($value);
-
-			// Check that this Accessorytype is published.
-			if ($designAccessoryType->enabled)
-			{
-				$designAccessoriestypes[$value] = clone $designAccessoryType;
-
-				// Get the accessories in the Accessorytype.
-				$accessoriesModel = FOFModel::getTmpInstance('Accessories', 'ReddesignModel');
-				$accessoriesModel->setState('enabled', '1');
-				$accessoriesModel->setState('reddesign_accessorytype_id', $value);
-				$accessoriesList = $accessoriesModel->getItemList(true, 'reddesign_accessory_id');
-
-				// Set the accessories into the AccessoryType.
-				$designAccessoriestypes[$value]->accessories = $accessoriesList;
-			}
-		}
-
-		return $designAccessoriestypes;
-	}
-
-	/**
 	 * Retrieves the fonts in the system.
 	 *
 	 * @return array Returns the array of fonts.

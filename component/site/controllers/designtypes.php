@@ -251,18 +251,6 @@ class ReddesignControllerDesigntypes extends FOFController
 		$design = $design->get('Design');
 		$data['designAreas'] = $design->areas;
 
-		// Get desingAccessories
-		$designAccessories = array();
-
-		foreach ($design->accessories as $accessoryId)
-		{
-			$accessoryModel = FOFModel::getTmpInstance('Accessory', 'ReddesignModel');
-			$accessory = $accessoryModel->getItem($accessoryId->id);
-			$designAccessories[] = $accessory;
-		}
-
-		$data['designAccessories'] = $designAccessories;
-
 		$autoSizeData = $this->input->getString('autoSizeData', '');
 		$autoSizeData = json_decode($autoSizeData);
 		$data['autoSizeData'] = $autoSizeData;

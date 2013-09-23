@@ -32,72 +32,6 @@
 		</field>
 
 		<field
-				name="currency_symbol"
-				type="text"
-				size="5"
-				default="$"
-				label="COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL"
-				description="COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_DESC"
-				/>
-
-		<field
-				name="currency_symbol_position_before"
-				type="list"
-				label="COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION"
-				description="COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_DESC"
-				default="0"
-				class="inputbox">
-			<option value="1">
-				COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_VALUE_1
-			</option>
-			<option value="0">
-				COM_REDDESIGN_CONFIG_CURRENCY_SYMBOL_POSITION_VALUE_2
-			</option>
-		</field>
-
-		<field
-				name="currency_decimal_separator"
-				type="list"
-				label="COM_REDDESIGN_CONFIG_CURRENCY_DECIMAL_SEPARATOR"
-				description="COM_REDDESIGN_CONFIG_CURRENCY_DECIMAL_SEPARATOR_DESC"
-				default="0"
-				class="inputbox">
-			<option value=".">
-				COM_REDDESIGN_CONFIG_CURRENCY_DECIMAL_SEPARATOR_VALUE_1
-			</option>
-			<option value=",">
-				COM_REDDESIGN_CONFIG_CURRENCY_DECIMAL_SEPARATOR_VALUE_2
-			</option>
-		</field>
-
-		<field
-				name="currency_thousand_separator"
-				type="list"
-				label="COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR"
-				description="COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_DESC"
-				default="0"
-				class="inputbox">
-			<option value=".">
-				COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_VALUE_1
-			</option>
-			<option value=",">
-				COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_VALUE_2
-			</option>
-			<option value=" ">
-				COM_REDDESIGN_CONFIG_CURRENCY_THOUSAND_SEPARATOR_VALUE_3
-			</option>
-		</field>
-
-		<field
-				name="decimals"
-				type="text"
-				size="5"
-				default="2"
-				label="COM_REDDESIGN_CONFIG_DECIMALS"
-				description="COM_REDDESIGN_CONFIG_DECIMALS_DESC"
-				/>
-
-		<field
 			name="font_preview_text"
 			type="text"
 			size="10"
@@ -194,60 +128,6 @@
 				default="50"
 				label="COM_REDDESIGN_CONFIG_MAX_BACKGROUND_THUMBNAIL_HEIGHT"
 				description="COM_REDDESIGN_CONFIG_MAX_BACKGROUND_THUMBNAIL_HEIGHT_DESC"
-				/>
-
-		<field
-				name="max_accessorytype_image_size"
-				type="text"
-				size="5"
-				default="2"
-				label="COM_REDDESIGN_CONFIG_MAX_ACCESSORYTYPE_IMAGE_FILE_SIZE"
-				description="COM_REDDESIGN_CONFIG_MAX_ACCESSORYTYPE_IMAGE_FILE_SIZE_DESC"
-				/>
-
-		<field
-				name="max_accessorytype_thumbnail_width"
-				type="text"
-				size="5"
-				default="64"
-				label="COM_REDDESIGN_CONFIG_MAX_ACCESSORYTYPE_THUMBNAIL_WIDTH"
-				description="COM_REDDESIGN_CONFIG_MAX_ACCESSORYTYPE_THUMBNAIL_WIDTH_DESC"
-				/>
-
-		<field
-				name="max_accessorytype_thumbnail_height"
-				type="text"
-				size="5"
-				default="64"
-				label="COM_REDDESIGN_CONFIG_MAX_ACCESSORYTYPE_THUMBNAIL_HEIGHT"
-				description="COM_REDDESIGN_CONFIG_MAX_ACCESSORYTYPE_THUMBNAIL_HEIGHT_DESC"
-				/>
-
-		<field
-				name="max_accessory_image_size"
-				type="text"
-				size="5"
-				default="2"
-				label="COM_REDDESIGN_CONFIG_MAX_ACCESSORY_IMAGE_FILE_SIZE"
-				description="COM_REDDESIGN_CONFIG_MAX_ACCESSORY_IMAGE_FILE_SIZE_DESC"
-				/>
-
-		<field
-				name="max_accessory_thumbnail_width"
-				type="text"
-				size="5"
-				default="50"
-				label="COM_REDDESIGN_CONFIG_MAX_ACCESSORY_THUMBNAIL_WIDTH"
-				description="COM_REDDESIGN_CONFIG_MAX_ACCESSORY_THUMBNAIL_WIDTH_DESC"
-				/>
-
-		<field
-				name="max_accessory_thumbnail_height"
-				type="text"
-				size="5"
-				default="50"
-				label="COM_REDDESIGN_CONFIG_MAX_ACCESSORY_THUMBNAIL_HEIGHT"
-				description="COM_REDDESIGN_CONFIG_MAX_ACCESSORY_THUMBNAIL_HEIGHT_DESC"
 				/>
 
 	</fieldset>

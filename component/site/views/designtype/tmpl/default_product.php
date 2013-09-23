@@ -37,14 +37,6 @@ if ($tagPos != 0)
 			</div>
 		</div>
 	</div>
-	<div class="span3 offset1">
-		<div class="total well">
-			<h5><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PRODUCT_TOTAL'); ?>: <span id="total"></span></h5>
-			<p>
-				<button type="submit" class="btn btn-primary" id="orderDesign"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_ORDER'); ?></button>
-			</p>
-		</div>
-	</div>
 	<?php if (!empty($this->relatedDesigntypes)) : ?>
 	<div id="related-designtypes" class="span12">
 		<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_RELATED_DESIGNTYPES'); ?> |

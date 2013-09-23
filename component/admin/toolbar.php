@@ -41,15 +41,6 @@ class ReddesignToolbar extends FOFToolbar
 					case 'fonts':
 						$newViewsOrder[1] = $view;
 						break;
-					case 'accessorytypes':
-						$newViewsOrder[2] = $view;
-						break;
-					case 'accessories':
-						$newViewsOrder[3] = $view;
-						break;
-					case 'orders':
-						$newViewsOrder[4] = $view;
-						break;
 				}
 			}
 
@@ -70,29 +61,24 @@ class ReddesignToolbar extends FOFToolbar
 		$view = $this->input->getCmd('view', '');
 		JToolBarHelper::title(JText::_('COM_REDDESIGN') . ' - ' . ucfirst($view),  $view);
 
-		if ($view != 'orders')
+		// On frontend, buttons must be added specifically
+
+		if (FOFPlatform::getInstance()->isBackend() || $this->renderFrontendSubmenu)
 		{
-			parent::onBrowse();
+			$this->renderSubmenu();
 		}
-		else
+
+		if (!FOFPlatform::getInstance()->isBackend() && !$this->renderFrontendButtons)
 		{
-			// On frontend, buttons must be added specifically
-
-			if (FOFPlatform::getInstance()->isBackend() || $this->renderFrontendSubmenu)
-			{
-				$this->renderSubmenu();
-			}
-
-			if (!FOFPlatform::getInstance()->isBackend() && !$this->renderFrontendButtons)
-			{
-				return;
-			}
-
-			// Set toolbar title
-			$option = $this->input->getCmd('option', 'com_foobar');
-			$subtitle_key = strtoupper($option . '_TITLE_' . $this->input->getCmd('view', 'cpanel'));
-			JToolBarHelper::title(JText::_(strtoupper($option)) . ' &ndash; <small>' . JText::_($subtitle_key) . '</small>', str_replace('com_', '', $option));
+			return;
 		}
+
+		parent::onBrowse();
+
+		// Set toolbar title
+		$option = $this->input->getCmd('option', 'com_reddesign');
+		$subtitle_key = strtoupper($option . '_TITLE_' . $this->input->getCmd('view', 'cpanel'));
+		JToolBarHelper::title(JText::_(strtoupper($option)) . ' &ndash; <small>' . JText::_($subtitle_key) . '</small>', str_replace('com_', '', $option));
 
 		// Add Components options (see config.xml)
 		JToolBarHelper::divider();

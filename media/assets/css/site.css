@@ -50,31 +50,6 @@ img.frame-thumbnail {
     margin-right: 25px;
 }
 
-/* Accessories */
-a img.accessory-thumbnail {
-    max-height: 50px;
-    max-width: 50px;
-}
-
-.accessory-thumbnail-container {
-    padding-right: 10px;
-}
-
-.accessory-selection {
-    vertical-align: middle;
-    border-right: medium none;
-    width: 10px;
-}
-
-.accessory-detail {
-    border-left: medium none;
-}
-
-.accessorytype-thumbnail {
-    max-width: 64px;
-    max-height: 64px;
-}
-
 .customize-it-btn {
     margin-top: 15px;
     margin-bottom: 15px;

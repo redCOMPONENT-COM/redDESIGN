@@ -13,7 +13,6 @@ JHTML::_('behavior.framework');
 
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/jquery.imgareaselect.pack.js');
 FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animated.css');
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 
 // If is a new design don't show tabs
 if (empty($this->item->reddesign_designtype_id)) :
@@ -70,26 +69,3 @@ else :
 </div>
 
 <?php endif; ?>
-
-<script>
-/* Prepares price calculation default settings */
-akeeba.jQuery(document).ready(
-	function () {
-		// Define Price settings:
-		accounting.settings = {
-			currency: {
-				symbol : "<?php echo $this->params->get('currency_symbol', '$'); ?>",
-				format: "<?php echo $this->params->get('currency_symbol_position_before', '1') ? '%s %v' : '%v %s'; ?>",
-				decimal : "<?php echo $this->params->get('currency_decimal_separator', '.'); ?>",
-				thousand: "<?php echo $this->params->get('currency_thousand_separator', ','); ?>",
-				precision : <?php echo $this->params->get('decimals', '2'); ?>
-			},
-			number: {
-				precision : <?php echo $this->params->get('decimals', '2'); ?>,
-				thousand: "<?php echo $this->params->get('currency_thousand_separator', ','); ?>",
-				decimal : "<?php echo $this->params->get('currency_decimal_separator', '.'); ?>"
-			}
-		}
-	}
-);
-</script>
