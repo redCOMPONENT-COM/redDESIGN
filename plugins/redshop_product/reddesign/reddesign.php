@@ -164,13 +164,61 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$db->setQuery($query);
 		$productType = $db->loadResult();
 
-		if ($productType == 'redDESIGN')
+		if ($productType == 'redDESIGN' && !empty($cart[0]['redDesignData']))
 		{
 			// Get redDESIGN relevant data.
 			$redDesignData = json_decode($cart[0]['redDesignData']);
 			$preparedDesignData = $this->prepareDesignTypeData($redDesignData);
-			$this->createPdfProductionFile($preparedDesignData);
+			$productionFileName = $this->createPdfProductionFile($preparedDesignData);
+
+			/**
+			 * Add link to the production PDF file into the customer_note field to
+			 * be displayed in order_detail view.
+			 *
+			 * Select saved customer note text.
+			 */
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('customer_note'));
+			$query->from($db->quoteName('#__redshop_order_item'));
+			$query->where($db->quoteName('order_item_id') . ' = ' . $rowitem->order_item_id);
+			$db->setQuery($query);
+			$customerNote = $db->loadResult();
+
+			// Concatenate PDF production file link onto customer note
+			$customerNote .= '[ProductionPDF]' .
+								FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/') .
+								$productionFileName . '.pdf';
+
+			$query = $db->getQuery(true);
+			$query->update($db->quoteName('#__redshop_order_item'));
+			$query->set($db->quoteName('customer_note') . '=' . $db->quote($customerNote));
+			$query->where($db->quoteName('order_item_id') . ' = ' . $rowitem->order_item_id);
+
+			$db->setQuery($query);
+			$db->query();
 		}
+	}
+
+	/**
+	 * Displays note to the order item at order detail backend view
+	 *
+	 * @param   object  $orderItem  Order item object.
+	 *
+	 * @return void
+	 */
+	public function onDisplayOrderItemNote($orderItem)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('customer_note'));
+		$query->from($db->quoteName('#__redshop_order_item'));
+		$query->where($db->quoteName('order_item_id') . ' = ' . $orderItem->order_item_id);
+		$db->setQuery($query);
+		$customerNote = $db->loadResult();
+
+		$customerNote = explode('[ProductionPDF]', $customerNote);
+
+		echo '<a href="' . $customerNote[1] . '">PDF: ' . $customerNote[1] . '</a>';
 	}
 
 	/**
@@ -683,6 +731,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		{
 			unlink($tmpBound);
 		}
+
+		return $productionFileName;
 	}
 
 	/**
