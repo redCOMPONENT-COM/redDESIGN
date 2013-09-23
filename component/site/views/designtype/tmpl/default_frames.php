@@ -63,6 +63,11 @@ defined('_JEXEC') or die();
 			</div>
 			</li>
 		<?php endforeach; ?>
-		<input type="hidden" name="reddesign_background_id" id="reddesign_background_id" value="<?php echo $reddesign_background_id;?>">
+		<input type="hidden" name="reddesign_background_id" id="reddesign_background_id" value="<?php echo $reddesign_background_id;?>" />
+		<input type="hidden"
+			   name="production_background_id"
+			   id="production_background_id"
+			   value="<?php echo $this->productionBackground->reddesign_background_id;?>"
+			/>
 	</ul>
 </div>

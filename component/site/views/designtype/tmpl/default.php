@@ -21,7 +21,6 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/accounting.min.js');
 	<input type="hidden" name="task" id="task" value="">
 	<input type="hidden" name="designAreas" id="designAreas" value="">
 	<input type="hidden" id="reddesign_designtype_id" name="reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>">
-	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1">
 
 	<?php echo $this->loadTemplate('product'); ?>
 

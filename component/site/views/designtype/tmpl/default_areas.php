@@ -77,7 +77,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 
 			<?php /* Case 1: automatic font size */ ?>
 			<?php if ($this->item->fontsizer != 'auto') : ?>
-				<label for="<?php echo 'fontArea' . $area->reddesign_area_id; ?>">
+				<label for="<?php echo 'fontSize' . $area->reddesign_area_id; ?>">
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_FONTSIZE'); ?>
 				</label>
 			<?php endif; ?>
@@ -86,11 +86,16 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			<?php if ($this->item->fontsizer === 'slider') : ?>
 				<?php FOFTemplateUtils::addJS('media://com_reddesign/assets/js/bootstrap-slider.js'); ?>
 				<?php FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/slider.css'); ?>
-				<input type="hidden" class="span2" value="<?php echo $area->defaultFontSize ?>"
+				<input type="hidden"
+					   id="fontSize<?php echo $area->reddesign_area_id ?>"
+					   name="fontSize<?php echo $area->reddesign_area_id ?>"
+					   class="span2"
+					   value="<?php echo $area->defaultFontSize ?>"
 					   data-slider-min="<?php echo $area->minFontSize ?>"
 					   data-slider-max="<?php echo $area->maxFontSize ?>"
 					   data-slider-value="[<?php echo $area->defaultFontSize ?>]"
-					   id="fontSize<?php echo $area->reddesign_area_id ?>">
+
+					/>
 
 				<?php /* Case 3: using dropdown selector for font size */ ?>
 			<?php elseif ($this->item->fontsizer === 'dropdown') : ?>
