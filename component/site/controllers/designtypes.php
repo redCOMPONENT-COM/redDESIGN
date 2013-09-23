@@ -231,7 +231,6 @@ class ReddesignControllerDesigntypes extends FOFController
 		JPluginHelper::importPlugin('reddesign');
 		$dispatcher = JDispatcher::getInstance();
 		$app = JFactory::getApplication();
-		$session = JFactory::getSession();
 
 		// Get design type data.
 		$designTypeId    = $this->input->getInt('reddesign_designtype_id', null);
