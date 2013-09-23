@@ -42,6 +42,15 @@
 	<!-- Backend -->
 	<administration>
 		<menu img="../media/com_reddesign/assets/images/reddesign_16.png">COM_REDDESIGN</menu>
+		<menu>COM_REDDESIGN</menu>
+		<submenu>
+			<menu
+				img="../media/com_reddesign/assets/images/reddesign_16.png"
+				view="designtypes">COM_REDDESIGN_MENU_DESIGNTYPES</menu>
+			<menu
+				img="../media/com_reddesign/assets/images/reddesign_16.png"
+				view="fonts">COM_REDDESIGN_MENU_FONTS</menu>
+		</submenu>
 		<files folder="component/admin">
 			<folder>sql</folder>
 			<folder>views</folder>
