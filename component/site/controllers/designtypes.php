@@ -243,7 +243,8 @@ class ReddesignControllerDesigntypes extends FOFController
 		$query
 			->select('max(chars.height) as height, group_concat(typography separator ", ") as typography, typography_height')
 			->from('#__reddesign_chars as chars')
-			->where('chars.reddesign_font_id = ' . $fontId . ' and chars.font_char in("' . implode('","', $char) . '")')
+			->where('chars.reddesign_font_id = ' . (int) $fontId)
+			->where('chars.font_char IN ("' . implode('","', $char . '")'))
 			->order('chars.reddesign_char_id ASC');
 
 		// Reset the query using our newly populated query object.
@@ -261,7 +262,8 @@ class ReddesignControllerDesigntypes extends FOFController
 			$query
 				->select('chars.width')
 				->from('#__reddesign_chars as chars')
-				->where('binary chars.font_char = "' . $char[$i] . '" AND chars.reddesign_font_id = "' . $fontId . '" ');
+				->where('binary chars.font_char = ' . $db->quote($char[$i]))
+				->where('chars.reddesign_font_id = "' . (int) $fontId . '" ');
 			$db->setQuery($query);
 			$width 		= $width + $db->loadResult();
 		}
