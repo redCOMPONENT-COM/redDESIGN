@@ -41,7 +41,6 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->previewBackgrounds	= $model->getPreviewBackgrounds();
 		$this->productionBackground = $model->getProductionBackground();
 		$this->fonts				= $model->getFonts();
-		$this->relatedDesigntypes	= $model->getRelatedDesigntypes();
 
 		if (empty($this->imageSize))
 		{
