@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
   `minFontSize`               INT(11)     NOT NULL,
   `maxFontSize`               INT(11)     NOT NULL,
   `maxline`                   INT(150)    NOT NULL,
-  `fedcolor`                  VARCHAR(60) NOT NULL,
+  `input_field_type`          TINYINT(3)  NOT NULL DEFAULT '0',
   PRIMARY KEY (`reddesign_area_id`),
   FOREIGN KEY (`reddesign_background_id`)
     REFERENCES `#__reddesign_backgrounds` (`reddesign_background_id`)

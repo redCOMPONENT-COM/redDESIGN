@@ -26,13 +26,15 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				<strong><?php echo $area->title; ?></strong>
 			</label>
 
-			<?php if ($this->item->fontsizer == 'auto') : ?>
+			<?php if ($area->input_field_type == 1) : ?>
 				<textarea
 					name="textArea<?php echo $area->reddesign_area_id; ?>"
 					class="textAreaClass"
 					placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
 					id="textArea<?php echo $area->reddesign_area_id; ?>"
-					required="required"></textarea>
+					required="required"
+					maxlength="<?php echo $area->maxchar; ?>"
+					rows="<?php echo $area->maxline; ?>"></textarea>
 			<?php else : ?>
 				<input
 					type="text"
@@ -41,6 +43,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
 					id="textArea<?php echo $area->reddesign_area_id; ?>"
 					value=""
+					maxlength="<?php echo $area->maxchar; ?>"
 					required="required"
 					>
 			<?php endif; ?>
