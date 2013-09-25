@@ -34,7 +34,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					id="textArea<?php echo $area->reddesign_area_id; ?>"
 					required="required"
 					maxlength="<?php echo $area->maxchar; ?>"
-					rows="<?php echo $area->maxline; ?>"></textarea>
+					rows="<?php echo $area->maxline ?>"><?php echo $area->default_text; ?></textarea>
 			<?php else : ?>
 				<input
 					type="text"
@@ -42,7 +42,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					class="textAreaClass"
 					placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
 					id="textArea<?php echo $area->reddesign_area_id; ?>"
-					value=""
+					value="<?php echo $area->default_text; ?>"
 					maxlength="<?php echo $area->maxchar; ?>"
 					required="required"
 					>
