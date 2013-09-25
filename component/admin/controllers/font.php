@@ -342,7 +342,7 @@ class ReddesignControllerFont extends FOFController
 	 *
 	 * @param   string  $ttf_file  The .ttf resource file
 	 *
-	 * @return  string|false
+	 * @return  string
 	 */
 	public function getFontFileName($ttf_file)
 	{
