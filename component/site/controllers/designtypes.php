@@ -244,7 +244,7 @@ class ReddesignControllerDesigntypes extends FOFController
 			->select('max(chars.height) as height, group_concat(typography separator ", ") as typography, typography_height')
 			->from('#__reddesign_chars as chars')
 			->where('chars.reddesign_font_id = ' . (int) $fontId)
-			->where('chars.font_char IN ("' . implode('","', $char . '")'))
+			->where('chars.font_char IN ("' . implode('","', $char) . '")')
 			->order('chars.reddesign_char_id ASC');
 
 		// Reset the query using our newly populated query object.

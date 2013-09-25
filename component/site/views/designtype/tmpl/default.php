@@ -96,8 +96,14 @@ JHtml::_('behavior.modal');
 				}
 			);
 
-			// Build Areas colors.
 			<?php foreach ($this->productionBackgroundAreas as  $area) : ?>
+
+				// Set up default text at images.
+				<?php if (!empty($area->default_text)) : ?>
+					customize(3);
+				<?php endif; ?>
+
+				// Colors.
 				var reddesign_area_id = parseInt(<?php echo $area->reddesign_area_id;?>);
 				akeeba.jQuery("#color-selector" + reddesign_area_id).ColorPicker({
 					designId:reddesign_area_id,
@@ -108,7 +114,7 @@ JHtml::_('behavior.modal');
 					}
 				});
 
-				// Setup before functions.
+				// Delay AJAX submit because of typing.
 				var typingTimer;
 				var doneTypingInterval = 400;
 

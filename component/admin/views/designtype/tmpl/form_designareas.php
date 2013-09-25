@@ -431,15 +431,41 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 								'<label for="inputFieldType' + reddesign_area_id + '">' +
 									'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_INPUT_FIELD_TYPE') ?>' +
 								'</label>' +
-								'<input id="inputFieldType' + reddesign_area_id + '[]0" type="radio" value="0" name="inputFieldType' + reddesign_area_id + '[]">' +
+								'<input id="inputFieldType' + reddesign_area_id + '[]0" ' +
+										'type="radio" ' +
+										'checked="checked" ' +
+										'value="0" ' +
+										'name="inputFieldType' + reddesign_area_id + '[]" ' +
+										'onclick="changeInputFieldType(' + reddesign_area_id + ');" ' +
+								'/>' +
 								'<label id="inputFieldType' + reddesign_area_id + '[]0-lbl" class="radiobtn" for="inputFieldType' + reddesign_area_id + '[]0">' +
 									'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTBOX'); ?>' +
 								'</label>' +
-								'<input id="inputFieldType1[]' + reddesign_area_id + '" type="radio" checked="checked" value="1" name="inputFieldType' + reddesign_area_id + '[]">' +
+								'<input id="inputFieldType1[]' + reddesign_area_id + '" ' +
+										'type="radio" ' +
+										'value="1" ' +
+										'name="inputFieldType' + reddesign_area_id + '[]" ' +
+										'onclick="changeInputFieldType(' + reddesign_area_id + ');" ' +
+								'/>' +
 								'<label id="inputFieldType1[]' + reddesign_area_id + '-lbl" class="radiobtn" for="inputFieldType' + reddesign_area_id + '[]1">' +
 									'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTAREA'); ?>' +
 								'</label>' +
 							'</div>' +
+
+							'<div class="control-group">' +
+								'<label for="defaultText' + reddesign_area_id + '">' +
+									'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_TEXT') ?>' +
+								'</label>' +
+								'<div id="defaultTextContainer' + reddesign_area_id + '">' +
+									'<input class="input-small" ' +
+											'type="text" ' +
+											'value="" ' +
+											'id="defaultText' + reddesign_area_id + '" ' +
+											'name="defaultText' + reddesign_area_id + '" ' +
+									'/>' +
+								'</div>' +
+							'</div>' +
+
 							'<div class="control-group">' +
 								'<label for="maximumCharsAllowed' + reddesign_area_id + '">' +
 									'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAXIMUM_CHARS') ?>' +
@@ -449,17 +475,6 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 										'value="" ' +
 										'id="maximumCharsAllowed' + reddesign_area_id + '" ' +
 										'name="maximumCharsAllowed' + reddesign_area_id + '" ' +
-								'/>' +
-							'</div>' +
-							'<div class="control-group">' +
-								'<label for="maximumLinesAllowed' + reddesign_area_id + '">' +
-									'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAXIMUM_LINES') ?>' +
-								'</label>' +
-								'<input class="input-small" ' +
-										'type="text"' +
-										'value=""' +
-										'id="maximumLinesAllowed' + reddesign_area_id + '" ' +
-										'name="maximumLinesAllowed' + reddesign_area_id + '" ' +
 								'/>' +
 							'</div>' +
 
@@ -747,6 +762,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			var areaFonts = akeeba.jQuery('[name="areaFonts' + reddesign_area_id + '[]"]').val();
 			var colorCodes = akeeba.jQuery('[name="colorCodes' + reddesign_area_id + '[]"]');
 			var allowAllColor = akeeba.jQuery("input[name='allColor"+reddesign_area_id+"']:checked").val();
+			var defaultText = akeeba.jQuery("#defaultText" + reddesign_area_id).val();
 
 			if(allowAllColor==1)
 			{
@@ -776,7 +792,8 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					input_field_type: inputFieldType,
 					maxchar: maximumCharsAllowed,
 					maxline: maximumLinesAllowed,
-					color_code: colorCodes
+					color_code: colorCodes,
+					default_text: defaultText
 				},
 				type: "post",
 				success: function (data) {
@@ -844,6 +861,43 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		{
 			akeeba.jQuery("#colorPicker"+reddesign_area_id).show();
 			akeeba.jQuery("#allowedColorsRow"+reddesign_area_id).show();
+		}
+	}
+
+	/**
+	 * Controls what needs to be shown regarding to input field type.
+	 *
+	 * @param reddesign_area_id
+	 */
+	function changeInputFieldType(reddesign_area_id)
+	{
+		var attr = akeeba.jQuery("#defaultText" + reddesign_area_id).attr("type");
+
+		if (attr == "text")
+		{
+			akeeba.jQuery("#defaultTextContainer" + reddesign_area_id).html(
+				'<textarea class="input-small" ' +
+							'style="resize: none;" ' +
+							'id="defaultText' + reddesign_area_id + '" ' +
+							'name="defaultText' + reddesign_area_id + '" ></textarea>'
+			);
+
+			akeeba.jQuery("#maximumLinesAllowed" + reddesign_area_id).css("display", "inline");
+			akeeba.jQuery("#maximumLinesAllowedLabel" + reddesign_area_id).css("display", "inline");
+		}
+		else
+		{
+			akeeba.jQuery("#defaultTextContainer" + reddesign_area_id).html(
+				'<input class="input-small" ' +
+						'type="text" ' +
+						'value=""' +
+						'id="defaultText' + reddesign_area_id + '" ' +
+						'name="defaultText' + reddesign_area_id + '" ' +
+				'/>'
+			);
+
+			akeeba.jQuery("#maximumLinesAllowed" + reddesign_area_id).css("display", "none");
+			akeeba.jQuery("#maximumLinesAllowedLabel" + reddesign_area_id).css("display", "none");
 		}
 	}
 
@@ -1195,6 +1249,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 								<?php endif; ?>
 
 								<div class="span3">
+
 									<div class="control-group">
 										<label for="inputFieldType<?php echo $area->reddesign_area_id; ?>">
 											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_INPUT_FIELD_TYPE') ?>
@@ -1203,13 +1258,36 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 											echo JHtml::_('select.radiolist',
 															$this->inputFieldOptions,
 															'inputFieldType' . $area->reddesign_area_id . '[]',
-															'',
+															' onclick="changeInputFieldType(' . $area->reddesign_area_id . ');" ',
 															'value',
 															'text',
 															$area->input_field_type
 											);
 										?>
 									</div>
+
+									<div class="control-group">
+										<label for="defaultText<?php echo $area->reddesign_area_id; ?>">
+											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_TEXT') ?>
+										</label>
+										<div id="defaultTextContainer<?php echo $area->reddesign_area_id; ?>">
+											<?php if ($area->input_field_type == 0) : ?>
+												<input class="input-small"
+													   type="text"
+													   value="<?php echo $area->default_text; ?>"
+													   id="defaultText<?php echo $area->reddesign_area_id; ?>"
+													   name="defaultText<?php echo $area->reddesign_area_id; ?>"
+													/>
+											<?php else : ?>
+												<textarea class="input-small"
+														  style="resize: none;"
+														  id="defaultText<?php echo $area->reddesign_area_id; ?>"
+														  name="defaultText<?php echo $area->reddesign_area_id; ?>"
+													><?php echo $area->default_text; ?></textarea>
+											<?php endif; ?>
+										</div>
+									</div>
+
 									<div class="control-group">
 										<label for="maximumCharsAllowed<?php echo $area->reddesign_area_id; ?>">
 											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAXIMUM_CHARS') ?>
@@ -1221,17 +1299,21 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 											   name="maximumCharsAllowed<?php echo $area->reddesign_area_id; ?>"
 											/>
 									</div>
-									<div class="control-group">
-										<label for="<?php echo 'maximumLinesAllowed' . $area->reddesign_area_id; ?>">
-											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAXIMUM_LINES') ?>
-										</label>
-										<input class="input-small"
-											   type="text"
-											   value="<?php echo $area->maxline; ?>"
-											   id="<?php echo 'maximumLinesAllowed' . $area->reddesign_area_id; ?>"
-											   name="<?php echo 'maximumLinesAllowed' . $area->reddesign_area_id; ?>"
-											/>
-									</div>
+
+									<?php if ($area->input_field_type == 1) : ?>
+										<div class="control-group">
+											<label id="maximumLinesAllowedLabel<?php echo $area->reddesign_area_id ?>" for="maximumLinesAllowed<?php echo $area->reddesign_area_id; ?>">
+												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAXIMUM_LINES') ?>
+											</label>
+											<input class="input-small"
+												   type="text"
+												   value="<?php echo $area->maxline; ?>"
+												   id="maximumLinesAllowed<?php echo $area->reddesign_area_id; ?>"
+												   name="maximumLinesAllowed<?php echo $area->reddesign_area_id; ?>"
+												/>
+										</div>
+									<?php endif; ?>
+
 								</div>
 
 								<div class="span3">
