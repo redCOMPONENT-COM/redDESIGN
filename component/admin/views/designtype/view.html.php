@@ -94,7 +94,6 @@ class ReddesignViewDesigntype extends FOFViewHtml
 
 			$this->areas = $areas;
 
-			// Get allColor radio input type for each area.
 			$colorCodes = array();
 
 			foreach ($this->areas as $area)
@@ -102,7 +101,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 				$colorCodes["color_" . $area->reddesign_area_id] = $area->color_code;
 				$colorCode = $area->color_code;
 
-				if ($colorCode != 1 || $colorCode != '1')
+				if ($colorCode != 1)
 				{
 					$colorCode = 0;
 				}
@@ -115,6 +114,11 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			}
 
 			$this->colorCodes = $colorCodes;
+
+			$this->inputFieldOptions = array(
+				JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTBOX')),
+				JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTAREA'))
+			);
 
 			$this->alginmentOptions = array(
 				JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_COMMON_SELECT')),

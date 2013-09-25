@@ -220,54 +220,6 @@ class ReddesignControllerDesigntypes extends FOFController
 	}
 
 	/**
-	 * There is event trigger inside this function.
-	 *
-	 * @return bool
-	 *
-	 * @access public
-	 */
-	public function orderProduct()
-	{
-		JPluginHelper::importPlugin('reddesign');
-		$dispatcher = JDispatcher::getInstance();
-		$app = JFactory::getApplication();
-
-		// Get design type data.
-		$designTypeId    = $this->input->getInt('reddesign_designtype_id', null);
-		$designTypeModel = FOFModel::getTmpInstance('Designtype', 'ReddesignModel')->reddesign_designtype_id($designTypeId);
-		$designType      = $designTypeModel->getItem($designTypeId);
-
-		$data = array();
-		$data['designType'] = $designType;
-
-		// Get Background Data
-		$reddesign_background_id = $this->input->getInt('reddesign_background_id', null);
-		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($reddesign_background_id);
-		$data['designBackground'] = $backgroundModel->getItem($reddesign_background_id);
-
-		// Get designAreas
-		$design = new JRegistry;
-		$design->loadString($this->input->getString('designAreas', ''), 'JSON');
-		$design = $design->get('Design');
-		$data['designAreas'] = $design->areas;
-
-		$autoSizeData = $this->input->getString('autoSizeData', '');
-		$autoSizeData = json_decode($autoSizeData);
-		$data['autoSizeData'] = $autoSizeData;
-
-		$results = $dispatcher->trigger('onOrderButtonClick', array($data));
-
-		if ($results[0])
-		{
-			$link = JRoute::_('index.php?option=com_redshop&view=cart', false);
-			$app->Redirect($link);
-		}
-
-		$link = JRoute::_('index.php?option=com_reddesign&view=designtype&id=' . $designTypeId, false);
-		$app->Redirect($link);
-	}
-
-	/**
 	 *  Calculates Font size and Offset when Auto-size is on.
 	 *
 	 *  @param   int    $fontId         FontId.
