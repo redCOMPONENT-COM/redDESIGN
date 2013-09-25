@@ -7,7 +7,7 @@
 	<authorUrl>www.redcomponent.com</authorUrl>
 	<copyright>(c) redCOMPONENT.com</copyright>
 	<license>GNU/GPL</license>
-	<version>1.5.0</version>
+	<version>1.5.1</version>
 	<description>COM_REDDESIGN_XML_DESC</description>
 	<install folder="component/admin">
 		<sql>
