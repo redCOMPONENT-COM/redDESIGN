@@ -1,3 +1,5 @@
+Changes that will have to be done to Stickers V2 database:
+
 ALTER TABLE  `#__reddesign_areas` DROP `fedcolor`;
 ALTER TABLE  `#__reddesign_areas` DROP `apply_cruv`;
 ALTER TABLE  `#__reddesign_areas` DROP `txtangle`;
