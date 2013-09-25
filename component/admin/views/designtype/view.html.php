@@ -37,7 +37,6 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->document 			= JFactory::getDocument();
 		$this->areas 				= null;
 		$this->productionBackground = null;
-		$this->editor				= JFactory::getEditor();
 		$this->params = JComponentHelper::getParams('com_reddesign');
 
 		// Font sizer options for the general tab.
@@ -59,16 +58,6 @@ class ReddesignViewDesigntype extends FOFViewHtml
 				$designtypesOptions[] = JHtml::_('select.option', $designtype->reddesign_designtype_id, $designtype->title);
 			}
 		}
-
-		$this->relatedDesigntypes = JHtml::_(
-			'select.genericlist',
-			$designtypesOptions,
-			'related_designtypes[]',
-			' multiple="multiple" ',
-			'value',
-			'text',
-			explode(',', $this->item->related_designtypes)
-		);
 
 		// If it's not a new design
 		if (!empty($this->item->reddesign_designtype_id))

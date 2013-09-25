@@ -128,35 +128,4 @@ class ReddesignModelDesigntypes extends FOFModel
 
 		return $fonts;
 	}
-
-	/**
-	 * Retrieves related design types.
-	 *
-	 * @return array Returns the array of related design types.
-	 */
-	public function getRelatedDesigntypes()
-	{
-		$relatedDesigntypes    = array();
-		$relatedDesigntypesIds = $this->getItem()->related_designtypes;
-
-		if (empty($relatedDesigntypesIds))
-		{
-			return false;
-		}
-
-		$relatedDesigntypesIds = array_map('trim', explode(',', $relatedDesigntypesIds));
-
-		foreach ($relatedDesigntypesIds as $relatedDesigntypesId)
-		{
-			$model = FOFModel::getTmpInstance('Designtypes', 'ReddesignModel');
-			$item = $model->getItem($relatedDesigntypesId);
-			$type = new stdClass;
-			$type->reddesign_designtype_id = $item->reddesign_designtype_id;
-			$type->title = $item->title;
-
-			$relatedDesigntypes[] = $type;
-		}
-
-		return $relatedDesigntypes;
-	}
 }
