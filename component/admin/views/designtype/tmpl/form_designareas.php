@@ -86,13 +86,30 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			var x2_pos_in_px = parseFloat(x2) * parseFloat(unitToPx);
 			var y2_pos_in_px = parseFloat(y2) * parseFloat(unitToPx);
 
-			akeeba.jQuery("img#background").imgAreaSelect({
+			var selectionObject = akeeba.jQuery("img#background").imgAreaSelect({
+				instance: true,
 				handles: true,
 				x1: x1_pos_in_px,
 				y1: y1_pos_in_px,
 				x2: x2_pos_in_px,
 				y2: y2_pos_in_px
 			});
+
+			var selection = selectionObject.getSelection();
+
+			var x1_pos_in_unit = parseFloat(selection.x1) * parseFloat(pxToUnit);
+			var y1_pos_in_unit = parseFloat(selection.y1) * parseFloat(pxToUnit);
+			var x2_pos_in_unit = parseFloat(selection.x2) * parseFloat(pxToUnit);
+			var y2_pos_in_unit = parseFloat(selection.y2) * parseFloat(pxToUnit);
+			var width_in_unit = parseFloat(selection.width) * parseFloat(pxToUnit);
+			var height_in_unit = parseFloat(selection.height) * parseFloat(pxToUnit);
+
+			akeeba.jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
+			akeeba.jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
+			akeeba.jQuery("#areaX2").val(x2_pos_in_unit.toFixed(0));
+			akeeba.jQuery("#areaY2").val(y2_pos_in_unit.toFixed(0));
+			akeeba.jQuery("#areaWidth").val(width_in_unit.toFixed(0));
+			akeeba.jQuery("#areaHeight").val(height_in_unit.toFixed(0));
 		}
 
 		/**
@@ -113,13 +130,30 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			x2 += x1_pos_in_px;
 			y2 += y1_pos_in_px;
 
-			akeeba.jQuery("img#background").imgAreaSelect({
+			var selectionObject = akeeba.jQuery("img#background").imgAreaSelect({
+				instance: true,
 				handles: true,
 				x1: x1_pos_in_px,
 				y1: y1_pos_in_px,
 				x2: x2,
 				y2: y2
 			});
+
+			var selection = selectionObject.getSelection();
+
+			var x1_pos_in_unit = parseFloat(selection.x1) * parseFloat(pxToUnit);
+			var y1_pos_in_unit = parseFloat(selection.y1) * parseFloat(pxToUnit);
+			var x2_pos_in_unit = parseFloat(selection.x2) * parseFloat(pxToUnit);
+			var y2_pos_in_unit = parseFloat(selection.y2) * parseFloat(pxToUnit);
+			var width_in_unit = parseFloat(selection.width) * parseFloat(pxToUnit);
+			var height_in_unit = parseFloat(selection.height) * parseFloat(pxToUnit);
+
+			akeeba.jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
+			akeeba.jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
+			akeeba.jQuery("#areaX2").val(x2_pos_in_unit.toFixed(0));
+			akeeba.jQuery("#areaY2").val(y2_pos_in_unit.toFixed(0));
+			akeeba.jQuery("#areaWidth").val(width_in_unit.toFixed(0));
+			akeeba.jQuery("#areaHeight").val(height_in_unit.toFixed(0));
 		}
 
         /**
