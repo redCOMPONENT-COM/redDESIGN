@@ -99,23 +99,8 @@ class PlgRedshop_ProductQuantity_Discount extends JPlugin
 		$user_helper = new rsUserhelper;
 		$user        = JFactory::getUser();
 		$user_id     = $user->id;
-		$userArr     = $session->get('rs_user');
-
-		if (empty($userArr))
-		{
-			$userArr = $user_helper->createUserSession($user_id);
-		}
 
 		$shopperGroupId = $user_helper->getShopperGroup($user_id);
-
-		/*if ($user_id)
-		{
-			$query = "SELECT p.* FROM #__redshop_users_info AS u "
-				. "LEFT JOIN #__redshop_product_price AS p ON u.shopper_group_id = p.shopper_group_id "
-				. "WHERE p.product_id = '" . $product_id . "' "
-				. "AND u.user_id='" . $user_id . "' AND u.address_type='BT' "
-				. "ORDER BY price_quantity_start ASC ";
-		}*/
 
 		// Initialize variables.
 		$db    = JFactory::getDbo();
