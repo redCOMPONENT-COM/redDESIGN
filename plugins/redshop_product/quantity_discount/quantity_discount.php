@@ -62,7 +62,10 @@ class PlgRedshop_ProductQuantity_Discount extends JPlugin
 			if ($i == 0)
 			{
 				$table .= "<tr>"
-					. "<td><input type='radio' class='quantity_discount_radio' name='quantity_discount_plg' value='1' product_id=\"$product->product_id\" ></td>"
+					. "<td>"
+					. "<input type='radio' class='quantity_discount_radio' name='quantity_discount_plg'
+							value='1' product_id=\"$product->product_id\" >"
+					. "</td>"
 					. "<td>1</td>"
 					. "<td>" . $productHelper->getProductFormattedPrice($product->product_price) . "</td>"
 					. "</tr>";
@@ -72,7 +75,10 @@ class PlgRedshop_ProductQuantity_Discount extends JPlugin
 			$percentage = round((100 * $difference) / $product->product_price, 2);
 
 			$table .= "<tr>"
-				. "<td><input type='radio' class='quantity_discount_radio' name='quantity_discount_plg' value=\"$price->price_quantity_end\" product_id=\"$product->product_id\" ></td>"
+				. "<td>"
+				. "<input type='radio' class='quantity_discount_radio' name='quantity_discount_plg'
+						value=\"$price->price_quantity_end\" product_id=\"$product->product_id\" >"
+				. "</td>"
 				. "<td>$price->price_quantity_end</td>"
 				. "<td>" . $productHelper->getProductFormattedPrice($price->product_price * $price->price_quantity_end) . "</td>"
 				. "<td>$percentage%</td>"
