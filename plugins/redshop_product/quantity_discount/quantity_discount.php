@@ -128,7 +128,7 @@ class PlgRedshop_ProductQuantity_Discount extends JPlugin
 		}
 		catch (RuntimeException $e)
 		{
-			JError::raiseWarning(500, $e->getMessage());
+			throw new RuntimeException($e->getMessage(), $e->getCode());
 		}
 
 		return $prices;
