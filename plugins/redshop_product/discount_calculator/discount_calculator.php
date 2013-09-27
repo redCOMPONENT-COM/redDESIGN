@@ -71,24 +71,12 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 		$template = str_replace('{discount_calculator_plg}', $table, $template);
 
-		if ($product->product_type == 'redDESIGN')
-		{
-			$getExtraParamsJS = "
-				function getExtraParams(frm)
-				{
-					return '&plg_product_price=' + akeeba.jQuery('#plg_product_price_' + " . $product->product_id . ").val();
-				}
-			";
-		}
-		else
-		{
-			$getExtraParamsJS = "
-				function getExtraParams(frm)
-				{
-					return '&plg_product_price=' + jQuery('#plg_product_price_' + " . $product->product_id . ").val();
-				}
-			";
-		}
+		$getExtraParamsJS = "
+			function getExtraParams(frm)
+			{
+				return '&plg_product_price=' + rsjQuery('#plg_product_price_' + " . $product->product_id . ").val();
+			}
+		";
 
 		$document->addScriptDeclaration($getExtraParamsJS);
 	}

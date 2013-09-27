@@ -1,14 +1,26 @@
-akeeba.jQuery(function(){
+// Check for akeeba availability
+if (typeof akeeba == "undefined")
+{
+	var rsjQuery = jQuery;
+}
+else
+{
+	console.log('redshop');
+	var rsjQuery = akeeba.jQuery;
+}
 
-    var quantity_elm = $('input[id^="quantity"]');
+rsjQuery(function(){
+
+    var quantity_elm = rsjQuery('input[id^="quantity"]');
     quantity_elm.hide();
 
-    akeeba.jQuery('.quantity_discount_radio').click(function(){
+    rsjQuery('.quantity_discount_radio').click(function(){
 
-        var nq = $(this).val();
-        var pid = $(this).attr('product_id');
+        var nq = rsjQuery(this).val();
+        var pid = rsjQuery(this).attr('product_id');
 
         quantity_elm.val(nq);
+
         calculateTotalPrice(pid, 0);
     });
 });
