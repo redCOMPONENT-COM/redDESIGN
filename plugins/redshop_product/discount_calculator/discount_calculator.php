@@ -74,7 +74,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$document->addScriptDeclaration("
 			function getExtraParams(frm)
 			{
-				return '&plg_product_price='+akeeba.jQuery('#plg_product_price_'+ " . $product->product_id . ").val();
+				return '&plg_product_price=' + akeeba.jQuery('#plg_product_price_' + " . $product->product_id . ").val();
 			}
 		");
 	}
