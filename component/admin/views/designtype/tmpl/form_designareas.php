@@ -512,6 +512,19 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 								'/>' +
 							'</div>' +
 
+							'<div class="control-group">' +
+								'<label id="maximumLinesAllowedLabel' + reddesign_area_id + '" for="maximumLinesAllowed' + reddesign_area_id + '" style="display: none;">' +
+									'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAXIMUM_LINES') ?>' +
+								'</label>' +
+								'<input class="input-small" ' +
+										'type="text" ' +
+										'value="" ' +
+										'id="maximumLinesAllowed' + reddesign_area_id + '" ' +
+										'name="maximumLinesAllowed<?php echo $area->reddesign_area_id; ?>" ' +
+										'style="display: none;" ' +
+								'/>' +
+							'</div>' +
+
 						'</div>' +
 
 						'<div class="span3">' +
@@ -902,8 +915,10 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 	 * Controls what needs to be shown regarding to input field type.
 	 *
 	 * @param reddesign_area_id
+	 * @param maxchar
+	 * @param maxline
 	 */
-	function changeInputFieldType(reddesign_area_id)
+	function changeInputFieldType(reddesign_area_id, maxline = '')
 	{
 		var attr = akeeba.jQuery("#defaultText" + reddesign_area_id).attr("type");
 
@@ -913,7 +928,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				'<textarea class="input-small" ' +
 							'style="resize: none;" ' +
 							'id="defaultText' + reddesign_area_id + '" ' +
-							'name="defaultText' + reddesign_area_id + '" ></textarea>'
+							'name="defaultText' + reddesign_area_id + '" >' + maxline + '</textarea>'
 			);
 
 			akeeba.jQuery("#maximumLinesAllowed" + reddesign_area_id).css("display", "inline");
@@ -924,7 +939,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			akeeba.jQuery("#defaultTextContainer" + reddesign_area_id).html(
 				'<input class="input-small" ' +
 						'type="text" ' +
-						'value=""' +
+						'value="' + maxline + '" ' +
 						'id="defaultText' + reddesign_area_id + '" ' +
 						'name="defaultText' + reddesign_area_id + '" ' +
 				'/>'
@@ -1292,7 +1307,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 											echo JHtml::_('select.radiolist',
 															$this->inputFieldOptions,
 															'inputFieldType' . $area->reddesign_area_id . '[]',
-															' onclick="changeInputFieldType(' . $area->reddesign_area_id . ');" ',
+															' onclick="changeInputFieldType(' . $area->reddesign_area_id . ', ' . $area->maxline . ');" ',
 															'value',
 															'text',
 															$area->input_field_type
