@@ -19,13 +19,13 @@ defined('JPATH_BASE') or die;
 class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 {
 	/**
-	 * On Prepare redshop product page
+	 * On Prepare redSHOP Product
 	 *
-	 * @param   string  &$template  template name
-	 * @param   string  &$params    [description]
-	 * @param   string  $product    [description]
+	 * @param   string  &$template  Product Template Data
+	 * @param   array   &$params    redSHOP Params list
+	 * @param   object  $product    Product Data Object
 	 *
-	 * @return  [type]             [description]
+	 * @return  void
 	 */
 	public function onPrepareProduct(&$template, &$params, $product)
 	{
@@ -33,7 +33,14 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$view          = $input->get('view');
 		$document      = JFactory::getDocument();
 		$productHelper = new producthelper;
+
+		// Settlement to load attribute.js after quantity_discount.js
+		unset($document->_scripts[JURI::root(true) . '/components/com_redshop/assets/js/attribute.js']);
+
 		$document->addScript('plugins/redshop_product/discount_calculator/js/discount_calculator.js');
+
+		// Adding script using this way because in redSHOP is using this code
+		JHTML::Script('attribute.js', 'components/com_redshop/assets/js/', false);
 
 		if ($view != 'product')
 		{
