@@ -1,20 +1,30 @@
-akeeba.jQuery(function () {
+// Check for akeeba availability
+if (typeof akeeba == "undefined")
+{
+    var rsjQuery = jQuery;
+}
+else
+{
+    var rsjQuery = akeeba.jQuery;
+}
 
-    akeeba.jQuery('[id^="rs_sticker_element_"]').hide();
+rsjQuery(function () {
 
-    akeeba.jQuery('input[id^="plg_dimention_base_input_"],select[id^="plg_dimention_base_"]').bind('change keyup', function () {
+    rsjQuery('[id^="rs_sticker_element_"]').hide();
+
+    rsjQuery('input[id^="plg_dimention_base_input_"],select[id^="plg_dimention_base_"]').bind('change keyup', function () {
 
         var elm = null, pid = 0;
 
-        if (akeeba.jQuery(this).is('input')) {
-            pid = akeeba.jQuery(this).attr('id').split("_")[4];
-            elm = akeeba.jQuery(this);
+        if (rsjQuery(this).is('input')) {
+            pid = rsjQuery(this).attr('id').split("_")[4];
+            elm = rsjQuery(this);
         } else {
-            pid = akeeba.jQuery(this).attr('id').split("_")[3];
-            elm = akeeba.jQuery('#plg_dimention_base_input_' + pid);
+            pid = rsjQuery(this).attr('id').split("_")[3];
+            elm = rsjQuery('#plg_dimention_base_input_' + pid);
         }
 
-        var pdb = akeeba.jQuery('#plg_dimention_base_' + pid).val();
+        var pdb = rsjQuery('#plg_dimention_base_' + pid).val();
         var pdbi = parseFloat(elm.val()).round(2);
 
         var h = newH = elm.attr('default-height'), w = newW = elm.attr('default-width');
@@ -37,20 +47,20 @@ akeeba.jQuery(function () {
 
         var finalWH = newW * newH;
 
-        akeeba.jQuery('#plg_dimention_width_' + pid).val(newW);
-        akeeba.jQuery('#plg_dimention_height_' + pid).val(newH);
-        akeeba.jQuery('#plg_dimention_log_' + pid).html(newW + ' X ' + newH + akeeba.jQuery('#plg_default_volume_unit_' + pid).html());
+        rsjQuery('#plg_dimention_width_' + pid).val(newW);
+        rsjQuery('#plg_dimention_height_' + pid).val(newH);
+        rsjQuery('#plg_dimention_log_' + pid).html(newW + ' X ' + newH + rsjQuery('#plg_default_volume_unit_' + pid).html());
 
-        akeeba.jQuery.getJSON('plugins/redshop_product/discount_calculator/json/lookup.json', {}, function (json, textStatus) {
+        rsjQuery.getJSON('plugins/redshop_product/discount_calculator/json/lookup.json', {}, function (json, textStatus) {
 
-            var finaldata = akeeba.jQuery.vlookup(finalWH, json, false);
+            var finaldata = rsjQuery.vlookup(finalWH, json, false);
 
-            akeeba.jQuery.getJSON('plugins/redshop_product/discount_calculator/json/element.json', {}, function(json, textStatus) {
+            rsjQuery.getJSON('plugins/redshop_product/discount_calculator/json/element.json', {}, function(json, textStatus) {
 
-                var sticker_element = parseInt(akeeba.jQuery('#rs_sticker_element_' + pid).html());
-                finaldata.element = akeeba.jQuery.vlookup(sticker_element, json, true);
+                var sticker_element = parseInt(rsjQuery('#rs_sticker_element_' + pid).html());
+                finaldata.element = rsjQuery.vlookup(sticker_element, json, true);
 
-                akeeba.jQuery.updatePrice(pid, finaldata);
+                rsjQuery.updatePrice(pid, finaldata);
             });
 
         });
@@ -65,11 +75,11 @@ akeeba.jQuery(function () {
      *
      * @return  {number}              calculated price
      */
-    akeeba.jQuery.updatePrice = function (pid, price_data) {
+    rsjQuery.updatePrice = function (pid, price_data) {
 
         //console.log(price_data);
 
-        var main_price = akeeba.jQuery('#main_price' + pid).val();
+        var main_price = rsjQuery('#main_price' + pid).val();
         var price_value = price_data.price * price_data.element.price;
 
         //calculateTotalPrice(pid, 0);
@@ -78,15 +88,15 @@ akeeba.jQuery(function () {
 
             // Set price changes in HTML fields
             var formatted_main_price = number_format(price_value, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
-            akeeba.jQuery('#display_product_price_no_vat' + pid + ', #produkt_kasse_hoejre_pris_indre' + pid).html(formatted_main_price);
+            rsjQuery('#display_product_price_no_vat' + pid + ', #produkt_kasse_hoejre_pris_indre' + pid).html(formatted_main_price);
 
             // Set price changes in hidden fields
-            akeeba.jQuery('#product_price_no_vat' + pid).val(price_value);
-            akeeba.jQuery('#main_price' + pid).val(price_value);
+            rsjQuery('#product_price_no_vat' + pid).val(price_value);
+            rsjQuery('#main_price' + pid).val(price_value);
         }
 
         // Set Calculated product price into hidden input type
-        akeeba.jQuery('#plg_product_price_' + pid).val(price_value);
+        rsjQuery('#plg_product_price_' + pid).val(price_value);
 
         return price_value;
     };
@@ -99,11 +109,11 @@ akeeba.jQuery(function () {
      *
      * @return  {json}          JSON String object contains final values
      */
-    akeeba.jQuery.vlookup = function (needle, data, isElement) {
+    rsjQuery.vlookup = function (needle, data, isElement) {
 
         var size = [], price = [];
 
-        akeeba.jQuery.each(data, function (key, val) {
+        rsjQuery.each(data, function (key, val) {
 
             if(isElement){
 
