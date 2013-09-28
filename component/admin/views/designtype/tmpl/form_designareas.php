@@ -520,7 +520,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 										'type="text" ' +
 										'value="" ' +
 										'id="maximumLinesAllowed' + reddesign_area_id + '" ' +
-										'name="maximumLinesAllowed<?php echo $area->reddesign_area_id; ?>" ' +
+										'name="maximumLinesAllowed' + reddesign_area_id + '" ' +
 										'style="display: none;" ' +
 								'/>' +
 							'</div>' +
