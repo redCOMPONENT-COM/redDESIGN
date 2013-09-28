@@ -110,6 +110,7 @@ class ReddesignControllerDesigntypes extends FOFController
 		// Create Imagick object.
 		$newImage = new Imagick;
 		$newImage->readImage($backgroundImageFileLocation);
+		$newImage->setImageFormat('jpg');
 
 		// Add text areas to the background image.
 		foreach ($design->areas as $area)
@@ -154,14 +155,14 @@ class ReddesignControllerDesigntypes extends FOFController
 				}
 
 				// Create an area image.
-				$areaImage->newImage($this->areaItem->width, $this->areaItem->height, new ImagickPixel('none'));
+				$areaImage->newImage($this->areaItem->width, $this->areaItem->height, new ImagickPixel('transparent'));
 
 				// Set color and font.
-				$areaDraw->setFillColor('#' . $area->fontColor);
 				$areaDraw->setFont($fontTypeFileLocation);
-
-				// End Auto size.
+				$areaDraw->setFillColor('#' . $area->fontColor);
+				$areaDraw->setFillOpacity(1);
 				$areaDraw->setFontSize($area->fontSize);
+				$areaDraw->setTextAntialias(true);
 
 				/*
 				 * Text alingment condition:
@@ -186,7 +187,7 @@ class ReddesignControllerDesigntypes extends FOFController
 				$areaImage->annotateImage($areaDraw, 0, 0, 0, $area->textArea);
 
 				// Add area image on top of background image.
-				$newImage->compositeImage($areaImage, Imagick::COMPOSITE_DEFAULT, $this->areaItem->x1_pos, $this->areaItem->y1_pos);
+				$newImage->compositeImage($areaImage, Imagick::COMPOSITE_COLORIZE, $this->areaItem->x1_pos, $this->areaItem->y1_pos);
 				$newImage->writeImage($newjpgFileLocation);
 
 				// Free resources.

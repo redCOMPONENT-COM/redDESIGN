@@ -128,10 +128,10 @@ JHtml::_('behavior.modal');
 
 				// Onkeyup, start the countdown.
 				akeeba.jQuery("#textArea"+reddesign_area_id).keyup(function(){
-				    clearTimeout(typingTimer);
-				    typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
-
+					clearTimeout(typingTimer);
+					typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 				});
+
 			<?php endforeach; ?>
 
 		}
