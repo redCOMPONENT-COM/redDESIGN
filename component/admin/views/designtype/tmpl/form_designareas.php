@@ -500,20 +500,6 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 							'</div>' +
 
 							'<div class="control-group">' +
-								'<label for="defaultText' + reddesign_area_id + '">' +
-									'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_TEXT') ?>' +
-								'</label>' +
-								'<div id="defaultTextContainer' + reddesign_area_id + '">' +
-									'<input class="input-small" ' +
-											'type="text" ' +
-											'value="" ' +
-											'id="defaultText' + reddesign_area_id + '" ' +
-											'name="defaultText' + reddesign_area_id + '" ' +
-									'/>' +
-								'</div>' +
-							'</div>' +
-
-							'<div class="control-group">' +
 								'<label for="maximumCharsAllowed' + reddesign_area_id + '">' +
 									'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAXIMUM_CHARS') ?>' +
 								'</label>' +
