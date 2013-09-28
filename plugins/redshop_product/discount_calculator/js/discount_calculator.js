@@ -76,9 +76,6 @@ rsjQuery(function () {
      * @return  {number}              calculated price
      */
     rsjQuery.updatePrice = function (pid, price_data) {
-
-        //console.log(price_data);
-
         var main_price = rsjQuery('#main_price' + pid).val();
         var price_value = price_data.price * price_data.element.price;
 
