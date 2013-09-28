@@ -491,6 +491,19 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 									'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_TEXT') ?>' +
 								'</label>' +
 								'<div id="defaultTextContainer' + reddesign_area_id + '">' +
+									'<textarea class="input-small" ' +
+												'style="resize: none;" ' +
+												'id="defaultText' + reddesign_area_id + '" ' +
+												'name="defaultText' + reddesign_area_id + '" ' +
+									'></textarea>' +
+								'</div>' +
+							'</div>' +
+
+							'<div class="control-group">' +
+								'<label for="defaultText' + reddesign_area_id + '">' +
+									'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_TEXT') ?>' +
+								'</label>' +
+								'<div id="defaultTextContainer' + reddesign_area_id + '">' +
 									'<input class="input-small" ' +
 											'type="text" ' +
 											'value="" ' +
@@ -915,36 +928,18 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 	 * Controls what needs to be shown regarding to input field type.
 	 *
 	 * @param reddesign_area_id
-	 * @param maxchar
-	 * @param maxline
 	 */
-	function changeInputFieldType(reddesign_area_id, maxline = '')
+	function changeInputFieldType(reddesign_area_id)
 	{
-		var attr = akeeba.jQuery("#defaultText" + reddesign_area_id).attr("type");
+		var selectedType = akeeba.jQuery('[name="inputFieldType' + reddesign_area_id + '[]"]:checked').val();
 
-		if (attr == "text")
+		if (selectedType == 1)
 		{
-			akeeba.jQuery("#defaultTextContainer" + reddesign_area_id).html(
-				'<textarea class="input-small" ' +
-							'style="resize: none;" ' +
-							'id="defaultText' + reddesign_area_id + '" ' +
-							'name="defaultText' + reddesign_area_id + '" >' + maxline + '</textarea>'
-			);
-
 			akeeba.jQuery("#maximumLinesAllowed" + reddesign_area_id).css("display", "inline");
 			akeeba.jQuery("#maximumLinesAllowedLabel" + reddesign_area_id).css("display", "inline");
 		}
 		else
 		{
-			akeeba.jQuery("#defaultTextContainer" + reddesign_area_id).html(
-				'<input class="input-small" ' +
-						'type="text" ' +
-						'value="' + maxline + '" ' +
-						'id="defaultText' + reddesign_area_id + '" ' +
-						'name="defaultText' + reddesign_area_id + '" ' +
-				'/>'
-			);
-
 			akeeba.jQuery("#maximumLinesAllowed" + reddesign_area_id).css("display", "none");
 			akeeba.jQuery("#maximumLinesAllowedLabel" + reddesign_area_id).css("display", "none");
 		}
@@ -1307,7 +1302,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 											echo JHtml::_('select.radiolist',
 															$this->inputFieldOptions,
 															'inputFieldType' . $area->reddesign_area_id . '[]',
-															' onclick="changeInputFieldType(' . $area->reddesign_area_id . ', ' . $area->maxline . ');" ',
+															' onclick="changeInputFieldType(' . $area->reddesign_area_id . ');" ',
 															'value',
 															'text',
 															$area->input_field_type
@@ -1320,20 +1315,11 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_TEXT') ?>
 										</label>
 										<div id="defaultTextContainer<?php echo $area->reddesign_area_id; ?>">
-											<?php if ($area->input_field_type == 0) : ?>
-												<input class="input-small"
-													   type="text"
-													   value="<?php echo $area->default_text; ?>"
-													   id="defaultText<?php echo $area->reddesign_area_id; ?>"
-													   name="defaultText<?php echo $area->reddesign_area_id; ?>"
-													/>
-											<?php else : ?>
-												<textarea class="input-small"
-														  style="resize: none;"
-														  id="defaultText<?php echo $area->reddesign_area_id; ?>"
-														  name="defaultText<?php echo $area->reddesign_area_id; ?>"
-													><?php echo $area->default_text; ?></textarea>
-											<?php endif; ?>
+											<textarea class="input-small"
+													  style="resize: none;"
+													  id="defaultText<?php echo $area->reddesign_area_id; ?>"
+													  name="defaultText<?php echo $area->reddesign_area_id; ?>"
+											><?php echo $area->default_text; ?></textarea>
 										</div>
 									</div>
 
@@ -1349,19 +1335,32 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 											/>
 									</div>
 
-									<?php if ($area->input_field_type == 1) : ?>
-										<div class="control-group">
-											<label id="maximumLinesAllowedLabel<?php echo $area->reddesign_area_id ?>" for="maximumLinesAllowed<?php echo $area->reddesign_area_id; ?>">
-												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAXIMUM_LINES') ?>
-											</label>
-											<input class="input-small"
-												   type="text"
-												   value="<?php echo $area->maxline; ?>"
-												   id="maximumLinesAllowed<?php echo $area->reddesign_area_id; ?>"
-												   name="maximumLinesAllowed<?php echo $area->reddesign_area_id; ?>"
-												/>
-										</div>
-									<?php endif; ?>
+									<?php
+										if ($area->input_field_type == 0)
+										{
+											$style = ' style="display: none;" ';
+										}
+										else
+										{
+											$style = ' style="display: inline;" ';
+										}
+									?>
+
+									<div class="control-group">
+										<label id="maximumLinesAllowedLabel<?php echo $area->reddesign_area_id ?>"
+											   for="maximumLinesAllowed<?php echo $area->reddesign_area_id; ?>"
+											   <?php echo $style; ?>
+										>
+											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAXIMUM_LINES') ?>
+										</label>
+										<input class="input-small"
+											   type="text"
+											   value="<?php echo $area->maxline; ?>"
+											   id="maximumLinesAllowed<?php echo $area->reddesign_area_id; ?>"
+											   name="maximumLinesAllowed<?php echo $area->reddesign_area_id; ?>"
+											   <?php echo $style; ?>
+											/>
+									</div>
 
 								</div>
 
