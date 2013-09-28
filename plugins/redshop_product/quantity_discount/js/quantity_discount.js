@@ -5,7 +5,6 @@ if (typeof akeeba == "undefined")
 }
 else
 {
-	console.log('redshop');
 	var rsjQuery = akeeba.jQuery;
 }
 
