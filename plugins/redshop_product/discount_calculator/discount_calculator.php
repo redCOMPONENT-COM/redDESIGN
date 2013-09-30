@@ -72,9 +72,14 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$template = str_replace('{discount_calculator_plg}', $table, $template);
 
 		$getExtraParamsJS = "
-			function getExtraParams(frm)
+			var jsProductPrice = rsjQuery('#plg_product_price_' + " . $product->product_id . ");
+
+			if (jsProductPrice.length > 0)
 			{
-				return '&plg_product_price=' + rsjQuery('#plg_product_price_' + " . $product->product_id . ").val();
+				function getExtraParams(frm)
+				{
+					return '&plg_product_price=' + jsProductPrice;
+				}
 			}
 		";
 
