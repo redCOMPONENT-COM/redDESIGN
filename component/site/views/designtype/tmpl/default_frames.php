@@ -28,7 +28,6 @@ defined('_JEXEC') or die();
 						   id="frame<?php echo $frame->reddesign_background_id;?>"
 						   name="frame"
 						   value="<?php echo $frame->reddesign_background_id ?>"
-						   data-price="<?php echo $frame->price ?>"
 						<?php if ($frame->isPreviewbgimage) : ?>
 						   checked="checked"'
 						<?php endif; ?>

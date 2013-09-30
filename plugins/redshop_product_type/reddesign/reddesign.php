@@ -147,4 +147,90 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 		return null;
 	}
+
+	/**
+	 * Map redSHOP product attribute value with redDESIGN background from a specific redDESIGN design type.
+	 * For that purpose use #__reddesign_attribute_mapping.
+	 *
+	 *  @param   object  $property  Property object.
+	 *
+	 *  @return  bool
+	 */
+	public function productTypeAttributeValue($property)
+	{
+		echo '<tr><td>this is a new row</td></tr>';
+	}
+
+	/**
+	 * Loads modified fields.js for backend product detail view.
+	 *
+	 * @param   object  $product  Current product object.
+	 *
+	 * @return  bool
+	 */
+	public function loadFieldsJSFromPlugin($product)
+	{
+		$jsLoaded = false;
+
+		if ($product->product_type = 'redDESIGN')
+		{
+			$db = JFactory::getDbo();
+			$document = JFactory::getDocument();
+
+			// Get selected design type.
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('reddesign_designtype_id'));
+			$query->from($db->quoteName('#__reddesign_product_mapping'));
+			$query->where($db->quoteName('product_id') . ' = ' . $product->product_id);
+			$db->setQuery($query);
+			$selectedDesignType = $db->loadResult();
+
+			// Get all the backgrounds that belongs to selected Design Type item.
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')));
+			$query->from($db->quoteName('#__reddesign_backgrounds'));
+			$query->where($db->quoteName('isPDFbgimage') . ' = ' . 0);
+			$db->setQuery($query);
+			$backgrounds = $db->loadObjectList();
+
+			$dropdownHtml = '';
+
+			foreach ($backgrounds as $background)
+			{
+				$dropdownHtml .= "<input type='radio' name='redDesignBackground' value='" . $background->reddesign_background_id . "' />&nbsp;&nbsp;";
+				$dropdownHtml .= $background->title . "&nbsp;&nbsp;";
+				$dropdownHtml .= "<img src='" . FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $background->thumbnail .
+									"' alt='" . $background->title . "'/>&nbsp;&nbsp;&nbsp;";
+			}
+
+			$addDropdownJs  = 'var backgroundsDropDownHtml = "' . $dropdownHtml . '";';
+			$addDropdownJs .= 'var backgroundChckText = "' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_BACKGROUND_ATTRIBUTE') .'";';
+
+			$document->addScriptDeclaration($addDropdownJs);
+			$document->addScript(JURI::root() . 'plugins/redshop_product_type/reddesign/js/fields.js');
+
+			$jsLoaded = true;
+		}
+
+		return $jsLoaded;
+	}
+
+	/**
+	 * Save Attribute Property Data
+	 *
+	 * @param   object  $product             Product Description
+	 * @param   object  &$property           Attribute Property Post Data
+	 * @param   object  &$propertyAfterSave  Attribute Property Table Object
+	 *
+	 * @return  void
+	 */
+	public function onAttributePropertySaveLoop($product, &$property, &$propertyAfterSave)
+	{
+		echo "<pre>";
+		print_r($product);
+		print_r($property);
+		print_r($propertyAfterSave);
+		echo "</pre>";
+		die();
+	}
 }
