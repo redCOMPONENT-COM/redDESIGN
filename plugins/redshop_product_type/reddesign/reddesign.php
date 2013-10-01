@@ -166,7 +166,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		// Get selected design type.
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('reddesign_designtype_id'))
-			->from($db->quoteName('#__reddesign_product_mapping'))
+			->from($db->quoteName('#__reddesign_attribute_mapping'))
 			->where($db->quoteName('product_id') . ' = ' . (int) $product->product_id)
 			->where($db->quoteName('property_id') . ' = ' . (int) $property->property_id);
 
@@ -248,14 +248,6 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			$db = JFactory::getDbo();
 			$document = JFactory::getDocument();
 
-			// Get selected design type.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_designtype_id'));
-			$query->from($db->quoteName('#__reddesign_product_mapping'));
-			$query->where($db->quoteName('product_id') . ' = ' . $product->product_id);
-			$db->setQuery($query);
-			$selectedDesignType = $db->loadResult();
-
 			// Get all the backgrounds that belongs to selected Design Type item.
 			$query = $db->getQuery(true);
 			$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')));
@@ -309,7 +301,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		$query = $db->getQuery(true);
 
 		// Create the base insert statement.
-		$query->insert($db->quoteName('#__reddesign_product_mapping'))
+		$query->insert($db->quoteName('#__reddesign_attribute_mapping'))
 			->columns(array($db->quoteName('reddesign_designtype_id'), $db->quoteName('product_id'), $db->quoteName('property_id')))
 			->values((int) $property['redDesignBackground'] . ', ' . (int) $product->product_id . ', ' . (int) $propertyAfterSave->property_id);
 
@@ -341,7 +333,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 		// Create the base delete statement.
 		$query->delete()
-			->from($db->quoteName('#__reddesign_product_mapping'))
+			->from($db->quoteName('#__reddesign_attribute_mapping'))
 			->where($db->quoteName('product_id') . ' = ' . (int) $data->product_id)
 			->where($db->quoteName('property_id') . ' = ' . (int) $data->property_id);
 
