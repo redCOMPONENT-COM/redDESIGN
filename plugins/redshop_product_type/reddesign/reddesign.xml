@@ -11,6 +11,7 @@
 	<description>PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_DESC</description>
 	<files>
 		<filename plugin="reddesign">reddesign.php</filename>
+		<folder plugin="reddesign">js</folder>
 	</files>
 	<languages>
 		<language tag="en-GB">language/en-GB/en-GB.plg_redshop_product_type_reddesign.ini</language>

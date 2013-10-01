@@ -152,4 +152,17 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_product_mapping` (
   DEFAULT CHARSET = utf8
   DEFAULT COLLATE = utf8_general_ci;
 
+--
+-- Table structure for table `#__reddesign_attribute_mapping`
+--
+CREATE TABLE IF NOT EXISTS `#__reddesign_attribute_mapping` (
+  `reddesign_designtype_id` INT(11) NOT NULL,
+  `product_id`              INT(11) NOT NULL,
+  `attribute_id`              INT(11) NOT NULL,
+  PRIMARY KEY (`reddesign_designtype_id`, `product_id`, `attribute_id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  DEFAULT COLLATE = utf8_general_ci;
+
 SET foreign_key_checks = 1;
