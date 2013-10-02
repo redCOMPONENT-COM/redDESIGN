@@ -225,7 +225,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	{
 		$result = '';
 
-		if ($product->product_type = 'redDESIGN')
+		if ($product->product_type == 'redDESIGN')
 		{
 			$document = JFactory::getDocument();
 
