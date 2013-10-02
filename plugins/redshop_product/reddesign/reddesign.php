@@ -328,7 +328,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		if (!empty($orderItemMapping->productionPdf))
 		{
 			$productionPdf = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $orderItemMapping->productionPdf . '.pdf');
-			echo '<a href="' . $productionPdf . '" target="_blank">PDF:<br/>' . $productionPdf . '</a><br/><br/>';
+			echo '<a href="' . $productionPdf . '" download="productionFile.pdf">PDF:<br/>' . $productionPdf . '</a><br/><br/>';
 
 			$productionEps = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/eps/' . $orderItemMapping->productionEps . '.eps');
 			echo '<a href="' . $productionEps . '" download="productionFile.eps">EPS:<br/>' . $productionEps . '</a>';
