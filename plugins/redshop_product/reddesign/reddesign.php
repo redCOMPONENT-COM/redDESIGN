@@ -248,7 +248,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		if (!empty($orderItemMapping->productionPdf))
 		{
 			$productionPdf = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $orderItemMapping->productionPdf . '.pdf');
-			echo '<a href="' . $productionPdf . '" download="productionFile.pdf">PDF:<br/>' . $productionPdf . '</a><br/><br/>';
+			echo '<a href="' . $productionPdf . '" target="_blank">PDF:<br/>' . $productionPdf . '</a><br/><br/>';
 
 			$productionEps = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/eps/' . $orderItemMapping->productionEps . '.eps');
 			echo '<a href="' . $productionEps . '" download="productionFile.eps">EPS:<br/>' . $productionEps . '</a>';
@@ -298,7 +298,11 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$area['fontColor'] = $redDesignData->$key;
 
 			$key = 'fontSize' . $areaId;
-			$area['fontSize'] = $redDesignData->$key;
+
+			if (!empty($redDesignData->$key))
+			{
+				$area['fontSize'] = $redDesignData->$key;
+			}
 
 			$key = 'textArea' . $areaId;
 			$area['textArea'] = $redDesignData->$key;
@@ -419,7 +423,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 				foreach ($autoSizeDataArray as $autoSizeDataElement)
 				{
-					if ($autoSizeDataElement['reddesign_area_id'] == $areaItem->reddesign_area_id)
+					if ($autoSizeDataElement->reddesign_area_id == $areaItem->reddesign_area_id)
 					{
 						$autoSizeData = $autoSizeDataElement;
 					}
@@ -427,16 +431,16 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 				$fontSize = 0;
 
-				if ($autoSizeData['fontSize'])
+				if ($autoSizeData->fontSize)
 				{
-					$fontSize = $autoSizeData['fontSize'] / $ratio;
+					$fontSize = $autoSizeData->fontSize / $ratio;
 				}
 
-				$noOfLines = count($autoSizeData['stringLines']);
+				$noOfLines = count($autoSizeData->stringLines);
 
 				$bottomoffset = $imageHeight - $areaItem->y2_pos + $pdfTopMargin;
 
-				$maxHeight = $autoSizeData['maxHeight'];
+				$maxHeight = $autoSizeData->maxHeight;
 				$offsetOverallArea = (($areaItem->height - ($fontSize * $maxHeight * $noOfLines)) / 2);
 				$offsetOverallArea = $offsetOverallArea + $bottomoffset;
 
@@ -479,12 +483,12 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					$epsAreaText .= "\ngsave\n";
 
 					$epsAreaText .= "\n $offsetLeft $offsetTop moveto";
-					$epsAreaText .= "\n (" . $autoSizeData['stringLines'][$h] . ") dup stringwidth pop 2 div neg 0 rmoveto true charpath ";
+					$epsAreaText .= "\n (" . $autoSizeData->stringLines[$h] . ") dup stringwidth pop 2 div neg 0 rmoveto true charpath ";
 					$epsAreaText .= "\n fill";
 					$epsAreaText .= "\n showpage";
 
 					$epsText .= "\n $offsetLeft $offsetTop moveto";
-					$epsText .= "\n (" . $autoSizeData['stringLines'][$h] . ")";
+					$epsText .= "\n (" . $autoSizeData->stringLines[$h] . ")";
 					$epsText .= "\n cshow";
 				}
 			}
@@ -713,7 +717,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		fwrite($fp, $epsTextFile);
 		fclose($fp);
 
-		// Create pdf ...
+		// Create pdf.
 		ob_clean();
 
 		$pdfFileName = $pdfFilePath . $productionFileName . ".pdf";
@@ -721,11 +725,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$cmd .= " -sOutputFile=$pdfFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]";
 		$cmd .= "  >> setpagedevice'  -f" . $tmpEpsFile;
 		exec($cmd);
-
-		/*$cmd = "gs -dBATCH -dNOPAUSE  -dNOEPS -dEPSCrop -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true -dSubsetFonts=false ";
-		$cmd .= "-dOptimize=false -sOutputFile=$epsFileName -sDEVICE=pdfwrite  \-c '<< /PageSize [$imageWidth $imageHeight]";
-		$cmd .= "  >> setpagedevice' -f" . $tmpTextEpsFile;
-		exec($cmd);*/
 
 		$epsFileName = $epsFilePath . $productionFileName . ".eps";
 		$cmd  = "gs -dBATCH -dNOPAUSE -dNOEPS -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
