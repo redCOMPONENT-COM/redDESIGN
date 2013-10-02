@@ -159,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_attribute_mapping` (
   `reddesign_designtype_id` INT(11) NOT NULL,
   `product_id`              INT(11) NOT NULL,
   `property_id`             INT(11) NOT NULL,
-  PRIMARY KEY (`reddesign_designtype_id`, `product_id`, `attribute_id`)
+  PRIMARY KEY (`reddesign_designtype_id`, `product_id`, `property_id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
