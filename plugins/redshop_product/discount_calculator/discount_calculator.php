@@ -57,11 +57,19 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 					</select>
 				</td>';
 		$table .= '<td>
-					<input type="text" id="plg_dimention_base_input_' . $product->product_id . '" name="plg_dimention_base_input" size="5" maxlength="5" default-width="' . $product->product_width . '" default-height="' . $product->product_height . '">
+					<input type="text"
+							id="plg_dimention_base_input_' . $product->product_id . '"
+							name="plg_dimention_base_input"
+							size="5"
+							maxlength="5"
+							default-width="' . $product->product_width . '" default-height="' . $product->product_height .
+					'">
 					<span id="plg_default_volume_unit_' . $product->product_id . '">' . DEFAULT_VOLUME_UNIT . '</span>
 				</td>';
 		$table .= '<td>
-					<span id="plg_dimention_log_' . $product->product_id . '">' . $product->product_width . ' X ' . $product->product_height . ' ' . DEFAULT_VOLUME_UNIT . '</span>
+					<span id="plg_dimention_log_' . $product->product_id . '">' .
+						$product->product_width . ' X ' . $product->product_height . ' ' . DEFAULT_VOLUME_UNIT .
+					'</span>
 					<input type="hidden" name="plg_dimention_width" value="' . $product->product_width . '" id="plg_dimention_width_' . $product->product_id . '">
 					<input type="hidden" name="plg_dimention_height" value="' . $product->product_height . '" id="plg_dimention_height_' . $product->product_id . '">
 					<input type="hidden" name="plg_product_price" value="' . $product->product_price . '" id="plg_product_price_' . $product->product_id . '">
@@ -96,7 +104,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 *
 	 * @return  boolean
 	 */
-	function checkSameCartProduct(&$cart, $data)
+	public function checkSameCartProduct(&$cart, $data)
 	{
 		return true;
 	}
@@ -111,7 +119,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 *
 	 * @return  boolean
 	 */
-	function onBeforeSetCartSession(&$cart, $data)
+	public function onBeforeSetCartSession(&$cart, $data)
 	{
 		if ( !isset($data['plg_product_price']) )
 		{
@@ -142,7 +150,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 *
 	 * @return  boolean
 	 */
-	function onSameCartProduct(&$cart, $data,$i)
+	public function onSameCartProduct(&$cart, $data,$i)
 	{
 		if ( !isset($data['plg_product_price']) )
 		{
@@ -167,20 +175,22 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 *
 	 * @return  int/boolean  return product price if success else return false
 	 */
-	function setProductCustomPrice($product_id)
+	public function setProductCustomPrice($product_id)
 	{
 		$session = JFactory::getSession();
 		$cart    = $session->get('cart');
+		$result  = false;
 
-		$prices = $cart['plg_product_price'];
+		if (!empty($cart['plg_product_price']))
+		{
+			$prices = $cart['plg_product_price'];
+		}
 
 		if (isset( $prices[$product_id]) )
 		{
-			return $prices[$product_id];
+			$result = $prices[$product_id];
 		}
-		else
-		{
-			return false;
-		}
+
+		return $result;
 	}
 }
