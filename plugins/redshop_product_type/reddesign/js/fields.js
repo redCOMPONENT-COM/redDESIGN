@@ -381,6 +381,10 @@ function addNewRow_attribute(tableRef){
 	var newTR1 = document.createElement('tr');
 	var newTD1 = document.createElement('td');
 
+	var tmpBackgroundsDropDownHtml = backgroundsDropDownHtml;
+	backgroundsDropDownHtml = backgroundsDropDownHtml.replace("{gh}",gh);
+	backgroundsDropDownHtml = backgroundsDropDownHtml.replace("{total_g}",total_g);
+
 	newTD1.innerHTML = '<table class="grey_solid_area"  width="100%" cellpadding="0" border="0" cellspacing="0" id="property_table' + gh + '">' +
 							'<tr class="attr_tbody" id="attr_tbody' + gh + p + '">' +
 								'<td>' +
@@ -446,10 +450,10 @@ function addNewRow_attribute(tableRef){
 										'<tr>' +
 											'<td>' +
 												'<div>' +
-													'<input type="checkbox" id="useBackgrounds' + gh + '" name="useBackgrounds' + gh + '" onclick="showBackgrounds(' + gh + ')" value="useBackgrounds' + gh + '">' +
-													'<label for="useBackgrounds' + gh + '">' + backgroundChckText + '</label>' +
+													'<input type="checkbox" id="useBackgrounds' + gh + '_' + total_g + '" name="useBackgrounds' + gh + '_' + total_g + '" onclick="showBackgrounds(\'' + gh + '_' + total_g + '\')" value="useBackgrounds' + gh + '_' + total_g + '">' +
+													'<label for="useBackgrounds' + gh + '_' + total_g + '">' + backgroundChckText + '</label>' +
 												'</div>' +
-												'<div id="designBackgrounds' + gh + '" style="display: none;">' +
+												'<div id="designBackgrounds' + gh + '_' + total_g + '" style="display: none;">' +
 													backgroundsDropDownHtml +
 												'</div>' +
 											'</td>'+
@@ -512,8 +516,6 @@ function addNewRow_attribute(tableRef){
 	newTR1.appendChild (newTD1);
 	tBody.appendChild(newTR1);
 
-
-
 	subnewTbody1.appendChild (newTR1);
 	subnewTable1.appendChild (subnewTbody1);
 	subnewTD1.appendChild (subnewTable1);
@@ -523,6 +525,8 @@ function addNewRow_attribute(tableRef){
 	newTD0.appendChild (newTable);
 	newTR0.appendChild (newTD0);
 	tBody.appendChild  (newTR0);
+
+	backgroundsDropDownHtml = tmpBackgroundsDropDownHtml;
 
 	modalpopup('modal'+gh+'0');
 	gh++;
@@ -578,6 +582,10 @@ function addproperty(tableRef,rh){
 	var newTD7 = document.createElement('td');
 	var newTD8 = document.createElement('td');
 	var newTD9 = document.createElement('td');
+
+	var tmp2BackgroundsDropDownHtml = backgroundsDropDownHtml;
+	backgroundsDropDownHtml = backgroundsDropDownHtml.replace("{gh}",rh);
+	backgroundsDropDownHtml = backgroundsDropDownHtml.replace("{total_g}",h);
 
 	newTD.innerHTML = '<table id="attribute_table'+h+'" class="attribute_value">' +
 						'<tr>' +
@@ -641,16 +649,17 @@ function addproperty(tableRef,rh){
 						'<tr>' +
 							'<td>' +
 								'<div>' +
-									'<input type="checkbox" id="useBackgrounds' + gh + '" name="useBackgrounds' + gh + '" onclick="showBackgrounds(' + gh + ')" value="useBackgrounds' + gh + '">' +
-									'<label for="useBackgrounds' + gh + '">' + backgroundChckText + '</label>' +
+									'<input type="checkbox" id="useBackgrounds' + rh + '_' + h + '" name="useBackgrounds' + rh + '_' + h + '" onclick="showBackgrounds(\'' + rh + '_' + h + '\')" value="useBackgrounds' + rh + '_' + h + '">' +
+									'<label for="useBackgrounds' + rh + '_' + h + '">' + backgroundChckText + '</label>' +
 								'</div>' +
-								'<div id="designBackgrounds' + gh + '" style="display: none;">' +
+								'<div id="designBackgrounds' + rh + '_' + h + '" style="display: none;">' +
 									backgroundsDropDownHtml +
 								'</div>' +
 							'</td>'+
 						'</tr>' +
 					'<table>';
 
+	backgroundsDropDownHtml = tmp2BackgroundsDropDownHtml;
 
 	newTD1.innerHTML = '<table width="100%" border="0" cellpadding="0" cellspacing="0" id="attribute_parameter'+h+'" >'
 			+'<tr><td><table width="100%" border="0" cellpadding="0" cellspacing="0" class="attribute_parameter">'
