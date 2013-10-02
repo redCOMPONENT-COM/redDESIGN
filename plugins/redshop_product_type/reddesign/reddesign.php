@@ -97,10 +97,10 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	 * Map redSHOP product with redDESIGN design type.
 	 * For that purpose use #__reddesign_product_mapping.
 	 *
-	 *  @param   object  $row    Product object.
-	 *  @param   bool    $isNew  Is this newly saved product.
+	 * @param   object  $row    Product object.
+	 * @param   bool    $isNew  Is this newly saved product.
 	 *
-	 *  @return  bool
+	 * @return  bool
 	 */
 	public function onAfterProductSave($row, $isNew)
 	{
@@ -151,14 +151,85 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	/**
 	 * Map redSHOP product attribute value with redDESIGN background from a specific redDESIGN design type.
 	 * For that purpose use #__reddesign_attribute_mapping.
+	 * attribute[$property->k][property][$property->g][redDesignBackground]
 	 *
-	 *  @param   object  $property  Property object.
+	 * @param   object  $property  Property object.
 	 *
-	 *  @return  bool
+	 * @return  void
 	 */
 	public function productTypeAttributeValue($property)
 	{
-		echo '<tr><td>this is a new row</td></tr>';
+		$product = $property->product;
+
+		$db = JFactory::getDbo();
+
+		// Get selected design type.
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('reddesign_designtype_id'))
+			->from($db->quoteName('#__reddesign_attribute_mapping'))
+			->where($db->quoteName('product_id') . ' = ' . (int) $product->product_id)
+			->where($db->quoteName('property_id') . ' = ' . (int) $property->property_id);
+
+		$db->setQuery($query);
+		$selectedDesignType = $db->loadResult();
+
+		$checked = '';
+		$style   = 'style="display: none;"';
+
+		if ($selectedDesignType)
+		{
+			$checked = 'checked="checked"';
+			$style   = '';
+		}
+
+		// Get all the backgrounds that belongs to selected Design Type item.
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')));
+		$query->from($db->quoteName('#__reddesign_backgrounds'));
+		$query->where($db->quoteName('isPDFbgimage') . ' = ' . 0);
+		$db->setQuery($query);
+		$backgrounds = $db->loadObjectList();
+
+		$dropdownHtml = '<tr>'
+		. '<td>'
+			. '<div>'
+			. '<input type="checkbox"
+					id="useBackgrounds' . $property->k . $property->g . '"
+					name="useBackgrounds' . $property->k . $property->g . '"
+					onclick="showBackgrounds(\'' . $property->k . $property->g . '\')"
+					value="useBackgrounds' . $property->k . $property->g . '"
+					' . $checked . '>'
+				. '<label for="useBackgrounds' . $property->k . $property->g . '">'
+					. JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_BACKGROUND_ATTRIBUTE')
+				. '</label>' .
+			'</div>';
+
+		$dropdownHtml .= '<div id="designBackgrounds' . $property->k . $property->g . '" ' . $style . ' >';
+
+		foreach ($backgrounds as $background)
+		{
+			if ((int) $background->reddesign_background_id == $selectedDesignType)
+			{
+				$checked = 'checked="checked"';
+			}
+			else
+			{
+				$checked = '';
+			}
+
+			$dropdownHtml .= '<input type="radio"
+								name="attribute[' . $property->k . '][property][' . $property->g . '][redDesignBackground]"
+								value="' . $background->reddesign_background_id . '"' . $checked . ' />' . "&nbsp;&nbsp;";
+			$dropdownHtml .= $background->title . "&nbsp;&nbsp;";
+			$dropdownHtml .= "<img src='" . FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $background->thumbnail .
+								"' alt='" . $background->title . "'/>&nbsp;&nbsp;&nbsp;";
+		}
+
+		$dropdownHtml .= '</div>';
+
+		$dropdownHtml .= '</td></tr>';
+
+		echo $dropdownHtml;
 	}
 
 	/**
@@ -177,14 +248,6 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			$db = JFactory::getDbo();
 			$document = JFactory::getDocument();
 
-			// Get selected design type.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_designtype_id'));
-			$query->from($db->quoteName('#__reddesign_product_mapping'));
-			$query->where($db->quoteName('product_id') . ' = ' . $product->product_id);
-			$db->setQuery($query);
-			$selectedDesignType = $db->loadResult();
-
 			// Get all the backgrounds that belongs to selected Design Type item.
 			$query = $db->getQuery(true);
 			$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')));
@@ -197,7 +260,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 			foreach ($backgrounds as $background)
 			{
-				$dropdownHtml .= "<input type='radio' name='redDesignBackground' value='" . $background->reddesign_background_id . "' />&nbsp;&nbsp;";
+				$dropdownHtml .= "<input type='radio' name='attribute[{gh}][property][{total_g}][redDesignBackground]' value='" . $background->reddesign_background_id . "' />&nbsp;&nbsp;";
 				$dropdownHtml .= $background->title . "&nbsp;&nbsp;";
 				$dropdownHtml .= "<img src='" . FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $background->thumbnail .
 									"' alt='" . $background->title . "'/>&nbsp;&nbsp;&nbsp;";
@@ -219,18 +282,71 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	 * Save Attribute Property Data
 	 *
 	 * @param   object  $product             Product Description
-	 * @param   object  &$property           Attribute Property Post Data
+	 * @param   array   &$property           Attribute Property Post Data
 	 * @param   object  &$propertyAfterSave  Attribute Property Table Object
 	 *
 	 * @return  void
 	 */
 	public function onAttributePropertySaveLoop($product, &$property, &$propertyAfterSave)
 	{
-		/*echo "<pre>";
-		print_r($product);
-		print_r($property);
-		print_r($propertyAfterSave);
-		echo "</pre>";
-		die();*/
+		$data              = new stdClass;
+		$data->product_id  = $product->product_id;
+		$data->property_id = $propertyAfterSave->property_id;
+
+		// Clear mapping
+		$this->removeReddesignPropertyMapping($data);
+
+		// Initialize variables.
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Create the base insert statement.
+		$query->insert($db->quoteName('#__reddesign_attribute_mapping'))
+			->columns(array($db->quoteName('reddesign_designtype_id'), $db->quoteName('product_id'), $db->quoteName('property_id')))
+			->values((int) $property['redDesignBackground'] . ', ' . (int) $product->product_id . ', ' . (int) $propertyAfterSave->property_id);
+
+		// Set the query and execute the insert.
+		$db->setQuery($query);
+
+		try
+		{
+			$db->execute();
+		}
+		catch (RuntimeException $e)
+		{
+			throw new RuntimeException($e->getMessage(), $e->getCode());
+		}
+	}
+
+	/**
+	 * Remove redDESIGN backgrounds and redSHOP Attribute Property Mapping
+	 *
+	 * @param   object  $data  Contains product and property id
+	 *
+	 * @return  void
+	 */
+	private function removeReddesignPropertyMapping($data)
+	{
+		// Initialize variables.
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Create the base delete statement.
+		$query->delete()
+			->from($db->quoteName('#__reddesign_attribute_mapping'))
+			->where($db->quoteName('product_id') . ' = ' . (int) $data->product_id)
+			->where($db->quoteName('property_id') . ' = ' . (int) $data->property_id);
+
+		// Set the query and execute the delete.
+		$db->setQuery($query);
+
+		try
+		{
+			$db->execute();
+		}
+		catch (RuntimeException $e)
+		{
+			throw new RuntimeException($e->getMessage(), $e->getCode());
+		}
 	}
 }
