@@ -39,6 +39,86 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	}
 
 	/**
+	 * On Prepare redSHOP Product
+	 *
+	 * @param   string  &$template  Product Template Data
+	 * @param   array   &$params    redSHOP Params list
+	 * @param   object  $product    Product Data Object
+	 *
+	 * @return  void
+	 */
+	public function onPrepareProduct(&$template, &$params, $product)
+	{
+		if ($product->product_type != 'redDESIGN')
+		{
+			return;
+		}
+
+		$input         = JFactory::getApplication()->input;
+		$view          = $input->get('view');
+		$document      = JFactory::getDocument();
+
+		if ($view != 'product')
+		{
+			return;
+		}
+
+		// Settlement to load attribute.js after quantity_discount.js
+		unset($document->_scripts[JURI::root(true) . '/components/com_redshop/assets/js/attribute.js']);
+
+		// Adding script from Plugin as we need customization in attribute.js for property background relation.
+		$document->addScript('plugins/redshop_product/reddesign/js/attribute.js');
+
+		$results  = $this->getPropertyBackgroundRelation($product->product_id);
+		$relation = array();
+
+		for ($i = 0, $n = count($results); $i < $n; $i++)
+		{
+			$result = $results[$i];
+			$relation[$result->property_id] = $result->reddesign_designtype_id;
+		}
+
+		$script = "
+			var propertyBackgroundRelation = " . json_encode($relation) . ";
+		";
+
+		$document->addScriptDeclaration($script);
+	}
+
+	/**
+	 * Get Attribute Property and redDESIGN Background Mapping
+	 *
+	 * @param   integer  $productId  Product Id
+	 *
+	 * @return  mixed              Relation Object List
+	 */
+	private function getPropertyBackgroundRelation($productId)
+	{
+		// Initialize variables.
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Create the base select statement.
+		$query->select('reddesign_designtype_id, property_id')
+			->from($db->quoteName('#__reddesign_attribute_mapping'))
+			->where($db->quoteName('product_id') . ' = ' . (int) $productId);
+
+		// Set the query and load the result.
+		$db->setQuery($query);
+
+		try
+		{
+			$result = $db->loadObjectList();
+		}
+		catch (RuntimeException $e)
+		{
+			throw new RuntimeException($e->getMessage(), $e->getCode());
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Stops loading redSHOP's jQuery file if true is returned.
 	 * This is used to prevent jQuery conflicts and multiple jQuery loads
 	 * during integration.
