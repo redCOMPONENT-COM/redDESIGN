@@ -243,7 +243,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	{
 		$jsLoaded = false;
 
-		if ($product->product_type = 'redDESIGN')
+		if ($product->product_type == 'redDESIGN')
 		{
 			$db = JFactory::getDbo();
 			$document = JFactory::getDocument();
