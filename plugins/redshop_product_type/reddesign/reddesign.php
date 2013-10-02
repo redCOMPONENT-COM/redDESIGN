@@ -204,7 +204,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			}
 
 			$addDropdownJs  = 'var backgroundsDropDownHtml = "' . $dropdownHtml . '";';
-			$addDropdownJs .= 'var backgroundChckText = "' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_BACKGROUND_ATTRIBUTE') .'";';
+			$addDropdownJs .= 'var backgroundChckText = "' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_BACKGROUND_ATTRIBUTE') . '";';
 
 			$document->addScriptDeclaration($addDropdownJs);
 			$document->addScript(JURI::root() . 'plugins/redshop_product_type/reddesign/js/fields.js');
@@ -226,11 +226,11 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	 */
 	public function onAttributePropertySaveLoop($product, &$property, &$propertyAfterSave)
 	{
-		echo "<pre>";
+		/*echo "<pre>";
 		print_r($product);
 		print_r($property);
 		print_r($propertyAfterSave);
 		echo "</pre>";
-		die();
+		die();*/
 	}
 }

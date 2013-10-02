@@ -92,28 +92,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$html = ob_get_contents();
 			ob_end_clean();
 
-			/*
-			 * Because input fields are in a wierd form on product view we will use jQuery and one extra
-			 * input field to store redDESIGN data in it for the form submit process.
-			 */
-			$js = '<script type="text/javascript">
-						akeeba.jQuery("#designform :input").change(function() {
-							var values = {};
-							var inputs = akeeba.jQuery("#designform :input");
-
-							inputs.each(function() {
-								values[this.name] = akeeba.jQuery(this).val();
-							});
-
-							var jsonString = JSON.stringify(values);
-							/*var formValues = akeeba.jQuery("#designform").serializeArray();
-							var jsonString = JSON.stringify(formValues);*/
-
-							akeeba.jQuery("#redDesignData").val(jsonString);
-						});
-					</script>';
-
-			$template_desc = str_replace("{redDESIGN}", $html . $js, $template_desc);
+			$template_desc = str_replace("{redDESIGN}", $html, $template_desc);
 
 			$redDesignData = "<input type='hidden' name='task' value='add'><input type='hidden' id='redDesignData' name='redDesignData' value='' />";
 
@@ -132,11 +111,63 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 */
 	public function onBeforeSetCartSession(&$cart, $data)
 	{
-		$input = JFactory::getApplication()->input;
 		$idx = $cart['idx'];
-		$redDesignData = $input->getString('redDesignData', '');
 
-		$cart[$idx]['redDesignData'] = $redDesignData;
+		$cart[$idx]['redDesignData'] = $data['redDesignData'];
+	}
+
+	/**
+	 * When adding same product it needs to update data from this different
+	 * place because onBeforeSetCartSession works only once for one session.
+	 *
+	 * @param   object  &$cart  The Product Template Data.
+	 * @param   object  $data   The product params.
+	 * @param   int     $i      The product params.
+	 *
+	 * @return  void
+	 */
+	public function onSameCartProduct(&$cart, $data, $i)
+	{
+		$idx = $cart['idx'];
+
+		$cart[$idx]['redDesignData'] = $data['redDesignData'];
+	}
+
+	/**
+	 * Adds a javascript function call to the Add to cart click
+	 *
+	 * @param   object  $product  Product object.
+	 * @param   array   $cart     Cart session object.
+	 *
+	 * @return  string
+	 */
+	public function onAddToCartClickJS($product, $cart)
+	{
+		$result = '';
+
+		if ($product->product_type = 'redDESIGN')
+		{
+			$document = JFactory::getDocument();
+
+			$js = 'function generateRedDesignData() {
+						var values = {};
+						var inputs = akeeba.jQuery("#designform :input");
+
+						inputs.each(function() {
+							values[this.name] = akeeba.jQuery(this).val();
+						});
+
+						var jsonString = JSON.stringify(values);
+
+						akeeba.jQuery("#redDesignData").val(jsonString);
+					}
+			';
+			$document->addScriptDeclaration($js);
+
+			$result = 'generateRedDesignData();';
+		}
+
+		return $result;
 	}
 
 	/**
@@ -155,8 +186,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 */
 	public function afterOrderItemSave($cart, $rowitem, $i)
 	{
-		// Get product type
 		$db = JFactory::getDbo();
+
+		// Get product type
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('product_type'));
 		$query->from($db->quoteName('#__redshop_product'));
@@ -169,33 +201,29 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			// Get redDESIGN relevant data.
 			$redDesignData = json_decode($cart[0]['redDesignData']);
 			$preparedDesignData = $this->prepareDesignTypeData($redDesignData);
-			$productionFileName = $this->createPdfProductionFile($preparedDesignData);
+			$productionFileName = $this->createProductionFiles($preparedDesignData);
 
-			/**
-			 * Add link to the production PDF file into the customer_note field to
-			 * be displayed in order_detail view.
-			 *
-			 * Select saved customer note text.
-			 */
+			// Insert record to the mapping table #__reddesign_orderitem_mapping.
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName('customer_note'));
-			$query->from($db->quoteName('#__redshop_order_item'));
+			$query->select($db->quoteName(array('order_item_id', 'productionPdf', 'productionEps')));
+			$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
 			$query->where($db->quoteName('order_item_id') . ' = ' . $rowitem->order_item_id);
 			$db->setQuery($query);
-			$customerNote = $db->loadResult();
+			$orderItem = $db->loadObject();
 
-			// Concatenate PDF production file link onto customer note
-			$customerNote .= '[ProductionPDF]' .
-								FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/') .
-								$productionFileName . '.pdf';
+			$orderItemProductionFiles = new stdClass;
+			$orderItemProductionFiles->order_item_id = $rowitem->order_item_id;
+			$orderItemProductionFiles->productionPdf = $productionFileName;
+			$orderItemProductionFiles->productionEps = $productionFileName;
 
-			$query = $db->getQuery(true);
-			$query->update($db->quoteName('#__redshop_order_item'));
-			$query->set($db->quoteName('customer_note') . '=' . $db->quote($customerNote));
-			$query->where($db->quoteName('order_item_id') . ' = ' . $rowitem->order_item_id);
-
-			$db->setQuery($query);
-			$db->query();
+			if (empty($orderItem))
+			{
+				$db->insertObject('#__reddesign_orderitem_mapping', $orderItemProductionFiles);
+			}
+			else
+			{
+				$db->updateObject('#__reddesign_orderitem_mapping', $orderItemProductionFiles, 'order_item_id');
+			}
 		}
 	}
 
@@ -209,35 +237,22 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	public function onDisplayOrderItemNote($orderItem)
 	{
 		$db = JFactory::getDbo();
+
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName('customer_note'));
-		$query->from($db->quoteName('#__redshop_order_item'));
+		$query->select($db->quoteName(array('order_item_id', 'productionPdf', 'productionEps')));
+		$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
 		$query->where($db->quoteName('order_item_id') . ' = ' . $orderItem->order_item_id);
 		$db->setQuery($query);
-		$customerNote = $db->loadResult();
+		$orderItemMapping = $db->loadObject();
 
-		$customerNote = explode('[ProductionPDF]', $customerNote);
+		if (!empty($orderItemMapping->productionPdf))
+		{
+			$productionPdf = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $orderItemMapping->productionPdf . '.pdf');
+			echo '<a href="' . $productionPdf . '" target="_blank">PDF:<br/>' . $productionPdf . '</a><br/><br/>';
 
-		echo '<a href="' . $customerNote[1] . '">PDF: ' . $customerNote[1] . '</a>';
-	}
-
-	/**
-	 * When adding same product it needs to update data from this different
-	 * place because onBeforeSetCartSession works only once.
-	 *
-	 * @param   object  &$cart  The Product Template Data.
-	 * @param   object  $data   The product params.
-	 * @param   int     $i      The product params.
-	 *
-	 * @return  void
-	 */
-	public function onSameCartProduct(&$cart, $data, $i)
-	{
-		$input = JFactory::getApplication()->input;
-		$idx = $cart['idx'];
-		$redDesignData = $input->getString('redDesignData', '');
-
-		$cart[$idx]['redDesignData'] = $redDesignData;
+			$productionEps = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/eps/' . $orderItemMapping->productionEps . '.eps');
+			echo '<a href="' . $productionEps . '" target="_blank">EPS:<br/>' . $productionEps . '</a>';
+		}
 	}
 
 	/**
@@ -303,7 +318,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 *
 	 * @return   string  $pdfFileName  Newly generate PDF file name.
 	 */
-	public function createPdfProductionFile($data)
+	public function createProductionFiles($data)
 	{
 		// Create production PDF file name
 		$userId = JFactory::getUser()->id;
@@ -532,7 +547,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$tmpEpsFile = $epsFilePath . "tmp_" . $productionFileName . ".eps";
 		$tmpTextEpsFile = $epsFilePath . "tmptext_" . $productionFileName . ".eps";
 
-		$epsFileName = $epsFilePath . $productionFileName . ".pdf";
+		$epsFileName = $epsFilePath . $productionFileName . ".eps";
 
 		$tempFile = "%!PS";
 		$tempFile .= "\n%%Creator:redDESIGN";
@@ -707,9 +722,15 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$cmd .= "  >> setpagedevice'  -f" . $tmpEpsFile;
 		exec($cmd);
 
-		$cmd = "gs -dBATCH -dNOPAUSE  -dNOEPS -dEPSCrop -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true -dSubsetFonts=false ";
+		/*$cmd = "gs -dBATCH -dNOPAUSE  -dNOEPS -dEPSCrop -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true -dSubsetFonts=false ";
 		$cmd .= "-dOptimize=false -sOutputFile=$epsFileName -sDEVICE=pdfwrite  \-c '<< /PageSize [$imageWidth $imageHeight]";
 		$cmd .= "  >> setpagedevice' -f" . $tmpTextEpsFile;
+		exec($cmd);*/
+
+		$epsFileName = $epsFilePath . $productionFileName . ".eps";
+		$cmd  = "gs -dBATCH -dNOPAUSE -dNOEPS -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
+		$cmd .= " -sOutputFile=$epsFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]";
+		$cmd .= "  >> setpagedevice'  -f" . $tmpEpsFile;
 		exec($cmd);
 
 		if (file_exists($tmpTextEpsFile))
