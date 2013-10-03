@@ -72,8 +72,8 @@
 				type="text"
 				size="5"
 				default="600"
-				label="COM_REDDESIGN_CONFIG_MAX_EPS_THUMBNAIL_WIDTH"
-				description="COM_REDDESIGN_CONFIG_MAX_EPS_THUMBNAIL_WIDTH_DESC"
+				label="COM_REDDESIGN_CONFIG_MAX_EPS_PREVIEW_WIDTH"
+				description="COM_REDDESIGN_CONFIG_MAX_EPS_PREVIEW_WIDTH_DESC"
 				/>
 
 		<field
@@ -81,8 +81,8 @@
 				type="text"
 				size="5"
 				default="400"
-				label="COM_REDDESIGN_CONFIG_MAX_EPS_THUMBNAIL_HEIGHT"
-				description="COM_REDDESIGN_CONFIG_MAX_EPS_THUMBNAIL_HEIGHT_DESC"
+				label="COM_REDDESIGN_CONFIG_MAX_EPS_PREVIEW_HEIGHT"
+				description="COM_REDDESIGN_CONFIG_MAX_EPS_PREVIEW_HEIGHT_DESC"
 				/>
 
 		<field
