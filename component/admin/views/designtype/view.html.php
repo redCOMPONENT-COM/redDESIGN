@@ -37,7 +37,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->document 			= JFactory::getDocument();
 		$this->areas 				= null;
 		$this->productionBackground = null;
-		$this->params = JComponentHelper::getParams('com_reddesign');
+		$this->params				= JComponentHelper::getParams('com_reddesign');
 
 		// Font sizer options for the general tab.
 		$this->sizerOptions = array(
