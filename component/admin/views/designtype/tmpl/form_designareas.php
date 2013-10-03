@@ -131,7 +131,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			x2 += x1_pos_in_px;
 			y2 += y1_pos_in_px;
 
-			if (x1_pos_in_px < x2 && y1_pos_in_px < y2)
+			if (x1_pos_in_px <= x2 && y1_pos_in_px <= y2)
 			{
 				var selectionObject = akeeba.jQuery("img#background").imgAreaSelect({
 					instance: true,

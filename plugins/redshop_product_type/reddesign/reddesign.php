@@ -182,11 +182,20 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			$style   = '';
 		}
 
+		// Get selected design type.
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('reddesign_designtype_id'))
+			->from($db->quoteName('#__reddesign_product_mapping'))
+			->where($db->quoteName('product_id') . ' = ' . (int) $product->product_id);
+		$db->setQuery($query);
+		$designTypeId = $db->loadResult();
+
 		// Get all the backgrounds that belongs to selected Design Type item.
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')));
-		$query->from($db->quoteName('#__reddesign_backgrounds'));
-		$query->where($db->quoteName('isPDFbgimage') . ' = ' . 0);
+		$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
+			->from($db->quoteName('#__reddesign_backgrounds'))
+			->where($db->quoteName('isPDFbgimage') . ' = ' . 0)
+			->where($db->quoteName('reddesign_designtype_id') . ' = ' . $designTypeId);
 		$db->setQuery($query);
 		$backgrounds = $db->loadObjectList();
 
