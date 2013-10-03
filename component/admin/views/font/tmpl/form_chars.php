@@ -119,7 +119,6 @@ defined('_JEXEC') or die();
 			}
 		});
 
-		akeeba.jQuery("#reddesign_font_id").val("");
 		akeeba.jQuery("#font_char").val("");
 		akeeba.jQuery("#width").val("");
 		akeeba.jQuery("#height").val("");

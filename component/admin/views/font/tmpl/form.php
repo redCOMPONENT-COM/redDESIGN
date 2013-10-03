@@ -157,10 +157,9 @@ if (empty($this->item->default_baseline_height))
 			</div>
 		</div>
 	</div>
-	<?php
-	if (!empty($this->item->reddesign_font_id))
-	{
-		echo $this->loadTemplate('chars');
-	}
-	?>
 </form>
+<?php
+if (!empty($this->item->reddesign_font_id))
+{
+	echo $this->loadTemplate('chars');
+}
