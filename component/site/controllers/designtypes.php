@@ -110,8 +110,6 @@ class ReddesignControllerDesigntypes extends FOFController
 		// Create Imagick object.
 		$newImage = new Imagick;
 		$newImage->readImage($backgroundImageFileLocation);
-		/*$newImage->setImageCompression(Imagick::COMPRESSION_JPEG);
-		$newImage->setImageCompressionQuality(100);*/
 
 		// Add text areas to the background image.
 		foreach ($design->areas as $area)
@@ -196,7 +194,7 @@ class ReddesignControllerDesigntypes extends FOFController
 					$has_icc_profile = (array_search('icc', $profiles) !== false);
 
 					// If it doesnt have a CMYK ICC profile, we add one.
-					if ($has_icc_profile === false)
+					if (!$has_icc_profile)
 					{
 						$icc_cmyk = file_get_contents(JPATH_ROOT . '/media/com_reddesign/assets/colorprofiles/USWebUncoated.icc');
 						$newImage->profileImage('icc', $icc_cmyk);
