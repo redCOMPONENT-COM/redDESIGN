@@ -368,7 +368,6 @@ class ReddesignControllerDesigntypes extends FOFController
 		else
 		{
 			$finalFontSize = $FontSizeByWidthMax;
-			$finalFontSize = $finalFontSize / 1.2;
 		}
 
 		return $finalFontSize;
