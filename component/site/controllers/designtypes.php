@@ -351,8 +351,8 @@ class ReddesignControllerDesigntypes extends FOFController
 	{
 		// To find the font size for particular one line, need to divide it by number of lines.
 		$canvasEffectiveHeight = $canvasHeight / $lineCount;
-		$FontSizeByHeightMax = $canvasEffectiveHeight / $fontH;
-		$FontSizeByWidthMax = $canvasWidth / (($fontW) * $maxCharsInSingleLine);
+		$fontSizeByHeightMax = $canvasEffectiveHeight / $fontH;
+		$fontSizeByWidthMax = $canvasWidth / (($fontW) * $maxCharsInSingleLine);
 
 		/*
 		* Mid-Height (eg. char "a,s,u")
@@ -360,15 +360,14 @@ class ReddesignControllerDesigntypes extends FOFController
 		* Base-Height (eg. char "j,q,y")
 		*/
 
-		if ($FontSizeByWidthMax > $FontSizeByHeightMax)
+		if ($fontSizeByWidthMax > $fontSizeByHeightMax)
 		{
-			$finalFontSize = $FontSizeByHeightMax;
+			$finalFontSize = $fontSizeByHeightMax;
 			$finalFontSize = $finalFontSize / 1.1;
 		}
 		else
 		{
-			$finalFontSize = $FontSizeByWidthMax;
-			$finalFontSize = $finalFontSize / 1.2;
+			$finalFontSize = $fontSizeByWidthMax;
 		}
 
 		return $finalFontSize;
