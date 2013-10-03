@@ -31,9 +31,9 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		/**
 		 * Initiate PX to Unit conversation variables
 		 */
-		var unit = '<?php echo $this->unit;?>';
-		var pxToUnit = '<?php echo $this->pxToUnit;?>';
-		var unitToPx = '<?php echo $this->unitToPx;?>';
+		var pxToUnit = parseFloat('<?php echo $this->pxToUnit;?>');
+		var unitToPx = parseFloat('<?php echo $this->unitToPx;?>');
+		var ratio = parseFloat('<?php echo $this->ratio; ?>');
 
 		/**
 		 * Initiate imgAreaSelect plugin
@@ -81,10 +81,10 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		 * @param y2
 		 */
 		function selectAreaOnKeyUp(x1, y1, x2, y2) {
-			var x1_pos_in_px = parseFloat(x1) * parseFloat(unitToPx);
-			var y1_pos_in_px = parseFloat(y1) * parseFloat(unitToPx);
-			var x2_pos_in_px = parseFloat(x2) * parseFloat(unitToPx);
-			var y2_pos_in_px = parseFloat(y2) * parseFloat(unitToPx);
+			var x1_pos_in_px = parseFloat(x1) * unitToPx * ratio;
+			var y1_pos_in_px = parseFloat(y1) * unitToPx * ratio;
+			var x2_pos_in_px = parseFloat(x2) * unitToPx * ratio;
+			var y2_pos_in_px = parseFloat(y2) * unitToPx * ratio;
 
 			var selectionObject = akeeba.jQuery("img#background").imgAreaSelect({
 				instance: true,
@@ -97,12 +97,13 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 
 			var selection = selectionObject.getSelection();
 
-			var x1_pos_in_unit = parseFloat(selection.x1) * parseFloat(pxToUnit);
-			var y1_pos_in_unit = parseFloat(selection.y1) * parseFloat(pxToUnit);
-			var x2_pos_in_unit = parseFloat(selection.x2) * parseFloat(pxToUnit);
-			var y2_pos_in_unit = parseFloat(selection.y2) * parseFloat(pxToUnit);
-			var width_in_unit = parseFloat(selection.width) * parseFloat(pxToUnit);
-			var height_in_unit = parseFloat(selection.height) * parseFloat(pxToUnit);
+			// Use ratio to calculate and display real mertics instead of scaled down.
+			var x1_pos_in_unit = (parseFloat(selection.x1) / ratio) * pxToUnit;
+			var y1_pos_in_unit = (parseFloat(selection.y1) / ratio) * pxToUnit;
+			var x2_pos_in_unit = (parseFloat(selection.x2) / ratio) * pxToUnit;
+			var y2_pos_in_unit = (parseFloat(selection.y2) / ratio) * pxToUnit;
+			var width_in_unit = (parseFloat(selection.width) / ratio) * pxToUnit;
+			var height_in_unit = (parseFloat(selection.height) / ratio) * pxToUnit;
 
 			akeeba.jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
 			akeeba.jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
@@ -121,10 +122,10 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		 * @param height
 		 */
 		function selectAreaOnWidthHeightUp(x1, y1, width, height) {
-			var x1_pos_in_px = parseFloat(x1) * parseFloat(unitToPx);
-			var y1_pos_in_px = parseFloat(y1) * parseFloat(unitToPx);
-			var x2           = parseFloat(width) * parseFloat(unitToPx);
-			var y2           = parseFloat(height) * parseFloat(unitToPx);
+			var x1_pos_in_px = parseFloat(x1) * unitToPx * ratio;
+			var y1_pos_in_px = parseFloat(y1) * unitToPx * ratio;
+			var x2           = parseFloat(width) * unitToPx * ratio;
+			var y2           = parseFloat(height) * unitToPx * ratio;
 
 			// Convert width and height to coordinates.
 			x2 += x1_pos_in_px;
@@ -143,12 +144,13 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 
 				var selection = selectionObject.getSelection();
 
-				var x1_pos_in_unit = parseFloat(selection.x1) * parseFloat(pxToUnit);
-				var y1_pos_in_unit = parseFloat(selection.y1) * parseFloat(pxToUnit);
-				var x2_pos_in_unit = parseFloat(selection.x2) * parseFloat(pxToUnit);
-				var y2_pos_in_unit = parseFloat(selection.y2) * parseFloat(pxToUnit);
-				var width_in_unit = parseFloat(selection.width) * parseFloat(pxToUnit);
-				var height_in_unit = parseFloat(selection.height) * parseFloat(pxToUnit);
+				// Use ratio to calculate and display real mertics instead of scaled down.
+				var x1_pos_in_unit = (parseFloat(selection.x1) / ratio) * pxToUnit;
+				var y1_pos_in_unit = (parseFloat(selection.y1) / ratio) * pxToUnit;
+				var x2_pos_in_unit = (parseFloat(selection.x2) / ratio) * pxToUnit;
+				var y2_pos_in_unit = (parseFloat(selection.y2) / ratio) * pxToUnit;
+				var width_in_unit = (parseFloat(selection.width) / ratio) * pxToUnit;
+				var height_in_unit = (parseFloat(selection.height) / ratio) * pxToUnit;
 
 				akeeba.jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
 				akeeba.jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
@@ -173,13 +175,13 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			}
 			else
 			{
-				// convert pixel to selected unit
-				var x1_pos_in_unit = parseFloat(selection.x1) * parseFloat(pxToUnit);
-				var y1_pos_in_unit = parseFloat(selection.y1) * parseFloat(pxToUnit);
-				var x2_pos_in_unit = parseFloat(selection.x2) * parseFloat(pxToUnit);
-				var y2_pos_in_unit = parseFloat(selection.y2) * parseFloat(pxToUnit);
-				var width_in_unit = parseFloat(selection.width) * parseFloat(pxToUnit);
-				var height_in_unit = parseFloat(selection.height) * parseFloat(pxToUnit);
+				// Convert pixel to selected unit. Use ratio to calculate and display real mertics instead of scaled down.
+				var x1_pos_in_unit = (parseFloat(selection.x1) / ratio) * pxToUnit;
+				var y1_pos_in_unit = (parseFloat(selection.y1) / ratio) * pxToUnit;
+				var x2_pos_in_unit = (parseFloat(selection.x2) / ratio) * pxToUnit;
+				var y2_pos_in_unit = (parseFloat(selection.y2) / ratio) * pxToUnit;
+				var width_in_unit  = (parseFloat(selection.width) / ratio) * pxToUnit;
+				var height_in_unit = (parseFloat(selection.height) / ratio) * pxToUnit;
 
 				akeeba.jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
 				akeeba.jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
@@ -237,12 +239,12 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			var areaWidth  = akeeba.jQuery("#areaWidth").val();
 			var areaHeight = akeeba.jQuery("#areaHeight").val();
 
-			var areaX1_in_px = (areaX1 * parseFloat(unitToPx)).toFixed(0);
-			var areaY1_in_px = (areaY1 * parseFloat(unitToPx)).toFixed(0);
-			var areaX2_in_px = (areaX2 * parseFloat(unitToPx)).toFixed(0);
-			var areaY2_in_px = (areaY2 * parseFloat(unitToPx)).toFixed(0);
-			var areaWidth_in_px = (areaWidth * parseFloat(unitToPx)).toFixed(0);
-			var areaHeight_in_px = (areaHeight * parseFloat(unitToPx)).toFixed(0);
+			var areaX1_in_px = (areaX1 * unitToPx).toFixed(0);
+			var areaY1_in_px = (areaY1 * unitToPx).toFixed(0);
+			var areaX2_in_px = (areaX2 * unitToPx).toFixed(0);
+			var areaY2_in_px = (areaY2 * unitToPx).toFixed(0);
+			var areaWidth_in_px = (areaWidth * unitToPx).toFixed(0);
+			var areaHeight_in_px = (areaHeight * unitToPx).toFixed(0);
 
 			if(update != 0)
 			{
@@ -358,17 +360,17 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					'</td>' +
 					'<td>' +
 						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong> ' +
-						(width * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
+						(width * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong> ' +
-						(height * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
+						(height * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' +
-						(x1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
+						(x1_pos * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong> ' +
-						(y1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
+						(y1_pos * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong> ' +
-						(x2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
+						(x2_pos * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 						'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong> ' +
-						(y2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>' +
+						(y2_pos * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>' +
 					'</td>' +
 					'<td>' +
 						'<button type="button" class="btn btn-primary btn-mini" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
@@ -623,7 +625,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			);
 
 
-			<?php foreach($this->alginmentOptions as  $alginmentOption) : ?>
+			<?php foreach($this->alignmentOptions as  $alginmentOption) : ?>
 				akeeba.jQuery('#areaFontAlignment' + reddesign_area_id).append(
 					'<option value="<?php echo $alginmentOption->value; ?>">' +
 						'<?php echo $alginmentOption->text; ?>' +
@@ -673,17 +675,17 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				'</td>' +
 				'<td>' +
 					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong> ' +
-					(width * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
+					(width * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong> ' +
-					(height * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
+					(height * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' +
-					(x1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
+					(x1_pos * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong> ' +
-					(y1_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
+					(y1_pos * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong> ' +
-					(x2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?>, ' +
+					(x2_pos * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
 					'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong> ' +
-					(y2_pos * parseFloat(pxToUnit)).toFixed(0) + '<?php echo $this->unit; ?> ' +
+					(y2_pos * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?> ' +
 				'</td>' +
 				'<td>' +
 					'<button type="button" class="btn btn-primary btn-mini" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
@@ -738,12 +740,21 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 		function selectAreaForEdit(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, width, height) {
 			akeeba.jQuery("#designAreaId").val(reddesign_area_id);
 			akeeba.jQuery("#areaName").val(title);
-			akeeba.jQuery("#areaX1").val((x1_pos * parseFloat(pxToUnit)).toFixed(0));
-			akeeba.jQuery("#areaY1").val((y1_pos * parseFloat(pxToUnit)).toFixed(0));
-			akeeba.jQuery("#areaX2").val((x2_pos * parseFloat(pxToUnit)).toFixed(0));
-			akeeba.jQuery("#areaY2").val((y2_pos * parseFloat(pxToUnit)).toFixed(0));
-			akeeba.jQuery("#areaWidth").val((width * parseFloat(pxToUnit)).toFixed(0));
-			akeeba.jQuery("#areaHeight").val((height * parseFloat(pxToUnit)).toFixed(0));
+
+			// Convert pixel to selected unit. Use ratio to calculate and display real mertics instead of scaled down.
+			var x1_pos_in_unit = (parseFloat(x1_pos) / ratio) * pxToUnit;
+			var y1_pos_in_unit = (parseFloat(y1_pos) / ratio) * pxToUnit;
+			var x2_pos_in_unit = (parseFloat(x2_pos) / ratio) * pxToUnit;
+			var y2_pos_in_unit = (parseFloat(y2_pos) / ratio) * pxToUnit;
+			var width_in_unit  = (parseFloat(width) / ratio) * pxToUnit;
+			var height_in_unit = (parseFloat(height) / ratio) * pxToUnit;
+
+			akeeba.jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
+			akeeba.jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
+			akeeba.jQuery("#areaX2").val(x2_pos_in_unit.toFixed(0));
+			akeeba.jQuery("#areaY2").val(y2_pos_in_unit.toFixed(0));
+			akeeba.jQuery("#areaWidth").val(width_in_unit.toFixed(0));
+			akeeba.jQuery("#areaHeight").val(height_in_unit.toFixed(0));
 
 			selectArea(x1_pos, y1_pos, x2_pos, y2_pos);
 
@@ -1190,7 +1201,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 											</label>
 											<?php
 												echo JHtml::_('select.genericlist',
-																$this->alginmentOptions,
+																$this->alignmentOptions,
 																'areaFontAlignment' . $area->reddesign_area_id,
 																'',
 																'value',

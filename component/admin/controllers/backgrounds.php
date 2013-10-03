@@ -161,14 +161,14 @@ class ReddesignControllerBackgrounds extends FOFController
 		}
 
 		// Update the database with the new path of the EPS file
-		$data['eps_file']			= $uploaded_file['mangled_filename'];
+		$data['eps_file'] = $uploaded_file['mangled_filename'];
 
 		// Update the database with the new path to the image
-		$data['image_path']			= $jpegPreviewFile;
+		$data['image_path'] = $jpegPreviewFile;
 
 		if ($thumbPreviewFile)
 		{
-			$data['thumbnail']			= $thumbPreviewFile;
+			$data['thumbnail'] = $thumbPreviewFile;
 		}
 
 		// If this new background will be the PDF Production background, switch it against the previous production background

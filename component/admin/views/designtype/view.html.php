@@ -20,6 +20,40 @@ defined('_JEXEC') or die;
 
 class ReddesignViewDesigntype extends FOFViewHtml
 {
+	public $item;
+
+	public $activeTab;
+
+	public $document;
+
+	public $areas;
+
+	public $productionBackground;
+
+	public $params;
+
+	public $sizerOptions;
+
+	public $backgrounds;
+
+	public $ratio;
+
+	public $colorCodes;
+
+	public $inputFieldOptions;
+
+	public $fonts;
+
+	public $alignmentOptions;
+
+	public $fontsOptions;
+
+	public $unit;
+
+	public $pxToUnit;
+
+	public $unitToPx;
+
 	/**
 	 * Executes before rendering the page for the Add task.
 	 *
@@ -75,6 +109,21 @@ class ReddesignViewDesigntype extends FOFViewHtml
 				{
 					$this->productionBackground = $background;
 
+					$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $this->productionBackground->eps_file;
+					$previewFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $this->productionBackground->image_path;
+
+					// Read EPS size.
+					$im = new Imagick;
+					$im->readImage($epsFileLocation);
+					$dimensions = $im->getImageGeometry();
+					$imageWidth = $dimensions['width'];
+
+					// Read preview size, for scaling.
+					$previewImageSize = getimagesize($previewFileLocation);
+
+					// Scaling ratio
+					$this->ratio = $previewImageSize[0] / $imageWidth;
+
 					// Get all areas existing in the database for this specific background.
 					$areaModel = FOFModel::getTmpInstance('Area', 'ReddesignModel')->reddesign_background_id($background->reddesign_background_id);
 					$areas = $areaModel->getItemList();
@@ -109,7 +158,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 				JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTAREA'))
 			);
 
-			$this->alginmentOptions = array(
+			$this->alignmentOptions = array(
 				JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_COMMON_SELECT')),
 				JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_COMMON_LEFT')),
 				JHtml::_('select.option', '2', JText::_('COM_REDDESIGN_COMMON_RIGHT')),
