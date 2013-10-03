@@ -171,13 +171,13 @@ defined('_JEXEC') or die();
 					</label>
 					<input class="input-mini" type="text" maxlength="1" value="<?php echo $char_settings->font_char; ?>" id="font_char_<?php echo $char_settings->reddesign_char_id; ?>" name="font_char_<?php echo $char_settings->reddesign_char_id; ?>">
 				</div>
-				<div class="control-group character-group"><label for="width">
+				<div class="control-group character-group">
 						<label for="width_<?php echo $char_settings->reddesign_char_id; ?>">
 							<?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_WIDTH') ?>
 						</label>
 						<input class="input-small" type="text" maxlength="15" value="<?php echo $char_settings->width; ?>" id="width_<?php echo $char_settings->reddesign_char_id; ?>" name="width_<?php echo $char_settings->reddesign_char_id; ?>">
 				</div>
-				<div class="control-group character-group"><label for="height">
+				<div class="control-group character-group">
 						<label for="height_<?php echo $char_settings->reddesign_char_id; ?>">
 							<?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_HEIGHT') ?>
 						</label>
