@@ -809,7 +809,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$epsFileName = $epsFilePath . $productionFileName . ".eps";
 		$cmd  = "gs -dBATCH -dNOPAUSE -dNOEPS -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
 		$cmd .= " -sOutputFile=$epsFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]";
-		$cmd .= "  >> setpagedevice'  -f" . $tmpEpsFile;
+		$cmd .= "  >> setpagedevice'  -f" . $tmpTextEpsFile;
 		exec($cmd);
 
 		if (file_exists($tmpTextEpsFile))
