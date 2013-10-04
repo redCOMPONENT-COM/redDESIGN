@@ -91,26 +91,47 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			</label>
 
 			<?php
-			/* FONT SELECTION */
+				// Font Selection
 
-			// If no font is selected Arial will be used
-			if (empty($area->font_id))
-			{
-				$defaultFonts = array();
-				$defaultFonts[] = JHTML::_('select.option', 0, 'Arial');
-				echo JHTML::_('select.genericlist', $defaultFonts, 'fontArea' . $area->reddesign_area_id, 'class="inputbox" onChange="customize(0);"', 'value', 'text', null);
-			}
-			else
-			{
-				$areaFontsIds 	= explode(',', $area->font_id);
-				$options 		= array();
+				// If no font is selected Arial will be used.
+				if (empty($area->font_id))
+				{
+					$defaultFonts = array();
+					$defaultFonts[] = JHTML::_('select.option', 0, 'Arial');
+					echo JHTML::_(
+									'select.genericlist',
+									$defaultFonts,
+									'fontArea' . $area->reddesign_area_id,
+									'class="inputbox" onChange="customize(0);"',
+									'value',
+									'text',
+									null
+					);
+				}
+				else
+				{
+					$areaFontsIds 	= explode(',', $area->font_id);
 
-				foreach ($areaFontsIds as $key => $value) :
-					$options[] = JHTML::_('select.option', $value, $this->fonts[$value]->title);
-				endforeach;
+					if (count($areaFontsIds) > 1)
+					{
+						$options = array();
 
-				echo JHTML::_('select.genericlist', $options, 'fontArea' . $area->reddesign_area_id, 'class="inputbox" onChange="customize(0);"', 'value', 'text', null);
-			}
+						foreach ($areaFontsIds as $key => $value)
+						{
+							$options[] = JHTML::_('select.option', $value, $this->fonts[$value]->title);
+						}
+
+						echo JHTML::_(
+										'select.genericlist',
+										$options,
+										'fontArea' . $area->reddesign_area_id,
+										'class="inputbox" onChange="customize(0);"',
+										'value',
+										'text',
+										null
+						);
+					}
+				}
 			?>
 
 			<?php /* FONT SIZE SELECTION */ ?>
@@ -140,14 +161,27 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				<?php /* Case 3: using dropdown selector for font size */ ?>
 			<?php elseif ($this->item->fontsizer === 'dropdown') : ?>
 				<?php
-				$areaFontSizes = explode(',', $area->font_size);
-				$sizeOptions       = array();
+					$areaFontSizes = explode(',', $area->font_size);
 
-				foreach ($areaFontSizes as $key => $value) :
-					$sizeOptions[] = JHTML::_('select.option', $value, $value);
-				endforeach;
+					if (count($areaFontSizes) > 1)
+					{
+						$sizeOptions       = array();
 
-				echo JHTML::_('select.genericlist', $sizeOptions, 'fontSize' . $area->reddesign_area_id, 'class="inputbox" onChange="customize(0);"', 'value', 'text', null);
+						foreach ($areaFontSizes as $key => $value)
+						{
+							$sizeOptions[] = JHTML::_('select.option', $value, $value);
+						}
+
+						echo JHTML::_(
+										'select.genericlist',
+										$sizeOptions,
+										'fontSize' . $area->reddesign_area_id,
+										'class="inputbox" onChange="customize(0);"',
+										'value',
+										'text',
+										null
+						);
+					}
 				?>
 			<?php endif; ?>
 		</div>
