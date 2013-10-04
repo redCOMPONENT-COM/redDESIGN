@@ -80,13 +80,19 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$template = str_replace('{discount_calculator_plg}', $table, $template);
 
 		$getExtraParamsJS = "
-			var jsProductPrice = rsjQuery('#plg_product_price_' + " . $product->product_id . ");
+			var dpAllow = false;
 
-			if (jsProductPrice.length > 0)
+			function getExtraParams(frm)
 			{
-				function getExtraParams(frm)
+				var jsProductPrice = rsjQuery('input[id^=\"plg_product_price_\"]').val();
+
+				if (jsProductPrice && dpAllow)
 				{
 					return '&plg_product_price=' + jsProductPrice;
+				}
+				else
+				{
+					alert('" . sprintf(JText::_('PLG_REDSHOP_PRODUCT_DISCOUNT_CALCULATOR_REQUIRED_MINIMUM_HEIGHT'), $product->product_width) . "');
 				}
 			}
 		";
