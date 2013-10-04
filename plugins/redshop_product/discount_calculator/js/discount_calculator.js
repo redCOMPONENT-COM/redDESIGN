@@ -29,6 +29,9 @@ rsjQuery(function () {
 
         var h = newH = elm.attr('default-height'), w = newW = elm.attr('default-width');
 
+        // Check for valid height and width
+        dpAllow = (w <= pdbi || h <= pdbi);
+
         if (!isNaN(pdbi)) {
 
             var ratio_h2w = w > 0 && (h / w), ratio_w2h = h > 0 && (w / h);
