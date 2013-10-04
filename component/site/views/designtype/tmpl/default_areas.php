@@ -18,6 +18,41 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 </h4>
 <?php foreach ($this->productionBackgroundAreas as $area) : ?>
 
+	<?php
+		switch ($area->textalign)
+		{
+			case 1:
+				$textAlign = 'left';
+				break;
+			case 2:
+				$textAlign = 'right';
+				break;
+			case 0:
+			case 3:
+			default:
+				$textAlign = 'center';
+				break;
+		}
+
+		if (!empty($area->maxchar) && $area->maxchar != 0)
+		{
+			$maxChar = 'maxlength="' . $area->maxchar . '"';
+		}
+		else
+		{
+			$maxChar = '';
+		}
+
+		if (!empty($area->maxline) && $area->maxline != 0)
+		{
+			$maxLine = 'rows="' . $area->maxline . '"';
+		}
+		else
+		{
+			$maxLine = '';
+		}
+	?>
+
 	<input id="textAlign<?php echo $area->reddesign_area_id; ?>" type="hidden" value="<?php echo $area->textalign; ?>" />
 
 	<div class="row-fluid">
@@ -30,20 +65,22 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				<textarea
 					name="textArea<?php echo $area->reddesign_area_id; ?>"
 					class="textAreaClass"
+					style="text-align: <?php echo $textAlign; ?>;"
 					placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
 					id="textArea<?php echo $area->reddesign_area_id; ?>"
 					required="required"
-					maxlength="<?php echo $area->maxchar; ?>"
-					rows="<?php echo $area->maxline ?>"><?php echo $area->default_text; ?></textarea>
+					<?php echo $maxChar; ?>
+					<?php echo $maxLine ?>><?php echo $area->default_text; ?></textarea>
 			<?php else : ?>
 				<input
 					type="text"
 					name="textArea<?php echo $area->reddesign_area_id; ?>"
 					class="textAreaClass"
+					style="text-align: <?php echo $textAlign; ?>;"
 					placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
 					id="textArea<?php echo $area->reddesign_area_id; ?>"
 					value="<?php echo $area->default_text; ?>"
-					maxlength="<?php echo $area->maxchar; ?>"
+					<?php echo $maxChar; ?>
 					required="required"
 					>
 			<?php endif; ?>
