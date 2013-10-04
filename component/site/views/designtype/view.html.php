@@ -19,6 +19,14 @@ defined('_JEXEC') or die;
  */
 class ReddesignViewDesigntype extends FOFViewHtml
 {
+	public $previewBackground;
+
+	public $previewBackgrounds;
+
+	public $imageSize;
+
+	public $productionBackgroundAreas;
+
 	/**
 	 * Executes before rendering the page for the Read task.
 	 *

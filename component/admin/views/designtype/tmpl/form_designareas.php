@@ -239,12 +239,12 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 			var areaWidth  = akeeba.jQuery("#areaWidth").val();
 			var areaHeight = akeeba.jQuery("#areaHeight").val();
 
-			var areaX1_in_px = (areaX1 * unitToPx).toFixed(0);
-			var areaY1_in_px = (areaY1 * unitToPx).toFixed(0);
-			var areaX2_in_px = (areaX2 * unitToPx).toFixed(0);
-			var areaY2_in_px = (areaY2 * unitToPx).toFixed(0);
-			var areaWidth_in_px = (areaWidth * unitToPx).toFixed(0);
-			var areaHeight_in_px = (areaHeight * unitToPx).toFixed(0);
+			var areaX1_in_px = (areaX1 * unitToPx * ratio).toFixed(0);
+			var areaY1_in_px = (areaY1 * unitToPx * ratio).toFixed(0);
+			var areaX2_in_px = (areaX2 * unitToPx * ratio).toFixed(0);
+			var areaY2_in_px = (areaY2 * unitToPx * ratio).toFixed(0);
+			var areaWidth_in_px = (areaWidth * unitToPx * ratio).toFixed(0);
+			var areaHeight_in_px = (areaHeight * unitToPx * ratio).toFixed(0);
 
 			if(update != 0)
 			{
