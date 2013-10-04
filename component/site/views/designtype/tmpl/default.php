@@ -199,7 +199,8 @@ JHtml::_('behavior.modal');
 				"fontTypeId" :	akeeba.jQuery("#fontArea<?php echo $area->reddesign_area_id; ?>").val()
 			});
 
-			akeeba.jQuery("#rs_sticker_element_<?php echo JRequest::getInt('pid'); ?>").html(akeeba.jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").val().replace(/ /g,'').length);
+			var textareacount = akeeba.jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").val().replace(/ /g,'').length;
+			akeeba.jQuery("#rs_sticker_element_<?php echo JRequest::getInt('pid'); ?>").html(textareacount);
 
 			<?php endforeach; ?>
 
