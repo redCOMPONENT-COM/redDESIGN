@@ -152,8 +152,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	{
 		if ($data->product_type == 'redDESIGN')
 		{
-			// Get design type ID
 			$db = JFactory::getDbo();
+
+			// Get design type ID.
 			$query = $db->getQuery(true);
 			$query->select($db->quoteName('reddesign_designtype_id'));
 			$query->from($db->quoteName('#__reddesign_product_mapping'));
@@ -161,7 +162,23 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$db->setQuery($query);
 			$reddesignDesigntypeId = $db->loadResult();
 
-			// Get redDESIGN frontend editor HTML
+			// Get background ID so you can get areas.
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('reddesign_background_id'))
+				->from($db->quoteName('#__reddesign_backgrounds'))
+				->where($db->quoteName('isPDFbgimage') . ' = ' . 1)
+				->where($db->quoteName('reddesign_designtype_id') . ' = ' . $reddesignDesigntypeId);
+			$db->setQuery($query);
+			$backgroundId = $db->loadResult();
+
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('reddesign_area_id'))
+				->from($db->quoteName('#__reddesign_areas'))
+				->where($db->quoteName('reddesign_background_id') . ' = ' . $backgroundId);
+			$db->setQuery($query);
+			$areas = $db->loadColumn();
+
+			// Get redDESIGN frontend HTML.
 			$inputvars = array(
 				'id'	=> $reddesignDesigntypeId
 			);
@@ -172,7 +189,116 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$html = ob_get_contents();
 			ob_end_clean();
 
-			$template_desc = str_replace("{redDESIGN}", $html, $template_desc);
+			// Get title.
+			$htmlElement = explode('{RedDesignBreakTitle}', $html);
+			$htmlElement = $htmlElement[1];
+			$template_desc = str_replace("{redDESIGN:Title}", $htmlElement, $template_desc);
+
+			// Get form begin.
+			$htmlElement = explode('{RedDesignBreakFormBegin}', $html);
+			$htmlElement = $htmlElement[1];
+			$template_desc = str_replace("{redDESIGN:FormBegin}", $htmlElement, $template_desc);
+
+			// Get backgrounds selection.
+			$htmlElement = explode('{RedDesignBreakBackgrounds}', $html);
+			$htmlElement = $htmlElement[1];
+			$template_desc = str_replace("{redDESIGN:BackgroundsSelect}", $htmlElement, $template_desc);
+
+			// Get main image.
+			$htmlElement = explode('{RedDesignBreakDesignImage}', $html);
+			$htmlElement = $htmlElement[1];
+			$template_desc = str_replace("{redDESIGN:DesignImage}", $htmlElement, $template_desc);
+
+			// Get button "Customize it!", this button can be turned on at the configuration.
+			$htmlElement = explode('{RedDesignBreakButtonCustomizeIt}', $html);
+			$htmlElement = $htmlElement[1];
+			$template_desc = str_replace("{redDESIGN:ButtonCustomizeIt}", $htmlElement, $template_desc);
+
+			// Here's where it gets crazy. - Design Areas
+			$htmlAreas = explode('{RedDesignBreakDesignAreas}', $html);
+			$htmlAreas = $htmlAreas[1];
+
+			// Get areas global title.
+			$htmlElement = explode('{RedDesignBreakDesignAreasTitle}', $htmlAreas);
+			$htmlElement = $htmlElement[1];
+			$template_desc = str_replace("{redDESIGN:AreasTitle}", $htmlElement, $template_desc);
+
+			// Get middle tags of {redDESIGN:AreasLoop} enclosure.
+			$areasLoopTemplate = explode('{redDESIGN:AreasLoopStart}', $template_desc);
+			$areasLoopTemplate = explode('{redDESIGN:AreasLoopEnd}', $areasLoopTemplate[1]);
+			$areasLoopTemplate = $areasLoopTemplate[0];
+
+			$areasFinshedOutput = '';
+
+			foreach ($areas as $areaId)
+			{
+				$areasLoopTemplateInstance = $areasLoopTemplate;
+
+				// Get area specific content.
+				$areaHtml = explode('{RedDesignBreakDesignArea' . $areaId . '}', $htmlAreas);
+				$areaHtml = $areaHtml[1];
+
+				// Get specific area title.
+				$htmlElement = explode('{RedDesignBreakDesignAreaTitle}', $areaHtml);
+				$htmlElement = $htmlElement[1];
+				$areasLoopTemplateInstance = str_replace("{redDESIGN:AreaTitle}", $htmlElement, $areasLoopTemplateInstance);
+
+				// Get input text label.
+				$htmlElement = explode('{RedDesignBreakDesignAreaInputTextLabel}', $areaHtml);
+				$htmlElement = $htmlElement[1];
+				$areasLoopTemplateInstance = str_replace("{redDESIGN:InputTextLabel}", $htmlElement, $areasLoopTemplateInstance);
+
+				// Get input text.
+				$htmlElement = explode('{RedDesignBreakDesignAreaInputText}', $areaHtml);
+				$htmlElement = $htmlElement[1];
+				$areasLoopTemplateInstance = str_replace("{redDESIGN:InputText}", $htmlElement, $areasLoopTemplateInstance);
+
+				// Get choose font label.
+				$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontLabel}', $areaHtml);
+				$htmlElement = $htmlElement[1];
+				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontLabel}", $htmlElement, $areasLoopTemplateInstance);
+
+				// Get choose font input.
+				$htmlElement = explode('{RedDesignBreakDesignAreaChooseFont}', $areaHtml);
+				$htmlElement = $htmlElement[1];
+				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFont}", $htmlElement, $areasLoopTemplateInstance);
+
+				// Get choose font size label.
+				$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontSizeLabel}', $areaHtml);
+				$htmlElement = $htmlElement[1];
+				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontSizeLabel}", $htmlElement, $areasLoopTemplateInstance);
+
+				// Get choose font size input.
+				$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontSize}', $areaHtml);
+				$htmlElement = $htmlElement[1];
+				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontSize}", $htmlElement, $areasLoopTemplateInstance);
+
+				// Get choose color label.
+				$htmlElement = explode('{RedDesignBreakDesignAreaChooseColorLabel}', $areaHtml);
+				$htmlElement = $htmlElement[1];
+				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColorLabel}", $htmlElement, $areasLoopTemplateInstance);
+
+				// Get choose color label.
+				$htmlElement = explode('{RedDesignBreakDesignAreaChooseColor}', $areaHtml);
+				$htmlElement = $htmlElement[1];
+				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColor}", $htmlElement, $areasLoopTemplateInstance);
+
+				// Get choose color label.
+				$htmlElement = explode('{RedDesignBreakDesignAreaChooseColor}', $areaHtml);
+				$htmlElement = $htmlElement[1];
+				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColor}", $htmlElement, $areasLoopTemplateInstance);
+
+				$areasFinshedOutput .= $areasLoopTemplateInstance;
+			}
+
+			$start = '{redDESIGN:AreasLoopStart}';
+			$end = '{redDESIGN:AreasLoopEnd}';
+			$template_desc = preg_replace('#(' . $start . ')(.*)(' . $end . ')#si', $areasFinshedOutput, $template_desc);
+
+			// Get form end.
+			$htmlElement = explode('{RedDesignBreakFormEndsAndJS}', $html);
+			$htmlElement = $htmlElement[1];
+			$template_desc = str_replace("{redDESIGN:FormEnd}", $htmlElement, $template_desc);
 
 			$redDesignData = "<input type='hidden' name='task' value='add'><input type='hidden' id='redDesignData' name='redDesignData' value='' />";
 
