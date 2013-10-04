@@ -198,7 +198,12 @@ JHtml::_('behavior.modal');
 				"fontSize" :	akeeba.jQuery("#fontSize<?php echo $area->reddesign_area_id; ?>").val(),
 				"fontTypeId" :	akeeba.jQuery("#fontArea<?php echo $area->reddesign_area_id; ?>").val()
 			});
+
+			var textareacount = akeeba.jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").val().replace(/ /g,'').length;
+			akeeba.jQuery("#rs_sticker_element_<?php echo JRequest::getInt('pid'); ?>").html(textareacount);
+
 			<?php endforeach; ?>
+
 			design = JSON.stringify({Design: design });
 			akeeba.jQuery.ajax({
 				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=designtype&task=ajaxGetDesign&format=raw&<?php echo JFactory::getSession()->getFormToken(); ?>=1",
