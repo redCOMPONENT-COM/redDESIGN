@@ -11,61 +11,80 @@ defined('_JEXEC') or die();
 
 JHtml::_('behavior.modal');
 
+/*
+{RedDesignBreakELEMENT} is a tag used in integration plugin to explode HTML string into smaller peaces. Those peaces are used in redSHOP templating.
+*/
+
 ?>
 
+<?php // Part 0 - Title ?>
+{RedDesignBreakTitle}
 <h1><?php echo $this->item->title; ?></h1>
+{RedDesignBreakTitle}
+
+<?php // Part 1 - Begin Form ?>
+{RedDesignBreakFormBegin}
 <form id="designform" name="designform" method="post" action="index.php" class="row-fluid">
 	<input type="hidden" name="option" value="com_reddesign">
 	<input type="hidden" name="view" value="designtype">
 	<input type="hidden" name="task" id="task" value="">
 	<input type="hidden" name="designAreas" id="designAreas" value="">
 	<input type="hidden" id="reddesign_designtype_id" name="reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>">
+{RedDesignBreakFormBegin}
 
-	<?php echo $this->loadTemplate('product'); ?>
+<?php // Part 2 - Select Backgrounds ?>
+{RedDesignBreakBackgrounds}
+	<div class="row-fluid">
+		<div class="well span12">
+			<?php echo $this->loadTemplate('backgrounds'); ?>
+		</div>
+	</div>
+{RedDesignBreakBackgrounds}
 
-	<ul class="nav nav-tabs">
-		<li class="active">
-			<a href="#customize" id="customizeLink" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_CUSTOMIZE_TAB'); ?></a>
-		</li>
-	</ul>
-
-	<div id="my-tab-content" class="tab-content">
-		<div class="tab-pane active" id="customize">
-			<div class="row-fluid">
-				<div class="row-fluid">
-					<div class="well span12">
-						<?php echo $this->loadTemplate('frames'); ?>
-					</div>
-				</div>
-				<div id="background-container" class="row-fluid">
-					<div id="backgroundImage">
-						<img id="background"
-							 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"
-							 alt="<?php echo $this->previewBackground->title;?>" />
-					</div>
-					<div id="progressBar"
-						 style="display: none;">
-						<div class="progress progress-striped active">
-							<div class="bar" style="width: 100%;"></div>
-						</div>
-					</div>
-				</div>
-				<div class="customize-it-btn row-fluid">
-					<?php if (!empty($this->productionBackgroundAreas) && ($this->params->get('autoCustomize', 1) == 0 || $this->params->get('autoCustomize', 1) == 2) ) : ?>
-						<button type="button" class="btn btn-success" data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>" id="customizeDesign">
-							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE'); ?>
-						</button>
-					<?php endif; ?>
-				</div>
-				<div class="row-fluid">
-					<div class="well span12">
-						<?php echo $this->loadTemplate('areas'); ?>
-						<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
-					</div>
-				</div>
+<?php // Part 3 - Design Image ?>
+{RedDesignBreakDesignImage}
+	<div id="background-container" class="row-fluid">
+		<div id="backgroundImage">
+			<img id="background"
+				 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"
+				 alt="<?php echo $this->previewBackground->title;?>" />
+		</div>
+		<div id="progressBar" style="display: none;">
+			<div class="progress progress-striped active">
+				<div class="bar" style="width: 100%;"></div>
 			</div>
 		</div>
 	</div>
+{RedDesignBreakDesignImage}
+
+<?php // Part 4 - "Customize it!" Button (Controlled by configuration parameters.) ?>
+{RedDesignBreakButtonCustomizeIt}
+	<div class="customize-it-btn row-fluid">
+		<?php if (!empty($this->productionBackgroundAreas) && ($this->params->get('autoCustomize', 1) == 0 || $this->params->get('autoCustomize', 1) == 2) ) : ?>
+			<button type="button"
+					class="btn btn-success"
+					data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>"
+					id="customizeDesign"
+				>
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE'); ?>
+			</button>
+		<?php endif; ?>
+	</div>
+{RedDesignBreakButtonCustomizeIt}
+
+
+<?php // Part 5 - Areas Begin ?>
+{RedDesignBreakDesignAreas}
+	<div class="row-fluid">
+		<div class="well span12">
+			<?php echo $this->loadTemplate('areas'); ?>
+			<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
+		</div>
+	</div>
+{RedDesignBreakDesignAreas}
+
+<?php // Part 6 - Form Ends ?>
+{RedDesignBreakFormEndsAndJS}
 </form>
 
 <script type="text/javascript">
@@ -260,3 +279,4 @@ JHtml::_('behavior.modal');
 		customize(3);
 	}
 </script>
+{RedDesignBreakFormEndsAndJS}
