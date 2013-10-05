@@ -72,36 +72,29 @@ class ReddesignControllerDesigntypes extends FOFController
 		$background = $backgroundModel->getItem($design->reddesign_background_id);
 		$backgroundImage = $background->image_path;
 
-		if ($session->get('customizedImage') != "")
+		// Get a (very!) randomized name
+		if (version_compare(JVERSION, '3.0', 'ge'))
 		{
-			$mangledname = $session->get('customizedImage');
+			$serverkey = JFactory::getConfig()->get('secret', '');
 		}
 		else
 		{
-			// Get a (very!) randomized name
-			if (version_compare(JVERSION, '3.0', 'ge'))
-			{
-				$serverkey = JFactory::getConfig()->get('secret', '');
-			}
-			else
-			{
-				$serverkey = JFactory::getConfig()->getValue('secret', '');
-			}
+			$serverkey = JFactory::getConfig()->getValue('secret', '');
+		}
 
-			$sig = $backgroundImage . microtime() . $serverkey;
+		$sig = $backgroundImage . microtime() . $serverkey;
 
-			if (function_exists('sha256'))
-			{
-				$mangledname = sha256($sig);
-			}
-			elseif (function_exists('sha1'))
-			{
-				$mangledname = sha1($sig);
-			}
-			else
-			{
-				$mangledname = md5($sig);
-			}
+		if (function_exists('sha256'))
+		{
+			$mangledname = sha256($sig);
+		}
+		elseif (function_exists('sha1'))
+		{
+			$mangledname = sha1($sig);
+		}
+		else
+		{
+			$mangledname = md5($sig);
 		}
 
 		$backgroundImageFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $backgroundImage;

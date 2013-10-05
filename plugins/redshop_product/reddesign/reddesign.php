@@ -326,15 +326,14 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 * Can change sameProduct variable in addToCart function.
 	 * That means if you return true as a value than the product will be added to a separate order line.
 	 *
-	 * @param   array  &$cart  Cart array.
-	 * @param   array  $data   Data about product being added.
+	 * @param   array  &$cart         Cart array.
+	 * @param   array  $data          Data about product being added.
+	 * @param   bool   &$sameProduct  Same product or not.
 	 *
 	 * @return  bool   $notSame True if you want new order line for the product in cart.
 	 */
-	public function checkSameCartProduct(&$cart, $data)
+	public function checkSameCartProduct(&$cart, $data, &$sameProduct)
 	{
-		$notSame = false;
-
 		// Get product type
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -346,10 +345,28 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		if ($productType == 'redDESIGN')
 		{
-			$notSame = true;
+			$sameProduct = false;
 		}
+	}
 
-		return $notSame;
+	/**
+	 * This is an event that is called when cart template replacement is started.
+	 *
+	 * @param   array   &$cart           Cart array.
+	 * @param   string  &$product_image  Product image string.
+	 * @param   object  $product         Product object.
+	 * @param   int     $i               Position in the cart.
+	 *
+	 * @return  void
+	 */
+	public function changeCartOrderItemImage(&$cart, &$product_image, $product, $i)
+	{
+		if ($product->product_type = 'redDESIGN')
+		{
+			$redDesignData = json_decode($cart[$i]['redDesignData']);
+
+			$product_image = "<div  class='product_image'><img src='" . $redDesignData->backgroundImgSrc . "'></div>";
+		}
 	}
 
 	/**
@@ -392,6 +409,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						inputs.each(function() {
 							values[this.name] = akeeba.jQuery(this).val();
 						});
+
+						values["backgroundImgSrc"] = akeeba.jQuery("#background").attr("src");
 
 						var jsonString = JSON.stringify(values);
 
