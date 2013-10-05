@@ -351,6 +351,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 	/**
 	 * This is an event that is called when cart template replacement is started.
+	 * ToDo: Images are coming from media/assets/designtypes/forcart and they stey there forever.
+	 * ToDo: Delete them upon order complete to free server resources.
 	 *
 	 * @param   array   &$cart           Cart array.
 	 * @param   string  &$product_image  Product image string.
