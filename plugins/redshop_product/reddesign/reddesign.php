@@ -90,7 +90,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 *
 	 * @param   integer  $productId  Product Id
 	 *
-	 * @return  mixed              Relation Object List
+	 * @throws  RuntimeException
+	 * @return  mixed               Relation Object List
 	 */
 	private function getPropertyBackgroundRelation($productId)
 	{
