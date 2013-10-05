@@ -323,6 +323,36 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	}
 
 	/**
+	 * Can change sameProduct variable in addToCart function.
+	 * That means if you return true as a value than the product will be added to a separate order line.
+	 *
+	 * @param   array  &$cart  Cart array.
+	 * @param   array  $data   Data about product being added.
+	 *
+	 * @return  bool   $notSame True if you want new order line for the product in cart.
+	 */
+	public function checkSameCartProduct(&$cart, $data)
+	{
+		$notSame = false;
+
+		// Get product type
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('product_type'));
+		$query->from($db->quoteName('#__redshop_product'));
+		$query->where($db->quoteName('product_id') . ' = ' . $data['product_id']);
+		$db->setQuery($query);
+		$productType = $db->loadResult();
+
+		if ($productType == 'redDESIGN')
+		{
+			$notSame = true;
+		}
+
+		return $notSame;
+	}
+
+	/**
 	 * When adding same product it needs to update data from this different
 	 * place because onBeforeSetCartSession works only once for one session.
 	 *
