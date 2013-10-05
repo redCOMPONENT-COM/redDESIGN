@@ -43,7 +43,7 @@ JHtml::_('behavior.modal');
 
 <?php // Part 3 - Design Image ?>
 {RedDesignBreakDesignImage}
-	<div id="background-container" class="row-fluid">
+	<div id="background-container">
 		<div id="backgroundImage">
 			<img id="background"
 				 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"

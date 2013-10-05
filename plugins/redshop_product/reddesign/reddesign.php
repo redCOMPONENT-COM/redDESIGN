@@ -90,7 +90,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 *
 	 * @param   integer  $productId  Product Id
 	 *
-	 * @return  mixed              Relation Object List
+	 * @throws  RuntimeException
+	 * @return  mixed               Relation Object List
 	 */
 	private function getPropertyBackgroundRelation($productId)
 	{
@@ -323,6 +324,55 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	}
 
 	/**
+	 * Can change sameProduct variable in addToCart function.
+	 * That means if you return true as a value than the product will be added to a separate order line.
+	 *
+	 * @param   array  &$cart         Cart array.
+	 * @param   array  $data          Data about product being added.
+	 * @param   bool   &$sameProduct  Same product or not.
+	 *
+	 * @return  bool   $notSame True if you want new order line for the product in cart.
+	 */
+	public function checkSameCartProduct(&$cart, $data, &$sameProduct)
+	{
+		// Get product type
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('product_type'));
+		$query->from($db->quoteName('#__redshop_product'));
+		$query->where($db->quoteName('product_id') . ' = ' . $data['product_id']);
+		$db->setQuery($query);
+		$productType = $db->loadResult();
+
+		if ($productType == 'redDESIGN')
+		{
+			$sameProduct = false;
+		}
+	}
+
+	/**
+	 * This is an event that is called when cart template replacement is started.
+	 * ToDo: Images are coming from media/assets/designtypes/forcart and they stey there forever.
+	 * ToDo: Delete them upon order complete to free server resources.
+	 *
+	 * @param   array   &$cart           Cart array.
+	 * @param   string  &$product_image  Product image string.
+	 * @param   object  $product         Product object.
+	 * @param   int     $i               Position in the cart.
+	 *
+	 * @return  void
+	 */
+	public function changeCartOrderItemImage(&$cart, &$product_image, $product, $i)
+	{
+		if ($product->product_type = 'redDESIGN')
+		{
+			$redDesignData = json_decode($cart[$i]['redDesignData']);
+
+			$product_image = "<div  class='product_image'><img src='" . $redDesignData->backgroundImgSrc . "'></div>";
+		}
+	}
+
+	/**
 	 * When adding same product it needs to update data from this different
 	 * place because onBeforeSetCartSession works only once for one session.
 	 *
@@ -362,6 +412,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						inputs.each(function() {
 							values[this.name] = akeeba.jQuery(this).val();
 						});
+
+						values["backgroundImgSrc"] = akeeba.jQuery("#background").attr("src");
 
 						var jsonString = JSON.stringify(values);
 
