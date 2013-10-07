@@ -30,7 +30,7 @@ rsjQuery(function () {
         var h = newH = elm.attr('default-height'), w = newW = elm.attr('default-width');
 
         // Check for valid height and width
-        dpAllow = (w <= pdbi || h <= pdbi);
+        dpAllow = (w <= pdbi && h <= pdbi);
 
         if (!isNaN(pdbi)) {
 
