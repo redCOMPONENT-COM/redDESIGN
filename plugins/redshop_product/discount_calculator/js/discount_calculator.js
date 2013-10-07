@@ -12,17 +12,15 @@ rsjQuery(function () {
 
     rsjQuery('[id^="rs_sticker_element_"]').hide();
 
-    rsjQuery('input[id^="plg_dimention_base_input_"],select[id^="plg_dimention_base_"]').bind('change keyup', function () {
+    /**
+     * Set Discount Price Calculations
+     */
+    var setDiscountPrice = function(){
 
         var elm = null, pid = 0;
 
-        if (rsjQuery(this).is('input')) {
-            pid = rsjQuery(this).attr('id').split("_")[4];
-            elm = rsjQuery(this);
-        } else {
-            pid = rsjQuery(this).attr('id').split("_")[3];
-            elm = rsjQuery('#plg_dimention_base_input_' + pid);
-        }
+        pid = rsjQuery('#product_id').val();
+        elm = rsjQuery('#plg_dimention_base_input_' + pid);
 
         var pdb = rsjQuery('#plg_dimention_base_' + pid).val();
         var pdbi = parseFloat(elm.val()).round(2);
@@ -34,7 +32,6 @@ rsjQuery(function () {
             var ratio_h2w = w > 0 && (h / w), ratio_w2h = h > 0 && (w / h);
 
             if (pdb == 'w') {
-
                 newW = pdbi;
                 newH = (newW * ratio_h2w).round(2);
 
@@ -42,7 +39,6 @@ rsjQuery(function () {
                 dpAllow = (w <= pdbi);
 
             } else {
-
                 newH = pdbi;
                 newW = (newH * ratio_w2h).round(2);
 
@@ -72,8 +68,13 @@ rsjQuery(function () {
             });
 
         });
+    };
 
-    });
+    // Set Discount Price On Load
+    setDiscountPrice();
+
+    // Set Discount Price on Demand
+    rsjQuery('input[id^="plg_dimention_base_input_"],select[id^="plg_dimention_base_"]').bind('change keyup', setDiscountPrice);
 
     /**
      * Update price in HTML View

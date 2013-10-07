@@ -61,15 +61,16 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 							id="plg_dimention_base_input_' . $product->product_id . '"
 							name="plg_dimention_base_input"
 							size="5"
+							value="' . $product->product_width . '"
 							maxlength="5"
-							default-width="' . $product->product_width . '" default-height="' . $product->product_height .
-					'">
+							default-width="' . $product->product_width . '"
+							default-height="' . $product->product_height . '">
 					<span id="plg_default_volume_unit_' . $product->product_id . '">' . DEFAULT_VOLUME_UNIT . '</span>
 				</td>';
 		$table .= '<td>
-					<span id="plg_dimention_log_' . $product->product_id . '">' .
-						$product->product_width . ' X ' . $product->product_height . ' ' . DEFAULT_VOLUME_UNIT .
-					'</span>
+					<span id="plg_dimention_log_' . $product->product_id . '">'
+					. $product->product_width . ' X ' . $product->product_height . ' ' . DEFAULT_VOLUME_UNIT
+					. '</span>
 					<input type="hidden" name="plg_dimention_width" value="' . $product->product_width . '" id="plg_dimention_width_' . $product->product_id . '">
 					<input type="hidden" name="plg_dimention_height" value="' . $product->product_height . '" id="plg_dimention_height_' . $product->product_id . '">
 					<input type="hidden" name="plg_product_price" value="' . $product->product_price . '" id="plg_product_price_' . $product->product_id . '">
