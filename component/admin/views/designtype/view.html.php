@@ -180,19 +180,25 @@ class ReddesignViewDesigntype extends FOFViewHtml
 
 			if ($this->unit == 'cm')
 			{
-				// Conversion 1 px = 0.026458333cm.
-				$this->pxToUnit = '0.026458333';
+				/**
+				 * Default DPI in Imagick is used and it is 72 DPI.
+				 * Thag gives us 1px = 0.035278cm.
+				 */
+				$this->pxToUnit = '0,035277778';
 
-				// Conversion 1 cm = 37.795275591px.
-				$this->unitToPx = '37.795275591';
+				// From above 1cm = 28,346456514px.
+				$this->unitToPx = '28,346456514';
 			}
 			elseif ($this->unit == 'mm')
 			{
-				// Conversion 1 px = 0.264583333mm.
-				$this->pxToUnit = '0.264583333';
+				/**
+				 * Default DPI in Imagick is used and it is 72 DPI.
+				 * Thag gives us 1px = 0.35277778mm.
+				 */
+				$this->pxToUnit = '0.35277778';
 
-				// Conversion 1 mm = 3.779527559px.
-				$this->unitToPx = '3.779527559';
+				// From above 1mm = 2,834645651px.
+				$this->unitToPx = '2,834645651';
 			}
 			else
 			{
