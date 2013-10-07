@@ -29,6 +29,7 @@ JHtml::_('behavior.modal');
 	<input type="hidden" name="view" value="designtype">
 	<input type="hidden" name="task" id="task" value="">
 	<input type="hidden" name="designAreas" id="designAreas" value="">
+	<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
 	<input type="hidden" id="reddesign_designtype_id" name="reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>">
 {RedDesignBreakFormBegin}
 
@@ -78,7 +79,6 @@ JHtml::_('behavior.modal');
 	<div class="row-fluid">
 		<div class="well span12">
 			<?php echo $this->loadTemplate('areas'); ?>
-			<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
 		</div>
 	</div>
 {RedDesignBreakDesignAreas}
