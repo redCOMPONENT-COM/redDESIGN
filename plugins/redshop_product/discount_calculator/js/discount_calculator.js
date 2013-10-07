@@ -29,20 +29,25 @@ rsjQuery(function () {
 
         var h = newH = elm.attr('default-height'), w = newW = elm.attr('default-width');
 
-        // Check for valid height and width
-        dpAllow = (w <= pdbi && h <= pdbi);
-
         if (!isNaN(pdbi)) {
 
             var ratio_h2w = w > 0 && (h / w), ratio_w2h = h > 0 && (w / h);
 
             if (pdb == 'w') {
+
                 newW = pdbi;
                 newH = (newW * ratio_h2w).round(2);
 
+                // Check for valid height and width
+                dpAllow = (w <= pdbi);
+
             } else {
+
                 newH = pdbi;
                 newW = (newH * ratio_w2h).round(2);
+
+                // Check for valid height and width
+                dpAllow = (h <= pdbi);
             }
         } else {
             elm.val('');
