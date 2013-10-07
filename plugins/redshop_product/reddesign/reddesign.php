@@ -405,7 +405,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		{
 			$document = JFactory::getDocument();
 
-			$js = 'function generateRedDesignData() {
+			$js = '
+					function generateRedDesignData() {
 						var values = {};
 						var inputs = akeeba.jQuery("#designform :input");
 
@@ -418,6 +419,10 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						var jsonString = JSON.stringify(values);
 
 						akeeba.jQuery("#redDesignData").val(jsonString);
+					}
+
+					function getExtraParams(frm) {
+						return "&redDesignData=" + frm.redDesignData.value;
 					}
 			';
 			$document->addScriptDeclaration($js);
