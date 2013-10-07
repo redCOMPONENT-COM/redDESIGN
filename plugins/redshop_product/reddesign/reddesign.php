@@ -181,7 +181,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			// Get redDESIGN frontend HTML.
 			$inputvars = array(
-				'id'	=> $reddesignDesigntypeId
+				'id' => $reddesignDesigntypeId,
+				'task' => 'read'
 			);
 			$input = new FOFInput($inputvars);
 
