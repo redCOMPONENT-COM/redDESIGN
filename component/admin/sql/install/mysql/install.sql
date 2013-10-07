@@ -172,6 +172,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_orderitem_mapping` (
   `order_item_id`  INT(11) NOT NULL,
   `productionPdf`  VARCHAR(255) NOT NULL,
   `productionEps`  VARCHAR(255) NOT NULL,
+  `redDesignData`  TEXT NOT NULL,
   PRIMARY KEY (`order_item_id`)
 )
   ENGINE = InnoDB

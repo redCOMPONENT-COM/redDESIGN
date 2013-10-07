@@ -365,11 +365,24 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 */
 	public function changeCartOrderItemImage(&$cart, &$product_image, $product, $i)
 	{
-		if ($product->product_type = 'redDESIGN')
+		if ($product->product_type == 'redDESIGN')
 		{
 			$redDesignData = json_decode($cart[$i]['redDesignData']);
+		}
+		else
+		{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('redDesignData'));
+			$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
+			$query->where($db->quoteName('order_item_id') . ' = ' . (int) $product->order_item_id);
+			$db->setQuery($query);
+			$redDesignData = json_decode($db->loadResult());
+		}
 
-			$product_image = "<div  class='product_image'><img src='" . $redDesignData->backgroundImgSrc . "'></div>";
+		if (isset($redDesignData->backgroundImgSrc))
+		{
+			$product_image = "<div  class='product_image'><img width='" . CART_THUMB_WIDTH . "' src='" . $redDesignData->backgroundImgSrc . "'></div>";
 		}
 	}
 
@@ -460,10 +473,10 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$db->setQuery($query);
 		$productType = $db->loadResult();
 
-		if ($productType == 'redDESIGN' && !empty($cart[0]['redDesignData']))
+		if ($productType == 'redDESIGN' && !empty($cart[$i]['redDesignData']))
 		{
 			// Get redDESIGN relevant data.
-			$redDesignData = json_decode($cart[0]['redDesignData']);
+			$redDesignData = json_decode($cart[$i]['redDesignData']);
 			$preparedDesignData = $this->prepareDesignTypeData($redDesignData);
 			$productionFileName = $this->createProductionFiles($preparedDesignData);
 
@@ -479,6 +492,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$orderItemProductionFiles->order_item_id = $rowitem->order_item_id;
 			$orderItemProductionFiles->productionPdf = $productionFileName;
 			$orderItemProductionFiles->productionEps = $productionFileName;
+			$orderItemProductionFiles->redDesignData = $cart[$i]['redDesignData'];
 
 			if (empty($orderItem))
 			{
