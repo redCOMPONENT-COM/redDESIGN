@@ -54,11 +54,13 @@ rsjQuery(function () {
         rsjQuery('#plg_dimention_width_' + pid).val(newW);
         rsjQuery('#plg_dimention_height_' + pid).val(newH);
         rsjQuery('#plg_dimention_log_' + pid).html(newW + ' X ' + newH + rsjQuery('#plg_default_volume_unit_' + pid).html());
+        rsjQuery('.discount-calculator-plugin-width').html(newW);
+        rsjQuery('.discount-calculator-plugin-height').html(newH);
 
         rsjQuery.getJSON('plugins/redshop_product/discount_calculator/json/lookup.json', {}, function (json, textStatus) {
 
-            // Convert finalWH into "meter" from "centimeter"
-            finalWH /= 10000;
+            // Convert finalWH into "meter" from "centimeter" @todo: This will need confirmation from client.
+            // finalWH /= 10000;
 
             var finaldata = rsjQuery.vlookup(finalWH, json, false);
 
