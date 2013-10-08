@@ -57,6 +57,9 @@ rsjQuery(function () {
 
         rsjQuery.getJSON('plugins/redshop_product/discount_calculator/json/lookup.json', {}, function (json, textStatus) {
 
+            // Convert finalWH into "meter" from "centimeter"
+            finalWH /= 10000;
+
             var finaldata = rsjQuery.vlookup(finalWH, json, false);
 
             rsjQuery.getJSON('plugins/redshop_product/discount_calculator/json/element.json', {}, function(json, textStatus) {
