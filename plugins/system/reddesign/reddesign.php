@@ -39,8 +39,15 @@ class PlgSystemRedDESIGN extends JPlugin
 
 		if ($doc->_scripts)
 		{
-			// Settlement to load attribute.js after quantity_discount.js
-			unset($doc->_scripts[JURI::root(true) . '/components/com_redshop/assets/js/attribute.js']);
+			// Remove JS if match
+			foreach ($doc->_scripts as $script => $value)
+			{
+				if (substr_count($script, 'reddesign/js/attribute.js'))
+				{
+					// Remove redSHOP core attribute.js if plugin's attribute.js is available.
+					unset($doc->_scripts[JURI::root(true) . '/components/com_redshop/assets/js/attribute.js']);
+				}
+			}
 		}
 	}
 }
