@@ -36,6 +36,11 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$this->plugin = JPluginHelper::getPlugin('redshop_product', 'reddesign');
 
 		$this->loadLanguage();
+
+		if (!defined('FOF_INCLUDED'))
+		{
+			JLoader::import('fof.include');
+		}
 	}
 
 	/**
