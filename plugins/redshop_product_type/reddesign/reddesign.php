@@ -34,6 +34,11 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		parent::__construct($subject, $config);
 
 		$this->loadLanguage();
+
+		if (!defined('FOF_INCLUDED'))
+		{
+			JLoader::import('fof.include');
+		}
 	}
 
 	/**
