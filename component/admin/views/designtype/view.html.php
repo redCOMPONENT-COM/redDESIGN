@@ -184,10 +184,10 @@ class ReddesignViewDesigntype extends FOFViewHtml
 				 * Default DPI in Imagick is used and it is 72 DPI.
 				 * Thag gives us 1px = 0.035278cm.
 				 */
-				$this->pxToUnit = '0,035277778';
+				$this->pxToUnit = '0.035277778';
 
 				// From above 1cm = 28,346456514px.
-				$this->unitToPx = '28,346456514';
+				$this->unitToPx = '28.346456514';
 			}
 			elseif ($this->unit == 'mm')
 			{
@@ -198,7 +198,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 				$this->pxToUnit = '0.35277778';
 
 				// From above 1mm = 2,834645651px.
-				$this->unitToPx = '2,834645651';
+				$this->unitToPx = '2.834645651';
 			}
 			else
 			{
