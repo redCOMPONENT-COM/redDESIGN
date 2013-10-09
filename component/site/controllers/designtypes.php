@@ -100,9 +100,13 @@ class ReddesignControllerDesigntypes extends FOFController
 		$backgroundImageFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $backgroundImage;
 		$newjpgFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
 
+		// Create customized image
+		$imageMagickCmd = 'convert ' . $backgroundImageFileLocation . ' -profile RGB_PROFILE -colorspace RGB ' . $newjpgFileLocation;
+		exec($imageMagickCmd);
+
 		// Create Imagick object.
 		$newImage = new Imagick;
-		$newImage->readImage($backgroundImageFileLocation);
+		$newImage->readImage($newjpgFileLocation);
 
 		// Add text areas to the background image.
 		foreach ($design->areas as $area)
@@ -177,31 +181,6 @@ class ReddesignControllerDesigntypes extends FOFController
 
 				// Add text to the area image.
 				$areaImage->annotateImage($areaDraw, 0, 0, 0, $area->textArea);
-
-				// Convert CMYK color profile of the EPS image to RGB color profile.
-				if ($newImage->getImageColorspace() == Imagick::COLORSPACE_CMYK)
-				{
-					$profiles = $newImage->getImageProfiles('*', false);
-
-					// We're only interested if ICC profile(s) exist.
-					$has_icc_profile = (array_search('icc', $profiles) !== false);
-
-					// If it doesnt have a CMYK ICC profile, we add one.
-					if (!$has_icc_profile)
-					{
-						$icc_cmyk = file_get_contents(JPATH_ROOT . '/media/com_reddesign/assets/colorprofiles/USWebUncoated.icc');
-						$newImage->profileImage('icc', $icc_cmyk);
-						unset($icc_cmyk);
-					}
-
-					// Then we add an RGB profile.
-					$icc_rgb = file_get_contents(JPATH_ROOT . '/media/com_reddesign/assets/colorprofiles/sRGB_v4_ICC_preference.icc');
-					$newImage->profileImage('icc', $icc_rgb);
-					unset($icc_rgb);
-				}
-
-				// This will drop down the size of the image dramatically (removes all profiles).
-				$newImage->stripImage();
 
 				// Put second image on top of the first.
 				$newImage->compositeImage($areaImage, $areaImage->getImageCompose(), $this->areaItem->x1_pos, $this->areaItem->y1_pos);
