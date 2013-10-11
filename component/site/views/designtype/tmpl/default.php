@@ -215,7 +215,9 @@ JHtml::_('behavior.modal');
 				"fontArea" : 	akeeba.jQuery("#fontArea<?php echo $area->reddesign_area_id; ?>").val(),
 				"fontColor" :	akeeba.jQuery("#colorCode<?php echo $area->reddesign_area_id; ?>").val(),
 				"fontSize" :	akeeba.jQuery("#fontSize<?php echo $area->reddesign_area_id; ?>").val(),
-				"fontTypeId" :	akeeba.jQuery("#fontArea<?php echo $area->reddesign_area_id; ?>").val()
+				"fontTypeId" :	akeeba.jQuery("#fontArea<?php echo $area->reddesign_area_id; ?>").val(),
+				"plg_dimention_base" :   akeeba.jQuery("#plg_dimention_base_<?php echo JRequest::getInt('pid');?>").val(),
+				"plg_dimention_base_input" :   akeeba.jQuery("#plg_dimention_base_input_<?php echo JRequest::getInt('pid');?>").val()
 			});
 
 			var textareacount = akeeba.jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").val().replace(/ /g,'').length;
@@ -247,6 +249,12 @@ JHtml::_('behavior.modal');
 						setTimeout(function() {
 							akeeba.jQuery("#background-container").height("auto");
 						}, 5000);
+
+						akeeba.jQuery("#plg_dimention_base_input_<?php echo JRequest::getInt('pid');?>").attr({
+							'default-height' : json.autoSizeData[0].canvasHeight,
+							'default-width': json.autoSizeData[0].canvasWidth
+						});
+						setDiscountPrice();
 						akeeba.jQuery("#autoSizeData").val(JSON.stringify(json.autoSizeData));
 					}
 				},
