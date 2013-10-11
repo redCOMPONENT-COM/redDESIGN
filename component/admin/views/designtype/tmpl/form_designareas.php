@@ -307,6 +307,9 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
          * @param height
          */
 		function drawArea(reddesign_area_id, title, x1_pos, y1_pos, width, height) {
+			width -= 2;
+			height -= 3;
+
 			akeeba.jQuery("#backgroundImageContainer").append(
 				'<div id="areaDiv' + reddesign_area_id + '" ' +
 					'style="position: absolute; ' +
