@@ -54,6 +54,10 @@ class ReddesignViewDesigntype extends FOFViewHtml
 
 	public $unitToPx;
 
+	public $imageWidth;
+
+	public $imageHeight;
+
 	/**
 	 * Executes before rendering the page for the Add task.
 	 *
@@ -116,13 +120,14 @@ class ReddesignViewDesigntype extends FOFViewHtml
 					$im = new Imagick;
 					$im->readImage($epsFileLocation);
 					$dimensions = $im->getImageGeometry();
-					$imageWidth = $dimensions['width'];
+					$this->imageWidth = $dimensions['width'];
+					$this->imageHeight = $dimensions['height'];
 
 					// Read preview size, for scaling.
 					$previewImageSize = getimagesize($previewFileLocation);
 
 					// Scaling ratio
-					$this->ratio = $previewImageSize[0] / $imageWidth;
+					$this->ratio = $previewImageSize[0] / $this->imageWidth;
 
 					// Get all areas existing in the database for this specific background.
 					$areaModel = FOFModel::getTmpInstance('Area', 'ReddesignModel')->reddesign_background_id($background->reddesign_background_id);

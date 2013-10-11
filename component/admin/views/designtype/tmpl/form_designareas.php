@@ -307,6 +307,9 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
          * @param height
          */
 		function drawArea(reddesign_area_id, title, x1_pos, y1_pos, width, height) {
+			width -= 2;
+			height -= 3;
+
 			akeeba.jQuery("#backgroundImageContainer").append(
 				'<div id="areaDiv' + reddesign_area_id + '" ' +
 					'style="position: absolute; ' +
@@ -1078,7 +1081,9 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					</div>
 				</div>
 				<div class="span9">
-					<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMG_HELP'); ?></span>
+					<span class="help-block">
+						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMG_HELP'); ?>
+					</span>
 					<div id="backgroundImageContainer">
 						<img id="background"
 								 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->productionBackground->image_path; ?>"/>
@@ -1088,6 +1093,17 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 							</div>
 						<?php endforeach; ?>
 					</div>
+					<h3>
+						<?php
+							echo JText::sprintf(
+													'COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMAGE_MEASURES',
+													round($this->imageWidth * $this->pxToUnit, 0),
+													$this->unit,
+													round($this->imageHeight * $this->pxToUnit, 0),
+													$this->unit
+							);
+						?>
+					</h3>
 				</div>
 			</div>
 			<div class="form-actions">
