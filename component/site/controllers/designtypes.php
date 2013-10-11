@@ -144,7 +144,7 @@ class ReddesignControllerDesigntypes extends FOFController
 				if (empty($area->fontSize))
 				{
 					$newAutoSizeData = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $fontType, $this->areaItem->height, $this->areaItem->width);
-					$dimension = $this->getCanvaseDimension($area->plg_dimention_base, $area->plg_dimention_base_input, $area->fontTypeId);
+					$dimension = $this->getCanvaseDimension($area->plg_dimention_base, $area->plg_dimention_base_input, $area->fontTypeId, $fontType);
 					$newAutoSizeData['canvasHeight'] = $dimension['canvasHeight'];
 					$newAutoSizeData['canvasWidth'] = $dimension['canvasWidth'];
 					$area->fontSize = $newAutoSizeData['fontSize'];
@@ -352,15 +352,18 @@ class ReddesignControllerDesigntypes extends FOFController
 	 * @param   string  $canvaseDimentionBase       It can be width(w) or height(h).
 	 * @param   int     $canvaseDimentionBaseInput  Dimention amount.
 	 * @param   int     $fontId                     Font id.
+	 * @param   array   $fontDetailArr              Default height and width of fonts.
 	 *
 	 * @return Array
 	 *
 	 * @access public
 	 */
-	public function getCanvaseDimension($canvaseDimentionBase, $canvaseDimentionBaseInput, $fontId)
+	public function getCanvaseDimension($canvaseDimentionBase, $canvaseDimentionBaseInput, $fontId, $fontDetailArr)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
+
+		$char = str_split(mb_convert_encoding(urldecode($enteredChars), "ISO-8859-1", "UTF-8"));
 
 		// Select character settings for a given font.
 		$query
