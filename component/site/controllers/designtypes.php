@@ -144,6 +144,9 @@ class ReddesignControllerDesigntypes extends FOFController
 				if (empty($area->fontSize))
 				{
 					$newAutoSizeData = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $fontType, $this->areaItem->height, $this->areaItem->width);
+					$dimension = $this->getCanvaseDimension($area->plg_dimention_base, $area->plg_dimention_base_input, $area->fontTypeId, $area->textArea,  $fontType);
+					$newAutoSizeData['canvasHeight'] = $dimension['canvasHeight'];
+					$newAutoSizeData['canvasWidth'] = $dimension['canvasWidth'];
 					$area->fontSize = $newAutoSizeData['fontSize'];
 					$newAutoSizeData['reddesign_area_id'] = $this->areaItem->reddesign_area_id;
 					$autoSizeData[] = $newAutoSizeData;
@@ -341,5 +344,91 @@ class ReddesignControllerDesigntypes extends FOFController
 		}
 
 		return $finalFontSize;
+	}
+
+	/**
+	 *  Calculates Font size When Auto-size is on.
+	 *
+	 * @param   string  $canvaseDimentionBase       It can be width(w) or height(h).
+	 * @param   int     $canvaseDimentionBaseInput  Dimention amount.
+	 * @param   int     $fontId                     Font id.
+	 * @param   string  $enteredChars               Entered char by user.
+	 * @param   array   $fontDetailArr              Default height and width of fonts.
+	 *
+	 * @return Array
+	 *
+	 * @access public
+	 */
+	public function getCanvaseDimension($canvaseDimentionBase, $canvaseDimentionBaseInput, $fontId, $enteredChars, $fontDetailArr)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		$char = str_split(mb_convert_encoding(urldecode($enteredChars), "ISO-8859-1", "UTF-8"));
+
+		// Select character settings for a given font.
+		$query
+			->select('max(chars.height) as height, group_concat(typography separator ", ") as typography, typography_height')
+			->from('#__reddesign_chars as chars')
+			->where('chars.reddesign_font_id = ' . (int) $fontId)
+			->where('chars.font_char IN ("' . implode('","', $char) . '")')
+			->order('chars.reddesign_char_id ASC');
+
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+
+		// Load the results as a list of stdClass objects.
+		$charArr = $db->loadObject();
+		$maxHeight = $charArr->height;
+
+		$width = 0;
+
+		for ($i = 0;$i < count($char);$i++)
+		{
+			$query = $db->getQuery(true);
+			$query
+				->select('chars.width')
+				->from('#__reddesign_chars as chars')
+				->where('binary chars.font_char = ' . $db->quote($char[$i]))
+				->where('chars.reddesign_font_id = "' . (int) $fontId . '" ');
+			$db->setQuery($query);
+			$width 		= $width + $db->loadResult();
+		}
+
+		if ($width == 0)
+		{
+			$width = $fontDetailArr->default_width;
+		}
+
+		if ($maxHeight == 0)
+		{
+			$maxHeight = $fontDetailArr->default_height;
+		}
+
+		$typoArr = explode(',', $charArr->typography);
+
+		if (in_array('2', $typoArr) && in_array('3', $typoArr) && !in_array(4, $typoArr))
+		{
+			$maxHeight = $maxHeight + $fontDetailArr->default_caps_height;
+		}
+
+		if ($canvaseDimentionBase == 'w')
+		{
+			$fontSize = $canvaseDimentionBaseInput / ($width * 1.1);
+			$canvasHeight = $fontSize * $maxHeight;
+			$canvasWidth = $canvaseDimentionBaseInput;
+		}
+		else
+		{
+			$fontSize = $canvaseDimentionBaseInput / $maxHeight;
+			$canvasWidth = $fontSize * $width;
+			$canvasHeight = $canvaseDimentionBaseInput;
+		}
+
+		$canvaseDimension = array();
+		$canvaseDimension['canvasHeight'] = $canvasHeight;
+		$canvaseDimension['canvasWidth'] = $canvasWidth;
+
+		return $canvaseDimension;
 	}
 }
