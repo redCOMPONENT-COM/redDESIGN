@@ -144,9 +144,20 @@ class ReddesignControllerDesigntypes extends FOFController
 				if (empty($area->fontSize))
 				{
 					$newAutoSizeData = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $fontType, $this->areaItem->height, $this->areaItem->width);
-					$dimension = $this->getCanvaseDimension($area->plg_dimention_base, $area->plg_dimention_base_input, $area->fontTypeId, $area->textArea,  $fontType);
-					$newAutoSizeData['canvasHeight'] = $dimension['canvasHeight'];
-					$newAutoSizeData['canvasWidth'] = $dimension['canvasWidth'];
+
+					if (!empty($area->plg_dimension_base) && !empty($area->plg_dimension_base_input))
+					{
+						$dimension = $this->getCanvaseDimension(
+																	$area->plg_dimension_base,
+																	$area->plg_dimension_base_input,
+																	$area->fontTypeId,
+																	$area->textArea,
+																	$fontType
+																);
+						$newAutoSizeData['canvasHeight'] = $dimension['canvasHeight'];
+						$newAutoSizeData['canvasWidth'] = $dimension['canvasWidth'];
+					}
+
 					$area->fontSize = $newAutoSizeData['fontSize'];
 					$newAutoSizeData['reddesign_area_id'] = $this->areaItem->reddesign_area_id;
 					$autoSizeData[] = $newAutoSizeData;
@@ -349,8 +360,8 @@ class ReddesignControllerDesigntypes extends FOFController
 	/**
 	 *  Calculates Font size When Auto-size is on.
 	 *
-	 * @param   string  $canvaseDimentionBase       It can be width(w) or height(h).
-	 * @param   int     $canvaseDimentionBaseInput  Dimention amount.
+	 * @param   string  $canvaseDimensionBase       It can be width(w) or height(h).
+	 * @param   int     $canvaseDimensionBaseInput  Dimension amount.
 	 * @param   int     $fontId                     Font id.
 	 * @param   string  $enteredChars               Entered char by user.
 	 * @param   array   $fontDetailArr              Default height and width of fonts.
@@ -359,7 +370,7 @@ class ReddesignControllerDesigntypes extends FOFController
 	 *
 	 * @access public
 	 */
-	public function getCanvaseDimension($canvaseDimentionBase, $canvaseDimentionBaseInput, $fontId, $enteredChars, $fontDetailArr)
+	public function getCanvaseDimension($canvaseDimensionBase, $canvaseDimensionBaseInput, $fontId, $enteredChars, $fontDetailArr)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -412,17 +423,17 @@ class ReddesignControllerDesigntypes extends FOFController
 			$maxHeight = $maxHeight + $fontDetailArr->default_caps_height;
 		}
 
-		if ($canvaseDimentionBase == 'w')
+		if ($canvaseDimensionBase == 'w')
 		{
-			$fontSize = $canvaseDimentionBaseInput / ($width * 1.1);
+			$fontSize = $canvaseDimensionBaseInput / ($width * 1.1);
 			$canvasHeight = $fontSize * $maxHeight;
-			$canvasWidth = $canvaseDimentionBaseInput;
+			$canvasWidth = $canvaseDimensionBaseInput;
 		}
 		else
 		{
-			$fontSize = $canvaseDimentionBaseInput / $maxHeight;
+			$fontSize = $canvaseDimensionBaseInput / $maxHeight;
 			$canvasWidth = $fontSize * $width;
-			$canvasHeight = $canvaseDimentionBaseInput;
+			$canvasHeight = $canvaseDimensionBaseInput;
 		}
 
 		$canvaseDimension = array();
