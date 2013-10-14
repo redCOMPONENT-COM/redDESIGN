@@ -218,7 +218,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 				. '</label>' .
 			'</div>';
 
-		$dropdownHtml .= '<div id="designBackgrounds' . $property->k . $property->g . '" ' . $style . ' >';
+		$dropdownHtml .= '<div id="designBackgrounds' . $property->k . $property->g . '" ' . $style . ' class="designBackgrounds">';
 
 		foreach ($backgrounds as $background)
 		{
