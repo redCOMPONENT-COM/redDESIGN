@@ -50,13 +50,15 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$table = '';
 		$table .= '<table>';
 		$table .= '<tr>';
-		$table .= '<td>
-					<select name="plg_dimention_base" id="plg_dimention_base_' . $product->product_id . '">
-						<option value="w">' . JText::_("COM_REDSHOP_WIDTH") . '</option>
-						<option value="h">' . JText::_("COM_REDSHOP_HEIGHT") . '</option>
-					</select>
+		$table .= '<td class="td_first">
+					<div class="bgSelect">
+						<select name="plg_dimention_base" id="plg_dimention_base_' . $product->product_id . '">
+							<option value="w">' . JText::_("COM_REDSHOP_WIDTH") . '</option>
+							<option value="h">' . JText::_("COM_REDSHOP_HEIGHT") . '</option>
+						</select>
+					</div>
 				</td>';
-		$table .= '<td>
+		$table .= '<td class="td_center">
 					<input type="text"
 							id="plg_dimention_base_input_' . $product->product_id . '"
 							name="plg_dimention_base_input"
@@ -67,7 +69,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 							default-height="' . $product->product_height . '">
 					<span id="plg_default_volume_unit_' . $product->product_id . '">' . DEFAULT_VOLUME_UNIT . '</span>
 				</td>';
-		$table .= '<td>
+		$table .= '<td class="td_last">
 					<span id="plg_dimention_log_' . $product->product_id . '">'
 					. $product->product_width . ' X ' . $product->product_height . ' ' . DEFAULT_VOLUME_UNIT
 					. '</span>
