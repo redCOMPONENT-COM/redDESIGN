@@ -254,7 +254,12 @@ JHtml::_('behavior.modal');
 							'default-height' : json.autoSizeData[0].canvasHeight,
 							'default-width': json.autoSizeData[0].canvasWidth
 						});
-						setDiscountPrice();
+
+						// Check for discount plugin availability
+						if (typeof rsjQuery !== "undefined")
+						{
+							rsjQuery.setDiscountPrice();
+						}
 						akeeba.jQuery("#autoSizeData").val(JSON.stringify(json.autoSizeData));
 					}
 				},
