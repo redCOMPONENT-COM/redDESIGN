@@ -1,11 +1,13 @@
+var rsjQuery;
+
 // Check for akeeba availability
 if (typeof akeeba == "undefined")
 {
-    var rsjQuery = jQuery;
+    rsjQuery = jQuery;
 }
 else
 {
-    var rsjQuery = akeeba.jQuery;
+    rsjQuery = akeeba.jQuery;
 }
 
 rsjQuery(function(){

@@ -1,11 +1,13 @@
+var rsjQuery;
+
 // Check for akeeba availability
 if (typeof akeeba == "undefined")
 {
-    var rsjQuery = jQuery;
+    rsjQuery = jQuery;
 }
 else
 {
-    var rsjQuery = akeeba.jQuery;
+    rsjQuery = akeeba.jQuery;
 }
 
 rsjQuery(document).ready(function () {
@@ -24,10 +26,8 @@ rsjQuery(document).ready(function () {
  */
 rsjQuery.setDiscountPrice = function(){
 
-    var elm = null, pid = 0;
-
-    pid = rsjQuery('#product_id').val();
-    elm = rsjQuery('#plg_dimention_base_input_' + pid);
+    var pid = rsjQuery('#product_id').val();
+    var elm = rsjQuery('#plg_dimention_base_input_' + pid);
 
     var pdb = rsjQuery('#plg_dimention_base_' + pid).val();
     var pdbi = parseFloat(elm.val()).round(2);
@@ -66,7 +66,7 @@ rsjQuery.setDiscountPrice = function(){
 
     rsjQuery.getJSON('plugins/redshop_product/discount_calculator/json/lookup.json', {}, function (json, textStatus) {
 
-        // Convert finalWH into "meter" from "centimeter"
+        // Convert finalWH into "meter" from "centimeter". @todo: This will need confirmation from client.
         // finalWH /= 10000;
 
         var finaldata = rsjQuery.vlookup(finalWH, json, false);
@@ -170,8 +170,9 @@ rsjQuery.setQuantityDiscount = function(pid, price){
 /**
  * vlookup function checks the best match value from array
  *
- * @param   {integer}  needle  input from which we get best match
- * @param   {json}  data    json string
+ * @param   {integer}  needle     input from which we get best match
+ * @param   {json}     data       json string
+ * @param   {boolean}  isElement  Check for JSON data is for elements or not.
  *
  * @return  {json}          JSON String object contains final values
  */

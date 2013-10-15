@@ -112,11 +112,9 @@ class PlgRedshop_ProductQuantity_Discount extends JPlugin
 	{
 		require_once JPATH_SITE . '/components/com_redshop/helpers/user.php';
 
-		$session     = JFactory::getSession();
-		$user_helper = new rsUserhelper;
-		$user        = JFactory::getUser();
-		$user_id     = $user->id;
-
+		$user_helper    = new rsUserhelper;
+		$user           = JFactory::getUser();
+		$user_id        = $user->id;
 		$shopperGroupId = $user_helper->getShopperGroup($user_id);
 
 		// Initialize variables.
