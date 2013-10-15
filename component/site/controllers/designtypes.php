@@ -459,7 +459,6 @@ class ReddesignControllerDesigntypes extends FOFController
 	 *
 	 * @access public
 	 */
-
 	function getCharOffset($char, $fontId, $fontSize)
 	{
 		$db = JFactory::getDBO();
@@ -488,8 +487,13 @@ class ReddesignControllerDesigntypes extends FOFController
 
 			$typoArr = explode(',', $ResultArray->typography);
 
-			$totalHeight = $HeightArray->default_height + $ResultArray->typography_height + $HeightArray->default_caps_height + $HeightArray->default_baseline_height;
+			if (empty($HeightArray))
+			{
+				return array( '+0', 0 );
+			}
 
+			$totalHeight = $HeightArray->default_height + $ResultArray->typography_height;
+			$totalHeight = $totalHeight + $HeightArray->default_caps_height + $HeightArray->default_baseline_height;
 
 			if (in_array('2', $typoArr) && in_array('3', $typoArr) && !in_array('4', $typoArr))
 			{
