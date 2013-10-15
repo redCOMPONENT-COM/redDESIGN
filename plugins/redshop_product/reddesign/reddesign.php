@@ -324,6 +324,40 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 */
 	public function onBeforeSetCartSession(&$cart, $data)
 	{
+		if (!empty($data['order_item_id']))
+		{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('redDesignData'));
+			$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
+			$query->where($db->quoteName('order_item_id') . ' = ' . $data['order_item_id']);
+			$db->setQuery($query);
+			$redDesignData = $db->loadResult();
+
+			$idx = $cart['idx'];
+
+			$cart[$idx]['redDesignData'] = $redDesignData;
+		}
+		else
+		{
+			$idx = $cart['idx'];
+
+			$cart[$idx]['redDesignData'] = $data['redDesignData'];
+		}
+	}
+
+	/**
+	 * When adding same product it needs to update data from this different
+	 * place because onBeforeSetCartSession works only once for one session.
+	 *
+	 * @param   object  &$cart  The Product Template Data.
+	 * @param   object  $data   The product params.
+	 * @param   int     $i      The product params.
+	 *
+	 * @return  void
+	 */
+	public function onSameCartProduct(&$cart, $data, $i)
+	{
 		$idx = $cart['idx'];
 
 		$cart[$idx]['redDesignData'] = $data['redDesignData'];
@@ -389,23 +423,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		{
 			$product_image = "<div  class='product_image'><img width='" . CART_THUMB_WIDTH . "' src='" . $redDesignData->backgroundImgSrc . "'></div>";
 		}
-	}
-
-	/**
-	 * When adding same product it needs to update data from this different
-	 * place because onBeforeSetCartSession works only once for one session.
-	 *
-	 * @param   object  &$cart  The Product Template Data.
-	 * @param   object  $data   The product params.
-	 * @param   int     $i      The product params.
-	 *
-	 * @return  void
-	 */
-	public function onSameCartProduct(&$cart, $data, $i)
-	{
-		$idx = $cart['idx'];
-
-		$cart[$idx]['redDesignData'] = $data['redDesignData'];
 	}
 
 	/**
