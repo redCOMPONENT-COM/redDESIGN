@@ -134,6 +134,7 @@ class ReddesignControllerDesigntypes extends FOFController
 					$fontType->default_height = 0.9;
 					$fontType->default_caps_height = 0.9;
 					$fontType->default_baseline_height = 0.9;
+					$area->fontTypeId = 0;
 				}
 
 				// Get area.
