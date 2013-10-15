@@ -404,24 +404,36 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 */
 	public function changeCartOrderItemImage(&$cart, &$product_image, $product, $i)
 	{
-		if ($product->product_type == 'redDESIGN')
-		{
-			$redDesignData = json_decode($cart[$i]['redDesignData']);
-		}
-		else
-		{
-			$db = JFactory::getDbo();
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('redDesignData'));
-			$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
-			$query->where($db->quoteName('order_item_id') . ' = ' . (int) $product->order_item_id);
-			$db->setQuery($query);
-			$redDesignData = json_decode($db->loadResult());
-		}
+		$db = JFactory::getDbo();
 
-		if (isset($redDesignData->backgroundImgSrc))
+		// Get product type
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('product_type'));
+		$query->from($db->quoteName('#__redshop_product'));
+		$query->where($db->quoteName('product_id') . ' = ' . $product->product_id);
+		$db->setQuery($query);
+		$productType = $db->loadResult();
+
+		if ($productType == 'redDESIGN')
 		{
-			$product_image = "<div  class='product_image'><img width='" . CART_THUMB_WIDTH . "' src='" . $redDesignData->backgroundImgSrc . "'></div>";
+			if (!empty($product->order_item_id))
+			{
+				$query = $db->getQuery(true);
+				$query->select($db->quoteName('redDesignData'));
+				$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
+				$query->where($db->quoteName('order_item_id') . ' = ' . (int) $product->order_item_id);
+				$db->setQuery($query);
+				$redDesignData = json_decode($db->loadResult());
+			}
+			else
+			{
+				$redDesignData = json_decode($cart[$i]['redDesignData']);
+			}
+
+			if (isset($redDesignData->backgroundImgSrc))
+			{
+				$product_image = "<div  class='product_image'><img width='" . CART_THUMB_WIDTH . "' src='" . $redDesignData->backgroundImgSrc . "'></div>";
+			}
 		}
 	}
 
