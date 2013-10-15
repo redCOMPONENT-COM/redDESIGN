@@ -829,7 +829,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				else
 				{
 					// Center.
-					$offsetLeft = ($areaItem->x1_pos + $areaItem->width + (2 * $pdfLeftMargin)) / 2;
+					$offsetLeft = ($areaItem->x1_pos + $areaItem->width) / 2;
 					$alignmentPostScript = "\n (" . $area['textArea'] . ") dup stringwidth pop 2 div neg 0 rmoveto";
 				}
 

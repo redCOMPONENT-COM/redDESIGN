@@ -134,11 +134,13 @@ class ReddesignControllerDesigntypes extends FOFController
 					$fontType->default_height = 0.9;
 					$fontType->default_caps_height = 0.9;
 					$fontType->default_baseline_height = 0.9;
+					$area->fontTypeId = 0;
 				}
 
 				// Get area.
 				$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($design->reddesign_background_id);
 				$this->areaItem = $areaModel->getItem($area->id);
+				$topoffset = 0;
 
 				// If we need autosize text than take different approach than solution for regular text.
 				if (empty($area->fontSize))
@@ -154,6 +156,7 @@ class ReddesignControllerDesigntypes extends FOFController
 																	$area->textArea,
 																	$fontType
 																);
+						$topoffset = $newAutoSizeData['topoffset'];
 						$newAutoSizeData['canvasHeight'] = $dimension['canvasHeight'];
 						$newAutoSizeData['canvasWidth'] = $dimension['canvasWidth'];
 					}
@@ -194,7 +197,7 @@ class ReddesignControllerDesigntypes extends FOFController
 				}
 
 				// Add text to the area image.
-				$areaImage->annotateImage($areaDraw, 0, 0, 0, $area->textArea);
+				$areaImage->annotateImage($areaDraw, 0, $topoffset, 0, $area->textArea);
 
 				// Put second image on top of the first.
 				$newImage->compositeImage($areaImage, $areaImage->getImageCompose(), $this->areaItem->x1_pos, $this->areaItem->y1_pos);
@@ -309,9 +312,12 @@ class ReddesignControllerDesigntypes extends FOFController
 
 		$fontSize = $this->calculateFontSize($maxCharsInSingleLine, $avgWidth, $maxHeight, $lineCount, $canvasHeight, $canvasWidth);
 
+		$offset = $this->getCharOffset($char, $fontId, $fontSize);
+
 		$autoSizeData = array();
 		$autoSizeData['fontSize'] = $fontSize;
 		$autoSizeData['stringLines'] = $perLineChar;
+		$autoSizeData['topoffset'] = $offset[0];
 		$autoSizeData['maxHeight'] = $maxHeight;
 
 		return $autoSizeData;
@@ -441,5 +447,92 @@ class ReddesignControllerDesigntypes extends FOFController
 		$canvaseDimension['canvasWidth'] = $canvasWidth;
 
 		return $canvaseDimension;
+	}
+
+	/**
+	 *  Calculates Font size When Auto-size is on.
+	 *
+	 * @param   array  $char      Char array entered by user.
+	 * @param   int    $fontId    Font id.
+	 * @param   int    $fontSize  This is font size of entered chars.
+	 *
+	 * @return Array
+	 *
+	 * @access public
+	 */
+	function getCharOffset($char, $fontId, $fontSize)
+	{
+		$db = JFactory::getDBO();
+
+		if (count($char))
+		{
+			$query = $db->getQuery(true);
+			$query
+			->select('fonts.default_height, fonts.default_caps_height, fonts.default_baseline_height')
+			->from('#__reddesign_fonts as fonts')
+			->where('fonts.reddesign_font_id = ' . (int) $fontId);
+
+			$db->setQuery($query);
+			$HeightArray = $db->loadObject();
+
+			$query = $db->getQuery(true);
+			$query
+			->select('max(height) as height,  group_concat(typography separator ", ") as typography, typography_height')
+			->from('#__reddesign_chars as chars')
+			->where('chars.reddesign_font_id = ' . (int) $fontId)
+			->where('binary chars.font_char IN ("' . implode('","', $char) . '")')
+			->order('chars.reddesign_char_id ASC');
+
+			$db->setQuery($query);
+			$ResultArray = $db->loadObject();
+
+			$typoArr = explode(',', $ResultArray->typography);
+
+			if (empty($HeightArray))
+			{
+				return array( '+0', 0 );
+			}
+
+			$totalHeight = $HeightArray->default_height + $ResultArray->typography_height;
+			$totalHeight = $totalHeight + $HeightArray->default_caps_height + $HeightArray->default_baseline_height;
+
+			if (in_array('2', $typoArr) && in_array('3', $typoArr) && !in_array('4', $typoArr))
+			{
+				$difference = $totalHeight - $ResultArray->height - $HeightArray->default_caps_height;
+				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
+				$offsetTop = "-" . $offsetTop;
+			}
+			elseif (in_array('3', $typoArr) || in_array('4', $typoArr))
+			{
+				$difference = $totalHeight - ($ResultArray->height);
+				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
+				$offsetTop = "-" . $offsetTop;
+			}
+			elseif (in_array('2', $typoArr))
+			{
+				$difference = $totalHeight - ( $ResultArray->height + $HeightArray->default_baseline_height);
+				$offsetTop = (($difference * $fontSize) / 2);
+				$offsetTop = "+" . $offsetTop;
+			}
+			else
+			{
+				$difference = $totalHeight - ( $ResultArray->height + $HeightArray->default_baseline_height);
+				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
+				$offsetTop = "-" . $offsetTop;
+			}
+
+			$diff = $totalHeight - $ResultArray->height;
+
+			if (!$ResultArray->height)
+			{
+				$offsetTop = '+0';
+			}
+
+			return array($offsetTop, $diff );
+		}
+		else
+		{
+			return array( '+0', 0 );
+		}
 	}
 }
