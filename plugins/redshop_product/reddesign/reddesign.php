@@ -559,11 +559,13 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		if (!empty($orderItemMapping->productionPdf))
 		{
+			$downloadFileName = 'production-file-' . $orderItem->order_id . '-' . $orderItem->order_item_id;
+
 			$productionPdf = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $orderItemMapping->productionPdf . '.pdf');
-			echo '<a href="' . $productionPdf . '" download="productionFile.pdf">PDF:<br/>' . $productionPdf . '</a><br/><br/>';
+			echo '<a href="' . $productionPdf . '" download="' . $downloadFileName . '.pdf">PDF:<br/>' . $productionPdf . '</a><br/><br/>';
 
 			$productionEps = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/eps/' . $orderItemMapping->productionEps . '.eps');
-			echo '<a href="' . $productionEps . '" download="productionFile.eps">EPS:<br/>' . $productionEps . '</a>';
+			echo '<a href="' . $productionEps . '" download="' . $downloadFileName . '.eps">EPS:<br/>' . $productionEps . '</a>';
 		}
 	}
 
