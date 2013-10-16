@@ -107,7 +107,7 @@ class ReddesignControllerDesigntypes extends FOFController
 		// Add text areas to the background image.
 		foreach ($design->areas as $area)
 		{
-			if (!empty($area->textArea))
+			if (!empty($area->textArea) || $area->textArea == 0)
 			{
 				// Create needed objects.
 				$areaImage = new Imagick;
