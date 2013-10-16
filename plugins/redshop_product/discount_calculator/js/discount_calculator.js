@@ -10,9 +10,12 @@ else
     rsjQuery = akeeba.jQuery;
 }
 
+var lookupData = [{"size": 0,"price": 25}, {"size": 51,"price": 29}, {"size": 101,"price": 34}, {"size": 201,"price": 43}, {"size": 301,"price": 48}, {"size": 401,"price": 64}, {"size": 601,"price": 81}, {"size": 801,"price": 95}, {"size": 1001,"price": 107}, {"size": 1301,"price": 121}, {"size": 1601,"price": 140}, {"size": 1901,"price": 160}, {"size": 2201,"price": 171}, {"size": 2501,"price": 176}, {"size": 2801,"price": 186}, {"size": 3101,"price": 192}, {"size": 3401,"price": 198}, {"size": 3701,"price": 208}, {"size": 4001,"price": 216}, {"size": 4501,"price": 227}, {"size": 5001,"price": 249}, {"size": 5501,"price": 267}, {"size": 6001,"price": 286}, {"size": 6501,"price": 305}, {"size": 7001,"price": 323}, {"size": 7501,"price": 341}, {"size": 8001,"price": 358}, {"size": 8501,"price": 376}, {"size": 9001,"price": 392}, {"size": 9501,"price": 408}, {"size": 10001,"price": 417}, {"size": 10501,"price": 427}, {"size": 11001,"price": 436}, {"size": 11501,"price": 445}, {"size": 12001,"price": 454}, {"size": 12501,"price": 463}, {"size": 13001,"price": 473}, {"size": 13501,"price": 482}, {"size": 14001,"price": 491}, {"size": 14501,"price": 500}, {"size": 15001,"price": 509}];
+var elementData = [{"size": 1,"price": 0.65}, {"size": 8,"price": 0.85}, {"size": 35,"price": 1}, {"size": 70,"price": 1.3}, {"size": 125,"price": 1.6}];
+
 rsjQuery(document).ready(function () {
 
-    rsjQuery('[id^="rs_sticker_element_"]').hide();
+    rsjQuery('[id^="rs_sticker_element"]').hide();
 
     // Set Discount Price On Load
     rsjQuery.setDiscountPrice();
@@ -64,22 +67,14 @@ rsjQuery.setDiscountPrice = function(){
     rsjQuery('.discount-calculator-plugin-width').html(newW);
     rsjQuery('.discount-calculator-plugin-height').html(newH);
 
-    rsjQuery.getJSON('plugins/redshop_product/discount_calculator/json/lookup.json', {}, function (json, textStatus) {
+    // Convert finalWH into "meter" from "centimeter". @todo: This will need confirmation from client.
+    // finalWH /= 10000;
 
-        // Convert finalWH into "meter" from "centimeter". @todo: This will need confirmation from client.
-        // finalWH /= 10000;
+    var finaldata       = rsjQuery.vlookup(finalWH, lookupData, false);
+    var sticker_element = parseInt(rsjQuery('#rs_sticker_element').html());
+    finaldata.element   = rsjQuery.vlookup(sticker_element, elementData, true);
 
-        var finaldata = rsjQuery.vlookup(finalWH, json, false);
-
-        rsjQuery.getJSON('plugins/redshop_product/discount_calculator/json/element.json', {}, function(json, textStatus) {
-
-            var sticker_element = parseInt(rsjQuery('#rs_sticker_element_' + pid).html());
-            finaldata.element = rsjQuery.vlookup(sticker_element, json, true);
-
-            rsjQuery.updatePrice(pid, finaldata);
-        });
-
-    });
+    rsjQuery.updatePrice(pid, finaldata);
 };
 
 /**
