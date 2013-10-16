@@ -100,13 +100,9 @@ class ReddesignControllerDesigntypes extends FOFController
 		$backgroundImageFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $backgroundImage;
 		$newjpgFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
 
-		// Create customized image
-		$imageMagickCmd = 'convert ' . $backgroundImageFileLocation . ' -profile RGB_PROFILE -colorspace RGB ' . $newjpgFileLocation;
-		exec($imageMagickCmd);
-
 		// Create Imagick object.
 		$newImage = new Imagick;
-		$newImage->readImage($newjpgFileLocation);
+		$newImage->readImage($backgroundImageFileLocation);
 
 		// Add text areas to the background image.
 		foreach ($design->areas as $area)
@@ -150,12 +146,12 @@ class ReddesignControllerDesigntypes extends FOFController
 					if (!empty($area->plg_dimension_base) && !empty($area->plg_dimension_base_input))
 					{
 						$dimension = $this->getCanvaseDimension(
-																	$area->plg_dimension_base,
-																	$area->plg_dimension_base_input,
-																	$area->fontTypeId,
-																	$area->textArea,
-																	$fontType
-																);
+							$area->plg_dimension_base,
+							$area->plg_dimension_base_input,
+							$area->fontTypeId,
+							$area->textArea,
+							$fontType
+						);
 						$topoffset = $newAutoSizeData['topoffset'];
 						$newAutoSizeData['canvasHeight'] = $dimension['canvasHeight'];
 						$newAutoSizeData['canvasWidth'] = $dimension['canvasWidth'];
@@ -198,6 +194,31 @@ class ReddesignControllerDesigntypes extends FOFController
 
 				// Add text to the area image.
 				$areaImage->annotateImage($areaDraw, 0, $topoffset, 0, $area->textArea);
+
+				// Convert CMYK color profile of the EPS image to RGB color profile.
+				if ($newImage->getImageColorspace() == Imagick::COLORSPACE_CMYK)
+				{
+					$profiles = $newImage->getImageProfiles('*', false);
+
+					// We're only interested if ICC profile(s) exist.
+					$has_icc_profile = (array_search('icc', $profiles) !== false);
+
+					// If it doesnt have a CMYK ICC profile, we add one.
+					if ($has_icc_profile === false)
+					{
+						$icc_cmyk = file_get_contents(JPATH_ROOT . '/media/com_reddesign/assets/colorprofiles/USWebUncoated.icc');
+						$newImage->profileImage('icc', $icc_cmyk);
+						unset($icc_cmyk);
+					}
+
+					// Then we add an RGB profile.
+					$icc_rgb = file_get_contents(JPATH_ROOT . '/media/com_reddesign/assets/colorprofiles/sRGB_v4_ICC_preference.icc');
+					$newImage->profileImage('icc', $icc_rgb);
+					unset($icc_rgb);
+				}
+
+				// This will drop down the size of the image dramatically (removes all profiles).
+				$newImage->stripImage();
 
 				// Put second image on top of the first.
 				$newImage->compositeImage($areaImage, $areaImage->getImageCompose(), $this->areaItem->x1_pos, $this->areaItem->y1_pos);
@@ -460,7 +481,7 @@ class ReddesignControllerDesigntypes extends FOFController
 	 *
 	 * @access public
 	 */
-	function getCharOffset($char, $fontId, $fontSize)
+	public function getCharOffset($char, $fontId, $fontSize)
 	{
 		$db = JFactory::getDBO();
 
@@ -468,20 +489,20 @@ class ReddesignControllerDesigntypes extends FOFController
 		{
 			$query = $db->getQuery(true);
 			$query
-			->select('fonts.default_height, fonts.default_caps_height, fonts.default_baseline_height')
-			->from('#__reddesign_fonts as fonts')
-			->where('fonts.reddesign_font_id = ' . (int) $fontId);
+				->select('fonts.default_height, fonts.default_caps_height, fonts.default_baseline_height')
+				->from('#__reddesign_fonts as fonts')
+				->where('fonts.reddesign_font_id = ' . (int) $fontId);
 
 			$db->setQuery($query);
 			$HeightArray = $db->loadObject();
 
 			$query = $db->getQuery(true);
 			$query
-			->select('max(height) as height,  group_concat(typography separator ", ") as typography, typography_height')
-			->from('#__reddesign_chars as chars')
-			->where('chars.reddesign_font_id = ' . (int) $fontId)
-			->where('binary chars.font_char IN ("' . implode('","', $char) . '")')
-			->order('chars.reddesign_char_id ASC');
+				->select('max(height) as height,  group_concat(typography separator ", ") as typography, typography_height')
+				->from('#__reddesign_chars as chars')
+				->where('chars.reddesign_font_id = ' . (int) $fontId)
+				->where('binary chars.font_char IN ("' . implode('","', $char) . '")')
+				->order('chars.reddesign_char_id ASC');
 
 			$db->setQuery($query);
 			$ResultArray = $db->loadObject();

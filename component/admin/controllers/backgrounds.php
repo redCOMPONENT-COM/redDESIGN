@@ -368,6 +368,31 @@ class ReddesignControllerBackgrounds extends FOFController
 		$im = new Imagick;
 		$im->readImage($eps_file_location);
 
+		// Convert CMYK color profile of the EPS image to RGB color profile.
+		if ($im->getImageColorspace() == Imagick::COLORSPACE_CMYK)
+		{
+			$profiles = $im->getImageProfiles('*', false);
+
+			// We're only interested if ICC profile(s) exist.
+			$has_icc_profile = (array_search('icc', $profiles) !== false);
+
+			// If it doesnt have a CMYK ICC profile, we add one.
+			if ($has_icc_profile === false)
+			{
+				$icc_cmyk = file_get_contents(JPATH_ROOT . '/media/com_reddesign/assets/colorprofiles/USWebUncoated.icc');
+				$im->profileImage('icc', $icc_cmyk);
+				unset($icc_cmyk);
+			}
+
+			// Then we add an RGB profile.
+			$icc_rgb = file_get_contents(JPATH_ROOT . '/media/com_reddesign/assets/colorprofiles/sRGB_v4_ICC_preference.icc');
+			$im->profileImage('icc', $icc_rgb);
+			unset($icc_rgb);
+		}
+
+		// This will drop down the size of the image dramatically (removes all profiles).
+		$im->stripImage();
+
 		$im->thumbnailImage($max_thumb_width, $max_thumb_height, $best_fit);
 
 		// Convert to jpg
