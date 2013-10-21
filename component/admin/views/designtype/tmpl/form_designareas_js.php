@@ -526,7 +526,7 @@ function addAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, wi
 
 			'<div class="span2">' +
 
-			<?php if($this->item->fontsizer == 'dropdown') : ?>
+			<?php if($this->item->fontsizer == 'dropdown_numbers' || $this->item->fontsizer == 'dropdown_labels') : ?>
 			'<div class="control-group">' +
 			'<label for="fontsizerDropdown' + reddesign_area_id + '">' +
 			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>' +
