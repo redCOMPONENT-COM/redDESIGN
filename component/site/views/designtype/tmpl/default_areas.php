@@ -177,7 +177,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					   data-slider-max="<?php echo $area->maxFontSize ?>"
 					   data-slider-value="[<?php echo $area->defaultFontSize ?>]"
 				/>
-			<?php elseif ($this->item->fontsizer === 'dropdown') : ?>
+			<?php elseif ($this->item->fontsizer == 'dropdown_numbers' || $this->item->fontsizer == 'dropdown_labels') : ?>
 				<?php
 
 					// Case 2: using dropdown selector for font size.
@@ -187,11 +187,32 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					// If only one font size allowed don't show anything.
 					if (count($areaFontSizes) > 1)
 					{
-						$sizeOptions       = array();
+						$sizeOptions = array();
 
-						foreach ($areaFontSizes as $key => $value)
+						foreach ($areaFontSizes as $areaFontSize)
 						{
-							$sizeOptions[] = JHTML::_('select.option', $value, $value);
+							if ($this->item->fontsizer == 'dropdown_numbers')
+							{
+								$optionValue = $areaFontSize;
+								$optionText = $areaFontSize;
+							}
+							else
+							{
+								$labels = explode(':', $areaFontSize);
+
+								if (!empty($labels[1]))
+								{
+									$optionValue = $labels[1];
+								}
+								else
+								{
+									$optionValue = $labels[0];
+								}
+
+								$optionText = $labels[0];
+							}
+
+							$sizeOptions[] = JHTML::_('select.option', $optionValue, $optionText);
 						}
 
 						echo JHTML::_(

@@ -81,7 +81,8 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->sizerOptions = array(
 			JHTML::_('select.option',  'auto', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO')),
 			JHTML::_('select.option',  'slider', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_SLIDER')),
-			JHTML::_('select.option',  'dropdown', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN'))
+			JHTML::_('select.option',  'dropdown_numbers', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_NUMBERS')),
+			JHTML::_('select.option',  'dropdown_labels', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_LABELS'))
 		);
 
 		// Related design types.

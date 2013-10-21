@@ -275,7 +275,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 
 									<div class="span2">
 
-										<?php if($this->item->fontsizer == 'dropdown') : ?>
+										<?php if ($this->item->fontsizer == 'dropdown_numbers' || $this->item->fontsizer == 'dropdown_labels') : ?>
 											<div class="control-group">
 												<label for="fontsizerDropdown<?php echo $area->reddesign_area_id; ?>">
 													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>
@@ -290,7 +290,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC') ?>
 												</span>
 											</div>
-										<?php elseif($this->item->fontsizer == 'slider') : ?>
+										<?php elseif ($this->item->fontsizer == 'slider') : ?>
 											<div class="control-group">
 												<label for="fontsizerSliderDefault<?php echo $area->reddesign_area_id; ?>">
 													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_FONT_SIZE') ?>
