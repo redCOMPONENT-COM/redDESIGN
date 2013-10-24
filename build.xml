@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- ==================================================================    -->
-<!-- redDESIGN copier                                                        -->
+<!-- redDESIGN copier                                                      -->
 <!-- This PHING build file copies the current extension files form repo    -->
 <!-- to a testing joomla site.                                             -->
 <!-- You can also achieve the same goal by using:                          -->
