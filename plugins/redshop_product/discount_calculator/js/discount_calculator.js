@@ -22,6 +22,10 @@ rsjQuery(document).ready(function () {
 
     // Set Discount Price on Demand
     rsjQuery('input[id^="plg_dimention_base_input_"],select[id^="plg_dimention_base_"]').bind('change keyup', rsjQuery.setDiscountPrice);
+
+    rsjQuery('input[id^="plg_dimention_base_input_"]').click(function(event) {
+        rsjQuery(this).val('');
+    });
 });
 
 /**
