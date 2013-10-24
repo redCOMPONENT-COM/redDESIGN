@@ -22,6 +22,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 	<input type="hidden" name="reddesign_background_id" id="reddesign_background_id" value="" />
 
 	<div id="backgrounds-configuration">
+
 		<h3 id="backgroundTitle"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_TITLE'); ?></h3>
 
 		<div class="control-group">
@@ -34,6 +35,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_TITLE_DESC'); ?></span>
 			</div>
 		</div>
+
 		<div class="control-group">
 			<label for="enabled" class="control-label">
 				<?php echo JText::_('JPUBLISHED'); ?>
@@ -42,6 +44,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 				<?php echo JHTML::_('select.booleanlist', 'enabled', null, 1); ?>
 			</div>
 		</div>
+
 		<div class="control-group">
 			<label class="control-label " for="bg_eps_file">
 				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_FILE'); ?>
@@ -50,89 +53,86 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 				<input type="file" name="bg_eps_file" id="bg_eps_file" value="">
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label todo-label" for="bg_isPDFbgimage">
-				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_IS_PDF_BG_IMAGE'); ?>
-			</label>
 
+		<div class="control-group">
+			<label class="control-label" for="isPDFbgimage">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_BACKGROUND_TYPE'); ?>
+			</label>
 			<div class="controls">
-				<select name="isPDFbgimage" id="bg_isPDFbgimage">
-					<option value="0" selected="selected"><?php echo JText::_('JNO'); ?></option>
-					<option value="1"><?php echo JText::_('JYES'); ?></option>
-				</select>
-				<span
-					class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_IS_PDF_BG_IMAGE_DESC'); ?></span>
+				<?php echo JHtml::_('select.radiolist', $this->backgroundTypeOptions, 'isPDFbgimage', '', 'value', 'text', $this->item->isPDFbgimage); ?>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label todo-label" for="bg_isPreviewbgimage">
-				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_IS_PREVIEW_BG_IMAGE'); ?>
-			</label>
 
+		<div class="control-group" id="createPreviewContainer">
 			<div class="controls">
-				<select name="isPreviewbgimage" id="bg_isPreviewbgimage">
-					<option value="0" selected="selected"><?php echo JText::_('JNO'); ?></option>
-					<option value="1"><?php echo JText::_('JYES'); ?></option>
-				</select>
-				<span
-					class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_IS_PREVIEW_BG_IMAGE_DESC'); ?></span>
+				<input type="checkbox" id="createPreview" name="createPreview" checked="checked" value="1">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_CREATE_PREVIEW'); ?>
+				<span class="help-block">
+					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_CREATE_PREVIEW_DESC'); ?>
+				</span>
 			</div>
 		</div>
+
+		<div class="control-group" id="useCheckerboardContainer">
+			<div class="controls">
+				<input type="checkbox" id="useCheckerboard" name="useCheckerboard" checked="checked" value="1">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_USE_CHECKERBOARD'); ?>
+				<span class="help-block">
+					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_USE_CHECKERBOARD_DESC'); ?>
+				</span>
+			</div>
+		</div>
+
 		<div class="control-group previewbg">
 			<label class="control-label " for="bg_thumbnail">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
 			</label>
 			<div class="controls">
-				<input type="file" name="thumbnail" id="bg_thumbnail" value="">
-				&nbsp;<a href="#" class="modal" id="BgThumbnailLink"></a>
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?></span>
+				<input type="file" name="thumbnail" id="bg_thumbnail" value="">&nbsp;<a href="#" class="modal" id="BgThumbnailLink"></a>
+				<span class="help-block">
+					<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?>
+				</span>
 			</div>
 		</div>
+
 	</div>
+
 	<div class="form-actions">
-		<input type="button" class="btn btn-success" id="saveBgBtn"
-			   value="<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>"/>
-		<input type="button" class="btn" id="cancelBgBtn"
-			   value="<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>"/>
+		<input type="button" class="btn btn-success" id="saveBgBtn" value="<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>"/>
+		<input type="button" class="btn" id="cancelBgBtn" value="<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>"/>
 	</div>
+
 </form>
 
 <script type="text/javascript">
 	akeeba.jQuery(document).ready(
 		function () {
+			var backgroundType = akeeba.jQuery('input[name=backgroundType]:checked', '#background').val();
+
+			if (backgroundType == 0)
+			{
+				akeeba.jQuery("#createPreviewContainer").hide();
+			}
+
+			akeeba.jQuery("input[name=backgroundType]").change(function() {
+				var backgroundType = akeeba.jQuery('input[name=backgroundType]:checked', '#background').val();
+
+				if (backgroundType == 0)
+				{
+					akeeba.jQuery("#createPreviewContainer").hide();
+				}
+				else
+				{
+					akeeba.jQuery("#createPreviewContainer").show();
+				}
+			});
+
 			akeeba.jQuery(document).on('click', '#saveBgBtn',
 				function () {
 					akeeba.jQuery('#background').submit();
 				}
 			);
-			akeeba.jQuery(document).on('change', '#bg_isPDFbgimage',
-				function () {
-					var op = akeeba.jQuery("#bg_isPDFbgimage option[value='0']:selected");
-					if (op.length)
-					{
-						akeeba.jQuery(".previewbg").show();
-					}
-					else
-					{
-						akeeba.jQuery(".previewbg").hide();
-						akeeba.jQuery('#bg_isPreviewbgimage').val('0');
-					}
-				}
-			);
-			akeeba.jQuery(document).on('change', '#bg_isPreviewbgimage',
-				function () {
-					var op2 = akeeba.jQuery("#bg_isPreviewbgimage option[value='1']:selected");
-					if (op2.length)
-					{
-						akeeba.jQuery('#bg_isPDFbgimage').val('0');
-						akeeba.jQuery(".previewbg").show();
-					}
-					else
-					{
-						akeeba.jQuery(".previewbg").hide();
-					}
-				}
-			);
+
 			akeeba.jQuery(document).on('click', '#cancelBgBtn',
 				function () {
 					akeeba.jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_BACKGROUND_TITLE'); ?>");

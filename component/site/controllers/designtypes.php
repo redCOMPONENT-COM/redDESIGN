@@ -97,7 +97,7 @@ class ReddesignControllerDesigntypes extends FOFController
 			$mangledname = md5($sig);
 		}
 
-		$backgroundImageFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $backgroundImage;
+		$backgroundImageFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/checkerboard' . $backgroundImage;
 		$newjpgFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
 
 		// Create Imagick object.
@@ -114,7 +114,7 @@ class ReddesignControllerDesigntypes extends FOFController
 				$areaDraw  = new ImagickDraw;
 
 				// Get font.
-				if ($area->fontTypeId)
+				if (!empty($area->fontTypeId))
 				{
 					$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area->id);
 					$fontType = $fontModel->getItem($area->fontTypeId);

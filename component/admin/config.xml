@@ -58,16 +58,6 @@
 				/>
 
 		<field
-				name="eps_bestfit"
-				type="radio"
-				default="1"
-				label="COM_REDDESIGN_CONFIG_EPS_BESTFIT"
-				description="COM_REDDESIGN_CONFIG_EPS_BESTFIT_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
-
-		<field
 				name="max_eps_thumbnail_width"
 				type="text"
 				size="5"

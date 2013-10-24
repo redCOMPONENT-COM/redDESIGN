@@ -358,56 +358,29 @@ class ReddesignControllerBackgrounds extends FOFController
 	private function createBackgroundPreview($eps_file)
 	{
 		$params = JComponentHelper::getParams('com_reddesign');
-		$best_fit = $params->get('eps_bestfit', 1);
 		$max_thumb_width = $params->get('max_eps_thumbnail_width', 600);
 		$max_thumb_height = $params->get('max_eps_thumbnail_height', 400);
 
 		$eps_file_location = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $eps_file;
 
-		// Read EPS
-		$im = new Imagick;
-		$im->readImage($eps_file_location);
+		$image_name = substr($eps_file, 0, -3) . 'png';
+		$previewPath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $image_name;
 
-		// Convert CMYK color profile of the EPS image to RGB color profile.
-		if ($im->getImageColorspace() == Imagick::COLORSPACE_CMYK)
+		$cmd = 'convert -colorspace RGB ' . $eps_file_location . ' PNG32:' . $previewPath;
+		exec($cmd);
+
+		$checkerBoard = $this->input->getBool('useCheckerboard', 0);
+
+		// Set checkerboard transparency background.
+		if ($checkerBoard)
 		{
-			$profiles = $im->getImageProfiles('*', false);
-
-			// We're only interested if ICC profile(s) exist.
-			$has_icc_profile = (array_search('icc', $profiles) !== false);
-
-			// If it doesnt have a CMYK ICC profile, we add one.
-			if ($has_icc_profile === false)
-			{
-				$icc_cmyk = file_get_contents(JPATH_ROOT . '/media/com_reddesign/assets/colorprofiles/USWebUncoated.icc');
-				$im->profileImage('icc', $icc_cmyk);
-				unset($icc_cmyk);
-			}
-
-			// Then we add an RGB profile.
-			$icc_rgb = file_get_contents(JPATH_ROOT . '/media/com_reddesign/assets/colorprofiles/sRGB_v4_ICC_preference.icc');
-			$im->profileImage('icc', $icc_rgb);
-			unset($icc_rgb);
+			$cmd = 'composite -compose Dst_Over -tile pattern:checkerboard ' . $previewPath . ' ' . $previewPath;
+			exec($cmd);
 		}
 
-		// This will drop down the size of the image dramatically (removes all profiles).
-		$im->stripImage();
-
-		$im->thumbnailImage($max_thumb_width, $max_thumb_height, $best_fit);
-
-		// Convert to jpg
-		$im->setCompression(Imagick::COMPRESSION_JPEG);
-		$im->setCompressionQuality(60);
-
-		$im->setImageFormat('jpeg');
-
-		// Create the Background preview .jpg file name
-		$image_name = substr($eps_file, 0, -3) . 'jpg';
-
-		// Write image to the media://com_reddesign/assets/backgrounds/
-		$im->writeImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $image_name);
-		$im->clear();
-		$im->destroy();
+		// Resize the image if it is needed
+		$cmd = 'convert ' . $previewPath . ' -resize ' . $max_thumb_width . 'x' . $max_thumb_height . '\> ' . $previewPath;
+		exec($cmd);
 
 		return $image_name;
 	}
