@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ==================================================================    -->
+<!-- redSHOP copier                                                        -->
+<!-- This PHING build file copies the current extension files form repo    -->
+<!-- to a testing joomla site.                                             -->
+<!-- You can also achieve the same goal by using:                          -->
+<!-- Joomla Installer => install from folder => choose this repo as folder -->
+<!-- ==================================================================    -->
+<project name="RedDesign" default="discover" basedir=".">
+    <!-- Do initialization stuff -->
+    <target name="prepare" >
+        <property file="build.properties"  override="true"/>
+        <if>
+            <equals arg1="${extension}" arg2="" />
+            <then>
+                <fail message="Extension not specified, use -Dextension=EXTENSION" />
+            </then>
+            <else>
+                <!--<property file="${extension}.properties"  override="true"/>-->
+            </else>
+        </if>
+    </target>
+
+    <property name="discover" value="./" />
+
+    <target name="discover" description="Copies files to a existing joomla site" depends="prepare">
+        <echo message="Copies files to a existing joomla site..." />
+        <!-- Manifest & install script -->
+        <echo message="##### Manifest..." />
+        <copy file="${discover}/${comp.name}.xml"
+            tofile="${www.dir}/administrator/components/com_${comp.name}/${comp.name}.xml" overwrite="true">
+            <!-- trick to replace extension folders in the manifest-->
+            <filterchain>
+              <replacetokens begintoken="comp" endtoken="/admin">
+                <token key="onent" value="administrator/components/${comp.name}" />
+              </replacetokens>
+              <replacetokens begintoken="comp" endtoken="/site">
+                <token key="onent" value="components/${comp.name}" />
+              </replacetokens>
+            </filterchain>
+        </copy>
+
+        <!-- Backend component -->
+        <echo message="##### Administrator..." />
+        <copy todir="${www.dir}/administrator/components/com_${comp.name}" overwrite="true" >
+            <fileset dir="${discover}/component/admin">
+                <include name="**" />
+                <exclude name="${comp.name}.xml" />
+                <exclude name="install.php" />
+            </fileset>
+        </copy>
+
+        <!-- Backend languages -->
+        <echo message="##### Administrator Languages..." />
+        <copy todir="${www.dir}/administrator/language" overwrite="true">
+            <fileset dir="${discover}/component/admin/language">
+                <include name="**" />
+            </fileset>
+        </copy>
+
+        <!-- Frontend component -->
+        <echo message="##### Component..." />
+        <copy todir="${www.dir}/components/com_${comp.name}" overwrite="true" >
+            <fileset dir="${discover}/component/site" />
+        </copy>
+
+        <!-- Frontend languages -->
+        <echo message="##### Language Files..." />
+        <copy todir="${www.dir}/language" overwrite="true">
+            <fileset dir="${discover}/component/site/language">
+                <include name="**" />
+            </fileset>
+        </copy>
+
+        <!-- Libraries -->
+        <echo message="##### Libraries..." />
+        <copy todir="${www.dir}/libraries" overwrite="true">
+            <fileset dir="${discover}/libraries">
+                <include name="**" />
+            </fileset>
+        </copy>
+
+        <!-- Media -->
+        <echo message="##### Media Files..." />
+        <copy todir="${www.dir}/media" overwrite="true">
+            <fileset dir="${discover}/media">
+                <include name="**" />
+            </fileset>
+        </copy>
+
+        <!-- Modules - Site -->
+        <!-- <copy todir="${www.dir}/modules" overwrite="true">
+            <fileset dir="${discover}/modules/site">
+                <include name="**" />
+            </fileset>
+        </copy> -->
+
+        <!-- Modules - Admin -->
+        <!-- <copy todir="${www.dir}/administrator/modules" overwrite="true">
+            <fileset dir="${discover}/modules/admin">
+                <include name="**" />
+            </fileset>
+        </copy> -->
+
+        <!-- Plugins -->
+        <copy todir="${www.dir}/plugins" overwrite="true">
+            <fileset dir="${discover}/plugins">
+                <include name="**" />
+            </fileset>
+        </copy>
+    </target>
+
+</project>
