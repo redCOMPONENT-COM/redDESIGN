@@ -185,29 +185,33 @@ JHTML::_('behavior.modal');
 	 * Selects background for edit and populates field data accordingly
 	 */
 	function selectBackgroundForEdit(reddesign_background_id, title, isPreviewbgimage, isPDFbgimage, enabled, thumbnail) {
+
 		akeeba.jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_TITLE_BACKGROUNDS_EDIT'); ?>");
 		akeeba.jQuery("#reddesign_background_id").val(reddesign_background_id);
 		akeeba.jQuery("#bg_title").val(title);
-		akeeba.jQuery("#bg_isPDFbgimage").val(isPDFbgimage);
 		akeeba.jQuery("#bg_isPreviewbgimage").val(isPreviewbgimage);
 		akeeba.jQuery("#bg_enabled").val(enabled);
+
+		if (isPDFbgimage == 1)
+		{
+			akeeba.jQuery("#isPDFbgimage1").prop('checked',true);
+		}
+		else
+		{
+			akeeba.jQuery("#isPDFbgimage0").prop('checked',true);
+		}
+
 		akeeba.jQuery("#BgThumbnailLink")
 			.attr("href", '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/'); ?>' + thumbnail)
 			.text(thumbnail)
 		;
-		if (akeeba.jQuery("#bg_isPDFbgimage option[value='1']:selected").length)
-		{
-			akeeba.jQuery(".previewbg").hide();
-		}
-		else
-		{
-			akeeba.jQuery(".previewbg").show();
-		}
 
 		showBackgroundForm()
+
 		akeeba.jQuery('body').animate({
 			'scrollTop':   akeeba.jQuery('#backgroundForm').offset().top
 		}, 1000);
+
 	}
 
 	/**

@@ -56,19 +56,29 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 
 		<div class="control-group">
 			<label class="control-label" for="isPDFbgimage">
-				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_BACKGROUND_TYPE'); ?>
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_BACKGROUND_TYPE'); ?>
 			</label>
 			<div class="controls">
-				<?php echo JHtml::_('select.radiolist', $this->backgroundTypeOptions, 'isPDFbgimage', '', 'value', 'text', $this->item->isPDFbgimage); ?>
+				<?php echo JHtml::_('select.radiolist', $this->backgroundTypeOptions, 'isPDFbgimage', '', 'value', 'text', 0); ?>
 			</div>
 		</div>
 
 		<div class="control-group" id="createPreviewContainer">
 			<div class="controls">
 				<input type="checkbox" id="createPreview" name="createPreview" checked="checked" value="1">
-				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_CREATE_PREVIEW'); ?>
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_CREATE_PREVIEW'); ?>
 				<span class="help-block">
-					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_CREATE_PREVIEW_DESC'); ?>
+					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_CREATE_PREVIEW_DESC'); ?>
+				</span>
+			</div>
+		</div>
+
+		<div class="control-group" id="isDefaultPreviewBgImageContainer">
+			<div class="controls">
+				<input type="checkbox" id="isPreviewbgimage" name="isPreviewbgimage" checked="checked" value="1">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_DEFAULT_PREVIEW'); ?>
+				<span class="help-block">
+					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_DEFAULT_PREVIEW_DESC'); ?>
 				</span>
 			</div>
 		</div>
@@ -76,9 +86,9 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 		<div class="control-group" id="useCheckerboardContainer">
 			<div class="controls">
 				<input type="checkbox" id="useCheckerboard" name="useCheckerboard" checked="checked" value="1">
-				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_USE_CHECKERBOARD'); ?>
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_USE_CHECKERBOARD'); ?>
 				<span class="help-block">
-					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_USE_CHECKERBOARD_DESC'); ?>
+					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_USE_CHECKERBOARD_DESC'); ?>
 				</span>
 			</div>
 		</div>
@@ -107,23 +117,58 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 <script type="text/javascript">
 	akeeba.jQuery(document).ready(
 		function () {
-			var backgroundType = akeeba.jQuery('input[name=backgroundType]:checked', '#background').val();
+			var backgroundType = akeeba.jQuery('input[name=isPDFbgimage]:checked', '#background').val();
 
 			if (backgroundType == 0)
 			{
 				akeeba.jQuery("#createPreviewContainer").hide();
 			}
 
-			akeeba.jQuery("input[name=backgroundType]").change(function() {
-				var backgroundType = akeeba.jQuery('input[name=backgroundType]:checked', '#background').val();
+			if(akeeba.jQuery('#createPreview').is(':checked'))
+			{
+				akeeba.jQuery("#isDefaultPreviewBgImageContainer").show();
+			}
+			else
+			{
+				akeeba.jQuery("#isDefaultPreviewBgImageContainer").hide();
+			}
+
+			akeeba.jQuery("input[name=isPDFbgimage]").change(function() {
+				var backgroundType = akeeba.jQuery('input[name=isPDFbgimage]:checked', '#background').val();
 
 				if (backgroundType == 0)
 				{
 					akeeba.jQuery("#createPreviewContainer").hide();
+					akeeba.jQuery("#isDefaultPreviewBgImageContainer").show();
+					akeeba.jQuery("#useCheckerboardContainer").show();
 				}
 				else
 				{
 					akeeba.jQuery("#createPreviewContainer").show();
+
+					if(akeeba.jQuery('#createPreview').is(':checked'))
+					{
+						akeeba.jQuery("#isDefaultPreviewBgImageContainer").show();
+						akeeba.jQuery("#useCheckerboardContainer").show();
+					}
+					else
+					{
+						akeeba.jQuery("#isDefaultPreviewBgImageContainer").hide();
+						akeeba.jQuery("#useCheckerboardContainer").hide();
+					}
+				}
+			});
+
+			akeeba.jQuery("#createPreview").change(function() {
+				if(akeeba.jQuery('#createPreview').is(':checked'))
+				{
+					akeeba.jQuery("#isDefaultPreviewBgImageContainer").show();
+					akeeba.jQuery("#useCheckerboardContainer").show();
+				}
+				else
+				{
+					akeeba.jQuery("#isDefaultPreviewBgImageContainer").hide();
+					akeeba.jQuery("#useCheckerboardContainer").hide();
 				}
 			});
 
