@@ -33,13 +33,12 @@ rsjQuery(document).ready(function () {
  */
 rsjQuery.setDiscountPrice = function(){
 
-    var pid = rsjQuery('#product_id').val();
-    var elm = rsjQuery('#plg_dimention_base_input_' + pid);
+    var pid  = rsjQuery('#product_id').val();
+    var elm  = rsjQuery('#plg_dimention_base_input_' + pid);
+    var pdb  = rsjQuery('#plg_dimention_base_' + pid).val();
+    var pdbi = rsjQuery.clearPriceString(elm.val());
 
-    var pdb = rsjQuery('#plg_dimention_base_' + pid).val();
-    var pdbi = parseFloat(elm.val()).round(2);
-
-    var h = newH = elm.attr('default-height'), w = newW = elm.attr('default-width');
+    var h = elm.attr('default-height'), newH = h, w = elm.attr('default-width'), newW = w;
 
     if (!isNaN(pdbi)) {
 
@@ -67,7 +66,8 @@ rsjQuery.setDiscountPrice = function(){
 
     rsjQuery('#plg_dimention_width_' + pid).val(newW);
     rsjQuery('#plg_dimention_height_' + pid).val(newH);
-    rsjQuery('#plg_dimention_log_' + pid).html(newW + ' X ' + newH + rsjQuery('#plg_default_volume_unit_' + pid).html());
+
+    rsjQuery('#plg_dimention_log_' + pid).html(rsjQuery.clearPriceString(newW) + ' X ' + rsjQuery.clearPriceString(newH) + rsjQuery('#plg_default_volume_unit_' + pid).html());
     rsjQuery('.discount-calculator-plugin-width').html(newW);
     rsjQuery('.discount-calculator-plugin-height').html(newH);
 
@@ -159,7 +159,7 @@ rsjQuery.setQuantityDiscount = function(pid, price){
     quantityDiscountRadio.attr('price', qtydiscountedPrice);
 
     // Prepare Object to return
-    discountPrices           = new Object();
+    discountPrices           = [];
     discountPrices.basePrice = discountedPrice;
     discountPrices.price     = qtydiscountedPrice;
 
@@ -205,4 +205,16 @@ rsjQuery.vlookup = function (needle, data, isElement) {
         return {'size': size[size.length - 1], 'price': price[price.length - 1]};
     }
 
+};
+
+/**
+ * Clear Input string into valid 2 decimal price format
+ *
+ * @param   {string}  str  Price String e.g. 22,31
+ *
+ * @return  {float}       Price e.g. 22.31
+ */
+rsjQuery.clearPriceString = function(str){
+    str = String(str);
+    return parseFloat(str.replace(/\s/g, "").replace(",", ".")).round(2);
 };
