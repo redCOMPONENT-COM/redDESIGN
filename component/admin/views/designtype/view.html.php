@@ -58,6 +58,8 @@ class ReddesignViewDesigntype extends FOFViewHtml
 
 	public $imageHeight;
 
+	public $backgroundTypeOptions;
+
 	/**
 	 * Executes before rendering the page for the Add task.
 	 *
@@ -110,7 +112,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			foreach ($this->backgrounds as $background)
 			{
 				// Get the background image that has been selected to be the Production PDF file image.
-				if ($background->isPDFbgimage)
+				if ($background->isProductionBg)
 				{
 					$this->productionBackground = $background;
 
@@ -180,6 +182,11 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			{
 				$this->fontsOptions[] = JHtml::_('select.option', $font->reddesign_font_id, $font->title);
 			}
+
+			$this->backgroundTypeOptions = array(
+				JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_PRODUCTION_BG')),
+				JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_PREVIEW_BG'))
+			);
 
 			// Unit for measures.
 			$this->unit = $this->params->get('unit', 'px');

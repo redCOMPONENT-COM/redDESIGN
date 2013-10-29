@@ -12,9 +12,9 @@ defined('_JEXEC') or die();
 <h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_FRAMES_TITLE') ?></h4>
 <div class="row-fluid">
 	<ul id="frames" class="thumbnails">
-		<?php foreach($this->previewBackgrounds as $frame) : ?>
+		<?php foreach($this->backgrounds as $frame) : ?>
 			<?php
-				if ($frame->isPreviewbgimage)
+				if ($frame->isDefaultPreview)
 				{
 					$reddesign_background_id = $frame->reddesign_background_id;
 				}
@@ -28,7 +28,7 @@ defined('_JEXEC') or die();
 						   id="frame<?php echo $frame->reddesign_background_id;?>"
 						   name="frame"
 						   value="<?php echo $frame->reddesign_background_id ?>"
-						<?php if ($frame->isPreviewbgimage) : ?>
+						<?php if ($frame->isDefaultPreview) : ?>
 						   checked="checked"'
 						<?php endif; ?>
 						/>
@@ -46,11 +46,18 @@ defined('_JEXEC') or die();
 			</div>
 			</li>
 		<?php endforeach; ?>
-		<input type="hidden" name="reddesign_background_id" id="reddesign_background_id" value="<?php echo $reddesign_background_id;?>" />
+
+		<input type="hidden"
+			   name="reddesign_background_id"
+			   id="reddesign_background_id"
+			   value="<?php echo $reddesign_background_id;?>"
+			/>
+
 		<input type="hidden"
 			   name="production_background_id"
 			   id="production_background_id"
 			   value="<?php echo $this->productionBackground->reddesign_background_id;?>"
 			/>
+
 	</ul>
 </div>

@@ -199,7 +199,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
 			->from($db->quoteName('#__reddesign_backgrounds'))
-			->where($db->quoteName('isPDFbgimage') . ' = ' . 0)
+			->where($db->quoteName('isProductionBg') . ' = ' . 0)
 			->where($db->quoteName('reddesign_designtype_id') . ' = ' . $designTypeId);
 		$db->setQuery($query);
 		$backgrounds = $db->loadObjectList();
@@ -274,7 +274,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			$query = $db->getQuery(true);
 			$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
 				->from($db->quoteName('#__reddesign_backgrounds'))
-				->where($db->quoteName('isPDFbgimage') . ' = ' . 0)
+				->where($db->quoteName('isProductionBg') . ' = ' . 0)
 				->where($db->quoteName('reddesign_designtype_id') . ' = ' . $designTypeId);
 			$db->setQuery($query);
 			$backgrounds = $db->loadObjectList();

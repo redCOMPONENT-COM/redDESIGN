@@ -31,15 +31,20 @@ class ReddesignControllerBackgrounds extends FOFController
 	public function onBeforeApplySave(&$data)
 	{
 		// Init vars
+		$app = JFactory::getApplication();
 		$updatedEPS = false;
 		$updatedThumbnail = false;
+		$uploaded_file = null;
+		$jpegPreviewFile = null;
+		$backgroundsModel = $this->getThisModel();
+		$title = $this->input->getString('title', '');
 
 		// Get Eps if has been added
 		$file = $this->input->files->get('bg_eps_file', null);
 
 		// Get Thumbnail if has been added
-		$thumbFile			= $this->input->files->get('thumbnail', null);
-		$thumbPreviewFile	= null;
+		$thumbFile = $this->input->files->get('thumbnail', null);
+		$thumbPreviewFile = null;
 
 		// Get component Params
 		$params = JComponentHelper::getParams('com_reddesign');
@@ -50,18 +55,23 @@ class ReddesignControllerBackgrounds extends FOFController
 			// If is a new background and the file is not attached return error
 			if (!$data['reddesign_background_id'])
 			{
-				$app = JFactory::getApplication();
 				$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_FILE'), 'error');
 				$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
 				$this->redirect();
 			}
+		}
+		elseif (empty($title))
+		{
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_TITLE'), 'error');
+			$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
+			$this->redirect();
 		}
 		else
 		{
 			$updatedEPS = true;
 
 			// Upload the background file
-			$uploaded_file	= $this->uploadFile($file);
+			$uploaded_file = $this->uploadFile($file);
 
 			if (!$uploaded_file)
 			{
@@ -103,7 +113,7 @@ class ReddesignControllerBackgrounds extends FOFController
 			$uploadedThumbFile = $fileHelper->uploadFile(
 				$thumbFile,
 				'backgrounds/thumbnails',
-				$params->get('max_designtype_image_size', 2),
+				$params->get('max_eps_file_size', 2),
 				'jpg,JPG,jpeg,JPEG,png,PNG,gif,GIF'
 			);
 
@@ -172,20 +182,18 @@ class ReddesignControllerBackgrounds extends FOFController
 		}
 
 		// If this new background will be the PDF Production background, switch it against the previous production background
-		if ((int) $data['isPDFbgimage'])
+		if ((int) $data['isProductionBg'])
 		{
-			$backgroundsModel	= $this->getThisModel();
-			$designId			= (int) $data['reddesign_designtype_id'];
+			$designId = (int) $data['reddesign_designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
 			$backgroundsModel->unsetAllPDFBg($designId);
 		}
 
 		// If this new background will be the preview background, switch it against the previous preview background
-		if ((int) $data['isPreviewbgimage'])
+		if ((int) $data['isPreviewBg'])
 		{
-			$backgroundsModel	= $this->getThisModel();
-			$designId			= (int) $data['reddesign_designtype_id'];
+			$designId = (int) $data['reddesign_designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
 			$backgroundsModel->unsetAllPreviewBg($designId);
@@ -340,7 +348,7 @@ class ReddesignControllerBackgrounds extends FOFController
 		// If the temp file does not have ok MIME, return
 		if (!in_array($file['type'], $validFileTypes))
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_INVALID_MIME'));
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_INVALID_MIME'), 'error');
 
 			return false;
 		}
@@ -358,56 +366,29 @@ class ReddesignControllerBackgrounds extends FOFController
 	private function createBackgroundPreview($eps_file)
 	{
 		$params = JComponentHelper::getParams('com_reddesign');
-		$best_fit = $params->get('eps_bestfit', 1);
 		$max_thumb_width = $params->get('max_eps_thumbnail_width', 600);
 		$max_thumb_height = $params->get('max_eps_thumbnail_height', 400);
 
 		$eps_file_location = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $eps_file;
 
-		// Read EPS
-		$im = new Imagick;
-		$im->readImage($eps_file_location);
+		$image_name = substr($eps_file, 0, -3) . 'png';
+		$previewPath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $image_name;
 
-		// Convert CMYK color profile of the EPS image to RGB color profile.
-		if ($im->getImageColorspace() == Imagick::COLORSPACE_CMYK)
+		$cmd = 'convert -colorspace RGB ' . $eps_file_location . ' PNG32:' . $previewPath;
+		exec($cmd);
+
+		$checkerBoard = $this->input->getBool('useCheckerboard', 0);
+
+		// Set checkerboard transparency background.
+		if ($checkerBoard)
 		{
-			$profiles = $im->getImageProfiles('*', false);
-
-			// We're only interested if ICC profile(s) exist.
-			$has_icc_profile = (array_search('icc', $profiles) !== false);
-
-			// If it doesnt have a CMYK ICC profile, we add one.
-			if ($has_icc_profile === false)
-			{
-				$icc_cmyk = file_get_contents(JPATH_ROOT . '/media/com_reddesign/assets/colorprofiles/USWebUncoated.icc');
-				$im->profileImage('icc', $icc_cmyk);
-				unset($icc_cmyk);
-			}
-
-			// Then we add an RGB profile.
-			$icc_rgb = file_get_contents(JPATH_ROOT . '/media/com_reddesign/assets/colorprofiles/sRGB_v4_ICC_preference.icc');
-			$im->profileImage('icc', $icc_rgb);
-			unset($icc_rgb);
+			$cmd = 'composite -compose Dst_Over -tile pattern:checkerboard ' . $previewPath . ' ' . $previewPath;
+			exec($cmd);
 		}
 
-		// This will drop down the size of the image dramatically (removes all profiles).
-		$im->stripImage();
-
-		$im->thumbnailImage($max_thumb_width, $max_thumb_height, $best_fit);
-
-		// Convert to jpg
-		$im->setCompression(Imagick::COMPRESSION_JPEG);
-		$im->setCompressionQuality(60);
-
-		$im->setImageFormat('jpeg');
-
-		// Create the Background preview .jpg file name
-		$image_name = substr($eps_file, 0, -3) . 'jpg';
-
-		// Write image to the media://com_reddesign/assets/backgrounds/
-		$im->writeImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $image_name);
-		$im->clear();
-		$im->destroy();
+		// Resize the image if it is needed
+		$cmd = 'convert ' . $previewPath . ' -resize ' . $max_thumb_width . 'x' . $max_thumb_height . '\> ' . $previewPath;
+		exec($cmd);
 
 		return $image_name;
 	}

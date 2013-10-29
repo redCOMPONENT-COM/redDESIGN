@@ -66,7 +66,7 @@ JHTML::_('behavior.modal');
 							<?php echo $background->reddesign_background_id; ?>
 						</td>
 						<td align="left">
-							<a href="#" class="editBackground" onclick="selectBackgroundForEdit(<?php echo "'$background->reddesign_background_id', '$background->title',  '$background->isPreviewbgimage', '$background->isPDFbgimage', '$background->enabled', '$background->thumbnail'"; ?>)">
+							<a href="#" class="editBackground" onclick="selectBackgroundForEdit(<?php echo "'$background->reddesign_background_id', '$background->title',  '$background->isDefaultPreview', '$background->isProductionBg', '$background->enabled', '$background->thumbnail'"; ?>)">
 								<strong><?php echo $background->title; ?></strong>
 							</a>
 							&nbsp;
@@ -75,7 +75,7 @@ JHTML::_('behavior.modal');
 							</a>
 						</td>
 						<td align="center" width="9%" class="switchBg">
-							<?php if (!$background->isPreviewbgimage) : ?>
+							<?php if (!$background->isDefaultPreview) : ?>
 								<a class="jgrid" href="javascript:void(0);" onclick="setPreviewbg('<?php echo $background->reddesign_background_id; ?>')" >
 									<span class="state notdefault">
 										<span class="text">Default</span>
@@ -90,7 +90,7 @@ JHTML::_('behavior.modal');
 							<?php endif; ?>
 						</td>
 						<td align="center" width="9%" class="switchBg">
-							<?php if (!$background->isPDFbgimage) : ?>
+							<?php if (!$background->isProductionBg) : ?>
 								<a class="jgrid" href="javascript:void(0);" onclick="setPDFbg('<?php echo $background->reddesign_background_id; ?>')" >
 									<span class="state notdefault">
 										<span class="text">Default</span>
@@ -184,30 +184,33 @@ JHTML::_('behavior.modal');
 	/**
 	 * Selects background for edit and populates field data accordingly
 	 */
-	function selectBackgroundForEdit(reddesign_background_id, title, isPreviewbgimage, isPDFbgimage, enabled, thumbnail) {
+	function selectBackgroundForEdit(reddesign_background_id, title, isDefaultPreview, isProductionBg, enabled, thumbnail) {
+
 		akeeba.jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_TITLE_BACKGROUNDS_EDIT'); ?>");
 		akeeba.jQuery("#reddesign_background_id").val(reddesign_background_id);
 		akeeba.jQuery("#bg_title").val(title);
-		akeeba.jQuery("#bg_isPDFbgimage").val(isPDFbgimage);
-		akeeba.jQuery("#bg_isPreviewbgimage").val(isPreviewbgimage);
 		akeeba.jQuery("#bg_enabled").val(enabled);
+
+		if (isProductionBg == 1)
+		{
+			akeeba.jQuery("#isProductionBg").prop("checked", true);
+		}
+		else
+		{
+			akeeba.jQuery("#isProductionBg").prop("checked", false);
+		}
+
 		akeeba.jQuery("#BgThumbnailLink")
 			.attr("href", '<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/'); ?>' + thumbnail)
 			.text(thumbnail)
 		;
-		if (akeeba.jQuery("#bg_isPDFbgimage option[value='1']:selected").length)
-		{
-			akeeba.jQuery(".previewbg").hide();
-		}
-		else
-		{
-			akeeba.jQuery(".previewbg").show();
-		}
 
 		showBackgroundForm()
+
 		akeeba.jQuery('body').animate({
 			'scrollTop':   akeeba.jQuery('#backgroundForm').offset().top
 		}, 1000);
+
 	}
 
 	/**

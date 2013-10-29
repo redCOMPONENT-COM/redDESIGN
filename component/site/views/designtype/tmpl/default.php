@@ -47,8 +47,8 @@ JHtml::_('behavior.modal');
 	<div id="background-container">
 		<div id="backgroundImage">
 			<img id="background"
-				 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->previewBackground->image_path; ?>"
-				 alt="<?php echo $this->previewBackground->title;?>" />
+				 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->defaultPreviewBg->image_path; ?>"
+				 alt="<?php echo $this->defaultPreviewBg->title;?>" />
 		</div>
 		<div id="progressBar" style="display: none;">
 			<div class="progress progress-striped active">
@@ -97,7 +97,7 @@ JHtml::_('behavior.modal');
 	akeeba.jQuery(document).ready(
 		function () {
 			// Correct radio button selection.
-			akeeba.jQuery("#frame<?php echo $this->previewBackground->reddesign_background_id; ?>").attr("checked", "checked");
+			akeeba.jQuery("#frame<?php echo $this->defaultPreviewBg->reddesign_background_id; ?>").attr("checked", "checked");
 
 			// Customize function.
 			akeeba.jQuery(document).on("click", "#customizeDesign",
