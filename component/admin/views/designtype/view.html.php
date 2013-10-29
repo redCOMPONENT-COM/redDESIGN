@@ -112,7 +112,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			foreach ($this->backgrounds as $background)
 			{
 				// Get the background image that has been selected to be the Production PDF file image.
-				if ($background->isPDFbgimage)
+				if ($background->isProductionBg)
 				{
 					$this->productionBackground = $background;
 

@@ -113,7 +113,7 @@ class ReddesignControllerBackgrounds extends FOFController
 			$uploadedThumbFile = $fileHelper->uploadFile(
 				$thumbFile,
 				'backgrounds/thumbnails',
-				$params->get('max_designtype_image_size', 2),
+				$params->get('max_eps_file_size', 2),
 				'jpg,JPG,jpeg,JPEG,png,PNG,gif,GIF'
 			);
 
@@ -182,7 +182,7 @@ class ReddesignControllerBackgrounds extends FOFController
 		}
 
 		// If this new background will be the PDF Production background, switch it against the previous production background
-		if ((int) $data['isPDFbgimage'])
+		if ((int) $data['isProductionBg'])
 		{
 			$designId = (int) $data['reddesign_designtype_id'];
 
@@ -191,43 +191,12 @@ class ReddesignControllerBackgrounds extends FOFController
 		}
 
 		// If this new background will be the preview background, switch it against the previous preview background
-		if ((int) $data['isPreviewbgimage'])
+		if ((int) $data['isPreviewBg'])
 		{
 			$designId = (int) $data['reddesign_designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
 			$backgroundsModel->unsetAllPreviewBg($designId);
-		}
-
-		// Clone the background from prdoduction to preview if that is requested.
-		$cloneToPreview = $this->input->getBool('createPreview', false);
-
-		if ($cloneToPreview)
-		{
-			$data['isPDFbgimage'] = 0;
-
-			$uploaded_file = $this->uploadFile($file);
-
-			if (!$uploaded_file)
-			{
-				$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
-				$this->redirect();
-			}
-
-			$data['eps_file'] = $uploaded_file['mangled_filename'];
-
-			$jpegPreviewFile = $this->createBackgroundPreview($uploaded_file['mangled_filename']);
-
-			$data['image_path'] = $jpegPreviewFile;
-
-			if (!$jpegPreviewFile)
-			{
-				return false;
-			}
-
-			$data['title'] = '[AutoPreview]' . $title;
-
-			$backgroundsModel->save($data);
 		}
 
 		return $data;
@@ -379,7 +348,7 @@ class ReddesignControllerBackgrounds extends FOFController
 		// If the temp file does not have ok MIME, return
 		if (!in_array($file['type'], $validFileTypes))
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_INVALID_MIME'));
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_INVALID_MIME'), 'error');
 
 			return false;
 		}

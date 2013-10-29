@@ -131,8 +131,9 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   `eps_file`                VARCHAR(255),
   `image_path`              VARCHAR(255) NOT NULL,
   `thumbnail`               VARCHAR(255),
-  `isPDFbgimage`            TINYINT(1)   NOT NULL,
-  `isPreviewbgimage`        TINYINT(1)   NOT NULL,
+  `isProductionBg`          TINYINT(1)   NOT NULL,
+  `isPreviewBg`             TINYINT(1)   NOT NULL,
+  `isDefaultPreview`        TINYINT(1)   NOT NULL,
   `reddesign_designtype_id` INT(11)      NOT NULL,
   PRIMARY KEY (`reddesign_background_id`)
 )

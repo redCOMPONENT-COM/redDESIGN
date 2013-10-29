@@ -172,7 +172,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$query = $db->getQuery(true);
 			$query->select($db->quoteName('reddesign_background_id'))
 				->from($db->quoteName('#__reddesign_backgrounds'))
-				->where($db->quoteName('isPDFbgimage') . ' = ' . 1)
+				->where($db->quoteName('isProductionBg') . ' = ' . 1)
 				->where($db->quoteName('reddesign_designtype_id') . ' = ' . $reddesignDesigntypeId);
 			$db->setQuery($query);
 			$backgroundId = $db->loadResult();

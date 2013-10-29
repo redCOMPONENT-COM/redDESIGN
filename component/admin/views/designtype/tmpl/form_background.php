@@ -54,28 +54,29 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 			</div>
 		</div>
 
-		<div class="control-group">
-			<label class="control-label" for="isPDFbgimage">
-				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_BACKGROUND_TYPE'); ?>
-			</label>
+		<div class="control-group" id="isProductionBgContainer">
 			<div class="controls">
-				<?php echo JHtml::_('select.radiolist', $this->backgroundTypeOptions, 'isPDFbgimage', '', 'value', 'text', 0); ?>
-			</div>
-		</div>
-
-		<div class="control-group" id="createPreviewContainer">
-			<div class="controls">
-				<input type="checkbox" id="createPreview" name="createPreview" checked="checked" value="1">
-				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_CREATE_PREVIEW'); ?>
+				<input type="checkbox" id="isProductionBg" name="isProductionBg" checked="checked" value="1">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_IS_PRODUCTION_BACKGROUND'); ?>
 				<span class="help-block">
-					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_CREATE_PREVIEW_DESC'); ?>
+					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_IS_PRODUCTION_BACKGROUND_DESC'); ?>
 				</span>
 			</div>
 		</div>
 
-		<div class="control-group" id="isDefaultPreviewBgImageContainer">
+		<div class="control-group" id="isPreviewBgContainer">
 			<div class="controls">
-				<input type="checkbox" id="isPreviewbgimage" name="isPreviewbgimage" checked="checked" value="1">
+				<input type="checkbox" id="isPreviewBg" name="isPreviewBg" checked="checked" value="1">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_IS_PREVIEW_BACKGROUND'); ?>
+				<span class="help-block">
+					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_IS_PREVIEW_BACKGROUND_DESC'); ?>
+				</span>
+			</div>
+		</div>
+
+		<div class="control-group" id="isDefaultPreviewContainer">
+			<div class="controls">
+				<input type="checkbox" id="isDefaultPreview" name="isDefaultPreview" checked="checked" value="1">
 				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_DEFAULT_PREVIEW'); ?>
 				<span class="help-block">
 					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_DEFAULT_PREVIEW_DESC'); ?>
@@ -117,57 +118,26 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 <script type="text/javascript">
 	akeeba.jQuery(document).ready(
 		function () {
-			var backgroundType = akeeba.jQuery('input[name=isPDFbgimage]:checked', '#background').val();
-
-			if (backgroundType == 0)
+			if(akeeba.jQuery("#isPreviewBg").is(":checked"))
 			{
-				akeeba.jQuery("#createPreviewContainer").hide();
-			}
-
-			if(akeeba.jQuery('#createPreview').is(':checked'))
-			{
-				akeeba.jQuery("#isDefaultPreviewBgImageContainer").show();
+				akeeba.jQuery("#isDefaultPreviewContainer").show();
+				akeeba.jQuery("#useCheckerboardContainer").show();
 			}
 			else
 			{
-				akeeba.jQuery("#isDefaultPreviewBgImageContainer").hide();
+				akeeba.jQuery("#isDefaultPreviewContainer").hide();
+				akeeba.jQuery("#useCheckerboardContainer").show();
 			}
 
-			akeeba.jQuery("input[name=isPDFbgimage]").change(function() {
-				var backgroundType = akeeba.jQuery('input[name=isPDFbgimage]:checked', '#background').val();
-
-				if (backgroundType == 0)
+			akeeba.jQuery("#isPreviewBg").change(function() {
+				if(akeeba.jQuery("#isPreviewBg").is(":checked"))
 				{
-					akeeba.jQuery("#createPreviewContainer").hide();
-					akeeba.jQuery("#isDefaultPreviewBgImageContainer").show();
+					akeeba.jQuery("#isDefaultPreviewContainer").show();
 					akeeba.jQuery("#useCheckerboardContainer").show();
 				}
 				else
 				{
-					akeeba.jQuery("#createPreviewContainer").show();
-
-					if(akeeba.jQuery('#createPreview').is(':checked'))
-					{
-						akeeba.jQuery("#isDefaultPreviewBgImageContainer").show();
-						akeeba.jQuery("#useCheckerboardContainer").show();
-					}
-					else
-					{
-						akeeba.jQuery("#isDefaultPreviewBgImageContainer").hide();
-						akeeba.jQuery("#useCheckerboardContainer").hide();
-					}
-				}
-			});
-
-			akeeba.jQuery("#createPreview").change(function() {
-				if(akeeba.jQuery('#createPreview').is(':checked'))
-				{
-					akeeba.jQuery("#isDefaultPreviewBgImageContainer").show();
-					akeeba.jQuery("#useCheckerboardContainer").show();
-				}
-				else
-				{
-					akeeba.jQuery("#isDefaultPreviewBgImageContainer").hide();
+					akeeba.jQuery("#isDefaultPreviewContainer").hide();
 					akeeba.jQuery("#useCheckerboardContainer").hide();
 				}
 			});
@@ -183,7 +153,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 					akeeba.jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_BACKGROUND_TITLE'); ?>");
 					akeeba.jQuery("#reddesign_background_id").val('');
 					akeeba.jQuery("#bg_title").val('');
-					akeeba.jQuery("#bg_isPDFbgimage").val('0');
 					akeeba.jQuery("#bg_enabled").val('1');
 
 					akeeba.jQuery('#backgroundForm').fadeOut("fast");
@@ -192,4 +161,3 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 			);
 		});
 </script>
-

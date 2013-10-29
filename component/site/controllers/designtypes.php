@@ -97,8 +97,8 @@ class ReddesignControllerDesigntypes extends FOFController
 			$mangledname = md5($sig);
 		}
 
-		$backgroundImageFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/checkerboard' . $backgroundImage;
-		$newjpgFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
+		$backgroundImageFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $backgroundImage;
+		$newFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.png';
 
 		// Create Imagick object.
 		$newImage = new Imagick;
@@ -195,35 +195,10 @@ class ReddesignControllerDesigntypes extends FOFController
 				// Add text to the area image.
 				$areaImage->annotateImage($areaDraw, 0, $topoffset, 0, $area->textArea);
 
-				// Convert CMYK color profile of the EPS image to RGB color profile.
-				if ($newImage->getImageColorspace() == Imagick::COLORSPACE_CMYK)
-				{
-					$profiles = $newImage->getImageProfiles('*', false);
-
-					// We're only interested if ICC profile(s) exist.
-					$has_icc_profile = (array_search('icc', $profiles) !== false);
-
-					// If it doesnt have a CMYK ICC profile, we add one.
-					if ($has_icc_profile === false)
-					{
-						$icc_cmyk = file_get_contents(JPATH_ROOT . '/media/com_reddesign/assets/colorprofiles/USWebUncoated.icc');
-						$newImage->profileImage('icc', $icc_cmyk);
-						unset($icc_cmyk);
-					}
-
-					// Then we add an RGB profile.
-					$icc_rgb = file_get_contents(JPATH_ROOT . '/media/com_reddesign/assets/colorprofiles/sRGB_v4_ICC_preference.icc');
-					$newImage->profileImage('icc', $icc_rgb);
-					unset($icc_rgb);
-				}
-
-				// This will drop down the size of the image dramatically (removes all profiles).
-				$newImage->stripImage();
-
 				// Put second image on top of the first.
-				$newImage->compositeImage($areaImage, $areaImage->getImageCompose(), $this->areaItem->x1_pos, $this->areaItem->y1_pos);
+				$newImage->compositeImage($areaImage, imagick::COMPOSITE_DEFAULT, $this->areaItem->x1_pos, $this->areaItem->y1_pos);
 
-				$newImage->writeImage($newjpgFileLocation);
+				$newImage->writeImage($newFileLocation);
 
 				// Free resources.
 				$areaImage->clear();
@@ -231,7 +206,7 @@ class ReddesignControllerDesigntypes extends FOFController
 			}
 			else
 			{
-				$newImage->writeImage($newjpgFileLocation);
+				$newImage->writeImage($newFileLocation);
 			}
 		}
 
@@ -241,9 +216,9 @@ class ReddesignControllerDesigntypes extends FOFController
 
 		// Create session to store Image
 		$session->set('customizedImage', $mangledname);
-		$response['image'] = JURI::base() . 'media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
+		$response['image'] = JURI::base() . 'media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.png';
 		$response['imageTitle'] = $background->title;
-		$imageSize = getimagesize(JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg');
+		$imageSize = getimagesize(JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.png');
 		$response['imageWidth'] = $imageSize[0];
 		$response['imageHeight'] = $imageSize[1];
 
