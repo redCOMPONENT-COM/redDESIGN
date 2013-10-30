@@ -93,21 +93,26 @@ rsjQuery.updatePrice = function (pid, price_data) {
 
     var main_price  = rsjQuery('#main_price' + pid).val();
     var price_value = price_data.price * price_data.element.price;
+    var price       = price_value;
 
     // Set QUantity Based Discount
     discountPrices = rsjQuery.setQuantityDiscount(pid, price_value);
 
-    price_value = discountPrices.basePrice;
+    if (discountPrices.length > 0)
+    {
+        price_value = discountPrices.basePrice;
+        price       = discountPrices.price;
+    }
 
     if (SHOW_PRICE == '1' && ( DEFAULT_QUOTATION_MODE != '1' || (DEFAULT_QUOTATION_MODE && SHOW_QUOTATION_PRICE))) {
 
         // Set price changes in HTML fields
-        var formatted_main_price = number_format(discountPrices.price, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        var formatted_main_price = number_format(price, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
         rsjQuery('#display_product_price_no_vat' + pid + ', #produkt_kasse_hoejre_pris_indre' + pid).html(formatted_main_price);
 
         // Set price changes in hidden fields
-        rsjQuery('#product_price_no_vat' + pid).val(discountPrices.price);
-        rsjQuery('#main_price' + pid).val(discountPrices.price);
+        rsjQuery('#product_price_no_vat' + pid).val(price);
+        rsjQuery('#main_price' + pid).val(price);
     }
 
     // Set Calculated product price into hidden input type
@@ -126,6 +131,11 @@ rsjQuery.updatePrice = function (pid, price_data) {
  * @param  {number}  price  Product Price
  */
 rsjQuery.setQuantityDiscount = function(pid, price){
+
+    if (rsjQuery('.quantity_discount_radio').length <= 0)
+    {
+        return [];
+    }
 
     var discountedPrice = 0, qtydiscountedPrice = 0;
 
