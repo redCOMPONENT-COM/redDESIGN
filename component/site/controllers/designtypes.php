@@ -248,7 +248,7 @@ class ReddesignControllerDesigntypes extends FOFController
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
-		$char = str_split(mb_convert_encoding(urldecode($enteredChars), "ISO-8859-1", "UTF-8"));
+		$char = preg_split('/(?<!^)(?!$)/u', $enteredChars);
 
 		// Select character settings for a given font.
 		$query
