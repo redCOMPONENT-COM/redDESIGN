@@ -63,7 +63,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 							id="plg_dimention_base_input_' . $product->product_id . '"
 							name="plg_dimention_base_input"
 							size="5"
-							value="' . str_replace(".", ",", $product->product_width) . '"
+							value="' . str_replace(".", ",", round($product->product_width, 2)) . '"
 							maxlength="5"
 							default-width="' . $product->product_width . '"
 							default-height="' . $product->product_height . '">
