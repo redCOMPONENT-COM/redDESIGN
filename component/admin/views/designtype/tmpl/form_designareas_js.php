@@ -35,18 +35,9 @@ akeeba.jQuery(document).ready(
 			onSelectEnd: populateSelectionFields
 		});
 
-});
-
-akeeba.jQuery(function() {
-	akeeba.jQuery(".colorPickerContainer").colorpicker({
-		parts: ['map', 'bar', 'cmyk', 'preview', 'footer'],
-		layout: {
-			map:		[0, 0, 3, 1],	// Left, Top, Width, Height (in table cells).
-			bar:		[3, 0, 1, 4],
-			preview:	[4, 0, 1, 1],
-			cmyk:		[4, 0, 1, 2]
-		}
-	});
+		<?php foreach ($this->areas as  $area) : ?>
+			akeeba.jQuery("#colorPickerContainer<?php echo $area->reddesign_area_id ?>").farbtastic("#colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>");
+		<?php endforeach; ?>
 });
 
 /**

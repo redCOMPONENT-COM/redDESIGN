@@ -14,12 +14,11 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/imgareaselect-animate
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
 
 // FOFTemplateUtils::addJS('media://com_reddesign/assets/js/colorpicker.js');
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/jquery.colorpicker.js');
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/farbtastic.js');
 
 
 //FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
-FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/jquery.colorpicker.css');
-JHtml::stylesheet('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css');
+FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/farbtastic.css');
 
 ?>
 
@@ -468,7 +467,7 @@ JHtml::stylesheet('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/u
 										<legend><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_LEGEND_TEXT_COLOR_SETTINGS'); ?></legend>
 
 										<div class="row-fluid">
-											<div class="span12">
+											<div class="span6">
 												<label class="checkbox inline">
 													<?php
 															if ($area->color_code == 1 || $area->color_code == '1')
@@ -482,11 +481,75 @@ JHtml::stylesheet('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/u
 													?>
 													<input type="checkbox" id="allColors" name="allColors" value="allColors" <?php echo $chkAllColors; ?>>
 													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_CHECK_ALL_COLORS'); ?>
+
+
+													<button class="btn btn-mini btn-success" type="button">
+														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ADD_COLOR'); ?>
+													</button>
 												</label>
 
-												<div class="colorPickerContainer"></div>
 											</div>
 
+											<div class="span6">
+
+												<div class="span9">
+													<label class="control-label">
+														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_COLOR_PICKER'); ?>
+														<div id="colorPickerContainer<?php echo $area->reddesign_area_id; ?>"></div>
+													</label>
+
+													<label for="colorPickerValue<?php echo $area->reddesign_area_id; ?>">
+														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SELECTED_COLOR') ?>
+														<input class="span12"
+															   type="text"
+															   value=""
+															   id="colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>"
+															   name="colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>"
+															/>
+													</label>
+												</div>
+
+												<div class="span3 CMYKContainer">
+													<div class="input-prepend">
+														<span class="add-on">C</span>
+														<input class="span7"
+															   id="C<?php echo $area->reddesign_area_id; ?>"
+															   name="C<?php echo $area->reddesign_area_id; ?>"
+															   type="text"
+															   placeholder="C"
+															>
+													</div>
+													<div class="input-prepend">
+														<span class="add-on">M</span>
+														<input class="span7"
+															   id="M<?php echo $area->reddesign_area_id; ?>"
+															   name="M<?php echo $area->reddesign_area_id; ?>"
+															   type="text"
+															   placeholder="M"
+															>
+													</div>
+													<div class="input-prepend">
+														<span class="add-on">Y</span>
+														<input class="span7"
+															   id="Y<?php echo $area->reddesign_area_id; ?>"
+															   name="Y<?php echo $area->reddesign_area_id; ?>"
+															   type="text"
+															   placeholder="Y"
+															>
+													</div>
+													<div class="input-prepend">
+														<span class="add-on">K</span>
+														<input class="span7"
+															   id="K<?php echo $area->reddesign_area_id; ?>"
+															   name="K<?php echo $area->reddesign_area_id; ?>"
+															   type="text"
+															   placeholder="K"
+															>
+													</div>
+
+												</div>
+
+											</div>
 										</div>
 									</fieldset>
 								</div>
