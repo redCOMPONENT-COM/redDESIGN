@@ -35,14 +35,18 @@ akeeba.jQuery(document).ready(
 			onSelectEnd: populateSelectionFields
 		});
 
-		<?php foreach ($this->areas as  $area) : ?>
-		var reddesign_area_id = parseInt(<?php echo $area->reddesign_area_id;?>);
-		akeeba.jQuery('#colorpickerHolderC' + reddesign_area_id).ColorPicker({flat: true, designId:reddesign_area_id,
-			onChange: function (hsb, hex, rgb, reddesign_area_id) {
-				document.getElementById('color_code'+reddesign_area_id).value = hex; // Edited
-			}});
-		<?php endforeach; ?>
+});
 
+akeeba.jQuery(function() {
+	akeeba.jQuery(".colorPickerContainer").colorpicker({
+		parts: ['map', 'bar', 'cmyk', 'preview', 'footer'],
+		layout: {
+			map:		[0, 0, 3, 1],	// Left, Top, Width, Height (in table cells).
+			bar:		[3, 0, 1, 4],
+			preview:	[4, 0, 1, 1],
+			cmyk:		[4, 0, 1, 2]
+		}
+	});
 });
 
 /**
@@ -698,7 +702,7 @@ function addAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, wi
 
 			'</div>' +
 
-			'<div class="areSettingRowheight">' +
+			'<div class="colorPickerContainer">' +
 			'<div id="colorPicker' + reddesign_area_id + '" >' +
 			'<div class="control-group" >' +
 			'<label class="control-label ">' +
@@ -929,7 +933,7 @@ function saveAreaSettings(reddesign_area_id) {
 	var fontsizerSliderDefault = akeeba.jQuery("#fontsizerSliderDefault" + reddesign_area_id).val();
 	var fontsizerSliderMin = akeeba.jQuery("#fontsizerSliderMin" + reddesign_area_id).val();
 	var fontsizerSliderMax = akeeba.jQuery("#fontsizerSliderMax" + reddesign_area_id).val();
-	var inputFieldType = akeeba.jQuery('[name="inputFieldType' + reddesign_area_id + '[]"]:checked').val();
+	var inputFieldType = akeeba.jQuery("#inputFieldType" + reddesign_area_id).val();
 	var maximumCharsAllowed = akeeba.jQuery("#maximumCharsAllowed" + reddesign_area_id).val();
 	var maximumLinesAllowed = akeeba.jQuery("#maximumLinesAllowed" + reddesign_area_id).val();
 	var areaFonts = akeeba.jQuery('[name="areaFonts' + reddesign_area_id + '[]"]').val();
@@ -1044,17 +1048,15 @@ function hideColorPicker(reddesign_area_id)
  */
 function changeInputFieldType(reddesign_area_id)
 {
-	var selectedType = akeeba.jQuery('[name="inputFieldType' + reddesign_area_id + '[]"]:checked').val();
+	var selectedType = akeeba.jQuery("#inputFieldType" + reddesign_area_id).val();
 
 	if (selectedType == 1)
 	{
-		akeeba.jQuery("#maximumLinesAllowed" + reddesign_area_id).css("display", "inline");
-		akeeba.jQuery("#maximumLinesAllowedLabel" + reddesign_area_id).css("display", "inline");
+		akeeba.jQuery("#maximumLinesAllowedContainer" + reddesign_area_id).css("display", "inline");
 	}
 	else
 	{
-		akeeba.jQuery("#maximumLinesAllowed" + reddesign_area_id).css("display", "none");
-		akeeba.jQuery("#maximumLinesAllowedLabel" + reddesign_area_id).css("display", "none");
+		akeeba.jQuery("#maximumLinesAllowedContainer" + reddesign_area_id).css("display", "none");
 	}
 }
 
