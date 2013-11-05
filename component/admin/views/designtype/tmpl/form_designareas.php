@@ -13,12 +13,10 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/jquery.imgareaselect.pa
 FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/imgareaselect-animated.css');
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
 
-// FOFTemplateUtils::addJS('media://com_reddesign/assets/js/colorpicker.js');
+// Colorpicker includes.
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/farbtastic.js');
-
-
-//FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/farbtastic.css');
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 
 ?>
 
@@ -300,7 +298,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/farbtastic.css');
 
 																<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>
 
-																<textarea class="input-small"
+																<textarea class="span12"
 																		  style="resize: none;"
 																		  id="fontsizerDropdown<?php echo $area->reddesign_area_id; ?>"
 																		  name="fontsizerDropdown<?php echo $area->reddesign_area_id; ?>"
@@ -495,14 +493,14 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/farbtastic.css');
 												<div class="span9">
 													<label class="control-label">
 														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_COLOR_PICKER'); ?>
-														<div id="colorPickerContainer<?php echo $area->reddesign_area_id; ?>"></div>
+														<div id="colorPickerContainer<?php echo $area->reddesign_area_id; ?>" class="colorPickerContainer"></div>
 													</label>
 
 													<label for="colorPickerValue<?php echo $area->reddesign_area_id; ?>">
 														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SELECTED_COLOR') ?>
-														<input class="span12"
+														<input class="span12 colorPickerSelectedColor"
 															   type="text"
-															   value=""
+															   value="#cfcfcf"
 															   id="colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>"
 															   name="colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>"
 															/>
@@ -512,37 +510,41 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/farbtastic.css');
 												<div class="span3 CMYKContainer">
 													<div class="input-prepend">
 														<span class="add-on">C</span>
-														<input class="span7"
+														<input class="span8"
 															   id="C<?php echo $area->reddesign_area_id; ?>"
 															   name="C<?php echo $area->reddesign_area_id; ?>"
 															   type="text"
+															   value="10"
 															   placeholder="C"
 															>
 													</div>
 													<div class="input-prepend">
 														<span class="add-on">M</span>
-														<input class="span7"
+														<input class="span8"
 															   id="M<?php echo $area->reddesign_area_id; ?>"
 															   name="M<?php echo $area->reddesign_area_id; ?>"
 															   type="text"
+															   value="10"
 															   placeholder="M"
 															>
 													</div>
 													<div class="input-prepend">
 														<span class="add-on">Y</span>
-														<input class="span7"
+														<input class="span8"
 															   id="Y<?php echo $area->reddesign_area_id; ?>"
 															   name="Y<?php echo $area->reddesign_area_id; ?>"
 															   type="text"
+															   value="10"
 															   placeholder="Y"
 															>
 													</div>
 													<div class="input-prepend">
 														<span class="add-on">K</span>
-														<input class="span7"
+														<input class="span8"
 															   id="K<?php echo $area->reddesign_area_id; ?>"
 															   name="K<?php echo $area->reddesign_area_id; ?>"
 															   type="text"
+															   value="10"
 															   placeholder="K"
 															>
 													</div>
