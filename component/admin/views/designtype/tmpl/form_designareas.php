@@ -466,29 +466,45 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 
 										<div class="row-fluid">
 											<div class="span6">
-												<label class="checkbox inline">
-													<?php
+												<div class="span12">
+													<label class="checkbox inline" for="allColors<?php echo $area->reddesign_area_id; ?>">
+														<?php
+															$allColorsHide = '';
+
 															if ($area->color_code == 1 || $area->color_code == '1')
 															{
 																$chkAllColors = 'checked="checked"';
+																$allColorsHide = 'style="display: none;"';
 															}
 															else
 															{
 																$chkAllColors = '';
+																$color_codes = explode(',', $area->color_code);
 															}
-													?>
-													<input type="checkbox" id="allColors" name="allColors" value="allColors" <?php echo $chkAllColors; ?>>
-													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_CHECK_ALL_COLORS'); ?>
+														?>
+														<input type="checkbox"
+															   id="allColors<?php echo $area->reddesign_area_id; ?>"
+															   name="allColors<?php echo $area->reddesign_area_id; ?>"
+															   value="allColors"
+															<?php echo $chkAllColors; ?>
+															>
+														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_CHECK_ALL_COLORS'); ?>
+													</label>
+												</div>
 
-
-													<button class="btn btn-mini btn-success" type="button">
+												<div id="addColorContainer<?php echo $area->reddesign_area_id ?>" class="span12 addColorButton"  <?php echo $allColorsHide; ?>>
+													<button class="btn btn-mini btn-success" id="addColorButton<?php echo $area->reddesign_area_id ?>" type="button">
 														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ADD_COLOR'); ?>
 													</button>
-												</label>
+												</div>
 
+												<div id="selectedColorsPalette<?php echo $area->reddesign_area_id ?>" class="span12  <?php echo $allColorsHide; ?> ">
+												</div>
+
+												<input type="hidden"
 											</div>
 
-											<div class="span6">
+											<div id="colorsContainer<?php echo $area->reddesign_area_id ?>" class="span6" <?php echo $allColorsHide; ?>>
 
 												<div class="span9">
 													<label class="control-label">
@@ -496,7 +512,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 														<div id="colorPickerContainer<?php echo $area->reddesign_area_id; ?>" class="colorPickerContainer"></div>
 													</label>
 
-													<label for="colorPickerValue<?php echo $area->reddesign_area_id; ?>">
+													<label for="colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>">
 														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SELECTED_COLOR') ?>
 														<input class="span12 colorPickerSelectedColor"
 															   type="text"

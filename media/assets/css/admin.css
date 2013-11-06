@@ -30,3 +30,7 @@
 .icon-48-orders{
     background-image: url(../images/reddesign_orders_48.png);
 }
+
+.addColorButton {
+	margin: 15px 0 10px 0;
+}
