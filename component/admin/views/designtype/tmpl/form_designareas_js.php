@@ -71,13 +71,17 @@ akeeba.jQuery(document).ready(
 
 			akeeba.jQuery("#allColors<?php echo $area->reddesign_area_id; ?>").click(function () {
 				akeeba.jQuery("#colorsContainer<?php echo $area->reddesign_area_id; ?>").toggle(!this.checked);
-				akeeba.jQuery("#addColorButton<?php echo $area->reddesign_area_id; ?>").toggle(!this.checked);
+				akeeba.jQuery("#addColorContainer<?php echo $area->reddesign_area_id; ?>").toggle(!this.checked);
 				akeeba.jQuery("#selectedColorsPalette<?php echo $area->reddesign_area_id; ?>").toggle(!this.checked);
 			});
 
 
 			akeeba.jQuery("#addColorButton<?php echo $area->reddesign_area_id ?>").click(function () {
 				addColorToList(parseInt("<?php echo $area->reddesign_area_id; ?>"))
+			});
+
+			akeeba.jQuery(document).on("mouseover", ".color-icon", function() {
+				akeeba.jQuery(".color-icon").show();
 			});
 		<?php endforeach; ?>
 
@@ -92,7 +96,22 @@ akeeba.jQuery(document).ready(
  */
 function addColorToList(areaId)
 {
+	// Create color div element.
+	var selectedColor = akeeba.jQuery("#colorPickerSelectedColor" + areaId).val();
+	var element = '<div class="colorDiv" style="background-color:' + selectedColor + ';"><i class="glyphicon icon-remove"></i></div>';
+	akeeba.jQuery("#selectedColorsPalette" + areaId).append(element);
 
+	// Update color codes hidden input field.
+	var colorCodes = akeeba.jQuery("#colorCodes" + areaId).val();
+
+	if (colorCodes == "" || parseInt(colorCodes) == 1)
+	{
+		akeeba.jQuery("#colorCodes" + areaId).val(selectedColor);
+	}
+	else
+	{
+		akeeba.jQuery("#colorCodes" + areaId).val(colorCodes + "," + selectedColor);
+	}
 }
 
 /**
@@ -134,8 +153,6 @@ function rgbToHex(r, g, b) {
  *
  * @param hex int Hexadecimal value.
  * @param areaId int Area ID.
- *
- * @return void.
  */
 function loadCMYKValues(hex, areaId) {
 	var colorObject = new RGB(hexToRgb(hex).r, hexToRgb(hex).g, hexToRgb(hex).b);
@@ -1052,23 +1069,12 @@ function saveAreaSettings(reddesign_area_id) {
 	var maximumCharsAllowed = akeeba.jQuery("#maximumCharsAllowed" + reddesign_area_id).val();
 	var maximumLinesAllowed = akeeba.jQuery("#maximumLinesAllowed" + reddesign_area_id).val();
 	var areaFonts = akeeba.jQuery('[name="areaFonts' + reddesign_area_id + '[]"]').val();
-	var colorCodes = akeeba.jQuery('[name="colorCodes' + reddesign_area_id + '[]"]');
-	var allowAllColor = akeeba.jQuery("input[name='allColor"+reddesign_area_id+"']:checked").val();
+	var colorCodes = akeeba.jQuery("#colorCodes" + reddesign_area_id).val();
 	var defaultText = akeeba.jQuery("#defaultText" + reddesign_area_id).val();
-
 
 	if (akeeba.jQuery("#allColors" + reddesign_area_id).is(":checked"))
 	{
 		colorCodes = 1;
-	}
-	else
-	{
-		var arr = [];
-		for (var i = 0; i < colorCodes.length ; i++) {
-			var colorCode = "#"+colorCodes[i].value;
-			arr.push(colorCode);
-		}
-		colorCodes = arr.join(",");
 	}
 
 	akeeba.jQuery.ajax({

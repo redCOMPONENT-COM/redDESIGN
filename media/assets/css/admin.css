@@ -34,3 +34,11 @@
 .addColorButton {
 	margin: 15px 0 10px 0;
 }
+
+.colorDiv {
+	width: 50px;
+	height: 50px;
+	float: left;
+	margin: 5px;
+	cursor: pointer;
+}

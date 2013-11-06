@@ -471,7 +471,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 														<?php
 															$allColorsHide = '';
 
-															if ($area->color_code == 1 || $area->color_code == '1')
+															if ($area->color_code == 1)
 															{
 																$chkAllColors = 'checked="checked"';
 																$allColorsHide = 'style="display: none;"';
@@ -492,16 +492,26 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 													</label>
 												</div>
 
-												<div id="addColorContainer<?php echo $area->reddesign_area_id ?>" class="span12 addColorButton"  <?php echo $allColorsHide; ?>>
+												<div id="addColorContainer<?php echo $area->reddesign_area_id ?>" class="span12 addColorButton" <?php echo $allColorsHide; ?> >
 													<button class="btn btn-mini btn-success" id="addColorButton<?php echo $area->reddesign_area_id ?>" type="button">
 														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ADD_COLOR'); ?>
 													</button>
 												</div>
 
-												<div id="selectedColorsPalette<?php echo $area->reddesign_area_id ?>" class="span12  <?php echo $allColorsHide; ?> ">
+												<?php $colorCodes = explode(',', $area->color_code); ?>
+												<div id="selectedColorsPalette<?php echo $area->reddesign_area_id ?>" class="span12" <?php echo $allColorsHide; ?> >
+													<?php foreach ($colorCodes as $colorCode) : ?>
+														<?php if (!empty($colorCode) && $colorCode != 1) : ?>
+															<div class="colorDiv" style="background-color: <?php echo $colorCode; ?>;"><i class="glyphicon icon-remove"></i></div>
+														<?php endif; ?>
+													<?php endforeach; ?>
 												</div>
 
 												<input type="hidden"
+													   id="colorCodes<?php echo $area->reddesign_area_id ?>"
+													   name="colorCodes<?php echo $area->reddesign_area_id ?>"
+													   value="<?php echo $area->color_code; ?>"
+													/>
 											</div>
 
 											<div id="colorsContainer<?php echo $area->reddesign_area_id ?>" class="span6" <?php echo $allColorsHide; ?>>

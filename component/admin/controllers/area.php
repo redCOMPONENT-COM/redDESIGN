@@ -94,4 +94,24 @@ class ReddesignControllerArea extends FOFController
 
 		echo json_encode($items);
 	}
+
+	/**
+	 * Saves text color for an area.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function ajaxSaveColors()
+	{
+		$areaId		= $this->input->getInt('reddesign_area_id', null);
+		$colorCodes = $this->input->getString('color_code', '');
+
+		$model = $this->getThisModel();
+		$item = $model->getItem($areaId);
+
+		$item->color_code = $colorCodes;
+
+		$model->save($item);
+	}
 }
