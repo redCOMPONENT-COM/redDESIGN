@@ -36,14 +36,213 @@ akeeba.jQuery(document).ready(
 		});
 
 		<?php foreach ($this->areas as  $area) : ?>
-		var reddesign_area_id = parseInt(<?php echo $area->reddesign_area_id;?>);
-		akeeba.jQuery('#colorpickerHolderC' + reddesign_area_id).ColorPicker({flat: true, designId:reddesign_area_id,
-			onChange: function (hsb, hex, rgb, reddesign_area_id) {
-				document.getElementById('color_code'+reddesign_area_id).value = hex; // Edited
-			}});
-		<?php endforeach; ?>
+			var colorPicker<?php echo $area->reddesign_area_id ?> = akeeba.jQuery.farbtastic("#colorPickerContainer<?php echo $area->reddesign_area_id ?>");
+			colorPicker<?php echo $area->reddesign_area_id ?>.linkTo("#colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>");
 
-});
+			akeeba.jQuery(document).on("keyup", "#C<?php echo $area->reddesign_area_id; ?>", function() {
+				var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
+				colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+			});
+
+			akeeba.jQuery(document).on("keyup", "#M<?php echo $area->reddesign_area_id; ?>", function() {
+				var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
+				colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+			});
+
+			akeeba.jQuery(document).on("keyup", "#Y<?php echo $area->reddesign_area_id; ?>", function() {
+				var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
+				colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+			});
+
+			akeeba.jQuery(document).on("keyup", "#K<?php echo $area->reddesign_area_id; ?>", function() {
+				var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
+				colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+			});
+
+			akeeba.jQuery(document).on("keyup", "#colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>", function() {
+				var hex = akeeba.jQuery("#colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>").val();
+				loadCMYKValues(hex, parseInt("<?php echo $area->reddesign_area_id; ?>"));
+			});
+
+			akeeba.jQuery(document).on("mouseup", "#colorPickerContainer<?php echo $area->reddesign_area_id; ?>", function() {
+				var hex = akeeba.jQuery("#colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>").val();
+				loadCMYKValues(hex, parseInt("<?php echo $area->reddesign_area_id; ?>"));
+			});
+
+			akeeba.jQuery("#allColors<?php echo $area->reddesign_area_id; ?>").click(function () {
+				akeeba.jQuery("#colorsContainer<?php echo $area->reddesign_area_id; ?>").toggle(!this.checked);
+				akeeba.jQuery("#addColorContainer<?php echo $area->reddesign_area_id; ?>").toggle(!this.checked);
+				akeeba.jQuery("#selectedColorsPalette<?php echo $area->reddesign_area_id; ?>").toggle(!this.checked);
+			});
+
+
+			akeeba.jQuery("#addColorButton<?php echo $area->reddesign_area_id ?>").click(function () {
+				addColorToList(parseInt("<?php echo $area->reddesign_area_id; ?>"))
+			});
+		<?php endforeach; ?>
+	}
+);
+
+/**
+ * Adds selected color to the list.
+ *
+ * @param areaId integer Area ID.
+ *
+ * @return void
+ */
+function addColorToList(areaId)
+{
+
+	var selectedColor = akeeba.jQuery("#colorPickerSelectedColor" + areaId).val();
+	var colorCodes = akeeba.jQuery("#colorCodes" + areaId).val();
+
+	// Check if the same color is already added.
+	if (colorCodes.indexOf(selectedColor) == -1)
+	{
+		// Create color div element.
+		var element = '<div class="colorDiv" ' +
+			'id="' + areaId + '-' + selectedColor.replace("#","") + '" ' +
+			'style="background-color:' + selectedColor + ';" ' +
+			'onclick="removeColorFromList(' + areaId + ', \'' + selectedColor + '\');">' +
+			'<i class="glyphicon icon-remove"></i>' +
+			'<input type="hidden" value="' + selectedColor + '" />' +
+		'</div>';
+		akeeba.jQuery("#selectedColorsPalette" + areaId).append(element);
+
+		// Update color codes hidden input field.
+		if (colorCodes == "" || parseInt(colorCodes) == 1)
+		{
+			colorCodes = selectedColor;
+		}
+		else
+		{
+			colorCodes = colorCodes + "," + selectedColor;
+		}
+
+		akeeba.jQuery("#colorCodes" + areaId).val(colorCodes);
+		akeeba.jQuery.ajax({
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxUpdateColors&format=raw",
+			data: {
+				reddesign_area_id: areaId,
+				color_code: colorCodes
+			},
+			type: "post",
+			error: function (data) {
+				alert(data);
+			}
+		});
+	}
+	else
+	{
+		alert("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_COLOR_ALREADY_ADDED'); ?>");
+	}
+}
+
+/**
+ * Removes color from the list and from the database.
+ *
+ * @param areaId int Area ID.
+ * @param colorToRemove string Hexadecimal code of the color to be removed.
+ */
+function removeColorFromList(areaId, colorToRemove)
+{
+	var colorCodes = akeeba.jQuery("#colorCodes" + areaId).val();
+	colorCodes = colorCodes.split(",");
+
+	colorCodes = jQuery.grep(colorCodes, function(value) {
+		return value != colorToRemove;
+	});
+
+	colorCodes = colorCodes.join(",");
+
+	akeeba.jQuery("#colorCodes" + areaId).val(colorCodes);
+
+	akeeba.jQuery.ajax({
+		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxUpdateColors&format=raw",
+		data: {
+			reddesign_area_id: areaId,
+			color_code: colorCodes
+		},
+		type: "post",
+		error: function (data) {
+			alert(data);
+		}
+	});
+
+	akeeba.jQuery("#" + areaId + "-" + colorToRemove.replace("#","")).remove();
+}
+
+/**
+ * Gets hexadecimal value of the color generated by entering values in CMYK fields.
+ *
+ * @param areaId int Area ID
+ *
+ * @return string hexadecimal value
+ */
+function getNewHexColor(areaId)
+{
+	var c = akeeba.jQuery("#C" + areaId).val();
+	var m = akeeba.jQuery("#M" + areaId).val();
+	var y = akeeba.jQuery("#Y" + areaId).val();
+	var k = akeeba.jQuery("#K" + areaId).val();
+
+	var colorObject = new CMYK(c, m, y, k);
+	var rgb = ColorConverter.toRGB(colorObject);
+
+	return rgbToHex(rgb.r, rgb.g, rgb.b);
+}
+
+/**
+ * Converts hexadecimal value into RGB value
+ *
+ * @param r int Red value
+ * @param g int Green value
+ * @param b int Blue value
+ *
+ * @return string hexadecimal value
+ */
+function rgbToHex(r, g, b) {
+	return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+/**
+ * Load CMYK values into related CMYK area fields.
+ * Gets them from a hexadecimal value.
+ *
+ * @param hex int Hexadecimal value.
+ * @param areaId int Area ID.
+ */
+function loadCMYKValues(hex, areaId) {
+	var colorObject = new RGB(hexToRgb(hex).r, hexToRgb(hex).g, hexToRgb(hex).b);
+	var cmyk = ColorConverter.toCMYK(colorObject);
+
+	akeeba.jQuery("#C" + areaId).val(cmyk.c);
+	akeeba.jQuery("#M" + areaId).val(cmyk.m);
+	akeeba.jQuery("#Y" + areaId).val(cmyk.y);
+	akeeba.jQuery("#K" + areaId).val(cmyk.k);
+}
+
+/**
+ * Converts hexadecimal value to RGB value.
+ *
+ * @param hex string Hexadecimal value.
+ *
+ * @return object with r,g and b values.
+ */
+function hexToRgb(hex) {
+	// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+	var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+	hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+		return r + r + g + g + b + b;
+	});
+
+	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	return result ? {
+		r: parseInt(result[1], 16),
+		g: parseInt(result[2], 16),
+		b: parseInt(result[3], 16)
+	} : null;
+}
 
 /**
  * Selects area with given parameters. Used onkeyup event in parameter input fields.
@@ -456,307 +655,88 @@ function addAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, wi
 		rowClass = "row0";
 	}
 	akeeba.jQuery('#noAreaMessage').remove();
-	akeeba.jQuery("#areasTBody").append(
-		'<tr id="areaRow' + reddesign_area_id + '" class="' + rowClass + '">' +
-			'<td>' + reddesign_area_id + '</td>' +
-			'<td>' +
-			'<a href="#" onclick="selectAreaForEdit(' + reddesign_area_id + ',\'' +
-			title + '\',' +
-			x1_pos + ',' +
-			y1_pos + ',' +
-			x2_pos + ',' +
-			y2_pos + ',' +
-			width  + ',' +
-			height + ')">' +
-			'<strong>' + title + '</strong>' +
-			'</a>' +
-			'</td>' +
-			'<td>' +
-			'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong> ' +
-			(width * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
-			'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong> ' +
-			(height * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
-			'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong> ' +
-			(x1_pos * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
-			'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong> ' +
-			(y1_pos * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
-			'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong> ' +
-			(x2_pos * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>, ' +
-			'<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong> ' +
-			(y2_pos * pxToUnit).toFixed(0) + '<?php echo $this->unit; ?>' +
-			'</td>' +
-			'<td>' +
-			'<button type="button" class="btn btn-primary btn-mini" onclick="showAreaSettings(\'' + reddesign_area_id + '\');">' +
-			'<span><?php echo JText::_('COM_REDDESIGN_COMMON_SETTINGS'); ?></span>' +
-			'</button>' +
-			'</td>' +
-			'<td>' +
-			'<button type="button" class="btn btn-danger btn-mini" onclick="removeArea(\'' + reddesign_area_id + '\');">' +
-			'<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>' +
-			'</button>' +
-			'</td>' +
-			'</tr>' +
-			'<tr id="areaSettingsRow' + reddesign_area_id + '"	class="' + rowClass + ' hide areaSettingsRow">' +
-			'<td colspan="5" >' +
 
-			'<div id="row">' +
+	var areasRowData = {
+		reddesignAreaId: reddesign_area_id,
+		title:			 title,
+		x1:				 x1_pos,
+		x1ToUnit:		(x1_pos * pxToUnit).toFixed(0),
+		y1:				 y1_pos,
+		y1ToUnit:		(y1_pos * pxToUnit).toFixed(0),
+		x2:				 x2_pos,
+		x2ToUnit:		(x2_pos * pxToUnit).toFixed(0),
+		y2:				 y2_pos,
+		y2ToUnit:		(y2_pos * pxToUnit).toFixed(0),
+		width:			 width,
+		widthToUnit:	(width * pxToUnit).toFixed(0),
+		height:			 height,
+		heightToUnit:	(height * pxToUnit).toFixed(0),
+		rowClass: rowClass
+	};
 
-			'<div class="span3">' +
+	var areasRowTemplate = akeeba.jQuery("#areaRowsMustache").html();
+	var areaRowRendered = Mustache.render(areasRowTemplate, areasRowData);
 
-			<?php if($this->item->fontsizer != 'auto') : ?>
-			'<div class="control-group">' +
-			'<label for="areaFontAlignment' + reddesign_area_id + '">' +
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALIGNMENT') ?>' +
-			'</label>' +
-			'<select id="areaFontAlignment' + reddesign_area_id + '" name="areaFontAlignment' + reddesign_area_id + '"></select>' +
-			'</div>' +
-			<?php endif; ?>
-
-			'<div class="control-group">' +
-			'<label for="areaFonts' + reddesign_area_id + '[]">' +
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALLOWED_FONTS') ?>' +
-			'</label>' +
-			'<select id="areaFonts' + reddesign_area_id + '" name="areaFonts' + reddesign_area_id + '[]" multiple="multiple"></select>' +
-
-			'</div>' +
-
-			'</div>' +
-
-			<?php if($this->item->fontsizer != 'auto') : ?>
-
-			'<div class="span2">' +
-
-			<?php if($this->item->fontsizer == 'dropdown_numbers' || $this->item->fontsizer == 'dropdown_labels') : ?>
-			'<div class="control-group">' +
-			'<label for="fontsizerDropdown' + reddesign_area_id + '">' +
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>' +
-			'</label>' +
-			'<textarea class="input-small" style="resize: none;" id="fontsizerDropdown' + reddesign_area_id + '"rows="7"></textarea>' +
-			'<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC') ?></span>' +
-			'</div>' +
-			<?php elseif($this->item->fontsizer == 'slider') : ?>
-			'<div class="control-group">' +
-			'<label for="fontsizerSliderDefault' + reddesign_area_id + '">' +
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_FONT_SIZE') ?>' +
-			'</label>' +
-			'<input class="input-small" ' +
-			'type="text" ' +
-			'value="" ' +
-			'maxlength="3" ' +
-			'id="fontsizerSliderDefault' + reddesign_area_id + '" ' +
-			'name="fontsizerSliderDefault' + reddesign_area_id + '" ' +
-			'/>' +
-			'</div>' +
-			'<div class="control-group">' +
-			'<label for="fontsizerSliderMin' + reddesign_area_id + '">' +
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MIN_FONT_SIZE') ?>' +
-			'</label>' +
-			'<input class="input-small" ' +
-			'type="text" ' +
-			'value="" ' +
-			'maxlength="3" ' +
-			'id="fontsizerSliderMin' + reddesign_area_id + '" ' +
-			'name="fontsizerSliderMin' + reddesign_area_id + '" ' +
-			'/>' +
-			'</div>' +
-			'<div class="control-group">' +
-			'<label for="fontsizerSliderMax' + reddesign_area_id + '">' +
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAX_FONT_SITE') ?>' +
-			'</label>' +
-			'<input class="input-small" ' +
-			'type="text" ' +
-			'value="" ' +
-			'maxlength="3" ' +
-			'id="fontsizerSliderMax' + reddesign_area_id + '" ' +
-			'name="fontsizerSliderMax' + reddesign_area_id + '" ' +
-			'/>' +
-			'</div>' +
-			<?php endif; ?>
-
-			'</div>' +
-
-			<?php endif; ?>
-
-			'<div class="span3">' +
-
-			'<div class="control-group">' +
-			'<label for="inputFieldType' + reddesign_area_id + '">' +
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_INPUT_FIELD_TYPE') ?>' +
-			'</label>' +
-			'<input id="inputFieldType' + reddesign_area_id + '[]0" ' +
-			'type="radio" ' +
-			'checked="checked" ' +
-			'value="0" ' +
-			'name="inputFieldType' + reddesign_area_id + '[]" ' +
-			'onclick="changeInputFieldType(' + reddesign_area_id + ');" ' +
-			'/>' +
-			'<label id="inputFieldType' + reddesign_area_id + '[]0-lbl" class="radiobtn" for="inputFieldType' + reddesign_area_id + '[]0">' +
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTBOX'); ?>' +
-			'</label>' +
-			'<input id="inputFieldType1[]' + reddesign_area_id + '" ' +
-			'type="radio" ' +
-			'value="1" ' +
-			'name="inputFieldType' + reddesign_area_id + '[]" ' +
-			'onclick="changeInputFieldType(' + reddesign_area_id + ');" ' +
-			'/>' +
-			'<label id="inputFieldType1[]' + reddesign_area_id + '-lbl" class="radiobtn" for="inputFieldType' + reddesign_area_id + '[]1">' +
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTAREA'); ?>' +
-			'</label>' +
-			'</div>' +
-
-			'<div class="control-group">' +
-			'<label for="defaultText' + reddesign_area_id + '">' +
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_TEXT') ?>' +
-			'</label>' +
-			'<div id="defaultTextContainer' + reddesign_area_id + '">' +
-			'<textarea class="input-small" ' +
-			'style="resize: none;" ' +
-			'id="defaultText' + reddesign_area_id + '" ' +
-			'name="defaultText' + reddesign_area_id + '" ' +
-			'></textarea>' +
-			'</div>' +
-			'</div>' +
-
-			'<div class="control-group">' +
-			'<label for="maximumCharsAllowed' + reddesign_area_id + '">' +
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAXIMUM_CHARS') ?>' +
-			'</label>' +
-			'<input class="input-small" ' +
-			'type="text" ' +
-			'value="" ' +
-			'id="maximumCharsAllowed' + reddesign_area_id + '" ' +
-			'name="maximumCharsAllowed' + reddesign_area_id + '" ' +
-			'/>' +
-			'</div>' +
-
-			'<div class="control-group">' +
-			'<label id="maximumLinesAllowedLabel' + reddesign_area_id + '" for="maximumLinesAllowed' + reddesign_area_id + '" style="display: none;">' +
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAXIMUM_LINES') ?>' +
-			'</label>' +
-			'<input class="input-small" ' +
-			'type="text" ' +
-			'value="" ' +
-			'id="maximumLinesAllowed' + reddesign_area_id + '" ' +
-			'name="maximumLinesAllowed' + reddesign_area_id + '" ' +
-			'style="display: none;" ' +
-			'/>' +
-			'</div>' +
-
-			'</div>' +
-
-			'<div class="span3">' +
-
-			'<div class="control-group">'+
-			'<label class="control-label ">'+
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR'); ?>'+
-			'</label>'+
-			'<div class="controls">'+
-			'<input  class="inputbox" ' +
-			'type="radio" ' +
-			'name="allColor' + reddesign_area_id + '" ' +
-			'value ="0" ' +
-			'onclick="hideColorPicker(' + reddesign_area_id + ');" ' +
-			'checked="checked">' +
-			'<label class="radiobtn"  for="allColor' + reddesign_area_id + '">' +
-			'<?php echo JText::_('JNO'); ?>' +
-			'</label>&nbsp;' +
-			'<input class="inputbox" ' +
-			'type="radio" ' +
-			'name="allColor' + reddesign_area_id + '" ' +
-			'value ="1" ' +
-			'onclick="hideColorPicker(' + reddesign_area_id + ');">' +
-			'<label class="radiobtn"  for="allColor' + reddesign_area_id + '">' +
-			'<?php echo JText::_('JYES'); ?>' +
-			'</label>' +
-			'<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_USE_ALLCOLOR_DESC'); ?></span>'+
-			'</div>' +
-			'</div>' +
-			'<div id="allowedColorsRow' + reddesign_area_id + '">' +
-			'<div class="control-group">' +
-			'<div class="controls">' +
-			'<input type="text" ' +
-			'class="input-small" ' +
-			'value="ff0000" ' +
-			'id="color_code' + reddesign_area_id + '" ' +
-			'name="color_code' + reddesign_area_id + '" ' +
-			'/>&nbsp;' +
-			'<button type="button" class="btn btn-small btn-success" onclick="addNewcolor(' + reddesign_area_id + ');">' +
-			'<span><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ADD_COLOR'); ?></span>' +
-			'</button>' +
-			'</div>' +
-			'</div>' +
-			'<div class="control-group">'+
-			'<label class="control-label ">'+
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_ALLOWED_COLOR'); ?>'+
-			'</label>'+
-			'<div class="controls">'+
-			'<table class="loadcolor" id="extra_table' + reddesign_area_id + '" cellpadding="2" cellspacing="2">'+
-			'</table>' +
-			'</div>' +
-			'</div>' +
-			'</div>' +
-
-			'</div>' +
-
-			'<div class="areSettingRowheight">' +
-			'<div id="colorPicker' + reddesign_area_id + '" >' +
-			'<div class="control-group" >' +
-			'<label class="control-label ">' +
-			'<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLOR_TEXT'); ?>' +
-			'</label>' +
-			'<div class="controls">' +
-			'<p id="colorpickerHolderC' + reddesign_area_id + '"></p>' +
-			'</div>' +
-			'</div>' +
-			'</div>' +
-			'</div>' +
-
-			'<div class="row span12 offset5">' +
-
-			'<button id="saveAreaSettings' + reddesign_area_id + '" ' +
-			'type="button" ' +
-			'class="btn btn-success" ' +
-			'data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVE_AREA_SETTINGS'); ?>" ' +
-			'onclick="saveAreaSettings(' + reddesign_area_id + ');">' +
-			'<span>' +
-			'<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>' +
-			'</span>' +
-			'</button>' +
-
-			'<button type="button" ' +
-			'class="btn" ' +
-			'onclick="showAreaSettings(' + reddesign_area_id + ');">' +
-			'<span>' +
-			'<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>' +
-			'</span>' +
-			'</button>' +
-
-			'</div>' +
-
-			'</td>' +
-			'</tr>'
-	);
-
+	akeeba.jQuery("#areasTBody").append(areaRowRendered);
 
 	<?php foreach($this->alignmentOptions as  $alginmentOption) : ?>
-	akeeba.jQuery('#areaFontAlignment' + reddesign_area_id).append(
-		'<option value="<?php echo $alginmentOption->value; ?>">' +
-			'<?php echo $alginmentOption->text; ?>' +
+		akeeba.jQuery("#areaFontAlignment" + reddesign_area_id).append(
+			'<option value="<?php echo $alginmentOption->value; ?>">' +
+				'<?php echo $alginmentOption->text; ?>' +
 			'</option>'
-	);
+		);
 	<?php endforeach; ?>
 
 	<?php foreach($this->fontsOptions as  $fontsOption) : ?>
-	akeeba.jQuery('#areaFonts' + reddesign_area_id).append(
-		'<option value="<?php echo $fontsOption->value; ?>">' +
-			'<?php echo $fontsOption->text; ?>' +
-			'</option>');
+		akeeba.jQuery("#areaFonts" + reddesign_area_id).append(
+			'<option value="<?php echo $fontsOption->value; ?>">' +
+				'<?php echo $fontsOption->text; ?>' +
+			'</option>'
+		);
 	<?php endforeach; ?>
 
-	akeeba.jQuery('#colorpickerHolderC' + reddesign_area_id).ColorPicker({flat: true,
-		onChange: function (hsb, hex, rgb) {
-			document.getElementById('color_code'+reddesign_area_id).value = hex; // Edited
-		}});
+	var colorPicker = akeeba.jQuery.farbtastic("#colorPickerContainer" + reddesign_area_id);
+	colorPicker.linkTo("#colorPickerSelectedColor" + reddesign_area_id);
+
+	akeeba.jQuery(document).on("keyup", "#C" + reddesign_area_id, function() {
+		var newColor = getNewHexColor(reddesign_area_id);
+		colorPicker.setColor(newColor);
+	});
+
+	akeeba.jQuery(document).on("keyup", "#M" + reddesign_area_id, function() {
+		var newColor = getNewHexColor(reddesign_area_id);
+		colorPicker.setColor(newColor);
+	});
+
+	akeeba.jQuery(document).on("keyup", "#Y" + reddesign_area_id, function() {
+		var newColor = getNewHexColor(reddesign_area_id);
+		colorPicker.setColor(newColor);
+	});
+
+	akeeba.jQuery(document).on("keyup", "#K" + reddesign_area_id, function() {
+		var newColor = getNewHexColor(reddesign_area_id);
+		colorPicker.setColor(newColor);
+	});
+
+	akeeba.jQuery(document).on("keyup", "#colorPickerSelectedColor" + reddesign_area_id, function() {
+		var hex = akeeba.jQuery("#colorPickerSelectedColor" + reddesign_area_id).val();
+		loadCMYKValues(hex, reddesign_area_id);
+	});
+
+	akeeba.jQuery(document).on("mouseup", "#colorPickerContainer" + reddesign_area_id, function() {
+		var hex = akeeba.jQuery("#colorPickerSelectedColor" + reddesign_area_id).val();
+		loadCMYKValues(hex, reddesign_area_id);
+	});
+
+	akeeba.jQuery("#allColors" + reddesign_area_id).click(function () {
+		akeeba.jQuery("#colorsContainer" + reddesign_area_id).toggle(!this.checked);
+		akeeba.jQuery("#addColorContainer" + reddesign_area_id).toggle(!this.checked);
+		akeeba.jQuery("#selectedColorsPalette" + reddesign_area_id).toggle(!this.checked);
+	});
+
+	akeeba.jQuery("#addColorButton" + reddesign_area_id).click(function () {
+		addColorToList(reddesign_area_id);
+	});
 }
 
 /**
@@ -929,27 +909,16 @@ function saveAreaSettings(reddesign_area_id) {
 	var fontsizerSliderDefault = akeeba.jQuery("#fontsizerSliderDefault" + reddesign_area_id).val();
 	var fontsizerSliderMin = akeeba.jQuery("#fontsizerSliderMin" + reddesign_area_id).val();
 	var fontsizerSliderMax = akeeba.jQuery("#fontsizerSliderMax" + reddesign_area_id).val();
-	var inputFieldType = akeeba.jQuery('[name="inputFieldType' + reddesign_area_id + '[]"]:checked').val();
+	var inputFieldType = akeeba.jQuery("#inputFieldType" + reddesign_area_id).val();
 	var maximumCharsAllowed = akeeba.jQuery("#maximumCharsAllowed" + reddesign_area_id).val();
 	var maximumLinesAllowed = akeeba.jQuery("#maximumLinesAllowed" + reddesign_area_id).val();
 	var areaFonts = akeeba.jQuery('[name="areaFonts' + reddesign_area_id + '[]"]').val();
-	var colorCodes = akeeba.jQuery('[name="colorCodes' + reddesign_area_id + '[]"]');
-	var allowAllColor = akeeba.jQuery("input[name='allColor"+reddesign_area_id+"']:checked").val();
+	var colorCodes = akeeba.jQuery("#colorCodes" + reddesign_area_id).val();
 	var defaultText = akeeba.jQuery("#defaultText" + reddesign_area_id).val();
 
-	if(allowAllColor==1)
+	if (akeeba.jQuery("#allColors" + reddesign_area_id).is(":checked"))
 	{
 		colorCodes = 1;
-		akeeba.jQuery("#extra_table"+reddesign_area_id).html("");
-	}
-	else
-	{
-		var arr = [];
-		for (var i = 0; i < colorCodes.length ; i++) {
-			var colorCode = "#"+colorCodes[i].value;
-			arr.push(colorCode);
-		}
-		colorCodes = arr.join(",");
 	}
 
 	akeeba.jQuery.ajax({
@@ -979,101 +948,23 @@ function saveAreaSettings(reddesign_area_id) {
 }
 
 /**
- * Adds new color row
- *
- * @param reddesign_area_id
- */
-function addNewcolor(reddesign_area_id)
-{
-	var color_code = akeeba.jQuery("#color_code" + reddesign_area_id).val();
-	if(color_code!="")
-	{
-		colorcode = "#"+color_code;
-	}
-
-	akeeba.jQuery("#extra_table"+reddesign_area_id).append(
-		'<tr>' +
-			'<td>' +
-			'<div class="colorSelector_list" >' +
-			'<div style=" background-color:' + colorcode + '" >&nbsp;</div>' +
-			'</div>' +
-			'</td>' +
-			'<td>' +
-			'<div>' + colorcode + '</div>' +
-			'<input type="hidden" ' +
-			'value="' + color_code +'" ' +
-			'class="colorCodes' + reddesign_area_id + '" ' +
-			'name="colorCodes' + reddesign_area_id + '[]"  ' +
-			'id="colorCodes' + reddesign_area_id + '">' +
-			'</td>' +
-			'<td>' +
-			'<div>' +
-			'<input type="hidden" name="colour_id'+reddesign_area_id+'[]" id="colour_id'+reddesign_area_id+'" value="'+color_code+'">'+
-			'<button type="button" class="btn btn-small btn-danger delete" onclick="deleteColor(this,' + reddesign_area_id + ');">' +
-			'<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>' +
-			'</button>' +
-			'</div>'+
-			'</td>'+
-			'</tr>'
-	);
-}
-
-/**
- * Hides colorpicker
- *
- * @param reddesign_area_id
- */
-function hideColorPicker(reddesign_area_id)
-{
-	if(akeeba.jQuery("input[name='allColor"+reddesign_area_id+"']:checked").val()==1)
-	{
-		akeeba.jQuery("#colorPicker"+reddesign_area_id).hide();
-		akeeba.jQuery("#allowedColorsRow"+reddesign_area_id).hide();
-	}
-	else
-	{
-		akeeba.jQuery("#colorPicker"+reddesign_area_id).show();
-		akeeba.jQuery("#allowedColorsRow"+reddesign_area_id).show();
-	}
-}
-
-/**
  * Controls what needs to be shown regarding to input field type.
  *
  * @param reddesign_area_id
  */
 function changeInputFieldType(reddesign_area_id)
 {
-	var selectedType = akeeba.jQuery('[name="inputFieldType' + reddesign_area_id + '[]"]:checked').val();
+	var selectedType = akeeba.jQuery("#inputFieldType" + reddesign_area_id).val();
 
 	if (selectedType == 1)
 	{
-		akeeba.jQuery("#maximumLinesAllowed" + reddesign_area_id).css("display", "inline");
-		akeeba.jQuery("#maximumLinesAllowedLabel" + reddesign_area_id).css("display", "inline");
+		akeeba.jQuery("#maximumLinesAllowedContainer" + reddesign_area_id).css("display", "inline");
 	}
 	else
 	{
-		akeeba.jQuery("#maximumLinesAllowed" + reddesign_area_id).css("display", "none");
-		akeeba.jQuery("#maximumLinesAllowedLabel" + reddesign_area_id).css("display", "none");
+		akeeba.jQuery("#maximumLinesAllowedContainer" + reddesign_area_id).css("display", "none");
 	}
 }
-
-/**
- * Delete color code from DB and remove that color row
- *
- * @param r
- * @param reddesign_area_id
- */
-function deleteColor(r,reddesign_area_id)
-{
-	var i=r.parentNode.parentNode.parentNode.rowIndex;
-	document.getElementById('extra_table'+reddesign_area_id).deleteRow(i);
-
-	// Do AJAX Delete
-	saveAreaSettings(reddesign_area_id);
-	// End
-}
-
 
 </script>
 

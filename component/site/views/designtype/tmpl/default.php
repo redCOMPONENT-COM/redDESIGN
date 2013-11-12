@@ -122,17 +122,6 @@ JHtml::_('behavior.modal');
 					customize(3);
 				<?php endif; ?>
 
-				// Colors.
-				var reddesign_area_id = parseInt(<?php echo $area->reddesign_area_id;?>);
-				akeeba.jQuery("#color-selector" + reddesign_area_id).ColorPicker({
-					designId:reddesign_area_id,
-					color: "#000000",
-					onChange: function (hsb, hex, rgb, reddesign_area_id) {
-						akeeba.jQuery("#color-selector" +reddesign_area_id+ " div").css("backgroundColor", "#" + hex);
-						document.getElementById("colorCode"+reddesign_area_id).value = hex; // Edited
-					}
-				});
-
 				// Delay AJAX submit because of typing.
 				var typingTimer;
 				var doneTypingInterval = 400;
@@ -141,20 +130,137 @@ JHtml::_('behavior.modal');
 					akeeba.jQuery("#fontSize" + reddesign_area_id).slider()
 						.on("slide", function(ev){
 							clearTimeout(typingTimer);
-				    			typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
+							typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 						});
 				<?php endif; ?>
 
 				// Onkeyup, start the countdown.
-				akeeba.jQuery("#textArea"+reddesign_area_id).keyup(function(){
+				akeeba.jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").keyup(function(){
 					clearTimeout(typingTimer);
 					typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 				});
 
+				<?php if ($area->color_code == 1 || empty($area->color_code)) : ?>
+					var colorPicker<?php echo $area->reddesign_area_id ?> = akeeba.jQuery.farbtastic("#colorPickerContainer<?php echo $area->reddesign_area_id ?>");
+					colorPicker<?php echo $area->reddesign_area_id ?>.linkTo("#colorCode<?php echo $area->reddesign_area_id; ?>");
+
+					akeeba.jQuery(document).on("keyup", "#C<?php echo $area->reddesign_area_id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
+						colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+						clearTimeout(typingTimer);
+						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
+					});
+
+					akeeba.jQuery(document).on("keyup", "#M<?php echo $area->reddesign_area_id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
+						colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+						clearTimeout(typingTimer);
+						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
+					});
+
+					akeeba.jQuery(document).on("keyup", "#Y<?php echo $area->reddesign_area_id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
+						colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+						clearTimeout(typingTimer);
+						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
+					});
+
+					akeeba.jQuery(document).on("keyup", "#K<?php echo $area->reddesign_area_id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
+						colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+						clearTimeout(typingTimer);
+						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
+					});
+
+					akeeba.jQuery(document).on("keyup", "#colorCode<?php echo $area->reddesign_area_id; ?>", function() {
+						var hex = akeeba.jQuery("#colorCode<?php echo $area->reddesign_area_id; ?>").val();
+						loadCMYKValues(hex, parseInt("<?php echo $area->reddesign_area_id; ?>"));
+						clearTimeout(typingTimer);
+						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
+					});
+
+					akeeba.jQuery(document).on("mouseup", "#colorPickerContainer<?php echo $area->reddesign_area_id; ?>", function() {
+						var hex = akeeba.jQuery("#colorCode<?php echo $area->reddesign_area_id; ?>").val();
+						loadCMYKValues(hex, parseInt("<?php echo $area->reddesign_area_id; ?>"));
+						customize(0);
+					});
+				<?php endif; ?>
 			<?php endforeach; ?>
 
 		}
 	);
+
+	/**
+	 * Load CMYK values into related CMYK area fields.
+	 * Gets them from a hexadecimal value.
+	 *
+	 * @param hex int Hexadecimal value.
+	 * @param areaId int Area ID.
+	 */
+	function loadCMYKValues(hex, areaId) {
+		var colorObject = new RGB(hexToRgb(hex).r, hexToRgb(hex).g, hexToRgb(hex).b);
+		var cmyk = ColorConverter.toCMYK(colorObject);
+
+		akeeba.jQuery("#C" + areaId).val(cmyk.c);
+		akeeba.jQuery("#M" + areaId).val(cmyk.m);
+		akeeba.jQuery("#Y" + areaId).val(cmyk.y);
+		akeeba.jQuery("#K" + areaId).val(cmyk.k);
+	}
+
+	/**
+	 * Converts hexadecimal value to RGB value.
+	 *
+	 * @param hex string Hexadecimal value.
+	 *
+	 * @return object with r,g and b values.
+	 */
+	function hexToRgb(hex) {
+		// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+		var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+		hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+			return r + r + g + g + b + b;
+		});
+
+		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+		return result ? {
+			r: parseInt(result[1], 16),
+			g: parseInt(result[2], 16),
+			b: parseInt(result[3], 16)
+		} : null;
+	}
+
+	/**
+	 * Gets hexadecimal value of the color generated by entering values in CMYK fields.
+	 *
+	 * @param areaId int Area ID
+	 *
+	 * @return string hexadecimal value
+	 */
+	function getNewHexColor(areaId)
+	{
+		var c = akeeba.jQuery("#C" + areaId).val();
+		var m = akeeba.jQuery("#M" + areaId).val();
+		var y = akeeba.jQuery("#Y" + areaId).val();
+		var k = akeeba.jQuery("#K" + areaId).val();
+
+		var colorObject = new CMYK(c, m, y, k);
+		var rgb = ColorConverter.toRGB(colorObject);
+
+		return rgbToHex(rgb.r, rgb.g, rgb.b);
+	}
+
+	/**
+	 * Converts hexadecimal value into RGB value
+	 *
+	 * @param r int Red value
+	 * @param g int Green value
+	 * @param b int Blue value
+	 *
+	 * @return string hexadecimal value
+	 */
+	function rgbToHex(r, g, b) {
+		return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+	}
 
 	/**
 	 * Sends customize data to server and retreives the resulting image.
@@ -166,13 +272,11 @@ JHtml::_('behavior.modal');
 		var customizeOrNot = 0;
 		var autoCustomizeParam = <?php echo $this->params->get('autoCustomize', 1); ?>;
 
-		<?php
-		/*
+		/**
 		 * 0 when customize function is called from an element different than button (textbox, font dropdown etc.)
 		 * 1 when customize function is called from the button
 		 * 3 when customize function is called from frames selection radio button
 		 */
-		?>
 
 		// Turn off or on customization according to the settings in config.xml.
 		if((button == 1 && autoCustomizeParam == 0) || (button == 1 && autoCustomizeParam == 2))
@@ -209,11 +313,14 @@ JHtml::_('behavior.modal');
 			};
 			<?php foreach($this->productionBackgroundAreas as $area) : ?>
 
+			var fontColor = akeeba.jQuery("#colorCode<?php echo $area->reddesign_area_id; ?>").val();
+			fontColor = fontColor.replace("#", "");
+
 			design.areas.push({
 				"id" : 			"<?php echo $area->reddesign_area_id; ?>",
 				"textArea" :	akeeba.jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").val(),
 				"fontArea" : 	akeeba.jQuery("#fontArea<?php echo $area->reddesign_area_id; ?>").val(),
-				"fontColor" :	akeeba.jQuery("#colorCode<?php echo $area->reddesign_area_id; ?>").val(),
+				"fontColor" :	fontColor,
 				"fontSize" :	akeeba.jQuery("#fontSize<?php echo $area->reddesign_area_id; ?>").val(),
 				"fontTypeId" :	akeeba.jQuery("#fontArea<?php echo $area->reddesign_area_id; ?>").val(),
 				"plg_dimention_base" :   akeeba.jQuery("#plg_dimention_base_<?php echo JRequest::getInt('pid');?>").val(),
