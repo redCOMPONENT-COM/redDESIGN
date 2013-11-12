@@ -9,6 +9,10 @@
 
 defined('_JEXEC') or die();
 
+// JS templating framework
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/mustache.js');
+
+// Select area JS includes.
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/jquery.imgareaselect.pack.js');
 FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/imgareaselect-animated.css');
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
@@ -28,6 +32,9 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 <?php else : ?>
 
 	<?php
+		// Load JS template for design area setting rows.
+		echo $this->loadTemplate('designareas_js_tmpl');
+
 		// Load dynamically created JS.
 		echo $this->loadTemplate('designareas_js');
 	?>
@@ -502,7 +509,12 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 												<div id="selectedColorsPalette<?php echo $area->reddesign_area_id ?>" class="span12" <?php echo $allColorsHide; ?> >
 													<?php foreach ($colorCodes as $colorCode) : ?>
 														<?php if (!empty($colorCode) && $colorCode != 1) : ?>
-															<div class="colorDiv" style="background-color: <?php echo $colorCode; ?>;"><i class="glyphicon icon-remove"></i></div>
+															<div class="colorDiv"
+																 id="<?php echo $area->reddesign_area_id . '-' . str_replace('#', '', $colorCode); ?>"
+																 style="background-color: <?php echo $colorCode; ?>;"
+																 onclick="removeColorFromList(<?php echo $area->reddesign_area_id ?>, '<?php echo $colorCode; ?>');">
+																<i class="glyphicon icon-remove"></i>
+															</div>
 														<?php endif; ?>
 													<?php endforeach; ?>
 												</div>
@@ -582,28 +594,26 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 									</fieldset>
 								</div>
 
-							<div class="span6 offset5">
-
-								<button id="saveAreaSettings<?php echo $area->reddesign_area_id; ?>"
-										type="button"
-										class="btn btn-success"
-										data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVE_AREA_SETTINGS'); ?>"
-										onclick="saveAreaSettings(<?php echo $area->reddesign_area_id; ?>);">
-									<span>
-										<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
-									</span>
-								</button>
-
-								<button type="button"
-										class="btn"
-										onclick="showAreaSettings(<?php echo $area->reddesign_area_id; ?>);">
-									<span>
-										<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>
-									</span>
-								</button>
+								<div class="span6 offset5">
+									<button id="saveAreaSettings<?php echo $area->reddesign_area_id; ?>"
+											type="button"
+											class="btn btn-success"
+											data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVE_AREA_SETTINGS'); ?>"
+											onclick="saveAreaSettings(<?php echo $area->reddesign_area_id; ?>);">
+										<span>
+											<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
+										</span>
+									</button>
+									<button type="button"
+											class="btn"
+											onclick="showAreaSettings(<?php echo $area->reddesign_area_id; ?>);">
+										<span>
+											<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>
+										</span>
+									</button>
+								</div>
 
 							</div>
-
 						</td>
 					</tr>
 				<?php endforeach; ?>
