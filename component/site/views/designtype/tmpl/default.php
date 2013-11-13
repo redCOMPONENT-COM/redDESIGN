@@ -14,7 +14,8 @@ JHtml::_('behavior.modal');
 /*
 {RedDesignBreakELEMENT} is a tag used in integration plugin to explode HTML string into smaller peaces. Those peaces are used in redSHOP templating.
 */
-
+$input         = JFactory::getApplication()->input;
+$productId     = $input->getInt('pid');
 ?>
 
 <?php // Part 0 - Title ?>
@@ -216,12 +217,12 @@ JHtml::_('behavior.modal');
 				"fontColor" :	akeeba.jQuery("#colorCode<?php echo $area->reddesign_area_id; ?>").val(),
 				"fontSize" :	akeeba.jQuery("#fontSize<?php echo $area->reddesign_area_id; ?>").val(),
 				"fontTypeId" :	akeeba.jQuery("#fontArea<?php echo $area->reddesign_area_id; ?>").val(),
-				"plg_dimention_base" :   akeeba.jQuery("#plg_dimention_base_<?php echo JRequest::getInt('pid');?>").val(),
-				"plg_dimention_base_input" :   akeeba.jQuery("#plg_dimention_base_input_<?php echo JRequest::getInt('pid');?>").val()
+				"plg_dimention_base" :   akeeba.jQuery("#plg_dimention_base_<?php echo $productId;?>").val(),
+				"plg_dimention_base_input" :   akeeba.jQuery("#plg_dimention_base_input_<?php echo $productId;?>").val()
 			});
 
 			var textareacount = akeeba.jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").val().replace(/ /g,'').length;
-			akeeba.jQuery("#rs_sticker_element_<?php echo JRequest::getInt('pid'); ?>").html(textareacount);
+			akeeba.jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
 
 			<?php endforeach; ?>
 
@@ -250,7 +251,7 @@ JHtml::_('behavior.modal');
 							akeeba.jQuery("#background-container").height("auto");
 						}, 5000);
 
-						akeeba.jQuery("#plg_dimention_base_input_<?php echo JRequest::getInt('pid');?>").attr({
+						akeeba.jQuery("#plg_dimention_base_input_<?php echo $productId;?>").attr({
 							'default-height' : json.autoSizeData[0].canvasHeight,
 							'default-width': json.autoSizeData[0].canvasWidth
 						});
