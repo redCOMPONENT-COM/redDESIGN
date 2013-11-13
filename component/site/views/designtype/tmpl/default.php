@@ -15,7 +15,7 @@ JHtml::_('behavior.modal');
 {RedDesignBreakELEMENT} is a tag used in integration plugin to explode HTML string into smaller peaces. Those peaces are used in redSHOP templating.
 */
 $input         = JFactory::getApplication()->input;
-$productId     = $input->getInt('pid');
+$productId     = $input->getInt('pid', 0);
 ?>
 
 <?php // Part 0 - Title ?>
