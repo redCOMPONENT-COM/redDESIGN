@@ -470,7 +470,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					}
 
 					function getExtraParams(frm) {
-						return "&redDesignData=" + frm.redDesignData.value;
+						return "&redDesignData=" + encodeURIComponent(frm.redDesignData.value);
 					}
 			';
 			$document->addScriptDeclaration($js);
