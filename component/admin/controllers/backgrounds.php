@@ -187,16 +187,16 @@ class ReddesignControllerBackgrounds extends FOFController
 			$designId = (int) $data['reddesign_designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
-			$backgroundsModel->unsetAllPDFBg($designId);
+			$backgroundsModel->unsetAllIsProductionBg($designId);
 		}
 
 		// If this new background will be the preview background, switch it against the previous preview background
-		if ((int) $data['isPreviewBg'])
+		if ((int) $data['isDefaultPreview'])
 		{
 			$designId = (int) $data['reddesign_designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
-			$backgroundsModel->unsetAllPreviewBg($designId);
+			$backgroundsModel->unsetAllIsDefaultPreview($designId);
 		}
 
 		return $data;

@@ -145,9 +145,9 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
 -- Table structure for table `#__reddesign_product_mapping`
 --
 CREATE TABLE IF NOT EXISTS `#__reddesign_product_mapping` (
-  `reddesign_designtype_id` INT(11) NOT NULL,
   `product_id`              INT(11) NOT NULL,
-  PRIMARY KEY (`reddesign_designtype_id`, `product_id`)
+  `reddesign_designtype_id` TEXT    NOT NULL,
+  PRIMARY KEY (`product_id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
@@ -170,10 +170,10 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_attribute_mapping` (
 -- Table structure for table `#__reddesign_orderitem_mapping`
 --
 CREATE TABLE IF NOT EXISTS `#__reddesign_orderitem_mapping` (
-  `order_item_id`  INT(11) NOT NULL,
+  `order_item_id`  INT(11)      NOT NULL,
   `productionPdf`  VARCHAR(255) NOT NULL,
   `productionEps`  VARCHAR(255) NOT NULL,
-  `redDesignData`  TEXT NOT NULL,
+  `redDesignData`  TEXT         NOT NULL,
   PRIMARY KEY (`order_item_id`)
 )
   ENGINE = InnoDB

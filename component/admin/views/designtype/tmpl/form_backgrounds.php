@@ -36,10 +36,13 @@ JHTML::_('behavior.modal');
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_EPS_FILE'); ?>
 				</th>
 				<th width="9%">
-					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_PREVIEW_BACKGROUND'); ?>
+					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_DEFAULT_PREVIEW_BACKGROUND'); ?>
 				</th>
 				<th width="9%">
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_PRODUCTION_BACKGROUND'); ?>
+				</th>
+				<th width="9%">
+					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_PREVIEW_BACKGROUND'); ?>
 				</th>
 				<th width="9%">
 					<?php echo JText::_('JPUBLISHED'); ?>
@@ -103,6 +106,9 @@ JHTML::_('behavior.modal');
 									</span>
 								</a>
 							<?php endif; ?>
+						</td>
+						<td align="center" width="9%">
+							<?php echo JHTML::_('grid.published', $background->isPreviewBg, $i); ?>
 						</td>
 						<td align="center" width="9%">
 							<?php echo JHTML::_('grid.published', $background, $i); ?>
