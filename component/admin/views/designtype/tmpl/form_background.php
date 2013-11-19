@@ -94,7 +94,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 			</div>
 		</div>
 
-		<div class="control-group previewbg">
+		<div class="control-group previewbg" style="display: none">
 			<label class="control-label " for="bg_thumbnail">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
 			</label>

@@ -158,36 +158,42 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	{
 		if ($data->product_type == 'redDESIGN')
 		{
+			$app = JFactory::getApplication();
 			$db = JFactory::getDbo();
 
-			// Get design type ID.
+			$designTypeId = $app->input->getInt('designTypeId', null);
+
+			// Get related design type IDs. They are related because multiple design types can be assigned to a redSHOP product.
 			$query = $db->getQuery(true);
 			$query->select($db->quoteName('reddesign_designtype_id'));
 			$query->from($db->quoteName('#__reddesign_product_mapping'));
 			$query->where($db->quoteName('product_id') . ' = ' . $data->product_id);
 			$db->setQuery($query);
-			$reddesignDesigntypeId = $db->loadResult();
+			$productRelatedDesigntypeIds = $db->loadResult();
 
-			// Get background ID so you can get areas.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_background_id'))
-				->from($db->quoteName('#__reddesign_backgrounds'))
-				->where($db->quoteName('isProductionBg') . ' = ' . 1)
-				->where($db->quoteName('reddesign_designtype_id') . ' = ' . $reddesignDesigntypeId);
-			$db->setQuery($query);
-			$backgroundId = $db->loadResult();
-
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_area_id'))
-				->from($db->quoteName('#__reddesign_areas'))
-				->where($db->quoteName('reddesign_background_id') . ' = ' . $backgroundId);
-			$db->setQuery($query);
-			$areas = $db->loadColumn();
+			if (empty($designTypeId))
+			{
+				$productRelatedDesigntypeIds = explode(',', $productRelatedDesigntypeIds);
+				$designTypeId = $productRelatedDesigntypeIds[0];
+				array_shift($productRelatedDesigntypeIds);
+				$productRelatedDesigntypeIds = implode(',', $productRelatedDesigntypeIds);
+			}
+			else
+			{
+				$productRelatedDesigntypeIds = str_replace($designTypeId, '', $productRelatedDesigntypeIds);
+				$productRelatedDesigntypeIds = explode(',', $productRelatedDesigntypeIds);
+				$productRelatedDesigntypeIds = array_filter($productRelatedDesigntypeIds);
+				$productRelatedDesigntypeIds = implode(',', $productRelatedDesigntypeIds);
+			}
 
 			// Get redDESIGN frontend HTML.
 			$inputvars = array(
-				'id' => $reddesignDesigntypeId,
-				'task' => 'read'
+				'id' => $designTypeId,
+				'task' => 'read',
+				'relatedDesignTypes' => $productRelatedDesigntypeIds,
+				'cid' => $params->get('cid', null),
+				'productId' => $data->product_id,
+				'Itemid' => $app->input->getInt('Itemid', null)
 			);
 			$input = new FOFInput($inputvars);
 
@@ -195,6 +201,23 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			FOFDispatcher::getTmpInstance('com_reddesign', 'designtype', array('input' => $input))->dispatch();
 			$html = ob_get_contents();
 			ob_end_clean();
+
+			// Get background ID so you can get areas.
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('reddesign_background_id'))
+				->from($db->quoteName('#__reddesign_backgrounds'))
+				->where($db->quoteName('isProductionBg') . ' = ' . 1)
+				->where($db->quoteName('reddesign_designtype_id') . ' = ' . $designTypeId);
+			$db->setQuery($query);
+			$backgroundId = $db->loadResult();
+
+			// Get areas for the template tags replacement.
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('reddesign_area_id'))
+				->from($db->quoteName('#__reddesign_areas'))
+				->where($db->quoteName('reddesign_background_id') . ' = ' . $backgroundId);
+			$db->setQuery($query);
+			$areas = $db->loadColumn();
 
 			// Get title.
 			$htmlElement = explode('{RedDesignBreakTitle}', $html);
@@ -868,8 +891,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		$tmpEpsFile = $epsFilePath . "tmp_" . $productionFileName . ".eps";
 		$tmpTextEpsFile = $epsFilePath . "tmptext_" . $productionFileName . ".eps";
-
-		$epsFileName = $epsFilePath . $productionFileName . ".eps";
 
 		$tempFile = "%!PS";
 		$tempFile .= "\n%%Creator:redDESIGN";

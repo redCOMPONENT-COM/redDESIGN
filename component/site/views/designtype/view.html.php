@@ -41,7 +41,12 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->params = JComponentHelper::getParams('com_reddesign');
 
 		// Get Design
-		$this->item = $model->getItem();
+		$designTypeId = $this->config['input']->getInt('id', null);
+		$this->item = $model->getItem($designTypeId);
+
+		// Get related design types. They are related through redSHOP product (multiple design types assigned per redSHOP product);
+		$this->relatedDesignTypes = $this->config['input']->getString('relatedDesignTypes', '');
+		$this->relatedDesignTypes = explode(',', $this->relatedDesignTypes);
 
 		// Get Design related elements
 		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($this->item->reddesign_designtype_id);

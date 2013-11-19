@@ -128,7 +128,7 @@ $productId     = $input->getInt('pid', 0);
 				var doneTypingInterval = 400;
 
 				<?php if ($this->item->fontsizer == "slider") : ?>
-					akeeba.jQuery("#fontSize" + reddesign_area_id).slider()
+					akeeba.jQuery("#fontSize<?php echo $area->reddesign_area_id ?>").slider()
 						.on("slide", function(ev){
 							clearTimeout(typingTimer);
 							typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);

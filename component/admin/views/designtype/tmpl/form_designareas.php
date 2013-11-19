@@ -10,7 +10,7 @@
 defined('_JEXEC') or die();
 
 // JS templating framework
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/mustache.js');
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/mustache.min.js');
 
 // Select area JS includes.
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/jquery.imgareaselect.pack.js');
@@ -18,7 +18,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/imgareaselect-animate
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
 
 // Colorpicker includes.
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/farbtastic.js');
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/farbtastic.min.js');
 FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/farbtastic.css');
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 
