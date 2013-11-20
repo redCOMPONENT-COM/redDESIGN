@@ -29,7 +29,7 @@ class ReddesignModelBackgrounds extends FOFModel
 	 *
 	 * @return bool
 	 */
-	public function setAsPDFbg($designId, $bgId)
+	public function setAsProductionFileBg($designId, $bgId)
 	{
 		if (!$this->unsetAllIsProductionBg($designId))
 		{

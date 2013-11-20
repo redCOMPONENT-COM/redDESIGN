@@ -199,6 +199,21 @@ class ReddesignControllerBackgrounds extends FOFController
 			$backgroundsModel->unsetAllIsDefaultPreview($designId);
 		}
 
+		if (empty($data['isProductionBg']))
+		{
+			$data['isProductionBg'] = 0;
+		}
+
+		if (empty($data['isDefaultPreview']))
+		{
+			$data['isDefaultPreview'] = 0;
+		}
+
+		if (empty($data['isPreviewBg']))
+		{
+			$data['isPreviewBg'] = 0;
+		}
+
 		return $data;
 	}
 
@@ -400,7 +415,7 @@ class ReddesignControllerBackgrounds extends FOFController
 	 *
 	 * @return void
 	 */
-	public function setPDFbg()
+	public function setProductionFileBg()
 	{
 		$designId	= $this->input->getInt('reddesign_designtype_id', '');
 		$bgId		= $this->input->getInt('reddesign_background_id', '');
@@ -409,7 +424,7 @@ class ReddesignControllerBackgrounds extends FOFController
 
 		$app = JFactory::getApplication();
 
-		if (!$model->setAsPDFbg($designId, $bgId))
+		if (!$model->setAsProductionFileBg($designId, $bgId))
 		{
 			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_ERROR_SWITCHING_PDF_BG'), 'error');
 		}
