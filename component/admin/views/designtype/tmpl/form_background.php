@@ -126,7 +126,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 			else
 			{
 				akeeba.jQuery("#isDefaultPreviewContainer").hide();
-				akeeba.jQuery("#useCheckerboardContainer").show();
+				akeeba.jQuery("#useCheckerboardContainer").hide();
 			}
 
 			akeeba.jQuery("#isPreviewBg").change(function() {
@@ -138,7 +138,9 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 				else
 				{
 					akeeba.jQuery("#isDefaultPreviewContainer").hide();
+					akeeba.jQuery("#isDefaultPreview").attr('checked', false);
 					akeeba.jQuery("#useCheckerboardContainer").hide();
+					akeeba.jQuery("#useCheckerboard").attr('checked', false);
 				}
 			});
 
