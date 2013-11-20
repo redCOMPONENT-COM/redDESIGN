@@ -665,6 +665,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 */
 	public function createProductionFiles($data)
 	{
+		// Get component Params
+		$params = JComponentHelper::getParams('com_reddesign');
+
 		// Create production PDF file name
 		$userId = JFactory::getUser()->id;
 		$mangledname  = explode('.', $data['designBackground']->eps_file);
@@ -720,8 +723,10 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		// Scaling ratio
 		$ratio = $previewImageSize[0] / $imageWidth;
 
-		$pdfLeftMargin = 28.35;
-		$pdfTopMargin = 28.35;
+		// Default DPI is 72.
+		$mmPadding = $params->get('productionFilePadding', 10);
+		$pdfLeftMargin = ($mmPadding * 72) / 25.4;
+		$pdfTopMargin = $pdfLeftMargin;
 
 		foreach ($areas as $area)
 		{
