@@ -33,6 +33,14 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$view          = $input->get('view');
 		$document      = JFactory::getDocument();
 		$productHelper = new producthelper;
+		$extraField    = new extraField;
+
+		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product->product_id);
+
+		if ($extraFieldData->data_txt != 'type1')
+		{
+			return false;
+		}
 
 		// Settlement to load attribute.js after quantity_discount.js
 		unset($document->_scripts[JURI::root(true) . '/components/com_redshop/assets/js/attribute.js']);
@@ -44,7 +52,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 		if ($view != 'product')
 		{
-			return;
+			return false;
 		}
 
 		$table = '';
@@ -58,23 +66,36 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 						</select>
 					</div>
 				</td>';
+
+		$extraFieldData = $extraField->getSectionFieldDataList(6, 1, $product->product_id);
+		$minWidth		= str_replace(",", ".", $extraFieldData->data_txt);
+		$extraFieldData = $extraField->getSectionFieldDataList(7, 1, $product->product_id);
+		$minHeight		= str_replace(",", ".", $extraFieldData->data_txt);
+
+		$extraFieldData = $extraField->getSectionFieldDataList(8, 1, $product->product_id);
+		$maxWidth		= str_replace(",", ".", $extraFieldData->data_txt);
+		$extraFieldData = $extraField->getSectionFieldDataList(9, 1, $product->product_id);
+		$maxHeight		= str_replace(",", ".", $extraFieldData->data_txt);
+
 		$table .= '<td class="td_center">
 					<input type="text"
 							id="plg_dimention_base_input_' . $product->product_id . '"
 							name="plg_dimention_base_input"
 							size="5"
-							value="' . str_replace(".", ",", round($product->product_width, 2)) . '"
+							value="' . str_replace(".", ",", round($minWidth, 2)) . '"
 							maxlength="5"
-							default-width="' . $product->product_width . '"
-							default-height="' . $product->product_height . '">
+							default-width="' . $minWidth . '"
+							default-height="' . $minHeight . '"
+							max-width="' . $maxWidth . '"
+							max-height="' . $maxHeight . '">
 					<span id="plg_default_volume_unit_' . $product->product_id . '">' . DEFAULT_VOLUME_UNIT . '</span>
 				</td>';
 		$table .= '<td class="td_last">
 					<span id="plg_dimention_log_' . $product->product_id . '">'
-					. str_replace(".", ",", $product->product_width) . ' X ' . str_replace(".", ",", $product->product_height) . ' ' . DEFAULT_VOLUME_UNIT
+					. str_replace(".", ",", $minWidth) . ' X ' . str_replace(".", ",", $minHeight) . ' ' . DEFAULT_VOLUME_UNIT
 					. '</span>
-					<input type="hidden" name="plg_dimention_width" value="' . $product->product_width . '" id="plg_dimention_width_' . $product->product_id . '">
-					<input type="hidden" name="plg_dimention_height" value="' . $product->product_height . '" id="plg_dimention_height_' . $product->product_id . '">
+					<input type="hidden" name="plg_dimention_width" value="' . $minWidth . '" id="plg_dimention_width_' . $product->product_id . '">
+					<input type="hidden" name="plg_dimention_height" value="' . $minHeight . '" id="plg_dimention_height_' . $product->product_id . '">
 					<input type="hidden" name="plg_product_price" value="' . $product->product_price . '" id="plg_product_price_' . $product->product_id . '">
 				</td>';
 		$table .= '</tr>';
@@ -95,7 +116,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 				}
 				else
 				{
-					alert('" . sprintf(JText::_('PLG_REDSHOP_PRODUCT_DISCOUNT_CALCULATOR_REQUIRED_MINIMUM_HEIGHT'), $product->product_width) . "');
+					alert('" . sprintf(JText::_('PLG_REDSHOP_PRODUCT_DISCOUNT_CALCULATOR_REQUIRED_MINIMUM_HEIGHT'), $minWidth) . "');
 				}
 			}
 		";
@@ -146,6 +167,137 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$cart['plg_product_price'][$cart[$i]['product_id']] = $data['plg_product_price'];
 
 		return;
+	}
+
+	/**
+	 * Discount Calculator update cart session variables
+	 *
+	 * Method is called by the view and the results are imploded and displayed in a placeholder
+	 *
+	 * @param   array  &$cartArr  Cart session array
+	 * @param   int    $index     Cart index
+	 *
+	 * @return  boolean
+	 */
+	public function onBeforeLoginCartSession(&$cartArr, $index)
+	{
+		$i = $index;
+
+		if ( !isset($cartArr['plg_product_price'][$cartArr[$i]['product_id']]))
+		{
+			return;
+		}
+
+		$cartArr[$i]['product_price']              = $cartArr['plg_product_price'][$cartArr[$i]['product_id']];
+		$cartArr[$i]['product_old_price']          = $cartArr['plg_product_price'][$cartArr[$i]['product_id']];
+		$cartArr[$i]['product_old_price_excl_vat'] = $cartArr['plg_product_price'][$cartArr[$i]['product_id']];
+		$cartArr[$i]['product_price_excl_vat']     = $cartArr['plg_product_price'][$cartArr[$i]['product_id']];
+
+		return;
+	}
+
+	/**
+	 * Discount Calculator update cart session variables
+	 *
+	 * Method is called by the view and the results are imploded and displayed in a placeholder
+	 *
+	 * @param   array  &$cart  Cart session array
+	 * @param   int    $index  Cart index
+	 * @param   array  $data   Cart Data
+	 *
+	 * @return  boolean
+	 */
+	public function onAfterCartUpdate(&$cart, $index, $data)
+	{
+		$i	 			= $index;
+		$product_id		= $cart[$i]['product_id'];
+		$extraField 	= new extraField;
+		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product_id);
+
+		if ($extraFieldData->data_txt != 'type2' && $extraFieldData->data_txt != 'type1')
+		{
+			return;
+		}
+
+		if ($extraFieldData->data_txt == 'type2')
+		{
+			if (isset($cart[$index]['rs_dimention']) && $cart[$index]['rs_dimention'])
+			{
+				$chars = preg_split('/ /', $cart[$index]['rs_dimention'], -1, PREG_SPLIT_OFFSET_CAPTURE);
+
+				$lang = JFactory::getLanguage();
+				$lang->load('plg_redshop_product_addToCartValidation', JPATH_ADMINISTRATOR);
+
+				// Width X Height Unit
+				$dimention 	= $post['rs_dimention'];
+				$width 		= $chars[0][0];
+				$height 	= $chars[2][0];
+			}
+			else
+			{
+				return;
+			}
+
+			$quantity       = $cart[$i]['quantity'];
+
+			$extraFieldData = $extraField->getSectionFieldDataList(1, 1, $product_id);
+			$elements 		= $extraFieldData->data_txt;
+
+			$meterPerPrice  = $width * $height / 10000;
+
+			$meterTotalPrice = $meterPerPrice * $quantity;
+
+			$meters = array( 0 => 703.5,
+							1 => 646.8,
+							2 => 617.4,
+							3 => 580.3,
+							4 => 536.2,
+							5 => 492.1,
+							10 => 387.8,
+							20 => 385.7,
+							50 => 378.0,
+							999 => 349.3
+							);
+
+			$pricePerMeter = 0;
+
+			foreach ($meters as $key => $value)
+			{
+				if ($key >= floor($meterTotalPrice))
+				{
+					$pricePerMeter = $value;
+					break;
+				}
+			}
+
+			$totalPricePerMeter = $pricePerMeter * $meterTotalPrice;
+
+			$quntityDiscount = array( 0 => 1,
+									5 => 0.9,
+									10 => 0.85,
+									25 => 0.80,
+									50 => 0.75,
+									500 => 0.70
+									);
+
+			$discountAmount = 0;
+
+			foreach ($quntityDiscount as $key => $value)
+			{
+				if ($key >= $elements)
+				{
+					$discountAmount = $value;
+					break;
+				}
+			}
+
+			$pricePerPiece = $totalPricePerMeter / $quantity * $discountAmount + $elements / $quantity;
+
+			$cartArr[$i]['product_price']              = $pricePerPiece;
+			$cartArr[$i]['product_old_price']          = $pricePerPiece;
+			$cartArr[$i]['product_old_price_excl_vat'] = $pricePerPiece;
+			$cartArr[$i]['product_price_excl_vat']     = $pricePerPiece;
+		}
 	}
 
 	/**
