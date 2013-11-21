@@ -97,7 +97,7 @@
 			name="productionFilePadding"
 			type="text"
 			size="5"
-			default="50"
+			default="10"
 			label="COM_REDDESIGN_CONFIG_PRODUCTION_FILE_PADDING"
 			description="COM_REDDESIGN_CONFIG_PRODUCTION_FILE_PADDING_DESC"
 			/>
