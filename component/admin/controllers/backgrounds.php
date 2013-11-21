@@ -79,7 +79,7 @@ class ReddesignControllerBackgrounds extends FOFController
 				$this->redirect();
 			}
 
-			// Create a image preview of the EPS
+			// Create an image preview of the EPS.
 			$jpegPreviewFile = $this->createBackgroundPreview($uploaded_file['mangled_filename']);
 
 			if (!$jpegPreviewFile)
