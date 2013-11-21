@@ -37,7 +37,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product->product_id);
 
-		if ($extraFieldData->data_txt != 'type1' && $view != 'product')
+		if ($extraFieldData->data_txt != 'type1')
 		{
 			return false;
 		}
@@ -49,6 +49,11 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 		// Adding script using this way because in redSHOP is using this code
 		JHTML::Script('attribute.js', 'components/com_redshop/assets/js/', false);
+
+		if ($view != 'product')
+		{
+			return false;
+		}
 
 		$table = '';
 		$table .= '<table>';
