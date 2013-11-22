@@ -41,12 +41,41 @@ rsjQuery(document).ready(function () {
     rsjQuery.setDiscountPrice();
 
     // Set Discount Price on Demand
-    rsjQuery('input[id^="plg_dimention_base_input_"],select[id^="plg_dimention_base_"]').bind('change keyup', rsjQuery.setDiscountPrice);
+    rsjQuery('input[id^="plg_dimention_base_input_"],select[id^="plg_dimention_base_"]').bind('change', rsjQuery.validateDimension);
 
     rsjQuery('input[id^="plg_dimention_base_input_"]').click(function(event) {
         rsjQuery(this).val('');
     });
 });
+
+rsjQuery.validateDimension = function(){
+
+    var pid  = rsjQuery('#product_id').val();
+    var elm  = rsjQuery('#plg_dimention_base_input_' + pid);
+    var pdb  = rsjQuery('#plg_dimention_base_' + pid).val();
+
+    var h = elm.attr('default-height'), w = elm.attr('default-width');
+
+    if(pdb == 'w' && parseFloat(elm.val()) < w)
+    {
+       alert('Minimum påkrævede bredde er ' + w + 'cm');
+    }
+    else if(pdb == 'w' && parseFloat(elm.val()) > parseFloat(elm.attr('max-width')))
+    {
+       alert('Maksimale tilladte bredde er ' + elm.attr('max-width') + 'cm');
+    }
+    else if(pdb == 'h' && parseFloat(elm.val()) < h)
+    {
+       alert('Minimum påkrævede højde er ' + h + 'cm');
+    }
+    else if(pdb == 'h' && parseFloat(elm.val()) > parseFloat(elm.attr('max-height')))
+    {
+       alert('Maksimale tilladte højde er ' + elm.attr('max-height') + 'cm');
+    }
+
+    // Set Discount Price On Load
+    rsjQuery.setDiscountPrice();
+}
 
 /**
  * Set Discount Price Calculations

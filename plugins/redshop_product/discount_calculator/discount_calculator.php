@@ -234,9 +234,12 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 */
 	public function onAfterCartItemUpdate(&$cart, $i, $data)
 	{
-		/*echo "<pre>";
-		print_r($cart);
-		exit;*/
+		if ( !isset($cart['plg_product_price'][$cart[$i]['product_id']]))
+		{
+			return;
+		}
+
+		$cart[$i]['product_old_price'] = $cart['plg_product_price'][$cart[$i]['product_id']];
 	}
 
 	/**
@@ -329,10 +332,61 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 			}
 
 			// Price Per Piece
-			$calculator_price = $totalPricePerMeter / $quantity * $discountAmount + $elements / $quantity;
+			$pricePerPiece = $totalPricePerMeter / $quantity * $discountAmount + $elements / $quantity;
+			$price = $this->getProductQuantityPrice($cart[$i]['product_id'], $quantity);
+
+			$percentage = round($price->product_price, 2);
+
+			$calculator_price = $pricePerPiece - abs($pricePerPiece * $percentage / 100);
+
+			$cart['plg_product_price'][$cart[$i]['product_id']] = $calculator_price;
 		}
 	}
 
+	/**
+	 * Get Product Quantity prices based on shopper group of current logged in user
+	 *
+	 * @param   integer  $product_id  Product Id
+	 * @param   integer  $quantity    Cart quantity
+	 *
+	 * @return  array    Price information object list
+	 */
+	private function getProductQuantityPrice($product_id, $quantity)
+	{
+		require_once JPATH_SITE . '/components/com_redshop/helpers/user.php';
+
+		$user_helper    = new rsUserhelper;
+		$user           = JFactory::getUser();
+		$user_id        = $user->id;
+		$shopperGroupId = $user_helper->getShopperGroup($user_id);
+
+		// Initialize variables.
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Create the base select statement.
+		$query->select('p.*')
+			->from($db->quoteName('#__redshop_product_price', 'p'))
+			->where($db->quoteName('p.product_id') . ' = ' . (int) $product_id)
+			->where($db->quoteName('p.shopper_group_id') . ' = ' . (int) $shopperGroupId)
+			->where($db->quoteName('p.price_quantity_start') . ' <= ' . (int) $quantity)
+			->where($db->quoteName('p.price_quantity_end') . ' >= ' . (int) $quantity)
+			->order($db->quoteName('p.price_quantity_start') . ' ASC');
+
+		// Set the query and load the result.
+		$db->setQuery($query);
+
+		try
+		{
+			$prices = $db->loadObject();
+		}
+		catch (RuntimeException $e)
+		{
+			throw new RuntimeException($e->getMessage(), $e->getCode());
+		}
+
+		return $prices;
+	}
 
 	/**
 	 * Discount Calculator update cart session variables
