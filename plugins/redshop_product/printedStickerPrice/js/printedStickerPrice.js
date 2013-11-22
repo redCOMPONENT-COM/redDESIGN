@@ -63,7 +63,6 @@ rsjQuery.setDiscountPrice = function(){
     if (!isNaN(pdbi)) {
 
         var ratio_h2w = w > 0 && (h / w), ratio_w2h = h > 0 && (w / h);
-        var dpAllow = 0;
 
         if (pdb == 'w') {
             newW = pdbi;
@@ -96,50 +95,85 @@ rsjQuery.setDiscountPrice = function(){
     finalWH /= 10000;
 
     // Quantity Based Discount Calculations
-    var quantityDiscountRadio = rsjQuery('.printedStickerPrice_radio:checked');
 
-    var quantity = quantityDiscountRadio.val();
+     rsjQuery('.printedStickerPrice_radio').each(function(index, el) {
 
-    var finalWHTotal = finalWH * quantity;
+        var quantity = parseInt(rsjQuery(this).val());
 
-    var finaldata       = rsjQuery.vlookup(finalWHTotal, lookupData, false);
-    var sticker_element = 79;//parseInt(rsjQuery('#rs_sticker_element').html());
+        var finalWHTotal = finalWH * quantity;
 
-    finaldata.element   = rsjQuery.vlookup(sticker_element, elementData, true);
+        var finaldata       = rsjQuery.vlookup(finalWHTotal, lookupData, false);
+        var sticker_element = 79;//parseInt(rsjQuery('#rs_sticker_element').html());
 
-    // Total price per meter
-    var tppm = finaldata.price * finalWHTotal;
+        finaldata.element   = rsjQuery.vlookup(sticker_element, elementData, true);
 
-    // price per piece
-    var ppp = tppm / quantity * finaldata.element.price + (sticker_element / quantity);
+        var ppm  = finaldata.price;
+        var tppm = finaldata.price * finalWHTotal;
 
-    rsjQuery.updatePrice(pid, ppp);
+        var price = tppm / quantity * finaldata.element.price + (sticker_element / quantity);
+
+
+        discountedPrice = parseFloat(price) + parseFloat(price * rsjQuery(this).attr('percentage'));
+
+        // Multiply with Quantity
+        qtydiscountedPrice = discountedPrice * quantity;
+
+        // Set Base Price
+        rsjQuery(this).attr('base-price', discountedPrice);
+        rsjQuery(this).attr('price', qtydiscountedPrice);
+
+        if (rsjQuery(this).attr('checked'))
+        {
+            rsjQuery.updatePrice(pid, price);
+        }
+
+        discountedPrice = parseFloat(price) + parseFloat(price * rsjQuery(this).attr('percentage'));
+
+
+
+        // Multiply with Quantity
+        qtydiscountedPrice = discountedPrice * quantity;
+
+        // Set Base Price
+        rsjQuery(this).attr('base-price', discountedPrice);
+        rsjQuery(this).attr('price', qtydiscountedPrice);
+
+        // Set price changes in HTML fields
+        var formatted_main_price = number_format(qtydiscountedPrice, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+
+        rsjQuery('#price_quantity' + rsjQuery(this).attr('index')).html(formatted_main_price);
+
+    });
+
+
 };
 
 /**
  * Update price in HTML View
  *
  * @param   {number}  pid         Current Product Id
- * @param   {float}  price_value  Product price array
+ * @param   {json}  price_data    Product data Array JSON
  *
  * @return  {number}              calculated price
  */
 rsjQuery.updatePrice = function (pid, price_value) {
 
     // Set QUantity Based Discount
-    var discountPrices = rsjQuery.setQuantityDiscount(pid, price_value);
+    //discountPrices = rsjQuery.setQuantityDiscount(pid, price_value);
 
-    price_value = discountPrices.basePrice;
+    //price_value = discountPrices.basePrice;
+
+    console.log(price_value);
 
     if (SHOW_PRICE == '1' && ( DEFAULT_QUOTATION_MODE != '1' || (DEFAULT_QUOTATION_MODE && SHOW_QUOTATION_PRICE))) {
 
         // Set price changes in HTML fields
-        var formatted_main_price = number_format(discountPrices.price, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        var formatted_main_price = number_format(price_value, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
         rsjQuery('#display_product_price_no_vat' + pid + ', #produkt_kasse_hoejre_pris_indre' + pid).html(formatted_main_price);
 
         // Set price changes in hidden fields
-        rsjQuery('#product_price_no_vat' + pid).val(discountPrices.price);
-        rsjQuery('#main_price' + pid).val(discountPrices.price);
+        rsjQuery('#product_price_no_vat' + pid).val(price_value);
+        rsjQuery('#main_price' + pid).val(price_value);
     }
 
     // Set Calculated product price into hidden input type
@@ -161,24 +195,6 @@ rsjQuery.setQuantityDiscount = function(pid, price){
 
     var discountedPrice = 0, qtydiscountedPrice = 0;
 
-    rsjQuery('.printedStickerPrice_radio').each(function(index, el) {
-
-        discountedPrice = parseFloat(price) + parseFloat(price * rsjQuery(this).attr('percentage'));
-
-        // Multiply with Quantity
-        qtydiscountedPrice = discountedPrice * parseInt(rsjQuery(this).val());
-
-        // Set Base Price
-        rsjQuery(this).attr('base-price', discountedPrice);
-        rsjQuery(this).attr('price', qtydiscountedPrice);
-
-        // Set price changes in HTML fields
-        var formatted_main_price = number_format(qtydiscountedPrice, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
-
-        rsjQuery('#price_quantity' + rsjQuery(this).attr('index')).html(formatted_main_price);
-
-    });
-
     // Quantity Based Discount Calculations
     var quantityDiscountRadio = rsjQuery('.printedStickerPrice_radio:checked');
 
@@ -192,7 +208,7 @@ rsjQuery.setQuantityDiscount = function(pid, price){
     quantityDiscountRadio.attr('price', qtydiscountedPrice);
 
     // Prepare Object to return
-    var discountPrices           = [];
+    discountPrices           = [];
     discountPrices.basePrice = discountedPrice;
     discountPrices.price     = qtydiscountedPrice;
 

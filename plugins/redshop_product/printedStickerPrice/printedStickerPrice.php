@@ -55,6 +55,11 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 		$extraFieldData = $extraField->getSectionFieldDataList(7, 1, $product->product_id);
 		$minHeight		= str_replace(",", ".", $extraFieldData->data_txt);
 
+		$extraFieldData = $extraField->getSectionFieldDataList(8, 1, $product->product_id);
+		$maxWidth		= str_replace(",", ".", $extraFieldData->data_txt);
+		$extraFieldData = $extraField->getSectionFieldDataList(9, 1, $product->product_id);
+		$maxHeight		= str_replace(",", ".", $extraFieldData->data_txt);
+
 		$table = '';
 		$table .= '<table>';
 		$table .= '<tr>';
@@ -74,7 +79,9 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 							value="' . str_replace(".", ",", $minWidth) . '"
 							maxlength="5"
 							default-width="' . $minWidth . '"
-							default-height="' . $minHeight . '">
+							default-height="' . $minHeight . '"
+							max-width="' . $maxWidth . '"
+							max-height="' . $maxHeight . '">
 					<span id="plg_default_volume_unit_' . $product->product_id . '">' . DEFAULT_VOLUME_UNIT . '</span>
 				</td>';
 		$table .= '<td class="td_last">
