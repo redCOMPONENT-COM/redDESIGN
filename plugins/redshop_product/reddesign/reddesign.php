@@ -564,14 +564,63 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('order_item_id', 'productionPdf', 'productionEps')));
+		$query->select($db->quoteName(array('order_item_id', 'productionPdf', 'productionEps', 'redDesignData')));
 		$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
 		$query->where($db->quoteName('order_item_id') . ' = ' . $orderItem->order_item_id);
 		$db->setQuery($query);
 		$orderItemMapping = $db->loadObject();
 
+		$redDesignData = json_decode($orderItemMapping->redDesignData);
+		$redDesignData = $this->prepareDesignTypeData($redDesignData);
+
+		echo '<div id="customDesignData' . $orderItem->order_item_id . '" style="margin: 15px 0 15px 0;">' .
+				'<span><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_DETAILS') . '</strong></span><br/>';
+
+		foreach ($redDesignData['designAreas'] as $area)
+		{
+			// Get font name.
+			if (empty($area['fontTypeId']))
+			{
+				$fontName = 'Arial';
+			}
+			else
+			{
+				$fontModel = FOFModel::getTmpInstance('Font', 'ReddesignModel');
+				$fontName = $fontModel->getItem($area['fontTypeId']);
+				$fontName = $fontName->title;
+			}
+
+			// Get text color
+			if (strpos($area['fontColor'], '#') !== false)
+			{
+				$fontColor = '<span style="background-color: ' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+			}
+			else
+			{
+				$fontColor = '<span style="background-color: #' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+			}
+
+			if (empty($area['fontSize']))
+			{
+				$area['fontSize'] = JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AUTO_FONT_SIZE');
+			}
+
+			echo '<br/>' .
+				'<div id="area' . $area['id'] . '">' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AREA') . '</div>' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT') . $area['textArea'] . '</div>' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_NAME') . $fontName . '</div>' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_SIZE') . $area['fontSize'] . '</div>' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT_COLOR') . $fontColor . '</div>' .
+				'</div>';
+		}
+
+		echo '</div>';
+
 		if (!empty($orderItemMapping->productionPdf))
 		{
+			echo '<div><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_PRODUCTION_FILES') . '</strong></div><br/>';
+
 			$downloadFileName = 'production-file-' . $orderItem->order_id . '-' . $orderItem->order_item_id;
 
 			$productionPdf = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $orderItemMapping->productionPdf . '.pdf');
@@ -612,5 +661,65 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			';
 			$document->addScriptDeclaration($js);
 		}
+	}
+
+	/**
+	 * Prepares Design Type data in JSON format.
+	 *
+	 * @param   array  $redDesignData  Data from the request.
+	 *
+	 * @return string $designTypeJSON Design type data JSON encoded.
+	 */
+	public function prepareDesignTypeData($redDesignData)
+	{
+		// Get design type data.
+		$designTypeModel = FOFModel::getTmpInstance('Designtype', 'ReddesignModel')->reddesign_designtype_id($redDesignData->reddesign_designtype_id);
+		$designType      = $designTypeModel->getItem($redDesignData->reddesign_designtype_id);
+
+		$data = array();
+		$data['designType'] = $designType;
+
+		// Get Background Data
+		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($redDesignData->production_background_id);
+		$data['designBackground'] = $backgroundModel->getItem($redDesignData->production_background_id);
+
+		// Get designAreas
+		$data['designAreas'] = array();
+
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('reddesign_area_id'));
+		$query->from($db->quoteName('#__reddesign_areas'));
+		$query->where($db->quoteName('reddesign_background_id') . ' = ' . $redDesignData->production_background_id);
+		$db->setQuery($query);
+		$areaIds = $db->loadColumn();
+
+		foreach ($areaIds as $areaId)
+		{
+			$area = array();
+			$area['id'] = $areaId;
+
+			$key = 'fontArea' . $areaId;
+			$area['fontTypeId'] = $redDesignData->$key;
+
+			$key = 'colorCode' . $areaId;
+			$area['fontColor'] = $redDesignData->$key;
+
+			$key = 'fontSize' . $areaId;
+
+			if (!empty($redDesignData->$key))
+			{
+				$area['fontSize'] = $redDesignData->$key;
+			}
+
+			$key = 'textArea' . $areaId;
+			$area['textArea'] = $redDesignData->$key;
+
+			$data['designAreas'][] = $area;
+		}
+
+		$data['autoSizeData'] = json_decode($redDesignData->autoSizeData);
+
+		return $data;
 	}
 }
