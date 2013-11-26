@@ -167,6 +167,7 @@ class ReddesignControllerDesigntypes extends FOFController
 					$area->fontSize = $newAutoSizeData['fontSize'];
 					$newAutoSizeData['reddesign_area_id'] = $this->areaItem->reddesign_area_id;
 					$autoSizeData[] = $newAutoSizeData;
+
 					$this->areaItem->textalign = 3;
 				}
 				elseif ($designType->fontsizer == 'auto')
@@ -190,6 +191,8 @@ class ReddesignControllerDesigntypes extends FOFController
 						$textProperties = $areaImage->queryFontMetrics($areaDraw, $area->textArea);
 						$area->fontSize++;
 					}
+
+					$this->areaItem->textalign = 3;
 				}
 
 				// Set color and font.
@@ -213,7 +216,7 @@ class ReddesignControllerDesigntypes extends FOFController
 				{
 					$areaDraw->setGravity(Imagick::GRAVITY_EAST);
 				}
-				elseif ($this->areaItem->textalign == 3 || $designType->fontsizer == 'auto_chars' || $designType->fontsizer == 'auto')
+				else
 				{
 					$areaDraw->setGravity(Imagick::GRAVITY_CENTER);
 				}
