@@ -82,6 +82,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		// Font sizer options for the general tab.
 		$this->sizerOptions = array(
 			JHTML::_('select.option',  'auto', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO')),
+			JHTML::_('select.option',  'auto_chars', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO_CHARS')),
 			JHTML::_('select.option',  'slider', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_SLIDER')),
 			JHTML::_('select.option',  'dropdown_numbers', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_NUMBERS')),
 			JHTML::_('select.option',  'dropdown_labels', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_LABELS'))

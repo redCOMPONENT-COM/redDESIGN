@@ -49,7 +49,7 @@ defined('_JEXEC') or die;
 						<legend><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_LEGEND_FONT_SETTINGS'); ?></legend>
 						<div class="row-fluid">
 							<div class="span6">
-								<?php if($this->item->fontsizer != 'auto') : ?>
+								<?php if ($this->item->fontsizer != 'auto' && $this->item->fontsizer != 'auto_chars') : ?>
 									<div class="control-group">
 										<label for="areaFontAlignment{{reddesignAreaId}}">
 											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALIGNMENT') ?>
@@ -65,60 +65,58 @@ defined('_JEXEC') or die;
 								</div>
 							</div>
 							<div class="offset2 span4">
-								<?php if($this->item->fontsizer != 'auto') : ?>
-									<?php if ($this->item->fontsizer == 'dropdown_numbers' || $this->item->fontsizer == 'dropdown_labels') : ?>
-										<div class="control-group">
-											<label for="fontsizerDropdown{{reddesignAreaId}}">
-												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>
-												<textarea class="span12"
-														  style="resize: none;"
-														  id="fontsizerDropdown{{reddesignAreaId}}"
-														  name="fontsizerDropdown{{reddesignAreaId}}"
-														  rows="7"
-														></textarea>
-												<span class="help-block">
-													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC') ?>
-												</span>
-											</label>
-										</div>
-									<?php elseif ($this->item->fontsizer == 'slider') : ?>
-										<div class="control-group">
-											<label for="fontsizerSliderDefault{{reddesignAreaId}}">
-												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_FONT_SIZE') ?>
-													<input class="input-mini"
-														   type="text"
-														   value=""
-														   maxlength="3"
-														   id="fontsizerSliderDefault{{reddesignAreaId}}"
-														   name="fontsizerSliderDefault{{reddesignAreaId}}"
-													/>
-											</label>
-										</div>
-										<div class="control-group">
-											<label for="fontsizerSliderMin{{reddesignAreaId}}">
-												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MIN_FONT_SIZE') ?>
+								<?php if ($this->item->fontsizer == 'dropdown_numbers' || $this->item->fontsizer == 'dropdown_labels') : ?>
+									<div class="control-group">
+										<label for="fontsizerDropdown{{reddesignAreaId}}">
+											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>
+											<textarea class="span12"
+													  style="resize: none;"
+													  id="fontsizerDropdown{{reddesignAreaId}}"
+													  name="fontsizerDropdown{{reddesignAreaId}}"
+													  rows="7"
+													></textarea>
+											<span class="help-block">
+												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC') ?>
+											</span>
+										</label>
+									</div>
+								<?php elseif ($this->item->fontsizer == 'slider') : ?>
+									<div class="control-group">
+										<label for="fontsizerSliderDefault{{reddesignAreaId}}">
+											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_FONT_SIZE') ?>
 												<input class="input-mini"
 													   type="text"
 													   value=""
 													   maxlength="3"
-													   id="fontsizerSliderMin{{reddesignAreaId}}"
-													   name="fontsizerSliderMin{{reddesignAreaId}}"
+													   id="fontsizerSliderDefault{{reddesignAreaId}}"
+													   name="fontsizerSliderDefault{{reddesignAreaId}}"
 												/>
-											</label>
-										</div>
-										<div class="control-group">
-											<label for="fontsizerSliderMax{{reddesignAreaId}}">
-												<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAX_FONT_SITE') ?>
-												<input class="input-mini"
-													   type="text"
-													   value=""
-													   maxlength="3"
-													   id="fontsizerSliderMax{{reddesignAreaId}}"
-													   name="fontsizerSliderMax{{reddesignAreaId}}"
-												/>
-											</label>
-										</div>
-									<?php endif; ?>
+										</label>
+									</div>
+									<div class="control-group">
+										<label for="fontsizerSliderMin{{reddesignAreaId}}">
+											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MIN_FONT_SIZE') ?>
+											<input class="input-mini"
+												   type="text"
+												   value=""
+												   maxlength="3"
+												   id="fontsizerSliderMin{{reddesignAreaId}}"
+												   name="fontsizerSliderMin{{reddesignAreaId}}"
+											/>
+										</label>
+									</div>
+									<div class="control-group">
+										<label for="fontsizerSliderMax{{reddesignAreaId}}">
+											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAX_FONT_SITE') ?>
+											<input class="input-mini"
+												   type="text"
+												   value=""
+												   maxlength="3"
+												   id="fontsizerSliderMax{{reddesignAreaId}}"
+												   name="fontsizerSliderMax{{reddesignAreaId}}"
+											/>
+										</label>
+									</div>
 								<?php endif; ?>
 							</div>
 						</div>
@@ -134,10 +132,10 @@ defined('_JEXEC') or die;
 									<select id="inputFieldType{{reddesignAreaId}}"
 											name="inputFieldType{{reddesignAreaId}}[]"
 											onclick="changeInputFieldType({{reddesignAreaId}});">
-										<option value="0">
+										<option value="0" selected="selected">
 											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTBOX'); ?>
 										</option>
-										<option value="1" selected="selected">
+										<option value="1">
 											<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTAREA'); ?>
 										</option>
 									</select>
