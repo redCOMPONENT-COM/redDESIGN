@@ -156,10 +156,10 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 
 		{RedDesignBreakDesignAreaChooseFontSizeLabel}
 			<?php // Font Size Selection ?>
-			<?php if ($this->item->fontsizer != 'auto') : ?>
+			<?php if ($this->item->fontsizer != 'auto' && $this->item->fontsizer != 'auto_chars') : ?>
 				<label for="<?php echo 'fontSize' . $area->reddesign_area_id; ?>">
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_FONTSIZE'); ?>
-						</label>
+				</label>
 			<?php endif; ?>
 		{RedDesignBreakDesignAreaChooseFontSizeLabel}
 

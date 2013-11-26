@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   `modified_on`             DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
   `locked_by`               BIGINT(20) NOT NULL DEFAULT '0',
   `locked_on`               DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `fontsizer`               ENUM('auto', 'slider', 'dropdown_numbers', 'dropdown_labels'),
+  `fontsizer`               ENUM('auto', 'auto_chars', 'slider', 'dropdown_numbers', 'dropdown_labels'),
   `minWidth`                DOUBLE(9, 2) NULL,
   `minHeight`               DOUBLE(9, 2) NULL,
   `maxWidth`                DOUBLE(9, 2) NULL,
