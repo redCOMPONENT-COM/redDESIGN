@@ -172,12 +172,6 @@ class ReddesignControllerDesigntypes extends FOFController
 				}
 				elseif ($designType->fontsizer == 'auto')
 				{
-					// Set the text transparency: 0 = transparent, 1 = opaque
-					$areaDraw->setFillAlpha(1);
-
-					// Top left will be point of reference
-					// $areaDraw->setGravity(Imagick::GRAVITY_CENTER);
-
 					// Create an array for the textwidth and textheight
 					$textProperties = array('textWidth' => 0);
 
@@ -191,6 +185,17 @@ class ReddesignControllerDesigntypes extends FOFController
 						$textProperties = $areaImage->queryFontMetrics($areaDraw, $area->textArea);
 						$area->fontSize++;
 					}
+
+					//$stringLines = preg_split('/(?<!^)(?!$)/u', $area->textArea);
+					$stringLines = explode("\n", $area->textArea);
+
+					$autoSizeData[] = array(
+												'fontSize' => $area->fontSize,
+												'stringLines' => $stringLines,
+												'topoffset' => 0,
+												'maxHeight' => 1,
+												'reddesign_area_id' => $this->areaItem->reddesign_area_id
+					);
 
 					$this->areaItem->textalign = 3;
 				}

@@ -358,17 +358,14 @@ $productId     = $input->getInt('pid', 0);
 							akeeba.jQuery("#background-container").height("auto");
 						}, 5000);
 
-						akeeba.jQuery("#plg_dimention_base_input_<?php echo $productId;?>").attr({
-							'default-height' : json.autoSizeData[0].canvasHeight,
-							'default-width': json.autoSizeData[0].canvasWidth
-						});
+						<?php if ($this->item->fontsizer == 'auto' || $this->item->fontsizer == 'auto_chars') : ?>
+							akeeba.jQuery("#plg_dimention_base_input_<?php echo $productId;?>").attr({
+								'default-height' : json.autoSizeData[0].canvasHeight,
+								'default-width': json.autoSizeData[0].canvasWidth
+							});
 
-						// Check for discount plugin availability
-						if (typeof rsjQuery !== "undefined")
-						{
-							rsjQuery.setDiscountPrice();
-						}
-						akeeba.jQuery("#autoSizeData").val(JSON.stringify(json.autoSizeData));
+							akeeba.jQuery("#autoSizeData").val(JSON.stringify(json.autoSizeData));
+						<?php endif; ?>
 					}
 				},
 				error: function(errMsg) {
