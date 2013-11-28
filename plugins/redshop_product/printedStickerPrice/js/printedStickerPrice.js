@@ -132,7 +132,7 @@ rsjQuery.setDiscountPrice = function(){
         var finalWHTotal = finalWH * quantity;
 
         var finaldata       = rsjQuery.vlookup(finalWHTotal, lookupData, false);
-        var sticker_element = 79;//parseInt(rsjQuery('#rs_sticker_element').html());
+        var sticker_element = 39;//parseInt(rsjQuery('#rs_sticker_element').html());
 
         finaldata.element   = rsjQuery.vlookup(sticker_element, elementData, true);
 

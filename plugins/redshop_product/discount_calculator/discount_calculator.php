@@ -25,7 +25,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 * @param   array   &$params    redSHOP Params list
 	 * @param   object  $product    Product Data Object
 	 *
-	 * @return  void
+	 * @return  boolean
 	 */
 	public function onPrepareProduct(&$template, &$params, $product)
 	{
@@ -276,7 +276,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 			}
 
 			$quantity       = $cart[$i]['quantity'];
-			$elements 		= 79;
+			$elements 		= 39;
 			$meterPerPrice  = $width * $height / 10000;
 			$meterTotalPrice = $meterPerPrice * $quantity;
 
