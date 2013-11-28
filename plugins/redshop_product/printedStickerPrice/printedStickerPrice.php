@@ -37,7 +37,7 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 
 		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product->product_id);
 
-		if ($extraFieldData->data_txt != 'type2' && $view != 'product')
+		if ($extraFieldData->data_txt != 'type2')
 		{
 			return false;
 		}
@@ -49,6 +49,11 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 
 		// Adding script using this way because in redSHOP is using this code
 		JHTML::Script('attribute.js', 'components/com_redshop/assets/js/', false);
+
+		if ($view != 'product' )
+		{
+			return false;
+		}
 
 		$extraFieldData = $extraField->getSectionFieldDataList(6, 1, $product->product_id);
 		$minWidth		= str_replace(",", ".", $extraFieldData->data_txt);

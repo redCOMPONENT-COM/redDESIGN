@@ -32,7 +32,6 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$input         = JFactory::getApplication()->input;
 		$view          = $input->get('view');
 		$document      = JFactory::getDocument();
-		$productHelper = new producthelper;
 		$extraField    = new extraField;
 
 		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product->product_id);
@@ -187,8 +186,6 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 			return;
 		}
 
-		$i = $cart['idx'];
-
 		$data['product_price']              = $data['plg_product_price'];
 
 		return;
@@ -269,7 +266,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 				$lang->load('plg_redshop_product_addToCartValidation', JPATH_ADMINISTRATOR);
 
 				// Width X Height Unit
-				$dimention 	= $post['rs_dimention'];
+				$dimention 	= $cart[$i]['rs_dimention'];
 				$width 		= $chars[0][0];
 				$height 	= $chars[2][0];
 			}
@@ -279,12 +276,8 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 			}
 
 			$quantity       = $cart[$i]['quantity'];
-
-			$extraFieldData = $extraField->getSectionFieldDataList(1, 1, $product_id);
 			$elements 		= 79;
-
 			$meterPerPrice  = $width * $height / 10000;
-
 			$meterTotalPrice = $meterPerPrice * $quantity;
 
 			$meters = array( 0 => 703.5,
