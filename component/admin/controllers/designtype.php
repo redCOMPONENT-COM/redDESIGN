@@ -229,7 +229,7 @@ class ReddesignControllerDesigntype extends FOFController
 			$rgbTextColor .= ' ';
 			$rgbTextColor .= round($rgbTextColorBuffer['blue'] * (1 / 255), 2);
 
-			if ($data['designType']->fontsizer == 'auto_chars')
+			if ($data['designType']->fontsizer == 'auto' || $data['designType']->fontsizer == 'auto_chars')
 			{
 				$autoSizeDataArray = $data['autoSizeData'];
 				$autoSizeData = null;

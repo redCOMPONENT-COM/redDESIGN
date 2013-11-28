@@ -43,6 +43,11 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 					break;
 			}
 
+			if ($this->item->fontsizer == 'auto' || $this->item->fontsizer == 'auto_chars')
+			{
+				$textAlign = 'center';
+			}
+
 			if (!empty($area->maxchar) && $area->maxchar != 0)
 			{
 				$maxChar = 'maxlength="' . $area->maxchar . '"';
@@ -175,7 +180,6 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 				<input type="hidden"
 					   id="fontSize<?php echo $area->reddesign_area_id ?>"
 					   name="fontSize<?php echo $area->reddesign_area_id ?>"
-					   class="span2"
 					   value="<?php echo $area->defaultFontSize ?>"
 					   data-slider-min="<?php echo $area->minFontSize ?>"
 					   data-slider-max="<?php echo $area->maxFontSize ?>"
