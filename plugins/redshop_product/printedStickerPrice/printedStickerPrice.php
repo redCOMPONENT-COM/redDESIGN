@@ -25,7 +25,7 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 	 * @param   array   &$params    redSHOP Params list
 	 * @param   object  $product    Product Data Object
 	 *
-	 * @return  void
+	 * @return  boolean
 	 */
 	public function onPrepareProduct(&$template, &$params, $product)
 	{
