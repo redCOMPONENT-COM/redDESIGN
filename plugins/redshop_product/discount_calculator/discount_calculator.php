@@ -342,6 +342,8 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 * @param   integer  $product_id  Product Id
 	 * @param   integer  $quantity    Cart quantity
 	 *
+	 * @throws   string  If Query fails it will throw error
+	 *
 	 * @return  array    Price information object list
 	 */
 	private function getProductQuantityPrice($product_id, $quantity)
