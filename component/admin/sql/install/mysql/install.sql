@@ -59,10 +59,6 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   `locked_by`               BIGINT(20) NOT NULL DEFAULT '0',
   `locked_on`               DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
   `fontsizer`               ENUM('auto', 'auto_chars', 'slider', 'dropdown_numbers', 'dropdown_labels'),
-  `minWidth`                DOUBLE(9, 2) NULL,
-  `minHeight`               DOUBLE(9, 2) NULL,
-  `maxWidth`                DOUBLE(9, 2) NULL,
-  `maxHeight`               DOUBLE(9, 2) NULL,
   PRIMARY KEY (`reddesign_designtype_id`)
 )
   ENGINE = InnoDB
