@@ -593,11 +593,17 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			// Get text color
 			if (strpos($area['fontColor'], '#') !== false)
 			{
-				$fontColor = '<span style="background-color: ' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+				$cmykCode = $this->rgb2cmyk($this->hex2rgb($area['fontColor']));
+				$cmyk = 'C: ' . $cmykCode['c'] . ' ' . 'M: ' . $cmykCode['m'] . ' ' . 'Y: ' . $cmykCode['y'] . ' ' . 'K: ' . $cmykCode['k'];
+				$fontColor = '<span style="margin-right:5px; background-color: ' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+				$fontColor .= '<span>' . $cmyk . '</span>';
 			}
 			else
 			{
-				$fontColor = '<span style="background-color: #' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+				$cmykCode = $this->rgb2cmyk($this->hex2rgb('#' . $area['fontColor']));
+				$cmyk = 'C: ' . $cmykCode['c'] . ' ' . 'M: ' . $cmykCode['m'] . ' ' . 'Y: ' . $cmykCode['y'] . ' ' . 'K: ' . $cmykCode['k'];
+				$fontColor  = '<span style="margin-right:5px; background-color:#' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+				$fontColor .= '<span>' . $cmyk . '</span>';
 			}
 
 			if (empty($area['fontSize']))
@@ -661,6 +667,62 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			';
 			$document->addScriptDeclaration($js);
 		}
+	}
+
+	/**
+	 * Converts hexadecimal color code to RGB color code. Need for conversion to CMYK.
+	 *
+	 * @param   string  $hex  Hexadecimal color code.
+	 *
+	 * @return  array   $rgb  RGB color code.
+	 */
+	public function hex2rgb($hex)
+	{
+		$color = str_replace('#', '', $hex);
+		$rgb = array('r' => hexdec(substr($color, 0, 2)), 'g' => hexdec(substr($color, 2, 2)), 'b' => hexdec(substr($color, 4, 2)));
+
+		return $rgb;
+	}
+
+	/**
+	 * Converts RGB color code to CMYK color code.
+	 *
+	 * @param   mixed  $rOrArray  Color code in RGB or R part of color code.
+	 * @param   int    $g         G part of the RGB color code.
+	 * @param   int    $b         B part of the RGB color code.
+	 *
+	 * @return  array  array  Array of CMYK values.
+	 */
+	public function rgb2cmyk($rOrArray, $g=0, $b=0)
+	{
+		if (is_array($rOrArray))
+		{
+			$r = $rOrArray['r'];
+			$g = $rOrArray['g'];
+			$b = $rOrArray['b'];
+		}
+		else
+		{
+			$r = $rOrArray;
+		}
+
+		$result = array();
+
+		$r /= 255;
+		$g /= 255;
+		$b /= 255;
+
+		$result['k'] = min(1 - $r, 1 - $g, 1 - $b);
+		$result['c'] = (1 - $r - $result['k']) / (1 - $result['k']);
+		$result['m'] = (1 - $g - $result['k']) / (1 - $result['k']);
+		$result['y'] = (1 - $b - $result['k']) / (1 - $result['k']);
+
+		$result['c'] = round($result['c'] * 100);
+		$result['m'] = round($result['m'] * 100);
+		$result['y'] = round($result['y'] * 100);
+		$result['k'] = round($result['k'] * 100);
+
+		return $result;
 	}
 
 	/**

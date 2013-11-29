@@ -61,40 +61,5 @@ defined('_JEXEC') or die();
 			</div>
 		</div>
 
-		<div class="control-group">
-			<label class="control-label " for="minWidth">
-				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_MIN_WIDTH'); ?>
-			</label>
-			<div class="controls">
-				<input class="input-small" type="text" name="minWidth" id="minWidth" value="<?php echo $this->item->minWidth; ?>">
-			</div>
-		</div>
-
-		<div class="control-group">
-			<label class="control-label " for="minHeight">
-				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_MIN_HEIGHT'); ?>
-			</label>
-			<div class="controls">
-				<input class="input-small" type="text" name="minHeight" id="minHeight" value="<?php echo $this->item->minHeight; ?>">
-			</div>
-		</div>
-
-		<div class="control-group">
-			<label class="control-label " for="maxWidth">
-				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_MAX_WIDTH'); ?>
-			</label>
-			<div class="controls">
-				<input class="input-small" type="text" name="maxWidth" id="maxWidth" value="<?php echo $this->item->maxWidth; ?>">
-			</div>
-		</div>
-
-		<div class="control-group">
-			<label class="control-label " for="maxHeight">
-				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_MAX_HEIGHT'); ?>
-			</label>
-			<div class="controls">
-				<input class="input-small" type="text" name="maxHeight" id="maxHeight" value="<?php echo $this->item->maxHeight; ?>">
-			</div>
-		</div>
 	</div>
 </form>

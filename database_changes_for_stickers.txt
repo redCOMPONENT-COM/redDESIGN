@@ -18,8 +18,3 @@ ALTER TABLE  `#__reddesign_designtypes` DROP `sample_thumb`;
 ALTER TABLE  `#__reddesign_designtypes` DROP `related_designtypes`;
 
 Changed #__reddesign_product_mapping table completley.
-
-ALTER TABLE  `#__reddesign_designtypes` ADD `minWidth` DOUBLE(9, 2) NULL;
-ALTER TABLE  `#__reddesign_designtypes` ADD `minHeight` DOUBLE(9, 2) NULL;
-ALTER TABLE  `#__reddesign_designtypes` ADD `maxWidth` DOUBLE(9, 2) NULL;
-ALTER TABLE  `#__reddesign_designtypes` ADD `maxHeight` DOUBLE(9, 2) NULL;
