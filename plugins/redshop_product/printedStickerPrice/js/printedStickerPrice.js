@@ -75,7 +75,7 @@ rsjQuery.validateDimension = function(){
 
     // Set Discount Price On Load
     rsjQuery.setDiscountPrice();
-}
+};
 
 /**
  * Set Discount Price Calculations
@@ -136,16 +136,15 @@ rsjQuery.setDiscountPrice = function(){
 
         finaldata.element   = rsjQuery.vlookup(sticker_element, elementData, true);
 
-        var ppm  = finaldata.price;
         var tppm = finaldata.price * finalWHTotal;
 
         var price = tppm / quantity * finaldata.element.price + (sticker_element / quantity);
 
 
-        discountedPrice = parseFloat(price) + parseFloat(price * rsjQuery(this).attr('percentage'));
+        var discountedPrice = parseFloat(price) + parseFloat(price * rsjQuery(this).attr('percentage'));
 
         // Multiply with Quantity
-        qtydiscountedPrice = discountedPrice * quantity;
+        var qtydiscountedPrice = discountedPrice * quantity;
 
         // Set Base Price
         rsjQuery(this).attr('base-price', discountedPrice);
@@ -156,12 +155,10 @@ rsjQuery.setDiscountPrice = function(){
             rsjQuery.updatePrice(pid, price);
         }
 
-        discountedPrice = parseFloat(price) + parseFloat(price * rsjQuery(this).attr('percentage'));
-
-
+        var discountedPrice = parseFloat(price) + parseFloat(price * rsjQuery(this).attr('percentage'));
 
         // Multiply with Quantity
-        qtydiscountedPrice = discountedPrice * quantity;
+        var qtydiscountedPrice = discountedPrice * quantity;
 
         // Set Base Price
         rsjQuery(this).attr('base-price', discountedPrice);
@@ -181,20 +178,13 @@ rsjQuery.setDiscountPrice = function(){
  * Update price in HTML View
  *
  * @param   {number}  pid         Current Product Id
- * @param   {json}  price_data    Product data Array JSON
+ * @param   {json}  price_value    Product data Array JSON
  *
  * @return  {number}              calculated price
  */
 rsjQuery.updatePrice = function (pid, price_value) {
 
-    // Set QUantity Based Discount
-    //discountPrices = rsjQuery.setQuantityDiscount(pid, price_value);
-
-    //price_value = discountPrices.basePrice;
-
-    console.log(price_value);
-
-    if (SHOW_PRICE == '1' && ( DEFAULT_QUOTATION_MODE != '1' || (DEFAULT_QUOTATION_MODE && SHOW_QUOTATION_PRICE))) {
+    if (SHOW_PRICE == '1' && ( DEFAULT_QUOTATION_MODE != '1' || (DEFAULT_QUOTATION_MODE && SHOW_QUOTATION_PRICE))){
 
         // Set price changes in HTML fields
         var formatted_main_price = number_format(price_value, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
@@ -222,7 +212,8 @@ rsjQuery.updatePrice = function (pid, price_value) {
  */
 rsjQuery.setQuantityDiscount = function(pid, price){
 
-    var discountedPrice = 0, qtydiscountedPrice = 0;
+    var discountedPrice = 0;
+    var qtyDiscountedPrice = 0;
 
     // Quantity Based Discount Calculations
     var quantityDiscountRadio = rsjQuery('.printedStickerPrice_radio:checked');
@@ -230,16 +221,16 @@ rsjQuery.setQuantityDiscount = function(pid, price){
     discountedPrice = parseFloat(price) + parseFloat(price * quantityDiscountRadio.attr('percentage'));
 
     // Multiply with Quantity
-    qtydiscountedPrice = discountedPrice * parseInt(quantityDiscountRadio.val());
+    qtyDiscountedPrice = discountedPrice * parseInt(quantityDiscountRadio.val());
 
     // Set Base Price
     quantityDiscountRadio.attr('base-price', discountedPrice);
-    quantityDiscountRadio.attr('price', qtydiscountedPrice);
+    quantityDiscountRadio.attr('price', qtyDiscountedPrice);
 
     // Prepare Object to return
-    discountPrices           = [];
+    var discountPrices           = [];
     discountPrices.basePrice = discountedPrice;
-    discountPrices.price     = qtydiscountedPrice;
+    discountPrices.price     = qtyDiscountedPrice;
 
     return discountPrices;
 };

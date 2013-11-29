@@ -25,7 +25,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 * @param   array   &$params    redSHOP Params list
 	 * @param   object  $product    Product Data Object
 	 *
-	 * @return  boolean
+	 * @return  mixed
 	 */
 	public function onPrepareProduct(&$template, &$params, $product)
 	{
@@ -109,13 +109,9 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 			{
 				var jsProductPrice = rsjQuery('input[id^=\"plg_product_price_\"]').val();
 
-				if (jsProductPrice && dpAllow)
+				if (jsProductPrice)
 				{
 					return '&plg_product_price=' + jsProductPrice;
-				}
-				else
-				{
-					alert('" . sprintf(JText::_('PLG_REDSHOP_PRODUCT_DISCOUNT_CALCULATOR_REQUIRED_MINIMUM_HEIGHT'), $minWidth) . "');
 				}
 			}
 		";
@@ -159,7 +155,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 		$cart[$i]['product_old_price']  		= $data['plg_product_price'];
 		$cart[$i]['product_old_price_excl_vat'] = $data['plg_product_price'];
-		$cart[$i]['product_price_excl_vat']     = $data['product_price'];
+		$cart[$i]['product_price_excl_vat']     = $data['product_price'] + $data['product_old_price_excl_vat'];
 		$productVat								= $cart[$i]['product_price'] * 0.25;
 		$cart[$i]['product_price']              = $data['product_price'] + $productVat;
 		$cart[$i]['product_vat'] 				= $productVat;
@@ -266,7 +262,6 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 				$lang->load('plg_redshop_product_addToCartValidation', JPATH_ADMINISTRATOR);
 
 				// Width X Height Unit
-				$dimention 	= $cart[$i]['rs_dimention'];
 				$width 		= $chars[0][0];
 				$height 	= $chars[2][0];
 			}
