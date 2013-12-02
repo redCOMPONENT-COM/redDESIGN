@@ -25,7 +25,7 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 	 * @param   array   &$params    redSHOP Params list
 	 * @param   object  $product    Product Data Object
 	 *
-	 * @return  void
+	 * @return  boolean
 	 */
 	public function onPrepareProduct(&$template, &$params, $product)
 	{
@@ -37,7 +37,7 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 
 		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product->product_id);
 
-		if ($extraFieldData->data_txt != 'type2' && $view != 'product')
+		if ($extraFieldData->data_txt != 'type2')
 		{
 			return false;
 		}
@@ -50,10 +50,20 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 		// Adding script using this way because in redSHOP is using this code
 		JHTML::Script('attribute.js', 'components/com_redshop/assets/js/', false);
 
+		if ($view != 'product' )
+		{
+			return false;
+		}
+
 		$extraFieldData = $extraField->getSectionFieldDataList(6, 1, $product->product_id);
 		$minWidth		= str_replace(",", ".", $extraFieldData->data_txt);
 		$extraFieldData = $extraField->getSectionFieldDataList(7, 1, $product->product_id);
 		$minHeight		= str_replace(",", ".", $extraFieldData->data_txt);
+
+		$extraFieldData = $extraField->getSectionFieldDataList(8, 1, $product->product_id);
+		$maxWidth		= str_replace(",", ".", $extraFieldData->data_txt);
+		$extraFieldData = $extraField->getSectionFieldDataList(9, 1, $product->product_id);
+		$maxHeight		= str_replace(",", ".", $extraFieldData->data_txt);
 
 		$table = '';
 		$table .= '<table>';
@@ -74,7 +84,9 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 							value="' . str_replace(".", ",", $minWidth) . '"
 							maxlength="5"
 							default-width="' . $minWidth . '"
-							default-height="' . $minHeight . '">
+							default-height="' . $minHeight . '"
+							max-width="' . $maxWidth . '"
+							max-height="' . $maxHeight . '">
 					<span id="plg_default_volume_unit_' . $product->product_id . '">' . DEFAULT_VOLUME_UNIT . '</span>
 				</td>';
 		$table .= '<td class="td_last">

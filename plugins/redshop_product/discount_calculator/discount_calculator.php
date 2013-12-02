@@ -25,14 +25,13 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 * @param   array   &$params    redSHOP Params list
 	 * @param   object  $product    Product Data Object
 	 *
-	 * @return  void
+	 * @return  mixed
 	 */
 	public function onPrepareProduct(&$template, &$params, $product)
 	{
 		$input         = JFactory::getApplication()->input;
 		$view          = $input->get('view');
 		$document      = JFactory::getDocument();
-		$productHelper = new producthelper;
 		$extraField    = new extraField;
 
 		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product->product_id);
@@ -110,13 +109,9 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 			{
 				var jsProductPrice = rsjQuery('input[id^=\"plg_product_price_\"]').val();
 
-				if (jsProductPrice && dpAllow)
+				if (jsProductPrice)
 				{
 					return '&plg_product_price=' + jsProductPrice;
-				}
-				else
-				{
-					alert('" . sprintf(JText::_('PLG_REDSHOP_PRODUCT_DISCOUNT_CALCULATOR_REQUIRED_MINIMUM_HEIGHT'), $minWidth) . "');
 				}
 			}
 		";
@@ -158,13 +153,36 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 		$i = $cart['idx'];
 
-		$cart[$i]['product_price']              = $data['plg_product_price'];
-		$cart[$i]['product_old_price']          = $data['plg_product_price'];
+		$cart[$i]['product_old_price']  		= $data['plg_product_price'];
 		$cart[$i]['product_old_price_excl_vat'] = $data['plg_product_price'];
-		$cart[$i]['product_price_excl_vat']     = $data['plg_product_price'];
+		$cart[$i]['product_price_excl_vat']     = $data['product_price'] + $data['product_old_price_excl_vat'];
+		$productVat								= $cart[$i]['product_price'] * 0.25;
+		$cart[$i]['product_price']              = $data['product_price'] + $productVat;
+		$cart[$i]['product_vat'] 				= $productVat;
 
 		// Set product custom price
 		$cart['plg_product_price'][$cart[$i]['product_id']] = $data['plg_product_price'];
+
+		return;
+	}
+
+	/**
+	 * Discount Calculator update cart session variables
+	 *
+	 * Method is called by the view and the results are imploded and displayed in a placeholder
+	 *
+	 * @param   array  &$data  Post Data
+	 *
+	 * @return  boolean
+	 */
+	public function onAfterBaseProductPriceSet(&$data)
+	{
+		if ( !isset($data['plg_product_price']) )
+		{
+			return;
+		}
+
+		$data['product_price']              = $data['plg_product_price'];
 
 		return;
 	}
@@ -188,10 +206,10 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 			return;
 		}
 
-		$cartArr[$i]['product_price']              = $cartArr['plg_product_price'][$cartArr[$i]['product_id']];
-		$cartArr[$i]['product_old_price']          = $cartArr['plg_product_price'][$cartArr[$i]['product_id']];
-		$cartArr[$i]['product_old_price_excl_vat'] = $cartArr['plg_product_price'][$cartArr[$i]['product_id']];
-		$cartArr[$i]['product_price_excl_vat']     = $cartArr['plg_product_price'][$cartArr[$i]['product_id']];
+		$cartArr[$i]['product_price_excl_vat']  = $cartArr[$i]['product_old_price_excl_vat'];
+		$productVat								= $cartArr[$i]['product_old_price'] * 0.25;
+		$cartArr[$i]['product_price']           = $cartArr[$i]['product_old_price_excl_vat'] + $productVat;
+		$cartArr[$i]['product_vat'] 			= $productVat;
 
 		return;
 	}
@@ -202,34 +220,48 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 * Method is called by the view and the results are imploded and displayed in a placeholder
 	 *
 	 * @param   array  &$cart  Cart session array
-	 * @param   int    $index  Cart index
+	 * @param   int    $i      Cart index
 	 * @param   array  $data   Cart Data
 	 *
 	 * @return  boolean
 	 */
-	public function onAfterCartUpdate(&$cart, $index, $data)
+	public function onAfterCartItemUpdate(&$cart, $i, $data)
 	{
-		$i	 			= $index;
-		$product_id		= $cart[$i]['product_id'];
-		$extraField 	= new extraField;
-		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product_id);
-
-		if ($extraFieldData->data_txt != 'type2' && $extraFieldData->data_txt != 'type1')
+		if ( !isset($cart['plg_product_price'][$cart[$i]['product_id']]))
 		{
 			return;
 		}
 
+		$cart[$i]['product_old_price'] = $cart['plg_product_price'][$cart[$i]['product_id']];
+	}
+
+	/**
+	 * Discount Calculator update cart session variables
+	 *
+	 * Method is called by the view and the results are imploded and displayed in a placeholder
+	 *
+	 * @param   array  &$cart              Cart session array
+	 * @param   int    $i                  Cart index
+	 * @param   float  &$calculator_price  Product price
+	 *
+	 * @return  boolean
+	 */
+	public function onBeforeCartItemUpdate(&$cart, $i, &$calculator_price)
+	{
+		$product_id		= $cart[$i]['product_id'];
+		$extraField 	= new extraField;
+		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product_id);
+
 		if ($extraFieldData->data_txt == 'type2')
 		{
-			if (isset($cart[$index]['rs_dimention']) && $cart[$index]['rs_dimention'])
+			if (isset($cart[$i]['rs_dimention']) && $cart[$i]['rs_dimention'])
 			{
-				$chars = preg_split('/ /', $cart[$index]['rs_dimention'], -1, PREG_SPLIT_OFFSET_CAPTURE);
+				$chars = preg_split('/ /', $cart[$i]['rs_dimention'], -1, PREG_SPLIT_OFFSET_CAPTURE);
 
 				$lang = JFactory::getLanguage();
 				$lang->load('plg_redshop_product_addToCartValidation', JPATH_ADMINISTRATOR);
 
 				// Width X Height Unit
-				$dimention 	= $post['rs_dimention'];
 				$width 		= $chars[0][0];
 				$height 	= $chars[2][0];
 			}
@@ -239,12 +271,8 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 			}
 
 			$quantity       = $cart[$i]['quantity'];
-
-			$extraFieldData = $extraField->getSectionFieldDataList(1, 1, $product_id);
-			$elements 		= $extraFieldData->data_txt;
-
+			$elements 		= 39;
 			$meterPerPrice  = $width * $height / 10000;
-
 			$meterTotalPrice = $meterPerPrice * $quantity;
 
 			$meters = array( 0 => 703.5,
@@ -291,13 +319,63 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 				}
 			}
 
+			// Price Per Piece
 			$pricePerPiece = $totalPricePerMeter / $quantity * $discountAmount + $elements / $quantity;
+			$price = $this->getProductQuantityPrice($cart[$i]['product_id'], $quantity);
 
-			$cartArr[$i]['product_price']              = $pricePerPiece;
-			$cartArr[$i]['product_old_price']          = $pricePerPiece;
-			$cartArr[$i]['product_old_price_excl_vat'] = $pricePerPiece;
-			$cartArr[$i]['product_price_excl_vat']     = $pricePerPiece;
+			$percentage = round($price->product_price, 2);
+
+			$calculator_price = $pricePerPiece - abs($pricePerPiece * $percentage / 100);
+
+			$cart['plg_product_price'][$cart[$i]['product_id']] = $calculator_price;
 		}
+	}
+
+	/**
+	 * Get Product Quantity prices based on shopper group of current logged in user
+	 *
+	 * @param   integer  $product_id  Product Id
+	 * @param   integer  $quantity    Cart quantity
+	 *
+	 * @throws   string  If Query fails it will throw error
+	 *
+	 * @return  array    Price information object list
+	 */
+	private function getProductQuantityPrice($product_id, $quantity)
+	{
+		require_once JPATH_SITE . '/components/com_redshop/helpers/user.php';
+
+		$user_helper    = new rsUserhelper;
+		$user           = JFactory::getUser();
+		$user_id        = $user->id;
+		$shopperGroupId = $user_helper->getShopperGroup($user_id);
+
+		// Initialize variables.
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Create the base select statement.
+		$query->select('p.*')
+			->from($db->quoteName('#__redshop_product_price', 'p'))
+			->where($db->quoteName('p.product_id') . ' = ' . (int) $product_id)
+			->where($db->quoteName('p.shopper_group_id') . ' = ' . (int) $shopperGroupId)
+			->where($db->quoteName('p.price_quantity_start') . ' <= ' . (int) $quantity)
+			->where($db->quoteName('p.price_quantity_end') . ' >= ' . (int) $quantity)
+			->order($db->quoteName('p.price_quantity_start') . ' ASC');
+
+		// Set the query and load the result.
+		$db->setQuery($query);
+
+		try
+		{
+			$prices = $db->loadObject();
+		}
+		catch (RuntimeException $e)
+		{
+			throw new RuntimeException($e->getMessage(), $e->getCode());
+		}
+
+		return $prices;
 	}
 
 	/**
