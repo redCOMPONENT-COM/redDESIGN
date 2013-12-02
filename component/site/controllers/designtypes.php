@@ -186,7 +186,6 @@ class ReddesignControllerDesigntypes extends FOFController
 						$area->fontSize++;
 					}
 
-					//$stringLines = preg_split('/(?<!^)(?!$)/u', $area->textArea);
 					$stringLines = explode("\n", $area->textArea);
 
 					$autoSizeData[] = array(
