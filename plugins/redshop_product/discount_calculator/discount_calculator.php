@@ -25,7 +25,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 * @param   array   &$params    redSHOP Params list
 	 * @param   object  $product    Product Data Object
 	 *
-	 * @return  boolean
+	 * @return  mixed
 	 */
 	public function onPrepareProduct(&$template, &$params, $product)
 	{
@@ -155,7 +155,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 		$cart[$i]['product_old_price']  		= $data['plg_product_price'];
 		$cart[$i]['product_old_price_excl_vat'] = $data['plg_product_price'];
-		$cart[$i]['product_price_excl_vat']     = $data['plg_product_price'] + $data['product_old_price_excl_vat'];
+		$cart[$i]['product_price_excl_vat']     = $data['product_price'] + $data['product_old_price_excl_vat'];
 		$productVat								= $cart[$i]['product_price'] * 0.25;
 		$cart[$i]['product_price']              = $data['product_price'] + $productVat;
 		$cart[$i]['product_vat'] 				= $productVat;
@@ -257,6 +257,108 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$cart['plg_product_price'][$productId] = $calculator_price;
 	}
 
+	/**
+	 * Get Product Quantity prices based on shopper group of current logged in user
+	 *
+	 * @param   integer  $product_id  Product Id
+	 * @param   integer  $quantity    Cart quantity
+	 *
+	 * @throws   string  If Query fails it will throw error
+	 *
+	 * @return  array    Price information object list
+	 */
+	private function getProductQuantityPrice($product_id, $quantity)
+	{
+		require_once JPATH_SITE . '/components/com_redshop/helpers/user.php';
+
+		$user_helper    = new rsUserhelper;
+		$user           = JFactory::getUser();
+		$user_id        = $user->id;
+		$shopperGroupId = $user_helper->getShopperGroup($user_id);
+
+		// Initialize variables.
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Create the base select statement.
+		$query->select('p.*')
+			->from($db->quoteName('#__redshop_product_price', 'p'))
+			->where($db->quoteName('p.product_id') . ' = ' . (int) $product_id)
+			->where($db->quoteName('p.shopper_group_id') . ' = ' . (int) $shopperGroupId)
+			->where($db->quoteName('p.price_quantity_start') . ' <= ' . (int) $quantity)
+			->where($db->quoteName('p.price_quantity_end') . ' >= ' . (int) $quantity)
+			->order($db->quoteName('p.price_quantity_start') . ' ASC');
+
+		// Set the query and load the result.
+		$db->setQuery($query);
+
+		try
+		{
+			$prices = $db->loadObject();
+		}
+		catch (RuntimeException $e)
+		{
+			throw new RuntimeException($e->getMessage(), $e->getCode());
+		}
+
+		return $prices;
+	}
+
+	/**
+	 * Discount Calculator update cart session variables
+	 *
+	 * Method is called by the view and the results are imploded and displayed in a placeholder
+	 *
+	 * @param   array    &$cart  Cart session array
+	 * @param   array    $data   Cart Data
+	 * @param   integer  $i      Index Variable
+	 *
+	 * @return  boolean
+	 */
+	public function onSameCartProduct(&$cart, $data,$i)
+	{
+		if ( !isset($data['plg_product_price']) )
+		{
+			return;
+		}
+
+		$cart[$i]['product_price']              = $data['plg_product_price'];
+		$cart[$i]['product_old_price']          = $data['plg_product_price'];
+		$cart[$i]['product_old_price_excl_vat'] = $data['plg_product_price'];
+		$cart[$i]['product_price_excl_vat']     = $data['plg_product_price'];
+
+		// Set product custom price
+		$cart['plg_product_price'][$cart[$i]['product_id']] = $data['plg_product_price'];
+	}
+
+	/**
+	 * update cart session variables
+	 *
+	 * Method is called by the redSHOP product frontend helper from getProductNetPrice function
+	 *
+	 * @param   integer  $product_id  The product id
+	 *
+	 * @return  int/boolean  return product price if success else return false
+	 */
+	public function setProductCustomPrice($product_id)
+	{
+		$session = JFactory::getSession();
+		$cart    = $session->get('cart');
+		$result  = false;
+
+		if (!empty($cart['plg_product_price']))
+		{
+			$prices = $cart['plg_product_price'];
+		}
+
+		if (isset( $prices[$product_id]) )
+		{
+			$result = $prices[$product_id];
+		}
+
+		return $result;
+	}
+
 	private function getTypesCalculation($dimension, $productId, $quantity)
 	{
 		$extraField 	= new extraField;
@@ -343,109 +445,6 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		return $calculator_price;
 	}
 
-
-	/**
-	 * Get Product Quantity prices based on shopper group of current logged in user
-	 *
-	 * @param   integer  $product_id  Product Id
-	 * @param   integer  $quantity    Cart quantity
-	 *
-	 * @throws   string  If Query fails it will throw error
-	 *
-	 * @return  array    Price information object list
-	 */
-	private function getProductQuantityPrice($product_id, $quantity)
-	{
-		require_once JPATH_SITE . '/components/com_redshop/helpers/user.php';
-
-		$user_helper    = new rsUserhelper;
-		$user           = JFactory::getUser();
-		$user_id        = $user->id;
-		$shopperGroupId = $user_helper->getShopperGroup($user_id);
-
-		// Initialize variables.
-		$db    = JFactory::getDbo();
-		$query = $db->getQuery(true);
-
-		// Create the base select statement.
-		$query->select('p.*')
-			->from($db->quoteName('#__redshop_product_price', 'p'))
-			->where($db->quoteName('p.product_id') . ' = ' . (int) $product_id)
-			->where($db->quoteName('p.shopper_group_id') . ' = ' . (int) $shopperGroupId)
-			->where($db->quoteName('p.price_quantity_start') . ' <= ' . (int) $quantity)
-			->where($db->quoteName('p.price_quantity_end') . ' >= ' . (int) $quantity)
-			->order($db->quoteName('p.price_quantity_start') . ' ASC');
-
-		// Set the query and load the result.
-		$db->setQuery($query);
-
-		try
-		{
-			$prices = $db->loadObject();
-		}
-		catch (RuntimeException $e)
-		{
-			throw new RuntimeException($e->getMessage(), $e->getCode());
-		}
-
-		return $prices;
-	}
-
-	/**
-	 * Discount Calculator update cart session variables
-	 *
-	 * Method is called by the view and the results are imploded and displayed in a placeholder
-	 *
-	 * @param   array    &$cart  Cart session array
-	 * @param   array    $data   Cart Data
-	 * @param   integer  $i      Index Variable
-	 *
-	 * @return  boolean
-	 */
-	public function onSameCartProduct(&$cart, $data,$i)
-	{
-		if ( !isset($data['plg_product_price']) )
-		{
-			return;
-		}
-
-		$cart[$i]['product_price']              = $data['plg_product_price'];
-		$cart[$i]['product_old_price']          = $data['plg_product_price'];
-		$cart[$i]['product_old_price_excl_vat'] = $data['plg_product_price'];
-		$cart[$i]['product_price_excl_vat']     = $data['plg_product_price'];
-
-		// Set product custom price
-		$cart['plg_product_price'][$cart[$i]['product_id']] = $data['plg_product_price'];
-	}
-
-	/**
-	 * update cart session variables
-	 *
-	 * Method is called by the redSHOP product front-end helper from getProductNetPrice function
-	 *
-	 * @param   integer  $product_id  The product id
-	 *
-	 * @return  integer/boolean  return product price if success else return false
-	 */
-	public function setProductCustomPrice($product_id)
-	{
-		$session = JFactory::getSession();
-		$cart    = $session->get('cart');
-		$result  = false;
-
-		if (!empty($cart['plg_product_price']))
-		{
-			$prices = $cart['plg_product_price'];
-		}
-
-		if (isset( $prices[$product_id]) )
-		{
-			$result = $prices[$product_id];
-		}
-
-		return $result;
-	}
-
 	public function onReorderCartItem(&$orderItem)
 	{
 		$orderId     = $orderItem['order_id'];
@@ -457,6 +456,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$quantity  = $orderItem['product_quantity'];
 		$productId = $orderItem['product_id'];
 
+		// get difference type of calculations
 		$calculator_price = $this->getTypesCalculation($dimension, $productId, $quantity);
 
 		$orderItem['plg_product_price'] = $calculator_price;
