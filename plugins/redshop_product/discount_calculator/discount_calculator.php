@@ -465,8 +465,6 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 */
 	public function onReorderCartItem(&$orderItem)
 	{
-		$orderItemId = $orderItem['order_item_id'];
-
 		$dimension = $this->getOrderItemDimention($orderItem);
 		$orderItem['rs_dimension'] = $dimension;
 
