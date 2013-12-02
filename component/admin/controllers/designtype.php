@@ -135,6 +135,9 @@ class ReddesignControllerDesigntype extends FOFController
 		// Get component Params
 		$params = JComponentHelper::getParams('com_reddesign');
 
+		$designTypeModel = $this->getThisModel();
+		$designTypeItem = $designTypeModel->getItem($data['designBackground']->reddesign_designtype_id);
+
 		// Create production PDF file name
 		$userId = JFactory::getUser()->id;
 		$mangledname  = explode('.', $data['designBackground']->eps_file);
@@ -187,12 +190,28 @@ class ReddesignControllerDesigntype extends FOFController
 		// Read preview size, for scaling.
 		$previewImageSize = getimagesize($previewFileLocation);
 
-		// Scaling ratio
+		// Scaling ratio.
 		$ratio = $previewImageSize[0] / $imageWidth;
 
+		// Get unit setting for padding conversion.
+		$unit = $params->get('unit', 'px');
+
+		switch ($unit)
+		{
+			case 'cm':
+				$unitToPx = '28.346456514';
+				break;
+			case 'mm':
+				$unitToPx = '2.834645651';
+				break;
+			default:
+				$unitToPx = '1';
+				break;
+		}
+
 		// Default DPI is 72.
-		$mmPadding = $params->get('productionFilePadding', 10);
-		$pdfLeftMargin = ($mmPadding * 72) / 25.4;
+		$productionFilePadding = $params->get('productionFilePadding', 10) * $unitToPx;
+		$pdfLeftMargin = ($productionFilePadding * 72) / 25.4;
 		$pdfTopMargin = $pdfLeftMargin;
 
 		foreach ($areas as $area)
@@ -229,7 +248,7 @@ class ReddesignControllerDesigntype extends FOFController
 			$rgbTextColor .= ' ';
 			$rgbTextColor .= round($rgbTextColorBuffer['blue'] * (1 / 255), 2);
 
-			if ($data['designType']->fontsizer == 'auto' || $data['designType']->fontsizer == 'auto_chars')
+			if ($designTypeItem->fontsizer == 'auto' || $designTypeItem->fontsizer == 'auto_chars')
 			{
 				$autoSizeDataArray = $data['autoSizeData'];
 				$autoSizeData = null;
@@ -330,12 +349,11 @@ class ReddesignControllerDesigntype extends FOFController
 				else
 				{
 					// Center.
-					$offsetLeft = ($areaItem->x1_pos + $areaItem->width) / 2;
-					$alignmentPostScript = "\n (" . $area['textArea'] . ") dup stringwidth pop 2 div neg 0 rmoveto";
+					$offsetLeft = $areaItem->x1_pos;
+					$alignmentPostScript = "\n (" . $area['textArea'] . ") dup stringwidth pop 2 div 0 rmoveto";
 				}
 
-				$offsetTop = (($imageHeight - $areaItem->y2_pos) + $pdfTopMargin + ($areaItem->height / 2));
-				$offsetTop -= (($area['fontSize'] / 2) - ($area['fontSize'] * 0.15));
+				$offsetTop = $areaItem->y2_pos + $pdfTopMargin;
 				$offsetLeft += $pdfLeftMargin;
 
 				$epsText .= $epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $area['fontSize'] . "  scalefont setfont\n";
