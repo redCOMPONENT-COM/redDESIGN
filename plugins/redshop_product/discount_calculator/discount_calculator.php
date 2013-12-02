@@ -22,7 +22,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 * On Prepare redSHOP Product
 	 *
 	 * @param   string  &$template  Product Template Data
-	 * @param   array   &$params    redSHOP Params list
+	 * @param   array   &$params    redSHOP Parameter list
 	 * @param   object  $product    Product Data Object
 	 *
 	 * @return  mixed
@@ -59,7 +59,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$table .= '<tr>';
 		$table .= '<td class="td_first">
 					<div class="bgSelect">
-						<select name="plg_dimention_base" id="plg_dimention_base_' . $product->product_id . '">
+						<select name="plg_dimension_base" id="plg_dimension_base_' . $product->product_id . '">
 							<option value="w">' . JText::_("COM_REDSHOP_WIDTH") . '</option>
 							<option value="h">' . JText::_("COM_REDSHOP_HEIGHT") . '</option>
 						</select>
@@ -78,8 +78,8 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 		$table .= '<td class="td_center">
 					<input type="text"
-							id="plg_dimention_base_input_' . $product->product_id . '"
-							name="plg_dimention_base_input"
+							id="plg_dimension_base_input_' . $product->product_id . '"
+							name="plg_dimension_base_input"
 							size="5"
 							value="' . str_replace(".", ",", round($minWidth, 2)) . '"
 							maxlength="5"
@@ -90,11 +90,11 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 					<span id="plg_default_volume_unit_' . $product->product_id . '">' . DEFAULT_VOLUME_UNIT . '</span>
 				</td>';
 		$table .= '<td class="td_last">
-					<span id="plg_dimention_log_' . $product->product_id . '">'
+					<span id="plg_dimension_log_' . $product->product_id . '">'
 					. str_replace(".", ",", $minWidth) . ' X ' . str_replace(".", ",", $minHeight) . ' ' . DEFAULT_VOLUME_UNIT
 					. '</span>
-					<input type="hidden" name="plg_dimention_width" value="' . $minWidth . '" id="plg_dimention_width_' . $product->product_id . '">
-					<input type="hidden" name="plg_dimention_height" value="' . $minHeight . '" id="plg_dimention_height_' . $product->product_id . '">
+					<input type="hidden" name="plg_dimension_width" value="' . $minWidth . '" id="plg_dimension_width_' . $product->product_id . '">
+					<input type="hidden" name="plg_dimension_height" value="' . $minHeight . '" id="plg_dimension_height_' . $product->product_id . '">
 					<input type="hidden" name="plg_product_price" value="' . $product->product_price . '" id="plg_product_price_' . $product->product_id . '">
 				</td>';
 		$table .= '</tr>';
@@ -248,87 +248,14 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 */
 	public function onBeforeCartItemUpdate(&$cart, $i, &$calculator_price)
 	{
-		$product_id		= $cart[$i]['product_id'];
-		$extraField 	= new extraField;
-		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product_id);
+		$dimension = $cart[$i]['rs_dimension'];
+		$quantity  = $cart[$i]['quantity'];
+		$productId = $cart[$i]['product_id'];
 
-		if ($extraFieldData->data_txt == 'type2')
-		{
-			if (isset($cart[$i]['rs_dimention']) && $cart[$i]['rs_dimention'])
-			{
-				$chars = preg_split('/ /', $cart[$i]['rs_dimention'], -1, PREG_SPLIT_OFFSET_CAPTURE);
+		// Get difference type of calculations
+		$calculator_price = $this->getTypesCalculation($dimension, $productId, $quantity);
 
-				$lang = JFactory::getLanguage();
-				$lang->load('plg_redshop_product_addToCartValidation', JPATH_ADMINISTRATOR);
-
-				// Width X Height Unit
-				$width 		= $chars[0][0];
-				$height 	= $chars[2][0];
-			}
-			else
-			{
-				return;
-			}
-
-			$quantity       = $cart[$i]['quantity'];
-			$elements 		= 39;
-			$meterPerPrice  = $width * $height / 10000;
-			$meterTotalPrice = $meterPerPrice * $quantity;
-
-			$meters = array( 0 => 703.5,
-							1 => 646.8,
-							2 => 617.4,
-							3 => 580.3,
-							4 => 536.2,
-							5 => 492.1,
-							10 => 387.8,
-							20 => 385.7,
-							50 => 378.0,
-							999 => 349.3
-							);
-
-			$pricePerMeter = 0;
-
-			foreach ($meters as $key => $value)
-			{
-				if ($key >= floor($meterTotalPrice))
-				{
-					$pricePerMeter = $value;
-					break;
-				}
-			}
-
-			$totalPricePerMeter = $pricePerMeter * $meterTotalPrice;
-
-			$quntityDiscount = array( 0 => 1,
-									5 => 0.9,
-									10 => 0.85,
-									25 => 0.80,
-									50 => 0.75,
-									500 => 0.70
-									);
-
-			$discountAmount = 0;
-
-			foreach ($quntityDiscount as $key => $value)
-			{
-				if ($key >= $elements)
-				{
-					$discountAmount = $value;
-					break;
-				}
-			}
-
-			// Price Per Piece
-			$pricePerPiece = $totalPricePerMeter / $quantity * $discountAmount + $elements / $quantity;
-			$price = $this->getProductQuantityPrice($cart[$i]['product_id'], $quantity);
-
-			$percentage = round($price->product_price, 2);
-
-			$calculator_price = $pricePerPiece - abs($pricePerPiece * $percentage / 100);
-
-			$cart['plg_product_price'][$cart[$i]['product_id']] = $calculator_price;
-		}
+		$cart['plg_product_price'][$productId] = $calculator_price;
 	}
 
 	/**
@@ -431,5 +358,165 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Get Different Type of Calculations
+	 *
+	 * @param   string   $dimension  Product Dimension
+	 * @param   integer  $productId  Product Id
+	 * @param   integer  $quantity   Product Item Quantity
+	 *
+	 * @return  float    Product final calculated Price
+	 */
+	private function getTypesCalculation($dimension, $productId, $quantity)
+	{
+		$extraField 	= new extraField;
+		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $productId);
+
+		$calculator_price = 0;
+
+		// Type 2 calculation
+		if ($extraFieldData->data_txt == 'type2')
+		{
+			if (isset($dimension) && $dimension)
+			{
+				$chars = preg_split('/ /', $dimension, -1, PREG_SPLIT_OFFSET_CAPTURE);
+
+				$lang = JFactory::getLanguage();
+				$lang->load('plg_redshop_product_addToCartValidation', JPATH_ADMINISTRATOR);
+
+				// Width X Height Unit
+				$width 		= $chars[0][0];
+				$height 	= $chars[2][0];
+			}
+			else
+			{
+				return 0;
+			}
+
+			$elements        = 39;
+			$meterPerPrice   = $width * $height / 10000;
+			$meterTotalPrice = $meterPerPrice * $quantity;
+
+			$meters = array(
+				0 => 703.5,
+				1 => 646.8,
+				2 => 617.4,
+				3 => 580.3,
+				4 => 536.2,
+				5 => 492.1,
+				10 => 387.8,
+				20 => 385.7,
+				50 => 378.0,
+				999 => 349.3
+			);
+
+			$pricePerMeter = 0;
+
+			foreach ($meters as $key => $value)
+			{
+				if ($key >= floor($meterTotalPrice))
+				{
+					$pricePerMeter = $value;
+					break;
+				}
+			}
+
+			$totalPricePerMeter = $pricePerMeter * $meterTotalPrice;
+
+			$quntityDiscount = array(
+				0 => 1,
+				5 => 0.9,
+				10 => 0.85,
+				25 => 0.80,
+				50 => 0.75,
+				500 => 0.70
+			);
+
+			$discountAmount = 0;
+
+			foreach ($quntityDiscount as $key => $value)
+			{
+				if ($key >= $elements)
+				{
+					$discountAmount = $value;
+					break;
+				}
+			}
+
+			// Price Per Piece
+			$pricePerPiece = $totalPricePerMeter / $quantity * $discountAmount + $elements / $quantity;
+			$price = $this->getProductQuantityPrice($productId, $quantity);
+
+			$percentage       = round($price->product_price, 2);
+			$calculator_price = $pricePerPiece - abs($pricePerPiece * $percentage / 100);
+		}
+
+		return $calculator_price;
+	}
+
+	/**
+	 * This event will trigger when need to reorder the product
+	 *
+	 * @param   array  &$orderItem  Current Order Item row
+	 *
+	 * @return  void
+	 */
+	public function onReorderCartItem(&$orderItem)
+	{
+		$dimension = $this->getOrderItemDimention($orderItem);
+		$orderItem['rs_dimension'] = $dimension;
+
+		$quantity  = $orderItem['product_quantity'];
+		$productId = $orderItem['product_id'];
+
+		// Get difference type of calculations
+		$calculator_price = $this->getTypesCalculation($dimension, $productId, $quantity);
+
+		$orderItem['plg_product_price'] = $calculator_price;
+	}
+
+	/**
+	 * Get Product Dimension from the order item.
+	 *
+	 * @param   array  $orderItem  Order Item information
+	 *
+	 * @return  string              Dimension Text
+	 */
+	private function getOrderItemDimention($orderItem)
+	{
+		// Initialize variables.
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Create a sub-query for the subcategory list
+		$subQuery = $db->getQuery(true);
+		$subQuery->select('field_id')
+				->from('#__redshop_fields')
+				->where($db->quoteName('field_name') . ' LIKE "rs_dimension"');
+
+		// Create the base select statement.
+		$query->select('fd.data_txt')
+			->from($db->quoteName('#__redshop_fields_data') . ' AS fd')
+			->where($db->quoteName('fd.itemid') . ' = ' . (int) $orderItem['order_item_id'])
+			->where($db->quoteName('fd.section') . ' = 12');
+
+		// Add the sub-query to the main query
+		$query->where($db->quoteName('fd.fieldid') . ' IN (' . $subQuery->__toString() . ')');
+
+		// Set the query and load the result.
+		$db->setQuery($query);
+
+		try
+		{
+			$dataTxt = $db->loadResult();
+		}
+		catch (RuntimeException $e)
+		{
+			throw new RuntimeException($e->getMessage(), $e->getCode());
+		}
+
+		return $dataTxt;
 	}
 }

@@ -70,7 +70,7 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 		$table .= '<tr>';
 		$table .= '<td class="td_first">
 					<div class="bgSelect">
-						<select name="plg_dimention_base" id="plg_dimention_base_' . $product->product_id . '">
+						<select name="plg_dimension_base" id="plg_dimension_base_' . $product->product_id . '">
 							<option value="w">' . JText::_("COM_REDSHOP_WIDTH") . '</option>
 							<option value="h">' . JText::_("COM_REDSHOP_HEIGHT") . '</option>
 						</select>
@@ -78,8 +78,8 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 				</td>';
 		$table .= '<td class="td_center">
 					<input type="text"
-							id="plg_dimention_base_input_' . $product->product_id . '"
-							name="plg_dimention_base_input"
+							id="plg_dimension_base_input_' . $product->product_id . '"
+							name="plg_dimension_base_input"
 							size="5"
 							value="' . str_replace(".", ",", $minWidth) . '"
 							maxlength="5"
@@ -90,11 +90,11 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 					<span id="plg_default_volume_unit_' . $product->product_id . '">' . DEFAULT_VOLUME_UNIT . '</span>
 				</td>';
 		$table .= '<td class="td_last">
-					<span id="plg_dimention_log_' . $product->product_id . '">'
+					<span id="plg_dimension_log_' . $product->product_id . '">'
 					. str_replace(".", ",", $minWidth) . ' X ' . str_replace(".", ",", $minHeight) . ' ' . DEFAULT_VOLUME_UNIT
 					. '</span>
-					<input type="hidden" name="plg_dimention_width" value="' . $minWidth . '" id="plg_dimention_width_' . $product->product_id . '">
-					<input type="hidden" name="plg_dimention_height" value="' . $minHeight . '" id="plg_dimention_height_' . $product->product_id . '">
+					<input type="hidden" name="plg_dimension_width" value="' . $minWidth . '" id="plg_dimension_width_' . $product->product_id . '">
+					<input type="hidden" name="plg_dimension_height" value="' . $minHeight . '" id="plg_dimension_height_' . $product->product_id . '">
 					<input type="hidden" name="plg_product_price" value="' . $product->product_price . '" id="plg_product_price_' . $product->product_id . '">
 				</td>';
 		$table .= '</tr>';

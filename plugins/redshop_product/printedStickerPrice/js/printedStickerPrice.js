@@ -41,9 +41,9 @@ rsjQuery(document).ready(function () {
     rsjQuery.setDiscountPrice();
 
     // Set Discount Price on Demand
-    rsjQuery('input[id^="plg_dimention_base_input_"],select[id^="plg_dimention_base_"]').bind('change', rsjQuery.validateDimension);
+    rsjQuery('input[id^="plg_dimension_base_input_"],select[id^="plg_dimension_base_"]').bind('change', rsjQuery.validateDimension);
 
-    rsjQuery('input[id^="plg_dimention_base_input_"]').click(function(event) {
+    rsjQuery('input[id^="plg_dimension_base_input_"]').click(function(event) {
         rsjQuery(this).val('');
     });
 });
@@ -51,8 +51,8 @@ rsjQuery(document).ready(function () {
 rsjQuery.validateDimension = function(){
 
     var pid  = rsjQuery('#product_id').val();
-    var elm  = rsjQuery('#plg_dimention_base_input_' + pid);
-    var pdb  = rsjQuery('#plg_dimention_base_' + pid).val();
+    var elm  = rsjQuery('#plg_dimension_base_input_' + pid);
+    var pdb  = rsjQuery('#plg_dimension_base_' + pid).val();
 
     var h = elm.attr('default-height'), w = elm.attr('default-width');
 
@@ -83,8 +83,8 @@ rsjQuery.validateDimension = function(){
 rsjQuery.setDiscountPrice = function(){
 
     var pid  = rsjQuery('#product_id').val();
-    var elm  = rsjQuery('#plg_dimention_base_input_' + pid);
-    var pdb  = rsjQuery('#plg_dimention_base_' + pid).val();
+    var elm  = rsjQuery('#plg_dimension_base_input_' + pid);
+    var pdb  = rsjQuery('#plg_dimension_base_' + pid).val();
     var pdbi = rsjQuery.clearPriceString(elm.val());
 
     var h = elm.attr('default-height'), newH = h, w = elm.attr('default-width'), newW = w;
@@ -114,10 +114,10 @@ rsjQuery.setDiscountPrice = function(){
 
     var finalWH = newW * newH;
 
-    rsjQuery('#plg_dimention_width_' + pid).val(newW);
-    rsjQuery('#plg_dimention_height_' + pid).val(newH);
+    rsjQuery('#plg_dimension_width_' + pid).val(newW);
+    rsjQuery('#plg_dimension_height_' + pid).val(newH);
 
-    rsjQuery('#plg_dimention_log_' + pid).html(rsjQuery.clearPriceString(newW) + ' X ' + rsjQuery.clearPriceString(newH) + rsjQuery('#plg_default_volume_unit_' + pid).html());
+    rsjQuery('#plg_dimension_log_' + pid).html(rsjQuery.clearPriceString(newW) + ' X ' + rsjQuery.clearPriceString(newH) + rsjQuery('#plg_default_volume_unit_' + pid).html());
     rsjQuery('.discount-calculator-plugin-width').html(newW);
     rsjQuery('.discount-calculator-plugin-height').html(newH);
 
