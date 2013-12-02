@@ -395,7 +395,6 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 				return 0;
 			}
 
-			$quantity        = $quantity;
 			$elements        = 39;
 			$meterPerPrice   = $width * $height / 10000;
 			$meterTotalPrice = $meterPerPrice * $quantity;
@@ -466,7 +465,6 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 */
 	public function onReorderCartItem(&$orderItem)
 	{
-		$orderId     = $orderItem['order_id'];
 		$orderItemId = $orderItem['order_item_id'];
 
 		$dimension = $this->getOrderItemDimention($orderItem);
