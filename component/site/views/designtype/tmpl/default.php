@@ -324,8 +324,8 @@ $productId     = $input->getInt('pid', 0);
 				"fontColor" :	fontColor,
 				"fontSize" :	akeeba.jQuery("#fontSize<?php echo $area->reddesign_area_id; ?>").val(),
 				"fontTypeId" :	akeeba.jQuery("#fontArea<?php echo $area->reddesign_area_id; ?>").val(),
-				"plg_dimention_base" :   akeeba.jQuery("#plg_dimention_base_<?php echo $productId;?>").val(),
-				"plg_dimention_base_input" :   akeeba.jQuery("#plg_dimention_base_input_<?php echo $productId;?>").val()
+				"plg_dimension_base" :   akeeba.jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
+				"plg_dimension_base_input" :   akeeba.jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
 			});
 
 			var textareacount = akeeba.jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").val().replace(/ /g,'').length;
@@ -359,7 +359,7 @@ $productId     = $input->getInt('pid', 0);
 						}, 5000);
 
 						<?php if ($this->item->fontsizer == 'auto' || $this->item->fontsizer == 'auto_chars') : ?>
-							akeeba.jQuery("#plg_dimention_base_input_<?php echo $productId;?>").attr({
+							akeeba.jQuery("#plg_dimension_base_input_<?php echo $productId;?>").attr({
 								'default-height' : json.autoSizeData[0].canvasHeight,
 								'default-width': json.autoSizeData[0].canvasWidth
 							});

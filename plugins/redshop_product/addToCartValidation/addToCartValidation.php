@@ -28,9 +28,9 @@ class PlgRedshop_ProductaddToCartValidation extends JPlugin
 	 */
 	public function onBeforeAddProductToCart($post)
 	{
-		if (isset($post['rs_dimention']) && $post['rs_dimention'])
+		if (isset($post['rs_dimension']) && $post['rs_dimension'])
 		{
-			$chars = preg_split('/ /', $post['rs_dimention'], -1, PREG_SPLIT_OFFSET_CAPTURE);
+			$chars = preg_split('/ /', $post['rs_dimension'], -1, PREG_SPLIT_OFFSET_CAPTURE);
 
 			$lang = JFactory::getLanguage();
 			$lang->load('plg_redshop_product_addToCartValidation', JPATH_ADMINISTRATOR);
