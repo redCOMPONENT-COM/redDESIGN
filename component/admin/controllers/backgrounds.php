@@ -79,7 +79,7 @@ class ReddesignControllerBackgrounds extends FOFController
 				$this->redirect();
 			}
 
-			// Create a image preview of the EPS
+			// Create an image preview of the EPS.
 			$jpegPreviewFile = $this->createBackgroundPreview($uploaded_file['mangled_filename']);
 
 			if (!$jpegPreviewFile)
@@ -187,16 +187,31 @@ class ReddesignControllerBackgrounds extends FOFController
 			$designId = (int) $data['reddesign_designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
-			$backgroundsModel->unsetAllPDFBg($designId);
+			$backgroundsModel->unsetAllIsProductionBg($designId);
 		}
 
 		// If this new background will be the preview background, switch it against the previous preview background
-		if ((int) $data['isPreviewBg'])
+		if ((int) $data['isDefaultPreview'])
 		{
 			$designId = (int) $data['reddesign_designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
-			$backgroundsModel->unsetAllPreviewBg($designId);
+			$backgroundsModel->unsetAllIsDefaultPreview($designId);
+		}
+
+		if (empty($data['isProductionBg']))
+		{
+			$data['isProductionBg'] = 0;
+		}
+
+		if (empty($data['isDefaultPreview']))
+		{
+			$data['isDefaultPreview'] = 0;
+		}
+
+		if (empty($data['isPreviewBg']))
+		{
+			$data['isPreviewBg'] = 0;
 		}
 
 		return $data;
@@ -400,7 +415,7 @@ class ReddesignControllerBackgrounds extends FOFController
 	 *
 	 * @return void
 	 */
-	public function setPDFbg()
+	public function setProductionFileBg()
 	{
 		$designId	= $this->input->getInt('reddesign_designtype_id', '');
 		$bgId		= $this->input->getInt('reddesign_background_id', '');
@@ -409,7 +424,7 @@ class ReddesignControllerBackgrounds extends FOFController
 
 		$app = JFactory::getApplication();
 
-		if (!$model->setAsPDFbg($designId, $bgId))
+		if (!$model->setAsProductionFileBg($designId, $bgId))
 		{
 			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_ERROR_SWITCHING_PDF_BG'), 'error');
 		}

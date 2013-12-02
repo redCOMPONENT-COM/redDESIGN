@@ -93,6 +93,15 @@
 				description="COM_REDDESIGN_CONFIG_MAX_BACKGROUND_THUMBNAIL_HEIGHT_DESC"
 				/>
 
+		<field
+			name="productionFilePadding"
+			type="text"
+			size="5"
+			default="10"
+			label="COM_REDDESIGN_CONFIG_PRODUCTION_FILE_PADDING"
+			description="COM_REDDESIGN_CONFIG_PRODUCTION_FILE_PADDING_DESC"
+			/>
+
 	</fieldset>
 
 	<fieldset

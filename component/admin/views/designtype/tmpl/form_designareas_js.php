@@ -679,13 +679,15 @@ function addAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, wi
 
 	akeeba.jQuery("#areasTBody").append(areaRowRendered);
 
-	<?php foreach($this->alignmentOptions as  $alginmentOption) : ?>
-		akeeba.jQuery("#areaFontAlignment" + reddesign_area_id).append(
-			'<option value="<?php echo $alginmentOption->value; ?>">' +
-				'<?php echo $alginmentOption->text; ?>' +
-			'</option>'
-		);
-	<?php endforeach; ?>
+	<?php if ($this->item->fontsizer != 'auto' && $this->item->fontsizer != 'auto_chars') : ?>
+		<?php foreach($this->alignmentOptions as  $alginmentOption) : ?>
+			akeeba.jQuery("#areaFontAlignment" + reddesign_area_id).append(
+				'<option value="<?php echo $alginmentOption->value; ?>">' +
+					'<?php echo $alginmentOption->text; ?>' +
+				'</option>'
+			);
+		<?php endforeach; ?>
+	<?php endif; ?>
 
 	<?php foreach($this->fontsOptions as  $fontsOption) : ?>
 		akeeba.jQuery("#areaFonts" + reddesign_area_id).append(

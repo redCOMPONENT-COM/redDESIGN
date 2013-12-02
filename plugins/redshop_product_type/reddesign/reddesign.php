@@ -77,7 +77,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			$query->from($db->quoteName('#__reddesign_product_mapping'));
 			$query->where($db->quoteName('product_id') . ' = ' . $product_data->product_id);
 			$db->setQuery($query);
-			$selectedDesignType = $db->loadResult();
+			$selectedDesignTypes = $db->loadResult();
 
 			$designTypeOptions = array();
 			$designTypeOptions[] = JHtml::_('select.option', '0', JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_SELECT'));
@@ -90,7 +90,15 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			$html = '<div>';
 				$html .= '<label for="designType">' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_DESIGN_TYPE') . '</label>';
 				$html .= '<div style="padding-top: 7px" >';
-					$html .= JHtml::_('select.genericlist', $designTypeOptions, 'designType', ' class="inputbox" ', 'value', 'text', $selectedDesignType);
+					$html .= JHtml::_(
+										'select.genericlist',
+										$designTypeOptions,
+										'designType[]',
+										' multiple class="inputbox" size="9" ',
+										'value',
+										'text',
+										explode(',', $selectedDesignTypes)
+									);
 				$html .= '</div>';
 			$html .= '</div>';
 
@@ -111,43 +119,30 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	{
 		$app = JFactory::getApplication();
 		$db = JFactory::getDbo();
-		$reddesignDesigntypeId = $app->input->getInt('designType', null);
 
-		if (!empty($reddesignDesigntypeId))
+		$reddesignDesigntypeIds = $app->input->get('designType', array(), 'ARRAY');
+		$reddesignDesigntypeIds = implode(',', $reddesignDesigntypeIds);
+
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName(array('reddesign_designtype_id', 'product_id')));
+		$query->from($db->quoteName('#__reddesign_product_mapping'));
+		$query->where($db->quoteName('product_id') . ' = ' . $row->product_id);
+		$db->setQuery($query);
+		$map = $db->loadObject();
+
+		if (empty($map))
 		{
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_designtype_id'));
-			$query->from($db->quoteName('#__reddesign_product_mapping'));
-			$query->where($db->quoteName('product_id') . ' = ' . $row->product_id);
-			$db->setQuery($query);
+			$map = new JObject;
+			$map->product_id = $row->product_id;
+			$map->reddesign_designtype_id = $reddesignDesigntypeIds;
 
-			$results = $db->loadObjectList();
+			return $db->insertObject('#__reddesign_product_mapping', $map);
+		}
+		else
+		{
+			$map->reddesign_designtype_id = $reddesignDesigntypeIds;
 
-			if (count($results) > 0)
-			{
-				$query = $db->getQuery(true);
-				$query->update($db->quoteName('#__reddesign_product_mapping'));
-				$query->set($db->quoteName('reddesign_designtype_id') . '=' . $reddesignDesigntypeId);
-				$query->where($db->quoteName('product_id') . ' = ' . $row->product_id);
-
-				$db->setQuery($query);
-
-				return $db->query();
-			}
-			else
-			{
-				$columns = array('reddesign_designtype_id', 'product_id');
-				$values = array($reddesignDesigntypeId, $row->product_id);
-
-				$query = $db->getQuery(true);
-				$query->insert($db->quoteName('#__reddesign_product_mapping'));
-				$query->columns($db->quoteName($columns));
-				$query->values(implode(',', $values));
-
-				$db->setQuery($query);
-
-				return $db->query();
-			}
+			return $db->updateObject('#__reddesign_product_mapping', $map, 'product_id');
 		}
 
 		return null;
@@ -165,6 +160,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	public function productTypeAttributeValue($property)
 	{
 		$product = $property->product;
+		$backgrounds = array();
 
 		$db = JFactory::getDbo();
 
@@ -196,13 +192,16 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		$designTypeId = $db->loadResult();
 
 		// Get all the backgrounds that belongs to selected Design Type item.
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
-			->from($db->quoteName('#__reddesign_backgrounds'))
-			->where($db->quoteName('isProductionBg') . ' = ' . 0)
-			->where($db->quoteName('reddesign_designtype_id') . ' = ' . $designTypeId);
-		$db->setQuery($query);
-		$backgrounds = $db->loadObjectList();
+		if (!empty($designTypeId))
+		{
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
+				->from($db->quoteName('#__reddesign_backgrounds'))
+				->where($db->quoteName('isProductionBg') . ' = ' . 0)
+				->where($db->quoteName('reddesign_designtype_id') . ' IN (' . $designTypeId . ')');
+			$db->setQuery($query);
+			$backgrounds = $db->loadObjectList();
+		}
 
 		$dropdownHtml = '<tr>'
 		. '<td>'
@@ -256,6 +255,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	public function loadFieldsJSFromPlugin($product)
 	{
 		$jsLoaded = false;
+		$backgrounds = array();
 
 		if ($product->product_type == 'redDESIGN')
 		{
@@ -270,14 +270,17 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			$db->setQuery($query);
 			$designTypeId = $db->loadResult();
 
-			// Get all the backgrounds that belongs to selected Design Type item.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
-				->from($db->quoteName('#__reddesign_backgrounds'))
-				->where($db->quoteName('isProductionBg') . ' = ' . 0)
-				->where($db->quoteName('reddesign_designtype_id') . ' = ' . $designTypeId);
-			$db->setQuery($query);
-			$backgrounds = $db->loadObjectList();
+			if (!empty($designTypeId))
+			{
+				// Get all the backgrounds that belongs to selected Design Type item.
+				$query = $db->getQuery(true);
+				$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
+					->from($db->quoteName('#__reddesign_backgrounds'))
+					->where($db->quoteName('isProductionBg') . ' = ' . 0)
+					->where($db->quoteName('reddesign_designtype_id') . ' IN (' . $designTypeId . ')');
+				$db->setQuery($query);
+				$backgrounds = $db->loadObjectList();
+			}
 
 			$dropdownHtml = '';
 

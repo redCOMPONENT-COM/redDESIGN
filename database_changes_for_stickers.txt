@@ -16,3 +16,5 @@ ALTER TABLE  `#__reddesign_designtypes` DROP `description`;
 ALTER TABLE  `#__reddesign_designtypes` DROP `sample_image`;
 ALTER TABLE  `#__reddesign_designtypes` DROP `sample_thumb`;
 ALTER TABLE  `#__reddesign_designtypes` DROP `related_designtypes`;
+
+Changed #__reddesign_product_mapping table completley.

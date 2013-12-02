@@ -68,6 +68,9 @@ class ReddesignControllerDesigntypes extends FOFController
 		$design->loadString($this->input->getString('designarea', ''), 'JSON');
 		$design = $design->get('Design');
 
+		$designTypeModel = FOFModel::getTmpInstance('Designtypes', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_designtype_id);
+		$designType = $designTypeModel->getItem($design->reddesign_designtype_id);
+
 		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_designtype_id);
 		$background = $backgroundModel->getItem($design->reddesign_background_id);
 		$backgroundImage = $background->image_path;
@@ -136,10 +139,14 @@ class ReddesignControllerDesigntypes extends FOFController
 				// Get area.
 				$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($design->reddesign_background_id);
 				$this->areaItem = $areaModel->getItem($area->id);
-				$topoffset = 0;
+				$topOffset = 0;
+				$leftOffset = 0;
+
+				// Create area image.
+				$areaImage->newImage($this->areaItem->width, $this->areaItem->height, new ImagickPixel('transparent'));
 
 				// If we need autosize text than take different approach than solution for regular text.
-				if (empty($area->fontSize))
+				if ($designType->fontsizer == 'auto_chars')
 				{
 					$newAutoSizeData = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $fontType, $this->areaItem->height, $this->areaItem->width);
 
@@ -152,7 +159,7 @@ class ReddesignControllerDesigntypes extends FOFController
 							$area->textArea,
 							$fontType
 						);
-						$topoffset = $newAutoSizeData['topoffset'];
+						$topOffset = $newAutoSizeData['topoffset'];
 						$newAutoSizeData['canvasHeight'] = $dimension['canvasHeight'];
 						$newAutoSizeData['canvasWidth'] = $dimension['canvasWidth'];
 					}
@@ -160,11 +167,38 @@ class ReddesignControllerDesigntypes extends FOFController
 					$area->fontSize = $newAutoSizeData['fontSize'];
 					$newAutoSizeData['reddesign_area_id'] = $this->areaItem->reddesign_area_id;
 					$autoSizeData[] = $newAutoSizeData;
+
 					$this->areaItem->textalign = 3;
 				}
+				elseif ($designType->fontsizer == 'auto')
+				{
+					// Create an array for the textwidth and textheight
+					$textProperties = array('textWidth' => 0);
 
-				// Create an area image.
-				$areaImage->newImage($this->areaItem->width, $this->areaItem->height, new ImagickPixel('transparent'));
+					// Set an initial value for the fontsize, will be increased in the loop below
+					$area->fontSize = 0;
+
+					// Increase the fontsize until we have reached our desired width
+					while ($textProperties['textWidth'] <= $this->areaItem->width && $textProperties['textHeight'] <= $this->areaItem->height)
+					{
+						$areaDraw->setFontSize($area->fontSize);
+						$textProperties = $areaImage->queryFontMetrics($areaDraw, $area->textArea);
+						$area->fontSize++;
+					}
+
+					//$stringLines = preg_split('/(?<!^)(?!$)/u', $area->textArea);
+					$stringLines = explode("\n", $area->textArea);
+
+					$autoSizeData[] = array(
+												'fontSize' => $area->fontSize,
+												'stringLines' => $stringLines,
+												'topoffset' => 0,
+												'maxHeight' => 1,
+												'reddesign_area_id' => $this->areaItem->reddesign_area_id
+					);
+
+					$this->areaItem->textalign = 3;
+				}
 
 				// Set color and font.
 				$areaDraw->setFont($fontTypeFileLocation);
@@ -179,11 +213,11 @@ class ReddesignControllerDesigntypes extends FOFController
 				 * 2 is right,
 				 * 3 is center.
 				 */
-				if ((int) $this->areaItem->textalign == 1)
+				if ($this->areaItem->textalign == 1)
 				{
 					$areaDraw->setGravity(Imagick::GRAVITY_WEST);
 				}
-				elseif ((int) $this->areaItem->textalign == 2)
+				elseif ($this->areaItem->textalign == 2)
 				{
 					$areaDraw->setGravity(Imagick::GRAVITY_EAST);
 				}
@@ -193,7 +227,7 @@ class ReddesignControllerDesigntypes extends FOFController
 				}
 
 				// Add text to the area image.
-				$areaImage->annotateImage($areaDraw, 0, $topoffset, 0, $area->textArea);
+				$areaImage->annotateImage($areaDraw, $leftOffset, $topOffset, 0, $area->textArea);
 
 				// Put second image on top of the first.
 				$newImage->compositeImage($areaImage, imagick::COMPOSITE_DEFAULT, $this->areaItem->x1_pos, $this->areaItem->y1_pos);

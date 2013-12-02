@@ -29,13 +29,12 @@ class ReddesignModelBackgrounds extends FOFModel
 	 *
 	 * @return bool
 	 */
-	public function setAsPDFbg($designId, $bgId)
+	public function setAsProductionFileBg($designId, $bgId)
 	{
-		if (!$this->unsetAllPDFBg($designId))
+		if (!$this->unsetAllIsProductionBg($designId))
 		{
 			return false;
 		}
-
 
 		// Create a new query object.
 		$query = $this->_db->getQuery(true);
@@ -63,7 +62,7 @@ class ReddesignModelBackgrounds extends FOFModel
 	 *
 	 * @return bool
 	 */
-	public function unsetAllPDFBg($designId)
+	public function unsetAllIsProductionBg($designId)
 	{
 		// Create a new query object.
 		$query = $this->_db->getQuery(true);
@@ -94,7 +93,7 @@ class ReddesignModelBackgrounds extends FOFModel
 	 */
 	public function setAsPreviewbg($designId, $bgId)
 	{
-		if (!$this->unsetAllPreviewBg($designId))
+		if (!$this->unsetAllIsDefaultPreview($designId))
 		{
 			return false;
 		}
@@ -125,7 +124,7 @@ class ReddesignModelBackgrounds extends FOFModel
 	 *
 	 * @return bool
 	 */
-	public function unsetAllPreviewBg($designId)
+	public function unsetAllIsDefaultPreview($designId)
 	{
 		// Create a new query object.
 		$query = $this->_db->getQuery(true);

@@ -92,6 +92,7 @@ rsjQuery.setDiscountPrice = function(){
     if (!isNaN(pdbi)) {
 
         var ratio_h2w = w > 0 && (h / w), ratio_w2h = h > 0 && (w / h);
+        var dpAllow;
 
         if (pdb == 'w') {
             newW = pdbi;
@@ -139,16 +140,6 @@ rsjQuery.setDiscountPrice = function(){
         var tppm = finaldata.price * finalWHTotal;
 
         var price = tppm / quantity * finaldata.element.price + (sticker_element / quantity);
-
-
-        var discountedPrice = parseFloat(price) + parseFloat(price * rsjQuery(this).attr('percentage'));
-
-        // Multiply with Quantity
-        var qtydiscountedPrice = discountedPrice * quantity;
-
-        // Set Base Price
-        rsjQuery(this).attr('base-price', discountedPrice);
-        rsjQuery(this).attr('price', qtydiscountedPrice);
 
         if (rsjQuery(this).attr('checked'))
         {
@@ -212,8 +203,8 @@ rsjQuery.updatePrice = function (pid, price_value) {
  */
 rsjQuery.setQuantityDiscount = function(pid, price){
 
-    var discountedPrice = 0;
-    var qtyDiscountedPrice = 0;
+    var discountedPrice;
+    var qtyDiscountedPrice;
 
     // Quantity Based Discount Calculations
     var quantityDiscountRadio = rsjQuery('.printedStickerPrice_radio:checked');

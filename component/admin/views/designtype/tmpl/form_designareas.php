@@ -10,7 +10,7 @@
 defined('_JEXEC') or die();
 
 // JS templating framework
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/mustache.js');
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/mustache.min.js');
 
 // Select area JS includes.
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/jquery.imgareaselect.pack.js');
@@ -18,7 +18,7 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/imgareaselect-animate
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
 
 // Colorpicker includes.
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/farbtastic.js');
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/farbtastic.min.js');
 FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/farbtastic.css');
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 
@@ -122,7 +122,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 					</span>
 					<div id="backgroundImageContainer">
 						<img id="background"
-								 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->productionBackground->image_path; ?>"/>
+							 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->productionBackground->image_path; ?>"/>
 						<?php foreach($this->areas as $area) : ?>
 							<div id="areaDiv<?php echo $area->reddesign_area_id; ?>">
 								<?php echo $area->title; ?>
@@ -251,24 +251,21 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 										<div class="row-fluid">
 											<div class="span6">
 
-												<?php if($this->item->fontsizer != 'auto') : ?>
+												<?php if($this->item->fontsizer != 'auto' && $this->item->fontsizer != 'auto_chars') : ?>
 
 													<div class="control-group">
 														<label for="<?php echo 'areaFontAlignment' . $area->reddesign_area_id; ?>">
-
 															<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALIGNMENT') ?>
-
 															<?php
-															echo JHtml::_('select.genericlist',
-																$this->alignmentOptions,
-																'areaFontAlignment' . $area->reddesign_area_id,
-																'',
-																'value',
-																'text',
-																$area->textalign
-															);
+																echo JHtml::_('select.genericlist',
+																	$this->alignmentOptions,
+																	'areaFontAlignment' . $area->reddesign_area_id,
+																	'',
+																	'value',
+																	'text',
+																	$area->textalign
+																);
 															?>
-
 														</label>
 													</div>
 
@@ -276,99 +273,81 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 
 												<div class="control-group">
 													<label for="<?php echo 'areaFonts' . $area->reddesign_area_id; ?>">
-
 														<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALLOWED_FONTS') ?>
-
 														<?php
-														echo JHtml::_('select.genericlist',
-															$this->fontsOptions,
-															'areaFonts' . $area->reddesign_area_id . '[]',
-															' multiple="multiple" ',
-															'value',
-															'text',
-															explode(',', $area->font_id)
-														);
+															echo JHtml::_(
+																			'select.genericlist',
+																			$this->fontsOptions,
+																			'areaFonts' . $area->reddesign_area_id . '[]',
+																			' multiple="multiple" ',
+																			'value',
+																			'text',
+																			explode(',', $area->font_id)
+															);
 														?>
-
 													</label>
 												</div>
 
 											</div>
 											<div class="offset2 span4">
 
-												<?php if($this->item->fontsizer != 'auto') : ?>
+												<?php if ($this->item->fontsizer == 'dropdown_numbers' || $this->item->fontsizer == 'dropdown_labels') : ?>
 
-													<?php if ($this->item->fontsizer == 'dropdown_numbers' || $this->item->fontsizer == 'dropdown_labels') : ?>
+													<div class="control-group">
+														<label for="fontsizerDropdown<?php echo $area->reddesign_area_id; ?>">
+															<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>
+															<textarea class="span12"
+																	  style="resize: none;"
+																	  id="fontsizerDropdown<?php echo $area->reddesign_area_id; ?>"
+																	  name="fontsizerDropdown<?php echo $area->reddesign_area_id; ?>"
+																	  rows="7"
+																><?php echo $area->font_size; ?></textarea>
+															<span class="help-block">
+																<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC') ?>
+															</span>
+														</label>
+													</div>
 
-														<div class="control-group">
-															<label for="fontsizerDropdown<?php echo $area->reddesign_area_id; ?>">
+												<?php elseif ($this->item->fontsizer == 'slider') : ?>
 
-																<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>
+													<div class="control-group">
+														<label for="fontsizerSliderDefault<?php echo $area->reddesign_area_id; ?>">
+															<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_FONT_SIZE') ?>
+															<input class="input-mini"
+																   type="text"
+																   value="<?php echo $area->defaultFontSize; ?>"
+																   maxlength="3"
+																   id="fontsizerSliderDefault<?php echo $area->reddesign_area_id; ?>"
+																   name="fontsizerSliderDefault<?php echo $area->reddesign_area_id; ?>"
+																/>
+														</label>
+													</div>
 
-																<textarea class="span12"
-																		  style="resize: none;"
-																		  id="fontsizerDropdown<?php echo $area->reddesign_area_id; ?>"
-																		  name="fontsizerDropdown<?php echo $area->reddesign_area_id; ?>"
-																		  rows="7"
-																	><?php echo $area->font_size; ?></textarea>
-																<span class="help-block">
-																	<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC') ?>
-																</span>
+													<div class="control-group">
+														<label for="fontsizerSliderMin<?php echo $area->reddesign_area_id; ?>">
+															<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MIN_FONT_SIZE') ?>
+															<input class="input-mini"
+																   type="text"
+																   value="<?php echo $area->minFontSize; ?>"
+																   maxlength="3"
+																   id="fontsizerSliderMin<?php echo $area->reddesign_area_id; ?>"
+																   name="fontsizerSliderMin<?php echo $area->reddesign_area_id; ?>"
+																/>
+														</label>
+													</div>
 
-															</label>
-														</div>
-
-													<?php elseif ($this->item->fontsizer == 'slider') : ?>
-
-														<div class="control-group">
-															<label for="fontsizerSliderDefault<?php echo $area->reddesign_area_id; ?>">
-
-																<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_FONT_SIZE') ?>
-
-																<input class="input-mini"
-																	   type="text"
-																	   value="<?php echo $area->defaultFontSize; ?>"
-																	   maxlength="3"
-																	   id="fontsizerSliderDefault<?php echo $area->reddesign_area_id; ?>"
-																	   name="fontsizerSliderDefault<?php echo $area->reddesign_area_id; ?>"
-																	/>
-
-															</label>
-														</div>
-
-														<div class="control-group">
-															<label for="fontsizerSliderMin<?php echo $area->reddesign_area_id; ?>">
-
-																<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MIN_FONT_SIZE') ?>
-
-																<input class="input-mini"
-																	   type="text"
-																	   value="<?php echo $area->minFontSize; ?>"
-																	   maxlength="3"
-																	   id="fontsizerSliderMin<?php echo $area->reddesign_area_id; ?>"
-																	   name="fontsizerSliderMin<?php echo $area->reddesign_area_id; ?>"
-																	/>
-
-															</label>
-														</div>
-
-														<div class="control-group">
-															<label for="fontsizerSliderMax<?php echo $area->reddesign_area_id; ?>">
-
-																<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAX_FONT_SITE') ?>
-
-																<input class="input-mini"
-																	   type="text"
-																	   value="<?php echo $area->maxFontSize; ?>"
-																	   maxlength="3"
-																	   id="fontsizerSliderMax<?php echo $area->reddesign_area_id; ?>"
-																	   name="fontsizerSliderMax<?php echo $area->reddesign_area_id; ?>"
-																	/>
-
-															</label>
-														</div>
-
-													<?php endif; ?>
+													<div class="control-group">
+														<label for="fontsizerSliderMax<?php echo $area->reddesign_area_id; ?>">
+															<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAX_FONT_SITE') ?>
+															<input class="input-mini"
+																   type="text"
+																   value="<?php echo $area->maxFontSize; ?>"
+																   maxlength="3"
+																   id="fontsizerSliderMax<?php echo $area->reddesign_area_id; ?>"
+																   name="fontsizerSliderMax<?php echo $area->reddesign_area_id; ?>"
+																/>
+														</label>
+													</div>
 
 												<?php endif; ?>
 
