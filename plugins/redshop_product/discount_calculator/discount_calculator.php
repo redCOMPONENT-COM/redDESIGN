@@ -25,7 +25,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 * @param   array   &$params    redSHOP Params list
 	 * @param   object  $product    Product Data Object
 	 *
-	 * @return  mixed
+	 * @return  boolean
 	 */
 	public function onPrepareProduct(&$template, &$params, $product)
 	{
@@ -155,7 +155,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 		$cart[$i]['product_old_price']  		= $data['plg_product_price'];
 		$cart[$i]['product_old_price_excl_vat'] = $data['plg_product_price'];
-		$cart[$i]['product_price_excl_vat']     = $data['product_price'] + $data['product_old_price_excl_vat'];
+		$cart[$i]['product_price_excl_vat']     = $data['plg_product_price'] + $data['product_old_price_excl_vat'];
 		$productVat								= $cart[$i]['product_price'] * 0.25;
 		$cart[$i]['product_price']              = $data['product_price'] + $productVat;
 		$cart[$i]['product_vat'] 				= $productVat;
@@ -248,15 +248,27 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 */
 	public function onBeforeCartItemUpdate(&$cart, $i, &$calculator_price)
 	{
-		$product_id		= $cart[$i]['product_id'];
+		$dimension = $cart[$i]['rs_dimention'];
+		$quantity  = $cart[$i]['quantity'];
+		$productId = $cart[$i]['product_id'];
+
+		$calculator_price = $this->getTypesCalculation($dimension, $productId, $quantity);
+
+		$cart['plg_product_price'][$productId] = $calculator_price;
+	}
+
+	private function getTypesCalculation($dimension, $productId, $quantity)
+	{
 		$extraField 	= new extraField;
-		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product_id);
+		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $productId);
+
+		$calculator_price = 0;
 
 		if ($extraFieldData->data_txt == 'type2')
 		{
-			if (isset($cart[$i]['rs_dimention']) && $cart[$i]['rs_dimention'])
+			if (isset($dimension) && $dimension)
 			{
-				$chars = preg_split('/ /', $cart[$i]['rs_dimention'], -1, PREG_SPLIT_OFFSET_CAPTURE);
+				$chars = preg_split('/ /', $dimension, -1, PREG_SPLIT_OFFSET_CAPTURE);
 
 				$lang = JFactory::getLanguage();
 				$lang->load('plg_redshop_product_addToCartValidation', JPATH_ADMINISTRATOR);
@@ -270,7 +282,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 				return;
 			}
 
-			$quantity       = $cart[$i]['quantity'];
+			$quantity       = $quantity;
 			$elements 		= 39;
 			$meterPerPrice  = $width * $height / 10000;
 			$meterTotalPrice = $meterPerPrice * $quantity;
@@ -321,15 +333,16 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 			// Price Per Piece
 			$pricePerPiece = $totalPricePerMeter / $quantity * $discountAmount + $elements / $quantity;
-			$price = $this->getProductQuantityPrice($cart[$i]['product_id'], $quantity);
+			$price = $this->getProductQuantityPrice($productId, $quantity);
 
 			$percentage = round($price->product_price, 2);
 
 			$calculator_price = $pricePerPiece - abs($pricePerPiece * $percentage / 100);
-
-			$cart['plg_product_price'][$cart[$i]['product_id']] = $calculator_price;
 		}
+
+		return $calculator_price;
 	}
+
 
 	/**
 	 * Get Product Quantity prices based on shopper group of current logged in user
@@ -408,11 +421,11 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	/**
 	 * update cart session variables
 	 *
-	 * Method is called by the redSHOP product frontend helper from getProductNetPrice function
+	 * Method is called by the redSHOP product front-end helper from getProductNetPrice function
 	 *
 	 * @param   integer  $product_id  The product id
 	 *
-	 * @return  int/boolean  return product price if success else return false
+	 * @return  integer/boolean  return product price if success else return false
 	 */
 	public function setProductCustomPrice($product_id)
 	{
@@ -431,5 +444,57 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		}
 
 		return $result;
+	}
+
+	public function onReorderCartItem(&$orderItem)
+	{
+		$orderId     = $orderItem['order_id'];
+		$orderItemId = $orderItem['order_item_id'];
+
+		$dimension = $this->getOrderItemDimention($orderItem);
+		$orderItem['rs_dimention'] = $dimension;
+
+		$quantity  = $orderItem['product_quantity'];
+		$productId = $orderItem['product_id'];
+
+		$calculator_price = $this->getTypesCalculation($dimension, $productId, $quantity);
+
+		$orderItem['plg_product_price'] = $calculator_price;
+	}
+
+	private function getOrderItemDimention($orderItem)
+	{
+		// Initialize variables.
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Create a sub-query for the subcategory list
+        $subQuery = $db->getQuery(true);
+        $subQuery->select('field_id')
+                ->from('#__redshop_fields')
+                ->where($db->quoteName('field_name') . ' LIKE "rs_dimention"');
+
+		// Create the base select statement.
+		$query->select('fd.data_txt')
+			->from($db->quoteName('#__redshop_fields_data') . ' AS fd')
+			->where($db->quoteName('fd.itemid') . ' = ' . (int) $orderItem['order_item_id'])
+			->where($db->quoteName('fd.section') . ' = 12');
+
+		// Add the sub-query to the main query
+		$query->where($db->quoteName('fd.fieldid') . ' IN (' . $subQuery->__toString() . ')');
+
+		// Set the query and load the result.
+		$db->setQuery($query);
+
+		try
+		{
+			$dataTxt = $db->loadResult();
+		}
+		catch (RuntimeException $e)
+		{
+			throw new RuntimeException($e->getMessage(), $e->getCode());
+		}
+
+		return $dataTxt;
 	}
 }
