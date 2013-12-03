@@ -8,9 +8,13 @@
  */
 
 defined('_JEXEC') or die();
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/colorpicker.js');
+
 FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
-FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
+
+// Colorpicker includes.
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/farbtastic.js');
+FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/farbtastic.css');
+FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 ?>
 
 {RedDesignBreakDesignAreasTitle}
@@ -37,6 +41,11 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				default:
 					$textAlign = 'center';
 					break;
+			}
+
+			if ($this->item->fontsizer == 'auto' || $this->item->fontsizer == 'auto_chars')
+			{
+				$textAlign = 'center';
 			}
 
 			if (!empty($area->maxchar) && $area->maxchar != 0)
@@ -152,10 +161,10 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 
 		{RedDesignBreakDesignAreaChooseFontSizeLabel}
 			<?php // Font Size Selection ?>
-			<?php if ($this->item->fontsizer != 'auto') : ?>
+			<?php if ($this->item->fontsizer != 'auto' && $this->item->fontsizer != 'auto_chars') : ?>
 				<label for="<?php echo 'fontSize' . $area->reddesign_area_id; ?>">
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_FONTSIZE'); ?>
-						</label>
+				</label>
 			<?php endif; ?>
 		{RedDesignBreakDesignAreaChooseFontSizeLabel}
 
@@ -171,13 +180,12 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 				<input type="hidden"
 					   id="fontSize<?php echo $area->reddesign_area_id ?>"
 					   name="fontSize<?php echo $area->reddesign_area_id ?>"
-					   class="span2"
 					   value="<?php echo $area->defaultFontSize ?>"
 					   data-slider-min="<?php echo $area->minFontSize ?>"
 					   data-slider-max="<?php echo $area->maxFontSize ?>"
 					   data-slider-value="[<?php echo $area->defaultFontSize ?>]"
 				/>
-			<?php elseif ($this->item->fontsizer === 'dropdown') : ?>
+			<?php elseif ($this->item->fontsizer == 'dropdown_numbers' || $this->item->fontsizer == 'dropdown_labels') : ?>
 				<?php
 
 					// Case 2: using dropdown selector for font size.
@@ -187,11 +195,32 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 					// If only one font size allowed don't show anything.
 					if (count($areaFontSizes) > 1)
 					{
-						$sizeOptions       = array();
+						$sizeOptions = array();
 
-						foreach ($areaFontSizes as $key => $value)
+						foreach ($areaFontSizes as $areaFontSize)
 						{
-							$sizeOptions[] = JHTML::_('select.option', $value, $value);
+							if ($this->item->fontsizer == 'dropdown_numbers')
+							{
+								$optionValue = $areaFontSize;
+								$optionText = $areaFontSize;
+							}
+							else
+							{
+								$labels = explode(':', $areaFontSize);
+
+								if (!empty($labels[1]))
+								{
+									$optionValue = $labels[1];
+								}
+								else
+								{
+									$optionValue = $labels[0];
+								}
+
+								$optionText = $labels[0];
+							}
+
+							$sizeOptions[] = JHTML::_('select.option', $optionValue, $optionText);
 						}
 
 						echo JHTML::_(
@@ -221,13 +250,65 @@ FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/colorpicker.css');
 
 			<?php elseif ($area->color_code == 1) : ?>
 
-				<div id="color-selector<?php echo $area->reddesign_area_id; ?>" class="colorSelector">
-					<div style="background-color: #000000"></div>
+				<div id="colorsContainer<?php echo $area->reddesign_area_id ?>" class="span6">
+					<div class="span9">
+						<label class="control-label">
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_COLOR_PICKER'); ?>
+							<div id="colorPickerContainer<?php echo $area->reddesign_area_id; ?>" class="colorPickerContainer"></div>
+						</label>
+						<label for="colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>">
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SELECTED_COLOR') ?>
+							<input class="span12 colorPickerSelectedColor"
+								   type="text"
+								   value="#cfcfcf"
+								   id="colorCode<?php echo $area->reddesign_area_id ?>"
+								   name="colorCode<?php echo $area->reddesign_area_id; ?>"
+								/>
+						</label>
+					</div>
+					<div class="span3 CMYKContainer">
+						<div class="input-prepend">
+							<span class="add-on">C</span>
+							<input class="span8"
+								   id="C<?php echo $area->reddesign_area_id; ?>"
+								   name="C<?php echo $area->reddesign_area_id; ?>"
+								   type="text"
+								   value="10"
+								   placeholder="C"
+								>
+						</div>
+						<div class="input-prepend">
+							<span class="add-on">M</span>
+							<input class="span8"
+								   id="M<?php echo $area->reddesign_area_id; ?>"
+								   name="M<?php echo $area->reddesign_area_id; ?>"
+								   type="text"
+								   value="10"
+								   placeholder="M"
+								>
+						</div>
+						<div class="input-prepend">
+							<span class="add-on">Y</span>
+							<input class="span8"
+								   id="Y<?php echo $area->reddesign_area_id; ?>"
+								   name="Y<?php echo $area->reddesign_area_id; ?>"
+								   type="text"
+								   value="10"
+								   placeholder="Y"
+								>
+						</div>
+						<div class="input-prepend">
+							<span class="add-on">K</span>
+							<input class="span8"
+								   id="K<?php echo $area->reddesign_area_id; ?>"
+								   name="K<?php echo $area->reddesign_area_id; ?>"
+								   type="text"
+								   value="10"
+								   placeholder="K"
+								>
+						</div>
+					</div>
 				</div>
-				<div class="help-block">
-					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_COLORS_HELP'); ?>
-				</div>
-				<input type="hidden" name="colorCode<?php echo $area->reddesign_area_id ?>" value="000000" id="colorCode<?php echo $area->reddesign_area_id ?>">
 
 			<?php else : ?>
 

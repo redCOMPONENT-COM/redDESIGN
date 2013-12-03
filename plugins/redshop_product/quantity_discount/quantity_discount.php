@@ -64,30 +64,34 @@ class PlgRedshop_ProductQuantity_Discount extends JPlugin
 				$productPrice = $product->product_price + $productHelper->getProductTax($product->product_id, $product->product_price);
 
 				$table .= "<tr>"
-					. "<td>"
-					. "<input type='radio' class='quantity_discount_radio' name='quantity_discount_plg'
-							value='1' price=\"$productPrice\" product_id=\"$product->product_id\" checked='checked' >"
-					. "</td>"
 					. "<td>1</td>"
 					. "<td>"
-					. $productHelper->getProductFormattedPrice($productPrice)
+					. "<input type='radio' class='quantity_discount_radio' name='quantity_discount_plg'
+							value='1' price=\"$productPrice\"
+							product_id=\"$product->product_id\"
+							percentage='0'
+							index='0'
+							checked='checked' >"
 					. "</td>"
+					. "<td><span id='price_quantity0'></span></td><td>&nbsp;</td>"
 					. "</tr>";
 			}
 
-			$difference = $product->product_price - $price->product_price;
-			$percentage = round((100 * $difference) / $product->product_price, 2);
+			$percentage = round($price->product_price, 2);
 
-			$productTax   = $productHelper->getProductTax($product->product_id, $price->product_price);
-			$productPrice = ($price->product_price + $productTax) * $price->price_quantity_end;
+			$index = $i + 1;
 
 			$table .= "<tr>"
+				. "<td>$price->price_quantity_start</td>"
 				. "<td>"
 				. "<input type='radio' class='quantity_discount_radio' name='quantity_discount_plg'
-						value=\"$price->price_quantity_end\" price=\"$productPrice\" product_id=\"$product->product_id\" >"
+						value=\"$price->price_quantity_start\" price='0'
+						product_id=\"$product->product_id\"
+						percentage='" . $percentage / 100 . "'
+						index='" . $index . "'
+						>"
 				. "</td>"
-				. "<td>$price->price_quantity_end</td>"
-				. "<td>" . $productHelper->getProductFormattedPrice($productPrice) . "</td>"
+				. "<td><span id='price_quantity" . $index . "'></span></td>"
 				. "<td>$percentage%</td>"
 				. "</tr>";
 		}
@@ -108,11 +112,9 @@ class PlgRedshop_ProductQuantity_Discount extends JPlugin
 	{
 		require_once JPATH_SITE . '/components/com_redshop/helpers/user.php';
 
-		$session     = JFactory::getSession();
-		$user_helper = new rsUserhelper;
-		$user        = JFactory::getUser();
-		$user_id     = $user->id;
-
+		$user_helper    = new rsUserhelper;
+		$user           = JFactory::getUser();
+		$user_id        = $user->id;
 		$shopperGroupId = $user_helper->getShopperGroup($user_id);
 
 		// Initialize variables.

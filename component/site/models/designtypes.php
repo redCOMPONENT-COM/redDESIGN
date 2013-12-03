@@ -47,7 +47,7 @@ class ReddesignModelDesigntypes extends FOFModel
 
 		foreach ($backgrounds as $background)
 		{
-			if ($background->isPDFbgimage)
+			if ($background->isProductionBg)
 			{
 				return $background;
 			}
@@ -68,7 +68,7 @@ class ReddesignModelDesigntypes extends FOFModel
 
 		foreach ($backgrounds as $background)
 		{
-			if ($background->isPreviewbgimage)
+			if ($background->isDefaultPreview)
 			{
 				return $background;
 			}
@@ -78,54 +78,4 @@ class ReddesignModelDesigntypes extends FOFModel
 		return false;
 	}
 
-	/**
-	 * Retrieve all the backgrounds to be used for previews.
-	 *
-	 * @return mixed  Returns the array of preview backgrounds.
-	 */
-	public function getPreviewBackgrounds()
-	{
-		$backgrounds		= $this->getBackgrounds();
-		$previewBackgrounds	= array();
-
-		foreach ($backgrounds as $background)
-		{
-			if (!$background->isPDFbgimage)
-			{
-				$previewBackgrounds[] = $background;
-			}
-		}
-
-		return $previewBackgrounds;
-	}
-
-	/**
-	 * Retrieves the areas belonging to a specific production background.
-	 *
-	 * @param   int  $productionBackgroundId  The production background id.
-	 *
-	 * @return  array  Returns the array of areas that belongs to a background.
-	 */
-	public function getProductionBackgroundAreas($productionBackgroundId)
-	{
-		$areasModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($productionBackgroundId);
-
-		$areas = $areasModel->getItemList();
-
-		return $areas;
-	}
-
-	/**
-	 * Retrieves the fonts in the system.
-	 *
-	 * @return array Returns the array of fonts.
-	 */
-	public function getFonts()
-	{
-		$fontsModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel');
-
-		$fonts = $fontsModel->getItemList(false, 'reddesign_font_id');
-
-		return $fonts;
-	}
 }

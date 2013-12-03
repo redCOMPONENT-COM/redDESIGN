@@ -58,6 +58,8 @@ class ReddesignViewDesigntype extends FOFViewHtml
 
 	public $imageHeight;
 
+	public $backgroundTypeOptions;
+
 	/**
 	 * Executes before rendering the page for the Add task.
 	 *
@@ -80,8 +82,10 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		// Font sizer options for the general tab.
 		$this->sizerOptions = array(
 			JHTML::_('select.option',  'auto', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO')),
+			JHTML::_('select.option',  'auto_chars', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO_CHARS')),
 			JHTML::_('select.option',  'slider', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_SLIDER')),
-			JHTML::_('select.option',  'dropdown', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN'))
+			JHTML::_('select.option',  'dropdown_numbers', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_NUMBERS')),
+			JHTML::_('select.option',  'dropdown_labels', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_LABELS'))
 		);
 
 		// Related design types.
@@ -109,7 +113,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			foreach ($this->backgrounds as $background)
 			{
 				// Get the background image that has been selected to be the Production PDF file image.
-				if ($background->isPDFbgimage)
+				if ($background->isProductionBg)
 				{
 					$this->productionBackground = $background;
 
@@ -137,27 +141,6 @@ class ReddesignViewDesigntype extends FOFViewHtml
 
 			$this->areas = $areas;
 
-			$colorCodes = array();
-
-			foreach ($this->areas as $area)
-			{
-				$colorCodes["color_" . $area->reddesign_area_id] = $area->color_code;
-				$colorCode = $area->color_code;
-
-				if ($colorCode != 1)
-				{
-					$colorCode = 0;
-				}
-
-				$colorCodes['allColor' . $area->reddesign_area_id] = JHTML::_('select.booleanlist',
-																				'allColor' . $area->reddesign_area_id,
-																				'class="inputbox" onclick="hideColorPicker(\'' . $area->reddesign_area_id . '\');"',
-																				$colorCode
-				);
-			}
-
-			$this->colorCodes = $colorCodes;
-
 			$this->inputFieldOptions = array(
 				JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTBOX')),
 				JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTAREA'))
@@ -179,6 +162,11 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			{
 				$this->fontsOptions[] = JHtml::_('select.option', $font->reddesign_font_id, $font->title);
 			}
+
+			$this->backgroundTypeOptions = array(
+				JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_PRODUCTION_BG')),
+				JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_PREVIEW_BG'))
+			);
 
 			// Unit for measures.
 			$this->unit = $this->params->get('unit', 'px');

@@ -68,6 +68,9 @@ class ReddesignControllerDesigntypes extends FOFController
 		$design->loadString($this->input->getString('designarea', ''), 'JSON');
 		$design = $design->get('Design');
 
+		$designTypeModel = FOFModel::getTmpInstance('Designtypes', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_designtype_id);
+		$designType = $designTypeModel->getItem($design->reddesign_designtype_id);
+
 		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_designtype_id);
 		$background = $backgroundModel->getItem($design->reddesign_background_id);
 		$backgroundImage = $background->image_path;
@@ -98,27 +101,23 @@ class ReddesignControllerDesigntypes extends FOFController
 		}
 
 		$backgroundImageFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $backgroundImage;
-		$newjpgFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
-
-		// Create customized image
-		$imageMagickCmd = 'convert ' . $backgroundImageFileLocation . ' -profile RGB_PROFILE -colorspace RGB ' . $newjpgFileLocation;
-		exec($imageMagickCmd);
+		$newFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.png';
 
 		// Create Imagick object.
 		$newImage = new Imagick;
-		$newImage->readImage($newjpgFileLocation);
+		$newImage->readImage($backgroundImageFileLocation);
 
 		// Add text areas to the background image.
 		foreach ($design->areas as $area)
 		{
-			if (!empty($area->textArea))
+			if (!empty($area->textArea) || $area->textArea == 0)
 			{
 				// Create needed objects.
 				$areaImage = new Imagick;
 				$areaDraw  = new ImagickDraw;
 
 				// Get font.
-				if ($area->fontTypeId)
+				if (!empty($area->fontTypeId))
 				{
 					$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area->id);
 					$fontType = $fontModel->getItem($area->fontTypeId);
@@ -134,26 +133,33 @@ class ReddesignControllerDesigntypes extends FOFController
 					$fontType->default_height = 0.9;
 					$fontType->default_caps_height = 0.9;
 					$fontType->default_baseline_height = 0.9;
+					$area->fontTypeId = 0;
 				}
 
 				// Get area.
 				$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($design->reddesign_background_id);
 				$this->areaItem = $areaModel->getItem($area->id);
+				$topOffset = 0;
+				$leftOffset = 0;
+
+				// Create area image.
+				$areaImage->newImage($this->areaItem->width, $this->areaItem->height, new ImagickPixel('transparent'));
 
 				// If we need autosize text than take different approach than solution for regular text.
-				if (empty($area->fontSize))
+				if ($designType->fontsizer == 'auto_chars')
 				{
 					$newAutoSizeData = $this->getFontSizeOnCharsBase($area->fontTypeId, $area->textArea, $fontType, $this->areaItem->height, $this->areaItem->width);
 
 					if (!empty($area->plg_dimension_base) && !empty($area->plg_dimension_base_input))
 					{
 						$dimension = $this->getCanvaseDimension(
-																	$area->plg_dimension_base,
-																	$area->plg_dimension_base_input,
-																	$area->fontTypeId,
-																	$area->textArea,
-																	$fontType
-																);
+							$area->plg_dimension_base,
+							$area->plg_dimension_base_input,
+							$area->fontTypeId,
+							$area->textArea,
+							$fontType
+						);
+						$topOffset = $newAutoSizeData['topoffset'];
 						$newAutoSizeData['canvasHeight'] = $dimension['canvasHeight'];
 						$newAutoSizeData['canvasWidth'] = $dimension['canvasWidth'];
 					}
@@ -161,11 +167,37 @@ class ReddesignControllerDesigntypes extends FOFController
 					$area->fontSize = $newAutoSizeData['fontSize'];
 					$newAutoSizeData['reddesign_area_id'] = $this->areaItem->reddesign_area_id;
 					$autoSizeData[] = $newAutoSizeData;
+
 					$this->areaItem->textalign = 3;
 				}
+				elseif ($designType->fontsizer == 'auto')
+				{
+					// Create an array for the textwidth and textheight
+					$textProperties = array('textWidth' => 0);
 
-				// Create an area image.
-				$areaImage->newImage($this->areaItem->width, $this->areaItem->height, new ImagickPixel('transparent'));
+					// Set an initial value for the fontsize, will be increased in the loop below
+					$area->fontSize = 0;
+
+					// Increase the fontsize until we have reached our desired width
+					while ($textProperties['textWidth'] <= $this->areaItem->width && $textProperties['textHeight'] <= $this->areaItem->height)
+					{
+						$areaDraw->setFontSize($area->fontSize);
+						$textProperties = $areaImage->queryFontMetrics($areaDraw, $area->textArea);
+						$area->fontSize++;
+					}
+
+					$stringLines = explode("\n", $area->textArea);
+
+					$autoSizeData[] = array(
+												'fontSize' => $area->fontSize,
+												'stringLines' => $stringLines,
+												'topoffset' => 0,
+												'maxHeight' => 1,
+												'reddesign_area_id' => $this->areaItem->reddesign_area_id
+					);
+
+					$this->areaItem->textalign = 3;
+				}
 
 				// Set color and font.
 				$areaDraw->setFont($fontTypeFileLocation);
@@ -180,11 +212,11 @@ class ReddesignControllerDesigntypes extends FOFController
 				 * 2 is right,
 				 * 3 is center.
 				 */
-				if ((int) $this->areaItem->textalign == 1)
+				if ($this->areaItem->textalign == 1)
 				{
 					$areaDraw->setGravity(Imagick::GRAVITY_WEST);
 				}
-				elseif ((int) $this->areaItem->textalign == 2)
+				elseif ($this->areaItem->textalign == 2)
 				{
 					$areaDraw->setGravity(Imagick::GRAVITY_EAST);
 				}
@@ -194,12 +226,12 @@ class ReddesignControllerDesigntypes extends FOFController
 				}
 
 				// Add text to the area image.
-				$areaImage->annotateImage($areaDraw, 0, 0, 0, $area->textArea);
+				$areaImage->annotateImage($areaDraw, $leftOffset, $topOffset, 0, $area->textArea);
 
 				// Put second image on top of the first.
-				$newImage->compositeImage($areaImage, $areaImage->getImageCompose(), $this->areaItem->x1_pos, $this->areaItem->y1_pos);
+				$newImage->compositeImage($areaImage, imagick::COMPOSITE_DEFAULT, $this->areaItem->x1_pos, $this->areaItem->y1_pos);
 
-				$newImage->writeImage($newjpgFileLocation);
+				$newImage->writeImage($newFileLocation);
 
 				// Free resources.
 				$areaImage->clear();
@@ -207,7 +239,7 @@ class ReddesignControllerDesigntypes extends FOFController
 			}
 			else
 			{
-				$newImage->writeImage($newjpgFileLocation);
+				$newImage->writeImage($newFileLocation);
 			}
 		}
 
@@ -217,9 +249,9 @@ class ReddesignControllerDesigntypes extends FOFController
 
 		// Create session to store Image
 		$session->set('customizedImage', $mangledname);
-		$response['image'] = JURI::base() . 'media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg';
+		$response['image'] = JURI::base() . 'media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.png';
 		$response['imageTitle'] = $background->title;
-		$imageSize = getimagesize(JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.jpg');
+		$imageSize = getimagesize(JPATH_ROOT . '/media/com_reddesign/assets/designtypes/customized/' . $mangledname . '.png');
 		$response['imageWidth'] = $imageSize[0];
 		$response['imageHeight'] = $imageSize[1];
 
@@ -249,7 +281,7 @@ class ReddesignControllerDesigntypes extends FOFController
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
-		$char = str_split(mb_convert_encoding(urldecode($enteredChars), "ISO-8859-1", "UTF-8"));
+		$char = preg_split('/(?<!^)(?!$)/u', $enteredChars);
 
 		// Select character settings for a given font.
 		$query
@@ -309,9 +341,12 @@ class ReddesignControllerDesigntypes extends FOFController
 
 		$fontSize = $this->calculateFontSize($maxCharsInSingleLine, $avgWidth, $maxHeight, $lineCount, $canvasHeight, $canvasWidth);
 
+		$offset = $this->getCharOffset($char, $fontId, $fontSize);
+
 		$autoSizeData = array();
 		$autoSizeData['fontSize'] = $fontSize;
 		$autoSizeData['stringLines'] = $perLineChar;
+		$autoSizeData['topoffset'] = $offset[0];
 		$autoSizeData['maxHeight'] = $maxHeight;
 
 		return $autoSizeData;
@@ -441,5 +476,92 @@ class ReddesignControllerDesigntypes extends FOFController
 		$canvaseDimension['canvasWidth'] = $canvasWidth;
 
 		return $canvaseDimension;
+	}
+
+	/**
+	 *  Calculates Font size When Auto-size is on.
+	 *
+	 * @param   array  $char      Char array entered by user.
+	 * @param   int    $fontId    Font id.
+	 * @param   int    $fontSize  This is font size of entered chars.
+	 *
+	 * @return Array
+	 *
+	 * @access public
+	 */
+	public function getCharOffset($char, $fontId, $fontSize)
+	{
+		$db = JFactory::getDBO();
+
+		if (count($char))
+		{
+			$query = $db->getQuery(true);
+			$query
+				->select('fonts.default_height, fonts.default_caps_height, fonts.default_baseline_height')
+				->from('#__reddesign_fonts as fonts')
+				->where('fonts.reddesign_font_id = ' . (int) $fontId);
+
+			$db->setQuery($query);
+			$HeightArray = $db->loadObject();
+
+			$query = $db->getQuery(true);
+			$query
+				->select('max(height) as height,  group_concat(typography separator ", ") as typography, typography_height')
+				->from('#__reddesign_chars as chars')
+				->where('chars.reddesign_font_id = ' . (int) $fontId)
+				->where('binary chars.font_char IN ("' . implode('","', $char) . '")')
+				->order('chars.reddesign_char_id ASC');
+
+			$db->setQuery($query);
+			$ResultArray = $db->loadObject();
+
+			$typoArr = explode(',', $ResultArray->typography);
+
+			if (empty($HeightArray))
+			{
+				return array( '+0', 0 );
+			}
+
+			$totalHeight = $HeightArray->default_height + $ResultArray->typography_height;
+			$totalHeight = $totalHeight + $HeightArray->default_caps_height + $HeightArray->default_baseline_height;
+
+			if (in_array('2', $typoArr) && in_array('3', $typoArr) && !in_array('4', $typoArr))
+			{
+				$difference = $totalHeight - $ResultArray->height - $HeightArray->default_caps_height;
+				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
+				$offsetTop = "-" . $offsetTop;
+			}
+			elseif (in_array('3', $typoArr) || in_array('4', $typoArr))
+			{
+				$difference = $totalHeight - ($ResultArray->height);
+				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
+				$offsetTop = "-" . $offsetTop;
+			}
+			elseif (in_array('2', $typoArr))
+			{
+				$difference = $totalHeight - ( $ResultArray->height + $HeightArray->default_baseline_height);
+				$offsetTop = (($difference * $fontSize) / 2);
+				$offsetTop = "+" . $offsetTop;
+			}
+			else
+			{
+				$difference = $totalHeight - ( $ResultArray->height + $HeightArray->default_baseline_height);
+				$offsetTop = (($difference * $fontSize) / 2) * 1.2;
+				$offsetTop = "-" . $offsetTop;
+			}
+
+			$diff = $totalHeight - $ResultArray->height;
+
+			if (!$ResultArray->height)
+			{
+				$offsetTop = '+0';
+			}
+
+			return array($offsetTop, $diff );
+		}
+		else
+		{
+			return array( '+0', 0 );
+		}
 	}
 }

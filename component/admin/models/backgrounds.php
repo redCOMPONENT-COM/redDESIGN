@@ -29,13 +29,12 @@ class ReddesignModelBackgrounds extends FOFModel
 	 *
 	 * @return bool
 	 */
-	public function setAsPDFbg($designId, $bgId)
+	public function setAsProductionFileBg($designId, $bgId)
 	{
-		if (!$this->unsetAllPDFBg($designId))
+		if (!$this->unsetAllIsProductionBg($designId))
 		{
 			return false;
 		}
-
 
 		// Create a new query object.
 		$query = $this->_db->getQuery(true);
@@ -43,8 +42,7 @@ class ReddesignModelBackgrounds extends FOFModel
 		// Update set the specific background as PDF background for production file. Also remove it from preview backgrounds if is the case.
 		$query
 			->update($this->_db->qn('#__reddesign_backgrounds'))
-			->set($this->_db->qn('isPDFbgimage') . ' = ' . $this->_db->q(1))
-			->set($this->_db->qn('isPreviewbgimage') . ' = ' . $this->_db->q(0))
+			->set($this->_db->qn('isProductionBg') . ' = ' . $this->_db->q(1))
 			->where($this->_db->qn('reddesign_background_id') . ' = ' . $this->_db->q($bgId));
 
 		$this->_db->setQuery($query);
@@ -64,7 +62,7 @@ class ReddesignModelBackgrounds extends FOFModel
 	 *
 	 * @return bool
 	 */
-	public function unsetAllPDFBg($designId)
+	public function unsetAllIsProductionBg($designId)
 	{
 		// Create a new query object.
 		$query = $this->_db->getQuery(true);
@@ -72,7 +70,7 @@ class ReddesignModelBackgrounds extends FOFModel
 		// Update all current design background and set them as none is the background for PDF production file.
 		$query
 			->update($this->_db->qn('#__reddesign_backgrounds'))
-			->set($this->_db->qn('isPDFbgimage') . ' = ' . $this->_db->q(0))
+			->set($this->_db->qn('isProductionBg') . ' = ' . $this->_db->q(0))
 			->where($this->_db->qn('reddesign_designtype_id') . ' = ' . $this->_db->q($designId));
 
 		$this->_db->setQuery($query);
@@ -95,7 +93,7 @@ class ReddesignModelBackgrounds extends FOFModel
 	 */
 	public function setAsPreviewbg($designId, $bgId)
 	{
-		if (!$this->unsetAllPreviewBg($designId))
+		if (!$this->unsetAllIsDefaultPreview($designId))
 		{
 			return false;
 		}
@@ -106,8 +104,7 @@ class ReddesignModelBackgrounds extends FOFModel
 		// Update set the specific background as Preview background for production file. Also prevent to be used as PDF background
 		$query
 			->update($this->_db->qn('#__reddesign_backgrounds'))
-			->set($this->_db->qn('isPreviewbgimage') . ' = ' . $this->_db->q(1))
-			->set($this->_db->qn('isPDFbgimage') . ' = ' . $this->_db->q(0))
+			->set($this->_db->qn('isDefaultPreview') . ' = ' . $this->_db->q(1))
 			->where($this->_db->qn('reddesign_background_id') . ' = ' . $this->_db->q($bgId));
 
 		$this->_db->setQuery($query);
@@ -127,7 +124,7 @@ class ReddesignModelBackgrounds extends FOFModel
 	 *
 	 * @return bool
 	 */
-	public function unsetAllPreviewBg($designId)
+	public function unsetAllIsDefaultPreview($designId)
 	{
 		// Create a new query object.
 		$query = $this->_db->getQuery(true);
@@ -135,7 +132,7 @@ class ReddesignModelBackgrounds extends FOFModel
 		// Update all current design background and set them as none is the background for PDF production file.
 		$query
 			->update($this->_db->qn('#__reddesign_backgrounds'))
-			->set($this->_db->qn('isPreviewbgimage') . ' = ' . $this->_db->q(0))
+			->set($this->_db->qn('isDefaultPreview') . ' = ' . $this->_db->q(0))
 			->where($this->_db->qn('reddesign_designtype_id') . ' = ' . $this->_db->q($designId));
 
 		$this->_db->setQuery($query);

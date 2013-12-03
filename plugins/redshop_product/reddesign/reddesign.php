@@ -158,36 +158,42 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	{
 		if ($data->product_type == 'redDESIGN')
 		{
+			$app = JFactory::getApplication();
 			$db = JFactory::getDbo();
 
-			// Get design type ID.
+			$designTypeId = $app->input->getInt('designTypeId', null);
+
+			// Get related design type IDs. They are related because multiple design types can be assigned to a redSHOP product.
 			$query = $db->getQuery(true);
 			$query->select($db->quoteName('reddesign_designtype_id'));
 			$query->from($db->quoteName('#__reddesign_product_mapping'));
 			$query->where($db->quoteName('product_id') . ' = ' . $data->product_id);
 			$db->setQuery($query);
-			$reddesignDesigntypeId = $db->loadResult();
+			$productRelatedDesigntypeIds = $db->loadResult();
 
-			// Get background ID so you can get areas.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_background_id'))
-				->from($db->quoteName('#__reddesign_backgrounds'))
-				->where($db->quoteName('isPDFbgimage') . ' = ' . 1)
-				->where($db->quoteName('reddesign_designtype_id') . ' = ' . $reddesignDesigntypeId);
-			$db->setQuery($query);
-			$backgroundId = $db->loadResult();
-
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_area_id'))
-				->from($db->quoteName('#__reddesign_areas'))
-				->where($db->quoteName('reddesign_background_id') . ' = ' . $backgroundId);
-			$db->setQuery($query);
-			$areas = $db->loadColumn();
+			if (empty($designTypeId))
+			{
+				$productRelatedDesigntypeIds = explode(',', $productRelatedDesigntypeIds);
+				$designTypeId = $productRelatedDesigntypeIds[0];
+				array_shift($productRelatedDesigntypeIds);
+				$productRelatedDesigntypeIds = implode(',', $productRelatedDesigntypeIds);
+			}
+			else
+			{
+				$productRelatedDesigntypeIds = str_replace($designTypeId, '', $productRelatedDesigntypeIds);
+				$productRelatedDesigntypeIds = explode(',', $productRelatedDesigntypeIds);
+				$productRelatedDesigntypeIds = array_filter($productRelatedDesigntypeIds);
+				$productRelatedDesigntypeIds = implode(',', $productRelatedDesigntypeIds);
+			}
 
 			// Get redDESIGN frontend HTML.
 			$inputvars = array(
-				'id' => $reddesignDesigntypeId,
-				'task' => 'read'
+				'id' => $designTypeId,
+				'task' => 'read',
+				'relatedDesignTypes' => $productRelatedDesigntypeIds,
+				'cid' => $params->get('cid', null),
+				'productId' => $data->product_id,
+				'Itemid' => $app->input->getInt('Itemid', null)
 			);
 			$input = new FOFInput($inputvars);
 
@@ -195,6 +201,23 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			FOFDispatcher::getTmpInstance('com_reddesign', 'designtype', array('input' => $input))->dispatch();
 			$html = ob_get_contents();
 			ob_end_clean();
+
+			// Get background ID so you can get areas.
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('reddesign_background_id'))
+				->from($db->quoteName('#__reddesign_backgrounds'))
+				->where($db->quoteName('isProductionBg') . ' = ' . 1)
+				->where($db->quoteName('reddesign_designtype_id') . ' = ' . $designTypeId);
+			$db->setQuery($query);
+			$backgroundId = $db->loadResult();
+
+			// Get areas for the template tags replacement.
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('reddesign_area_id'))
+				->from($db->quoteName('#__reddesign_areas'))
+				->where($db->quoteName('reddesign_background_id') . ' = ' . $backgroundId);
+			$db->setQuery($query);
+			$areas = $db->loadColumn();
 
 			// Get title.
 			$htmlElement = explode('{RedDesignBreakTitle}', $html);
@@ -324,6 +347,40 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 */
 	public function onBeforeSetCartSession(&$cart, $data)
 	{
+		if (!empty($data['order_item_id']))
+		{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('redDesignData'));
+			$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
+			$query->where($db->quoteName('order_item_id') . ' = ' . $data['order_item_id']);
+			$db->setQuery($query);
+			$redDesignData = $db->loadResult();
+
+			$idx = $cart['idx'];
+
+			$cart[$idx]['redDesignData'] = $redDesignData;
+		}
+		else
+		{
+			$idx = $cart['idx'];
+
+			$cart[$idx]['redDesignData'] = $data['redDesignData'];
+		}
+	}
+
+	/**
+	 * When adding same product it needs to update data from this different
+	 * place because onBeforeSetCartSession works only once for one session.
+	 *
+	 * @param   object  &$cart  The Product Template Data.
+	 * @param   object  $data   The product params.
+	 * @param   int     $i      The product params.
+	 *
+	 * @return  void
+	 */
+	public function onSameCartProduct(&$cart, $data, $i)
+	{
 		$idx = $cart['idx'];
 
 		$cart[$idx]['redDesignData'] = $data['redDesignData'];
@@ -370,42 +427,37 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 */
 	public function changeCartOrderItemImage(&$cart, &$product_image, $product, $i)
 	{
-		if ($product->product_type == 'redDESIGN')
-		{
-			$redDesignData = json_decode($cart[$i]['redDesignData']);
-		}
-		else
-		{
-			$db = JFactory::getDbo();
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('redDesignData'));
-			$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
-			$query->where($db->quoteName('order_item_id') . ' = ' . (int) $product->order_item_id);
-			$db->setQuery($query);
-			$redDesignData = json_decode($db->loadResult());
-		}
+		$db = JFactory::getDbo();
 
-		if (isset($redDesignData->backgroundImgSrc))
+		// Get product type
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('product_type'));
+		$query->from($db->quoteName('#__redshop_product'));
+		$query->where($db->quoteName('product_id') . ' = ' . $product->product_id);
+		$db->setQuery($query);
+		$productType = $db->loadResult();
+
+		if ($productType == 'redDESIGN')
 		{
-			$product_image = "<div  class='product_image'><img width='" . CART_THUMB_WIDTH . "' src='" . $redDesignData->backgroundImgSrc . "'></div>";
+			if (!empty($product->order_item_id))
+			{
+				$query = $db->getQuery(true);
+				$query->select($db->quoteName('redDesignData'));
+				$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
+				$query->where($db->quoteName('order_item_id') . ' = ' . (int) $product->order_item_id);
+				$db->setQuery($query);
+				$redDesignData = json_decode($db->loadResult());
+			}
+			else
+			{
+				$redDesignData = json_decode($cart[$i]['redDesignData']);
+			}
+
+			if (isset($redDesignData->backgroundImgSrc))
+			{
+				$product_image = "<div  class='product_image'><img width='" . CART_THUMB_WIDTH . "' src='" . $redDesignData->backgroundImgSrc . "'></div>";
+			}
 		}
-	}
-
-	/**
-	 * When adding same product it needs to update data from this different
-	 * place because onBeforeSetCartSession works only once for one session.
-	 *
-	 * @param   object  &$cart  The Product Template Data.
-	 * @param   object  $data   The product params.
-	 * @param   int     $i      The product params.
-	 *
-	 * @return  void
-	 */
-	public function onSameCartProduct(&$cart, $data, $i)
-	{
-		$idx = $cart['idx'];
-
-		$cart[$idx]['redDesignData'] = $data['redDesignData'];
 	}
 
 	/**
@@ -441,7 +493,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					}
 
 					function getExtraParams(frm) {
-						return "&redDesignData=" + frm.redDesignData.value;
+						return "&redDesignData=" + encodeURIComponent(frm.redDesignData.value);
 					}
 			';
 			$document->addScriptDeclaration($js);
@@ -453,16 +505,11 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	}
 
 	/**
-	 * This method should create PDF production file. It would be more suitable to
-	 * have afterUpdateOrderStatus event and to create PDF production files on that
-	 * event. But current redSHOP architecture updates order status from hundreds
-	 * of different places instead of one.
-	 * ToDo: Make a control inside redDESIGN which will trigger fuction for deleting
-	 * ToDo: all PDFs related to not paid orders.
+	 * This method saves redDESIGN customization data which is later used for production files creation.
 	 *
 	 * @param   object  $cart     Cart object.
 	 * @param   object  $rowitem  Order item object.
-	 * @param   int     $i        Some kind of index or maybe even Order item ID. ToDo: Check use of this var and remove it from the trigger.
+	 * @param   int     $i        Some kind of index or maybe even Order item ID.
 	 *
 	 * @return void
 	 */
@@ -480,23 +527,18 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		if ($productType == 'redDESIGN' && !empty($cart[$i]['redDesignData']))
 		{
-			// Get redDESIGN relevant data.
-			$redDesignData = json_decode($cart[$i]['redDesignData']);
-			$preparedDesignData = $this->prepareDesignTypeData($redDesignData);
-			$productionFileName = $this->createProductionFiles($preparedDesignData);
-
 			// Insert record to the mapping table #__reddesign_orderitem_mapping.
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName(array('order_item_id', 'productionPdf', 'productionEps')));
+			$query->select($db->quoteName('redDesignData'));
 			$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
 			$query->where($db->quoteName('order_item_id') . ' = ' . $rowitem->order_item_id);
 			$db->setQuery($query);
-			$orderItem = $db->loadObject();
+			$orderItem = $db->loadResult();
 
 			$orderItemProductionFiles = new stdClass;
 			$orderItemProductionFiles->order_item_id = $rowitem->order_item_id;
-			$orderItemProductionFiles->productionPdf = $productionFileName;
-			$orderItemProductionFiles->productionEps = $productionFileName;
+			$orderItemProductionFiles->productionPdf = '';
+			$orderItemProductionFiles->productionEps = '';
 			$orderItemProductionFiles->redDesignData = $cart[$i]['redDesignData'];
 
 			if (empty($orderItem))
@@ -522,20 +564,165 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('order_item_id', 'productionPdf', 'productionEps')));
+		$query->select($db->quoteName(array('order_item_id', 'productionPdf', 'productionEps', 'redDesignData')));
 		$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
 		$query->where($db->quoteName('order_item_id') . ' = ' . $orderItem->order_item_id);
 		$db->setQuery($query);
 		$orderItemMapping = $db->loadObject();
 
+		$redDesignData = json_decode($orderItemMapping->redDesignData);
+		$redDesignData = $this->prepareDesignTypeData($redDesignData);
+
+		echo '<div id="customDesignData' . $orderItem->order_item_id . '" style="margin: 15px 0 15px 0;">' .
+				'<span><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_DETAILS') . '</strong></span><br/>';
+
+		foreach ($redDesignData['designAreas'] as $area)
+		{
+			// Get font name.
+			if (empty($area['fontTypeId']))
+			{
+				$fontName = 'Arial';
+			}
+			else
+			{
+				$fontModel = FOFModel::getTmpInstance('Font', 'ReddesignModel');
+				$fontName = $fontModel->getItem($area['fontTypeId']);
+				$fontName = $fontName->title;
+			}
+
+			// Get text color
+			if (strpos($area['fontColor'], '#') !== false)
+			{
+				$cmykCode = $this->rgb2cmyk($this->hex2rgb($area['fontColor']));
+				$cmyk = 'C: ' . $cmykCode['c'] . ' ' . 'M: ' . $cmykCode['m'] . ' ' . 'Y: ' . $cmykCode['y'] . ' ' . 'K: ' . $cmykCode['k'];
+				$fontColor = '<span style="margin-right:5px; background-color: ' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+				$fontColor .= '<span>' . $cmyk . '</span>';
+			}
+			else
+			{
+				$cmykCode = $this->rgb2cmyk($this->hex2rgb('#' . $area['fontColor']));
+				$cmyk = 'C: ' . $cmykCode['c'] . ' ' . 'M: ' . $cmykCode['m'] . ' ' . 'Y: ' . $cmykCode['y'] . ' ' . 'K: ' . $cmykCode['k'];
+				$fontColor  = '<span style="margin-right:5px; background-color:#' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+				$fontColor .= '<span>' . $cmyk . '</span>';
+			}
+
+			if (empty($area['fontSize']))
+			{
+				$area['fontSize'] = JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AUTO_FONT_SIZE');
+			}
+
+			echo '<br/>' .
+				'<div id="area' . $area['id'] . '">' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AREA') . '</div>' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT') . $area['textArea'] . '</div>' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_NAME') . $fontName . '</div>' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_SIZE') . $area['fontSize'] . '</div>' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT_COLOR') . $fontColor . '</div>' .
+				'</div>';
+		}
+
+		echo '</div>';
+
 		if (!empty($orderItemMapping->productionPdf))
 		{
+			echo '<div><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_PRODUCTION_FILES') . '</strong></div><br/>';
+
+			$downloadFileName = 'production-file-' . $orderItem->order_id . '-' . $orderItem->order_item_id;
+
 			$productionPdf = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $orderItemMapping->productionPdf . '.pdf');
-			echo '<a href="' . $productionPdf . '" download="productionFile.pdf">PDF:<br/>' . $productionPdf . '</a><br/><br/>';
+			echo '<a href="' . $productionPdf . '" download="' . $downloadFileName . '.pdf">' .
+				JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
+				' PDF</a><br/><br/>';
 
 			$productionEps = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/eps/' . $orderItemMapping->productionEps . '.eps');
-			echo '<a href="' . $productionEps . '" download="productionFile.eps">EPS:<br/>' . $productionEps . '</a>';
+			echo '<a href="' . $productionEps . '" download="' . $downloadFileName . '.eps">' .
+				JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
+				' EPS</a>';
 		}
+		else
+		{
+			$button = '<button type="button" onclick="createProductionFiles(' . $orderItem->order_item_id . ',' . $orderItem->order_id . ')">'
+				. JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CREATE_PRODUCTION_FILES')
+				. '</button>';
+			echo $button;
+
+			echo '<div id="linksContainer' . $orderItem->order_item_id . '" style="margin: 15px 0 15px 0;"></div>';
+
+			$document = JFactory::getDocument();
+			$js = '
+					function createProductionFiles(orderItemId, orderId) {
+								var req = new Request.HTML({
+									method: "get",
+									url: "' . JURI::base() . 'index.php?option=com_reddesign&view=designtype&task=ajaxCustomizeDesign&format=raw",
+									data: { "orderItemId" : orderItemId, "orderId" : orderId },
+									onRequest: function(){
+										$("linksContainer" + orderItemId).set("text", "' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CREATING_PRODUCTION_FILES') . '");
+									},
+									update: $("linksContainer" + orderItemId),
+									onFailure: function(){
+										$("linksContainer" + orderItemId).set("text", "' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CAN_NOT_CREATE_PRODUCTION_FILES') . '");
+									}
+								}).send();
+				}
+			';
+			$document->addScriptDeclaration($js);
+		}
+	}
+
+	/**
+	 * Converts hexadecimal color code to RGB color code. Need for conversion to CMYK.
+	 *
+	 * @param   string  $hex  Hexadecimal color code.
+	 *
+	 * @return  array   $rgb  RGB color code.
+	 */
+	public function hex2rgb($hex)
+	{
+		$color = str_replace('#', '', $hex);
+		$rgb = array('r' => hexdec(substr($color, 0, 2)), 'g' => hexdec(substr($color, 2, 2)), 'b' => hexdec(substr($color, 4, 2)));
+
+		return $rgb;
+	}
+
+	/**
+	 * Converts RGB color code to CMYK color code.
+	 *
+	 * @param   mixed  $rOrArray  Color code in RGB or R part of color code.
+	 * @param   int    $g         G part of the RGB color code.
+	 * @param   int    $b         B part of the RGB color code.
+	 *
+	 * @return  array  array  Array of CMYK values.
+	 */
+	public function rgb2cmyk($rOrArray, $g=0, $b=0)
+	{
+		if (is_array($rOrArray))
+		{
+			$r = $rOrArray['r'];
+			$g = $rOrArray['g'];
+			$b = $rOrArray['b'];
+		}
+		else
+		{
+			$r = $rOrArray;
+		}
+
+		$result = array();
+
+		$r /= 255;
+		$g /= 255;
+		$b /= 255;
+
+		$result['k'] = min(1 - $r, 1 - $g, 1 - $b);
+		$result['c'] = (1 - $r - $result['k']) / (1 - $result['k']);
+		$result['m'] = (1 - $g - $result['k']) / (1 - $result['k']);
+		$result['y'] = (1 - $b - $result['k']) / (1 - $result['k']);
+
+		$result['c'] = round($result['c'] * 100);
+		$result['m'] = round($result['m'] * 100);
+		$result['y'] = round($result['y'] * 100);
+		$result['k'] = round($result['k'] * 100);
+
+		return $result;
 	}
 
 	/**
@@ -596,518 +783,5 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$data['autoSizeData'] = json_decode($redDesignData->autoSizeData);
 
 		return $data;
-	}
-
-	/**
-	 * Create ProductPDF file for redDesign
-	 *
-	 * @param   array  $data  An array that holds design information
-	 *
-	 * @return   string  $pdfFileName  Newly generate PDF file name.
-	 */
-	public function createProductionFiles($data)
-	{
-		// Create production PDF file name
-		$userId = JFactory::getUser()->id;
-		$mangledname  = explode('.', $data['designBackground']->eps_file);
-		$mangledname  = $mangledname[0];
-
-		// Get a (very!) randomised name
-		if (version_compare(JVERSION, '3.0', 'ge'))
-		{
-			$serverkey = JFactory::getConfig()->get('secret', '');
-		}
-		else
-		{
-			$serverkey = JFactory::getConfig()->getValue('secret', '');
-		}
-
-		$sig = $mangledname . microtime() . $serverkey;
-
-		if (function_exists('sha256'))
-		{
-			$mangledname = sha256($sig);
-		}
-		elseif (function_exists('sha1'))
-		{
-			$mangledname = sha1($sig);
-		}
-		else
-		{
-			$mangledname = md5($sig);
-		}
-
-		$productionFileName = $userId . '-' . date('d-m-y-H-i-s') . '-' . $mangledname;
-
-		$areas = $data['designAreas'];
-		$epsText = '';
-		$epsAreaText = '';
-		$epsTextFile = '';
-
-		$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']->eps_file;
-		$previewFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']->image_path;
-		$pdfFilePath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/pdf/';
-		$epsFilePath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/eps/';
-
-		// Read EPS.
-		$im = new Imagick;
-		$im->readImage($epsFileLocation);
-		$dimensions = $im->getImageGeometry();
-		$imageWidth = $dimensions['width'];
-		$imageHeight = $dimensions['height'];
-
-		// Read preview size, for scaling.
-		$previewImageSize = getimagesize($previewFileLocation);
-
-		// Scaling ratio
-		$ratio = $previewImageSize[0] / $imageWidth;
-
-		$pdfLeftMargin = 28.35;
-		$pdfTopMargin = 28.35;
-
-		foreach ($areas as $area)
-		{
-			if ($area['fontTypeId'])
-			{
-				$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area['id']);
-				$fontType = $fontModel->getItem($area['fontTypeId']);
-				$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $fontType->font_file;
-			}
-			else
-			{
-				$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/arial.ttf';
-			}
-
-			$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($data['designBackground']->reddesign_background_id);
-			$areaItem = $areaModel->getItem($area['id']);
-
-			/*
-			 * Scale back all used measures by using calculated ratio.
-			 * PHP_ROUND_HALF_DOWN is used because test show that measures are scaled in that way.
-			 */
-			$areaItem->width = round($areaItem->width / $ratio, 0, PHP_ROUND_HALF_DOWN);
-			$areaItem->height = round($areaItem->height / $ratio, 0, PHP_ROUND_HALF_DOWN);
-			$areaItem->x1_pos = round($areaItem->x1_pos / $ratio, 0, PHP_ROUND_HALF_DOWN);
-			$areaItem->y1_pos = round($areaItem->y1_pos / $ratio, 0, PHP_ROUND_HALF_DOWN);
-			$areaItem->x2_pos = round($areaItem->x2_pos / $ratio, 0, PHP_ROUND_HALF_DOWN);
-			$areaItem->y2_pos = round($areaItem->y2_pos / $ratio, 0, PHP_ROUND_HALF_DOWN);
-
-			$rgbTextColorBuffer = $this->hex2RGB('#' . $area['fontColor']);
-			$rgbTextColor = round($rgbTextColorBuffer['red'] * (1 / 255), 2);
-			$rgbTextColor .= ' ';
-			$rgbTextColor .= round($rgbTextColorBuffer['green'] * (1 / 255), 2);
-			$rgbTextColor .= ' ';
-			$rgbTextColor .= round($rgbTextColorBuffer['blue'] * (1 / 255), 2);
-
-			if ($data['designType']->fontsizer == 'auto')
-			{
-				$autoSizeDataArray = $data['autoSizeData'];
-				$autoSizeData = null;
-
-				foreach ($autoSizeDataArray as $autoSizeDataElement)
-				{
-					if ($autoSizeDataElement->reddesign_area_id == $areaItem->reddesign_area_id)
-					{
-						$autoSizeData = $autoSizeDataElement;
-					}
-				}
-
-				$fontSize = 0;
-
-				if ($autoSizeData->fontSize)
-				{
-					$fontSize = $autoSizeData->fontSize / $ratio;
-				}
-
-				$noOfLines = count($autoSizeData->stringLines);
-
-				$bottomoffset = $imageHeight - $areaItem->y2_pos + $pdfTopMargin;
-
-				$maxHeight = $autoSizeData->maxHeight;
-				$offsetOverallArea = (($areaItem->height - ($fontSize * $maxHeight * $noOfLines)) / 2);
-				$offsetOverallArea = $offsetOverallArea + $bottomoffset;
-
-				/*
-				 * In the POSTSCRIPT default coordinate system, the origin is in the lower left hand corner of the current page.
-				 * As usual, x increases to the right. But, y increases upward!
-				 */
-
-				$offsetLeft = $areaItem->x1_pos + $pdfLeftMargin + ($areaItem->width / 2);
-
-				for ($h = 0;$h < $noOfLines;$h++)
-				{
-					if ($noOfLines == 1)
-					{
-						// Because other parts of the algorithm doesn't respect em-square we have to take a constant like 0.15 (15%) of the font size
-						// because there is some empty space between chars and em-square's border.
-						$offsetTop = (($imageHeight - $areaItem->y2_pos) + $pdfTopMargin + ($areaItem->height / 2)) - (($fontSize / 2) - ($fontSize * 0.15));
-					}
-					else
-					{
-						$gap = 1;
-
-						if ($noOfLines > 3)
-						{
-							$gap = ($fontSize * 1.1) / ($noOfLines - 1);
-						}
-
-						$gap = $gap / 2;
-
-						$offsetTop = $offsetOverallArea - $gap + ($fontSize * $maxHeight * (($noOfLines - 1) - $h)) * 1.1;
-					}
-
-					$epsText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $fontSize . "  scalefont setfont\n";
-					$epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $fontSize . "  scalefont setfont\n";
-
-					$epsText .= "\n$rgbTextColor setrgbcolor";
-					$epsText .= "\ngsave\n";
-
-					$epsAreaText .= "\n$rgbTextColor setrgbcolor";
-					$epsAreaText .= "\ngsave\n";
-
-					$epsAreaText .= "\n $offsetLeft $offsetTop moveto";
-					$epsAreaText .= "\n (" . $autoSizeData->stringLines[$h] . ") dup stringwidth pop 2 div neg 0 rmoveto true charpath ";
-					$epsAreaText .= "\n fill";
-					$epsAreaText .= "\n showpage";
-
-					$epsText .= "\n $offsetLeft $offsetTop moveto";
-					$epsText .= "\n (" . $autoSizeData->stringLines[$h] . ")";
-					$epsText .= "\n cshow";
-				}
-			}
-			else
-			{
-				$area['fontSize'] = round($area['fontSize'] / $ratio, 0);
-
-				/*
-				 * Calculate offset.
-				 * In the POSTSCRIPT default coordinate system, the origin is in the lower left hand corner of the current page.
-				 * As usual, x increases to the right. But, y increases upward!
-				 */
-				$alignmentPostScript = '';
-
-				if ((int) $areaItem->textalign == 1)
-				{
-					// Left.
-					$offsetLeft = $areaItem->x1_pos;
-				}
-				elseif ((int) $areaItem->textalign == 2)
-				{
-					// Right.
-					$offsetLeft = $areaItem->x2_pos;
-					$alignmentPostScript = "\n (" . $area['textArea'] . ") dup stringwidth pop neg 0 rmoveto";
-				}
-				else
-				{
-					// Center.
-					$offsetLeft = ($areaItem->x1_pos + $areaItem->width) / 2;
-					$alignmentPostScript = "\n (" . $area['textArea'] . ") dup stringwidth pop 2 div neg 0 rmoveto";
-				}
-
-				$offsetTop = (($imageHeight - $areaItem->y2_pos) + $pdfTopMargin + ($areaItem->height / 2));
-				$offsetTop -= (($area['fontSize'] / 2) - ($area['fontSize'] * 0.15));
-				$offsetLeft += $pdfLeftMargin;
-
-				$epsText .= $epsAreaText .= "\n/ (" . $fontTypeFileLocation . ") findfont " . $area['fontSize'] . "  scalefont setfont\n";
-
-				$epsText .= "\n$rgbTextColor setrgbcolor";
-				$epsText .= "\ngsave\n";
-
-				$epsAreaText .= "\n$rgbTextColor setrgbcolor";
-				$epsAreaText .= "\ngsave\n";
-
-				$epsAreaText .= "\n $offsetLeft $offsetTop moveto";
-				$epsAreaText .= $alignmentPostScript;
-				$epsAreaText .= "\n (" . $area['textArea'] . ") true charpath ";
-
-				$epsAreaText .= "\n fill";
-				$epsAreaText .= "\n showpage";
-
-				$epsText .= "\n $offsetLeft $offsetTop moveto";
-				$epsText .= "\n (" . $area['textArea'] . ")";
-				$epsText .= "\n cshow";
-			}
-		}
-
-		$epsText .= "\ngrestore\n";
-
-		$tmpEpsFile = $epsFilePath . "tmp_" . $productionFileName . ".eps";
-		$tmpTextEpsFile = $epsFilePath . "tmptext_" . $productionFileName . ".eps";
-
-		$epsFileName = $epsFilePath . $productionFileName . ".eps";
-
-		$tempFile = "%!PS";
-		$tempFile .= "\n%%Creator:redDESIGN";
-		$tempFile .= "\n%%Title:" . $productionFileName . ".pdf";
-		$tempFile .= "\n%%LanguageLevel: 3";
-		$tempFile .= "\n%%DocumentData: Clean7Bit";
-		$tempFile .= "\n%%EndComments";
-		$tempFile .= "\n";
-		$tempFile .= "\n%%BeginProlog";
-		$tempFile .= "\n/BeginEPSF {";
-		$tempFile .= "\n/EPSFsave save def";
-		$tempFile .= "\ncount /OpStackSize exch def";
-		$tempFile .= "\n/DictStackSize countdictstack def";
-		$tempFile .= "\n% turn off showpage";
-		$tempFile .= "\n/showpage {} def";
-		$tempFile .= "\n% set up default graphics state";
-		$tempFile .= "\n0 setgray 0 setlinecap";
-		$tempFile .= "\n1 setlinewidth 0 setlinejoin";
-		$tempFile .= "\n10 setmiterlimit [] 0 setdash newpath";
-		$tempFile .= "\n/languagelevel where";
-		$tempFile .= "\n{pop languagelevel 1 ne";
-		$tempFile .= "\n{false setstrokeadjust false setoverprint} if";
-		$tempFile .= "\n} if";
-		$tempFile .= "\n} bind def";
-		$tempFile .= "\n";
-		$tempFile .= "\n/EndEPSF {";
-		$tempFile .= "\ncount OpStackSize sub";
-		$tempFile .= "\ndup 0 lt {neg {pop} repeat} {pop} ifelse";
-		$tempFile .= "\ncountdictstack DictStackSize sub";
-		$tempFile .= "\ndup 0 lt {neg {end} repeat} {pop} ifelse";
-		$tempFile .= "\nEPSFsave restore";
-		$tempFile .= "\n} bind def";
-		$tempFile .= "\n";
-		$tempFile .= "\n%%EndProlog";
-		$tempFile .= "\n%%Page: 1 1";
-		$tempFile .= "\n/pagesave save def";
-		$tempFile .= "\n";
-		$tempFile .= "\n 0 0 translate";
-
-		if (file_exists($epsFileLocation))
-		{
-			$tempFile .= "\nBeginEPSF";
-			$tempFile .= "\n 0 0 translate";
-			$tempFile .= "\n%%BeginDocument: danske.eps";
-			$tempFile .= "\n(" . $epsFileLocation . ") run";
-			$tempFile .= "\n%%EndDocument";
-			$tempFile .= "\nEndEPSF";
-		}
-
-		$tempFile .= "\npagesave restore showpage";
-
-		// Create temp eps file for reading bounding box...
-		$tempFile .= "\n%%EOF";
-
-		$tmpEpsImage = $epsFilePath . "tmp_eps_" . $productionFileName . ".eps";
-		$tmpBound = $epsFilePath . "tmp_bound_" . $productionFileName . ".ps";
-
-		$fp = fopen($tmpEpsImage, "w");
-		fwrite($fp, $tempFile);
-		fclose($fp);
-
-		$imageWidth = $imageWidth + 56.7;
-		$imageHeight = $imageHeight + 56.7;
-
-		$cmd = "gs -dBATCH -dNOPAUSE -sOutputFile=$tmpBound -sDEVICE=ps2write  \-c '<< /PageSize
-				[$imageWidth $imageHeight]  >> setpagedevice'  -f" . $tmpEpsImage;
-		exec($cmd);
-
-		$imageBound = $this->readBound($tmpBound);
-		$epsFile  = "%!PS-Adobe-3.1 EPSF-3.1";
-		$epsFile .= "\n%%Creator:redDESIGN";
-		$epsFile .= "\n%%Title:" . $productionFileName . ".pdf";
-		$epsFile .= "\n%%LanguageLevel: 3";
-		$epsFile .= "\n%%DocumentData: Clean7Bit";
-		$epsFile .= "\n%%EndComments";
-		$epsFile .= "\n";
-		$epsFile .= "\n%%BeginProlog";
-		$epsFile .= "\n/BeginEPSF {";
-		$epsFile .= "\n/EPSFsave save def";
-		$epsFile .= "\ncount /OpStackSize exch def";
-		$epsFile .= "\n/DictStackSize countdictstack def";
-		$epsFile .= "\n% turn off showpage";
-		$epsFile .= "\n/showpage {} def";
-		$epsFile .= "\n% set up default graphics state";
-		$epsFile .= "\n0 setgray 0 setlinecap";
-		$epsFile .= "\n1 setlinewidth 0 setlinejoin";
-		$epsFile .= "\n10 setmiterlimit [] 0 setdash newpath";
-		$epsFile .= "\n/languagelevel where";
-		$epsFile .= "\n{pop languagelevel 1 ne";
-		$epsFile .= "\n{false setstrokeadjust false setoverprint} if";
-		$epsFile .= "\n} if";
-		$epsFile .= "\n} bind def";
-		$epsFile .= "\n";
-		$epsFile .= "\n/EndEPSF {";
-		$epsFile .= "\ncount OpStackSize sub";
-		$epsFile .= "\ndup 0 lt {neg {pop} repeat} {pop} ifelse";
-		$epsFile .= "\ncountdictstack DictStackSize sub";
-		$epsFile .= "\ndup 0 lt {neg {end} repeat} {pop} ifelse";
-		$epsFile .= "\nEPSFsave restore";
-		$epsFile .= "\n} bind def";
-		$epsFile .= "\n";
-
-		$epsFile .= "\n/x 1 def";
-		$epsFile .= "\n/cshow		%  (str)  =>  ---";
-		$epsFile .= "\n{ dup stringwidth pop -2 div 0 rmoveto show } bind def";
-		$epsFile .= "\n/alignshow		%  (str)  =>  ---";
-		$epsFile .= "\n	{dup stringwidth pop neg 0 rmoveto show} bind def";
-		$epsFile .= "\n/nl { x currentpoint exch pop 16 sub moveto } bind def";
-		$epsFile .= "\n%%EndProlog";
-		$epsFile .= "\n%%Page: 1 1";
-		$epsFile .= "\n/pagesave save def";
-		$epsFile .= "\n";
-
-		if (file_exists($epsFileLocation))
-		{
-			$epsFile .= "\nBeginEPSF";
-			$epsFile .= "\n 0 0 translate";
-
-			if ($imageBound[0] > 100)
-			{
-				$epsFile .= "\n 0 0 translate";
-			}
-			elseif ($imageBound[3] == 0)
-			{
-				$epsFile .= "\n 0 0 translate";
-			}
-			else
-			{
-				$epsFile .= "\n " . $pdfLeftMargin . " " . $pdfTopMargin . " translate";
-			}
-
-			$epsFile .= "\n% 0 0 " . ($imageWidth) . " " . ($imageHeight);
-
-			$epsFile .= "\n%%BeginDocument: danske.eps";
-			$epsFile .= "\n(" . $epsFileLocation . ") run";
-			$epsFile .= "\n%%EndDocument";
-			$epsFile .= "\nEndEPSF";
-		}
-
-		$epsFile .= "\nBeginEPSF";
-		$epsFile .= "\nclear";
-		$epsFile .= "\n 0 0 translate";
-		$epsTextFile .= $epsFile;
-		$epsFile .= "\n%%BeginDocument: text.eps";
-		$epsFile .= "\n" . $epsAreaText;
-		$epsFile .= "\n%%EndDocument";
-		$epsFile .= "\nEndEPSF";
-
-		// Create temp eps file for reading bounding box...
-		$epsFile .= "\n%%EOF";
-
-		$epsTextFile .= "\n%%BeginDocument: text.eps";
-		$epsTextFile .= "\n" . $epsText;
-		$epsTextFile .= "\n%%EndDocument";
-		$epsTextFile .= "\nEndEPSF";
-		$epsTextFile .= "\n%%EOF";
-
-		$fp = fopen($tmpEpsFile, "w");
-		fwrite($fp, $epsFile);
-		fclose($fp);
-
-		$fp = fopen($tmpTextEpsFile, "w");
-		fwrite($fp, $epsTextFile);
-		fclose($fp);
-
-		// Create pdf.
-		ob_clean();
-
-		$pdfFileName = $pdfFilePath . $productionFileName . ".pdf";
-		$cmd  = "gs -dBATCH -dNOPAUSE -dNOEPS -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
-		$cmd .= " -sOutputFile=$pdfFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]";
-		$cmd .= "  >> setpagedevice'  -f" . $tmpEpsFile;
-		exec($cmd);
-
-		$epsFileName = $epsFilePath . $productionFileName . ".eps";
-		$cmd  = "gs -dBATCH -dNOPAUSE -dNOEPS -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
-		$cmd .= " -sOutputFile=$epsFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]";
-		$cmd .= "  >> setpagedevice'  -f" . $tmpTextEpsFile;
-		exec($cmd);
-
-		if (file_exists($tmpTextEpsFile))
-		{
-			unlink($tmpTextEpsFile);
-		}
-
-		if (file_exists($tmpEpsFile))
-		{
-			unlink($tmpEpsFile);
-		}
-
-		if (file_exists($tmpEpsImage))
-		{
-			unlink($tmpEpsImage);
-		}
-
-		if (file_exists($tmpBound))
-		{
-			unlink($tmpBound);
-		}
-
-		return $productionFileName;
-	}
-
-	/**
-	 * Read BoundingArea of Image
-	 *
-	 * @param   string  $fname  location of image
-	 *
-	 * @return array
-	 */
-	private function readBound($fname)
-	{
-		$contentStr = "";
-
-		if (!file_exists($fname))
-		{
-			return false;
-		}
-
-		$contents = file($fname);
-
-		for ($f = 0; $f < count($contents); $f++)
-		{
-			if (strstr($contents[$f], "%%BoundingBox"))
-			{
-				$contentStr = $contents[$f];
-				break;
-			}
-		}
-
-		$box = explode(":", $contentStr);
-		$boundingBox = explode(" ", trim($box[1]));
-
-		return $boundingBox;
-	}
-
-	/**
-	 * Convert a hexa decimal color code to its RGB equivalent
-	 *
-	 * @param   string   $hexStr          (hexadecimal color value)
-	 * @param   boolean  $returnAsString  (if set true, returns the value separated by the separator character. Otherwise returns associative array)
-	 * @param   string   $seperator       (to separate RGB values. Applicable only if second parameter is true.)
-	 *
-	 * @return array or string (depending on second parameter. Returns False if invalid hex color value)
-	 */
-	public function hex2RGB($hexStr, $returnAsString = false, $seperator = ',')
-	{
-		// Gets a proper hex string
-		$hexStr = preg_replace("/[^0-9A-Fa-f]/", '', $hexStr);
-		$rgbArray = array();
-
-		if (strlen($hexStr) == 6)
-		{
-			// If a proper hex code, convert using bitwise operation. No overhead... faster.
-			$colorVal = hexdec($hexStr);
-			$rgbArray['red'] = 0xFF & ($colorVal >> 0x10);
-			$rgbArray['green'] = 0xFF & ($colorVal >> 0x8);
-			$rgbArray['blue'] = 0xFF & $colorVal;
-		}
-		elseif (strlen($hexStr) == 3)
-		{
-			// If shorthand notation, need some string manipulations.
-			$rgbArray['red'] = hexdec(str_repeat(substr($hexStr, 0, 1), 2));
-			$rgbArray['green'] = hexdec(str_repeat(substr($hexStr, 1, 1), 2));
-			$rgbArray['blue'] = hexdec(str_repeat(substr($hexStr, 2, 1), 2));
-		}
-		else
-		{
-			// Invalid hex color code.
-			return false;
-		}
-
-		// Returns the rgb string or the associative array.
-		return $returnAsString ? implode($seperator, $rgbArray) : $rgbArray;
 	}
 }

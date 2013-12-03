@@ -46,7 +46,17 @@ defined('_JEXEC') or die();
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS'); ?>
 			</label>
 			<div class="controls">
-				<?php echo JHTML::_('select.genericlist', $this->sizerOptions, 'fontsizer', 'class="inputbox"', 'value', 'text', $this->item->fontsizer); ?>
+				<?php
+					echo JHTML::_(
+									'select.genericlist',
+									$this->sizerOptions,
+									'fontsizer',
+									'class="inputbox input-xxlarge"',
+									'value',
+									'text',
+									$this->item->fontsizer
+					);
+				?>
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DESC'); ?></span>
 			</div>
 		</div>

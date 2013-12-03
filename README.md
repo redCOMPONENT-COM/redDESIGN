@@ -3,6 +3,12 @@ redDESIGN is a redCOMPONENT extension for Joomla and redSHOP. redDESIGN allows y
 
 The web user will be able to add text in serveral fonts to a base design.
 
+## Status
+Master: [![Build Status](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGN.png?branch=master&token=vxVVpxnq2ZPuMp3yebRz)](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGN/)
+
+Develop: [![Build Status](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGN.png?branch=develop&token=vxVVpxnq2ZPuMp3yebRz)](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGN/)
+
+
 ##Roadmap
 There are four main milestones in this project:
 - [1st Component basic structure](https://github.com/redCOMPONENT-COM/redDESIGN/issues?milestone=4&state=open)

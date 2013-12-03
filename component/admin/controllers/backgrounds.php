@@ -31,15 +31,20 @@ class ReddesignControllerBackgrounds extends FOFController
 	public function onBeforeApplySave(&$data)
 	{
 		// Init vars
+		$app = JFactory::getApplication();
 		$updatedEPS = false;
 		$updatedThumbnail = false;
+		$uploaded_file = null;
+		$jpegPreviewFile = null;
+		$backgroundsModel = $this->getThisModel();
+		$title = $this->input->getString('title', '');
 
 		// Get Eps if has been added
 		$file = $this->input->files->get('bg_eps_file', null);
 
 		// Get Thumbnail if has been added
-		$thumbFile			= $this->input->files->get('thumbnail', null);
-		$thumbPreviewFile	= null;
+		$thumbFile = $this->input->files->get('thumbnail', null);
+		$thumbPreviewFile = null;
 
 		// Get component Params
 		$params = JComponentHelper::getParams('com_reddesign');
@@ -50,18 +55,23 @@ class ReddesignControllerBackgrounds extends FOFController
 			// If is a new background and the file is not attached return error
 			if (!$data['reddesign_background_id'])
 			{
-				$app = JFactory::getApplication();
 				$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_FILE'), 'error');
 				$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
 				$this->redirect();
 			}
+		}
+		elseif (empty($title))
+		{
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_TITLE'), 'error');
+			$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
+			$this->redirect();
 		}
 		else
 		{
 			$updatedEPS = true;
 
 			// Upload the background file
-			$uploaded_file	= $this->uploadFile($file);
+			$uploaded_file = $this->uploadFile($file);
 
 			if (!$uploaded_file)
 			{
@@ -69,7 +79,7 @@ class ReddesignControllerBackgrounds extends FOFController
 				$this->redirect();
 			}
 
-			// Create a image preview of the EPS
+			// Create an image preview of the EPS.
 			$jpegPreviewFile = $this->createBackgroundPreview($uploaded_file['mangled_filename']);
 
 			if (!$jpegPreviewFile)
@@ -103,7 +113,7 @@ class ReddesignControllerBackgrounds extends FOFController
 			$uploadedThumbFile = $fileHelper->uploadFile(
 				$thumbFile,
 				'backgrounds/thumbnails',
-				$params->get('max_designtype_image_size', 2),
+				$params->get('max_eps_file_size', 2),
 				'jpg,JPG,jpeg,JPEG,png,PNG,gif,GIF'
 			);
 
@@ -172,23 +182,36 @@ class ReddesignControllerBackgrounds extends FOFController
 		}
 
 		// If this new background will be the PDF Production background, switch it against the previous production background
-		if ((int) $data['isPDFbgimage'])
+		if ((int) $data['isProductionBg'])
 		{
-			$backgroundsModel	= $this->getThisModel();
-			$designId			= (int) $data['reddesign_designtype_id'];
+			$designId = (int) $data['reddesign_designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
-			$backgroundsModel->unsetAllPDFBg($designId);
+			$backgroundsModel->unsetAllIsProductionBg($designId);
 		}
 
 		// If this new background will be the preview background, switch it against the previous preview background
-		if ((int) $data['isPreviewbgimage'])
+		if ((int) $data['isDefaultPreview'])
 		{
-			$backgroundsModel	= $this->getThisModel();
-			$designId			= (int) $data['reddesign_designtype_id'];
+			$designId = (int) $data['reddesign_designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
-			$backgroundsModel->unsetAllPreviewBg($designId);
+			$backgroundsModel->unsetAllIsDefaultPreview($designId);
+		}
+
+		if (empty($data['isProductionBg']))
+		{
+			$data['isProductionBg'] = 0;
+		}
+
+		if (empty($data['isDefaultPreview']))
+		{
+			$data['isDefaultPreview'] = 0;
+		}
+
+		if (empty($data['isPreviewBg']))
+		{
+			$data['isPreviewBg'] = 0;
 		}
 
 		return $data;
@@ -340,7 +363,7 @@ class ReddesignControllerBackgrounds extends FOFController
 		// If the temp file does not have ok MIME, return
 		if (!in_array($file['type'], $validFileTypes))
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_INVALID_MIME'));
+			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_INVALID_MIME'), 'error');
 
 			return false;
 		}
@@ -358,31 +381,29 @@ class ReddesignControllerBackgrounds extends FOFController
 	private function createBackgroundPreview($eps_file)
 	{
 		$params = JComponentHelper::getParams('com_reddesign');
-		$best_fit = $params->get('eps_bestfit', 1);
 		$max_thumb_width = $params->get('max_eps_thumbnail_width', 600);
 		$max_thumb_height = $params->get('max_eps_thumbnail_height', 400);
 
 		$eps_file_location = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $eps_file;
 
-		// Read EPS
-		$im = new Imagick;
-		$im->readImage($eps_file_location);
+		$image_name = substr($eps_file, 0, -3) . 'png';
+		$previewPath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $image_name;
 
-		$im->thumbnailImage($max_thumb_width, $max_thumb_height, $best_fit);
+		$cmd = 'convert -colorspace RGB ' . $eps_file_location . ' PNG32:' . $previewPath;
+		exec($cmd);
 
-		// Convert to jpg
-		$im->setCompression(Imagick::COMPRESSION_JPEG);
-		$im->setCompressionQuality(60);
+		$checkerBoard = $this->input->getBool('useCheckerboard', 0);
 
-		$im->setImageFormat('jpeg');
+		// Set checkerboard transparency background.
+		if ($checkerBoard)
+		{
+			$cmd = 'composite -compose Dst_Over -tile pattern:checkerboard ' . $previewPath . ' ' . $previewPath;
+			exec($cmd);
+		}
 
-		// Create the Background preview .jpg file name
-		$image_name = substr($eps_file, 0, -3) . 'jpg';
-
-		// Write image to the media://com_reddesign/assets/backgrounds/
-		$im->writeImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $image_name);
-		$im->clear();
-		$im->destroy();
+		// Resize the image if it is needed
+		$cmd = 'convert ' . $previewPath . ' -resize ' . $max_thumb_width . 'x' . $max_thumb_height . '\> ' . $previewPath;
+		exec($cmd);
 
 		return $image_name;
 	}
@@ -394,7 +415,7 @@ class ReddesignControllerBackgrounds extends FOFController
 	 *
 	 * @return void
 	 */
-	public function setPDFbg()
+	public function setProductionFileBg()
 	{
 		$designId	= $this->input->getInt('reddesign_designtype_id', '');
 		$bgId		= $this->input->getInt('reddesign_background_id', '');
@@ -403,7 +424,7 @@ class ReddesignControllerBackgrounds extends FOFController
 
 		$app = JFactory::getApplication();
 
-		if (!$model->setAsPDFbg($designId, $bgId))
+		if (!$model->setAsProductionFileBg($designId, $bgId))
 		{
 			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_ERROR_SWITCHING_PDF_BG'), 'error');
 		}
