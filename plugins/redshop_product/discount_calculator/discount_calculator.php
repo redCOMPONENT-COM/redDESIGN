@@ -240,22 +240,22 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 *
 	 * Method is called by the view and the results are imploded and displayed in a placeholder
 	 *
-	 * @param   array  &$cart              Cart session array
-	 * @param   int    $i                  Cart index
-	 * @param   float  &$calculator_price  Product price
+	 * @param   array  &$cart             Cart session array
+	 * @param   int    $i                 Cart index
+	 * @param   float  &$calculatorPrice  Product price
 	 *
 	 * @return  boolean
 	 */
-	public function onBeforeCartItemUpdate(&$cart, $i, &$calculator_price)
+	public function onBeforeCartItemUpdate(&$cart, $i, &$calculatorPrice)
 	{
 		$dimension = $cart[$i]['rs_dimension'];
 		$quantity  = $cart[$i]['quantity'];
 		$productId = $cart[$i]['product_id'];
 
 		// Get difference type of calculations
-		$calculator_price = $this->getTypesCalculation($dimension, $productId, $quantity);
+		$calculatorPrice = $this->getTypesCalculation($dimension, $productId, $quantity);
 
-		$cart['plg_product_price'][$productId] = $calculator_price;
+		$cart['plg_product_price'][$productId] = $calculatorPrice;
 	}
 
 	/**
@@ -374,27 +374,27 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$extraField 	= new extraField;
 		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $productId);
 
-		$calculator_price = 0;
+		if (isset($dimension) && $dimension)
+		{
+			$chars = preg_split('/ /', $dimension, -1, PREG_SPLIT_OFFSET_CAPTURE);
+
+			$lang = JFactory::getLanguage();
+			$lang->load('plg_redshop_product_addToCartValidation', JPATH_ADMINISTRATOR);
+
+			// Width X Height Unit
+			$width 		= $chars[0][0];
+			$height 	= $chars[2][0];
+		}
+		else
+		{
+			return 0;
+		}
+
+		$calculatorPrice = 0;
 
 		// Type 2 calculation
 		if ($extraFieldData->data_txt == 'type2')
 		{
-			if (isset($dimension) && $dimension)
-			{
-				$chars = preg_split('/ /', $dimension, -1, PREG_SPLIT_OFFSET_CAPTURE);
-
-				$lang = JFactory::getLanguage();
-				$lang->load('plg_redshop_product_addToCartValidation', JPATH_ADMINISTRATOR);
-
-				// Width X Height Unit
-				$width 		= $chars[0][0];
-				$height 	= $chars[2][0];
-			}
-			else
-			{
-				return 0;
-			}
-
 			$elements        = 39;
 			$meterPerPrice   = $width * $height / 10000;
 			$meterTotalPrice = $meterPerPrice * $quantity;
@@ -450,10 +450,92 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 			$price = $this->getProductQuantityPrice($productId, $quantity);
 
 			$percentage       = round($price->product_price, 2);
-			$calculator_price = $pricePerPiece - abs($pricePerPiece * $percentage / 100);
+			$calculatorPrice = $pricePerPiece - abs($pricePerPiece * $percentage / 100);
+		}
+		elseif ($extraFieldData->data_txt == 'type1')
+		{
+			$lookupData  = json_decode('[
+					{"size": 0,"price": 25}, {"size": 51,"price": 29},
+					{"size": 101,"price": 34}, {"size": 201,"price": 43},
+					{"size": 301,"price": 48}, {"size": 401,"price": 64},
+					{"size": 601,"price": 81}, {"size": 801,"price": 95},
+					{"size": 1001,"price": 107}, {"size": 1301,"price": 121},
+					{"size": 1601,"price": 140}, {"size": 1901,"price": 160},
+					{"size": 2201,"price": 171}, {"size": 2501,"price": 176},
+					{"size": 2801,"price": 186}, {"size": 3101,"price": 192},
+					{"size": 3401,"price": 198}, {"size": 3701,"price": 208},
+					{"size": 4001,"price": 216}, {"size": 4501,"price": 227},
+					{"size": 5001,"price": 249}, {"size": 5501,"price": 267},
+					{"size": 6001,"price": 286}, {"size": 6501,"price": 305},
+					{"size": 7001,"price": 323}, {"size": 7501,"price": 341},
+					{"size": 8001,"price": 358}, {"size": 8501,"price": 376},
+					{"size": 9001,"price": 392}, {"size": 9501,"price": 408},
+					{"size": 10001,"price": 417}, {"size": 10501,"price": 427},
+					{"size": 11001,"price": 436}, {"size": 11501,"price": 445},
+					{"size": 12001,"price": 454}, {"size": 12501,"price": 463},
+					{"size": 13001,"price": 473}, {"size": 13501,"price": 482},
+					{"size": 14001,"price": 491}, {"size": 14501,"price": 500},
+					{"size": 15001,"price": 509}
+				]'
+			);
+
+			$elementData = json_decode('[
+					{"size": 1,"price": 0.65}, {"size": 8,"price": 0.85},
+					{"size": 35,"price": 1}, {"size": 70,"price": 1.3},
+					{"size": 125,"price": 1.6}
+				]'
+			);
+
+			$finalWH = $width * $height;
+
+			$finaldata            = $this->vlookup($finalWH, $lookupData);
+			$stickerElement       = (int) $this->getProductElements($productId);
+			$finaldata['element'] = $this->vlookup($stickerElement, $elementData);
+
+			$calculatorPrice      = $finaldata['price'] * $finaldata['element']['price'];
+
+			$quantityBasedPrice   = $this->getProductQuantityPrice($productId, $quantity);
+
+			$percentage = 0;
+
+			if (count($quantityBasedPrice) > 0)
+			{
+				$percentage = $quantityBasedPrice->product_price;
+			}
+
+			$discountedPrice = $calculatorPrice - ($calculatorPrice * $percentage / 100);
+
+			// Multiply with Quantity
+			$calculatorPrice = $discountedPrice * $quantity;
 		}
 
-		return $calculator_price;
+		return $calculatorPrice;
+	}
+
+	/**
+	 * vlookup function checks the best match value from array
+	 *
+	 * @param   integer     $needle  input from which need to get best match
+	 * @param   jsonObject  $data    JSON Data Object Array
+	 *
+	 * @return  array           Final Result Array
+	 */
+	private function vlookup($needle, $data)
+	{
+		$return = array();
+
+		foreach ($data as $value)
+		{
+			if ($value->size >= $needle)
+			{
+				$return['size'] = $value->size;
+				$return['price'] = $value->price;
+
+				break;
+			}
+		}
+
+		return $return;
 	}
 
 	/**
@@ -472,9 +554,9 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$productId = $orderItem['product_id'];
 
 		// Get difference type of calculations
-		$calculator_price = $this->getTypesCalculation($dimension, $productId, $quantity);
+		$calculatorPrice = $this->getTypesCalculation($dimension, $productId, $quantity);
 
-		$orderItem['plg_product_price'] = $calculator_price;
+		$orderItem['plg_product_price'] = $calculatorPrice;
 	}
 
 	/**
@@ -486,6 +568,42 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 	 */
 	private function getOrderItemDimention($orderItem)
 	{
+		return $this->getProductExtrafieldData(
+					'rs_dimension',
+					$orderItem['order_item_id'],
+					12
+				);
+	}
+
+	/**
+	 * Get Product Total Element set in Back-end Product detail
+	 *
+	 * @param   integer  $productId  Product Id
+	 *
+	 * @return  string              Element Value
+	 */
+	private function getProductElements($productId)
+	{
+		return $this->getProductExtrafieldData(
+					'rs_sticker_element',
+					$productId,
+					1
+				);
+	}
+
+	/**
+	 * Get Product Extra Field Information
+	 *
+	 * @param   string   $name     Extra Field Name - Prefixed with "rs_"
+	 * @param   integer  $itemId   Extra Field Section Id
+	 * @param   integer  $section  Section Id
+	 *
+	 * @throws   string  If Query fails it will throw error message
+	 *
+	 * @return  string            Extra Field Data Text
+	 */
+	private function getProductExtrafieldData($name, $itemId, $section)
+	{
 		// Initialize variables.
 		$db    = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -494,13 +612,13 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 		$subQuery = $db->getQuery(true);
 		$subQuery->select('field_id')
 				->from('#__redshop_fields')
-				->where($db->quoteName('field_name') . ' LIKE "rs_dimension"');
+				->where($db->quoteName('field_name') . ' LIKE ' . $db->quote($name));
 
 		// Create the base select statement.
 		$query->select('fd.data_txt')
 			->from($db->quoteName('#__redshop_fields_data') . ' AS fd')
-			->where($db->quoteName('fd.itemid') . ' = ' . (int) $orderItem['order_item_id'])
-			->where($db->quoteName('fd.section') . ' = 12');
+			->where($db->quoteName('fd.itemid') . ' = ' . (int) $itemId)
+			->where($db->quoteName('fd.section') . ' = ' . (int) $section);
 
 		// Add the sub-query to the main query
 		$query->where($db->quoteName('fd.fieldid') . ' IN (' . $subQuery->__toString() . ')');
