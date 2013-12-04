@@ -210,8 +210,7 @@ class ReddesignControllerDesigntype extends FOFController
 		}
 
 		// Default DPI is 72.
-		$productionFilePadding = $params->get('productionFilePadding', 10) * $unitToPx;
-		$pdfLeftMargin = ($productionFilePadding * 72) / 25.4;
+		$pdfLeftMargin = $params->get('productionFilePadding', 10) * $unitToPx;
 		$pdfTopMargin = $pdfLeftMargin;
 
 		foreach ($areas as $area)
