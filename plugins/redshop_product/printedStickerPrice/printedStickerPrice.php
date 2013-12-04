@@ -156,10 +156,10 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 			$index = $i + 1;
 
 			$table .= "<tr>"
-				. "<td>$price->price_quantity_end</td>"
+				. "<td>$price->price_quantity_start</td>"
 				. "<td>"
 				. "<input type='radio' class='printedStickerPrice_radio' name='printedStickerPrice_plg'
-						value=\"$price->price_quantity_end\" price='0'
+						value=\"$price->price_quantity_start\" price='0'
 						product_id=\"$product->product_id\"
 						percentage='" . $percentage / 100 . "'
 						index='" . $index . "'
