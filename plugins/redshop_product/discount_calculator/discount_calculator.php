@@ -232,10 +232,11 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 			return;
 		}
 
-		$cart[$i]['product_price']              = $cart['plg_product_price'][$cart[$i]['product_id']];
+		$productVat								= $cart[$i]['product_price'] * 0.25;
+		$cart[$i]['product_vat'] 				= $productVat;
+		$cart[$i]['product_price']              = $cart[$i]['product_price'] + $productVat;
 		$cart[$i]['product_old_price']          = $cart['plg_product_price'][$cart[$i]['product_id']];
 		$cart[$i]['product_old_price_excl_vat'] = $cart['plg_product_price'][$cart[$i]['product_id']];
-		$cart[$i]['product_price_excl_vat']     = $cart['plg_product_price'][$cart[$i]['product_id']];
 	}
 
 	/**
