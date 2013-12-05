@@ -232,7 +232,11 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 			return;
 		}
 
-		$cart[$i]['product_old_price'] = $cart['plg_product_price'][$cart[$i]['product_id']];
+		$productVat								= $cart[$i]['product_price'] * 0.25;
+		$cart[$i]['product_vat'] 				= $productVat;
+		$cart[$i]['product_price']              = $cart[$i]['product_price'] + $productVat;
+		$cart[$i]['product_old_price']          = $cart['plg_product_price'][$cart[$i]['product_id']];
+		$cart[$i]['product_old_price_excl_vat'] = $cart['plg_product_price'][$cart[$i]['product_id']];
 	}
 
 	/**
@@ -425,32 +429,11 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 			$totalPricePerMeter = $pricePerMeter * $meterTotalPrice;
 
-			$quntityDiscount = array(
-				0 => 1,
-				5 => 0.9,
-				10 => 0.85,
-				25 => 0.80,
-				50 => 0.75,
-				500 => 0.70
-			);
-
-			$discountAmount = 0;
-
-			foreach ($quntityDiscount as $key => $value)
-			{
-				if ($key >= $elements)
-				{
-					$discountAmount = $value;
-					break;
-				}
-			}
+			$price 			  = $this->getProductQuantityPrice($productId, $quantity);
+			$percentage       = 1 - abs(round($price->product_price, 2)) / 100;
 
 			// Price Per Piece
-			$pricePerPiece = $totalPricePerMeter / $quantity * $discountAmount + $elements / $quantity;
-			$price = $this->getProductQuantityPrice($productId, $quantity);
-
-			$percentage       = round($price->product_price, 2);
-			$calculatorPrice = $pricePerPiece - abs($pricePerPiece * $percentage / 100);
+			$calculatorPrice = $totalPricePerMeter / $quantity * $percentage + $elements / $quantity;
 		}
 		elseif ($extraFieldData->data_txt == 'type1')
 		{
