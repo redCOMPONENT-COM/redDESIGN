@@ -108,13 +108,9 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 			{
 				var jsProductPrice = rsjQuery('input[id^=\"plg_product_price_\"]').val();
 
-				if (jsProductPrice && dpAllow)
+				if (jsProductPrice)
 				{
 					return '&plg_product_price=' + jsProductPrice;
-				}
-				else
-				{
-					alert('" . sprintf(JText::_('PLG_REDSHOP_PRODUCT_DISCOUNT_CALCULATOR_REQUIRED_MINIMUM_HEIGHT'), $minWidth) . "');
 				}
 			}
 		";

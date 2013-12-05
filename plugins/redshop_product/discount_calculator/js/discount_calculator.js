@@ -31,26 +31,28 @@ rsjQuery(document).ready(function () {
 rsjQuery.validateDimension = function(){
 
     var pid  = rsjQuery('#product_id').val();
-    var elm  = rsjQuery('#plg_dimension_base_input_' + pid);
-    var pdb  = rsjQuery('#plg_dimension_base_' + pid).val();
+    var pluginBaseInput  = rsjQuery('#plg_dimention_base_input_' + pid);
+    var pdb  = rsjQuery('#plg_dimention_base_' + pid).val();
 
-    var h = elm.attr('default-height'), w = elm.attr('default-width');
+    var h = pluginBaseInput.attr('default-height'), w = pluginBaseInput.attr('default-width');
 
-    if(pdb == 'w' && parseFloat(elm.val()) < w)
+    if(pdb == 'w' && parseFloat(pluginBaseInput.val()) < w)
     {
-       alert('Minimum påkrævede bredde er ' + w + 'cm');
+       pluginBaseInput.val(w);
     }
-    else if(pdb == 'w' && parseFloat(elm.val()) > parseFloat(elm.attr('max-width')))
+    else if(pdb == 'w' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-width')))
     {
-       alert('Maksimale tilladte bredde er ' + elm.attr('max-width') + 'cm');
+       alert('Maksimale tilladte bredde er ' + pluginBaseInput.attr('max-width') + 'cm');
+       pluginBaseInput.val(pluginBaseInput.attr('max-width'));
     }
-    else if(pdb == 'h' && parseFloat(elm.val()) < h)
+    else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) < h)
     {
-       alert('Minimum påkrævede højde er ' + h + 'cm');
+       pluginBaseInput.val(h);
     }
-    else if(pdb == 'h' && parseFloat(elm.val()) > parseFloat(elm.attr('max-height')))
+    else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-height')))
     {
-       alert('Maksimale tilladte højde er ' + elm.attr('max-height') + 'cm');
+       alert('Maksimale tilladte højde er ' + pluginBaseInput.attr('max-height') + 'cm');
+       pluginBaseInput.val(pluginBaseInput.attr('max-height'));
     }
 
     // Set Discount Price On Load
@@ -64,11 +66,11 @@ rsjQuery.validateDimension = function(){
 rsjQuery.setDiscountPrice = function(){
 
     var pid  = rsjQuery('#product_id').val();
-    var elm  = rsjQuery('#plg_dimension_base_input_' + pid);
+    var pluginBaseInput  = rsjQuery('#plg_dimension_base_input_' + pid);
     var pdb  = rsjQuery('#plg_dimension_base_' + pid).val();
-    var pdbi = rsjQuery.clearPriceString(elm.val());
+    var pdbi = rsjQuery.clearPriceString(pluginBaseInput.val());
 
-    var h = elm.attr('default-height'), newH = h, w = elm.attr('default-width'), newW = w;
+    var h = pluginBaseInput.attr('default-height'), newH = h, w = pluginBaseInput.attr('default-width'), newW = w;
 
     if (!isNaN(pdbi)) {
 
@@ -89,7 +91,7 @@ rsjQuery.setDiscountPrice = function(){
             dpAllow = (h <= pdbi);
         }
     } else {
-        elm.val('');
+        pluginBaseInput.val('');
     }
 
     var finalWH = newW * newH;
@@ -105,8 +107,8 @@ rsjQuery.setDiscountPrice = function(){
     // finalWH /= 10000;
 
     var finaldata       = rsjQuery.vlookup(finalWH, lookupData, false);
-    var sticker_element = parseInt(rsjQuery('#rs_sticker_element').html());
-    finaldata.element   = rsjQuery.vlookup(sticker_element, elementData, true);
+    var stickerElement = parseInt(rsjQuery('#rs_sticker_element').html());
+    finaldata.element   = rsjQuery.vlookup(stickerElement, elementData, true);
 
     rsjQuery.updatePrice(pid, finaldata);
 };

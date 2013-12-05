@@ -31,7 +31,6 @@ rsjQuery(function(){
 });
 
 var lookupData = [{"size": 0,"price": 703.5}, {"size": 1,"price": 646.8}, {"size": 2,"price": 617.4}, {"size": 3,"price": 580.3}, {"size": 4,"price": 536.2}, {"size": 5,"price": 492.1}, {"size": 10,"price": 387.8}, {"size": 20,"price": 385.7}, {"size": 50,"price": 378}, {"size": 999,"price": 349.3}];
-var elementData = [{"size": 0,"price": 1}, {"size": 5,"price": 0.90}, {"size": 10,"price": 0.85}, {"size": 25,"price": 0.8}, {"size": 50,"price": 0.75}, {"size": 500,"price": 0.70}];
 
 rsjQuery(document).ready(function () {
 
@@ -51,26 +50,28 @@ rsjQuery(document).ready(function () {
 rsjQuery.validateDimension = function(){
 
     var pid  = rsjQuery('#product_id').val();
-    var elm  = rsjQuery('#plg_dimension_base_input_' + pid);
+    var pluginBaseInput  = rsjQuery('#plg_dimension_base_input_' + pid);
     var pdb  = rsjQuery('#plg_dimension_base_' + pid).val();
 
-    var h = elm.attr('default-height'), w = elm.attr('default-width');
+    var h = pluginBaseInput.attr('default-height'), w = pluginBaseInput.attr('default-width');
 
-    if(pdb == 'w' && parseFloat(elm.val()) < w)
+    if(pdb == 'w' && parseFloat(pluginBaseInput.val()) < w)
     {
-       alert('Minimum påkrævede bredde er ' + w + 'cm');
+       pluginBaseInput.val(w);
     }
-    else if(pdb == 'w' && parseFloat(elm.val()) > parseFloat(elm.attr('max-width')))
+    else if(pdb == 'w' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-width')))
     {
-       alert('Maksimale tilladte bredde er ' + elm.attr('max-width') + 'cm');
+       alert('Maksimale tilladte bredde er ' + pluginBaseInput.attr('max-width') + 'cm');
+       pluginBaseInput.val(pluginBaseInput.attr('max-width'));
     }
-    else if(pdb == 'h' && parseFloat(elm.val()) < h)
+    else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) < h)
     {
-       alert('Minimum påkrævede højde er ' + h + 'cm');
+       pluginBaseInput.val(h);
     }
-    else if(pdb == 'h' && parseFloat(elm.val()) > parseFloat(elm.attr('max-height')))
+    else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-height')))
     {
-       alert('Maksimale tilladte højde er ' + elm.attr('max-height') + 'cm');
+       alert('Maksimale tilladte højde er ' + pluginBaseInput.attr('max-height') + 'cm');
+       pluginBaseInput.val(pluginBaseInput.attr('max-height'));
     }
 
     // Set Discount Price On Load
@@ -83,11 +84,11 @@ rsjQuery.validateDimension = function(){
 rsjQuery.setDiscountPrice = function(){
 
     var pid  = rsjQuery('#product_id').val();
-    var elm  = rsjQuery('#plg_dimension_base_input_' + pid);
+    var pluginBaseInput  = rsjQuery('#plg_dimension_base_input_' + pid);
     var pdb  = rsjQuery('#plg_dimension_base_' + pid).val();
-    var pdbi = rsjQuery.clearPriceString(elm.val());
+    var pdbi = rsjQuery.clearPriceString(pluginBaseInput.val());
 
-    var h = elm.attr('default-height'), newH = h, w = elm.attr('default-width'), newW = w;
+    var h = pluginBaseInput.attr('default-height'), newH = h, w = pluginBaseInput.attr('default-width'), newW = w;
 
     if (!isNaN(pdbi)) {
 
@@ -109,7 +110,7 @@ rsjQuery.setDiscountPrice = function(){
             dpAllow = (h <= pdbi);
         }
     } else {
-        elm.val('');
+        pluginBaseInput.val('');
     }
 
     var finalWH = newW * newH;
@@ -133,26 +134,24 @@ rsjQuery.setDiscountPrice = function(){
         var finalWHTotal = finalWH * quantity;
 
         var finaldata       = rsjQuery.vlookup(finalWHTotal, lookupData, false);
-        var sticker_element = 39;//parseInt(rsjQuery('#rs_sticker_element').html());
-
-        finaldata.element   = rsjQuery.vlookup(sticker_element, elementData, true);
+        var stickerElement = 39;
 
         var tppm = finaldata.price * finalWHTotal;
 
-        var price = tppm / quantity * finaldata.element.price + (sticker_element / quantity);
+        var discountPercentage = 1 - Math.abs(rsjQuery(this).attr('percentage'));
+
+        var price = tppm / quantity * discountPercentage + (stickerElement / quantity);
 
         if (rsjQuery(this).attr('checked'))
         {
             rsjQuery.updatePrice(pid, price);
         }
 
-        var discountedPrice = parseFloat(price) + parseFloat(price * rsjQuery(this).attr('percentage'));
-
         // Multiply with Quantity
-        var qtydiscountedPrice = discountedPrice * quantity;
+        var qtydiscountedPrice = price * quantity;
 
         // Set Base Price
-        rsjQuery(this).attr('base-price', discountedPrice);
+        rsjQuery(this).attr('base-price', price);
         rsjQuery(this).attr('price', qtydiscountedPrice);
 
         // Set price changes in HTML fields
@@ -161,8 +160,6 @@ rsjQuery.setDiscountPrice = function(){
         rsjQuery('#price_quantity' + rsjQuery(this).attr('index')).html(formatted_main_price);
 
     });
-
-
 };
 
 /**

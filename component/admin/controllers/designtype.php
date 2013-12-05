@@ -119,6 +119,9 @@ class ReddesignControllerDesigntype extends FOFController
 		}
 
 		$data['autoSizeData'] = json_decode($redDesignData->autoSizeData);
+		$data['customUserWidth'] = $redDesignData->customUserWidth;
+		$data['customUserHeight'] = $redDesignData->customUserHeight;
+		$data['enteredDimensionunit'] = $redDesignData->enteredDimensionunit;
 
 		return $data;
 	}
@@ -187,14 +190,32 @@ class ReddesignControllerDesigntype extends FOFController
 		$imageWidth = $dimensions['width'];
 		$imageHeight = $dimensions['height'];
 
+		// Get unit setting for padding conversion.
+		$unit = $params->get('unit', 'px');
+
+		// Check for user entered dimension
+		if (isset($data['customUserWidth']) && !$empty($data['customUserWidth']))
+		{
+			$imageWidth = $data['customUserWidth'];
+		}
+
+		// Check for user entered dimension
+		if (isset($data['customUserHeight']) && !$empty($data['customUserHeight']))
+		{
+			$imageHeight = $data['customUserHeight'];
+		}
+
+		// Check for user entered dimension
+		if (isset($data['enteredDimensionunit']) && !$empty($data['enteredDimensionunit']))
+		{
+			$unit = $data['enteredDimensionunit'];
+		}
+
 		// Read preview size, for scaling.
 		$previewImageSize = getimagesize($previewFileLocation);
 
 		// Scaling ratio.
 		$ratio = $previewImageSize[0] / $imageWidth;
-
-		// Get unit setting for padding conversion.
-		$unit = $params->get('unit', 'px');
 
 		switch ($unit)
 		{
@@ -444,7 +465,7 @@ class ReddesignControllerDesigntype extends FOFController
 		$imageWidth += (2 * $pdfLeftMargin);
 		$imageHeight += (2 * $pdfTopMargin);
 
-		$cmd = "gs -dBATCH -dNOPAUSE -sOutputFile=$tmpBound -sDEVICE=ps2write  \-c '<< /PageSize
+		$cmd = "gs -dBATCH -dNOPAUSE -dEPSFitPage -sOutputFile=$tmpBound -sDEVICE=ps2write  \-c '<< /PageSize
 				[$imageWidth $imageHeight]  >> setpagedevice'  -f" . $tmpEpsImage;
 		exec($cmd);
 
@@ -549,13 +570,13 @@ class ReddesignControllerDesigntype extends FOFController
 		ob_clean();
 
 		$pdfFileName = $pdfFilePath . $productionFileName . ".pdf";
-		$cmd  = "gs -dBATCH -dNOPAUSE -dNOEPS -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
+		$cmd  = "gs -dBATCH -dNOPAUSE -dEPSFitPage -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
 		$cmd .= " -sOutputFile=$pdfFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]";
 		$cmd .= "  >> setpagedevice'  -f" . $tmpEpsFile;
 		exec($cmd);
 
 		$epsFileName = $epsFilePath . $productionFileName . ".eps";
-		$cmd  = "gs -dBATCH -dNOPAUSE -dNOEPS -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
+		$cmd  = "gs -dBATCH -dNOPAUSE -dEPSFitPage -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
 		$cmd .= " -sOutputFile=$epsFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]";
 		$cmd .= "  >> setpagedevice'  -f" . $tmpTextEpsFile;
 		exec($cmd);

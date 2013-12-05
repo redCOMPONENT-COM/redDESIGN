@@ -487,6 +487,10 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 						values["backgroundImgSrc"] = akeeba.jQuery("#background").attr("src");
 
+						values["customUserWidth"] = akeeba.jQuery("input[id^=\"plg_dimension_width\"]").val();
+						values["customUserHeight"] = akeeba.jQuery("input[id^=\"plg_dimension_height\"]").val();
+						values["enteredDimensionunit"] = "cm";
+
 						var jsonString = JSON.stringify(values);
 
 						akeeba.jQuery("#redDesignData").val(jsonString);
