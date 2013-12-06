@@ -159,9 +159,9 @@ rsjQuery.setDiscountPrice = function(){
         rsjQuery(this).attr('price', qtydiscountedPrice);
 
         // Set price changes in HTML fields
-        var formatted_main_price = number_format(qtydiscountedPrice, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        var formattedMainPrice = number_format(qtydiscountedPrice, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
 
-        rsjQuery('#price_quantity' + rsjQuery(this).attr('index')).html(formatted_main_price);
+        rsjQuery('#price_quantity' + rsjQuery(this).attr('index')).html(formattedMainPrice);
     });
 };
 
@@ -178,13 +178,13 @@ rsjQuery.updatePrice = function (pid, priceValue, priceVat) {
     if (SHOW_PRICE == '1' && ( DEFAULT_QUOTATION_MODE != '1' || (DEFAULT_QUOTATION_MODE && SHOW_QUOTATION_PRICE))){
 
         // Set price changes in HTML fields
-        var formatted_main_price = number_format(priceValue, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
-        rsjQuery('#display_product_price_no_vat' + pid).html(formatted_main_price);
+        var formattedMainPrice = number_format(priceValue, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        rsjQuery('#display_product_price_no_vat' + pid).html(formattedMainPrice);
 
         // Apply VAT
         var priceInclVat = priceValue + priceVat;
-        formatted_main_price = number_format(priceInclVat, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
-        rsjQuery('#produkt_kasse_hoejre_pris_indre' + pid).html(formatted_main_price);
+        formattedMainPrice = number_format(priceInclVat, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        rsjQuery('#produkt_kasse_hoejre_pris_indre' + pid).html(formattedMainPrice);
 
         // Set price changes in hidden fields
         rsjQuery('#product_price_no_vat' + pid).val(priceValue);

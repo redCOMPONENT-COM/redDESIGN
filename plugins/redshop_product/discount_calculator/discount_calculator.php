@@ -115,7 +115,6 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 				}
 			}
 
-
 			//Calculator discount quantity when attribute changed
 			function onchangePropertyDropdown(allarg)
 			{
