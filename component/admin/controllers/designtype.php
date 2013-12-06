@@ -194,19 +194,19 @@ class ReddesignControllerDesigntype extends FOFController
 		$unit = $params->get('unit', 'px');
 
 		// Check for user entered dimension
-		if (isset($data['customUserWidth']) && !$empty($data['customUserWidth']))
+		if (isset($data['customUserWidth']) && !empty($data['customUserWidth']))
 		{
 			$imageWidth = $data['customUserWidth'];
 		}
 
 		// Check for user entered dimension
-		if (isset($data['customUserHeight']) && !$empty($data['customUserHeight']))
+		if (isset($data['customUserHeight']) && !empty($data['customUserHeight']))
 		{
 			$imageHeight = $data['customUserHeight'];
 		}
 
 		// Check for user entered dimension
-		if (isset($data['enteredDimensionunit']) && !$empty($data['enteredDimensionunit']))
+		if (isset($data['enteredDimensionunit']) && !empty($data['enteredDimensionunit']))
 		{
 			$unit = $data['enteredDimensionunit'];
 		}
