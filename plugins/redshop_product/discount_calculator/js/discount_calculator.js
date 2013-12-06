@@ -178,12 +178,15 @@ rsjQuery.setQuantityDiscount = function(pid, price){
         // Multiply with Quantity
         qtydiscountedPrice = discountedPrice * parseInt(rsjQuery(this).val());
 
+        //Add price from attribute
+        qtydiscountedPriceShow = qtydiscountedPrice + parseFloat(rsjQuery("#tmp_product_old_price").val());
+
         // Set Base Price
         rsjQuery(this).attr('base-price', discountedPrice);
         rsjQuery(this).attr('price', qtydiscountedPrice);
 
         // Set price changes in HTML fields
-        var formatted_main_price = number_format(qtydiscountedPrice, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        var formatted_main_price = number_format(qtydiscountedPriceShow, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
         rsjQuery('#price_quantity' + rsjQuery(this).attr('index')).html(formatted_main_price);
 
     });
