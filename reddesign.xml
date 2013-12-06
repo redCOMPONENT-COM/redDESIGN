@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
+
 	<name>COM_REDDESIGN</name>
 	<creationDate>September 2013</creationDate>
 	<author>redCOMPONENT.com</author>
@@ -7,73 +8,85 @@
 	<authorUrl>www.redcomponent.com</authorUrl>
 	<copyright>(c) redCOMPONENT.com</copyright>
 	<license>GNU/GPL</license>
-	<version>1.5</version>
+	<version>2.0</version>
 	<description>COM_REDDESIGN_XML_DESC</description>
+
+	<scriptfile>install.php</scriptfile>
+	<redcore version="1.0"/>
+
 	<install folder="component/admin">
 		<sql>
 			<file driver="mysql" charset="utf8">sql/install/mysql/install.sql</file>
 			<file driver="mysqli" charset="utf8">sql/install/mysql/install.sql</file>
 		</sql>
 	</install>
+
 	<uninstall folder="component/admin">
 		<sql>
 			<file driver="mysql" charset="utf8">sql/install/mysql/uninstall.sql</file>
 			<file driver="mysqli" charset="utf8">sql/install/mysql/uninstall.sql</file>
 		</sql>
 	</uninstall>
+
 	<update>
 		<schemas>
 			<schemapath type="mysql">sql/updates/mysql</schemapath>
 			<schemapath type="mysqli">sql/updates/mysql</schemapath>
 		</schemas>
 	</update>
+
 	<!-- Frontend -->
 	<files folder="component/site">
 		<folder>views</folder>
 		<folder>controllers</folder>
-		<filename>dispatcher.php</filename>
 		<filename>reddesign.php</filename>
 	</files>
-	<languages folder="component/site">
-		<language tag="en-GB">language/en-GB/en-GB.com_reddesign.ini</language>
-		<language tag="en-GB">language/en-GB/en-GB.com_reddesign.sys.ini</language>
+	<languages folder="component/site/language">
+		<language tag="en-GB">en-GB/en-GB.com_reddesign.ini</language>
+		<language tag="en-GB">en-GB/en-GB.com_reddesign.sys.ini</language>
 	</languages>
+
 	<!-- Backend -->
 	<administration>
-		<menu img="../media/com_reddesign/assets/images/reddesign_16.png">COM_REDDESIGN</menu>
+		<menu img="../media/com_reddesign/images/reddesign_16.png">COM_REDDESIGN</menu>
 		<menu>COM_REDDESIGN</menu>
 		<submenu>
-			<menu
-				img="../media/com_reddesign/assets/images/designarea_16.png"
-				view="designtypes">COM_REDDESIGN_MENU_DESIGNTYPES</menu>
-			<menu
-				img="../media/com_reddesign/assets/images/font_16.png"
-				view="fonts">COM_REDDESIGN_MENU_FONTS</menu>
+			<menu img="../media/com_reddesign/images/designarea_16.png" view="designtypes">COM_REDDESIGN_MENU_DESIGNTYPES</menu>
+			<menu img="../media/com_reddesign/images/font_16.png" view="fonts">COM_REDDESIGN_MENU_FONTS</menu>
 		</submenu>
 		<files folder="component/admin">
-			<folder>sql</folder>
-			<folder>views</folder>
 			<folder>controllers</folder>
-			<folder>models</folder>
-			<folder>tables</folder>
 			<folder>helpers</folder>
+			<folder>models</folder>
+			<folder>sql</folder>
+			<folder>tables</folder>
+			<folder>views</folder>
 			<filename>access.xml</filename>
 			<filename>config.xml</filename>
-			<filename>dispatcher.php</filename>
+			<filename>controller.php</filename>
 			<filename>reddesign.php</filename>
-			<filename>toolbar.php</filename>
 		</files>
-		<languages folder="component/admin">
-			<language tag="en-GB">language/en-GB/en-GB.com_reddesign.ini</language>
-			<language tag="en-GB">language/en-GB/en-GB.com_reddesign.sys.ini</language>
+		<languages folder="component/admin/language">
+			<language tag="en-GB">en-GB/en-GB.com_reddesign.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_reddesign.sys.ini</language>
 		</languages>
 	</administration>
+
+	<!-- Libraries to install -->
+	<libraries>
+		<library name="reddesign"/>
+	</libraries>
+
 	<!-- Media folder -->
-	<media destination="com_reddesign" folder="media">
-		<folder>assets</folder>
+	<media destination="com_reddesign" folder="media/com_reddesign">
+		<folder>backgrounds</folder>
+		<folder>css</folder>
+		<folder>designtypes</folder>
+		<folder>fonts</folder>
+		<folder>images</folder>
+		<folder>js</folder>
 	</media>
-	<!-- Install FoF and Akeeba Strapper libraries -->
-	<scriptfile>script.reddesign.php</scriptfile>
+
 	<!-- Plugins to install -->
 	<plugins>
 		<plugin group="redshop_product"		 name="reddesign"           published="published" />
