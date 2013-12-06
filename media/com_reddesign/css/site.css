@@ -1,0 +1,75 @@
+/* Common */
+.top-buffer {
+    margin-top: 5px;
+}
+
+#background-container {
+   clear: both;
+   vertical-align: middle;
+}
+
+#background {
+
+}
+
+/* Product */
+.product-thumbnail {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.total, .total p {
+    text-align: center;
+}
+
+/* Frames */
+.frame-container {
+    float: left;
+    min-height: 75px;
+}
+
+img.frame-thumbnail {
+    max-height: 50px;
+    max-width: 50px;
+}
+
+.frame-thumbnail-container {
+    float: left;
+    padding-right: 10px;
+}
+
+.frame-selection {
+    float: left;
+    width: 10px;
+    margin: 10px 11px 0px 0px;
+}
+
+.frame-detail {
+    float: left;
+    border-left: none;
+    margin-right: 25px;
+}
+
+.customize-it-btn {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 902px) {
+    .akeeba-bootstrap [class*="span"],
+    .akeeba-bootstrap .uneditable-input[class*="span"],
+    .akeeba-bootstrap .row-fluid [class*="span"] {
+        float: none;
+        display: block;
+        width: 100%;
+        margin-left: 0;
+        -webkit-box-sizing: 'border-box';
+        -moz-box-sizing: 'border-box';
+        box-sizing: 'border-box';
+    }
+}
+
+#frames li {
+	list-style-type: none;
+	min-width: 330px;
+}

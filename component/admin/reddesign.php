@@ -8,17 +8,23 @@
  */
 defined('_JEXEC') or die;
 
-// Include FoF
-JLoader::import('fof.include');
-
 // Register component prefix.
 JLoader::registerPrefix('Reddesign', __DIR__);
 
-// Access check.
+// Register library prefix
+RLoader::registerPrefix('Reddesign', JPATH_LIBRARIES . '/reddesign');
+
+$app = JFactory::getApplication();
+
+// Check access.
 if (!JFactory::getUser()->authorise('core.manage', 'com_reddesign'))
 {
-	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
+	$app->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
+
+	return false;
 }
 
-// Dispatch
-FOFDispatcher::getTmpInstance('com_reddesign')->dispatch();
+// Instanciate and execute the front controller.
+$controller = JControllerLegacy::getInstance('Reddesign');
+$controller->execute($app->input->get('task'));
+$controller->redirect();
