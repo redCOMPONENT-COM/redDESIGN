@@ -114,7 +114,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 					return '&plg_product_price=' + jsProductPrice;
 				}
 			}
-			
+
 
 			//Calculator discount quantity when attribute changed
 			function onchangePropertyDropdown(allarg)
@@ -160,7 +160,8 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 		$i = $cart['idx'];
 
-		$cart[$i]['product_old_price']  		= $data['plg_product_price'];
+		// Add 25% VAT
+		$cart[$i]['product_old_price']  		= $data['plg_product_price'] * 1.25;
 		$cart[$i]['product_old_price_excl_vat'] = $data['plg_product_price'];
 		$cart[$i]['product_price_excl_vat']     = $data['product_price'] + $data['product_old_price_excl_vat'];
 		$productVat								= $cart[$i]['product_price'] * 0.25;

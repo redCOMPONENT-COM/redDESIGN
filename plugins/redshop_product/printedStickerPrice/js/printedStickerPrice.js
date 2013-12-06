@@ -142,13 +142,17 @@ rsjQuery.setDiscountPrice = function(){
 
         var price = tppm / quantity * discountPercentage + (stickerElement / quantity);
 
+        // Apply VAT
+        var priceVat = price * 0.25;
+        var priceInclVat = price + priceVat;
+
         if (rsjQuery(this).attr('checked'))
         {
-            rsjQuery.updatePrice(pid, price);
+            rsjQuery.updatePrice(pid, price, priceVat);
         }
 
         // Multiply with Quantity
-        var qtydiscountedPrice = price * quantity;
+        var qtydiscountedPrice = priceInclVat * quantity;
 
         // Set Base Price
         rsjQuery(this).attr('base-price', price);
@@ -158,7 +162,6 @@ rsjQuery.setDiscountPrice = function(){
         var formatted_main_price = number_format(qtydiscountedPrice, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
 
         rsjQuery('#price_quantity' + rsjQuery(this).attr('index')).html(formatted_main_price);
-
     });
 };
 
@@ -166,30 +169,35 @@ rsjQuery.setDiscountPrice = function(){
  * Update price in HTML View
  *
  * @param   {number}  pid         Current Product Id
- * @param   {json}  price_value    Product data Array JSON
+ * @param   {json}  priceValue    Product data Array JSON
  *
  * @return  {number}              calculated price
  */
-rsjQuery.updatePrice = function (pid, price_value) {
+rsjQuery.updatePrice = function (pid, priceValue, priceVat) {
 
     if (SHOW_PRICE == '1' && ( DEFAULT_QUOTATION_MODE != '1' || (DEFAULT_QUOTATION_MODE && SHOW_QUOTATION_PRICE))){
 
         // Set price changes in HTML fields
-        var formatted_main_price = number_format(price_value, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
-        rsjQuery('#display_product_price_no_vat' + pid + ', #produkt_kasse_hoejre_pris_indre' + pid).html(formatted_main_price);
+        var formatted_main_price = number_format(priceValue, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        rsjQuery('#display_product_price_no_vat' + pid).html(formatted_main_price);
+
+        // Apply VAT
+        var priceInclVat = priceValue + priceVat;
+        formatted_main_price = number_format(priceInclVat, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        rsjQuery('#produkt_kasse_hoejre_pris_indre' + pid).html(formatted_main_price);
 
         // Set price changes in hidden fields
-        rsjQuery('#product_price_no_vat' + pid).val(price_value);
-        rsjQuery('#main_price' + pid).val(price_value);
+        rsjQuery('#product_price_no_vat' + pid).val(priceValue);
+        rsjQuery('#main_price' + pid).val(priceInclVat);
     }
 
     // Set Calculated product price into hidden input type
-    rsjQuery('#plg_product_price_' + pid).val(price_value);
+    rsjQuery('#plg_product_price_' + pid).val(priceValue);
 
     // redSHOP Price Calculations
     calculateTotalPrice(pid, 0);
 
-    return price_value;
+    return priceValue;
 };
 
 /**91*
