@@ -31,8 +31,8 @@ rsjQuery(document).ready(function () {
 rsjQuery.validateDimension = function(){
 
     var pid  = rsjQuery('#product_id').val();
-    var pluginBaseInput  = rsjQuery('#plg_dimention_base_input_' + pid);
-    var pdb  = rsjQuery('#plg_dimention_base_' + pid).val();
+    var pluginBaseInput  = rsjQuery('#plg_dimension_base_input_' + pid);
+    var pdb  = rsjQuery('#plg_dimension_base_' + pid).val();
 
     var h = pluginBaseInput.attr('default-height'), w = pluginBaseInput.attr('default-width');
 
