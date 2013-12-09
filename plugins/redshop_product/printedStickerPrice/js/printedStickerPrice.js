@@ -43,14 +43,17 @@ rsjQuery(document).ready(function () {
     rsjQuery.setDiscountPrice();
 
     // Set Discount Price on Demand
-    rsjQuery('input[id^="plg_dimension_base_input_"],select[id^="plg_dimension_base_"]').bind('change', rsjQuery.validateDimension);
+    rsjQuery('input[id^="plg_dimension_base_input_"]').bind('change', rsjQuery.validateDimension);
+
+    // Set Discount Price on Demand
+    rsjQuery('select[id^="plg_dimension_base_"]').bind('change', rsjQuery.setdefaultvalues);
 
     rsjQuery('input[id^="plg_dimension_base_input_"]').click(function(event) {
         rsjQuery(this).val('');
     });
 });
 
-rsjQuery.validateDimension = function(){
+rsjQuery.setdefaultvalues = function(){
 
     var pid  = rsjQuery('#product_id').val();
     var pluginBaseInput  = rsjQuery('#plg_dimension_base_input_' + pid);
@@ -64,11 +67,42 @@ rsjQuery.validateDimension = function(){
     }
     else if(pdb == 'w' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-width')))
     {
+       pluginBaseInput.val(pluginBaseInput.attr('max-width'));
+    }
+    else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) < h)
+    {
+       pluginBaseInput.val(h);
+    }
+    else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-height')))
+    {
+       pluginBaseInput.val(pluginBaseInput.attr('max-height'));
+    }
+
+    // Set Discount Price On Load
+    rsjQuery.setDiscountPrice();
+};
+
+rsjQuery.validateDimension = function(){
+
+    var pid  = rsjQuery('#product_id').val();
+    var pluginBaseInput  = rsjQuery('#plg_dimension_base_input_' + pid);
+    var pdb  = rsjQuery('#plg_dimension_base_' + pid).val();
+
+    var h = pluginBaseInput.attr('default-height'), w = pluginBaseInput.attr('default-width');
+
+    if(pdb == 'w' && parseFloat(pluginBaseInput.val()) < w)
+    {
+       alert('Minimum påkrævede bredde er ' + w + 'cm');
+       pluginBaseInput.val(w);
+    }
+    else if(pdb == 'w' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-width')))
+    {
        alert('Maksimale tilladte bredde er ' + pluginBaseInput.attr('max-width') + 'cm');
        pluginBaseInput.val(pluginBaseInput.attr('max-width'));
     }
     else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) < h)
     {
+       alert('Minimum påkrævede højde er ' + h + 'cm');
        pluginBaseInput.val(h);
     }
     else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-height')))
