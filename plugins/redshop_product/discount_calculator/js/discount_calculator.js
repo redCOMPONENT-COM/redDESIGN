@@ -159,6 +159,8 @@ rsjQuery.updatePrice = function (pid, priceData) {
     // redSHOP Price Calculations
     calculateTotalPrice(pid, 0);
 
+    getExtraParamsArray.plg_product_price = rsjQuery('input[id^="plg_product_price_"]').val();
+
     return priceValue;
 };
 
@@ -179,7 +181,7 @@ rsjQuery.setQuantityDiscount = function(pid, price){
 
     rsjQuery('.quantity_discount_radio').each(function(index, el) {
 
-        discountedPrice = parseFloat(price) - parseFloat(price * rsjQuery(this).attr('percentage'));
+        discountedPrice = parseFloat(price) - parseFloat(price * Math.abs(rsjQuery(this).attr('percentage')));
 
         // Multiply with Quantity
         qtydiscountedPrice = discountedPrice * parseInt(rsjQuery(this).val());
@@ -200,7 +202,7 @@ rsjQuery.setQuantityDiscount = function(pid, price){
     // Quantity Based Discount Calculations
     var quantityDiscountRadio = rsjQuery('.quantity_discount_radio:checked');
 
-    discountedPrice = parseFloat(price) - parseFloat(price * quantityDiscountRadio.attr('percentage'));
+    discountedPrice = parseFloat(price) - parseFloat(price * Math.abs(quantityDiscountRadio.attr('percentage')));
 
     // Multiply with Quantity
     qtydiscountedPrice = discountedPrice * parseInt(quantityDiscountRadio.val());

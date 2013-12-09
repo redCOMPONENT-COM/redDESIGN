@@ -101,21 +101,6 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 		$table .= '</table>';
 
 		$template = str_replace('{discount_calculator_plg}', $table, $template);
-		$getExtraParamsJS = "
-			var dpAllow = false;
-
-			function getExtraParams(frm)
-			{
-				var jsProductPrice = rsjQuery('input[id^=\"plg_product_price_\"]').val();
-
-				if (jsProductPrice)
-				{
-					return '&plg_product_price=' + jsProductPrice;
-				}
-			}
-		";
-
-		$document->addScriptDeclaration($getExtraParamsJS);
 
 		$prices = $this->getProductQuantityPrice($product->product_id);
 

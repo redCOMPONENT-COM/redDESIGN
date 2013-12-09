@@ -494,10 +494,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						var jsonString = JSON.stringify(values);
 
 						akeeba.jQuery("#redDesignData").val(jsonString);
-					}
 
-					function getExtraParams(frm) {
-						return "&redDesignData=" + encodeURIComponent(frm.redDesignData.value);
+						getExtraParamsArray.redDesignData = encodeURIComponent(jsonString);
 					}
 			';
 			$document->addScriptDeclaration($js);
