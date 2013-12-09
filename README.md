@@ -1,7 +1,11 @@
-# redDESIGN
+
+IMPORTANT NOTE: this version of redDESIGN was created for Stickers.dk site. This, is a complete updated version of redDESIGN 1.0 used for ramsign.dk but refactored in FoF (Framework on framework). It can works in Joomla 2.5. Needs a redSHOP 1.3.3 or earlier version for working (all interaction plugins must be installed). This series was discontinued because we decided to add SVG (vectorial graphics support) in version 2.0, created for exakt.dk customer.
+
+# redDESIGN 1.5
 redDESIGN is a redCOMPONENT extension for Joomla and redSHOP. redDESIGN allows you to sell customizable products like banners, sign or stickers. 
 
 The web user will be able to add text in serveral fonts to a base design.
+
 
 ## Status
 Master: [![Build Status](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGN.png?branch=master&token=vxVVpxnq2ZPuMp3yebRz)](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGN/)
