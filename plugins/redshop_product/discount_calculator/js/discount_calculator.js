@@ -31,8 +31,8 @@ rsjQuery(document).ready(function () {
 rsjQuery.validateDimension = function(){
 
     var pid  = rsjQuery('#product_id').val();
-    var pluginBaseInput  = rsjQuery('#plg_dimention_base_input_' + pid);
-    var pdb  = rsjQuery('#plg_dimention_base_' + pid).val();
+    var pluginBaseInput  = rsjQuery('#plg_dimension_base_input_' + pid);
+    var pdb  = rsjQuery('#plg_dimension_base_' + pid).val();
 
     var h = pluginBaseInput.attr('default-height'), w = pluginBaseInput.attr('default-width');
 
@@ -117,43 +117,51 @@ rsjQuery.setDiscountPrice = function(){
  * Update price in HTML View
  *
  * @param   {number}  pid         Current Product Id
- * @param   {json}  price_data    Product data Array JSON
+ * @param   {json}  priceData    Product data Array JSON
  *
  * @return  {number}              calculated price
  */
-rsjQuery.updatePrice = function (pid, price_data) {
+rsjQuery.updatePrice = function (pid, priceData) {
 
     var main_price  = rsjQuery('#main_price' + pid).val();
-    var price_value = price_data.price * price_data.element.price;
-    var price       = price_value;
+    var priceValue = priceData.price * priceData.element.price;
+    var price       = priceValue;
 
     // Set QUantity Based Discount
-    discountPrices = rsjQuery.setQuantityDiscount(pid, price_value);
+    discountPrices = rsjQuery.setQuantityDiscount(pid, priceValue);
 
     if (discountPrices.length > 0)
     {
-        price_value = discountPrices.basePrice;
+        priceValue = discountPrices.basePrice;
         price       = discountPrices.price;
     }
 
     if (SHOW_PRICE == '1' && ( DEFAULT_QUOTATION_MODE != '1' || (DEFAULT_QUOTATION_MODE && SHOW_QUOTATION_PRICE))) {
 
         // Set price changes in HTML fields
-        var formatted_main_price = number_format(price, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
-        rsjQuery('#display_product_price_no_vat' + pid + ', #produkt_kasse_hoejre_pris_indre' + pid).html(formatted_main_price);
+        var priceExclVat = price * 0.8;
+        var formattedMainPrice = number_format(priceExclVat, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        rsjQuery('#display_product_price_no_vat' + pid).html(formattedMainPrice);
+
+        // VAT Applied Price
+        formattedMainPrice = number_format(price, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        rsjQuery('#produkt_kasse_hoejre_pris_indre' + pid).html(formattedMainPrice);
 
         // Set price changes in hidden fields
-        rsjQuery('#product_price_no_vat' + pid).val(price);
+        rsjQuery('#product_price_no_vat' + pid).val(priceExclVat);
         rsjQuery('#main_price' + pid).val(price);
     }
 
     // Set Calculated product price into hidden input type
-    rsjQuery('#plg_product_price_' + pid).val(price_value);
+    // Send Excluding VAT price
+    rsjQuery('#plg_product_price_' + pid).val(priceValue * 0.8);
 
     // redSHOP Price Calculations
     calculateTotalPrice(pid, 0);
 
-    return price_value;
+    getExtraParamsArray.plg_product_price = rsjQuery('input[id^="plg_product_price_"]').val();
+
+    return priceValue;
 };
 
 /**
@@ -173,7 +181,7 @@ rsjQuery.setQuantityDiscount = function(pid, price){
 
     rsjQuery('.quantity_discount_radio').each(function(index, el) {
 
-        discountedPrice = parseFloat(price) - parseFloat(price * rsjQuery(this).attr('percentage'));
+        discountedPrice = parseFloat(price) - parseFloat(price * Math.abs(rsjQuery(this).attr('percentage')));
 
         // Multiply with Quantity
         qtydiscountedPrice = discountedPrice * parseInt(rsjQuery(this).val());
@@ -186,15 +194,15 @@ rsjQuery.setQuantityDiscount = function(pid, price){
         rsjQuery(this).attr('price', qtydiscountedPrice);
 
         // Set price changes in HTML fields
-        var formatted_main_price = number_format(qtydiscountedPriceShow, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
-        rsjQuery('#price_quantity' + rsjQuery(this).attr('index')).html(formatted_main_price);
+        var formattedMainPrice = number_format(qtydiscountedPriceShow, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        rsjQuery('#price_quantity' + rsjQuery(this).attr('index')).html(formattedMainPrice);
 
     });
 
     // Quantity Based Discount Calculations
     var quantityDiscountRadio = rsjQuery('.quantity_discount_radio:checked');
 
-    discountedPrice = parseFloat(price) - parseFloat(price * quantityDiscountRadio.attr('percentage'));
+    discountedPrice = parseFloat(price) - parseFloat(price * Math.abs(quantityDiscountRadio.attr('percentage')));
 
     // Multiply with Quantity
     qtydiscountedPrice = discountedPrice * parseInt(quantityDiscountRadio.val());
