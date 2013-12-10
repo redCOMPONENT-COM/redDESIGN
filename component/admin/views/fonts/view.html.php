@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  View
  * @since       2.0
  */
-class ReddesignViewDesigntypes extends ReddesignView
+class ReddesignViewFonts extends ReddesignView
 {
 	/**
 	 * Do we have to display a sidebar ?
@@ -52,7 +52,7 @@ class ReddesignViewDesigntypes extends ReddesignView
 	 */
 	public function getTitle()
 	{
-		return JText::_('COM_REDDESIGN_DESIGNTYPES_LIST');
+		return JText::_('COM_REDDESIGN_FONTS_LIST');
 	}
 
 	/**
@@ -71,12 +71,13 @@ class ReddesignViewDesigntypes extends ReddesignView
 
 		if ($user->authorise('core.admin', 'com_reddesign.panel'))
 		{
-			$new = RToolbarBuilder::createNewButton('designtype.add');
+			$new = RToolbarBuilder::createNewButton('font.add');
 			$secondGroup->addButton($new);
 
-			$edit = RToolbarBuilder::createEditButton('designtype.edit');
+			$edit = RToolbarBuilder::createEditButton('font.edit');
 			$secondGroup->addButton($edit);
-			$delete = RToolbarBuilder::createDeleteButton('designtypes.delete');
+
+			$delete = RToolbarBuilder::createDeleteButton('fonts.delete');
 			$thirdGroup->addButton($delete);
 		}
 
