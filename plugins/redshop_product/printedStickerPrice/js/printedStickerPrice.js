@@ -28,6 +28,7 @@ rsjQuery(function(){
         quantity_elm.val(nq);
         calculateTotalPrice(pid, 0);
 
+        // Set Plugin Price for add to cart
         getExtraParamsArray.plg_product_price = rsjQuery('input[id^="plg_product_price_"]').val();
     });
 });
