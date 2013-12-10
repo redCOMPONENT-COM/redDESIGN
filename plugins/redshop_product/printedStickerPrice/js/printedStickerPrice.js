@@ -27,6 +27,9 @@ rsjQuery(function(){
 
         quantity_elm.val(nq);
         calculateTotalPrice(pid, 0);
+
+        // Set Plugin Price for add to cart
+        getExtraParamsArray.plg_product_price = rsjQuery('input[id^="plg_product_price_"]').val();
     });
 });
 
@@ -40,14 +43,17 @@ rsjQuery(document).ready(function () {
     rsjQuery.setDiscountPrice();
 
     // Set Discount Price on Demand
-    rsjQuery('input[id^="plg_dimension_base_input_"],select[id^="plg_dimension_base_"]').bind('change', rsjQuery.validateDimension);
+    rsjQuery('input[id^="plg_dimension_base_input_"]').bind('change', rsjQuery.validateDimension);
+
+    // Set Discount Price on Demand
+    rsjQuery('select[id^="plg_dimension_base_"]').bind('change', rsjQuery.setdefaultvalues);
 
     rsjQuery('input[id^="plg_dimension_base_input_"]').click(function(event) {
         rsjQuery(this).val('');
     });
 });
 
-rsjQuery.validateDimension = function(){
+rsjQuery.setdefaultvalues = function(){
 
     var pid  = rsjQuery('#product_id').val();
     var pluginBaseInput  = rsjQuery('#plg_dimension_base_input_' + pid);
@@ -61,11 +67,42 @@ rsjQuery.validateDimension = function(){
     }
     else if(pdb == 'w' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-width')))
     {
+       pluginBaseInput.val(pluginBaseInput.attr('max-width'));
+    }
+    else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) < h)
+    {
+       pluginBaseInput.val(h);
+    }
+    else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-height')))
+    {
+       pluginBaseInput.val(pluginBaseInput.attr('max-height'));
+    }
+
+    // Set Discount Price On Load
+    rsjQuery.setDiscountPrice();
+};
+
+rsjQuery.validateDimension = function(){
+
+    var pid  = rsjQuery('#product_id').val();
+    var pluginBaseInput  = rsjQuery('#plg_dimension_base_input_' + pid);
+    var pdb  = rsjQuery('#plg_dimension_base_' + pid).val();
+
+    var h = pluginBaseInput.attr('default-height'), w = pluginBaseInput.attr('default-width');
+
+    if(pdb == 'w' && parseFloat(pluginBaseInput.val()) < w)
+    {
+       alert('Minimum påkrævede bredde er ' + w + 'cm');
+       pluginBaseInput.val(w);
+    }
+    else if(pdb == 'w' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-width')))
+    {
        alert('Maksimale tilladte bredde er ' + pluginBaseInput.attr('max-width') + 'cm');
        pluginBaseInput.val(pluginBaseInput.attr('max-width'));
     }
     else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) < h)
     {
+       alert('Minimum påkrævede højde er ' + h + 'cm');
        pluginBaseInput.val(h);
     }
     else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-height')))
@@ -142,23 +179,26 @@ rsjQuery.setDiscountPrice = function(){
 
         var price = tppm / quantity * discountPercentage + (stickerElement / quantity);
 
+        // Apply VAT
+        var priceVat = price * 0.25;
+        var priceInclVat = price + priceVat;
+
         if (rsjQuery(this).attr('checked'))
         {
-            rsjQuery.updatePrice(pid, price);
+            rsjQuery.updatePrice(pid, price, priceVat);
         }
 
         // Multiply with Quantity
-        var qtydiscountedPrice = price * quantity;
+        var qtydiscountedPrice = priceInclVat * quantity;
 
         // Set Base Price
         rsjQuery(this).attr('base-price', price);
         rsjQuery(this).attr('price', qtydiscountedPrice);
 
         // Set price changes in HTML fields
-        var formatted_main_price = number_format(qtydiscountedPrice, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        var formattedMainPrice = number_format(qtydiscountedPrice, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
 
-        rsjQuery('#price_quantity' + rsjQuery(this).attr('index')).html(formatted_main_price);
-
+        rsjQuery('#price_quantity' + rsjQuery(this).attr('index')).html(formattedMainPrice);
     });
 };
 
@@ -166,30 +206,38 @@ rsjQuery.setDiscountPrice = function(){
  * Update price in HTML View
  *
  * @param   {number}  pid         Current Product Id
- * @param   {json}  price_value    Product data Array JSON
+ * @param   {json}  priceValue    Product data Array JSON
  *
  * @return  {number}              calculated price
  */
-rsjQuery.updatePrice = function (pid, price_value) {
+rsjQuery.updatePrice = function (pid, priceValue, priceVat) {
 
     if (SHOW_PRICE == '1' && ( DEFAULT_QUOTATION_MODE != '1' || (DEFAULT_QUOTATION_MODE && SHOW_QUOTATION_PRICE))){
 
         // Set price changes in HTML fields
-        var formatted_main_price = number_format(price_value, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
-        rsjQuery('#display_product_price_no_vat' + pid + ', #produkt_kasse_hoejre_pris_indre' + pid).html(formatted_main_price);
+        var formattedMainPrice = number_format(priceValue, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        rsjQuery('#display_product_price_no_vat' + pid).html(formattedMainPrice);
+
+        // Apply VAT
+        var priceInclVat = priceValue + priceVat;
+        formattedMainPrice = number_format(priceInclVat, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        rsjQuery('#produkt_kasse_hoejre_pris_indre' + pid).html(formattedMainPrice);
 
         // Set price changes in hidden fields
-        rsjQuery('#product_price_no_vat' + pid).val(price_value);
-        rsjQuery('#main_price' + pid).val(price_value);
+        rsjQuery('#product_price_no_vat' + pid).val(priceValue);
+        rsjQuery('#main_price' + pid).val(priceInclVat);
     }
 
     // Set Calculated product price into hidden input type
-    rsjQuery('#plg_product_price_' + pid).val(price_value);
+    rsjQuery('#plg_product_price_' + pid).val(priceValue);
 
     // redSHOP Price Calculations
     calculateTotalPrice(pid, 0);
 
-    return price_value;
+    // Set Plugin Price for add to cart
+    getExtraParamsArray.plg_product_price = rsjQuery('input[id^="plg_product_price_"]').val();
+
+    return priceValue;
 };
 
 /**91*
