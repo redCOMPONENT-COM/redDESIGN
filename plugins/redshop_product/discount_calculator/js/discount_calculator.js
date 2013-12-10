@@ -40,7 +40,7 @@ rsjQuery(document).ready(function () {
     rsjQuery.setDiscountPrice();
 
     // Set Discount Price on Demand
-    rsjQuery('input[id^="plg_dimension_base_input_"],select[id^="plg_dimension_base_"]').bind('change', rsjQuery.validateDimension);
+    rsjQuery('input[id^="plg_dimension_base_input_"]').bind('change', rsjQuery.validateDimension);
 
     rsjQuery('input[id^="plg_dimension_base_input_"]').click(function(event) {
         rsjQuery(this).val('');
