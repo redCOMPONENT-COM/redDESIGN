@@ -36,6 +36,11 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product->product_id);
 
+		if (isset($extraFieldData->data_txt) === false)
+		{
+			return false;
+		}
+
 		if ($extraFieldData->data_txt != 'type1')
 		{
 			return false;

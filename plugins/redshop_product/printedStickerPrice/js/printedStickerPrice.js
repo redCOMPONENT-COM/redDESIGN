@@ -1,7 +1,7 @@
 var rsjQuery;
 
 // Check for akeeba availability
-if (typeof akeeba == "undefined")
+if ("undefined" === typeof akeeba)
 {
     rsjQuery = jQuery;
 }
@@ -45,12 +45,12 @@ rsjQuery(document).ready(function () {
     // Set Discount Price on Demand
     rsjQuery('input[id^="plg_dimension_base_input_"]').bind('change', rsjQuery.validateDimension);
 
-    // Set Discount Price on Demand
-    rsjQuery('select[id^="plg_dimension_base_"]').bind('change', rsjQuery.setdefaultvalues);
-
     rsjQuery('input[id^="plg_dimension_base_input_"]').click(function(event) {
         rsjQuery(this).val('');
     });
+
+    // Set Trigger for add to cart button
+    redShopJsTrigger.push(rsjQuery.setDiscountPrice);
 });
 
 rsjQuery.setdefaultvalues = function(){
@@ -234,41 +234,9 @@ rsjQuery.updatePrice = function (pid, priceValue, priceVat) {
     // redSHOP Price Calculations
     calculateTotalPrice(pid, 0);
 
-    // Set Plugin Price for add to cart
     getExtraParamsArray.plg_product_price = rsjQuery('input[id^="plg_product_price_"]').val();
 
     return priceValue;
-};
-
-/**91*
- * Set QUantity Based Discount
- *
- * @param  {number}  pid    Product Id
- * @param  {number}  price  Product Price
- */
-rsjQuery.setQuantityDiscount = function(pid, price){
-
-    var discountedPrice;
-    var qtyDiscountedPrice;
-
-    // Quantity Based Discount Calculations
-    var quantityDiscountRadio = rsjQuery('.printedStickerPrice_radio:checked');
-
-    discountedPrice = parseFloat(price) + parseFloat(price * quantityDiscountRadio.attr('percentage'));
-
-    // Multiply with Quantity
-    qtyDiscountedPrice = discountedPrice * parseInt(quantityDiscountRadio.val());
-
-    // Set Base Price
-    quantityDiscountRadio.attr('base-price', discountedPrice);
-    quantityDiscountRadio.attr('price', qtyDiscountedPrice);
-
-    // Prepare Object to return
-    var discountPrices           = [];
-    discountPrices.basePrice = discountedPrice;
-    discountPrices.price     = qtyDiscountedPrice;
-
-    return discountPrices;
 };
 
 /**
