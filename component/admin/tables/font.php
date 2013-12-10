@@ -1,30 +1,72 @@
 <?php
 /**
- * @package     RedDesign.Component
- * @subpackage  Administrator
+ * @package     Redshopb.Backend
+ * @subpackage  Tables
  *
- * @copyright   Copyright (C) 2013 redCOMPONENT.com. All rights reserved.
+ * @copyright   Copyright (C) 2012 - 2013 redCOMPONENT.com. All rights reserved.
  * @license     GNU General Public License version 2 or later, see LICENSE.
  */
 
 defined('_JEXEC') or die;
 
 /**
- * Font Table
+ * Wardrobe table.
  *
- * @package     RedDesign.Component
- * @subpackage  Administrator
- *
+ * @package     Redshopb.Backend
+ * @subpackage  Tables
  * @since       1.0
  */
-class ReddesignTableFont extends FOFTable
+class ReddesignTableFont extends RTable
 {
 	/**
-	 * Performs validation check for field values
+	 * The options.
 	 *
-	 * @access public
+	 * @var  array
+	 */
+	protected $_options = array(
+		'fonts.load' => true,
+		'fonts.store' => false,
+		'chars.store' => false,
+	);
+
+	/**
+	 * The table name without the prefix.
 	 *
-	 * @return bool
+	 * @var  string
+	 */
+	protected $_tableName = 'reddesign_chars';
+
+	/**
+	 * @var  integer
+	 */
+	public $id;
+
+	/**
+	 * @var  string
+	 */
+	public $name;
+
+	/**
+	 * @var  integer
+	 */
+	public $state;
+
+	/**
+	 * This is an array of department id from
+	 * the #__reddesign_chars table.
+	 *
+	 * @var  array
+	 */
+	public $chars;
+
+
+	/**
+	 * Method to perform sanity checks on the JTable instance properties to ensure
+	 * they are safe to store in the database.  Child classes should override this
+	 * method to make sure the data they are storing in the database is safe and
+	 * as expected before storage.
+	 *
+	 * @return  boolean  True if the instance is sane and able to be stored in the database.
 	 */
 	public function check()
 	{
@@ -75,7 +117,7 @@ class ReddesignTableFont extends FOFTable
 	 *
 	 * @return bool|void
 	 */
-	protected function onAfterDelete($oid)
+	/*protected function onAfterDelete($oid)
 	{
 		// Delete font thumb file
 		if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/fonts/' . $this->font_thumb))
@@ -90,5 +132,5 @@ class ReddesignTableFont extends FOFTable
 		}
 
 		parent::onAfterDelete($oid);
-	}
+	}*/
 }
