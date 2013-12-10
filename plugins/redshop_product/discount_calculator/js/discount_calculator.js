@@ -1,7 +1,7 @@
 var rsjQuery;
 
 // Check for akeeba availability
-if (typeof akeeba == "undefined")
+if ("undefined" === typeof akeeba)
 {
     rsjQuery = jQuery;
 }
@@ -10,8 +10,27 @@ else
     rsjQuery = akeeba.jQuery;
 }
 
-var lookupData = [{"size": 0,"price": 25}, {"size": 51,"price": 29}, {"size": 101,"price": 34}, {"size": 201,"price": 43}, {"size": 301,"price": 48}, {"size": 401,"price": 64}, {"size": 601,"price": 81}, {"size": 801,"price": 95}, {"size": 1001,"price": 107}, {"size": 1301,"price": 121}, {"size": 1601,"price": 140}, {"size": 1901,"price": 160}, {"size": 2201,"price": 171}, {"size": 2501,"price": 176}, {"size": 2801,"price": 186}, {"size": 3101,"price": 192}, {"size": 3401,"price": 198}, {"size": 3701,"price": 208}, {"size": 4001,"price": 216}, {"size": 4501,"price": 227}, {"size": 5001,"price": 249}, {"size": 5501,"price": 267}, {"size": 6001,"price": 286}, {"size": 6501,"price": 305}, {"size": 7001,"price": 323}, {"size": 7501,"price": 341}, {"size": 8001,"price": 358}, {"size": 8501,"price": 376}, {"size": 9001,"price": 392}, {"size": 9501,"price": 408}, {"size": 10001,"price": 417}, {"size": 10501,"price": 427}, {"size": 11001,"price": 436}, {"size": 11501,"price": 445}, {"size": 12001,"price": 454}, {"size": 12501,"price": 463}, {"size": 13001,"price": 473}, {"size": 13501,"price": 482}, {"size": 14001,"price": 491}, {"size": 14501,"price": 500}, {"size": 15001,"price": 509}];
-var elementData = [{"size": 1,"price": 0.65}, {"size": 8,"price": 0.85}, {"size": 35,"price": 1}, {"size": 70,"price": 1.3}, {"size": 125,"price": 1.6}];
+var lookupData = [
+    {"size": 0,"price": 25}, {"size": 51,"price": 29}, {"size": 101,"price": 34},
+    {"size": 201,"price": 43}, {"size": 301,"price": 48}, {"size": 401,"price": 64},
+    {"size": 601,"price": 81}, {"size": 801,"price": 95}, {"size": 1001,"price": 107},
+    {"size": 1301,"price": 121}, {"size": 1601,"price": 140}, {"size": 1901,"price": 160},
+    {"size": 2201,"price": 171}, {"size": 2501,"price": 176}, {"size": 2801,"price": 186},
+    {"size": 3101,"price": 192}, {"size": 3401,"price": 198}, {"size": 3701,"price": 208},
+    {"size": 4001,"price": 216}, {"size": 4501,"price": 227}, {"size": 5001,"price": 249},
+    {"size": 5501,"price": 267}, {"size": 6001,"price": 286}, {"size": 6501,"price": 305},
+    {"size": 7001,"price": 323}, {"size": 7501,"price": 341}, {"size": 8001,"price": 358},
+    {"size": 8501,"price": 376}, {"size": 9001,"price": 392}, {"size": 9501,"price": 408},
+    {"size": 10001,"price": 417}, {"size": 10501,"price": 427}, {"size": 11001,"price": 436},
+    {"size": 11501,"price": 445}, {"size": 12001,"price": 454}, {"size": 12501,"price": 463},
+    {"size": 13001,"price": 473}, {"size": 13501,"price": 482}, {"size": 14001,"price": 491},
+    {"size": 14501,"price": 500}, {"size": 15001,"price": 509}
+];
+
+var elementData = [
+    {"size": 1,"price": 0.65}, {"size": 8,"price": 0.85}, {"size": 35,"price": 1},
+    {"size": 70,"price": 1.3}, {"size": 125,"price": 1.6}
+];
 
 rsjQuery(document).ready(function () {
 
@@ -21,44 +40,15 @@ rsjQuery(document).ready(function () {
     rsjQuery.setDiscountPrice();
 
     // Set Discount Price on Demand
-    rsjQuery('input[id^="plg_dimension_base_input_"]').bind('change', rsjQuery.validateDimension);
-
-    // Set Discount Price on Demand
-    rsjQuery('select[id^="plg_dimension_base_"]').bind('change', rsjQuery.setdefaultvalues);
+    rsjQuery('input[id^="plg_dimension_base_input_"],select[id^="plg_dimension_base_"]').bind('change', rsjQuery.validateDimension);
 
     rsjQuery('input[id^="plg_dimension_base_input_"]').click(function(event) {
         rsjQuery(this).val('');
     });
+
+    // Set Trigger for add to cart button
+    redShopJsTrigger.push(rsjQuery.setDiscountPrice);
 });
-
-rsjQuery.setdefaultvalues = function(){
-
-    var pid  = rsjQuery('#product_id').val();
-    var pluginBaseInput  = rsjQuery('#plg_dimension_base_input_' + pid);
-    var pdb  = rsjQuery('#plg_dimension_base_' + pid).val();
-
-    var h = pluginBaseInput.attr('default-height'), w = pluginBaseInput.attr('default-width');
-
-    if(pdb == 'w' && parseFloat(pluginBaseInput.val()) < w)
-    {
-       pluginBaseInput.val(w);
-    }
-    else if(pdb == 'w' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-width')))
-    {
-       pluginBaseInput.val(pluginBaseInput.attr('max-width'));
-    }
-    else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) < h)
-    {
-       pluginBaseInput.val(h);
-    }
-    else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-height')))
-    {
-       pluginBaseInput.val(pluginBaseInput.attr('max-height'));
-    }
-
-    // Set Discount Price On Load
-    rsjQuery.setDiscountPrice();
-};
 
 rsjQuery.validateDimension = function(){
 
@@ -70,7 +60,6 @@ rsjQuery.validateDimension = function(){
 
     if(pdb == 'w' && parseFloat(pluginBaseInput.val()) < w)
     {
-       alert('Minimum påkrævede bredde er ' + w + 'cm');
        pluginBaseInput.val(w);
     }
     else if(pdb == 'w' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-width')))
@@ -80,7 +69,6 @@ rsjQuery.validateDimension = function(){
     }
     else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) < h)
     {
-       alert('Minimum påkrævede højde er ' + h + 'cm');
        pluginBaseInput.val(h);
     }
     else if(pdb == 'h' && parseFloat(pluginBaseInput.val()) > parseFloat(pluginBaseInput.attr('max-height')))
@@ -164,14 +152,14 @@ rsjQuery.updatePrice = function (pid, priceData) {
     // Set QUantity Based Discount
     discountPrices = rsjQuery.setQuantityDiscount(pid, priceValue);
 
-    if (discountPrices.length > 0)
+    if ('object' === typeof discountPrices)
     {
         priceValue = discountPrices.basePrice;
         price       = discountPrices.price;
     }
 
-    if (SHOW_PRICE == '1' && ( DEFAULT_QUOTATION_MODE != '1' || (DEFAULT_QUOTATION_MODE && SHOW_QUOTATION_PRICE))) {
-
+    if (SHOW_PRICE == '1' && ( DEFAULT_QUOTATION_MODE != '1' || (DEFAULT_QUOTATION_MODE && SHOW_QUOTATION_PRICE)))
+    {
         // Set price changes in HTML fields
         var priceExclVat = price * 0.8;
         var formattedMainPrice = number_format(priceExclVat, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
@@ -193,6 +181,7 @@ rsjQuery.updatePrice = function (pid, priceData) {
     // redSHOP Price Calculations
     calculateTotalPrice(pid, 0);
 
+    // Set Plugin Product Price for add to cart
     getExtraParamsArray.plg_product_price = rsjQuery('input[id^="plg_product_price_"]').val();
 
     return priceValue;
@@ -246,7 +235,7 @@ rsjQuery.setQuantityDiscount = function(pid, price){
     quantityDiscountRadio.attr('price', qtydiscountedPrice);
 
     // Prepare Object to return
-    discountPrices           = [];
+    discountPrices           = {};
     discountPrices.basePrice = discountedPrice;
     discountPrices.price     = qtydiscountedPrice;
 
