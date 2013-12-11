@@ -21,23 +21,26 @@ $action = JRoute::_('index.php?option=com_reddesign&view=font');
 		<li class="active">
 			<a href="#general" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_COMMON_GENERAL'); ?></a>
 		</li>
-		<li>
-			<a href="#chars" data-toggle="tab"><?php echo JText::_('COM_REDSHOPB_ADDRESS_LABEL'); ?></a>
-		</li>
+		<?php if (!empty($this->item->reddesign_font_id)) : ?>
+			<li>
+				<a href="#chars" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_SPECIFIC_SETTINGS'); ?></a>
+			</li>
+		<?php endif; ?>
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="general">
 			<?php echo $this->loadTemplate('general') ?>
 		</div>
-		<div class="tab-pane" id="chars">
-			<?php echo $this->loadTemplate('chars') ?>
-		</div>
+		<?php if (!empty($this->item->reddesign_font_id)) : ?>
+			<div class="tab-pane" id="chars">
+				<?php echo $this->loadTemplate('chars') ?>
+			</div>
+		<?php endif; ?>
 	</div>
 
-	<input type="hidden" name="from_company" value="<?php echo $fromCompany ?>">
-	<input type="hidden" name="from_department" value="<?php echo $fromDepartment ?>">
-	<input type="hidden" name="option" value="com_redshopb">
-	<input type="hidden" name="id" value="<?php echo $this->item->id; ?>">
+	<input type="hidden" name="option" value="com_reddesign">
+	<input type="hidden" name="view" value="font">
 	<input type="hidden" name="task" value="">
-	<?php echo JHTML::_('form.token'); ?>
+	<input type="hidden" id="reddesign_font_id" name="reddesign_font_id" value="<?php echo $this->item->reddesign_font_id; ?>">
+	<?php echo JHtml::_('form.token'); ?>
 </form>
