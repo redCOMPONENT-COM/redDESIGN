@@ -114,11 +114,19 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 					return '&plg_product_price=' + jsProductPrice;
 				}
 			}
-			
 
 			//Calculator discount quantity when attribute changed
 			function onchangePropertyDropdown(allarg)
 			{
+				rsjQueryallarg.each(function(r, i){
+					if(r[3] == allarg[3])
+					{
+						rsjQueryallarg.splice(i, 1);
+					}
+				});
+
+				rsjQueryallarg.push(allarg)
+
 				rsjQuery.setDiscountPrice();
 			}
 		";
