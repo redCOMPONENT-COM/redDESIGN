@@ -22,15 +22,15 @@ class ReddesignHelperFile
 	/**
 	 * Uploads file to the given assets folder.
 	 *
-	 * @param   array   $file              The file descriptor returned by PHP
-	 * @param   string  $assetsFolder      Name of a folder in media://com_reddesign/assets/.
-	 * @param   int     $maxFileSize       Maximum allowed file size.
-	 * @param   string  $okFileExtensions  Comma separated string list of allowed file extensions.
-	 * @param   string  $okMIMETypes       Comma separated string list of allowed MIME types.
+	 * @param   array   $file               The file descriptor returned by PHP
+	 * @param   string  $destinationFolder  Name of a folder in media/com_reddesign/.
+	 * @param   int     $maxFileSize        Maximum allowed file size.
+	 * @param   string  $okFileExtensions   Comma separated string list of allowed file extensions.
+	 * @param   string  $okMIMETypes        Comma separated string list of allowed MIME types.
 	 *
 	 * @return array|bool
 	 */
-	public function uploadFile($file, $assetsFolder, $maxFileSize = 2, $okFileExtensions = null, $okMIMETypes = null)
+	public function uploadFile($file, $destinationFolder, $maxFileSize = 2, $okFileExtensions = null, $okMIMETypes = null)
 	{
 		$app = JFactory::getApplication();
 		$fileExtension = JFile::getExt($file['name']);
@@ -67,7 +67,7 @@ class ReddesignHelperFile
 		}
 
 		// ...and its full path
-		$filepath = JPath::clean(JPATH_SITE . '/media/com_reddesign/assets/' . $assetsFolder . '/' . $mangledname . '.' . $fileExtension);
+		$filepath = JPath::clean(JPATH_SITE . '/media/com_reddesign/assets/' . $destinationFolder . '/' . $mangledname . '.' . $fileExtension);
 
 		// If we have a name clash, abort the upload
 		if (JFile::exists($filepath))
