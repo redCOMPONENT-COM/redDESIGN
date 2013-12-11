@@ -29,6 +29,13 @@ class ReddesignViewFont extends ReddesignView
 	protected $item;
 
 	/**
+	 * We don't need side bar here.
+	 *
+	 * @var  boolean
+	 */
+	protected $displaySidebar = false;
+
+	/**
 	 * Display method
 	 *
 	 * @param   string  $tpl  The template name
@@ -37,8 +44,28 @@ class ReddesignViewFont extends ReddesignView
 	 */
 	public function display($tpl = null)
 	{
-		$this->form	= $this->get('Form');
-		$this->item	= $this->get('Item');
+		$this->form = $this->get('Form');
+		$this->item = $this->get('Item');
+
+		if (empty($this->item->default_width))
+		{
+			$this->item->default_width = 0.99999;
+		}
+
+		if (empty($this->item->default_height))
+		{
+			$this->item->default_height = 0.99999;
+		}
+
+		if (empty($this->item->default_caps_height))
+		{
+			$this->item->default_caps_height = 0.99999;
+		}
+
+		if (empty($this->item->default_baseline_height))
+		{
+			$this->item->default_baseline_height = 0.99999;
+		}
 
 		parent::display($tpl);
 	}
@@ -50,7 +77,7 @@ class ReddesignViewFont extends ReddesignView
 	 */
 	public function getTitle()
 	{
-		$isNew = (int) $this->item->id <= 0;
+		$isNew = (int) $this->item->reddesign_font_id <= 0;
 		$title = JText::_('COM_REDDESIGN_FONT_TITLE');
 		$state = $isNew ? JText::_('JNEW') : JText::_('JEDIT');
 
