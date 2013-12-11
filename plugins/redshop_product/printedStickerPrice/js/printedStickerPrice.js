@@ -10,6 +10,8 @@ else
     rsjQuery = akeeba.jQuery;
 }
 
+var rsjQueryallarg = [];
+
 rsjQuery(function(){
 
     var quantity_elm = rsjQuery('input[id^="quantity"]');
@@ -125,6 +127,13 @@ rsjQuery.setDiscountPrice = function(){
     // Convert finalWH into "meter" from "centimeter". @todo: This will need confirmation from client.
     finalWH /= 10000;
 
+    var math_it_up = {
+        '+': function (x, y) { return parseFloat(x) + parseFloat(y)},
+        '-': function (x, y) { return parseFloat(x) - parseFloat(y)},
+        '*': function (x, y) { return parseFloat(x) * parseFloat(y)},
+        '/': function (x, y) { return parseFloat(x) / parseFloat(y)}
+    };
+
     // Quantity Based Discount Calculations
 
      rsjQuery('.printedStickerPrice_radio').each(function(index, el) {
@@ -150,12 +159,27 @@ rsjQuery.setDiscountPrice = function(){
         // Multiply with Quantity
         var qtydiscountedPrice = price * quantity;
 
+        var qtydiscountedPriceShow = qtydiscountedPrice;
+
+        if(rsjQueryallarg.length > 0)
+        {
+            rsjQueryallarg.each(function(r){
+                var proprice = rsjQuery("#property_id_prd_" + pid + "_0_" + r[3] + "_proprice" + r[4]).val();
+                var oprand = rsjQuery("#property_id_prd_" + pid + "_0_" + r[3] + "_oprand" + r[4]).val();
+                if(oprand != undefined)
+                {
+                    qtydiscountedPriceShow = math_it_up[oprand](proprice, qtydiscountedPriceShow);
+                }
+                
+            });
+        }
+
         // Set Base Price
         rsjQuery(this).attr('base-price', price);
         rsjQuery(this).attr('price', qtydiscountedPrice);
 
         // Set price changes in HTML fields
-        var formatted_main_price = number_format(qtydiscountedPrice, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
+        var formatted_main_price = number_format(qtydiscountedPriceShow, PRICE_DECIMAL, PRICE_SEPERATOR, THOUSAND_SEPERATOR);
 
         rsjQuery('#price_quantity' + rsjQuery(this).attr('index')).html(formatted_main_price);
 
