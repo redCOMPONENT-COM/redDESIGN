@@ -16,7 +16,7 @@ JHtml::_('rjquery.chosen', 'select');
 
 $action = JRoute::_('index.php?option=com_reddesign&view=font');
 ?>
-<form action="<?php echo $action; ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
+<form id="adminForm" name="adminForm" class="form-validate form-horizontal" action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" >
 	<ul class="nav nav-tabs">
 		<li class="active">
 			<a href="#general" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_COMMON_GENERAL'); ?></a>

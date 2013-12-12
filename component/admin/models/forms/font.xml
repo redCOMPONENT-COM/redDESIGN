@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field
+			name="reddesign_font_id"
+			type="hidden"
+			default="0"
+			label="COM_REDDESIGN_COMMON_ID"
+			description="COM_REDDESIGN_COMMON_ID"
+			readonly="true"
+			/>
+		<field
+			name="font_file"
+			type="file"
+			label="COM_REDDESIGN_FONT_FIELD_FILE"
+			description="COM_REDDESIGN_FONT_FIELD_FILE"
+			/>
+		<field
+			name="title"
+			type="text"
+			label="COM_REDDESIGN_FONT_FIELD_TITLE"
+			description="COM_REDDESIGN_FONT_TITLE_DESC"
+			/>
+		<field
+			name="enabled"
+			type="radio"
+			label="JPUBLISHED"
+			description="JPUBLISHED"
+			class="btn-group"
+			default="1"
+			>
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field
+			name="default_width"
+			type="text"
+			label="COM_REDDESIGN_FONT_DEFAULT_WIDTH"
+			description="COM_REDDESIGN_FONT_DEFAULT_WIDTH"
+			/>
+		<field
+			name="default_height"
+			type="text"
+			label="COM_REDDESIGN_FONT_DEFAULT_HEIGHT"
+			description="COM_REDDESIGN_FONT_DEFAULT_HEIGHT"
+			/>
+		<field
+			name="default_caps_height"
+			type="text"
+			label="COM_REDDESIGN_FONT_DEFAULT_CAPS_HEIGHT"
+			description="COM_REDDESIGN_FONT_DEFAULT_CAPS_HEIGHT"
+			/>
+		<field
+			name="default_baseline_height"
+			type="text"
+			label="COM_REDDESIGN_FONT_DEFAULT_BASELINE_HEIGHT"
+			description="COM_REDDESIGN_FONT_DEFAULT_BASELINE_HEIGHT"
+			/>
+	</fieldset>
+</form>

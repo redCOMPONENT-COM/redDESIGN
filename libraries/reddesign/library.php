@@ -10,10 +10,10 @@
 
 defined('JPATH_PLATFORM') or die;
 
-// Define redSHOP Library Folder Path
+// Define redDESIGN Library Folder Path
 define('JPATH_REDDESIGN_LIBRARY', __DIR__);
 
-// Load redSHOP Library
+// Load redCORE bootstra
 JLoader::import('redcore.bootstrap');
 
 // Register library prefix

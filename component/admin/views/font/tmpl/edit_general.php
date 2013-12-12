@@ -22,10 +22,6 @@ JHtml::_('behavior.framework');
 <?php endif; ?>
 
 <div id="basic_configuration" class="span12">
-	<h3>
-		<?php echo JText::_('COM_REDDESIGN_FONT_TITLE'); ?>
-	</h3>
-
 	<?php if (!empty($this->item->font_file) && !empty($this->item->font_thumb)) : ?>
 		<div class="control-group">
 			<label class="control-label ">

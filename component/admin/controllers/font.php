@@ -36,7 +36,7 @@ class ReddesignControllerFont extends RControllerForm
 		if (!empty($file['name']) && !empty($file['type']))
 		{
 			// Upload the font file
-			$uploaded_file = ReddesignHelperFile::uploadFile($file, 'fonts', 2, 'ttf');
+			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'fonts', 2, 'ttf');
 		}
 
 		// Delete font .ttf file
@@ -49,7 +49,13 @@ class ReddesignControllerFont extends RControllerForm
 		}
 		else
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_UPLOAD_INPUT'), 'error');
+			$recordId = $this->input->getInt($urlVar, null);
+			$this->setMessage(JText::_('COM_REDDESIGN_FONT_ERROR_UPLOAD_INPUT'), 'error');
+
+			// Redirect back to the edit screen.
+			$this->setRedirect(
+				$this->getRedirectToItemRoute($this->getRedirectToItemAppend($recordId, $urlVar))
+			);
 
 			return false;
 		}
