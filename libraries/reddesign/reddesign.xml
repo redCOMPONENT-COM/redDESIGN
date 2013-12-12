@@ -11,6 +11,7 @@
     <version>1.0.0</version>
     <description>Reddesign library</description>
     <files>
+		<folder>helpers</folder>
         <folder>input</folder>
         <folder>view</folder>
         <filename>library.php</filename>

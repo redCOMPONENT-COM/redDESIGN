@@ -79,7 +79,7 @@ class ReddesignViewFont extends ReddesignView
 	{
 		$isNew = (int) $this->item->reddesign_font_id <= 0;
 		$title = JText::_('COM_REDDESIGN_FONT_TITLE');
-		$state = $isNew ? JText::_('JNEW') : JText::_('JEDIT');
+		$state = $isNew ? JText::_('COM_REDDESIGN_COMMON_NEW') : JText::_('COM_REDDESIGN_COMMON_EDIT');
 
 		return $title . ' <small>' . $state . '</small>';
 	}
@@ -93,22 +93,22 @@ class ReddesignViewFont extends ReddesignView
 	{
 		$group = new RToolbarButtonGroup;
 
-		$save = RToolbarBuilder::createSaveButton('user.apply');
-		$saveAndClose = RToolbarBuilder::createSaveAndCloseButton('user.save');
+		$save = RToolbarBuilder::createSaveButton('font.apply');
+		$saveAndClose = RToolbarBuilder::createSaveAndCloseButton('font.save');
 
 		$group->addButton($save);
 		$group->addButton($saveAndClose);
 
-		$saveAndNew = RToolbarBuilder::createSaveAndNewButton('user.save2new');
+		$saveAndNew = RToolbarBuilder::createSaveAndNewButton('font.save2new');
 		$group->addButton($saveAndNew);
 
 		if (empty($this->item->id))
 		{
-			$cancel = RToolbarBuilder::createCancelButton('user.cancel');
+			$cancel = RToolbarBuilder::createCancelButton('font.cancel');
 		}
 		else
 		{
-			$cancel = RToolbarBuilder::createCloseButton('user.cancel');
+			$cancel = RToolbarBuilder::createCloseButton('font.cancel');
 		}
 
 		$group->addButton($cancel);

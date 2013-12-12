@@ -17,10 +17,10 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignHelperFile
+class ReddesignHelpersFile
 {
 	/**
-	 * Uploads file to the given assets folder.
+	 * Uploads file to the given media folder.
 	 *
 	 * @param   array   $file               The file descriptor returned by PHP
 	 * @param   string  $destinationFolder  Name of a folder in media/com_reddesign/.
@@ -30,13 +30,13 @@ class ReddesignHelperFile
 	 *
 	 * @return array|bool
 	 */
-	public function uploadFile($file, $destinationFolder, $maxFileSize = 2, $okFileExtensions = null, $okMIMETypes = null)
+	public static function uploadFile($file, $destinationFolder, $maxFileSize = 2, $okFileExtensions = null, $okMIMETypes = null)
 	{
 		$app = JFactory::getApplication();
 		$fileExtension = JFile::getExt($file['name']);
 
 		// Can we upload this file type?
-		if (!$this->canUpload($file, $maxFileSize, $okFileExtensions, $okMIMETypes))
+		if (!self::canUpload($file, $maxFileSize, $okFileExtensions, $okMIMETypes))
 		{
 			return false;
 		}
@@ -67,7 +67,7 @@ class ReddesignHelperFile
 		}
 
 		// ...and its full path
-		$filepath = JPath::clean(JPATH_SITE . '/media/com_reddesign/assets/' . $destinationFolder . '/' . $mangledname . '.' . $fileExtension);
+		$filepath = JPath::clean(JPATH_SITE . '/media/com_reddesign/' . $destinationFolder . '/' . $mangledname . '.' . $fileExtension);
 
 		// If we have a name clash, abort the upload
 		if (JFile::exists($filepath))
@@ -121,7 +121,7 @@ class ReddesignHelperFile
 	 *
 	 * @return  boolean
 	 */
-	private function canUpload($file, $maxFileSize = 2, $okFileExtensions = null, $okMIMETypes = null)
+	private static function canUpload($file, $maxFileSize = 2, $okFileExtensions = null, $okMIMETypes = null)
 	{
 		$app = JFactory::getApplication();
 
