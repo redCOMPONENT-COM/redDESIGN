@@ -575,99 +575,102 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$redDesignData = json_decode($orderItemMapping->redDesignData);
 		$redDesignData = $this->prepareDesignTypeData($redDesignData);
 
-		echo '<div id="customDesignData' . $orderItem->order_item_id . '" style="margin: 15px 0 15px 0;">' .
-				'<span><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_DETAILS') . '</strong></span><br/>';
-
-		foreach ($redDesignData['designAreas'] as $area)
+		if (count($orderItemMapping) > 0)
 		{
-			// Get font name.
-			if (empty($area['fontTypeId']))
+			echo '<div id="customDesignData' . $orderItem->order_item_id . '" style="margin: 15px 0 15px 0;">' .
+					'<span><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_DETAILS') . '</strong></span><br/>';
+
+			foreach ($redDesignData['designAreas'] as $area)
 			{
-				$fontName = 'Arial';
-			}
-			else
-			{
-				$fontModel = FOFModel::getTmpInstance('Font', 'ReddesignModel');
-				$fontName = $fontModel->getItem($area['fontTypeId']);
-				$fontName = $fontName->title;
-			}
-
-			// Get text color
-			if (strpos($area['fontColor'], '#') !== false)
-			{
-				$cmykCode = $this->rgb2cmyk($this->hex2rgb($area['fontColor']));
-				$cmyk = 'C: ' . $cmykCode['c'] . ' ' . 'M: ' . $cmykCode['m'] . ' ' . 'Y: ' . $cmykCode['y'] . ' ' . 'K: ' . $cmykCode['k'];
-				$fontColor = '<span style="margin-right:5px; background-color: ' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
-				$fontColor .= '<span>' . $cmyk . '</span>';
-			}
-			else
-			{
-				$cmykCode = $this->rgb2cmyk($this->hex2rgb('#' . $area['fontColor']));
-				$cmyk = 'C: ' . $cmykCode['c'] . ' ' . 'M: ' . $cmykCode['m'] . ' ' . 'Y: ' . $cmykCode['y'] . ' ' . 'K: ' . $cmykCode['k'];
-				$fontColor  = '<span style="margin-right:5px; background-color:#' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
-				$fontColor .= '<span>' . $cmyk . '</span>';
-			}
-
-			if (empty($area['fontSize']))
-			{
-				$area['fontSize'] = JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AUTO_FONT_SIZE');
-			}
-
-			echo '<br/>' .
-				'<div id="area' . $area['id'] . '">' .
-					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AREA') . '</div>' .
-					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT') . $area['textArea'] . '</div>' .
-					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_NAME') . $fontName . '</div>' .
-					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_SIZE') . $area['fontSize'] . '</div>' .
-					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT_COLOR') . $fontColor . '</div>' .
-				'</div>';
-		}
-
-		echo '</div>';
-
-		if (!empty($orderItemMapping->productionPdf))
-		{
-			echo '<div><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_PRODUCTION_FILES') . '</strong></div><br/>';
-
-			$downloadFileName = 'production-file-' . $orderItem->order_id . '-' . $orderItem->order_item_id;
-
-			$productionPdf = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $orderItemMapping->productionPdf . '.pdf');
-			echo '<a href="' . $productionPdf . '" download="' . $downloadFileName . '.pdf">' .
-				JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
-				' PDF</a><br/><br/>';
-
-			$productionEps = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/eps/' . $orderItemMapping->productionEps . '.eps');
-			echo '<a href="' . $productionEps . '" download="' . $downloadFileName . '.eps">' .
-				JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
-				' EPS</a>';
-		}
-		else
-		{
-			$button = '<button type="button" onclick="createProductionFiles(' . $orderItem->order_item_id . ',' . $orderItem->order_id . ')">'
-				. JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CREATE_PRODUCTION_FILES')
-				. '</button>';
-			echo $button;
-
-			echo '<div id="linksContainer' . $orderItem->order_item_id . '" style="margin: 15px 0 15px 0;"></div>';
-
-			$document = JFactory::getDocument();
-			$js = '
-					function createProductionFiles(orderItemId, orderId) {
-								var req = new Request.HTML({
-									method: "get",
-									url: "' . JURI::base() . 'index.php?option=com_reddesign&view=designtype&task=ajaxCustomizeDesign&format=raw",
-									data: { "orderItemId" : orderItemId, "orderId" : orderId },
-									onRequest: function(){
-										$("linksContainer" + orderItemId).set("text", "' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CREATING_PRODUCTION_FILES') . '");
-									},
-									update: $("linksContainer" + orderItemId),
-									onFailure: function(){
-										$("linksContainer" + orderItemId).set("text", "' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CAN_NOT_CREATE_PRODUCTION_FILES') . '");
-									}
-								}).send();
+				// Get font name.
+				if (empty($area['fontTypeId']))
+				{
+					$fontName = 'Arial';
 				}
-			';
-			$document->addScriptDeclaration($js);
+				else
+				{
+					$fontModel = FOFModel::getTmpInstance('Font', 'ReddesignModel');
+					$fontName = $fontModel->getItem($area['fontTypeId']);
+					$fontName = $fontName->title;
+				}
+
+				// Get text color
+				if (strpos($area['fontColor'], '#') !== false)
+				{
+					$cmykCode = $this->rgb2cmyk($this->hex2rgb($area['fontColor']));
+					$cmyk = 'C: ' . $cmykCode['c'] . ' ' . 'M: ' . $cmykCode['m'] . ' ' . 'Y: ' . $cmykCode['y'] . ' ' . 'K: ' . $cmykCode['k'];
+					$fontColor = '<span style="margin-right:5px; background-color: ' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+					$fontColor .= '<span>' . $cmyk . '</span>';
+				}
+				else
+				{
+					$cmykCode = $this->rgb2cmyk($this->hex2rgb('#' . $area['fontColor']));
+					$cmyk = 'C: ' . $cmykCode['c'] . ' ' . 'M: ' . $cmykCode['m'] . ' ' . 'Y: ' . $cmykCode['y'] . ' ' . 'K: ' . $cmykCode['k'];
+					$fontColor  = '<span style="margin-right:5px; background-color:#' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+					$fontColor .= '<span>' . $cmyk . '</span>';
+				}
+
+				if (empty($area['fontSize']))
+				{
+					$area['fontSize'] = JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AUTO_FONT_SIZE');
+				}
+
+				echo '<br/>' .
+					'<div id="area' . $area['id'] . '">' .
+						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AREA') . '</div>' .
+						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT') . $area['textArea'] . '</div>' .
+						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_NAME') . $fontName . '</div>' .
+						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_SIZE') . $area['fontSize'] . '</div>' .
+						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT_COLOR') . $fontColor . '</div>' .
+					'</div>';
+			}
+
+			echo '</div>';
+
+			if (!empty($orderItemMapping->productionPdf))
+			{
+				echo '<div><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_PRODUCTION_FILES') . '</strong></div><br/>';
+
+				$downloadFileName = 'production-file-' . $orderItem->order_id . '-' . $orderItem->order_item_id;
+
+				$productionPdf = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $orderItemMapping->productionPdf . '.pdf');
+				echo '<a href="' . $productionPdf . '" download="' . $downloadFileName . '.pdf">' .
+					JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
+					' PDF</a><br/><br/>';
+
+				$productionEps = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/eps/' . $orderItemMapping->productionEps . '.eps');
+				echo '<a href="' . $productionEps . '" download="' . $downloadFileName . '.eps">' .
+					JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
+					' EPS</a>';
+			}
+			else
+			{
+				$button = '<button type="button" onclick="createProductionFiles(' . $orderItem->order_item_id . ',' . $orderItem->order_id . ')">'
+					. JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CREATE_PRODUCTION_FILES')
+					. '</button>';
+				echo $button;
+
+				echo '<div id="linksContainer' . $orderItem->order_item_id . '" style="margin: 15px 0 15px 0;"></div>';
+
+				$document = JFactory::getDocument();
+				$js = '
+						function createProductionFiles(orderItemId, orderId) {
+									var req = new Request.HTML({
+										method: "get",
+										url: "' . JURI::base() . 'index.php?option=com_reddesign&view=designtype&task=ajaxCustomizeDesign&format=raw",
+										data: { "orderItemId" : orderItemId, "orderId" : orderId },
+										onRequest: function(){
+											$("linksContainer" + orderItemId).set("text", "' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CREATING_PRODUCTION_FILES') . '");
+										},
+										update: $("linksContainer" + orderItemId),
+										onFailure: function(){
+											$("linksContainer" + orderItemId).set("text", "' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CAN_NOT_CREATE_PRODUCTION_FILES') . '");
+										}
+									}).send();
+					}
+				';
+				$document->addScriptDeclaration($js);
+			}
 		}
 	}
 
