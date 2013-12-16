@@ -41,6 +41,6 @@ $action = JRoute::_('index.php?option=com_reddesign&view=font');
 	<input type="hidden" name="option" value="com_reddesign">
 	<input type="hidden" name="view" value="font">
 	<input type="hidden" name="task" value="">
-	<input type="hidden" id="reddesign_font_id" name="reddesign_font_id" value="<?php echo $this->item->reddesign_font_id; ?>">
+	<?php echo $this->form->getInput('reddesign_font_id'); ?>
 	<?php echo JHtml::_('form.token'); ?>
 </form>

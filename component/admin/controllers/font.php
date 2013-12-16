@@ -29,8 +29,9 @@ class ReddesignControllerFont extends RControllerForm
 	 */
 	public function save($key = null, $urlVar = null)
 	{
-		$app = JFactory::getApplication();
-		$file = $this->input->files->get('font_file');
+		$file = $this->input->files->get('jform');
+		$file = $file['font_file'];
+		$uploaded_file = null;
 
 		// If file has been uploaded, process it
 		if (!empty($file['name']) && !empty($file['type']))
@@ -45,7 +46,15 @@ class ReddesignControllerFont extends RControllerForm
 			// Create a image preview of the Font
 			$this->createFontPreviewThumb($uploaded_file['mangled_filename']);
 
-			return parent::save($key = null, $urlVar = null);
+			$data  = $this->input->post->get('jform', array(), 'array');
+
+			if (empty($data['title']))
+			{
+				$data['title'] = $file['name'];
+				$this->input->post->set('jform', $data);
+			}
+
+			return parent::save($key, $urlVar);
 		}
 		else
 		{
@@ -74,12 +83,7 @@ class ReddesignControllerFont extends RControllerForm
 		$params				= JComponentHelper::getParams('com_reddesign');
 		$text				= $params->get('font_preview_text', 'Lorem ipsum.');
 
-		$im = $this->imageTtfJustifyText(
-			$text,
-			$font_file_location,
-			2,
-			2
-		);
+		$im = $this->imageTtfJustifyText($text, $font_file_location, 2, 2);
 
 		// Creates the Font thumb .png file
 		$font_thumb = substr($font_file, 0, -3) . 'png';
@@ -98,14 +102,13 @@ class ReddesignControllerFont extends RControllerForm
 	 * @param   int     $W        Width of the Image.
 	 * @param   int     $H        Hight of the Image.
 	 * @param   int     $X        x-coordinate of the text into the image.
-	 * @param   int     $Y        y-coordinate of the text into the image.
 	 * @param   int     $fsize    Font size of text.
 	 * @param   array   $color    RGB color array for text color.
 	 * @param   array   $bgcolor  RGB color array for background.
 	 *
 	 * @return   resource  image resource
 	 */
-	private function imageTtfJustifyText($text, $font, $Justify = 2, $Leading = 0, $W = 0, $H = 0, $X = 0, $Y = 0, $fsize = 20, $color = array(0x0, 0x0, 0x0), $bgcolor = array(0xFF, 0xFF, 0xFF))
+	private function imageTtfJustifyText($text, $font, $Justify = 2, $Leading = 0, $W = 0, $H = 0, $X = 0, $fsize = 20, $color = array(0x0, 0x0, 0x0), $bgcolor = array(0xFF, 0xFF, 0xFF))
 	{
 		$angle = 0;
 		$_bx = imageTTFBbox($fsize, 0, $font, $text);
@@ -126,7 +129,7 @@ class ReddesignControllerFont extends RControllerForm
 		or die("Cannot Initialize new GD image stream");
 
 		// RGB color background.
-		$background_color = imagecolorallocate($im, $bgcolor[0], $bgcolor[1], $bgcolor[2]);
+		imagecolorallocate($im, $bgcolor[0], $bgcolor[1], $bgcolor[2]);
 
 		// RGB color text.
 		$text_color = imagecolorallocate($im, $color[0], $color[1], $color[2]);

@@ -19,7 +19,7 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 			<?php echo RLayoutHelper::render('search', array('view' => $this)) ?>
 		</div>
 	</div>
-	<?php if (empty($items)) : ?>
+	<?php if (empty($this->items)) : ?>
 		<div class="alert alert-info">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			<div class="pagination-centered">
@@ -61,7 +61,7 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 							<?php echo $this->pagination->getRowOffset($i); ?>
 						</td>
 						<td>
-							<?php echo JHtml::_('grid.reddesign_font_id', $i, $row->reddesign_font_id); ?>
+							<?php echo JHtml::_('grid.id', $i, $row->reddesign_font_id); ?>
 						</td>
 						<td>
 							<?php
