@@ -36,96 +36,72 @@ JHtml::_('behavior.framework');
 	<?php else : ?>
 		<div class="control-group">
 			<label class="control-label " for="font_file">
-				<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_FILE'); ?>
+				<?php echo $this->form->getLabel('font_file'); ?>
 			</label>
 
 			<div class="controls">
-				<input type="file" name="font_file" id="font_file" class="inputbox" value="<?php echo $this->item->font_file; ?>" required="required">
+				<?php echo $this->form->getInput('font_file'); ?>
 			</div>
 		</div>
 	<?php endif; ?>
 
 	<div class="control-group">
 		<label class="control-label " for="title">
-			<?php echo JText::_('COM_REDDESIGN_FONT_FIELD_TITLE'); ?>
+			<?php echo $this->form->getLabel('title'); ?>
 		</label>
 
 		<div class="controls">
-			<input type="text" value="<?php echo $this->item->title; ?>" maxlength="255" size="32" id="title" name="title">
+			<?php echo $this->form->getInput('title'); ?>
 			<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_TITLE_DESC'); ?></span>
 		</div>
 	</div>
 
 	<div class="control-group">
 		<label for="enabled" class="control-label">
-			<?php echo JText::_('JPUBLISHED'); ?>
+			<?php echo $this->form->getLabel('enabled'); ?>
 		</label>
 		<div class="controls">
-			<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
+			<?php echo $this->form->getInput('enabled'); ?>
 		</div>
 	</div>
 
 	<div class="control-group">
 		<label class="control-label" for="default_width">
-			<?php echo JText::_('COM_REDDESIGN_FONT_DEFAULT_WIDTH'); ?>
+			<?php echo $this->form->getLabel('default_width'); ?>
 		</label>
 
 		<div class="controls">
-			<input type="text"
-				   value="<?php echo $this->item->default_width; ?>"
-				   maxlength="10"
-				   size="32"
-				   id="default_width"
-				   name="default_width"
-				   required="required">
+			<?php echo $this->form->getInput('default_width'); ?>
 		</div>
 	</div>
 
 	<div class="control-group">
 		<label class="control-label" for="default_height">
-			<?php echo JText::_('COM_REDDESIGN_FONT_DEFAULT_HEIGHT'); ?>
+			<?php echo $this->form->getLabel('default_height'); ?>
 		</label>
 
 		<div class="controls">
-			<input type="text"
-				   value="<?php echo $this->item->default_height; ?>"
-				   maxlength="10"
-				   size="32"
-				   id="default_height"
-				   name="default_height"
-				   required="required">
+			<?php echo $this->form->getInput('default_height'); ?>
 		</div>
 	</div>
 
 	<div class="control-group">
 		<label class="control-label" for="default_caps_height">
-			<?php echo JText::_('COM_REDDESIGN_FONT_DEFAULT_CAPS_HEIGHT'); ?>
+			<?php echo $this->form->getLabel('default_caps_height'); ?>
 		</label>
 
 		<div class="controls">
-			<input type="text"
-				   value="<?php echo $this->item->default_caps_height; ?>"
-				   maxlength="10"
-				   size="32"
-				   id="default_caps_height"
-				   name="default_caps_height"
-				   required="required">
+			<?php echo $this->form->getInput('default_caps_height'); ?>
 		</div>
 	</div>
 
 	<div class="control-group">
 		<label class="control-label" for="default_baseline_height">
-			<?php echo JText::_('COM_REDDESIGN_FONT_DEFAULT_BASELINE_HEIGHT'); ?>
+			<?php echo $this->form->getLabel('default_baseline_height'); ?>
 		</label>
 
 		<div class="controls">
-			<input type="text"
-				   value="<?php echo $this->item->default_baseline_height; ?>"
-				   maxlength="10"
-				   size="32"
-				   id="default_baseline_height"
-				   name="default_baseline_height"
-				   required="required">
+			<?php echo $this->form->getInput('default_baseline_height'); ?>
 		</div>
 	</div>
 </div>

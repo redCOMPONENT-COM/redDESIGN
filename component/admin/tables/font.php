@@ -34,7 +34,7 @@ class ReddesignTableFont extends RTable
 	 *
 	 * @var  string
 	 */
-	protected $_tableName = 'reddesign_chars';
+	protected $_tableName = 'reddesign_fonts';
 
 	/**
 	 * @var  integer
@@ -89,11 +89,6 @@ class ReddesignTableFont extends RTable
 	/**
 	 * @var  string
 	 */
-	public $font_file = '';
-
-	/**
-	 * @var  string
-	 */
 	public $font_thumb = '';
 
 	/**
@@ -134,13 +129,6 @@ class ReddesignTableFont extends RTable
 	public function check()
 	{
 		$app = JFactory::getApplication();
-
-		if (empty($this->font_file))
-		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_EMPTY_FONT_FILE'), 'error');
-
-			return false;
-		}
 
 		if (empty($this->default_width))
 		{
