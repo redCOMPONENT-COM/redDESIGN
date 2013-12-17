@@ -77,7 +77,7 @@ class ReddesignViewFont extends ReddesignView
 	 */
 	public function getTitle()
 	{
-		$isNew = (int) $this->item->reddesign_font_id <= 0;
+		$isNew = (int) $this->item->id <= 0;
 		$title = JText::_('COM_REDDESIGN_FONT_TITLE');
 		$state = $isNew ? JText::_('COM_REDDESIGN_COMMON_NEW') : JText::_('COM_REDDESIGN_COMMON_EDIT');
 

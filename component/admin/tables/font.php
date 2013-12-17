@@ -19,17 +19,6 @@ defined('_JEXEC') or die;
 class ReddesignTableFont extends RTable
 {
 	/**
-	 * The options.
-	 *
-	 * @var  array
-	 */
-	protected $_options = array(
-		'fonts.load' => true,
-		'fonts.store' => true,
-		'chars.store' => false,
-	);
-
-	/**
 	 * The table name without the prefix.
 	 *
 	 * @var  string
@@ -39,7 +28,7 @@ class ReddesignTableFont extends RTable
 	/**
 	 * @var  integer
 	 */
-	public $reddesign_font_id;
+	public $id;
 
 	/**
 	 * @var  string
@@ -172,7 +161,7 @@ class ReddesignTableFont extends RTable
 	 */
 	protected function beforeLoad($keys = null, $reset = true)
 	{
-		if ($this->_eventBeforeLoad && $this->reddesign_font_id)
+		if ($this->_eventBeforeLoad && $this->id)
 		{
 			$db = $this->_db;
 
@@ -183,7 +172,7 @@ class ReddesignTableFont extends RTable
 			$query
 				->select($db->qn(array('reddesign_char_id', 'font_char', 'width', 'height', 'typography', 'typography_height')))
 				->from($db->qn('#__reddesign_chars'))
-				->where($db->qn('reddesign_font_id') . ' = ' . $this->reddesign_font_id)
+				->where($db->qn('font_id') . ' = ' . $this->id)
 				->order('reddesign_char_id ASC');
 
 			// Reset the query using our newly populated query object.

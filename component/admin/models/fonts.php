@@ -49,7 +49,7 @@ class ReddesignModelFonts extends RModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'reddesign_font_id', 'f.reddesign_font_id',
+				'id', 'f.id',
 				'enabled', 'f.enabled',
 				'title', 'f.title',
 				'created_by', 'f.created_by',
