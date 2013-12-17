@@ -2,8 +2,8 @@
 <form>
 	<fieldset>
 		<field
-			name="reddesign_font_id"
-			id="reddesign_font_id"
+			name="id"
+			id="id"
 			type="hidden"
 			default="0"
 			label="COM_REDDESIGN_COMMON_ID"
@@ -36,7 +36,8 @@
 			class="btn-group"
 			default="1"
 			>
-			<option value="1">JYES</option><option value="0">JNO</option>
+			<option class="btn" value="1">JYES</option>
+			<option class="btn" value="0">JNO</option>
 		</field>
 		<field
 			name="default_width"
@@ -80,7 +81,6 @@
 			default="0.99999"
 			maxlength="10"
 			size="32"
-			required="true"
 			/>
 	</fieldset>
 </form>

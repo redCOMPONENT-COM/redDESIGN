@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
 -- Table structure for table `#__reddesign_font`
 --
 CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
-  `reddesign_font_id`       INT(11)      NOT NULL AUTO_INCREMENT,
+  `id`       INT(11)      NOT NULL AUTO_INCREMENT,
   `title`                   VARCHAR(255),
   `slug`                    VARCHAR(255),
   `enabled`                 TINYINT(3)   NOT NULL DEFAULT '1',
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
   `default_height`          DOUBLE(5, 5) NOT NULL,
   `default_caps_height`     DOUBLE(5, 5) NOT NULL,
   `default_baseline_height` DOUBLE(5, 5) NOT NULL,
-  PRIMARY KEY (`reddesign_font_id`)
+  PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
@@ -102,10 +102,10 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_chars` (
   `height`                 DOUBLE(5, 5) NOT NULL,
   `typography`             INT(11)      NOT NULL DEFAULT '1',
   `typography_height`      DOUBLE(5, 5) NOT NULL,
-  `reddesign_font_id`      INT(11)      NOT NULL,
+  `font_id`      INT(11)      NOT NULL,
   PRIMARY KEY (`reddesign_char_id`),
-  FOREIGN KEY (`reddesign_font_id` )
-    REFERENCES `#__reddesign_fonts` (`reddesign_font_id` )
+  FOREIGN KEY (`font_id` )
+    REFERENCES `#__reddesign_fonts` (`id` )
       ON DELETE CASCADE
       ON UPDATE NO ACTION
 )
