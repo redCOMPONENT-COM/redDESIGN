@@ -38,6 +38,12 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 		if (isset($extraFieldData->data_txt) === false || $extraFieldData->data_txt != 'type1')
 		{
+			if ($extraFieldData->data_txt == 'normal')
+			{
+				$template = str_replace('{discount_calculator_plg}', '', $template);
+				$template = str_replace('{product_price_table_plugin}', '', $template);
+			}
+
 			return false;
 		}
 
