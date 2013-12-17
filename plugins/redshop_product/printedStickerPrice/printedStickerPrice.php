@@ -39,6 +39,8 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 
 		if ($extraFieldData->data_txt != 'type2')
 		{
+			$template = str_replace('{discount_calculator_plg}', '', $template);
+
 			return false;
 		}
 
