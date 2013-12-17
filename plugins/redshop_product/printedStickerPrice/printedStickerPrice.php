@@ -110,6 +110,24 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 				. "<th colspan='2'>" . JText::_('COM_REDSHOP_PRICE') . "</th>"
 			. "</tr>";
 
+		if (count($prices) == 0)
+		{
+				$productPrice = $product->product_price + $productHelper->getProductTax($product->product_id, $product->product_price);
+
+				$table .= "<tr>"
+					. "<td>1</td>"
+					. "<td>"
+					. "<input type='radio' class='printedStickerPrice_radio' name='printedStickerPrice_plg'
+							value='1' price=\"$productPrice\"
+							product_id=\"$product->product_id\"
+							percentage='0'
+							index='0'
+							checked='checked' >"
+					. "</td>"
+					. "<td><span id='price_quantity0'></span></td><td>&nbsp;</td>"
+					. "</tr>";
+		}
+
 		for ($i = 0, $n = count($prices); $i < $n; $i++)
 		{
 			$price = $prices[$i];
