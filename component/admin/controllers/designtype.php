@@ -197,18 +197,18 @@ class ReddesignControllerDesigntype extends FOFController
 		if (isset($data['customUserWidth']) && !empty($data['customUserWidth']))
 		{
 			$imageWidth = $data['customUserWidth'];
+
+			// CM is default unit entered by user
+			$imageWidth = $data['customUserWidth'] * 28.346456514;
 		}
 
 		// Check for user entered dimension
 		if (isset($data['customUserHeight']) && !empty($data['customUserHeight']))
 		{
 			$imageHeight = $data['customUserHeight'];
-		}
 
-		// Check for user entered dimension
-		if (isset($data['enteredDimensionunit']) && !empty($data['enteredDimensionunit']))
-		{
-			$unit = $data['enteredDimensionunit'];
+			// CM is default unit entered by user
+			$imageHeight = $data['customUserHeight'] * 28.346456514;
 		}
 
 		// Read preview size, for scaling.
@@ -457,15 +457,13 @@ class ReddesignControllerDesigntype extends FOFController
 
 		$tmpEpsImage = $epsFilePath . "tmp_eps_" . $productionFileName . ".eps";
 		$tmpBound = $epsFilePath . "tmp_bound_" . $productionFileName . ".ps";
+		$tmpResizeEPS = $epsFilePath . "tmp_resizeeps_" . $productionFileName . ".eps";
 
 		$fp = fopen($tmpEpsImage, "w");
 		fwrite($fp, $tempFile);
 		fclose($fp);
 
-		$imageWidth += (2 * $pdfLeftMargin);
-		$imageHeight += (2 * $pdfTopMargin);
-
-		$cmd = "gs -dBATCH -dNOPAUSE -dEPSFitPage -sOutputFile=$tmpBound -sDEVICE=ps2write  \-c '<< /PageSize
+		$cmd = "gs -dBATCH -dNOPAUSE -sOutputFile=$tmpBound -sDEVICE=ps2write  \-c '<< /PageSize
 				[$imageWidth $imageHeight]  >> setpagedevice'  -f" . $tmpEpsImage;
 		exec($cmd);
 
@@ -534,11 +532,19 @@ class ReddesignControllerDesigntype extends FOFController
 
 			$epsFile .= "\n% 0 0 " . ($imageWidth) . " " . ($imageHeight);
 
+			$cmd = "gs -dSAFER -dBATCH -dNOPAUSE -dEPSFitPage ";
+			$cmd .= "-sOutputFile=$tmpResizeEPS -sDEVICE=epswrite ";
+			$cmd .= "\-c '<< /PageSize [$imageWidth $imageHeight] >> setpagedevice' -f $epsFileLocation";
+			exec($cmd);
+
 			$epsFile .= "\n%%BeginDocument: danske.eps";
 			$epsFile .= "\n(" . $epsFileLocation . ") run";
 			$epsFile .= "\n%%EndDocument";
 			$epsFile .= "\nEndEPSF";
 		}
+
+		$imageWidth += (2 * $pdfLeftMargin);
+		$imageHeight += (2 * $pdfTopMargin);
 
 		$epsFile .= "\nBeginEPSF";
 		$epsFile .= "\nclear";
@@ -570,13 +576,13 @@ class ReddesignControllerDesigntype extends FOFController
 		ob_clean();
 
 		$pdfFileName = $pdfFilePath . $productionFileName . ".pdf";
-		$cmd  = "gs -dBATCH -dNOPAUSE -dEPSFitPage -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
+		$cmd  = "gs -dBATCH -dNOPAUSE -dNOCACHE -dEmbedAllFonts=true -dSubsetFonts=false";
 		$cmd .= " -sOutputFile=$pdfFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]";
 		$cmd .= "  >> setpagedevice'  -f" . $tmpEpsFile;
 		exec($cmd);
 
 		$epsFileName = $epsFilePath . $productionFileName . ".eps";
-		$cmd  = "gs -dBATCH -dNOPAUSE -dEPSFitPage -dNOCACHE -dEmbedAllFonts=true -dPDFFitPage=true  -dSubsetFonts=false";
+		$cmd  = "gs -dBATCH -dNOPAUSE -dNOCACHE -dEmbedAllFonts=true -dSubsetFonts=false";
 		$cmd .= " -sOutputFile=$epsFileName -sDEVICE=pdfwrite   \-c '<< /PageSize [$imageWidth $imageHeight]";
 		$cmd .= "  >> setpagedevice'  -f" . $tmpTextEpsFile;
 		exec($cmd);
@@ -599,6 +605,11 @@ class ReddesignControllerDesigntype extends FOFController
 		if (file_exists($tmpBound))
 		{
 			unlink($tmpBound);
+		}
+
+		if (file_exists($tmpResizeEPS))
+		{
+			unlink($tmpResizeEPS);
 		}
 
 		return $productionFileName;
