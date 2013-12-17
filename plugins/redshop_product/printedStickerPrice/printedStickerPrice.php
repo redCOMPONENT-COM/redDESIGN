@@ -37,7 +37,7 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 
 		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product->product_id);
 
-		if ($extraFieldData->data_txt != 'type2')
+		if (isset($extraFieldData->data_txt) === false || $extraFieldData->data_txt != 'type2')
 		{
 			return false;
 		}
