@@ -22,15 +22,14 @@ JHtml::_('behavior.framework');
 <?php endif; ?>
 
 <div id="basic_configuration" class="span12">
-	<?php if (!empty($this->item->font_file) && !empty($this->item->font_thumb)) : ?>
+	<?php if (!empty($this->item->font_file)) : ?>
 		<div class="control-group">
 			<label class="control-label ">
 				<?php echo JText::_('COM_REDDESIGN_FONT_THUMB_PREVIEW') ?>
 			</label>
 
 			<div class="controls">
-				<img style="border: 1px black solid;"
-						 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/fonts/') . $this->item->font_thumb; ?>">
+				<?php echo JHtml::image('media/com_reddesign/fonts/' . $this->fontThumbnail, '') ?>
 			</div>
 		</div>
 	<?php else : ?>
