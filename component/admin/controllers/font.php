@@ -29,44 +29,56 @@ class ReddesignControllerFont extends RControllerForm
 	 */
 	public function save($key = null, $urlVar = null)
 	{
+		$id = $this->input->getInt('id', null);
 		$file = $this->input->files->get('jform');
 		$file = $file['font_file'];
 		$uploaded_file = null;
 
-		// If file has been uploaded, process it
-		if (!empty($file['name']) && !empty($file['type']))
+		// If it is not new one than just save the data to the db.
+		if (empty($id))
 		{
-			// Upload the font file
-			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'fonts', 2, 'ttf');
-		}
-
-		// Delete font .ttf file
-		if (JFile::exists(JPATH_SITE . '/media/com_reddesign/fonts/' . $uploaded_file['mangled_filename']))
-		{
-			// Create a image preview of the Font
-			$this->createFontPreviewThumb($uploaded_file['mangled_filename']);
-
-			$data  = $this->input->post->get('jform', array(), 'array');
-
-			if (empty($data['title']))
+			// If file has been uploaded, process it
+			if (!empty($file['name']) && !empty($file['type']))
 			{
-				$data['title'] = $file['name'];
-				$this->input->post->set('jform', $data);
+				// Upload the font file
+				$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'fonts', 2, 'ttf');
 			}
 
-			return parent::save($key, $urlVar);
+			// Delete font .ttf file
+			if (JFile::exists(JPATH_SITE . '/media/com_reddesign/fonts/' . $uploaded_file['mangled_filename']))
+			{
+				// Create a image preview of the Font
+				$this->createFontPreviewThumb($uploaded_file['mangled_filename']);
+
+				$data = $this->input->post->get('jform', array(), 'array');
+
+				if (empty($data['title']))
+				{
+					$data['title'] = $file['name'];
+				}
+
+				$data['font_file'] = $uploaded_file['mangled_filename'];
+
+				$this->input->post->set('jform', $data);
+
+				return parent::save($key, $urlVar);
+			}
+			else
+			{
+				$recordId = $this->input->getInt($urlVar, null);
+				$this->setMessage(JText::_('COM_REDDESIGN_FONT_ERROR_UPLOAD_INPUT'), 'error');
+
+				// Redirect back to the edit screen.
+				$this->setRedirect(
+					$this->getRedirectToItemRoute($this->getRedirectToItemAppend($recordId, $urlVar))
+				);
+
+				return false;
+			}
 		}
 		else
 		{
-			$recordId = $this->input->getInt($urlVar, null);
-			$this->setMessage(JText::_('COM_REDDESIGN_FONT_ERROR_UPLOAD_INPUT'), 'error');
-
-			// Redirect back to the edit screen.
-			$this->setRedirect(
-				$this->getRedirectToItemRoute($this->getRedirectToItemAppend($recordId, $urlVar))
-			);
-
-			return false;
+			return parent::save($key, $urlVar);
 		}
 	}
 

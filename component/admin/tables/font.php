@@ -76,9 +76,9 @@ class ReddesignTableFont extends RTable
 	public $locked_on = '0000-00-00 00:00:00';
 
 	/**
-	 * @var  string
+	 * @var string
 	 */
-	public $font_thumb = '';
+	public $font_file = '';
 
 	/**
 	 * @var  float
@@ -201,9 +201,9 @@ class ReddesignTableFont extends RTable
 		if ($this->_eventAfterDelete)
 		{
 			// Delete font thumb file
-			if (JFile::exists(JPATH_SITE . '/media/com_reddesign/fonts/' . $this->font_thumb))
+			if (JFile::exists(JPATH_SITE . '/media/com_reddesign/fonts/' .  substr($this->font_file, 0, -3) . 'png'))
 			{
-				JFile::delete(JPATH_SITE . '/media/com_reddesign/fonts/' . $this->font_thumb);
+				JFile::delete(JPATH_SITE . '/media/com_reddesign/fonts/' . substr($this->font_file, 0, -3) . 'png');
 			}
 
 			// Delete font .ttf file

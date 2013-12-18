@@ -81,7 +81,6 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
   `locked_by`               BIGINT(20)   NOT NULL DEFAULT '0',
   `locked_on`               DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
   `font_file`               VARCHAR(255) NOT NULL,
-  `font_thumb`              VARCHAR(255) NOT NULL,
   `default_width`           DOUBLE(5, 5) NOT NULL,
   `default_height`          DOUBLE(5, 5) NOT NULL,
   `default_caps_height`     DOUBLE(5, 5) NOT NULL,

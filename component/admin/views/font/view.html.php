@@ -29,6 +29,11 @@ class ReddesignViewFont extends ReddesignView
 	protected $item;
 
 	/**
+	 * @var string
+	 */
+	protected $fontThumbnail;
+
+	/**
 	 * We don't need side bar here.
 	 *
 	 * @var  boolean
@@ -66,6 +71,8 @@ class ReddesignViewFont extends ReddesignView
 		{
 			$this->item->default_baseline_height = 0.99999;
 		}
+
+		$this->fontThumbnail = substr($this->item->font_file, 0, -3) . 'png';
 
 		parent::display($tpl);
 	}
