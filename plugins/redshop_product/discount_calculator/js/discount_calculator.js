@@ -28,8 +28,8 @@ var lookupData = [
 ];
 
 var elementData = [
-    {"size": 1,"price": 0.65}, {"size": 8,"price": 0.85}, {"size": 35,"price": 1},
-    {"size": 70,"price": 1.3}, {"size": 125,"price": 1.6}
+    {"size": 1,"price": 0.65}, {"size": 2,"price": 0.85}, {"size": 9,"price": 1},
+    {"size": 36,"price": 1.3}, {"size": 71,"price": 1.6}
 ];
 
 rsjQuery(document).ready(function () {
@@ -159,9 +159,9 @@ rsjQuery.setDiscountPrice = function(){
     // Convert finalWH into "meter" from "centimeter". @todo: This will need confirmation from client.
     // finalWH /= 10000;
 
-    var finaldata       = rsjQuery.vlookup(finalWH, lookupData, false);
+    var finaldata       = rsjQuery.vlookup(finalWH, lookupData);
     var stickerElement = parseInt(rsjQuery('#rs_sticker_element').html());
-    finaldata.element   = rsjQuery.vlookup(stickerElement, elementData, true);
+    finaldata.element   = rsjQuery.vlookup(stickerElement, elementData);
 
     rsjQuery.updatePrice(pid, finaldata);
 };
@@ -278,39 +278,23 @@ rsjQuery.setQuantityDiscount = function(pid, price){
  *
  * @param   {integer}  needle     input from which we get best match
  * @param   {json}     data       json string
- * @param   {boolean}  isElement  Check for JSON data is for elements or not.
  *
  * @return  {json}          JSON String object contains final values
  */
-rsjQuery.vlookup = function (needle, data, isElement) {
+rsjQuery.vlookup = function (needle, data) {
 
     var size = [], price = [];
 
     rsjQuery.each(data, function (key, val) {
 
-        if(isElement){
-
-            if (val.size >= needle) {
+        if (val.size <= needle) {
 
                 size.push(val.size);
                 price.push(val.price);
             }
-        }else{
-
-            if (val.size <= needle) {
-
-                size.push(val.size);
-                price.push(val.price);
-            }
-        }
-
     });
 
-    if (isElement) {
-        return {'size': size[0], 'price': price[0]};
-    }else{
-        return {'size': size[size.length - 1], 'price': price[price.length - 1]};
-    }
+    return {'size': size[size.length - 1], 'price': price[price.length - 1]};
 
 };
 

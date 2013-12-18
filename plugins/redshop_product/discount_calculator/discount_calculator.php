@@ -463,9 +463,9 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 			);
 
 			$elementData = json_decode('[
-					{"size": 1,"price": 0.65}, {"size": 8,"price": 0.85},
-					{"size": 35,"price": 1}, {"size": 70,"price": 1.3},
-					{"size": 125,"price": 1.6}
+					{"size": 1,"price": 0.65}, {"size": 2,"price": 0.85},
+					{"size": 9,"price": 1}, {"size": 36,"price": 1.3},
+					{"size": 71,"price": 1.6}
 				]'
 			);
 
@@ -489,7 +489,7 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 			$discountedPrice = $calculatorPrice - ($calculatorPrice * $percentage / 100);
 
 			// Multiply with Quantity
-			$calculatorPrice = $discountedPrice * $quantity;
+			$calculatorPrice = $discountedPrice * 0.80;
 		}
 
 		return $calculatorPrice;
@@ -509,12 +509,10 @@ class PlgRedshop_ProductDiscount_Calculator extends JPlugin
 
 		foreach ($data as $value)
 		{
-			if ($value->size >= $needle)
+			if ($value->size <= $needle)
 			{
 				$return['size'] = $value->size;
 				$return['price'] = $value->price;
-
-				break;
 			}
 		}
 
