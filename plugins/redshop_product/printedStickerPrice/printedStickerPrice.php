@@ -37,8 +37,14 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 
 		$extraFieldData = $extraField->getSectionFieldDataList(5, 1, $product->product_id);
 
-		if ($extraFieldData->data_txt != 'type2')
+		if (isset($extraFieldData->data_txt) === false || $extraFieldData->data_txt != 'type2')
 		{
+			if ($extraFieldData->data_txt == 'normal')
+			{
+				$template = str_replace('{discount_calculator_plg}', '', $template);
+				$template = str_replace('{product_price_table_plugin}', '', $template);
+			}
+
 			return false;
 		}
 
@@ -109,6 +115,24 @@ class PlgRedshop_ProductPrintedStickerPrice extends JPlugin
 				. "<th colspan='2'>" . JText::_('COM_REDSHOP_QUANTITY') . "</th>"
 				. "<th colspan='2'>" . JText::_('COM_REDSHOP_PRICE') . "</th>"
 			. "</tr>";
+
+		if (count($prices) == 0)
+		{
+				$productPrice = $product->product_price + $productHelper->getProductTax($product->product_id, $product->product_price);
+
+				$table .= "<tr>"
+					. "<td>1</td>"
+					. "<td>"
+					. "<input type='radio' class='printedStickerPrice_radio' name='printedStickerPrice_plg'
+							value='1' price=\"$productPrice\"
+							product_id=\"$product->product_id\"
+							percentage='0'
+							index='0'
+							checked='checked' >"
+					. "</td>"
+					. "<td><span id='price_quantity0'></span></td><td>&nbsp;</td>"
+					. "</tr>";
+		}
 
 		for ($i = 0, $n = count($prices); $i < $n; $i++)
 		{
