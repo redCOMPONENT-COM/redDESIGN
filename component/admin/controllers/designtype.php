@@ -538,7 +538,7 @@ class ReddesignControllerDesigntype extends FOFController
 			exec($cmd);
 
 			$epsFile .= "\n%%BeginDocument: danske.eps";
-			$epsFile .= "\n(" . $epsFileLocation . ") run";
+			$epsFile .= "\n(" . $tmpResizeEPS . ") run";
 			$epsFile .= "\n%%EndDocument";
 			$epsFile .= "\nEndEPSF";
 		}
