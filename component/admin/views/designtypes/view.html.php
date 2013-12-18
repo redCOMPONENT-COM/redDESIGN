@@ -39,6 +39,7 @@ class ReddesignViewDesigntypes extends ReddesignView
 		$this->items = $this->get('Items');
 		$this->state = $this->get('State');
 		$this->pagination = $this->get('Pagination');
+		$this->filterForm	= $this->get('Form');
 
 		parent::display($tpl);
 	}
@@ -76,6 +77,7 @@ class ReddesignViewDesigntypes extends ReddesignView
 
 			$edit = RToolbarBuilder::createEditButton('designtype.edit');
 			$secondGroup->addButton($edit);
+
 			$delete = RToolbarBuilder::createDeleteButton('designtypes.delete');
 			$thirdGroup->addButton($delete);
 		}

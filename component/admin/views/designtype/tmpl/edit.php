@@ -10,16 +10,16 @@
 defined('_JEXEC') or die();
 
 JHTML::_('behavior.framework');
+JHtml::_('rjquery.select2', 'select');
 
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/jquery.imgareaselect.pack.js');
-FOFTemplateUtils::addCSS('media:///com_reddesign/assets/css/imgareaselect-animated.css');
+RHelperAsset::load('jquery.imgareaselect.pack.js');
+RHelperAsset::load('imgareaselect-animated.css');
 
 // If is a new design don't show tabs
 if (empty($this->item->reddesign_designtype_id)) :
 	echo $this->loadTemplate('general');
 else :
 ?>
-
 	<script>
 		/* This function set the active Tab based on &tab= url value. General is the default. See view.html.php  */
 		akeeba.jQuery(document).ready(
@@ -53,7 +53,7 @@ else :
 
 	<ul class="nav nav-tabs">
 		<li>
-			<a href="#general"      id="generalLink"       data-toggle="tab" onclick="clearAreaSelection();">
+			<a href="#general" id="generalLink"       data-toggle="tab" onclick="clearAreaSelection();">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_GENERAL_TAB'); ?>
 			</a>
 		</li>

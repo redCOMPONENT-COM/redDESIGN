@@ -7,7 +7,25 @@
 <!-- Joomla Installer => install from folder => choose this repo as folder -->
 <!-- ==================================================================    -->
 <project name="RedDesign" default="discover" basedir=".">
+    <import file="./redCORE/build.xml"/>
+
     <!-- Do initialization stuff -->
+    <target name="init" >
+        <if>
+            <not>
+                 <available file="build.properties"/>
+            </not>
+            <then>
+                <fail message="The file build.properties does not exists." />
+            </then>
+            <else>
+                <property file="build.properties"  override="true"/>
+                <echo message="build.properties File included successfully." />
+            </else>
+        </if>
+        <property name="src" value="./" />
+    </target>
+
     <target name="prepare" >
         <property file="build.properties"  override="true"/>
         <if>
@@ -23,7 +41,7 @@
 
     <property name="discover" value="./" />
 
-    <target name="discover" description="Copies files to a existing joomla site" depends="prepare">
+    <target name="discover" description="Copies files to a existing joomla site" depends="init, redCORE-submodule, prepare">
         <echo message="Copies files to a existing joomla site..." />
         <!-- Manifest & install script -->
         <echo message="##### Manifest..." />

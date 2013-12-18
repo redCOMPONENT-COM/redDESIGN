@@ -15,10 +15,10 @@ defined('_JEXEC') or die;
  * @package     RedDesign.Component
  * @subpackage  Administrator
  *
- * @since       1.0
+ * @since       2.0
  */
 
-class ReddesignViewDesigntype extends FOFViewHtml
+class ReddesignViewDesigntype extends ReddesignView
 {
 	public $item;
 
@@ -61,6 +61,13 @@ class ReddesignViewDesigntype extends FOFViewHtml
 	public $backgroundTypeOptions;
 
 	/**
+	 * Do not display the sidebar
+	 *
+	 * @var  boolean
+	 */
+	protected $displaySidebar = false;
+
+	/**
 	 * Executes before rendering the page for the Add task.
 	 *
 	 * @param   string  $tpl  Subtemplate to use
@@ -69,10 +76,8 @@ class ReddesignViewDesigntype extends FOFViewHtml
 	 */
 	public function display($tpl = null)
 	{
-		$this->input->set('hidemainmenu', true);
-
-		$model 						= $this->getModel();
-		$this->item 				= $model->getItem();
+		$this->item 				= $this->get('Item');
+		$this->form 				= $this->get('Form');
 		$this->activeTab 			= JFactory::getApplication()->input->getString('tab', 'general');
 		$this->document 			= JFactory::getDocument();
 		$this->areas 				= null;
@@ -81,16 +86,16 @@ class ReddesignViewDesigntype extends FOFViewHtml
 
 		// Font sizer options for the general tab.
 		$this->sizerOptions = array(
-			JHTML::_('select.option',  'auto', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO')),
-			JHTML::_('select.option',  'auto_chars', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO_CHARS')),
-			JHTML::_('select.option',  'slider', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_SLIDER')),
-			JHTML::_('select.option',  'dropdown_numbers', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_NUMBERS')),
-			JHTML::_('select.option',  'dropdown_labels', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_LABELS'))
+			JHTML::_('select.option', 'auto', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO')),
+			JHTML::_('select.option', 'auto_chars', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO_CHARS')),
+			JHTML::_('select.option', 'slider', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_SLIDER')),
+			JHTML::_('select.option', 'dropdown_numbers', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_NUMBERS')),
+			JHTML::_('select.option', 'dropdown_labels', JText::_('COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_LABELS'))
 		);
 
 		// Related design types.
-		$designtypesModel = FOFModel::getTmpInstance('Designtypes', 'ReddesignModel');
-		$designtypes = $designtypesModel->getItemList();
+		$designtypesModel = RModel::getAdminInstance('Designtypes', array('ignore_request' => true));
+		$designtypes = $designtypesModel->getItems();
 		$designtypesOptions = array();
 
 		foreach ($designtypes as $designtype)
@@ -200,6 +205,54 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			}
 		}
 
-		parent::display();
+		parent::display($tpl);
+	}
+
+	/**
+	 * Get the view title.
+	 *
+	 * @return  string  The view title.
+	 */
+	public function getTitle()
+	{
+		return JText::_('COM_REDDESIGN_DESIGNTYPE_HEADER');
+	}
+
+	/**
+	 * Get the toolbar to render.
+	 *
+	 * @todo	We have setup ACL requirements for redITEM
+	 *
+	 * @return  RToolbar
+	 */
+	public function getToolbar()
+	{
+		$group = new RToolbarButtonGroup;
+
+		$save = RToolbarBuilder::createSaveButton('designtype.apply');
+		$saveAndClose = RToolbarBuilder::createSaveAndCloseButton('designtype.save');
+		$saveAndNew = RToolbarBuilder::createSaveAndNewButton('designtype.save2new');
+		$save2Copy = RToolbarBuilder::createSaveAsCopyButton('designtype.save2copy');
+
+		$group->addButton($save)
+			->addButton($saveAndClose)
+			->addButton($saveAndNew)
+			->addButton($save2Copy);
+
+		if (empty($this->item->reddesign_designtype_id))
+		{
+			$cancel = RToolbarBuilder::createCancelButton('designtype.cancel');
+		}
+		else
+		{
+			$cancel = RToolbarBuilder::createCloseButton('designtype.cancel');
+		}
+
+		$group->addButton($cancel);
+
+		$toolbar = new RToolbar;
+		$toolbar->addGroup($group);
+
+		return $toolbar;
 	}
 }
