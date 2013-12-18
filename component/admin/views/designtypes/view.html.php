@@ -41,6 +41,13 @@ class ReddesignViewDesigntypes extends ReddesignView
 		$this->pagination = $this->get('Pagination');
 		$this->filterForm	= $this->get('Form');
 
+		$this->ordering = array();
+
+		foreach ($this->items as &$item)
+		{
+			$this->ordering[0][] = $item->reddesign_designtype_id;
+		}
+
 		parent::display($tpl);
 	}
 
