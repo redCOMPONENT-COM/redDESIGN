@@ -10,12 +10,22 @@
 defined('_JEXEC') or die;
 
 /**
- * Companies Controller
+ * Design Types Controller
  *
  * @package     Reddesign.Backend
  * @subpackage  Controllers
  * @since       1.0
  */
-class ReddesignControllerCompanies extends RControllerAdmin
+class ReddesignControllerDesigntypes extends RControllerAdmin
 {
+	/**
+	 * constructor (registers additional tasks to methods)
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		// Write this to make two tasks use the same method (in this example the add method uses the edit method)
+		$this->registerTask('add', 'edit');
+	}
 }

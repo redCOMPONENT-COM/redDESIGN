@@ -6,6 +6,7 @@
  * @copyright   Copyright (C) 2013 redCOMPONENT.com. All rights reserved.
  * @license     GNU General Public License version 2 or later, see LICENSE.
  */
+
 defined('_JEXEC') or die;
 
 /**
@@ -16,7 +17,7 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerDesigntype extends FOFController
+class ReddesignControllerDesigntype extends RControllerForm
 {
 	/**
 	 * Saves design areas for AJAX request.

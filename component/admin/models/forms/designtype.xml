@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field
+			name="reddesign_designtype_id"
+			type="hidden"
+			default="0"
+			class="readonly"
+			readonly="true"
+			/>
+		<field
+			name="title"
+			type="text"
+			default=""
+			label="COM_REDDESIGN_DESIGNTYPE_FIELD_TITLE"
+			description="COM_REDDESIGN_DESIGNTYPE_FIELD_TITLE_DESC"
+			required="true"
+		/>
+		<field name="enabled"
+			type="radio"
+			label="JPUBLISHED"
+			class="btn-group"
+			default="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+		</field>
+		<field name="fontsizer"
+			type="list"
+			label="COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS"
+			description="COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DESC"
+			class="chosen input-xxlarge"
+			default="1">
+			<option value="auto">COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO</option>
+			<option value="auto_chars">COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO_CHARS</option>
+			<option value="slider">COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_SLIDER</option>
+			<option value="dropdown_numbers">COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_NUMBERS</option>
+			<option value="dropdown_labels">COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_LABELS</option>
+		</field>
+	</fieldset>
+</form>

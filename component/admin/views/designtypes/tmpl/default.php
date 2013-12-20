@@ -11,6 +11,16 @@ defined('_JEXEC') or die;
 
 $listOrder        = $this->escape($this->state->get('list.ordering'));
 $listDirn        = $this->escape($this->state->get('list.direction'));
+$ordering = ($listOrder == 'i.ordering');
+$saveOrder = ($listOrder == 'i.ordering' && $listDirn == 'asc');
+$search = $this->state->get('filter.search');
+$originalOrders = array();
+$user = JFactory::getUser();
+$userId = $user->id;
+
+if ($saveOrder) :
+	JHTML::_('rsortablelist.sortable', 'table-items', 'adminForm', strtolower($listDirn), 'index.php?option=com_reddesign&task=designtypes.saveOrderAjax&tmpl=component', true, true);
+endif;
 ?>
 <form action="index.php?option=com_reddesign&view=designtypes" method="post" id="adminForm" name="adminForm">
 	<div class="row-fluid">
@@ -19,7 +29,7 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 			<?php echo RLayoutHelper::render('search', array('view' => $this)) ?>
 		</div>
 	</div>
-	<?php if (empty($items)) : ?>
+	<?php if (empty($this->items)) : ?>
 		<div class="alert alert-info">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			<div class="pagination-centered">
@@ -27,42 +37,53 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 			</div>
 		</div>
 	<?php else : ?>
-		<table class="table table-striped">
+		<table class="table table-striped" id="table-items">
 			<thead>
 				<tr>
-					<th>
-						<?php echo JText::_('COM_REDDESIGN_COMMON_NUM'); ?>
+					<th width="30" align="center">
+						<?php echo '#'; ?>
 					</th>
-					<th>
-						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>)"? />
+					<th width="20">
+						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
+					</th>
+					<th width="1" align="center">
 					</th>
 					<th>
 						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_DESIGNTYPES_NAME', 'tbl.title', $listDirn, $listOrder);?>
 					</th>
-					<th>
+					<?php if ($search == ''): ?>
+					<th width='8%'>
+						<?php echo JHTML::_('rgrid.sort', 'COM_REDDESIGN_DESIGNTYPES_ORDERING', 'tbl.ordering', $listDirn, $listOrder); ?>
+					</th>
+					<?php endif; ?>
+					<th width='5%'>
 						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_DESIGNTYPES_FIELD_ENABLED', 'tbl.enabled', $listDirn, $listOrder);?>
 					</th>
-					<th>
+					<th width='5%'>
 						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_COMMON_ID', 'tbl.reddesign_designtype_id', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="9">
+					<td colspan="6">
 						<?php echo $this->pagination->getListFooter(); ?>
 					</td>
 				</tr>
 			</tfoot>
 			<tbody>
-				<?php foreach ($this->items as $i => $row) : ?>
+				<?php
+				$n = count($this->items);
+				foreach ($this->items as $i => $row) :
+					$orderkey = array_search($row->reddesign_designtype_id, $this->ordering[0]);
+					$parentsStr = '';
+				?>
 					<tr>
 						<td>
 							<?php echo $this->pagination->getRowOffset($i); ?>
 						</td>
-						<td>
-							<?php echo JHtml::_('grid.reddesign_designtype_id', $i, $row->reddesign_designtype_id); ?>
-						</td>
+						<td><?php echo JHtml::_('grid.id', $i, $row->reddesign_designtype_id); ?></td>
+						<td></td>
 						<td>
 							<?php
 								echo JHtml::_(
@@ -72,8 +93,14 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 								);
 							?>
 						</td>
+						<?php if ($search == ''): ?>
+						<td class="order nowrap center">
+							<span class="sortable-handler hasTooltip <?php echo ($saveOrder) ? '' : 'inactive' ;?>" title="<?php echo ($saveOrder) ? '' :JText::_('COM_REDDESIGN_DESIGNTYPES_ORDERING_DISABLED');?>"><i class="icon-move"></i></span>
+							<input type="text" style="display:none" name="order[]" value="<?php echo $orderkey + 1;?>" class="text-area-order" />
+						</td>
+						<?php endif; ?>
 						<td>
-							<?php echo $row->enabled;?>
+							<?php echo JHtml::_('rgrid.published', $row->enabled, $i, 'designtypes.', true, 'cb'); ?>
 						</td>
 						<td>
 							<?php echo $row->reddesign_designtype_id;?>
