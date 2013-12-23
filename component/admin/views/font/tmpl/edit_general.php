@@ -45,12 +45,12 @@ JHtml::_('behavior.framework');
 	<?php endif; ?>
 
 	<div class="control-group">
-		<label class="control-label " for="title">
-			<?php echo $this->form->getLabel('title'); ?>
+		<label class="control-label " for="name">
+			<?php echo $this->form->getLabel('name'); ?>
 		</label>
 
 		<div class="controls">
-			<?php echo $this->form->getInput('title'); ?>
+			<?php echo $this->form->getInput('name'); ?>
 			<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_TITLE_DESC'); ?></span>
 		</div>
 	</div>

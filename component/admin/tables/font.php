@@ -33,7 +33,7 @@ class ReddesignTableFont extends RTable
 	/**
 	 * @var  string
 	 */
-	public $title;
+	public $name;
 
 	/**
 	 * @var  integer

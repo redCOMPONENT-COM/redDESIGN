@@ -37,7 +37,7 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>)"? />
 					</th>
 					<th>
-						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_FONT_FIELD_TITLE', 'tbl.title', $listDirn, $listOrder);?>
+						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_FONT_NAME', 'tbl.name', $listDirn, $listOrder);?>
 					</th>
 					<th>
 						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_COMMON_ENABLED', 'tbl.enabled', $listDirn, $listOrder);?>
@@ -68,7 +68,7 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 								echo JHtml::_(
 												'link',
 												JRoute::_('index.php?option=com_reddesign&task=font.edit&id=' . $row->id),
-												$row->title
+												$row->name
 								);
 							?>
 						</td>

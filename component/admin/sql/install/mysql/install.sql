@@ -69,8 +69,8 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
 -- Table structure for table `#__reddesign_font`
 --
 CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
-  `id`       INT(11)      NOT NULL AUTO_INCREMENT,
-  `title`                   VARCHAR(255),
+  `id`                      INT(11)      NOT NULL AUTO_INCREMENT,
+  `name`                    VARCHAR(255),
   `slug`                    VARCHAR(255),
   `enabled`                 TINYINT(3)   NOT NULL DEFAULT '1',
   `ordering`                INT(10)      NOT NULL DEFAULT '0',

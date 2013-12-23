@@ -52,9 +52,9 @@ class ReddesignControllerFont extends RControllerForm
 
 				$data = $this->input->post->get('jform', array(), 'array');
 
-				if (empty($data['title']))
+				if (empty($data['name']))
 				{
-					$data['title'] = $file['name'];
+					$data['name'] = $file['name'];
 				}
 
 				$data['font_file'] = $uploaded_file['mangled_filename'];
