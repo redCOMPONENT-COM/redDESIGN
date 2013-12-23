@@ -52,8 +52,9 @@ class ReddesignModelDesigntypes extends RModelList
 				'reddesign_designtype_id', 'd.reddesign_designtype_id',
 				'published', 'd.published',
 				'title', 'd.title',
+				'ordering', 'd.ordering',
 				'created_by', 'd.created_by',
-				'created_on', 'd.created_on'
+				'created', 'd.created'
 			);
 		}
 
