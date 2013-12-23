@@ -29,10 +29,10 @@ defined('_JEXEC') or die();
 
 		<div class="control-group">
 			<div class="control-label">
-				<?php echo $this->form->getLabel('enabled'); ?>
+				<?php echo $this->form->getLabel('published'); ?>
 			</div>
 			<div class="controls">
-				<?php echo $this->form->getInput('enabled'); ?>
+				<?php echo $this->form->getInput('published'); ?>
 			</div>
 		</div>
 
