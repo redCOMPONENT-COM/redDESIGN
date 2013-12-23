@@ -52,26 +52,6 @@ class ReddesignViewFont extends ReddesignView
 		$this->form = $this->get('Form');
 		$this->item = $this->get('Item');
 
-		if (empty($this->item->default_width))
-		{
-			$this->item->default_width = 0.99999;
-		}
-
-		if (empty($this->item->default_height))
-		{
-			$this->item->default_height = 0.99999;
-		}
-
-		if (empty($this->item->default_caps_height))
-		{
-			$this->item->default_caps_height = 0.99999;
-		}
-
-		if (empty($this->item->default_baseline_height))
-		{
-			$this->item->default_baseline_height = 0.99999;
-		}
-
 		$this->fontThumbnail = substr($this->item->font_file, 0, -3) . 'png';
 
 		parent::display($tpl);

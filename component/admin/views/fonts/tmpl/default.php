@@ -40,7 +40,7 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_FONT_NAME', 'tbl.name', $listDirn, $listOrder);?>
 					</th>
 					<th>
-						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_COMMON_ENABLED', 'tbl.enabled', $listDirn, $listOrder);?>
+						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_COMMON_ENABLED', 'tbl.state', $listDirn, $listOrder);?>
 					</th>
 					<th>
 						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_COMMON_ID', 'tbl.id', $listDirn, $listOrder); ?>
@@ -73,7 +73,7 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 							?>
 						</td>
 						<td>
-							<?php echo $row->enabled;?>
+							<?php echo $row->state;?>
 						</td>
 						<td>
 							<?php echo $row->id;?>

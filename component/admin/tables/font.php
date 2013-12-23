@@ -38,7 +38,7 @@ class ReddesignTableFont extends RTable
 	/**
 	 * @var  integer
 	 */
-	public $enabled = 1;
+	public $state = 1;
 
 	/**
 	 * @var  integer
@@ -53,7 +53,7 @@ class ReddesignTableFont extends RTable
 	/**
 	 * @var  string
 	 */
-	public $created_on = '0000-00-00 00:00:00';
+	public $created_date = '0000-00-00 00:00:00';
 
 	/**
 	 * @var  integer
@@ -63,17 +63,17 @@ class ReddesignTableFont extends RTable
 	/**
 	 * @var  string
 	 */
-	public $modified_on = '0000-00-00 00:00:00';
+	public $modified_date = '0000-00-00 00:00:00';
 
 	/**
 	 * @var  integer
 	 */
-	public $locked_by = null;
+	public $checked_out = null;
 
 	/**
 	 * @var  string
 	 */
-	public $locked_on = '0000-00-00 00:00:00';
+	public $checked_out_time = '0000-00-00 00:00:00';
 
 	/**
 	 * @var string
@@ -83,22 +83,22 @@ class ReddesignTableFont extends RTable
 	/**
 	 * @var  float
 	 */
-	public $default_width = 1;
+	public $default_width = 1.0;
 
 	/**
 	 * @var  float
 	 */
-	public $default_height = 1;
+	public $default_height = 1.0;
 
 	/**
 	 * @var  float
 	 */
-	public $default_caps_height = 1;
+	public $default_caps_height = 1.0;
 
 	/**
 	 * @var  float
 	 */
-	public $default_baseline_height = 1;
+	public $default_baseline_height = 1.0;
 
 	/**
 	 * This is an object list of characters from the #__reddesign_chars table.

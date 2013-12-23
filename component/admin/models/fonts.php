@@ -50,10 +50,10 @@ class ReddesignModelFonts extends RModelList
 		{
 			$config['filter_fields'] = array(
 				'id', 'f.id',
-				'enabled', 'f.enabled',
+				'state', 'f.state',
 				'name', 'f.name',
 				'created_by', 'f.created_by',
-				'created_on', 'f.created_on'
+				'created_date', 'f.created_date'
 			);
 		}
 

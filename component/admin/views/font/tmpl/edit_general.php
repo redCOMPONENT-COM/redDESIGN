@@ -56,11 +56,11 @@ JHtml::_('behavior.framework');
 	</div>
 
 	<div class="control-group">
-		<label for="enabled" class="control-label">
-			<?php echo $this->form->getLabel('enabled'); ?>
+		<label for="state" class="control-label">
+			<?php echo $this->form->getLabel('state'); ?>
 		</label>
 		<div class="controls">
-			<?php echo $this->form->getInput('enabled'); ?>
+			<?php echo $this->form->getInput('state'); ?>
 		</div>
 	</div>
 
