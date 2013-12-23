@@ -16,6 +16,6 @@ defined('_JEXEC') or die;
  * @subpackage  Models
  * @since       1.0
  */
-class ReddesignModelFont extends RModelAdmin
+class ReddesignModelArea extends RModelAdmin
 {
 }
