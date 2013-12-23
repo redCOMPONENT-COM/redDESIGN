@@ -71,7 +71,6 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
 CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
   `id`                      INT(11)      NOT NULL AUTO_INCREMENT,
   `name`                    VARCHAR(255),
-  `slug`                    VARCHAR(255),
   `enabled`                 TINYINT(3)   NOT NULL DEFAULT '1',
   `ordering`                INT(10)      NOT NULL DEFAULT '0',
   `created_by`              BIGINT(20)   NOT NULL DEFAULT '0',
