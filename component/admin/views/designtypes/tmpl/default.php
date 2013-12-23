@@ -9,14 +9,15 @@
 
 defined('_JEXEC') or die;
 
-$listOrder        = $this->escape($this->state->get('list.ordering'));
-$listDirn        = $this->escape($this->state->get('list.direction'));
-$ordering = ($listOrder == 'i.ordering');
-$saveOrder = ($listOrder == 'i.ordering' && $listDirn == 'asc');
-$search = $this->state->get('filter.search');
+JHtml::_('rjquery.select2', 'select');
+$listOrder		= $this->escape($this->state->get('list.ordering'));
+$listDirn   	= $this->escape($this->state->get('list.direction'));
+$ordering 		= ($listOrder == 'd.ordering');
+$saveOrder 		= ($listOrder == 'd.ordering' && $listDirn == 'asc');
+$search 		= $this->state->get('filter.search');
 $originalOrders = array();
-$user = JFactory::getUser();
-$userId = $user->id;
+$user 			= JFactory::getUser();
+$userId 		= $user->id;
 
 if ($saveOrder) :
 	JHTML::_('rsortablelist.sortable', 'table-items', 'adminForm', strtolower($listDirn), 'index.php?option=com_reddesign&task=designtypes.saveOrderAjax&tmpl=component', true, true);
@@ -49,18 +50,18 @@ endif;
 					<th width="1" align="center">
 					</th>
 					<th>
-						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_DESIGNTYPES_NAME', 'tbl.title', $listDirn, $listOrder);?>
+						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_DESIGNTYPES_NAME', 'd.title', $listDirn, $listOrder);?>
 					</th>
 					<?php if ($search == ''): ?>
 					<th width='8%'>
-						<?php echo JHTML::_('rgrid.sort', 'COM_REDDESIGN_DESIGNTYPES_ORDERING', 'tbl.ordering', $listDirn, $listOrder); ?>
+						<?php echo JHTML::_('rgrid.sort', 'COM_REDDESIGN_DESIGNTYPES_ORDERING', 'd.ordering', $listDirn, $listOrder); ?>
 					</th>
 					<?php endif; ?>
 					<th width='5%'>
-						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_DESIGNTYPES_FIELD_ENABLED', 'tbl.enabled', $listDirn, $listOrder);?>
+						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_DESIGNTYPES_FIELD_ENABLED', 'd.enabled', $listDirn, $listOrder);?>
 					</th>
 					<th width='5%'>
-						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_COMMON_ID', 'tbl.reddesign_designtype_id', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_COMMON_ID', 'd.reddesign_designtype_id', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>

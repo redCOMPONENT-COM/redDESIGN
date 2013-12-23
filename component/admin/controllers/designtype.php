@@ -33,35 +33,38 @@ class ReddesignControllerDesigntype extends RControllerForm
 		$orderItemId = $this->input->getInt('orderItemId', null);
 		$orderId = $this->input->getInt('orderId', null);
 
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('redDesignData'));
-		$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
-		$query->where($db->quoteName('order_item_id') . ' = ' . $orderItemId);
-		$db->setQuery($query);
-		$redDesignData = $db->loadResult();
+		if ($orderItemId)
+		{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('redDesignData'));
+			$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
+			$query->where($db->quoteName('order_item_id') . ' = ' . $orderItemId);
+			$db->setQuery($query);
+			$redDesignData = $db->loadResult();
 
-		$redDesignData = json_decode($redDesignData);
-		$preparedDesignData = $this->prepareDesignTypeData($redDesignData);
-		$productionFileName = $this->createProductionFiles($preparedDesignData);
+			$redDesignData = json_decode($redDesignData);
+			$preparedDesignData = $this->prepareDesignTypeData($redDesignData);
+			$productionFileName = $this->createProductionFiles($preparedDesignData);
 
-		$orderItemProductionFiles = new stdClass;
-		$orderItemProductionFiles->order_item_id = $orderItemId;
-		$orderItemProductionFiles->productionPdf = $productionFileName;
-		$orderItemProductionFiles->productionEps = $productionFileName;
-		$db->updateObject('#__reddesign_orderitem_mapping', $orderItemProductionFiles, 'order_item_id');
+			$orderItemProductionFiles = new stdClass;
+			$orderItemProductionFiles->order_item_id = $orderItemId;
+			$orderItemProductionFiles->productionPdf = $productionFileName;
+			$orderItemProductionFiles->productionEps = $productionFileName;
+			$db->updateObject('#__reddesign_orderitem_mapping', $orderItemProductionFiles, 'order_item_id');
 
-		$downloadFileName = 'production-file-' . $orderId . '-' . $orderItemId;
+			$downloadFileName = 'production-file-' . $orderId . '-' . $orderItemId;
 
-		$productionPdf = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $productionFileName . '.pdf');
-		echo '<a href="' . $productionPdf . '" download="' . $downloadFileName . '.pdf">' .
-			JText::_('COM_REDDESIGN_COMMON_DOWNLOAD') .
-			' PDF</a><br/><br/>';
+			$productionPdf = JPATH_ROOT . '/media/com_reddesign/backgrounds/orders/pdf/' . $productionFileName . '.pdf';
+			echo '<a href="' . $productionPdf . '" download="' . $downloadFileName . '.pdf">' .
+				JText::_('COM_REDDESIGN_COMMON_DOWNLOAD') .
+				' PDF</a><br/><br/>';
 
-		$productionEps = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/eps/' . $productionFileName . '.eps');
-		echo '<a href="' . $productionEps . '" download="' . $downloadFileName . '.eps">' .
-			JText::_('COM_REDDESIGN_COMMON_DOWNLOAD') .
-			' EPS</a>';
+			$productionEps = JPATH_ROOT . '/media/com_reddesign/backgrounds/orders/eps/' . $productionFileName . '.eps';
+			echo '<a href="' . $productionEps . '" download="' . $downloadFileName . '.eps">' .
+				JText::_('COM_REDDESIGN_COMMON_DOWNLOAD') .
+				' EPS</a>';
+		}
 	}
 
 	/**
@@ -71,60 +74,67 @@ class ReddesignControllerDesigntype extends RControllerForm
 	 *
 	 * @return string $designTypeJSON Design type data JSON encoded.
 	 */
-	public function prepareDesignTypeData($redDesignData)
+	public function prepareDesignTypeData($redDesignData = null)
 	{
-		// Get design type data.
-		$designTypeModel = FOFModel::getTmpInstance('Designtype', 'ReddesignModel')->reddesign_designtype_id($redDesignData->reddesign_designtype_id);
-		$designType      = $designTypeModel->getItem($redDesignData->reddesign_designtype_id);
-
-		$data = array();
-		$data['designType'] = $designType;
-
-		// Get Background Data
-		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($redDesignData->production_background_id);
-		$data['designBackground'] = $backgroundModel->getItem($redDesignData->production_background_id);
-
-		// Get designAreas
-		$data['designAreas'] = array();
-
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('reddesign_area_id'));
-		$query->from($db->quoteName('#__reddesign_areas'));
-		$query->where($db->quoteName('reddesign_background_id') . ' = ' . $redDesignData->production_background_id);
-		$db->setQuery($query);
-		$areaIds = $db->loadColumn();
-
-		foreach ($areaIds as $areaId)
+		if ($redDesignData)
 		{
-			$area = array();
-			$area['id'] = $areaId;
+			// Get design type data.
+			$designTypeModel = RModel::getAdminInstance('DesignType', array('ignore_request' => true));
+			$designType      = $designTypeModel->getItem($redDesignData->reddesign_designtype_id);
 
-			$key = 'fontArea' . $areaId;
-			$area['fontTypeId'] = $redDesignData->$key;
+			$data = array();
+			$data['designType'] = $designType;
 
-			$key = 'colorCode' . $areaId;
-			$area['fontColor'] = $redDesignData->$key;
+			// Get Background Data
+			$backgroundModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true));
+			$data['designBackground'] = $backgroundModel->getItem($redDesignData->production_background_id);
 
-			$key = 'fontSize' . $areaId;
+			// Get designAreas
+			$data['designAreas'] = array();
 
-			if (!empty($redDesignData->$key))
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('reddesign_area_id'));
+			$query->from($db->quoteName('#__reddesign_areas'));
+			$query->where($db->quoteName('reddesign_background_id') . ' = ' . $redDesignData->production_background_id);
+			$db->setQuery($query);
+			$areaIds = $db->loadColumn();
+
+			foreach ($areaIds as $areaId)
 			{
-				$area['fontSize'] = $redDesignData->$key;
+				$area = array();
+				$area['id'] = $areaId;
+
+				$key = 'fontArea' . $areaId;
+				$area['fontTypeId'] = $redDesignData->$key;
+
+				$key = 'colorCode' . $areaId;
+				$area['fontColor'] = $redDesignData->$key;
+
+				$key = 'fontSize' . $areaId;
+
+				if (!empty($redDesignData->$key))
+				{
+					$area['fontSize'] = $redDesignData->$key;
+				}
+
+				$key = 'textArea' . $areaId;
+				$area['textArea'] = $redDesignData->$key;
+
+				$data['designAreas'][] = $area;
 			}
 
-			$key = 'textArea' . $areaId;
-			$area['textArea'] = $redDesignData->$key;
+			$data['autoSizeData'] = json_decode($redDesignData->autoSizeData);
+			$data['customUserWidth'] = $redDesignData->customUserWidth;
+			$data['customUserHeight'] = $redDesignData->customUserHeight;
+			$data['enteredDimensionunit'] = $redDesignData->enteredDimensionunit;
 
-			$data['designAreas'][] = $area;
+			return $data;
 		}
-
-		$data['autoSizeData'] = json_decode($redDesignData->autoSizeData);
-		$data['customUserWidth'] = $redDesignData->customUserWidth;
-		$data['customUserHeight'] = $redDesignData->customUserHeight;
-		$data['enteredDimensionunit'] = $redDesignData->enteredDimensionunit;
-
-		return $data;
+		else
+		{
+			return null;
+		}
 	}
 
 	/**
@@ -139,7 +149,7 @@ class ReddesignControllerDesigntype extends RControllerForm
 		// Get component Params
 		$params = JComponentHelper::getParams('com_reddesign');
 
-		$designTypeModel = $this->getThisModel();
+		$designTypeModel = RModel::getAdminInstance('DesignType', array('ignore_request' => true));
 		$designTypeItem = $designTypeModel->getItem($data['designBackground']->reddesign_designtype_id);
 
 		// Create production PDF file name
@@ -239,7 +249,7 @@ class ReddesignControllerDesigntype extends RControllerForm
 		{
 			if ($area['fontTypeId'])
 			{
-				$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area['id']);
+				$fontModel = RModel::getAdminInstance('Font', array('ignore_request' => true));
 				$fontType = $fontModel->getItem($area['fontTypeId']);
 				$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $fontType->font_file;
 			}
@@ -248,7 +258,7 @@ class ReddesignControllerDesigntype extends RControllerForm
 				$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/arial.ttf';
 			}
 
-			$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($data['designBackground']->reddesign_background_id);
+			$areaModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
 			$areaItem = $areaModel->getItem($area['id']);
 
 			/*
