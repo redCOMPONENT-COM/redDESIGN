@@ -58,7 +58,7 @@ endif;
 					</th>
 					<?php endif; ?>
 					<th width='5%'>
-						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_DESIGNTYPES_FIELD_ENABLED', 'd.enabled', $listDirn, $listOrder);?>
+						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_DESIGNTYPES_FIELD_ENABLED', 'd.published', $listDirn, $listOrder);?>
 					</th>
 					<th width='5%'>
 						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_COMMON_ID', 'd.reddesign_designtype_id', $listDirn, $listOrder); ?>
@@ -101,7 +101,7 @@ endif;
 						</td>
 						<?php endif; ?>
 						<td>
-							<?php echo JHtml::_('rgrid.published', $row->enabled, $i, 'designtypes.', true, 'cb'); ?>
+							<?php echo JHtml::_('rgrid.published', $row->published, $i, 'designtypes.', true, 'cb'); ?>
 						</td>
 						<td>
 							<?php echo $row->reddesign_designtype_id;?>

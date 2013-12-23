@@ -50,7 +50,7 @@ class ReddesignModelDesigntypes extends RModelList
 		{
 			$config['filter_fields'] = array(
 				'reddesign_designtype_id', 'd.reddesign_designtype_id',
-				'enabled', 'd.enabled',
+				'published', 'd.published',
 				'title', 'd.title',
 				'created_by', 'd.created_by',
 				'created_on', 'd.created_on'
