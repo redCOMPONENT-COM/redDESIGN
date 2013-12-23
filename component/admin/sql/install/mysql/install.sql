@@ -49,15 +49,15 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
 CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   `reddesign_designtype_id` INT(11)    NOT NULL AUTO_INCREMENT,
   `title`                   VARCHAR(255),
-  `slug`                    VARCHAR(255),
-  `enabled`                 TINYINT(3) NOT NULL DEFAULT '1',
+  `alias`                   VARCHAR(255),
+  `published`               TINYINT(3) NOT NULL DEFAULT '1',
   `ordering`                INT(10)    NOT NULL DEFAULT '0',
-  `created_by`              BIGINT(20) NOT NULL DEFAULT '0',
-  `created_on`              DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified_by`             BIGINT(20) NOT NULL DEFAULT '0',
-  `modified_on`             DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `locked_by`               BIGINT(20) NOT NULL DEFAULT '0',
-  `locked_on`               DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by`              INT(11)    DEFAULT NULL,
+  `created_date`            DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by`             INT(11)    DEFAULT NULL,
+  `modified_data`           DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `checked_out`             INT(11)    DEFAULT NULL,
+  `checked_out_time`        DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
   `fontsizer`               ENUM('auto', 'auto_chars', 'slider', 'dropdown_numbers', 'dropdown_labels'),
   PRIMARY KEY (`reddesign_designtype_id`)
 )

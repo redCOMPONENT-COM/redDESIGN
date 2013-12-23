@@ -42,5 +42,5 @@ class ReddesignTableDesigntype extends RTable
 	 *
 	 * @var  string
 	 */
-	protected $_tableFieldState = 'enabled';
+	protected $_tableFieldState = 'published';
 }

@@ -16,7 +16,7 @@
 			description="COM_REDDESIGN_DESIGNTYPE_FIELD_TITLE_DESC"
 			required="true"
 		/>
-		<field name="enabled"
+		<field name="published"
 			type="radio"
 			label="JPUBLISHED"
 			class="btn-group"
