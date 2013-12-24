@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 /**
- * User View
+ * Font View
  *
  * @package     Reddesign.Backend
  * @subpackage  Views

@@ -23,11 +23,6 @@ echo $this->loadTemplate('chars_js');
 
 	<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_SPECIFIC_SETTINGS_DESC'); ?></span>
 
-	<div id="ajax-message-container" style="height: 25px; padding-bottom: 11px;">
-		<div id="ajax-message" style="display: none;">
-		</div>
-	</div>
-
 	<div id="all-rows">
 		<div id="other-rows">
 			<?php foreach($this->item->chars as $charSettings) : ?>
@@ -138,14 +133,15 @@ echo $this->loadTemplate('chars_js');
 						<?php echo JHtml::_('select.genericlist', $this->typographies, 'typography', '', 'value', 'text', 0); ?>
 					</div>
 					<div class="control-group character-group span2">
-						<label for="typography_height"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY_HEIGHT') ?></label>
-						<input class="input-small" type="text" value="" maxlength="15" id="typography_height" name="typography_height">
+						<label for="typographyHeight"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY_HEIGHT') ?></label>
+						<input class="input-small" type="text" value="" maxlength="15" id="typographyHeight" name="typographyHeight">
 					</div>
 					<div class="control-group character-group span2">
-						<label for="add_button">&nbsp;</label>
-						<button id="add_button"
+						<label for="addButton">&nbsp;</label>
+						<button id="addButton"
 								type="button"
 								class="btn btn-success btn-small"
+								data-loading-text="<?php echo JText::_('COM_REDDESIGN_FONT_CHAR_SAVING'); ?>"
 								onclick="saveChar(0);"
 								title="<?php echo JText::_('COM_REDDESIGN_FONT_SAVE_CHAR'); ?>"
 							>

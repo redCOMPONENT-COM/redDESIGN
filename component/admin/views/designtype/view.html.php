@@ -201,8 +201,6 @@ class ReddesignViewDesigntype extends ReddesignView
 	/**
 	 * Get the toolbar to render.
 	 *
-	 * @todo	We have setup ACL requirements for redITEM
-	 *
 	 * @return  RToolbar
 	 */
 	public function getToolbar()

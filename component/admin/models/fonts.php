@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 /**
- * Design Types Model
+ * Fonts Model
  *
  * @package     Reddesign.Backend
  * @subpackage  Models

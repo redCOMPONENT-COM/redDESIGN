@@ -17,8 +17,22 @@ defined('_JEXEC') or die;
 class ReddesignController extends JControllerLegacy
 {
 	/**
-	 * @var		string	The default view.
-	 * @since	2.5
+	 * Typical view method for MVC based architecture
+	 *
+	 * This function is provide as a default implementation, in most cases
+	 * you will need to override it in your own controllers.
+	 *
+	 * @param   boolean  $cachable   If true, the view output will be cached
+	 * @param   array    $urlparams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+	 *
+	 * @return  JControllerLegacy  A JControllerLegacy object to support chaining.
 	 */
-	protected $default_view = 'designtypes';
+	public function display($cachable = false, $urlparams = array())
+	{
+		$input = JFactory::getApplication()->input;
+		$input->set('view', $input->get('view', 'designtypes'));
+		$input->set('task', $input->get('task', 'display'));
+
+		return parent::display($cachable, $urlparams);
+	}
 }
