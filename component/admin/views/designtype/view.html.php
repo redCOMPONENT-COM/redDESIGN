@@ -110,8 +110,9 @@ class ReddesignViewDesigntype extends ReddesignView
 		if (!empty($this->item->reddesign_designtype_id))
 		{
 			// Get all the backgrounds that belongs to this Design Type item.
-			$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($this->item->reddesign_designtype_id);
-			$this->backgrounds = $backgroundModel->getItemList();
+			$backgroundsModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true));
+			$backgroundsModel->setState('reddesign_designtype_id', $this->item->reddesign_designtype_id);
+			$this->backgrounds = $backgroundsModel->getItems();
 
 			$areas = array();
 
@@ -139,8 +140,9 @@ class ReddesignViewDesigntype extends ReddesignView
 					$this->ratio = $previewImageSize[0] / $this->imageWidth;
 
 					// Get all areas existing in the database for this specific background.
-					$areaModel = FOFModel::getTmpInstance('Area', 'ReddesignModel')->reddesign_background_id($background->reddesign_background_id);
-					$areas = $areaModel->getItemList();
+					$areasModel = RModel::getAdminInstance('Area', array('ignore_request' => true));
+					$areasModel->setState('reddesign_background_id', $background->reddesign_background_id);
+					$areas = $areasModel->getItems();
 				}
 			}
 
@@ -159,8 +161,8 @@ class ReddesignViewDesigntype extends ReddesignView
 			);
 
 			// Get all fonts in the system to be choosen or not for the current design.
-			$fontsModel = FOFModel::getTmpInstance('Font', 'ReddesignModel');
-			$this->fonts = $fontsModel->getItemList();
+			$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true));
+			$this->fonts = $fontsModel->getItems();
 			$this->fontsOptions = array();
 
 			foreach ($this->fonts as $font)

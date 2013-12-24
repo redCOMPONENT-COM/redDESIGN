@@ -91,7 +91,7 @@ class ReddesignModelDesigntypes extends RModelList
 
 		$query = $db->getQuery(true)
 			->select('d.*')
-			->from('#__reddesign_designtypes AS d');
+			->from($db->quoteName('#__reddesign_designtypes', 'd'));
 
 		// Filter search
 		$search = $this->getState('filter.search_designtypes');

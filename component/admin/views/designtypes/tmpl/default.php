@@ -10,14 +10,12 @@
 defined('_JEXEC') or die;
 
 JHtml::_('rjquery.select2', 'select');
-$listOrder		= $this->escape($this->state->get('list.ordering'));
-$listDirn   	= $this->escape($this->state->get('list.direction'));
-$ordering 		= ($listOrder == 'd.ordering');
-$saveOrder 		= ($listOrder == 'd.ordering' && $listDirn == 'asc');
-$search 		= $this->state->get('filter.search');
+
+$listOrder = $this->escape($this->state->get('list.ordering'));
+$listDirn = $this->escape($this->state->get('list.direction'));
+$saveOrder = ($listOrder == 'd.ordering' && $listDirn == 'asc');
+$search = $this->state->get('filter.search');
 $originalOrders = array();
-$user 			= JFactory::getUser();
-$userId 		= $user->id;
 
 if ($saveOrder) :
 	JHTML::_('rsortablelist.sortable', 'table-items', 'adminForm', strtolower($listDirn), 'index.php?option=com_reddesign&task=designtypes.saveOrderAjax&tmpl=component', true, true);
@@ -74,7 +72,6 @@ endif;
 			</tfoot>
 			<tbody>
 				<?php
-				$n = count($this->items);
 				foreach ($this->items as $i => $row) :
 					$orderkey = array_search($row->reddesign_designtype_id, $this->ordering[0]);
 					$parentsStr = '';
@@ -115,5 +112,6 @@ endif;
 	<input type="hidden" name="boxchecked" value="0"/>
 	<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
+	<input type="hidden" name="original_order_values" value="<?php echo implode($originalOrders, ','); ?>" />
 	<?php echo JHtml::_('form.token'); ?>
 </form>
