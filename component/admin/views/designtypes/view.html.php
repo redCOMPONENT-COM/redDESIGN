@@ -85,6 +85,9 @@ class ReddesignViewDesigntypes extends ReddesignView
 			$edit = RToolbarBuilder::createEditButton('designtype.edit');
 			$secondGroup->addButton($edit);
 
+			$checkin = RToolbarBuilder::createCheckinButton('designtypes.checkin');
+			$secondGroup->addButton($checkin);
+
 			$delete = RToolbarBuilder::createDeleteButton('designtypes.delete');
 			$thirdGroup->addButton($delete);
 		}
