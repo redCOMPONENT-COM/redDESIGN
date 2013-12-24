@@ -140,7 +140,7 @@ class ReddesignViewDesigntype extends ReddesignView
 					$this->ratio = $previewImageSize[0] / $this->imageWidth;
 
 					// Get all areas existing in the database for this specific background.
-					$areasModel = RModel::getAdminInstance('Area', array('ignore_request' => true));
+					$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
 					$areasModel->setState('reddesign_background_id', $background->reddesign_background_id);
 					$areas = $areasModel->getItems();
 				}
