@@ -40,6 +40,8 @@ class ReddesignViewFont extends ReddesignView
 	 */
 	protected $displaySidebar = false;
 
+	public $typographies = null;
+
 	/**
 	 * Display method
 	 *
@@ -52,27 +54,21 @@ class ReddesignViewFont extends ReddesignView
 		$this->form = $this->get('Form');
 		$this->item = $this->get('Item');
 
-		if (empty($this->item->default_width))
-		{
-			$this->item->default_width = 0.99999;
-		}
-
-		if (empty($this->item->default_height))
-		{
-			$this->item->default_height = 0.99999;
-		}
-
-		if (empty($this->item->default_caps_height))
-		{
-			$this->item->default_caps_height = 0.99999;
-		}
-
-		if (empty($this->item->default_baseline_height))
-		{
-			$this->item->default_baseline_height = 0.99999;
-		}
-
 		$this->fontThumbnail = substr($this->item->font_file, 0, -3) . 'png';
+
+		// Typography options for the chars tab.
+		$this->typographies = array(
+			JHTML::_('select.option', '0', JText::_('COM_REDDESIGN_SELECT_TYPOGRAPHY')),
+			JHTML::_('select.option', '1', JText::_('COM_REDDESIGN_FONT_X_HEIGHT')),
+			JHTML::_('select.option', '2', JText::_('COM_REDDESIGN_FONT_CAP_HEIGHT')),
+			JHTML::_('select.option', '3', JText::_('COM_REDDESIGN_FONT_BASELINE')),
+			JHTML::_('select.option', '4', JText::_('COM_REDDESIGN_FONT_BASELINE_HEIGHT_CAP_HEIGHT'))
+		);
+
+		if (empty($this->item->chars))
+		{
+			$this->item->chars = array();
+		}
 
 		parent::display($tpl);
 	}

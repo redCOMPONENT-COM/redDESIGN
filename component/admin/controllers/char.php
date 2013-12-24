@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerChar extends FOFController
+class ReddesignControllerChar extends RControllerAdmin
 {
 	/**
 	 * Saves character specific data.

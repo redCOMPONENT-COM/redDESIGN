@@ -21,8 +21,8 @@
 			label="JPUBLISHED"
 			class="btn-group"
 			default="1">
-			<option value="1">JPUBLISHED</option>
-			<option value="0">JUNPUBLISHED</option>
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
 		</field>
 		<field name="fontsizer"
 			type="list"
