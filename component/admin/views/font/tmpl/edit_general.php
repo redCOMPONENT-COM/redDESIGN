@@ -45,22 +45,22 @@ JHtml::_('behavior.framework');
 	<?php endif; ?>
 
 	<div class="control-group">
-		<label class="control-label " for="title">
-			<?php echo $this->form->getLabel('title'); ?>
+		<label class="control-label " for="name">
+			<?php echo $this->form->getLabel('name'); ?>
 		</label>
 
 		<div class="controls">
-			<?php echo $this->form->getInput('title'); ?>
+			<?php echo $this->form->getInput('name'); ?>
 			<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_TITLE_DESC'); ?></span>
 		</div>
 	</div>
 
 	<div class="control-group">
-		<label for="enabled" class="control-label">
-			<?php echo $this->form->getLabel('enabled'); ?>
+		<label for="state" class="control-label">
+			<?php echo $this->form->getLabel('state'); ?>
 		</label>
 		<div class="controls">
-			<?php echo $this->form->getInput('enabled'); ?>
+			<?php echo $this->form->getInput('state'); ?>
 		</div>
 	</div>
 

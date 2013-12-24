@@ -50,10 +50,10 @@ class ReddesignModelFonts extends RModelList
 		{
 			$config['filter_fields'] = array(
 				'id', 'f.id',
-				'enabled', 'f.enabled',
-				'title', 'f.title',
+				'state', 'f.state',
+				'name', 'f.name',
 				'created_by', 'f.created_by',
-				'created_on', 'f.created_on'
+				'created_date', 'f.created_date'
 			);
 		}
 
@@ -76,7 +76,7 @@ class ReddesignModelFonts extends RModelList
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		parent::populateState('f.title', 'asc');
+		parent::populateState('f.name', 'asc');
 	}
 
 	/**
@@ -98,14 +98,14 @@ class ReddesignModelFonts extends RModelList
 		if (!empty($search))
 		{
 			$search = $db->quote('%' . $db->escape($search, true) . '%');
-			$query->where('(f.title LIKE ' . $search . ')');
+			$query->where('(f.name LIKE ' . $search . ')');
 		}
 
 		// Ordering
 		$orderList = $this->getState('list.ordering');
 		$directionList = $this->getState('list.direction');
 
-		$order = !empty($orderList) ? $orderList : 'f.title';
+		$order = !empty($orderList) ? $orderList : 'f.name';
 		$direction = !empty($directionList) ? $directionList : 'ASC';
 		$query->order($db->escape($order) . ' ' . $db->escape($direction));
 

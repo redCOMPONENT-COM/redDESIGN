@@ -19,17 +19,17 @@
 			class="inputbox"
 			/>
 		<field
-			name="title"
-			id="title"
+			name="name"
+			id="name"
 			type="text"
-			label="COM_REDDESIGN_FONT_FIELD_TITLE"
-			description="COM_REDDESIGN_FONT_TITLE_DESC"
+			label="COM_REDDESIGN_FONT_NAME"
+			description="COM_REDDESIGN_FONT_NAME_DESC"
 			maxlength="255"
 			size="32"
 			/>
 		<field
-			name="enabled"
-			id="enabled"
+			name="state"
+			id="state"
 			type="radio"
 			label="JPUBLISHED"
 			description="JPUBLISHED"
@@ -45,7 +45,7 @@
 			type="text"
 			label="COM_REDDESIGN_FONT_DEFAULT_WIDTH"
 			description="COM_REDDESIGN_FONT_DEFAULT_WIDTH"
-			default="0.99999"
+			default="1.0"
 			maxlength="10"
 			size="32"
 			required="true"
@@ -56,7 +56,7 @@
 			type="text"
 			label="COM_REDDESIGN_FONT_DEFAULT_HEIGHT"
 			description="COM_REDDESIGN_FONT_DEFAULT_HEIGHT"
-			default="0.99999"
+			default="1.0"
 			maxlength="10"
 			size="32"
 			required="true"
@@ -67,7 +67,7 @@
 			type="text"
 			label="COM_REDDESIGN_FONT_DEFAULT_CAPS_HEIGHT"
 			description="COM_REDDESIGN_FONT_DEFAULT_CAPS_HEIGHT"
-			default="0.99999"
+			default="1.0"
 			maxlength="10"
 			size="32"
 			required="true"
@@ -78,9 +78,10 @@
 			type="text"
 			label="COM_REDDESIGN_FONT_DEFAULT_BASELINE_HEIGHT"
 			description="COM_REDDESIGN_FONT_DEFAULT_BASELINE_HEIGHT"
-			default="0.99999"
+			default="1.0"
 			maxlength="10"
 			size="32"
+			required="true"
 			/>
 	</fieldset>
 </form>
