@@ -7,7 +7,7 @@ The 2.0 version was created for Exakt.dk customer incorporating the SVG (vectori
 
 ## Status
 
-Develop: [![Build Status](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGN.png?branch=redcore&token=vxVVpxnq2ZPuMp3yebRz)](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGN/)
+redcore branch: [![Build Status](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGN.png?branch=redcore&token=vxVVpxnq2ZPuMp3yebRz)](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGN/)
 
 
 For more information check:
