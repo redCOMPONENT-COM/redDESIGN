@@ -16,6 +16,8 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 $saveOrder = ($listOrder == 'd.ordering' && $listDirn == 'asc');
 $search = $this->state->get('filter.search');
 $originalOrders = array();
+$user = JFactory::getUser();
+$userId = $user->id;
 
 if ($saveOrder) :
 	JHTML::_('rsortablelist.sortable', 'table-items', 'adminForm', strtolower($listDirn), 'index.php?option=com_reddesign&task=designtypes.saveOrderAjax&tmpl=component', true, true);
@@ -84,11 +86,21 @@ endif;
 						<td></td>
 						<td>
 							<?php
+							if ($row->checked_out)
+							{
+								$editor = JFactory::getUser($row->checked_out);
+								$canCheckin = $row->checked_out == $userId || $row->checked_out == 0;
+								echo JHtml::_('rgrid.checkedout', $i, $editor->name, $row->checked_out_time, 'designtypes.', $canCheckin);
+								echo $row->title;
+							}
+							else
+							{
 								echo JHtml::_(
 												'link',
 												JRoute::_('index.php?option=com_reddesign&task=designtype.edit&reddesign_designtype_id=' . $row->reddesign_designtype_id),
 												$row->title
 								);
+							}
 							?>
 						</td>
 						<?php if ($search == ''): ?>
