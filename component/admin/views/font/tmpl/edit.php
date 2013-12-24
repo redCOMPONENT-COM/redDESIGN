@@ -23,7 +23,7 @@ $action = JRoute::_('index.php?option=com_reddesign&view=font');
 		</li>
 		<?php if (!empty($this->item->id)) : ?>
 			<li>
-				<a href="#chars" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_SPECIFIC_SETTINGS'); ?></a>
+				<a href="#chars" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTERS'); ?></a>
 			</li>
 		<?php endif; ?>
 	</ul>
