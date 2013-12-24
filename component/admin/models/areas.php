@@ -10,35 +10,14 @@
 defined('_JEXEC') or die;
 
 /**
- * Design Types Model
+ * Areas Model
  *
  * @package     Reddesign.Backend
  * @subpackage  Models
  * @since       1.0
  */
-class ReddesignModelDesigntypes extends RModelList
+class ReddesignModelAreas extends RModelList
 {
-	/**
-	 * Name of the filter form to load
-	 *
-	 * @var  string
-	 */
-	protected $filterFormName = 'filter_designtypes';
-
-	/**
-	 * Limitstart field used by the pagination
-	 *
-	 * @var  string
-	 */
-	protected $limitField = 'designtype_limit';
-
-	/**
-	 * Limitstart field used by the pagination
-	 *
-	 * @var  string
-	 */
-	protected $limitstartField = 'auto';
-
 	/**
 	 * Constructor
 	 *
@@ -49,12 +28,8 @@ class ReddesignModelDesigntypes extends RModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'reddesign_designtype_id', 'd.reddesign_designtype_id',
-				'published', 'd.published',
-				'title', 'd.title',
-				'ordering', 'd.ordering',
-				'created_by', 'd.created_by',
-				'created', 'd.created'
+				'reddesign_area_id', 'a.reddesign_area_id',
+				'title', 'a.title',
 			);
 		}
 
@@ -77,7 +52,7 @@ class ReddesignModelDesigntypes extends RModelList
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		parent::populateState('d.title', 'asc');
+		parent::populateState('a.title', 'asc');
 	}
 
 	/**
@@ -91,22 +66,13 @@ class ReddesignModelDesigntypes extends RModelList
 
 		$query = $db->getQuery(true)
 			->select('d.*')
-			->from($db->quoteName('#__reddesign_designtypes', 'd'));
-
-		// Filter search
-		$search = $this->getState('filter.search_designtypes');
-
-		if (!empty($search))
-		{
-			$search = $db->quote('%' . $db->escape($search, true) . '%');
-			$query->where('(d.title LIKE ' . $search . ')');
-		}
+			->from($db->quoteName('#__reddesign_areas', 'a'));
 
 		// Ordering
 		$orderList = $this->getState('list.ordering');
 		$directionList = $this->getState('list.direction');
 
-		$order = !empty($orderList) ? $orderList : 'd.title';
+		$order = !empty($orderList) ? $orderList : 'a.title';
 		$direction = !empty($directionList) ? $directionList : 'ASC';
 		$query->order($db->escape($order) . ' ' . $db->escape($direction));
 
