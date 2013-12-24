@@ -10,12 +10,12 @@
 defined('_JEXEC') or die;
 
 /**
- * Font Model
+ * Char Model
  *
  * @package     Reddesign.Backend
  * @subpackage  Models
  * @since       1.0
  */
-class ReddesignModelFont extends RModelAdmin
+class ReddesignModelChar extends RModelAdmin
 {
 }

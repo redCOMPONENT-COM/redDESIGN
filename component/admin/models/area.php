@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 /**
- * Currency Model
+ * Area Model
  *
  * @package     Reddesign.Backend
  * @subpackage  Models

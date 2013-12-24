@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerChar extends RControllerAdmin
+class ReddesignControllerChar extends RControllerForm
 {
 	/**
 	 * Saves character specific data.
@@ -25,11 +25,21 @@ class ReddesignControllerChar extends RControllerAdmin
 	 *
 	 * @return void
 	 */
-	public function ajaxSave()
+	public function ajaxSaveChar()
 	{
-		$response = array();
+		$data = array();
+		$data['id']                = $this->input->getInt('id', null);
+		$data['font_char']         = $this->input->getString('font_char', '');
+		$data['width']             = $this->input->getFloat('width', null);
+		$data['height']            = $this->input->getFloat('height', null);
+		$data['typography']        = $this->input->getInt('typography', null);
+		$data['typography_height'] = $this->input->getFloat('typography_height', null);
+		$data['font_id']           = $this->input->getInt('font_id', null);
 
-		if ($this->applySave())
+		$charModel = RModel::getAdminInstance('Char', array('ignore_request' => true));
+		$charItem = $charModel->getItem($data['id']);
+
+		/*if ($this->apply())
 		{
 			$response['message'] = JText::sprintf('COM_REDDESIGN_FONT_CHAR_SUCCESSFULLY_SAVED_CHAR', $this->input->getString('font_char', ''));
 			$response['reddesign_char_id'] = $this->input->getInt('id', null);
@@ -44,7 +54,11 @@ class ReddesignControllerChar extends RControllerAdmin
 		else
 		{
 			echo JText::_('COM_REDDESIGN_FONT_CHAR_CANT_SAVE_CHAR');
-		}
+		}*/
+
+		echo json_encode($data);
+
+		JFactory::getApplication()->close();
 	}
 
 	/**

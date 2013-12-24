@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 /**
- * Design Types List View
+ * Fonts List View
  *
  * @package     Reddesign.Backend
  * @subpackage  View
@@ -58,7 +58,6 @@ class ReddesignViewFonts extends ReddesignView
 	/**
 	 * Get the toolbar to render.
 	 *
-	 * @todo        The commented lines are going to be implemented once we have setup ACL requirements for redDESIGN
 	 * @return  RToolbar
 	 */
 	public function getToolbar()

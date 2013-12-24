@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 /**
- * Wardrobe table.
+ * Font table.
  *
  * @package     Redshopb.Backend
  * @subpackage  Tables
@@ -159,9 +159,9 @@ class ReddesignTableFont extends RTable
 	 *
 	 * @return  boolean  True if successful. False if row not found.
 	 */
-	protected function beforeLoad($keys = null, $reset = true)
+	protected function afterLoad($keys = null, $reset = true)
 	{
-		if ($this->_eventBeforeLoad && $this->id)
+		if ($this->_eventAfterLoad && $this->id)
 		{
 			$db = $this->_db;
 
@@ -184,7 +184,7 @@ class ReddesignTableFont extends RTable
 			$this->chars = $charSettings;
 		}
 
-		return parent::beforeLoad($keys, $reset);
+		return parent::afterLoad($keys, $reset);
 	}
 
 	/**
