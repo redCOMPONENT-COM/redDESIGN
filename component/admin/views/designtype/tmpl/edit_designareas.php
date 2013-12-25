@@ -10,17 +10,17 @@
 defined('_JEXEC') or die();
 
 // JS templating framework
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/mustache.min.js');
+RHelperAsset::load('mustache.min.js');
 
 // Select area JS includes.
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/jquery.imgareaselect.pack.js');
-FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/imgareaselect-animated.css');
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
+RHelperAsset::load('jquery.imgareaselect.pack.js');
+RHelperAsset::load('imgareaselect-animated.css');
+RHelperAsset::load('selectionboxmove.js');
 
 // Colorpicker includes.
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/farbtastic.min.js');
-FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/farbtastic.css');
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
+RHelperAsset::load('farbtastic.min.js');
+RHelperAsset::load('farbtastic.css');
+RHelperAsset::load('color-converter.js');
 
 ?>
 
@@ -57,22 +57,22 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 					</div>
 					<div class="control-group">
 						<label for="areaWidth" class="control-label">
-							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_WIDTH') ?>
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_WIDTH'); ?>
 						</label>
 						<div class="controls">
 							<input  type="text" id="areaWidth" name="areaWidth"
 									value=""
-									onkeyup="selectAreaOnWidthKeyUp();">&nbsp;<?php echo $this->unit ?>
+									onkeyup="selectAreaOnWidthKeyUp();">&nbsp;<?php echo $this->unit; ?>
 						</div>
 					</div>
 					<div class="control-group">
 						<label for="areaHeight" class="control-label">
-							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_HEIGHT') ?>
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_HEIGHT'); ?>
 						</label>
 						<div class="controls">
 							<input  type="text" id="areaHeight" name="areaHeight"
 									value=""
-									onkeyup="selectAreaOnHeightKeyUp();">&nbsp;<?php echo $this->unit ?>
+									onkeyup="selectAreaOnHeightKeyUp();">&nbsp;<?php echo $this->unit; ?>
 						</div>
 					</div>
 					<div class="control-group">
@@ -82,37 +82,37 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 						<div class="controls">
 							<input  type="text" id="areaX1" name="areaX1"
 									value=""
-									onkeyup="selectAreaOnX1KeyUp();">&nbsp;<?php echo $this->unit ?>
+									onkeyup="selectAreaOnX1KeyUp();">&nbsp;<?php echo $this->unit; ?>
 						</div>
 					</div>
 					<div class="control-group">
 						<label for="areaY1" class="control-label">
-							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_Y1') ?>
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_Y1'); ?>
 						</label>
 						<div class="controls">
 							<input  type="text" id="areaY1" name="areaY1"
 									value=""
-									onkeyup="selectAreaOnY1KeyUp();">&nbsp;<?php echo $this->unit ?>
+									onkeyup="selectAreaOnY1KeyUp();">&nbsp;<?php echo $this->unit; ?>
 						</div>
 					</div>
 					<div class="control-group">
 						<label for="areaX2" class="control-label">
-							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_X2') ?>
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_X2'); ?>
 						</label>
 						<div class="controls">
 							<input  type="text" id="areaX2" name="areaX2"
 									value=""
-									onkeyup="selectAreaOnX2KeyUp();">&nbsp;<?php echo $this->unit ?>
+									onkeyup="selectAreaOnX2KeyUp();">&nbsp;<?php echo $this->unit; ?>
 						</div>
 					</div>
 					<div class="control-group">
 						<label for="areaY2" class="control-label">
-							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_Y2') ?>
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_Y2'); ?>
 						</label>
 						<div class="controls">
 							<input  type="text" id="areaY2" name="areaY2"
 									value=""
-									onkeyup="selectAreaOnY2KeyUp();">&nbsp;<?php echo $this->unit ?>
+									onkeyup="selectAreaOnY2KeyUp();">&nbsp;<?php echo $this->unit; ?>
 						</div>
 					</div>
 				</div>
@@ -387,7 +387,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 											<div class="control-group">
 												<label for="defaultText<?php echo $area->reddesign_area_id; ?>">
 
-													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_TEXT') ?>
+													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DEFAULT_TEXT'); ?>
 
 													<div id="defaultTextContainer<?php echo $area->reddesign_area_id; ?>">
 														<textarea class="input-medium"
@@ -403,7 +403,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 											<div class="control-group">
 												<label for="maximumCharsAllowed<?php echo $area->reddesign_area_id; ?>">
 
-													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAXIMUM_CHARS') ?>
+													<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_MAXIMUM_CHARS'); ?>
 
 													<input class="input-mini"
 														   type="text"
