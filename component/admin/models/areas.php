@@ -65,7 +65,7 @@ class ReddesignModelAreas extends RModelList
 		$db = $this->getDbo();
 
 		$query = $db->getQuery(true)
-			->select('d.*')
+			->select('a.*')
 			->from($db->quoteName('#__reddesign_areas', 'a'));
 
 		// Ordering
