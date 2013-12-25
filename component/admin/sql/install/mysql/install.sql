@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   `created_by`              INT(11)    DEFAULT NULL,
   `created_date`            DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified_by`             INT(11)    DEFAULT NULL,
-  `modified_data`           DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_date`           DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
   `checked_out`             INT(11)    DEFAULT NULL,
   `checked_out_time`        DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
   `fontsizer`               ENUM('auto', 'auto_chars', 'slider', 'dropdown_numbers', 'dropdown_labels'),
