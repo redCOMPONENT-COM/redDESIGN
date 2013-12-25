@@ -43,4 +43,24 @@ class ReddesignTableDesigntype extends RTable
 	 * @var  string
 	 */
 	protected $_tableFieldState = 'published';
+
+	/**
+	 * Method to store a node in the database table.
+	 *
+	 * @param   boolean  $updateNulls  True to update fields even if they are null.
+	 *
+	 * @return  boolean  True on success.
+	 */
+	public function store($updateNulls = false)
+	{
+		// Create alias for title
+		$this->alias = JFilterOutput::stringURLSafe($this->title);
+
+		if (!parent::store($updateNulls))
+		{
+			return false;
+		}
+
+		return true;
+	}
 }
