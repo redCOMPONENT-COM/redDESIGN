@@ -75,19 +75,30 @@ defined('_JEXEC') or die();
 			},
 			type: "post",
 			beforeSend: function () {
-				jQuery("#addButton").button("loading");
+				jQuery("#addButton" + charId).button("loading");
 			},
 			success: function (data) {
 				var json = jQuery.parseJSON(data);
-				if(update == 0)
+
+				if(json.status == 'success')
 				{
-					addRow(json);
+					if(update == 0)
+					{
+						addRow(json);
+					}
+				}
+				else
+				{
+					alert("JS Error: " + json.message);
 				}
 
 				setTimeout(function () {jQuery("#addButton").button("reset")}, 500);
 			},
 			error: function (data) {
+				var json = jQuery.parseJSON(data);
 
+				alert("JS Error: " + json.message);
+				jQuery("#addButton" + charId).button("reset");
 			}
 		});
 
@@ -99,16 +110,29 @@ defined('_JEXEC') or die();
 	}
 
 	function removeChar(charId) {
-		jQuery.ajax({ url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=char&task=ajaxRemove&format=raw",
+		jQuery.ajax({ url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=font.ajaxRemoveChar",
 			data: {
-				charId: charId
+				id: charId
 			},
 			type: "post",
+			beforeSend: function () {
+				jQuery("#removeButton" + charId).button("loading");
+			},
 			success: function (data) {
-				jQuery("#row" + charId).remove();
+				if (data != "success")
+				{
+					alert("JS Error: " + data);
+				}
+				else
+				{
+					jQuery("#row" + charId).remove();
+				}
+
+				jQuery("#addButton").button("reset");
 			},
 			error: function (data) {
-
+				alert("JS Error: " + data);
+				jQuery("#removeButton" + charId).button("reset");
 			}
 		});
 	}

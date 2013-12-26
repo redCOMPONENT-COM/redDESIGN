@@ -214,14 +214,17 @@ class ReddesignControllerFont extends RControllerForm
 		if (!$table->bind($data))
 		{
 			$data['message'] = JText::_('COM_REDDESIGN_FONT_CHAR_CANT_SAVE_CHAR_BINDING');
+			$data['status']  = 'error';
 		}
 		elseif (!$table->store($data))
 		{
 			$data['message'] = JText::_('COM_REDDESIGN_FONT_CHAR_CANT_SAVE_CHAR_STORING');
+			$data['status']  = 'error';
 		}
 		else
 		{
 			$data['message'] = JText::sprintf('COM_REDDESIGN_FONT_CHAR_SUCCESSFULLY_SAVED_CHAR', $data['font_char']);
+			$data['status']  = 'success';
 		}
 
 		echo json_encode($data);
@@ -238,16 +241,21 @@ class ReddesignControllerFont extends RControllerForm
 	 */
 	public function ajaxRemoveChar()
 	{
-		$model = $this->getThisModel();
-		$model->setIDsFromRequest();
+		RLoader::import('char', JPATH_COMPONENT_ADMINISTRATOR . '/tables/');
 
-		if ($model->delete())
+		$db = JFactory::getDbo();
+		$id = $this->input->getInt('id', null);
+		$table = new ReddesignTableChar($db);
+
+		if ($table->delete($id))
 		{
-			echo JText::_('COM_REDDESIGN_FONT_CHAR_SUCCESSFULLY_REMOVED');
+			echo 'success';
 		}
 		else
 		{
 			echo JText::_('COM_REDDESIGN_FONT_CHAR_ERROR_WHILE_REMOVING');
 		}
+
+		JFactory::getApplication()->close();
 	}
 }
