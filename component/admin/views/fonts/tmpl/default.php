@@ -9,16 +9,27 @@
 
 defined('_JEXEC') or die;
 
-$listOrder        = $this->escape($this->state->get('list.ordering'));
-$listDirn        = $this->escape($this->state->get('list.direction'));
+$listOrder = $this->escape($this->state->get('list.ordering'));
+$listDirn = $this->escape($this->state->get('list.direction'));
 ?>
 <form action="index.php?option=com_reddesign&view=fonts" method="post" id="adminForm" name="adminForm">
-	<div class="row-fluid">
-		<div class="span6">
-			<?php echo JText::_('COM_REDDESIGN_COMMON_FILTER'); ?>
-			<?php echo RLayoutHelper::render('search', array('view' => $this)) ?>
-		</div>
-	</div>
+	<?php echo JText::_('COM_REDDESIGN_COMMON_FILTER'); ?>
+	<?php
+		echo RLayoutHelper::render(
+									'searchtools.default',
+									array(
+											'view' => $this,
+											'options' => array(
+																'filterButton' => false,
+																'searchField' => 'search_fonts',
+																'searchFieldSelector' => '#filter_search_fonts',
+																'limitFieldSelector' => '#list_search_fonts',
+																'activeOrder' => $listOrder,
+																'activeDirection' => $listDirn
+											)
+									)
+		);
+	?>
 	<?php if (empty($this->items)) : ?>
 		<div class="alert alert-info">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -83,6 +94,7 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 			</tbody>
 		</table>
 	<?php endif; ?>
+
 	<input type="hidden" name="task" value=""/>
 	<input type="hidden" name="boxchecked" value="0"/>
 	<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>

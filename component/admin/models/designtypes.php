@@ -19,27 +19,6 @@ defined('_JEXEC') or die;
 class ReddesignModelDesigntypes extends RModelList
 {
 	/**
-	 * Name of the filter form to load
-	 *
-	 * @var  string
-	 */
-	protected $filterFormName = 'filter_designtypes';
-
-	/**
-	 * Limitstart field used by the pagination
-	 *
-	 * @var  string
-	 */
-	protected $limitField = 'designtype_limit';
-
-	/**
-	 * Limitstart field used by the pagination
-	 *
-	 * @var  string
-	 */
-	protected $limitstartField = 'auto';
-
-	/**
 	 * Constructor
 	 *
 	 * @param   array  $config  Configuration array
@@ -49,9 +28,9 @@ class ReddesignModelDesigntypes extends RModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'reddesign_designtype_id', 'd.reddesign_designtype_id',
-				'published', 'd.published',
-				'title', 'd.title',
+				'id', 'd.id',
+				'state', 'd.state',
+				'name', 'd.name',
 				'ordering', 'd.ordering',
 				'created_by', 'd.created_by',
 				'created', 'd.created'
@@ -77,7 +56,7 @@ class ReddesignModelDesigntypes extends RModelList
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		parent::populateState('d.title', 'asc');
+		parent::populateState('d.name', 'asc');
 	}
 
 	/**
@@ -99,14 +78,14 @@ class ReddesignModelDesigntypes extends RModelList
 		if (!empty($search))
 		{
 			$search = $db->quote('%' . $db->escape($search, true) . '%');
-			$query->where('(d.title LIKE ' . $search . ')');
+			$query->where('(d.name LIKE ' . $search . ')');
 		}
 
 		// Ordering
 		$orderList = $this->getState('list.ordering');
 		$directionList = $this->getState('list.direction');
 
-		$order = !empty($orderList) ? $orderList : 'd.title';
+		$order = !empty($orderList) ? $orderList : 'd.name';
 		$direction = !empty($directionList) ? $directionList : 'ASC';
 		$query->order($db->escape($order) . ' ' . $db->escape($direction));
 
