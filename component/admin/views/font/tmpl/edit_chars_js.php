@@ -63,7 +63,7 @@ defined('_JEXEC') or die();
 		}
 
 		jQuery.ajax({
-			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&font.ajaxSaveChar",
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=font.ajaxSaveChar",
 			data: {
 				id: charId,
 				font_id: fontId,

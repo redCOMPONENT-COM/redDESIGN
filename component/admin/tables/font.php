@@ -105,7 +105,7 @@ class ReddesignTableFont extends RTable
 	 *
 	 * @var  array
 	 */
-	public $chars;
+	public $chars = array();
 
 	/**
 	 * Method to perform sanity checks on the JTable instance properties to ensure
@@ -161,7 +161,7 @@ class ReddesignTableFont extends RTable
 	 */
 	protected function afterLoad($keys = null, $reset = true)
 	{
-		if ($this->_eventAfterLoad && $this->id)
+		if ($this->id)
 		{
 			$db = $this->_db;
 
@@ -170,18 +170,16 @@ class ReddesignTableFont extends RTable
 
 			// Select character settings for a given font.
 			$query
-				->select($db->qn(array('reddesign_char_id', 'font_char', 'width', 'height', 'typography', 'typography_height')))
+				->select($db->qn(array('id', 'font_char', 'width', 'height', 'typography', 'typography_height')))
 				->from($db->qn('#__reddesign_chars'))
 				->where($db->qn('font_id') . ' = ' . $this->id)
-				->order('reddesign_char_id ASC');
+				->order('id ASC');
 
 			// Reset the query using our newly populated query object.
 			$db->setQuery($query);
 
 			// Load the results as a list of stdClass objects.
-			$charSettings = $db->loadObjectList();
-
-			$this->chars = $charSettings;
+			$this->chars = $db->loadObjectList();
 		}
 
 		return parent::afterLoad($keys, $reset);
@@ -201,7 +199,7 @@ class ReddesignTableFont extends RTable
 		if ($this->_eventAfterDelete)
 		{
 			// Delete font thumb file
-			if (JFile::exists(JPATH_SITE . '/media/com_reddesign/fonts/' .  substr($this->font_file, 0, -3) . 'png'))
+			if (JFile::exists(JPATH_SITE . '/media/com_reddesign/fonts/' . substr($this->font_file, 0, -3) . 'png'))
 			{
 				JFile::delete(JPATH_SITE . '/media/com_reddesign/fonts/' . substr($this->font_file, 0, -3) . 'png');
 			}

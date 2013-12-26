@@ -40,6 +40,9 @@ class ReddesignViewFont extends ReddesignView
 	 */
 	protected $displaySidebar = false;
 
+	/**
+	 * @var array
+	 */
 	public $typographies = null;
 
 	/**
@@ -64,11 +67,6 @@ class ReddesignViewFont extends ReddesignView
 			JHTML::_('select.option', '3', JText::_('COM_REDDESIGN_FONT_BASELINE')),
 			JHTML::_('select.option', '4', JText::_('COM_REDDESIGN_FONT_BASELINE_HEIGHT_CAP_HEIGHT'))
 		);
-
-		if (empty($this->item->chars))
-		{
-			$this->item->chars = array();
-		}
 
 		parent::display($tpl);
 	}

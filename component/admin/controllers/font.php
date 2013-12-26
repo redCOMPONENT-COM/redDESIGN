@@ -197,6 +197,9 @@ class ReddesignControllerFont extends RControllerForm
 	 */
 	public function ajaxSaveChar()
 	{
+		RLoader::import('char', JPATH_COMPONENT_ADMINISTRATOR . '/tables/');
+		$db = JFactory::getDbo();
+
 		$data = array();
 		$data['id']                = $this->input->getInt('id', null);
 		$data['font_char']         = $this->input->getString('font_char', '');
@@ -206,28 +209,45 @@ class ReddesignControllerFont extends RControllerForm
 		$data['typography_height'] = $this->input->getFloat('typography_height', null);
 		$data['font_id']           = $this->input->getInt('font_id', null);
 
-		$charModel = RModel::getAdminInstance('Char', array('ignore_request' => true));
-		$charItem = $charModel->getItem($data['id']);
+		$table = new ReddesignTableChar($db);
 
-		/*if ($this->apply())
+		if (!$table->bind($data))
 		{
-			$response['message'] = JText::sprintf('COM_REDDESIGN_FONT_CHAR_SUCCESSFULLY_SAVED_CHAR', $this->input->getString('font_char', ''));
-			$response['reddesign_char_id'] = $this->input->getInt('id', null);
-			$response['font_char'] = $this->input->getString('font_char', null);
-			$response['width'] = $this->input->getFloat('width', null);
-			$response['height'] = $this->input->getFloat('height', null);
-			$response['typography'] = $this->input->getInt('typography', null);
-			$response['typography_height'] = $this->input->getFloat('typography_height', null);
-
-			echo json_encode($response);
+			$data['message'] = JText::_('COM_REDDESIGN_FONT_CHAR_CANT_SAVE_CHAR_BINDING');
+		}
+		elseif (!$table->store($data))
+		{
+			$data['message'] = JText::_('COM_REDDESIGN_FONT_CHAR_CANT_SAVE_CHAR_STORING');
 		}
 		else
 		{
-			echo JText::_('COM_REDDESIGN_FONT_CHAR_CANT_SAVE_CHAR');
-		}*/
+			$data['message'] = JText::sprintf('COM_REDDESIGN_FONT_CHAR_SUCCESSFULLY_SAVED_CHAR', $data['font_char']);
+		}
 
 		echo json_encode($data);
 
 		JFactory::getApplication()->close();
+	}
+
+	/**
+	 * Deletes a specific character from the font view.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function ajaxRemoveChar()
+	{
+		$model = $this->getThisModel();
+		$model->setIDsFromRequest();
+
+		if ($model->delete())
+		{
+			echo JText::_('COM_REDDESIGN_FONT_CHAR_SUCCESSFULLY_REMOVED');
+		}
+		else
+		{
+			echo JText::_('COM_REDDESIGN_FONT_CHAR_ERROR_WHILE_REMOVING');
+		}
 	}
 }
