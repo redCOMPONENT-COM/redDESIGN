@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerDesigntypes extends FOFController
+class ReddesignControllerDesigntype extends JController
 {
 	/**
 	 * Class constructor
@@ -29,8 +29,6 @@ class ReddesignControllerDesigntypes extends FOFController
 	public function  __construct($config = array())
 	{
 		parent::__construct($config);
-
-		$this->modelName = 'Designtypes';
 	}
 
 	/**
@@ -68,10 +66,10 @@ class ReddesignControllerDesigntypes extends FOFController
 		$design->loadString($this->input->getString('designarea', ''), 'JSON');
 		$design = $design->get('Design');
 
-		$designTypeModel = FOFModel::getTmpInstance('Designtypes', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_designtype_id);
-		$designType = $designTypeModel->getItem($design->reddesign_designtype_id);
+		$designTypeModel = RModel::getAdminInstance('Designtype', array('ignore_request' => true));
+		$designType = $designTypeModel->getItem($design->id);
 
-		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_designtype_id);
+		$backgroundModel = FOFModel::getTmpInstance('Background', array('ignore_request' => true));
 		$background = $backgroundModel->getItem($design->reddesign_background_id);
 		$backgroundImage = $background->image_path;
 
@@ -119,7 +117,7 @@ class ReddesignControllerDesigntypes extends FOFController
 				// Get font.
 				if (!empty($area->fontTypeId))
 				{
-					$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area->id);
+					$fontModel = RModel::getAdminInstance('Font',  array('ignore_request' => true));
 					$fontType = $fontModel->getItem($area->fontTypeId);
 					$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $fontType->font_file;
 				}
@@ -137,7 +135,7 @@ class ReddesignControllerDesigntypes extends FOFController
 				}
 
 				// Get area.
-				$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($design->reddesign_background_id);
+				$areaModel = RModel::getAdminInstance('Area', array('ignore_request' => true));
 				$this->areaItem = $areaModel->getItem($area->id);
 				$topOffset = 0;
 				$leftOffset = 0;
@@ -264,13 +262,13 @@ class ReddesignControllerDesigntypes extends FOFController
 	}
 
 	/**
-	 *  Calculates Font size and Offset when Auto-size is on.
+	 * Calculates Font size and Offset when Auto-size is on.
 	 *
-	 *  @param   int    $fontId         FontId.
-	 *  @param   array  $enteredChars   EnteredChars.
-	 *  @param   array  $fontDetailArr  FontDetailArr.
-	 *  @param   int    $canvasHeight   CanvasHeight.
-	 *  @param   int    $canvasWidth    CanvasWidth.
+	 * @param   int    $fontId         FontId.
+	 * @param   array  $enteredChars   EnteredChars.
+	 * @param   array  $fontDetailArr  FontDetailArr.
+	 * @param   int    $canvasHeight   CanvasHeight.
+	 * @param   int    $canvasWidth    CanvasWidth.
 	 *
 	 * @return array of Font Size and Offset respectively
 	 *
@@ -286,9 +284,9 @@ class ReddesignControllerDesigntypes extends FOFController
 		// Select character settings for a given font.
 		$query
 			->select('max(chars.height) as height, group_concat(typography separator ", ") as typography, typography_height')
-			->from('#__reddesign_chars as chars')
-			->where('chars.reddesign_font_id = ' . (int) $fontId)
-			->where('chars.font_char IN ("' . implode('","', $char) . '")')
+			->from($db->quoteName('#__reddesign_chars as chars'))
+			->where($db->quoteName('chars.reddesign_font_id') . ' = ' . (int) $fontId)
+			->where($db->quoteName('chars.font_char') . ' IN ("' . implode('","', $char) . '")')
 			->order('chars.reddesign_char_id ASC');
 
 		// Reset the query using our newly populated query object.
@@ -305,9 +303,9 @@ class ReddesignControllerDesigntypes extends FOFController
 			$query = $db->getQuery(true);
 			$query
 				->select('chars.width')
-				->from('#__reddesign_chars as chars')
-				->where('binary chars.font_char = ' . $db->quote($char[$i]))
-				->where('chars.reddesign_font_id = "' . (int) $fontId . '" ');
+				->from($db->quoteName('#__reddesign_chars as chars'))
+				->where($db->quoteName('binary chars.font_char') . ' = ' . $db->quote($char[$i]))
+				->where($db->quoteName('chars.reddesign_font_id') . ' = "' . (int) $fontId . '" ');
 			$db->setQuery($query);
 			$width 		= $width + $db->loadResult();
 		}
@@ -353,14 +351,14 @@ class ReddesignControllerDesigntypes extends FOFController
 	}
 
 	/**
-	 *  Calculates Font size When Auto-size is on.
+	 * Calculates Font size When Auto-size is on.
 	 *
-	 *  @param   int    $maxCharsInSingleLine  maxCharsInSingleLine.
-	 *  @param   float  $fontW                 fontW.
-	 *  @param   float  $fontH                 fontH.
-	 *  @param   int    $lineCount             lineCount.
-	 *  @param   int    $canvasHeight          canvasHeight.
-	 *  @param   int    $canvasWidth           canvasWidth.
+	 * @param   int    $maxCharsInSingleLine  maxCharsInSingleLine.
+	 * @param   float  $fontW                 fontW.
+	 * @param   float  $fontH                 fontH.
+	 * @param   int    $lineCount             lineCount.
+	 * @param   int    $canvasHeight          canvasHeight.
+	 * @param   int    $canvasWidth           canvasWidth.
 	 *
 	 * @return int
 	 *
@@ -415,9 +413,9 @@ class ReddesignControllerDesigntypes extends FOFController
 		// Select character settings for a given font.
 		$query
 			->select('max(chars.height) as height, group_concat(typography separator ", ") as typography, typography_height')
-			->from('#__reddesign_chars as chars')
-			->where('chars.reddesign_font_id = ' . (int) $fontId)
-			->where('chars.font_char IN ("' . implode('","', $char) . '")')
+			->from($db->quoteName('#__reddesign_chars as chars'))
+			->where($db->quoteName('chars.reddesign_font_id') . ' = ' . (int) $fontId)
+			->where($db->quoteName('chars.font_char') . ' IN ("' . implode('","', $char) . '")')
 			->order('chars.reddesign_char_id ASC');
 
 		// Reset the query using our newly populated query object.
@@ -434,9 +432,9 @@ class ReddesignControllerDesigntypes extends FOFController
 			$query = $db->getQuery(true);
 			$query
 				->select('chars.width')
-				->from('#__reddesign_chars as chars')
-				->where('binary chars.font_char = ' . $db->quote($char[$i]))
-				->where('chars.reddesign_font_id = "' . (int) $fontId . '" ');
+				->from($db->quoteName('#__reddesign_chars as chars'))
+				->where($db->quoteName('binary chars.font_char') . ' = ' . $db->quote($char[$i]))
+				->where($db->quoteName('chars.reddesign_font_id') . ' = "' . (int) $fontId . '" ');
 			$db->setQuery($query);
 			$width 		= $width + $db->loadResult();
 		}
@@ -498,8 +496,8 @@ class ReddesignControllerDesigntypes extends FOFController
 			$query = $db->getQuery(true);
 			$query
 				->select('fonts.default_height, fonts.default_caps_height, fonts.default_baseline_height')
-				->from('#__reddesign_fonts as fonts')
-				->where('fonts.reddesign_font_id = ' . (int) $fontId);
+				->from($db->quoteName('#__reddesign_fonts as fonts'))
+				->where($db->quoteName('fonts.reddesign_font_id') . ' = ' . (int) $fontId);
 
 			$db->setQuery($query);
 			$HeightArray = $db->loadObject();
@@ -507,9 +505,9 @@ class ReddesignControllerDesigntypes extends FOFController
 			$query = $db->getQuery(true);
 			$query
 				->select('max(height) as height,  group_concat(typography separator ", ") as typography, typography_height')
-				->from('#__reddesign_chars as chars')
-				->where('chars.reddesign_font_id = ' . (int) $fontId)
-				->where('binary chars.font_char IN ("' . implode('","', $char) . '")')
+				->from($db->quoteName('#__reddesign_chars as chars'))
+				->where($db->quoteName('chars.reddesign_font_id') . ' = ' . (int) $fontId)
+				->where($db->quoteName('binary chars.font_char') . ' IN ("' . implode('","', $char) . '")')
 				->order('chars.reddesign_char_id ASC');
 
 			$db->setQuery($query);

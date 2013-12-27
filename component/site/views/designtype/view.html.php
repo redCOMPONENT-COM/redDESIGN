@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die;
 
+jimport('joomla.application.component.view');
+
 /**
  * Designtype View
  *
@@ -17,7 +19,7 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignViewDesigntype extends FOFViewHtml
+class ReddesignViewDesigntype extends JView
 {
 	public $previewBackground;
 
@@ -41,7 +43,7 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->params = JComponentHelper::getParams('com_reddesign');
 
 		// Get Design
-		$designTypeId = $this->config['input']->getInt('id', null);
+		$designTypeId = JFactory::getApplication()->input->getInt('id', null);
 		$this->item = $model->getItem($designTypeId);
 
 		// Get related design types. They are related through redSHOP product (multiple design types assigned per redSHOP product);
@@ -49,8 +51,9 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		$this->relatedDesignTypes = explode(',', $this->relatedDesignTypes);
 
 		// Get Design related elements
-		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($this->item->reddesign_designtype_id);
-		$this->backgrounds = $backgroundModel->getItemList();
+		$backgroundsModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true));
+		$backgroundsModel->setState('reddesign_designtype_id', $this->item->id);
+		$this->backgrounds = $backgroundsModel->getItems();
 
 		foreach ($this->backgrounds as $background)
 		{
@@ -65,8 +68,8 @@ class ReddesignViewDesigntype extends FOFViewHtml
 			}
 		}
 
-		$fontsModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel');
-		$this->fonts = $fontsModel->getItemList(false, 'reddesign_font_id');
+		$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true));
+		$this->fonts = $fontsModel->getItems();
 
 		if (empty($this->imageSize))
 		{
@@ -79,9 +82,10 @@ class ReddesignViewDesigntype extends FOFViewHtml
 		}
 		else
 		{
-			$areasModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($this->productionBackground->reddesign_background_id);
-			$this->productionBackgroundAreas = $areasModel->getItemList();
-			$this->imageSize = getimagesize(FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->defaultPreviewBg->image_path);
+			$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
+			$areasModel->setState('reddesign_background_id', $this->productionBackground->reddesign_background_id);
+			$this->productionBackgroundAreas = $areasModel->getItems();
+			$this->imageSize = getimagesize(JURI::root() . 'media/com_reddesign/assets/backgrounds/' . $this->defaultPreviewBg->image_path);
 		}
 
 		if (empty($this->productionBackgroundAreas))
