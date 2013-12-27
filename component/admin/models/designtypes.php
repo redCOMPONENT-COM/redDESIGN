@@ -19,6 +19,27 @@ defined('_JEXEC') or die;
 class ReddesignModelDesigntypes extends RModelList
 {
 	/**
+	 * Name of the filter form to load
+	 *
+	 * @var  string
+	 */
+	protected $filterFormName = 'filter_fonts';
+
+	/**
+	 * Limitstart field used by the pagination
+	 *
+	 * @var  string
+	 */
+	protected $limitField = 'font_limit';
+
+	/**
+	 * Limitstart field used by the pagination
+	 *
+	 * @var  string
+	 */
+	protected $limitstartField = 'auto';
+
+	/**
 	 * Constructor
 	 *
 	 * @param   array  $config  Configuration array
@@ -29,8 +50,8 @@ class ReddesignModelDesigntypes extends RModelList
 		{
 			$config['filter_fields'] = array(
 				'id', 'd.id',
-				'state', 'd.state',
 				'name', 'd.name',
+				'state', 'd.state',
 				'ordering', 'd.ordering',
 				'created_by', 'd.created_by',
 				'created', 'd.created'
@@ -69,8 +90,8 @@ class ReddesignModelDesigntypes extends RModelList
 		$db = $this->getDbo();
 
 		$query = $db->getQuery(true)
-			->select('d.*')
-			->from($db->quoteName('#__reddesign_designtypes', 'd'));
+					->select('d.*')
+					->from($db->qn('#__reddesign_designtypes', 'd'));
 
 		// Filter search
 		$search = $this->getState('filter.search_designtypes');

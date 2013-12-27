@@ -50,9 +50,9 @@ class ReddesignModelFonts extends RModelList
 		{
 			$config['filter_fields'] = array(
 				'id', 'f.id',
+				'name', 'f.name',
 				'state', 'f.state',
 				'ordering', 'f.ordering',
-				'name', 'f.name',
 				'created_by', 'f.created_by',
 				'created_date', 'f.created_date'
 			);
@@ -90,8 +90,8 @@ class ReddesignModelFonts extends RModelList
 		$db = $this->getDbo();
 
 		$query = $db->getQuery(true)
-			->select('f.*')
-			->from('#__reddesign_fonts AS f');
+					->select('f.*')
+					->from($db->qn('#__reddesign_fonts', 'f'));
 
 		// Filter search
 		$search = $this->getState('filter.search_fonts');

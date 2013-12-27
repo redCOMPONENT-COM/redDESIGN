@@ -30,18 +30,18 @@ else
 	<?php echo JText::_('COM_REDDESIGN_COMMON_FILTER'); ?>
 	<?php
 		echo RLayoutHelper::render(
-									'searchtools.default',
-									array(
-											'view' => $this,
-											'options' => array(
-																'filterButton' => false,
-																'searchField' => 'search_fonts',
-																'searchFieldSelector' => '#filter_search_fonts',
-																'limitFieldSelector' => '#list_search_fonts',
-																'activeOrder' => $listOrder,
-																'activeDirection' => $listDirn
-											)
-									)
+			'searchtools.default',
+			array(
+				'view' => $this,
+				'options' => array(
+					'filterButton' => false,
+					'searchField' => 'search_fonts',
+					'searchFieldSelector' => '#filter_search_fonts',
+					'limitFieldSelector' => '#list_search_fonts',
+					'activeOrder' => $listOrder,
+					'activeDirection' => $listDirn
+				)
+			)
 		);
 	?>
 	<?php if (empty($this->items)) : ?>
@@ -61,22 +61,17 @@ else
 					<th class="nowrap center hidden-phone">
 						<?php
 							echo JHtml::_(
-											'rsearchtools.sort',
-											'',
-											'f.ordering',
-											$listDirn,
-											$listOrder,
-											null,
-											'asc',
-											'',
-											'icon-sort'
+								'rsearchtools.sort',
+								'',
+								'f.ordering',
+								$listDirn,
+								$listOrder,
+								null,
+								'asc',
+								'',
+								'icon-sort'
 							);
-
-							//null, 'f.ordering', $listDirn, $listOrder, null, 'asc', '', 'icon-sort');
-						//sort($title, $order, $direction = 'asc', $selected = 0, $task = null, $new_direction = 'asc',
-						//	$tip = '', $icon = null, $formName = 'adminForm')
 						?>
-						<?php //echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_FONT_ORDERING', 'f.ordering', $listDirn, $listOrder);?>
 					</th>
 					<th>
 						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>)"? />

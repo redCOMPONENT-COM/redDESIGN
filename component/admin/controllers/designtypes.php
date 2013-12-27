@@ -28,33 +28,4 @@ class ReddesignControllerDesigntypes extends RControllerAdmin
 		// Write this to make two tasks use the same method (in this example the add method uses the edit method)
 		$this->registerTask('add', 'edit');
 	}
-
-	/**
-	 * Method to save the submitted ordering values for records.
-	 *
-	 * @return  boolean  True on success
-	 */
-	public function saveorder()
-	{
-		// Check for request forgeries.
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-
-		// Get the input
-		$pks = $this->input->post->get('cid', array(), 'array');
-		$order = $this->input->post->get('order', array(), 'array');
-		$cat = $this->input->getInt('cat', 0);
-
-		// Get the model
-		$model = $this->getModel();
-
-		// Save the ordering
-		$return = $model->saveorderprod($pks, $order, $cat);
-
-		if ($return)
-		{
-			echo '1';
-		}
-
-		JFactory::getApplication()->close();
-	}
 }
