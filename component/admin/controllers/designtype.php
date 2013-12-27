@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 /**
- * Font Controller.
+ * Design Type Controller.
  *
  * @package     RedDesign.Component
  * @subpackage  Administrator
@@ -207,18 +207,14 @@ class ReddesignControllerDesigntype extends RControllerForm
 		// Check for user entered dimension
 		if (isset($data['customUserWidth']) && !empty($data['customUserWidth']))
 		{
-			$imageWidth = $data['customUserWidth'];
-
-			// CM is default unit entered by user
+			// CM is default unit entered by user TODO: OR NOT?
 			$imageWidth = $data['customUserWidth'] * 28.346456514;
 		}
 
 		// Check for user entered dimension
 		if (isset($data['customUserHeight']) && !empty($data['customUserHeight']))
 		{
-			$imageHeight = $data['customUserHeight'];
-
-			// CM is default unit entered by user
+			// CM is default unit entered by user TODO: OR NOT?
 			$imageHeight = $data['customUserHeight'] * 28.346456514;
 		}
 
