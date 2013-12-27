@@ -39,6 +39,14 @@ class ReddesignViewFonts extends ReddesignView
 		$this->items = $this->get('Items');
 		$this->state = $this->get('State');
 		$this->pagination = $this->get('Pagination');
+		$this->filterForm = $this->get('Form');
+
+		$this->ordering = array();
+
+		foreach ($this->items as &$item)
+		{
+			$this->ordering[0][] = $item->id;
+		}
 
 		parent::display($tpl);
 	}

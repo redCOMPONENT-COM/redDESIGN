@@ -197,8 +197,8 @@ class ReddesignControllerFont extends RControllerForm
 	 */
 	public function ajaxSaveChar()
 	{
-		RLoader::import('char', JPATH_COMPONENT_ADMINISTRATOR . '/tables/');
-		$db = JFactory::getDbo();
+		$model = $this->getModel();
+		$table = $model->getTable('Char');
 
 		$data = array();
 		$data['id']                = $this->input->getInt('id', null);
@@ -208,8 +208,6 @@ class ReddesignControllerFont extends RControllerForm
 		$data['typography']        = $this->input->getInt('typography', null);
 		$data['typography_height'] = $this->input->getFloat('typography_height', null);
 		$data['font_id']           = $this->input->getInt('font_id', null);
-
-		$table = new ReddesignTableChar($db);
 
 		if (!$table->bind($data))
 		{
@@ -241,11 +239,9 @@ class ReddesignControllerFont extends RControllerForm
 	 */
 	public function ajaxRemoveChar()
 	{
-		RLoader::import('char', JPATH_COMPONENT_ADMINISTRATOR . '/tables/');
-
-		$db = JFactory::getDbo();
+		$model = $this->getModel();
+		$table = $model->getTable('Char');
 		$id = $this->input->getInt('id', null);
-		$table = new ReddesignTableChar($db);
 
 		if ($table->delete($id))
 		{

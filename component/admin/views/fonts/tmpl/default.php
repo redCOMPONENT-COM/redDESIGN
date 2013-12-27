@@ -9,16 +9,41 @@
 
 defined('_JEXEC') or die;
 
-$listOrder        = $this->escape($this->state->get('list.ordering'));
-$listDirn        = $this->escape($this->state->get('list.direction'));
+$listOrder = $this->escape($this->state->get('list.ordering'));
+$listDirn = $this->escape($this->state->get('list.direction'));
+$saveOrderingUrl = 'index.php?option=com_reddesign&task=fonts.saveOrderAjax&tmpl=component';
+$disableClassName = '';
+$disabledLabel = '';
+
+if ($listOrder == 'f.ordering')
+{
+	JHtml::_('rsortablelist.sortable', 'fontsList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
+}
+else
+{
+	$disabledLabel = JText::_('COM_REDDESIGN_COMMON_ORDERING_DISABLED');
+	$disableClassName = 'inactive tip-top';
+}
 ?>
+
 <form action="index.php?option=com_reddesign&view=fonts" method="post" id="adminForm" name="adminForm">
-	<div class="row-fluid">
-		<div class="span6">
-			<?php echo JText::_('COM_REDDESIGN_COMMON_FILTER'); ?>
-			<?php echo RLayoutHelper::render('search', array('view' => $this)) ?>
-		</div>
-	</div>
+	<?php echo JText::_('COM_REDDESIGN_COMMON_FILTER'); ?>
+	<?php
+		echo RLayoutHelper::render(
+			'searchtools.default',
+			array(
+				'view' => $this,
+				'options' => array(
+					'filterButton' => false,
+					'searchField' => 'search_fonts',
+					'searchFieldSelector' => '#filter_search_fonts',
+					'limitFieldSelector' => '#list_search_fonts',
+					'activeOrder' => $listOrder,
+					'activeDirection' => $listDirn
+				)
+			)
+		);
+	?>
 	<?php if (empty($this->items)) : ?>
 		<div class="alert alert-info">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -27,30 +52,45 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 			</div>
 		</div>
 	<?php else : ?>
-		<table class="table table-striped">
+		<table id="fontsList" class="table table-striped">
 			<thead>
 				<tr>
 					<th>
 						<?php echo JText::_('COM_REDDESIGN_COMMON_NUM'); ?>
 					</th>
+					<th class="nowrap center hidden-phone">
+						<?php
+							echo JHtml::_(
+								'rsearchtools.sort',
+								'',
+								'f.ordering',
+								$listDirn,
+								$listOrder,
+								null,
+								'asc',
+								'',
+								'icon-sort'
+							);
+						?>
+					</th>
 					<th>
 						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>)"? />
 					</th>
 					<th>
-						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_FONT_NAME', 'tbl.name', $listDirn, $listOrder);?>
+						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_FONT_NAME', 'f.name', $listDirn, $listOrder);?>
 					</th>
 					<th>
-						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_COMMON_ENABLED', 'tbl.state', $listDirn, $listOrder);?>
+						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_COMMON_ENABLED', 'f.state', $listDirn, $listOrder);?>
 					</th>
 					<th>
-						<?php echo JHtml::_('rgrid.sort', 'COM_REDDESIGN_COMMON_ID', 'tbl.id', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_COMMON_ID', 'f.id', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="9">
-						<?php echo $this->pagination->getListFooter(); ?>
+					<td colspan="6">
+						<?php echo $this->pagination->getPaginationLinks(null, array('showLimitBox' => false)); ?>
 					</td>
 				</tr>
 			</tfoot>
@@ -58,7 +98,22 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 				<?php foreach ($this->items as $i => $row) : ?>
 					<tr>
 						<td>
-							<?php echo $this->pagination->getRowOffset($i); ?>
+							<?php echo $row->ordering; ?>
+						</td>
+						<td class="order nowrap center hidden-phone">
+							<span class="sortable-handler hasTooltip <?php echo $disableClassName ?>" title="<?php echo $disabledLabel ?>">
+								<i class="icon-ellipsis-vertical"></i>
+							</span>
+							<input type="text"
+								   style="display:none"
+								   name="order[]"
+								   size="5"
+								   value="<?php echo $row->ordering; ?>"
+								   class="width-20 text-area-order "
+								>
+							<span class="sortable-handler <?php echo $disableClassName ?>" title="<?php echo $disabledLabel ?>">
+								<i class="icon-ellipsis-vertical"></i>
+							</span>
 						</td>
 						<td>
 							<?php echo JHtml::_('grid.id', $i, $row->id); ?>
@@ -73,7 +128,7 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 							?>
 						</td>
 						<td>
-							<?php echo $row->state;?>
+							<?php echo JHtml::_('rgrid.published', $row->state, $i, 'fonts.', true, 'cb'); ?>
 						</td>
 						<td>
 							<?php echo $row->id;?>
@@ -83,6 +138,7 @@ $listDirn        = $this->escape($this->state->get('list.direction'));
 			</tbody>
 		</table>
 	<?php endif; ?>
+
 	<input type="hidden" name="task" value=""/>
 	<input type="hidden" name="boxchecked" value="0"/>
 	<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>

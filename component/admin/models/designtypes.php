@@ -23,14 +23,14 @@ class ReddesignModelDesigntypes extends RModelList
 	 *
 	 * @var  string
 	 */
-	protected $filterFormName = 'filter_designtypes';
+	protected $filterFormName = 'filter_fonts';
 
 	/**
 	 * Limitstart field used by the pagination
 	 *
 	 * @var  string
 	 */
-	protected $limitField = 'designtype_limit';
+	protected $limitField = 'font_limit';
 
 	/**
 	 * Limitstart field used by the pagination
@@ -49,9 +49,9 @@ class ReddesignModelDesigntypes extends RModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'reddesign_designtype_id', 'd.reddesign_designtype_id',
-				'published', 'd.published',
-				'title', 'd.title',
+				'id', 'd.id',
+				'name', 'd.name',
+				'state', 'd.state',
 				'ordering', 'd.ordering',
 				'created_by', 'd.created_by',
 				'created', 'd.created'
@@ -77,7 +77,7 @@ class ReddesignModelDesigntypes extends RModelList
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		parent::populateState('d.title', 'asc');
+		parent::populateState('d.name', 'asc');
 	}
 
 	/**
@@ -90,8 +90,8 @@ class ReddesignModelDesigntypes extends RModelList
 		$db = $this->getDbo();
 
 		$query = $db->getQuery(true)
-			->select('d.*')
-			->from($db->quoteName('#__reddesign_designtypes', 'd'));
+					->select('d.*')
+					->from($db->qn('#__reddesign_designtypes', 'd'));
 
 		// Filter search
 		$search = $this->getState('filter.search_designtypes');
@@ -99,14 +99,14 @@ class ReddesignModelDesigntypes extends RModelList
 		if (!empty($search))
 		{
 			$search = $db->quote('%' . $db->escape($search, true) . '%');
-			$query->where('(d.title LIKE ' . $search . ')');
+			$query->where('(d.name LIKE ' . $search . ')');
 		}
 
 		// Ordering
 		$orderList = $this->getState('list.ordering');
 		$directionList = $this->getState('list.direction');
 
-		$order = !empty($orderList) ? $orderList : 'd.title';
+		$order = !empty($orderList) ? $orderList : 'd.name';
 		$direction = !empty($directionList) ? $directionList : 'ASC';
 		$query->order($db->escape($order) . ' ' . $db->escape($direction));
 
