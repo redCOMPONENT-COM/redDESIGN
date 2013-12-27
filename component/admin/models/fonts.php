@@ -51,6 +51,7 @@ class ReddesignModelFonts extends RModelList
 			$config['filter_fields'] = array(
 				'id', 'f.id',
 				'state', 'f.state',
+				'ordering', 'f.ordering',
 				'name', 'f.name',
 				'created_by', 'f.created_by',
 				'created_date', 'f.created_date'

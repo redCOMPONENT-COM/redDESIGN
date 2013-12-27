@@ -195,20 +195,16 @@ class ReddesignTableFont extends RTable
 	 */
 	protected function afterDelete($pk = null)
 	{
-		// Trigger after delete
-		if ($this->_eventAfterDelete)
+		// Delete font thumb file
+		if (JFile::exists(JPATH_SITE . '/media/com_reddesign/fonts/' . substr($this->font_file, 0, -3) . 'png'))
 		{
-			// Delete font thumb file
-			if (JFile::exists(JPATH_SITE . '/media/com_reddesign/fonts/' . substr($this->font_file, 0, -3) . 'png'))
-			{
-				JFile::delete(JPATH_SITE . '/media/com_reddesign/fonts/' . substr($this->font_file, 0, -3) . 'png');
-			}
+			JFile::delete(JPATH_SITE . '/media/com_reddesign/fonts/' . substr($this->font_file, 0, -3) . 'png');
+		}
 
-			// Delete font .ttf file
-			if (JFile::exists(JPATH_SITE . '/media/com_reddesign/fonts/' . $this->font_file))
-			{
-				JFile::delete(JPATH_SITE . '/media/com_reddesign/fonts/' . $this->font_file);
-			}
+		// Delete font .ttf file
+		if (JFile::exists(JPATH_SITE . '/media/com_reddesign/fonts/' . $this->font_file))
+		{
+			JFile::delete(JPATH_SITE . '/media/com_reddesign/fonts/' . $this->font_file);
 		}
 
 		return parent::afterDelete($pk);
