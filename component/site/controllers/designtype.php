@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerDesigntypes extends FOFController
+class ReddesignControllerDesigntypes extends JController
 {
 	/**
 	 * Class constructor
@@ -29,8 +29,6 @@ class ReddesignControllerDesigntypes extends FOFController
 	public function  __construct($config = array())
 	{
 		parent::__construct($config);
-
-		$this->modelName = 'Designtypes';
 	}
 
 	/**
@@ -68,10 +66,10 @@ class ReddesignControllerDesigntypes extends FOFController
 		$design->loadString($this->input->getString('designarea', ''), 'JSON');
 		$design = $design->get('Design');
 
-		$designTypeModel = FOFModel::getTmpInstance('Designtypes', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_designtype_id);
-		$designType = $designTypeModel->getItem($design->reddesign_designtype_id);
+		$designTypeModel = RModel::getAdminInstance('Designtype', array('ignore_request' => true));
+		$designType = $designTypeModel->getItem($design->id);
 
-		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($design->reddesign_designtype_id);
+		$backgroundModel = FOFModel::getTmpInstance('Background', array('ignore_request' => true));
 		$background = $backgroundModel->getItem($design->reddesign_background_id);
 		$backgroundImage = $background->image_path;
 
@@ -119,7 +117,7 @@ class ReddesignControllerDesigntypes extends FOFController
 				// Get font.
 				if (!empty($area->fontTypeId))
 				{
-					$fontModel = FOFModel::getTmpInstance('Fonts', 'ReddesignModel')->reddesign_area_id($area->id);
+					$fontModel = RModel::getAdminInstance('Font',  array('ignore_request' => true));
 					$fontType = $fontModel->getItem($area->fontTypeId);
 					$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $fontType->font_file;
 				}
@@ -137,7 +135,7 @@ class ReddesignControllerDesigntypes extends FOFController
 				}
 
 				// Get area.
-				$areaModel = FOFModel::getTmpInstance('Areas', 'ReddesignModel')->reddesign_background_id($design->reddesign_background_id);
+				$areaModel = RModel::getAdminInstance('Area', array('ignore_request' => true));
 				$this->areaItem = $areaModel->getItem($area->id);
 				$topOffset = 0;
 				$leftOffset = 0;
