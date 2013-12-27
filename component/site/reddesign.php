@@ -10,8 +10,35 @@ defined('_JEXEC') or die;
 
 JLoader::import('joomla.application.component.controller');
 
-// Include FoF
-JLoader::import('fof.include');
+$jinput = JFactory::getApplication()->input;
 
-// Dispatch
-FOFDispatcher::getTmpInstance('com_reddesign')->dispatch();
+require_once JPATH_LIBRARIES . '/redcore/bootstrap.php';
+
+// Register component prefix
+JLoader::registerPrefix('Reddesign', __DIR__);
+
+// Register library prefix
+RLoader::registerPrefix('Reddesign', JPATH_LIBRARIES . '/reddesign');
+
+// Load CSS file
+RHelperAsset::load('site.css');
+
+// Set the controller page
+$controller = $jinput->getCmd('view');
+
+if (!file_exists(JPATH_COMPONENT . '/controllers/' . $controller . '.php'))
+{
+	$controller = 'designtypes';
+	$jinput->set('view', 'designtype');
+}
+
+require_once JPATH_COMPONENT . '/controllers/' . $controller . '.php';
+
+// Set a default task if none is present, this is needed to be able to override the display task
+// $jinput->set('task', $jinput->getCmd('task', $jinput->get('view') . '.execute'));
+$jinput->set('task', $jinput->getCmd('task', $jinput->get('view') . '.display'));
+
+// Execute the controller
+$controller = JControllerLegacy::getInstance('reddesign');
+$controller->execute($jinput->get('task'));
+$controller->redirect();
