@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerDesigntypes extends JController
+class ReddesignControllerDesigntype extends JController
 {
 	/**
 	 * Class constructor
