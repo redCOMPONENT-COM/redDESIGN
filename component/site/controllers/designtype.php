@@ -262,13 +262,13 @@ class ReddesignControllerDesigntypes extends JController
 	}
 
 	/**
-	 *  Calculates Font size and Offset when Auto-size is on.
+	 * Calculates Font size and Offset when Auto-size is on.
 	 *
-	 *  @param   int    $fontId         FontId.
-	 *  @param   array  $enteredChars   EnteredChars.
-	 *  @param   array  $fontDetailArr  FontDetailArr.
-	 *  @param   int    $canvasHeight   CanvasHeight.
-	 *  @param   int    $canvasWidth    CanvasWidth.
+	 * @param   int    $fontId         FontId.
+	 * @param   array  $enteredChars   EnteredChars.
+	 * @param   array  $fontDetailArr  FontDetailArr.
+	 * @param   int    $canvasHeight   CanvasHeight.
+	 * @param   int    $canvasWidth    CanvasWidth.
 	 *
 	 * @return array of Font Size and Offset respectively
 	 *
@@ -284,9 +284,9 @@ class ReddesignControllerDesigntypes extends JController
 		// Select character settings for a given font.
 		$query
 			->select('max(chars.height) as height, group_concat(typography separator ", ") as typography, typography_height')
-			->from('#__reddesign_chars as chars')
-			->where('chars.reddesign_font_id = ' . (int) $fontId)
-			->where('chars.font_char IN ("' . implode('","', $char) . '")')
+			->from($db->quoteName('#__reddesign_chars as chars'))
+			->where($db->quoteName('chars.reddesign_font_id') . ' = ' . (int) $fontId)
+			->where($db->quoteName('chars.font_char') . ' IN ("' . implode('","', $char) . '")')
 			->order('chars.reddesign_char_id ASC');
 
 		// Reset the query using our newly populated query object.
@@ -303,9 +303,9 @@ class ReddesignControllerDesigntypes extends JController
 			$query = $db->getQuery(true);
 			$query
 				->select('chars.width')
-				->from('#__reddesign_chars as chars')
-				->where('binary chars.font_char = ' . $db->quote($char[$i]))
-				->where('chars.reddesign_font_id = "' . (int) $fontId . '" ');
+				->from($db->quoteName('#__reddesign_chars as chars'))
+				->where($db->quoteName('binary chars.font_char') . ' = ' . $db->quote($char[$i]))
+				->where($db->quoteName('chars.reddesign_font_id') . ' = "' . (int) $fontId . '" ');
 			$db->setQuery($query);
 			$width 		= $width + $db->loadResult();
 		}
