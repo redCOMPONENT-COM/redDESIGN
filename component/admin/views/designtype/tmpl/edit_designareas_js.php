@@ -25,10 +25,10 @@ var selectionObjectInstance;
 /**
  * Initiate imgAreaSelect plugin
  */
-akeeba.jQuery(document).ready(
+jQuery(document).ready(
 	function ($) {
 
-		selectionObjectInstance = akeeba.jQuery("img#background").imgAreaSelect({
+		selectionObjectInstance = jQuery("img#background").imgAreaSelect({
 			instance: true,
 			handles: true,
 			onInit: clearSelectionFields,
@@ -36,47 +36,47 @@ akeeba.jQuery(document).ready(
 		});
 
 		<?php foreach ($this->areas as  $area) : ?>
-			var colorPicker<?php echo $area->reddesign_area_id ?> = akeeba.jQuery.farbtastic("#colorPickerContainer<?php echo $area->reddesign_area_id ?>");
+			var colorPicker<?php echo $area->reddesign_area_id ?> = jQuery.farbtastic("#colorPickerContainer<?php echo $area->reddesign_area_id ?>");
 			colorPicker<?php echo $area->reddesign_area_id ?>.linkTo("#colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>");
 
-			akeeba.jQuery(document).on("keyup", "#C<?php echo $area->reddesign_area_id; ?>", function() {
+			jQuery(document).on("keyup", "#C<?php echo $area->reddesign_area_id; ?>", function() {
 				var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
 				colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
 			});
 
-			akeeba.jQuery(document).on("keyup", "#M<?php echo $area->reddesign_area_id; ?>", function() {
+			jQuery(document).on("keyup", "#M<?php echo $area->reddesign_area_id; ?>", function() {
 				var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
 				colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
 			});
 
-			akeeba.jQuery(document).on("keyup", "#Y<?php echo $area->reddesign_area_id; ?>", function() {
+			jQuery(document).on("keyup", "#Y<?php echo $area->reddesign_area_id; ?>", function() {
 				var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
 				colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
 			});
 
-			akeeba.jQuery(document).on("keyup", "#K<?php echo $area->reddesign_area_id; ?>", function() {
+			jQuery(document).on("keyup", "#K<?php echo $area->reddesign_area_id; ?>", function() {
 				var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
 				colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
 			});
 
-			akeeba.jQuery(document).on("keyup", "#colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>", function() {
-				var hex = akeeba.jQuery("#colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>").val();
+			jQuery(document).on("keyup", "#colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>", function() {
+				var hex = jQuery("#colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>").val();
 				loadCMYKValues(hex, parseInt("<?php echo $area->reddesign_area_id; ?>"));
 			});
 
-			akeeba.jQuery(document).on("mouseup", "#colorPickerContainer<?php echo $area->reddesign_area_id; ?>", function() {
-				var hex = akeeba.jQuery("#colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>").val();
+			jQuery(document).on("mouseup", "#colorPickerContainer<?php echo $area->reddesign_area_id; ?>", function() {
+				var hex = jQuery("#colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>").val();
 				loadCMYKValues(hex, parseInt("<?php echo $area->reddesign_area_id; ?>"));
 			});
 
-			akeeba.jQuery("#allColors<?php echo $area->reddesign_area_id; ?>").click(function () {
-				akeeba.jQuery("#colorsContainer<?php echo $area->reddesign_area_id; ?>").toggle(!this.checked);
-				akeeba.jQuery("#addColorContainer<?php echo $area->reddesign_area_id; ?>").toggle(!this.checked);
-				akeeba.jQuery("#selectedColorsPalette<?php echo $area->reddesign_area_id; ?>").toggle(!this.checked);
+			jQuery("#allColors<?php echo $area->reddesign_area_id; ?>").click(function () {
+				jQuery("#colorsContainer<?php echo $area->reddesign_area_id; ?>").toggle(!this.checked);
+				jQuery("#addColorContainer<?php echo $area->reddesign_area_id; ?>").toggle(!this.checked);
+				jQuery("#selectedColorsPalette<?php echo $area->reddesign_area_id; ?>").toggle(!this.checked);
 			});
 
 
-			akeeba.jQuery("#addColorButton<?php echo $area->reddesign_area_id ?>").click(function () {
+			jQuery("#addColorButton<?php echo $area->reddesign_area_id ?>").click(function () {
 				addColorToList(parseInt("<?php echo $area->reddesign_area_id; ?>"))
 			});
 		<?php endforeach; ?>
@@ -93,8 +93,8 @@ akeeba.jQuery(document).ready(
 function addColorToList(areaId)
 {
 
-	var selectedColor = akeeba.jQuery("#colorPickerSelectedColor" + areaId).val();
-	var colorCodes = akeeba.jQuery("#colorCodes" + areaId).val();
+	var selectedColor = jQuery("#colorPickerSelectedColor" + areaId).val();
+	var colorCodes = jQuery("#colorCodes" + areaId).val();
 
 	// Check if the same color is already added.
 	if (colorCodes.indexOf(selectedColor) == -1)
@@ -107,7 +107,7 @@ function addColorToList(areaId)
 			'<i class="glyphicon icon-remove"></i>' +
 			'<input type="hidden" value="' + selectedColor + '" />' +
 		'</div>';
-		akeeba.jQuery("#selectedColorsPalette" + areaId).append(element);
+		jQuery("#selectedColorsPalette" + areaId).append(element);
 
 		// Update color codes hidden input field.
 		if (colorCodes == "" || parseInt(colorCodes) == 1)
@@ -119,8 +119,8 @@ function addColorToList(areaId)
 			colorCodes = colorCodes + "," + selectedColor;
 		}
 
-		akeeba.jQuery("#colorCodes" + areaId).val(colorCodes);
-		akeeba.jQuery.ajax({
+		jQuery("#colorCodes" + areaId).val(colorCodes);
+		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxUpdateColors&format=raw",
 			data: {
 				reddesign_area_id: areaId,
@@ -146,7 +146,7 @@ function addColorToList(areaId)
  */
 function removeColorFromList(areaId, colorToRemove)
 {
-	var colorCodes = akeeba.jQuery("#colorCodes" + areaId).val();
+	var colorCodes = jQuery("#colorCodes" + areaId).val();
 	colorCodes = colorCodes.split(",");
 
 	colorCodes = jQuery.grep(colorCodes, function(value) {
@@ -155,9 +155,9 @@ function removeColorFromList(areaId, colorToRemove)
 
 	colorCodes = colorCodes.join(",");
 
-	akeeba.jQuery("#colorCodes" + areaId).val(colorCodes);
+	jQuery("#colorCodes" + areaId).val(colorCodes);
 
-	akeeba.jQuery.ajax({
+	jQuery.ajax({
 		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxUpdateColors&format=raw",
 		data: {
 			reddesign_area_id: areaId,
@@ -169,7 +169,7 @@ function removeColorFromList(areaId, colorToRemove)
 		}
 	});
 
-	akeeba.jQuery("#" + areaId + "-" + colorToRemove.replace("#","")).remove();
+	jQuery("#" + areaId + "-" + colorToRemove.replace("#","")).remove();
 }
 
 /**
@@ -181,10 +181,10 @@ function removeColorFromList(areaId, colorToRemove)
  */
 function getNewHexColor(areaId)
 {
-	var c = akeeba.jQuery("#C" + areaId).val();
-	var m = akeeba.jQuery("#M" + areaId).val();
-	var y = akeeba.jQuery("#Y" + areaId).val();
-	var k = akeeba.jQuery("#K" + areaId).val();
+	var c = jQuery("#C" + areaId).val();
+	var m = jQuery("#M" + areaId).val();
+	var y = jQuery("#Y" + areaId).val();
+	var k = jQuery("#K" + areaId).val();
 
 	var colorObject = new CMYK(c, m, y, k);
 	var rgb = ColorConverter.toRGB(colorObject);
@@ -216,10 +216,10 @@ function loadCMYKValues(hex, areaId) {
 	var colorObject = new RGB(hexToRgb(hex).r, hexToRgb(hex).g, hexToRgb(hex).b);
 	var cmyk = ColorConverter.toCMYK(colorObject);
 
-	akeeba.jQuery("#C" + areaId).val(cmyk.c);
-	akeeba.jQuery("#M" + areaId).val(cmyk.m);
-	akeeba.jQuery("#Y" + areaId).val(cmyk.y);
-	akeeba.jQuery("#K" + areaId).val(cmyk.k);
+	jQuery("#C" + areaId).val(cmyk.c);
+	jQuery("#M" + areaId).val(cmyk.m);
+	jQuery("#Y" + areaId).val(cmyk.y);
+	jQuery("#K" + areaId).val(cmyk.k);
 }
 
 /**
@@ -253,7 +253,7 @@ function hexToRgb(hex) {
  * @param y2
  */
 function selectArea(x1, y1, x2, y2) {
-	selectionObjectInstance = akeeba.jQuery("img#background").imgAreaSelect({
+	selectionObjectInstance = jQuery("img#background").imgAreaSelect({
 		instance: true,
 		handles: true,
 		x1: x1,
@@ -270,7 +270,7 @@ function selectAreaOnWidthKeyUp()
 {
 	var width, selection, x2;
 
-	width = akeeba.jQuery("#areaWidth").val();
+	width = jQuery("#areaWidth").val();
 	selection = selectionObjectInstance.getSelection();
 
 	// Convert width to a coordinate.
@@ -281,7 +281,7 @@ function selectAreaOnWidthKeyUp()
 
 	if (width > 0 && x2 < imageWidth)
 	{
-		selectionObjectInstance = akeeba.jQuery("img#background").imgAreaSelect({
+		selectionObjectInstance = jQuery("img#background").imgAreaSelect({
 			instance: true,
 			handles: true,
 			x1: selection.x1,
@@ -301,7 +301,7 @@ function selectAreaOnHeightKeyUp()
 {
 	var height, selection, y2;
 
-	height = akeeba.jQuery("#areaHeight").val();
+	height = jQuery("#areaHeight").val();
 	selection = selectionObjectInstance.getSelection();
 
 	// Convert height to a coordinate.
@@ -310,7 +310,7 @@ function selectAreaOnHeightKeyUp()
 
 	if (height > 0 && y2 < imageHeight)
 	{
-		selectionObjectInstance = akeeba.jQuery("img#background").imgAreaSelect({
+		selectionObjectInstance = jQuery("img#background").imgAreaSelect({
 			instance: true,
 			handles: true,
 			x1: selection.x1,
@@ -330,7 +330,7 @@ function selectAreaOnX1KeyUp()
 {
 	var x1, x2, selection;
 
-	x1 = akeeba.jQuery("#areaX1").val();
+	x1 = jQuery("#areaX1").val();
 	selection = selectionObjectInstance.getSelection();
 
 	// Convert X1 to pixels coordinate.
@@ -341,7 +341,7 @@ function selectAreaOnX1KeyUp()
 
 	if(x1 > 0 && x2 < imageWidth)
 	{
-		selectionObjectInstance = akeeba.jQuery("img#background").imgAreaSelect({
+		selectionObjectInstance = jQuery("img#background").imgAreaSelect({
 			instance: true,
 			handles: true,
 			x1: x1,
@@ -361,7 +361,7 @@ function selectAreaOnY1KeyUp()
 {
 	var y1, y2, selection;
 
-	y1 = akeeba.jQuery("#areaY1").val();
+	y1 = jQuery("#areaY1").val();
 	selection = selectionObjectInstance.getSelection();
 
 	// Convert X1 to pixels coordinate.
@@ -372,7 +372,7 @@ function selectAreaOnY1KeyUp()
 
 	if(y1 > 0 && y2 < imageHeight)
 	{
-		selectionObjectInstance = akeeba.jQuery("img#background").imgAreaSelect({
+		selectionObjectInstance = jQuery("img#background").imgAreaSelect({
 			instance: true,
 			handles: true,
 			x1: selection.x1,
@@ -392,7 +392,7 @@ function selectAreaOnX2KeyUp()
 {
 	var x2, x1, selection;
 
-	x2 = akeeba.jQuery("#areaX2").val();
+	x2 = jQuery("#areaX2").val();
 	selection = selectionObjectInstance.getSelection();
 
 	// Convert X1 to pixels coordinate.
@@ -403,7 +403,7 @@ function selectAreaOnX2KeyUp()
 
 	if(x2 < imageWidth && x1 > 0)
 	{
-		selectionObjectInstance = akeeba.jQuery("img#background").imgAreaSelect({
+		selectionObjectInstance = jQuery("img#background").imgAreaSelect({
 			instance: true,
 			handles: true,
 			x1: x1,
@@ -423,7 +423,7 @@ function selectAreaOnY2KeyUp()
 {
 	var y2, y1, selection;
 
-	y2 = akeeba.jQuery("#areaY2").val();
+	y2 = jQuery("#areaY2").val();
 	selection = selectionObjectInstance.getSelection();
 
 	// Convert X1 to pixels coordinate.
@@ -434,7 +434,7 @@ function selectAreaOnY2KeyUp()
 
 	if(y2 < imageHeight && y1 > 0)
 	{
-		selectionObjectInstance = akeeba.jQuery("img#background").imgAreaSelect({
+		selectionObjectInstance = jQuery("img#background").imgAreaSelect({
 			instance: true,
 			handles: true,
 			x1: selection.x1,
@@ -462,12 +462,12 @@ function populateFields(selection)
 	var width_in_unit  = (parseFloat(selection.width) / ratio) * pxToUnit;
 	var height_in_unit = (parseFloat(selection.height) / ratio) * pxToUnit;
 
-	akeeba.jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
-	akeeba.jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
-	akeeba.jQuery("#areaX2").val(x2_pos_in_unit.toFixed(0));
-	akeeba.jQuery("#areaY2").val(y2_pos_in_unit.toFixed(0));
-	akeeba.jQuery("#areaWidth").val(width_in_unit.toFixed(0));
-	akeeba.jQuery("#areaHeight").val(height_in_unit.toFixed(0));
+	jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
+	jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
+	jQuery("#areaX2").val(x2_pos_in_unit.toFixed(0));
+	jQuery("#areaY2").val(y2_pos_in_unit.toFixed(0));
+	jQuery("#areaWidth").val(width_in_unit.toFixed(0));
+	jQuery("#areaHeight").val(height_in_unit.toFixed(0));
 }
 
 /**
@@ -492,12 +492,12 @@ function populateSelectionFields(img, selection) {
 		var width_in_unit  = (parseFloat(selection.width) / ratio) * pxToUnit;
 		var height_in_unit = (parseFloat(selection.height) / ratio) * pxToUnit;
 
-		akeeba.jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
-		akeeba.jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
-		akeeba.jQuery("#areaX2").val(x2_pos_in_unit.toFixed(0));
-		akeeba.jQuery("#areaY2").val(y2_pos_in_unit.toFixed(0));
-		akeeba.jQuery("#areaWidth").val(width_in_unit.toFixed(0));
-		akeeba.jQuery("#areaHeight").val(height_in_unit.toFixed(0));
+		jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
+		jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
+		jQuery("#areaX2").val(x2_pos_in_unit.toFixed(0));
+		jQuery("#areaY2").val(y2_pos_in_unit.toFixed(0));
+		jQuery("#areaWidth").val(width_in_unit.toFixed(0));
+		jQuery("#areaHeight").val(height_in_unit.toFixed(0));
 	}
 }
 
@@ -505,14 +505,14 @@ function populateSelectionFields(img, selection) {
  * Clears parameter input fields. Used when select area is not displayed anymore.
  */
 function clearSelectionFields() {
-	akeeba.jQuery("#designAreaId").val("0");
-	akeeba.jQuery("#areaName").val("");
-	akeeba.jQuery("#areaX1").val("");
-	akeeba.jQuery("#areaY1").val("");
-	akeeba.jQuery("#areaX2").val("");
-	akeeba.jQuery("#areaY2").val("");
-	akeeba.jQuery("#areaWidth").val("");
-	akeeba.jQuery("#areaHeight").val("");
+	jQuery("#designAreaId").val("0");
+	jQuery("#areaName").val("");
+	jQuery("#areaX1").val("");
+	jQuery("#areaY1").val("");
+	jQuery("#areaX2").val("");
+	jQuery("#areaY2").val("");
+	jQuery("#areaWidth").val("");
+	jQuery("#areaHeight").val("");
 }
 
 /**
@@ -521,7 +521,7 @@ function clearSelectionFields() {
  * @param update
  */
 function preSaveArea(update) {
-	if(!akeeba.jQuery("#areaName").val())
+	if(!jQuery("#areaName").val())
 	{
 		alert("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_NO_AREA_NAME'); ?>");
 	}
@@ -537,16 +537,16 @@ function preSaveArea(update) {
  * @param update
  */
 function saveArea(update) {
-	akeeba.jQuery("#saveAreaBtn").button("loading");
+	jQuery("#saveAreaBtn").button("loading");
 
 	var reddesign_area_id;
-	var areaName	= akeeba.jQuery("#areaName").val();
-	var areaX1 	= akeeba.jQuery("#areaX1").val();
-	var areaY1 	= akeeba.jQuery("#areaY1").val();
-	var areaX2 	= akeeba.jQuery("#areaX2").val();
-	var areaY2 	= akeeba.jQuery("#areaY2").val();
-	var areaWidth  = akeeba.jQuery("#areaWidth").val();
-	var areaHeight = akeeba.jQuery("#areaHeight").val();
+	var areaName	= jQuery("#areaName").val();
+	var areaX1 	= jQuery("#areaX1").val();
+	var areaY1 	= jQuery("#areaY1").val();
+	var areaX2 	= jQuery("#areaX2").val();
+	var areaY2 	= jQuery("#areaY2").val();
+	var areaWidth  = jQuery("#areaWidth").val();
+	var areaHeight = jQuery("#areaHeight").val();
 
 	var areaX1_in_px = (areaX1 * unitToPx * ratio).toFixed(0);
 	var areaY1_in_px = (areaY1 * unitToPx * ratio).toFixed(0);
@@ -565,7 +565,7 @@ function saveArea(update) {
 		reddesign_area_id = '';
 	}
 
-	akeeba.jQuery.ajax({
+	jQuery.ajax({
 		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxSave&format=raw",
 		data: {
 			reddesign_area_id: reddesign_area_id,
@@ -580,7 +580,7 @@ function saveArea(update) {
 		},
 		type: "post",
 		success: function (data) {
-			var json = akeeba.jQuery.parseJSON(data);
+			var json = jQuery.parseJSON(data);
 
 			if(update == 0)
 			{
@@ -591,13 +591,13 @@ function saveArea(update) {
 			}
 			else
 			{
-				akeeba.jQuery("#areaDiv" + reddesign_area_id).remove();
+				jQuery("#areaDiv" + reddesign_area_id).remove();
 				drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
-				akeeba.jQuery("#areaDiv" + reddesign_area_id).html(areaName + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
+				jQuery("#areaDiv" + reddesign_area_id).html(areaName + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
 				updateAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
 			}
 
-			setTimeout(function () {akeeba.jQuery("#saveAreaBtn").button("reset")}, 500);
+			setTimeout(function () {jQuery("#saveAreaBtn").button("reset")}, 500);
 		},
 		error: function (data) {
 			alert(data);
@@ -619,7 +619,7 @@ function drawArea(reddesign_area_id, title, x1_pos, y1_pos, width, height) {
 	width -= 2;
 	height -= 3;
 
-	akeeba.jQuery("#backgroundImageContainer").append(
+	jQuery("#backgroundImageContainer").append(
 		'<div id="areaDiv' + reddesign_area_id + '" ' +
 			'style="position: absolute; ' +
 			'width: ' + width + 'px; ' +
@@ -643,7 +643,7 @@ function drawArea(reddesign_area_id, title, x1_pos, y1_pos, width, height) {
  * @param height
  */
 function addAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, width, height) {
-	var lastClass = akeeba.jQuery("#areasTBody tr").last().attr("class");
+	var lastClass = jQuery("#areasTBody tr").last().attr("class");
 	var rowClass;
 
 	if (lastClass == "row0")
@@ -654,7 +654,7 @@ function addAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, wi
 	{
 		rowClass = "row0";
 	}
-	akeeba.jQuery('#noAreaMessage').remove();
+	jQuery('#noAreaMessage').remove();
 
 	var areasRowData = {
 		reddesignAreaId: reddesign_area_id,
@@ -674,14 +674,14 @@ function addAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, wi
 		rowClass: rowClass
 	};
 
-	var areasRowTemplate = akeeba.jQuery("#areaRowsMustache").html();
+	var areasRowTemplate = jQuery("#areaRowsMustache").html();
 	var areaRowRendered = Mustache.render(areasRowTemplate, areasRowData);
 
-	akeeba.jQuery("#areasTBody").append(areaRowRendered);
+	jQuery("#areasTBody").append(areaRowRendered);
 
 	<?php if ($this->item->fontsizer != 'auto' && $this->item->fontsizer != 'auto_chars') : ?>
 		<?php foreach($this->alignmentOptions as  $alginmentOption) : ?>
-			akeeba.jQuery("#areaFontAlignment" + reddesign_area_id).append(
+			jQuery("#areaFontAlignment" + reddesign_area_id).append(
 				'<option value="<?php echo $alginmentOption->value; ?>">' +
 					'<?php echo $alginmentOption->text; ?>' +
 				'</option>'
@@ -690,53 +690,53 @@ function addAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, wi
 	<?php endif; ?>
 
 	<?php foreach($this->fontsOptions as  $fontsOption) : ?>
-		akeeba.jQuery("#areaFonts" + reddesign_area_id).append(
+		jQuery("#areaFonts" + reddesign_area_id).append(
 			'<option value="<?php echo $fontsOption->value; ?>">' +
 				'<?php echo $fontsOption->text; ?>' +
 			'</option>'
 		);
 	<?php endforeach; ?>
 
-	var colorPicker = akeeba.jQuery.farbtastic("#colorPickerContainer" + reddesign_area_id);
+	var colorPicker = jQuery.farbtastic("#colorPickerContainer" + reddesign_area_id);
 	colorPicker.linkTo("#colorPickerSelectedColor" + reddesign_area_id);
 
-	akeeba.jQuery(document).on("keyup", "#C" + reddesign_area_id, function() {
+	jQuery(document).on("keyup", "#C" + reddesign_area_id, function() {
 		var newColor = getNewHexColor(reddesign_area_id);
 		colorPicker.setColor(newColor);
 	});
 
-	akeeba.jQuery(document).on("keyup", "#M" + reddesign_area_id, function() {
+	jQuery(document).on("keyup", "#M" + reddesign_area_id, function() {
 		var newColor = getNewHexColor(reddesign_area_id);
 		colorPicker.setColor(newColor);
 	});
 
-	akeeba.jQuery(document).on("keyup", "#Y" + reddesign_area_id, function() {
+	jQuery(document).on("keyup", "#Y" + reddesign_area_id, function() {
 		var newColor = getNewHexColor(reddesign_area_id);
 		colorPicker.setColor(newColor);
 	});
 
-	akeeba.jQuery(document).on("keyup", "#K" + reddesign_area_id, function() {
+	jQuery(document).on("keyup", "#K" + reddesign_area_id, function() {
 		var newColor = getNewHexColor(reddesign_area_id);
 		colorPicker.setColor(newColor);
 	});
 
-	akeeba.jQuery(document).on("keyup", "#colorPickerSelectedColor" + reddesign_area_id, function() {
-		var hex = akeeba.jQuery("#colorPickerSelectedColor" + reddesign_area_id).val();
+	jQuery(document).on("keyup", "#colorPickerSelectedColor" + reddesign_area_id, function() {
+		var hex = jQuery("#colorPickerSelectedColor" + reddesign_area_id).val();
 		loadCMYKValues(hex, reddesign_area_id);
 	});
 
-	akeeba.jQuery(document).on("mouseup", "#colorPickerContainer" + reddesign_area_id, function() {
-		var hex = akeeba.jQuery("#colorPickerSelectedColor" + reddesign_area_id).val();
+	jQuery(document).on("mouseup", "#colorPickerContainer" + reddesign_area_id, function() {
+		var hex = jQuery("#colorPickerSelectedColor" + reddesign_area_id).val();
 		loadCMYKValues(hex, reddesign_area_id);
 	});
 
-	akeeba.jQuery("#allColors" + reddesign_area_id).click(function () {
-		akeeba.jQuery("#colorsContainer" + reddesign_area_id).toggle(!this.checked);
-		akeeba.jQuery("#addColorContainer" + reddesign_area_id).toggle(!this.checked);
-		akeeba.jQuery("#selectedColorsPalette" + reddesign_area_id).toggle(!this.checked);
+	jQuery("#allColors" + reddesign_area_id).click(function () {
+		jQuery("#colorsContainer" + reddesign_area_id).toggle(!this.checked);
+		jQuery("#addColorContainer" + reddesign_area_id).toggle(!this.checked);
+		jQuery("#selectedColorsPalette" + reddesign_area_id).toggle(!this.checked);
 	});
 
-	akeeba.jQuery("#addColorButton" + reddesign_area_id).click(function () {
+	jQuery("#addColorButton" + reddesign_area_id).click(function () {
 		addColorToList(reddesign_area_id);
 	});
 }
@@ -754,7 +754,7 @@ function addAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, wi
  * @param height
  */
 function updateAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, width, height) {
-	akeeba.jQuery("#areaRow" + reddesign_area_id).html(
+	jQuery("#areaRow" + reddesign_area_id).html(
 		'<td>' + reddesign_area_id + '</td>' +
 			'<td>' +
 			'<a href="#" onclick="selectAreaForEdit(' + reddesign_area_id + ',\'' +
@@ -801,16 +801,16 @@ function updateAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos,
 function updateImageAreas() {
 	var json;
 
-	akeeba.jQuery("#backgroundImageContainer div").remove();
+	jQuery("#backgroundImageContainer div").remove();
 
-	akeeba.jQuery.ajax({
+	jQuery.ajax({
 		data: {
 			reddesign_background_id: <?php echo $this->productionBackground->reddesign_background_id; ?>
 		},
 		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxGetAreas&format=raw",
 		success: function (data) {
-			json = akeeba.jQuery.parseJSON(data);
-			akeeba.jQuery.each( json, function( key, value ) {
+			json = jQuery.parseJSON(data);
+			jQuery.each( json, function( key, value ) {
 				drawArea(value.reddesign_area_id, value.title, value.x1_pos, value.y1_pos, value.width, value.height)
 			});
 		},
@@ -833,8 +833,8 @@ function updateImageAreas() {
  * @param height
  */
 function selectAreaForEdit(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, width, height) {
-	akeeba.jQuery("#designAreaId").val(reddesign_area_id);
-	akeeba.jQuery("#areaName").val(title);
+	jQuery("#designAreaId").val(reddesign_area_id);
+	jQuery("#areaName").val(title);
 
 	// Convert pixel to selected unit. Use ratio to calculate and display real mertics instead of scaled down.
 	var x1_pos_in_unit = (parseFloat(x1_pos) / ratio) * pxToUnit;
@@ -844,16 +844,16 @@ function selectAreaForEdit(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_
 	var width_in_unit  = (parseFloat(width) / ratio) * pxToUnit;
 	var height_in_unit = (parseFloat(height) / ratio) * pxToUnit;
 
-	akeeba.jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
-	akeeba.jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
-	akeeba.jQuery("#areaX2").val(x2_pos_in_unit.toFixed(0));
-	akeeba.jQuery("#areaY2").val(y2_pos_in_unit.toFixed(0));
-	akeeba.jQuery("#areaWidth").val(width_in_unit.toFixed(0));
-	akeeba.jQuery("#areaHeight").val(height_in_unit.toFixed(0));
+	jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
+	jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
+	jQuery("#areaX2").val(x2_pos_in_unit.toFixed(0));
+	jQuery("#areaY2").val(y2_pos_in_unit.toFixed(0));
+	jQuery("#areaWidth").val(width_in_unit.toFixed(0));
+	jQuery("#areaHeight").val(height_in_unit.toFixed(0));
 
 	selectArea(x1_pos, y1_pos, x2_pos, y2_pos);
 
-	akeeba.jQuery("#areaDiv" + reddesign_area_id).html(title + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
+	jQuery("#areaDiv" + reddesign_area_id).html(title + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
 }
 
 /**
@@ -871,15 +871,15 @@ function cancelArea() {
  * @param reddesign_area_id
  */
 function removeArea(reddesign_area_id) {
-	akeeba.jQuery.ajax({
+	jQuery.ajax({
 		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxRemove&format=raw",
 		data: {
 			reddesign_area_id: reddesign_area_id
 		},
 		type: "post",
 		success: function (data) {
-			akeeba.jQuery("#areaRow" + reddesign_area_id).remove();
-			akeeba.jQuery("#areaSettingsRow" + reddesign_area_id).remove();
+			jQuery("#areaRow" + reddesign_area_id).remove();
+			jQuery("#areaSettingsRow" + reddesign_area_id).remove();
 			updateImageAreas();
 		},
 		error: function (data) {
@@ -894,8 +894,8 @@ function removeArea(reddesign_area_id) {
  * @param reddesign_area_id
  */
 function showAreaSettings(reddesign_area_id) {
-	akeeba.jQuery(".areaSettingsRow").hide();
-	akeeba.jQuery("#areaSettingsRow" + reddesign_area_id).slideToggle("slow");
+	jQuery(".areaSettingsRow").hide();
+	jQuery("#areaSettingsRow" + reddesign_area_id).slideToggle("slow");
 }
 
 /**
@@ -904,26 +904,26 @@ function showAreaSettings(reddesign_area_id) {
  * @param reddesign_area_id
  */
 function saveAreaSettings(reddesign_area_id) {
-	akeeba.jQuery("#saveAreaSettings" + reddesign_area_id).button("loading");
+	jQuery("#saveAreaSettings" + reddesign_area_id).button("loading");
 
-	var areaFontAlignment = akeeba.jQuery("#areaFontAlignment" + reddesign_area_id).val();
-	var fontsizerDropdown = akeeba.jQuery("#fontsizerDropdown" + reddesign_area_id).val();
-	var fontsizerSliderDefault = akeeba.jQuery("#fontsizerSliderDefault" + reddesign_area_id).val();
-	var fontsizerSliderMin = akeeba.jQuery("#fontsizerSliderMin" + reddesign_area_id).val();
-	var fontsizerSliderMax = akeeba.jQuery("#fontsizerSliderMax" + reddesign_area_id).val();
-	var inputFieldType = akeeba.jQuery("#inputFieldType" + reddesign_area_id).val();
-	var maximumCharsAllowed = akeeba.jQuery("#maximumCharsAllowed" + reddesign_area_id).val();
-	var maximumLinesAllowed = akeeba.jQuery("#maximumLinesAllowed" + reddesign_area_id).val();
-	var areaFonts = akeeba.jQuery('[name="areaFonts' + reddesign_area_id + '[]"]').val();
-	var colorCodes = akeeba.jQuery("#colorCodes" + reddesign_area_id).val();
-	var defaultText = akeeba.jQuery("#defaultText" + reddesign_area_id).val();
+	var areaFontAlignment = jQuery("#areaFontAlignment" + reddesign_area_id).val();
+	var fontsizerDropdown = jQuery("#fontsizerDropdown" + reddesign_area_id).val();
+	var fontsizerSliderDefault = jQuery("#fontsizerSliderDefault" + reddesign_area_id).val();
+	var fontsizerSliderMin = jQuery("#fontsizerSliderMin" + reddesign_area_id).val();
+	var fontsizerSliderMax = jQuery("#fontsizerSliderMax" + reddesign_area_id).val();
+	var inputFieldType = jQuery("#inputFieldType" + reddesign_area_id).val();
+	var maximumCharsAllowed = jQuery("#maximumCharsAllowed" + reddesign_area_id).val();
+	var maximumLinesAllowed = jQuery("#maximumLinesAllowed" + reddesign_area_id).val();
+	var areaFonts = jQuery('[name="areaFonts' + reddesign_area_id + '[]"]').val();
+	var colorCodes = jQuery("#colorCodes" + reddesign_area_id).val();
+	var defaultText = jQuery("#defaultText" + reddesign_area_id).val();
 
-	if (akeeba.jQuery("#allColors" + reddesign_area_id).is(":checked"))
+	if (jQuery("#allColors" + reddesign_area_id).is(":checked"))
 	{
 		colorCodes = 1;
 	}
 
-	akeeba.jQuery.ajax({
+	jQuery.ajax({
 		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxSave&format=raw",
 		data: {
 			reddesign_area_id: reddesign_area_id,
@@ -941,7 +941,7 @@ function saveAreaSettings(reddesign_area_id) {
 		},
 		type: "post",
 		success: function (data) {
-			setTimeout(function () {akeeba.jQuery("#saveAreaSettings" + reddesign_area_id).button("reset")}, 500);
+			setTimeout(function () {jQuery("#saveAreaSettings" + reddesign_area_id).button("reset")}, 500);
 		},
 		error: function (data) {
 			alert(data);
@@ -956,15 +956,15 @@ function saveAreaSettings(reddesign_area_id) {
  */
 function changeInputFieldType(reddesign_area_id)
 {
-	var selectedType = akeeba.jQuery("#inputFieldType" + reddesign_area_id).val();
+	var selectedType = jQuery("#inputFieldType" + reddesign_area_id).val();
 
 	if (selectedType == 1)
 	{
-		akeeba.jQuery("#maximumLinesAllowedContainer" + reddesign_area_id).css("display", "inline");
+		jQuery("#maximumLinesAllowedContainer" + reddesign_area_id).css("display", "inline");
 	}
 	else
 	{
-		akeeba.jQuery("#maximumLinesAllowedContainer" + reddesign_area_id).css("display", "none");
+		jQuery("#maximumLinesAllowedContainer" + reddesign_area_id).css("display", "none");
 	}
 }
 

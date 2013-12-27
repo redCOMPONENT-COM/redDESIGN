@@ -17,7 +17,7 @@ JHTML::_('behavior.modal');
 		<input type="button" class="btn btn-primary" id="addBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_ADD'); ?>"/>
 	</div>
 	<div id="backgroundForm" class="well" style="display:none;">
-		<?php echo $this->loadTemplate('background'); ?>
+
 	</div>
 	<form id="backgrounds_form" name="backgrounds" method="post" action="index.php">
 		<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
@@ -25,7 +25,7 @@ JHTML::_('behavior.modal');
 		<input type="hidden" name="view" value="background">
 		<input type="hidden" name="task" id="backgrounds_task" value="">
 		<input type="hidden" name="reddesign_background_id" id="backgrounds_reddesign_background_id" value="">
-		<input type="hidden" name="reddesign_designtype_id" id="backgrounds_reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>">
+		<input type="hidden" name="reddesign_designtype_id" id="backgrounds_reddesign_designtype_id" value="<?php echo $this->item->id; ?>">
 		<table id="itemsList" class="table table-striped">
 			<thead>
 			<tr>
@@ -136,15 +136,15 @@ JHTML::_('behavior.modal');
 </div>
 
 <script type="text/javascript">
-	akeeba.jQuery(document).ready(
+	jQuery(document).ready(
 		function ($) {
 			// Selects background for edit and populates field data accordingly.
 			<?php foreach ($this->backgrounds as $background) : ?>
-				akeeba.jQuery(document).on("click", "#editBackground<?php echo $background->reddesign_background_id; ?>", function() {
-					akeeba.jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_TITLE_BACKGROUNDS_EDIT'); ?>");
-					akeeba.jQuery("#reddesign_background_id").val("<?php echo $background->reddesign_background_id; ?>");
-					akeeba.jQuery("#bg_title").val("<?php echo $background->title; ?>");
-					akeeba.jQuery("input[name=enabled][value=" + <?php echo $background->enabled; ?> + "]").prop('checked', true);
+				jQuery(document).on("click", "#editBackground<?php echo $background->reddesign_background_id; ?>", function() {
+					jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_TITLE_BACKGROUNDS_EDIT'); ?>");
+					jQuery("#reddesign_background_id").val("<?php echo $background->reddesign_background_id; ?>");
+					jQuery("#bg_title").val("<?php echo $background->title; ?>");
+					jQuery("input[name=enabled][value=" + <?php echo $background->enabled; ?> + "]").prop('checked', true);
 
 					<?php
 						if ($background->isProductionBg)
@@ -156,7 +156,7 @@ JHTML::_('behavior.modal');
 							$isProductionBgChecked = 'false';
 						}
 					?>
-					akeeba.jQuery("#isProductionBg").prop("checked", <?php echo $isProductionBgChecked; ?>);
+					jQuery("#isProductionBg").prop("checked", <?php echo $isProductionBgChecked; ?>);
 
 					<?php
 						if ($background->isPreviewBg)
@@ -168,7 +168,7 @@ JHTML::_('behavior.modal');
 							$isPreviewBgChecked = 'false';
 						}
 					?>
-					akeeba.jQuery("#isPreviewBg").prop("checked", <?php echo $isPreviewBgChecked; ?>);
+					jQuery("#isPreviewBg").prop("checked", <?php echo $isPreviewBgChecked; ?>);
 
 					<?php
 						if ($background->isDefaultPreview)
@@ -180,36 +180,36 @@ JHTML::_('behavior.modal');
 							$isDefaultPreviewChecked = 'false';
 						}
 					?>
-					akeeba.jQuery("#isDefaultPreview").prop("checked", <?php echo $isDefaultPreviewChecked; ?>);
+					jQuery("#isDefaultPreview").prop("checked", <?php echo $isDefaultPreviewChecked; ?>);
 
-					if(akeeba.jQuery("#isPreviewBg").is(":checked"))
+					if(jQuery("#isPreviewBg").is(":checked"))
 					{
-						akeeba.jQuery("#isDefaultPreviewContainer").show();
-						akeeba.jQuery("#useCheckerboardContainer").show();
+						jQuery("#isDefaultPreviewContainer").show();
+						jQuery("#useCheckerboardContainer").show();
 					}
 					else
 					{
-						akeeba.jQuery("#isDefaultPreviewContainer").hide();
-						akeeba.jQuery("#useCheckerboardContainer").hide();
+						jQuery("#isDefaultPreviewContainer").hide();
+						jQuery("#useCheckerboardContainer").hide();
 					}
 
-					akeeba.jQuery("#BgThumbnailLink")
+					jQuery("#BgThumbnailLink")
 						.attr("href", "<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $background->thumbnail; ?>")
 						.text("<?php echo $background->thumbnail; ?>")
 					;
 
-					akeeba.jQuery('#addBgBtn').parent().hide();
-					akeeba.jQuery('#backgroundForm').fadeIn("slow");
+					jQuery('#addBgBtn').parent().hide();
+					jQuery('#backgroundForm').fadeIn("slow");
 
-					akeeba.jQuery('body').animate({
-						'scrollTop':   akeeba.jQuery('#backgroundForm').offset().top
+					jQuery('body').animate({
+						'scrollTop':   jQuery('#backgroundForm').offset().top
 					}, 1000);
 				});
 			<?php endforeach ?>
 
-			akeeba.jQuery(document).on('click', '#addBgBtn', function () {
-					akeeba.jQuery('#addBgBtn').parent().hide();
-					akeeba.jQuery('#backgroundForm').fadeIn("slow");
+			jQuery(document).on('click', '#addBgBtn', function () {
+					jQuery('#addBgBtn').parent().hide();
+					jQuery('#backgroundForm').fadeIn("slow");
 				}
 			);
 		}
@@ -223,9 +223,9 @@ JHTML::_('behavior.modal');
 
 		backgrounds_reddesign_background_id = bgid;
 
-		akeeba.jQuery('#backgrounds_task').val('setProductionFileBg');
-		akeeba.jQuery('#backgrounds_reddesign_background_id').val(bgid);
-		akeeba.jQuery('#backgrounds_form').submit();
+		jQuery('#backgrounds_task').val('setProductionFileBg');
+		jQuery('#backgrounds_reddesign_background_id').val(bgid);
+		jQuery('#backgrounds_form').submit();
 	}
 
 	/**
@@ -236,9 +236,9 @@ JHTML::_('behavior.modal');
 
 		backgrounds_reddesign_background_id = bgid;
 
-		akeeba.jQuery('#backgrounds_task').val('setPreviewBg');
-		akeeba.jQuery('#backgrounds_reddesign_background_id').val(bgid);
-		akeeba.jQuery('#backgrounds_form').submit();
+		jQuery('#backgrounds_task').val('setPreviewBg');
+		jQuery('#backgrounds_reddesign_background_id').val(bgid);
+		jQuery('#backgrounds_form').submit();
 	}
 
 
@@ -246,33 +246,33 @@ JHTML::_('behavior.modal');
 	 *  Removes a background form activation
 	 */
 	function removeBg(bgid) {
-		akeeba.jQuery('#backgrounds_task').val('remove');
-		<?php $return_url_removeBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->reddesign_designtype_id . '&tab=backgrounds'; ?>
-		akeeba.jQuery('#backgrounds_form').
+		jQuery('#backgrounds_task').val('remove');
+		<?php $return_url_removeBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->id . '&tab=backgrounds'; ?>
+		jQuery('#backgrounds_form').
 			append(
-				akeeba.jQuery('<input/>')
+				jQuery('<input/>')
 					.attr('type', 'hidden')
 					.attr('name', 'returnurl')
 					.val('<?php echo base64_encode($return_url_removeBg) ?>')
 			);
-		akeeba.jQuery('#backgrounds_reddesign_background_id').val(bgid);
-		akeeba.jQuery('#backgrounds_form').submit();
+		jQuery('#backgrounds_reddesign_background_id').val(bgid);
+		jQuery('#backgrounds_form').submit();
 	}
 
 	/**
 	 * Saves background form activation
 	 */
 	function modifyBg(bgid) {
-		akeeba.jQuery('#backgrounds_task').val('save');
-		<?php $return_url_removeBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->reddesign_designtype_id . '&tab=backgrounds'; ?>
-		akeeba.jQuery('#backgrounds_form').
+		jQuery('#backgrounds_task').val('save');
+		<?php $return_url_removeBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->id . '&tab=backgrounds'; ?>
+		jQuery('#backgrounds_form').
 			append(
-				akeeba.jQuery('<input/>')
+				jQuery('<input/>')
 					.attr('type', 'hidden')
 					.attr('name', 'returnurl')
 					.val('<?php echo base64_encode($return_url_removeBg) ?>')
 			);
-		akeeba.jQuery('#backgrounds_reddesign_background_id').val(bgid);
-		akeeba.jQuery('#backgrounds_form').submit();
+		jQuery('#backgrounds_reddesign_background_id').val(bgid);
+		jQuery('#backgrounds_form').submit();
 	}
 </script>

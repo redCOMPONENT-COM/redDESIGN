@@ -146,7 +146,7 @@ RHelperAsset::load('color-converter.js');
 				<button id="saveAreaBtn"
 						class="btn btn-success"
 						data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVING_AREA'); ?>"
-						onclick="preSaveArea(akeeba.jQuery('#designAreaId').val());"
+						onclick="preSaveArea(jQuery('#designAreaId').val());"
 					>
 					<span>
 						<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
