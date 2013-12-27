@@ -20,45 +20,95 @@ defined('_JEXEC') or die;
 
 class ReddesignViewDesigntype extends ReddesignView
 {
-	public $item;
+	/**
+	 * @var  JForm
+	 */
+	protected $form;
 
-	public $activeTab;
+	/**
+	 * @var  object
+	 */
+	protected $item;
 
-	public $document;
+	/**
+	 * @var  object
+	 */
+	protected $document;
 
-	public $areas;
+	/**
+	 * @var array
+	 */
+	protected $areas = array();
 
-	public $productionBackground;
+	/**
+	 * @var  object
+	 */
+	protected $productionBackground = null;
 
-	public $params;
+	/**
+	 * @var  object
+	 */
+	protected $params;
 
-	public $sizerOptions;
+	/**
+	 * @var array
+	 */
+	protected $backgrounds = array();
 
-	public $backgrounds;
+	/**
+	 * @var float
+	 */
+	protected $ratio;
 
-	public $ratio;
+	/**
+	 * @var array
+	 */
+	protected $inputFieldOptions = array();
 
-	public $colorCodes;
+	/**
+	 * @var array
+	 */
+	protected $fonts = array();
 
-	public $inputFieldOptions;
+	/**
+	 * @var array
+	 */
+	protected $alignmentOptions = array();
 
-	public $fonts;
+	/**
+	 * @var array
+	 */
+	protected $fontsOptions = array();
 
-	public $alignmentOptions;
+	/**
+	 * @var string
+	 */
+	protected $unit;
 
-	public $fontsOptions;
+	/**
+	 * @var float
+	 */
+	protected $pxToUnit;
 
-	public $unit;
+	/**
+	 * @var float
+	 */
+	protected $unitToPx;
 
-	public $pxToUnit;
+	/**
+	 * @var float
+	 */
+	protected $imageWidth;
 
-	public $unitToPx;
+	/**
+	 * @var float
+	 */
+	protected $imageHeight;
 
-	public $imageWidth;
-
-	public $imageHeight;
-
-	public $backgroundTypeOptions;
+	/**
+	 * @var array
+	 */
+	protected $backgroundTypeOptions = array();
 
 	/**
 	 * Do not display the sidebar
@@ -76,20 +126,17 @@ class ReddesignViewDesigntype extends ReddesignView
 	 */
 	public function display($tpl = null)
 	{
-		$this->item 				= $this->get('Item');
-		$this->form 				= $this->get('Form');
-		$this->activeTab 			= JFactory::getApplication()->input->getString('tab', 'general');
-		$this->document 			= JFactory::getDocument();
-		$this->areas 				= null;
-		$this->productionBackground = null;
-		$this->params				= JComponentHelper::getParams('com_reddesign');
+		$this->item 	= $this->get('Item');
+		$this->form 	= $this->get('Form');
+		$this->document = JFactory::getDocument();
+		$this->params	= JComponentHelper::getParams('com_reddesign');
 
 		// If it's not a new design
-		if (!empty($this->item->reddesign_designtype_id))
+		if (!empty($this->item->id))
 		{
 			// Get all the backgrounds that belongs to this Design Type item.
 			$backgroundsModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true));
-			$backgroundsModel->setState('reddesign_designtype_id', $this->item->reddesign_designtype_id);
+			$backgroundsModel->setState('id', $this->item->id);
 			$this->backgrounds = $backgroundsModel->getItems();
 
 			$areas = array();
@@ -145,7 +192,7 @@ class ReddesignViewDesigntype extends ReddesignView
 
 			foreach ($this->fonts as $font)
 			{
-				$this->fontsOptions[] = JHtml::_('select.option', $font->reddesign_font_id, $font->title);
+				$this->fontsOptions[] = JHtml::_('select.option', $font->id, $font->name);
 			}
 
 			$this->backgroundTypeOptions = array(
@@ -217,7 +264,7 @@ class ReddesignViewDesigntype extends ReddesignView
 			->addButton($saveAndNew)
 			->addButton($save2Copy);
 
-		if (empty($this->item->reddesign_designtype_id))
+		if (empty($this->item->id))
 		{
 			$cancel = RToolbarBuilder::createCancelButton('designtype.cancel');
 		}

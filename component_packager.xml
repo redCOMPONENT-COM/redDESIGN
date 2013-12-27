@@ -71,7 +71,7 @@
 			<fileset dir="${extpath}/">
 				<include name="LICENSE.txt"/>
 				<include name="reddesign.xml"/>
-				<include name="script.reddesign.php"/>
+				<include name="install.php"/>
 			</fileset>
 		</copy>
 

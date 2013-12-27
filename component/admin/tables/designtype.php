@@ -30,19 +30,59 @@ class ReddesignTableDesigntype extends RTable
 	protected $_tableName = 'reddesign_designtypes';
 
 	/**
-	 * The primary key of the table
-	 *
-	 * @var string
-	 * @since 0.9.1
+	 * @var  integer
 	 */
-	protected $_tableKey = 'reddesign_designtype_id';
+	public $id;
 
 	/**
-	 * Field name to publish/unpublish table registers. Ex: state
-	 *
 	 * @var  string
 	 */
-	protected $_tableFieldState = 'published';
+	public $name;
+
+	/**
+	 * @var  integer
+	 */
+	public $state = 1;
+
+	/**
+	 * @var  integer
+	 */
+	public $ordering = 0;
+
+	/**
+	 * @var  integer
+	 */
+	public $created_by = null;
+
+	/**
+	 * @var  string
+	 */
+	public $created_date = '0000-00-00 00:00:00';
+
+	/**
+	 * @var  integer
+	 */
+	public $modified_by = null;
+
+	/**
+	 * @var  string
+	 */
+	public $modified_date = '0000-00-00 00:00:00';
+
+	/**
+	 * @var  integer
+	 */
+	public $checked_out = null;
+
+	/**
+	 * @var  string
+	 */
+	public $checked_out_time = '0000-00-00 00:00:00';
+
+	/**
+	 * @var  string
+	 */
+	public $fontsizer = 'auto';
 
 	/**
 	 * Method to store a node in the database table.

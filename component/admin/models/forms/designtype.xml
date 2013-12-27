@@ -2,21 +2,21 @@
 <form>
 	<fieldset>
 		<field
-			name="reddesign_designtype_id"
+			name="id"
 			type="hidden"
 			default="0"
 			class="readonly"
 			readonly="true"
 			/>
 		<field
-			name="title"
+			name="name"
 			type="text"
 			default=""
 			label="COM_REDDESIGN_DESIGNTYPE_FIELD_TITLE"
 			description="COM_REDDESIGN_DESIGNTYPE_FIELD_TITLE_DESC"
 			required="true"
 		/>
-		<field name="published"
+		<field name="state"
 			type="radio"
 			label="JPUBLISHED"
 			class="btn-group"
