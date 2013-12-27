@@ -496,8 +496,8 @@ class ReddesignControllerDesigntypes extends JController
 			$query = $db->getQuery(true);
 			$query
 				->select('fonts.default_height, fonts.default_caps_height, fonts.default_baseline_height')
-				->from('#__reddesign_fonts as fonts')
-				->where('fonts.reddesign_font_id = ' . (int) $fontId);
+				->from($db->quoteName('#__reddesign_fonts as fonts'))
+				->where($db->quoteName('fonts.reddesign_font_id') . ' = ' . (int) $fontId);
 
 			$db->setQuery($query);
 			$HeightArray = $db->loadObject();
@@ -505,9 +505,9 @@ class ReddesignControllerDesigntypes extends JController
 			$query = $db->getQuery(true);
 			$query
 				->select('max(height) as height,  group_concat(typography separator ", ") as typography, typography_height')
-				->from('#__reddesign_chars as chars')
-				->where('chars.reddesign_font_id = ' . (int) $fontId)
-				->where('binary chars.font_char IN ("' . implode('","', $char) . '")')
+				->from($db->quoteName('#__reddesign_chars as chars'))
+				->where($db->quoteName('chars.reddesign_font_id') . ' = ' . (int) $fontId)
+				->where($db->quoteName('binary chars.font_char') . ' IN ("' . implode('","', $char) . '")')
 				->order('chars.reddesign_char_id ASC');
 
 			$db->setQuery($query);
