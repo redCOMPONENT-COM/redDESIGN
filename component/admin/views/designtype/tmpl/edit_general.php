@@ -10,7 +10,9 @@
 defined('_JEXEC') or die();
 
 ?>
-<form action="index.php" method="post" name="adminForm" id="adminForm" class="form-horizontal" enctype="multipart/form-data">
+<form enctype="multipart/form-data"
+	action="index.php?option=com_reddesign&task=designtype.edit&id=<?php echo $this->item->id; ?>"
+	method="post" name="adminForm" id="adminForm" class="form-horizontal">
 	<input type="hidden" name="option" value="com_reddesign">
 	<input type="hidden" name="view" value="designtype">
 	<input type="hidden" name="task" value="">
