@@ -136,38 +136,41 @@ class ReddesignViewDesigntype extends ReddesignView
 		{
 			// Get all the backgrounds that belongs to this Design Type item.
 			$backgroundsModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true));
-			$backgroundsModel->setState('id', $this->item->id);
+			$backgroundsModel->setState('designtype_id', $this->item->id);
 			$this->backgrounds = $backgroundsModel->getItems();
 
 			$areas = array();
 
-			foreach ($this->backgrounds as $background)
+			if ($this->backgrounds)
 			{
-				// Get the background image that has been selected to be the Production PDF file image.
-				if ($background->isProductionBg)
+				foreach ($this->backgrounds as $background)
 				{
-					$this->productionBackground = $background;
+					// Get the background image that has been selected to be the Production PDF file image.
+					if ($background->isProductionBg)
+					{
+						$this->productionBackground = $background;
 
-					$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $this->productionBackground->eps_file;
-					$previewFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $this->productionBackground->image_path;
+						$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $this->productionBackground->eps_file;
+						$previewFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $this->productionBackground->image_path;
 
-					// Read EPS size.
-					$im = new Imagick;
-					$im->readImage($epsFileLocation);
-					$dimensions = $im->getImageGeometry();
-					$this->imageWidth = $dimensions['width'];
-					$this->imageHeight = $dimensions['height'];
+						// Read EPS size.
+						$im = new Imagick;
+						$im->readImage($epsFileLocation);
+						$dimensions = $im->getImageGeometry();
+						$this->imageWidth = $dimensions['width'];
+						$this->imageHeight = $dimensions['height'];
 
-					// Read preview size, for scaling.
-					$previewImageSize = getimagesize($previewFileLocation);
+						// Read preview size, for scaling.
+						$previewImageSize = getimagesize($previewFileLocation);
 
-					// Scaling ratio
-					$this->ratio = $previewImageSize[0] / $this->imageWidth;
+						// Scaling ratio
+						$this->ratio = $previewImageSize[0] / $this->imageWidth;
 
-					// Get all areas existing in the database for this specific background.
-					$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
-					$areasModel->setState('reddesign_background_id', $background->reddesign_background_id);
-					$areas = $areasModel->getItems();
+						// Get all areas existing in the database for this specific background.
+						$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
+						$areasModel->setState('reddesign_background_id', $background->reddesign_background_id);
+						$areas = $areasModel->getItems();
+					}
 				}
 			}
 
