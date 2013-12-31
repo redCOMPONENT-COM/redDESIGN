@@ -195,10 +195,10 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		if (!empty($designTypeId))
 		{
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
+			$query->select($db->quoteName(array('id', 'name', 'thumbnail')))
 				->from($db->quoteName('#__reddesign_backgrounds'))
 				->where($db->quoteName('isProductionBg') . ' = ' . 0)
-				->where($db->quoteName('reddesign_designtype_id') . ' IN (' . $designTypeId . ')');
+				->where($db->quoteName('designtype_id') . ' IN (' . $designTypeId . ')');
 			$db->setQuery($query);
 			$backgrounds = $db->loadObjectList();
 		}
@@ -274,10 +274,10 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			{
 				// Get all the backgrounds that belongs to selected Design Type item.
 				$query = $db->getQuery(true);
-				$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
+				$query->select($db->quoteName(array('id', 'name', 'thumbnail')))
 					->from($db->quoteName('#__reddesign_backgrounds'))
 					->where($db->quoteName('isProductionBg') . ' = ' . 0)
-					->where($db->quoteName('reddesign_designtype_id') . ' IN (' . $designTypeId . ')');
+					->where($db->quoteName('designtype_id') . ' IN (' . $designTypeId . ')');
 				$db->setQuery($query);
 				$backgrounds = $db->loadObjectList();
 			}
