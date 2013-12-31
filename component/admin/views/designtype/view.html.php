@@ -141,7 +141,7 @@ class ReddesignViewDesigntype extends ReddesignView
 
 			$areas = array();
 
-			if ($this->backgrounds)
+			/*if ($this->backgrounds)
 			{
 				foreach ($this->backgrounds as $background)
 				{
@@ -172,7 +172,7 @@ class ReddesignViewDesigntype extends ReddesignView
 						$areas = $areasModel->getItems();
 					}
 				}
-			}
+			}*/
 
 			$this->areas = $areas;
 

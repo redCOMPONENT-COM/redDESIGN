@@ -178,4 +178,17 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_orderitem_mapping` (
   DEFAULT CHARSET = utf8
   DEFAULT COLLATE = utf8_general_ci;
 
+--
+-- Table structure for table `#__reddesign_property_area_xref`
+--
+CREATE TABLE IF NOT EXISTS `#__reddesign_property_area_xref` (
+  `property_id`       INT(11) NOT NULL,
+  `reddesign_area_id` INT(11) NOT NULL,
+  `display_type`      ENUM('TEXT','FONT','FONTSIZE','COLOR') NOT NULL,
+  PRIMARY KEY (`property_id`,`reddesign_area_id`)
+)
+  ENGINE=InnoDB
+  DEFAULT CHARSET = utf8
+  DEFAULT COLLATE = utf8_general_ci;
+
 SET foreign_key_checks = 1;

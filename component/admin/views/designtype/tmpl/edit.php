@@ -15,18 +15,51 @@ JHtml::_('rjquery.select2', 'select');
 RHelperAsset::load('jquery.imgareaselect.pack.js');
 RHelperAsset::load('imgareaselect-animated.css');
 ?>
-<script>
+<script type="text/javascript">
+	(function($){
+		$(document).ready(function () {
+			ajaxLoadBackgrounds();
+		});
+	})(jQuery);
 	/**
 	 * Function to clear area selection drawn over other tabs due to auto zIndex.
 	 * Without this function, area selections apear on top of all tabs.
 	 */
-	function clearAreaSelection() {
+	function clearAreaSelection()
+	{
 		var imageAreaSelection = jQuery("img#background").imgAreaSelect({ instance: true });
 
-		if(typeof imageAreaSelection != 'undefined')
+		if ((typeof imageAreaSelection != null) && (typeof imageAreaSelection != 'undefinded'))
 		{
 			imageAreaSelection.cancelSelection();
 		}
+	}
+
+	/**
+	 * Load Backgrounds list
+	 * @return void
+	 */
+	function ajaxLoadBackgrounds()
+	{
+		var url = 'index.php?option=com_reddesign&task=backgrounds.ajaxBackgrounds&designtype_id=<?php echo $this->item->id ?>';
+		console.log('ajaxLoadBackgrounds: ' + url);
+		jQuery('#addBgBtn').parent().hide();
+		// Perform the ajax request
+		jQuery.ajax({
+			url: url
+		}).done(function (data) {
+			jQuery('#backgroundsList').html(data);
+			jQuery('select').select2();
+			jQuery('.hasTooltip').tooltip({"animation": true, "html": true, "placement": "top",
+				"selector": false, "title": "", "trigger": "hover focus", "delay": 0, "container": false});
+
+			// JModal
+			SqueezeBox.initialize({});
+			SqueezeBox.assign($$('a.jmodal'), {
+				parse: 'rel'
+			});
+			console.log('SqueezeBox');
+		});
 	}
 </script>
 
@@ -60,15 +93,53 @@ RHelperAsset::load('imgareaselect-animated.css');
 
 <div id="my-tab-content" class="tab-content">
 	<div class="tab-pane active" id="general">
-		<?php echo $this->loadTemplate('general'); ?>
+		<form enctype="multipart/form-data"
+			action="index.php?option=com_reddesign&task=designtype.edit&id=<?php echo $this->item->id; ?>"
+			method="post" name="adminForm" id="adminForm" class="form-horizontal">
+			<input type="hidden" name="option" value="com_reddesign">
+			<input type="hidden" name="view" value="designtype">
+			<input type="hidden" name="task" value="">
+			<?php echo $this->form->getInput('id'); ?>
+			<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
+
+			<div id="basic_configuration" class="span12">
+				<div class="control-group">
+					<div class="control-label">
+						<?php echo $this->form->getLabel('name'); ?>
+					</div>
+					<div class="controls">
+						<?php echo $this->form->getInput('name'); ?>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<div class="control-label">
+						<?php echo $this->form->getLabel('state'); ?>
+					</div>
+					<div class="controls">
+						<?php echo $this->form->getInput('state'); ?>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<div class="control-label">
+						<?php echo $this->form->getLabel('fontsizer'); ?>
+					</div>
+					<div class="controls">
+						<?php echo $this->form->getInput('fontsizer'); ?>
+					</div>
+				</div>
+			</div>
+		</form>
 	</div>
 	<?php if (!empty($this->item->id)) : ?>
 		<div class="tab-pane" id="backgrounds">
-			<?php echo $this->loadTemplate('background'); ?>
-			<?php echo $this->loadTemplate('backgrounds'); ?>
+			<?php /*echo $this->loadTemplate('background');*/ ?>
+			<?php /*echo $this->loadTemplate('backgrounds');*/ ?>
+			<div id="backgroundsList"></div>
 		</div>
 		<div class="tab-pane" id="design-areas">
-			<?php echo $this->loadTemplate('designareas'); ?>
+			<?php /*echo $this->loadTemplate('designareas');*/ ?>
 		</div>
 	<?php endif; ?>
 </div>
