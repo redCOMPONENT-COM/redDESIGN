@@ -17,8 +17,18 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerBackgrounds extends FOFController
+class ReddesignControllerBackgrounds extends RControllerAdmin
 {
+	/**
+	 * constructor (registers additional tasks to methods)
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		// Write this to make two tasks use the same method (in this example the add method uses the edit method)
+		$this->registerTask('add', 'edit');
+	}
 
 	/**
 	 * Moves an uploaded EPS file to the media://com_reddesign/assets/backgrounds/
@@ -267,5 +277,33 @@ class ReddesignControllerBackgrounds extends FOFController
 
 		$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . $designId . '&tab=backgrounds');
 		$this->redirect();
+	}
+
+	/**
+	 * Method for load Backgrounds List by AJAX
+	 *
+	 * @return array
+	 */
+	public function ajaxBackgrounds()
+	{
+		$app = JFactory::getApplication();
+		$input = $app->input;
+
+		$designTypeId = $input->getInt('designtype_id');
+
+		if ($designTypeId)
+		{
+			/** @var RedshopbModelUsers $usersModel */
+
+			$view = $this->getView('Backgrounds', 'html');
+			$model = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true));
+			$view->setModel($model, true);
+
+			$model->setState('filter.designtypeid', $designTypeId);
+
+			$view->display();
+		}
+
+		$app->close();
 	}
 }

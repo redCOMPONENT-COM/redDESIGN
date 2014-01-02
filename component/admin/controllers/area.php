@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  *
  * @since       1.0
  */
-class ReddesignControllerArea extends FOFController
+class ReddesignControllerArea extends RControllerForm
 {
 	/**
 	 * Saves design areas for AJAX request.
@@ -37,19 +37,24 @@ class ReddesignControllerArea extends FOFController
 			$this->input->set('font_id', $fontIds);
 		}
 
-		if ($this->applySave())
+		$data = $this->input->post->get('jform', array(), 'array');
+
+		$model = RModel::getAdminInstance('Area');
+
+		if ($model->ajaxSave($data))
 		{
-			$response['reddesign_area_id'] = $this->input->getInt('id', null);
-			$response['title']			   = $this->input->getString('title', '');
-			$response['x1_pos']		   = $this->input->getInt('x1_pos', null);
-			$response['y1_pos']		   = $this->input->getInt('y1_pos', null);
-			$response['x2_pos']		   = $this->input->getInt('x2_pos', null);
-			$response['y2_pos']		   = $this->input->getInt('y2_pos', null);
-			$response['width']			   = $this->input->getInt('width', null);
-			$response['height']			   = $this->input->getInt('height', null);
-			$response['message']		   = JText::sprintf('COM_REDDESIGN_DESIGNTYPE_AREA_SAVED', $this->input->getString('title', ''));
+			$response['reddesign_area_id'] 	= $this->input->getInt('id', null);
+			$response['title']			   	= $this->input->getString('jform[title]', '');
+			$response['x1_pos']		   		= $this->input->getInt('x1_pos', null);
+			$response['y1_pos']		   		= $this->input->getInt('y1_pos', null);
+			$response['x2_pos']		   		= $this->input->getInt('x2_pos', null);
+			$response['y2_pos']		   		= $this->input->getInt('y2_pos', null);
+			$response['width']			   	= $this->input->getInt('width', null);
+			$response['height']			   	= $this->input->getInt('height', null);
+			$response['message']		   	= JText::sprintf('COM_REDDESIGN_DESIGNTYPE_AREA_SAVED', $this->input->getString('title', ''));
 
 			echo json_encode($response);
+			exit();
 		}
 		else
 		{
