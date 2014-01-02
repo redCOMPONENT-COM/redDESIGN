@@ -376,7 +376,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	}
 
 	/**
-	 * // Get all the backgrounds that belongs to selected Design Type item.
+	 * Get all the backgrounds that belongs to selected Design Type item.
 	 *
 	 * @param   string  $designTypeId  Comma separated design type ids.
 	 *
