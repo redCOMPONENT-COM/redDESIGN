@@ -10,6 +10,12 @@
 defined('_JEXEC') or die;
 
 JHTML::_('behavior.modal', 'a.jmodal');
+
+if (count($displayData->items) > 0)
+{
+	$this->items = $displayData->items;
+}
+
 ?>
 
 <div class="form-container">
