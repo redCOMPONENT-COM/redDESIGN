@@ -66,7 +66,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 			// Get design types.
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName(array('reddesign_designtype_id', 'title')));
+			$query->select($db->quoteName(array('id', 'name')));
 			$query->from($db->quoteName('#__reddesign_designtypes'));
 			$db->setQuery($query);
 			$designTypes = $db->loadObjectList();
@@ -84,7 +84,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 			foreach ($designTypes as $designType)
 			{
-				$designTypeOptions[] = JHtml::_('select.option', $designType->reddesign_designtype_id, $designType->title);
+				$designTypeOptions[] = JHtml::_('select.option', $designType->id, $designType->name);
 			}
 
 			$html = '<div>';
@@ -195,10 +195,10 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		if (!empty($designTypeId))
 		{
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
+			$query->select($db->quoteName(array('id', 'name', 'thumbnail')))
 				->from($db->quoteName('#__reddesign_backgrounds'))
 				->where($db->quoteName('isProductionBg') . ' = ' . 0)
-				->where($db->quoteName('reddesign_designtype_id') . ' IN (' . $designTypeId . ')');
+				->where($db->quoteName('designtype_id') . ' IN (' . $designTypeId . ')');
 			$db->setQuery($query);
 			$backgrounds = $db->loadObjectList();
 		}
@@ -274,10 +274,10 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			{
 				// Get all the backgrounds that belongs to selected Design Type item.
 				$query = $db->getQuery(true);
-				$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
+				$query->select($db->quoteName(array('id', 'name', 'thumbnail')))
 					->from($db->quoteName('#__reddesign_backgrounds'))
 					->where($db->quoteName('isProductionBg') . ' = ' . 0)
-					->where($db->quoteName('reddesign_designtype_id') . ' IN (' . $designTypeId . ')');
+					->where($db->quoteName('designtype_id') . ' IN (' . $designTypeId . ')');
 				$db->setQuery($query);
 				$backgrounds = $db->loadObjectList();
 			}
@@ -353,7 +353,6 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	 * @param   object  $data  Contains product and property id
 	 *
 	 * @throws  RuntimeException
-
 	 * @return  void
 	 */
 	private function removeReddesignPropertyMapping($data)
