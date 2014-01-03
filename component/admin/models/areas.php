@@ -52,7 +52,7 @@ class ReddesignModelAreas extends RModelList
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		parent::populateState('a.title', 'asc');
+		parent::populateState('a.name', 'asc');
 	}
 
 	/**
@@ -72,7 +72,7 @@ class ReddesignModelAreas extends RModelList
 		$orderList = $this->getState('list.ordering');
 		$directionList = $this->getState('list.direction');
 
-		$order = !empty($orderList) ? $orderList : 'a.title';
+		$order = !empty($orderList) ? $orderList : 'a.name';
 		$direction = !empty($directionList) ? $directionList : 'ASC';
 		$query->order($db->escape($order) . ' ' . $db->escape($direction));
 

@@ -23,18 +23,19 @@ RHelperAsset::load('farbtastic.css');
 RHelperAsset::load('color-converter.js');
 
 if (isset($displayData))
-{
-	$this->areas = $displayData->items;
-	$this->item = $displayData->item;
-	$this->productionBackground = $displayData->productionBackground;
-	$this->fontsOptions = $displayData->fontsOptions;
-	$this->unit = $displayData->unit;
-	$this->pxToUnit = $displayData->pxToUnit;
-	$this->unitToPx = $displayData->unitToPx;
-	$this->ratio = $displayData->ratio;
-	$this->imageWidth = $displayData->imageWidth;
-	$this->imageHeight = $displayData->imageHeight;
-}
+	{
+		$this->areas = $displayData->items;
+		$this->item = $displayData->item;
+		$this->productionBackground = $displayData->productionBackground;
+		$this->fontsOptions = $displayData->fontsOptions;
+		$this->unit = $displayData->unit;
+		$this->pxToUnit = $displayData->pxToUnit;
+		$this->unitToPx = $displayData->unitToPx;
+		$this->ratio = $displayData->ratio;
+		$this->imageWidth = $displayData->imageWidth;
+		$this->imageHeight = $displayData->imageHeight;
+		$this->inputFieldOptions = $displayData->inputFieldOptions;
+	}
 
 ?>
 
@@ -47,10 +48,10 @@ if (isset($displayData))
 
 	<?php
 		// Load JS template for design area setting rows.
-		//echo $this->loadTemplate('designareas_js_tmpl');
+		// Echo $this->loadTemplate('designareas_js_tmpl');
 
 		// Load dynamically created JS.
-		//echo $this->loadTemplate('designareas_js');
+		// Echo $this->loadTemplate('designareas_js');
 	?>
 
 	<div class="designAreasContainer">
@@ -136,11 +137,19 @@ if (isset($displayData))
 					</span>
 					<div id="backgroundImageContainer">
 						<img id="background" src="<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->image_path; ?>"/>
-						<?php foreach($this->areas as $area) : ?>
+						<?php
+						if (!empty($this->areas))
+						{
+							foreach ($this->areas as $area)
+							{
+						?>
 							<div id="areaDiv<?php echo $area->id; ?>">
 								<?php echo $area->name; ?>
 							</div>
-						<?php endforeach; ?>
+						<?php
+							}
+						}
+						?>
 					</div>
 					<h3>
 						<?php
@@ -214,14 +223,14 @@ if (isset($displayData))
 						</td>
 						<td class="span4">
 							<a href="#" onclick="selectAreaForEdit(<?php echo $area->id . ',\'' .
-								$area->title . '\',' .
+								$area->name . '\',' .
 								$area->x1_pos . ',' .
 								$area->y1_pos . ',' .
 								$area->x2_pos . ',' .
 								$area->y2_pos . ',' .
 								$area->width . ',' .
 								$area->height; ?>);">
-								<strong><?php echo $area->title; ?></strong>
+								<strong><?php echo $area->name; ?></strong>
 							</a>
 						</td>
 						<td>
@@ -1191,7 +1200,7 @@ function saveArea(update) {
 		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxSave",
 		data: {
 			'jform[id]': reddesign_area_id,
-			'jform[title]': areaName,
+			'jform[name]': areaName,
 			'jform[reddesign_background_id]': <?php echo $this->productionBackground->id; ?>,
 			'jform[x1_pos]': areaX1_in_px,
 			'jform[y1_pos]': areaY1_in_px,
