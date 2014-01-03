@@ -8,6 +8,12 @@
  */
 
 defined('_JEXEC') or die();
+
+if (isset($displayData))
+{
+	$this->backgrounds = $displayData->backgrounds;
+}
+
 ?>
 <h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_FRAMES_TITLE') ?></h4>
 <div class="row-fluid">

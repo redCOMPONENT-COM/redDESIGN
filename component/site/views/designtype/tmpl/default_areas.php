@@ -9,12 +9,19 @@
 
 defined('_JEXEC') or die();
 
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/selectionboxmove.js');
+RHelperAsset::load('selectionboxmove.js');
 
 // Colorpicker includes.
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/farbtastic.js');
-FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/farbtastic.css');
-FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
+RHelperAsset::load('farbtastic.js');
+RHelperAsset::load('farbtastic.css');
+RHelperAsset::load('color-converter.js');
+
+if (isset($displayData))
+{
+	$this->item = $displayData->item;
+	$this->productionBackgroundAreas = $displayData->productionBackgroundAreas;
+}
+
 ?>
 
 {RedDesignBreakDesignAreasTitle}
@@ -25,7 +32,7 @@ FOFTemplateUtils::addJS('media://com_reddesign/assets/js/color-converter.js');
 
 <?php foreach ($this->productionBackgroundAreas as $area) : ?>
 
-	<?php echo '{RedDesignBreakDesignArea' . $area->reddesign_area_id . '}'; ?>
+	<?php echo '{RedDesignBreakDesignArea' . $area->id . '}'; ?>
 
 		<?php
 			switch ($area->textalign)
