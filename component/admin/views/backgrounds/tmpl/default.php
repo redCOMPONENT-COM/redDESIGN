@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 
 JHTML::_('behavior.modal', 'a.jmodal');
 
-if (count($displayData->items) > 0)
+if (isset($displayData) && (count($displayData->items) > 0))
 {
 	$this->items = $displayData->items;
 }
@@ -143,9 +143,22 @@ if (count($displayData->items) > 0)
 				jQuery(document).on("click", "#editBackground<?php echo $background->id; ?>", function() {
 					jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_TITLE_BACKGROUNDS_EDIT'); ?>");
 					jQuery("#reddesign_background_id").val("<?php echo $background->id; ?>");
-					jQuery("#bg_title").val("<?php echo $background->name; ?>");
-					jQuery("input[name=enabled][value=" + <?php echo $background->state; ?> + "]").prop('checked', true);
+					jQuery("#jform_bg_name").val("<?php echo $background->name; ?>");
 
+					// State field
+					jQuery("#jform_bg_state label").attr("class", "btn");
+					var stateObj = jQuery("input[name='jform[bg_state]'][value='" + <?php echo $background->state; ?> + "']");
+					stateObj.prop('checked', true);
+					if (stateObj.val() == 1)
+					{
+						jQuery("#jform_bg_state label[for='" + stateObj.attr('id') + "']").addClass("active btn-success");
+					}
+					else
+					{
+						jQuery("#jform_bg_state label[for='" + stateObj.attr('id') + "']").addClass("active btn-danger");
+					}
+
+					// Production Background field
 					<?php
 						if ($background->isProductionBg)
 						{
@@ -156,8 +169,9 @@ if (count($displayData->items) > 0)
 							$isProductionBgChecked = 'false';
 						}
 					?>
-					jQuery("#isProductionBg").prop("checked", <?php echo $isProductionBgChecked; ?>);
+					jQuery("#jform_isProductionBg").prop("checked", <?php echo $isProductionBgChecked; ?>);
 
+					// Preview Background field
 					<?php
 						if ($background->isPreviewBg)
 						{
@@ -168,8 +182,9 @@ if (count($displayData->items) > 0)
 							$isPreviewBgChecked = 'false';
 						}
 					?>
-					jQuery("#isPreviewBg").prop("checked", <?php echo $isPreviewBgChecked; ?>);
+					jQuery("#jform_isPreviewBg").prop("checked", <?php echo $isPreviewBgChecked; ?>);
 
+					// Default Preview field
 					<?php
 						if ($background->isDefaultPreview)
 						{
@@ -180,9 +195,9 @@ if (count($displayData->items) > 0)
 							$isDefaultPreviewChecked = 'false';
 						}
 					?>
-					jQuery("#isDefaultPreview").prop("checked", <?php echo $isDefaultPreviewChecked; ?>);
+					jQuery("#jform_isDefaultPreview").prop("checked", <?php echo $isDefaultPreviewChecked; ?>);
 
-					if(jQuery("#isPreviewBg").is(":checked"))
+					if (jQuery("#jform_isPreviewBg").is(":checked"))
 					{
 						jQuery("#isDefaultPreviewContainer").show();
 						jQuery("#useCheckerboardContainer").show();
@@ -194,9 +209,10 @@ if (count($displayData->items) > 0)
 					}
 
 					jQuery("#BgThumbnailLink")
-						.attr("href", "<?php /*echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $background->thumbnail;*/ ?>")
-						.text("<?php echo $background->thumbnail; ?>")
-					;
+						.attr("href", "<?php echo JURI::root() . 'com_reddesign/backgrounds/thumbnails/' . $background->thumbnail; ?>")
+						.text("<?php echo $background->thumbnail; ?>");
+
+					jQuery("#saveBgBtn").val("<?php echo JText::_('COM_REDDESIGN_COMMON_UPDATE'); ?>");
 
 					jQuery('#addBgBtn').parent().hide();
 					jQuery('#backgroundForm').fadeIn("slow");
@@ -210,6 +226,7 @@ if (count($displayData->items) > 0)
 			jQuery(document).on('click', '#addBgBtn', function () {
 					jQuery('#addBgBtn').parent().hide();
 					jQuery('#backgroundForm').fadeIn("slow");
+					jQuery("#saveBgBtn").val("<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>");
 				}
 			);
 		}

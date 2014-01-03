@@ -93,23 +93,26 @@ RHelperAsset::load('imgareaselect-animated.css');
 		{
 	?>
 		<div class="tab-pane" id="backgrounds">
-			<?php /*echo $this->loadTemplate('background');*/ ?>
-			<?php /*echo $this->loadTemplate('backgrounds');*/ ?>
-			<?php
-				$backgroundModel = RModel::getAutoInstance('Background');
+			<div class="well">
+				<input type="button" class="btn btn-primary" id="addBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_ADD'); ?>"/>
+			</div>
+			<div id="backgroundForm" class="well" style="display:none;">
+				<?php
+				$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true));
 				$data = new stdClass;
 				$data->item = new stdClass;
-				$data->item->reddesign_designtype_id = $this->item->id;
+				$data->item->designtype_id = $this->item->id;
+				$data->model = $backgroundModel;
 				echo RLayoutHelper::render('edit', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/background/tmpl');
-
+				?>
+			</div>
+			<div id="backgroundsList">
+				<?php
 				$data = new stdClass;
 				$data->items = $this->backgrounds;
-
 				echo RLayoutHelper::render('default', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/backgrounds/tmpl');
-			?>
-
-			<div id="backgroundForm"></div>
-			<div id="backgroundsList"></div>
+				?>
+			</div>
 		</div>
 		<div class="tab-pane" id="design-areas">
 			<?php /*echo $this->loadTemplate('designareas');*/ ?>
