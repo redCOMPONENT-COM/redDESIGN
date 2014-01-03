@@ -22,7 +22,7 @@ if (isset($displayData))
 			<?php
 				if ($frame->isDefaultPreview)
 				{
-					$reddesign_background_id = $frame->reddesign_background_id;
+					$reddesign_background_id = $frame->id;
 				}
 			?>
 			<li>

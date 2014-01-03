@@ -75,36 +75,36 @@ if (isset($displayData))
 		?>
 
 		{RedDesignBreakDesignAreaTitle}
-			<input id="textAlign<?php echo $area->reddesign_area_id ?>" type="hidden" value="<?php echo $area->textalign; ?>" />
+			<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->textalign; ?>" />
 
-			<label for="textArea<?php echo $area->reddesign_area_id; ?>">
+			<label for="textArea<?php echo $area->id; ?>">
 				<strong><?php echo $area->title; ?></strong>
 			</label>
 		{RedDesignBreakDesignAreaTitle}
 
 		{RedDesignBreakDesignAreaInputTextLabel}
-			<label for="textArea<?php echo $area->reddesign_area_id; ?>">
+			<label for="textArea<?php echo $area->id; ?>">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_INPUT_TEXT'); ?>
 			</label>
 		{RedDesignBreakDesignAreaInputTextLabel}
 
 		{RedDesignBreakDesignAreaInputText}
 			<?php if ($area->input_field_type == 1) : ?>
-				<textarea name="textArea<?php echo $area->reddesign_area_id; ?>"
+				<textarea name="textArea<?php echo $area->id; ?>"
 						  class="textAreaClass"
 						  style="text-align: <?php echo $textAlign; ?>;"
 						  placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
-						  id="textArea<?php echo $area->reddesign_area_id; ?>"
+						  id="textArea<?php echo $area->id; ?>"
 						  required="required"
 						  <?php echo $maxChar; ?>
 						  <?php echo $maxLine ?>><?php echo $area->default_text; ?></textarea>
 			<?php else : ?>
 				<input type="text"
-					   name="textArea<?php echo $area->reddesign_area_id; ?>"
+					   name="textArea<?php echo $area->id; ?>"
 					   class="textAreaClass"
 					   style="text-align: <?php echo $textAlign; ?>;"
 					   placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
-					   id="textArea<?php echo $area->reddesign_area_id; ?>"
+					   id="textArea<?php echo $area->id; ?>"
 					   value="<?php echo $area->default_text; ?>"
 					   <?php echo $maxChar; ?>
 					   required="required"
@@ -113,7 +113,7 @@ if (isset($displayData))
 		{RedDesignBreakDesignAreaInputText}
 
 		{RedDesignBreakDesignAreaChooseFontLabel}
-			<label for="<?php echo 'fontArea' . $area->reddesign_area_id; ?>">
+			<label for="<?php echo 'fontArea' . $area->id; ?>">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_FONT'); ?>
 			</label>
 		{RedDesignBreakDesignAreaChooseFontLabel}
@@ -131,7 +131,7 @@ if (isset($displayData))
 					echo JHTML::_(
 									'select.genericlist',
 									$defaultFonts,
-									'fontArea' . $area->reddesign_area_id,
+									'fontArea' . $area->id,
 									'class="inputbox" onChange="customize(0);"',
 									'value',
 									'text',
@@ -155,7 +155,7 @@ if (isset($displayData))
 						echo JHTML::_(
 										'select.genericlist',
 										$options,
-										'fontArea' . $area->reddesign_area_id,
+										'fontArea' . $area->id,
 										'class="inputbox" onChange="customize(0);"',
 										'value',
 										'text',
@@ -169,7 +169,7 @@ if (isset($displayData))
 		{RedDesignBreakDesignAreaChooseFontSizeLabel}
 			<?php // Font Size Selection ?>
 			<?php if ($this->item->fontsizer != 'auto' && $this->item->fontsizer != 'auto_chars') : ?>
-				<label for="<?php echo 'fontSize' . $area->reddesign_area_id; ?>">
+				<label for="<?php echo 'fontSize' . $area->id; ?>">
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_FONTSIZE'); ?>
 				</label>
 			<?php endif; ?>
@@ -185,8 +185,8 @@ if (isset($displayData))
 					FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/slider.css');
 				?>
 				<input type="hidden"
-					   id="fontSize<?php echo $area->reddesign_area_id ?>"
-					   name="fontSize<?php echo $area->reddesign_area_id ?>"
+					   id="fontSize<?php echo $area->id ?>"
+					   name="fontSize<?php echo $area->id ?>"
 					   value="<?php echo $area->defaultFontSize ?>"
 					   data-slider-min="<?php echo $area->minFontSize ?>"
 					   data-slider-max="<?php echo $area->maxFontSize ?>"
@@ -233,7 +233,7 @@ if (isset($displayData))
 						echo JHTML::_(
 										'select.genericlist',
 										$sizeOptions,
-										'fontSize' . $area->reddesign_area_id,
+										'fontSize' . $area->id,
 										'class="inputbox" onChange="customize(0);"',
 										'value',
 										'text',
@@ -253,23 +253,23 @@ if (isset($displayData))
 		{RedDesignBreakDesignAreaChooseColor}
 			<?php if (empty($area->color_code)) : ?>
 
-				<input type="hidden" name="colorCode<?php echo $area->reddesign_area_id ?>" value="000000" id="colorCode<?php echo $area->reddesign_area_id ?>">
+				<input type="hidden" name="colorCode<?php echo $area->id ?>" value="000000" id="colorCode<?php echo $area->id ?>">
 
 			<?php elseif ($area->color_code == 1) : ?>
 
-				<div id="colorsContainer<?php echo $area->reddesign_area_id ?>" class="span6">
+				<div id="colorsContainer<?php echo $area->id ?>" class="span6">
 					<div class="span9">
 						<label class="control-label">
 							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_COLOR_PICKER'); ?>
-							<div id="colorPickerContainer<?php echo $area->reddesign_area_id; ?>" class="colorPickerContainer"></div>
+							<div id="colorPickerContainer<?php echo $area->id; ?>" class="colorPickerContainer"></div>
 						</label>
-						<label for="colorPickerSelectedColor<?php echo $area->reddesign_area_id; ?>">
+						<label for="colorPickerSelectedColor<?php echo $area->id; ?>">
 							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SELECTED_COLOR') ?>
 							<input class="span12 colorPickerSelectedColor"
 								   type="text"
 								   value="#cfcfcf"
-								   id="colorCode<?php echo $area->reddesign_area_id ?>"
-								   name="colorCode<?php echo $area->reddesign_area_id; ?>"
+								   id="colorCode<?php echo $area->id ?>"
+								   name="colorCode<?php echo $area->id; ?>"
 								/>
 						</label>
 					</div>
@@ -277,8 +277,8 @@ if (isset($displayData))
 						<div class="input-prepend">
 							<span class="add-on">C</span>
 							<input class="span8"
-								   id="C<?php echo $area->reddesign_area_id; ?>"
-								   name="C<?php echo $area->reddesign_area_id; ?>"
+								   id="C<?php echo $area->id; ?>"
+								   name="C<?php echo $area->id; ?>"
 								   type="text"
 								   value="10"
 								   placeholder="C"
@@ -287,8 +287,8 @@ if (isset($displayData))
 						<div class="input-prepend">
 							<span class="add-on">M</span>
 							<input class="span8"
-								   id="M<?php echo $area->reddesign_area_id; ?>"
-								   name="M<?php echo $area->reddesign_area_id; ?>"
+								   id="M<?php echo $area->id; ?>"
+								   name="M<?php echo $area->id; ?>"
 								   type="text"
 								   value="10"
 								   placeholder="M"
@@ -297,8 +297,8 @@ if (isset($displayData))
 						<div class="input-prepend">
 							<span class="add-on">Y</span>
 							<input class="span8"
-								   id="Y<?php echo $area->reddesign_area_id; ?>"
-								   name="Y<?php echo $area->reddesign_area_id; ?>"
+								   id="Y<?php echo $area->id; ?>"
+								   name="Y<?php echo $area->id; ?>"
 								   type="text"
 								   value="10"
 								   placeholder="Y"
@@ -307,8 +307,8 @@ if (isset($displayData))
 						<div class="input-prepend">
 							<span class="add-on">K</span>
 							<input class="span8"
-								   id="K<?php echo $area->reddesign_area_id; ?>"
-								   name="K<?php echo $area->reddesign_area_id; ?>"
+								   id="K<?php echo $area->id; ?>"
+								   name="K<?php echo $area->id; ?>"
 								   type="text"
 								   value="10"
 								   placeholder="K"
@@ -335,7 +335,7 @@ if (isset($displayData))
 								$colorCodeVal = str_replace('#', '', $colors[$key]);
 					?>
 								<div class="colorSelector_list">
-									<div onClick="setColorCode(<?php echo $area->reddesign_area_id ?>,'<?php echo $colorCodeVal; ?>');"
+									<div onClick="setColorCode(<?php echo $area->id ?>,'<?php echo $colorCodeVal; ?>');"
 										 style="background-color:<?php echo $value; ?>;cursor:pointer;">
 										 &nbsp;
 									</div>
@@ -347,22 +347,22 @@ if (isset($displayData))
 				</div>
 
 				<div class="choosenColor">
-					<label for="fontColor<?php echo $area->reddesign_area_id ?>">
+					<label for="fontColor<?php echo $area->id ?>">
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DEFAULT_COLOR_CODE'); ?>
 					</label>
-					<div class="colorSelector_list" id="fontColor<?php echo $area->reddesign_area_id ?>">
+					<div class="colorSelector_list" id="fontColor<?php echo $area->id ?>">
 						<div style="background-color:<?php echo $defaultColor; ?>;cursor:pointer;">&nbsp;</div>
 					</div>
 					<input type="hidden"
-						   class="colorCode<?php echo $area->reddesign_area_id ?>"
-						   name="colorCode<?php echo $area->reddesign_area_id ?>"
+						   class="colorCode<?php echo $area->id ?>"
+						   name="colorCode<?php echo $area->id ?>"
 						   value="<?php echo $defaultColorVal; ?>"
-						   id="colorCode<?php echo $area->reddesign_area_id ?>">
+						   id="colorCode<?php echo $area->id ?>">
 				</div>
 
 			<?php endif; ?>
 		{RedDesignBreakDesignAreaChooseColor}
 
-	<?php echo '{RedDesignBreakDesignArea' . $area->reddesign_area_id . '}'; ?>
+	<?php echo '{RedDesignBreakDesignArea' . $area->id . '}'; ?>
 
 <?php endforeach; ?>
