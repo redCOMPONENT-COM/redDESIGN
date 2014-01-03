@@ -17,6 +17,7 @@ if (isset($displayData))
 	$this->item = $displayData->item;
 	$this->defaultPreviewBg = $displayData->defaultPreviewBg;
 	$this->productionBackground = $displayData->productionBackground;
+	$this->productionBackgroundAreas = $displayData->productionBackgroundAreas;
 	$this->fonts = $displayData->fonts;
 }
 
@@ -105,7 +106,7 @@ $productId     = $input->getInt('pid', 0);
 	jQuery(document).ready(
 		function () {
 			// Correct radio button selection.
-			jQuery("#frame<?php echo $this->defaultPreviewBg->reddesign_background_id; ?>").attr("checked", "checked");
+			jQuery("#frame<?php echo $this->defaultPreviewBg->id; ?>").attr("checked", "checked");
 
 			// Customize function.
 			jQuery(document).on("click", "#customizeDesign",
@@ -135,7 +136,7 @@ $productId     = $input->getInt('pid', 0);
 				var doneTypingInterval = 400;
 
 				<?php if ($this->item->fontsizer == "slider") : ?>
-					jQuery("#fontSize<?php echo $area->reddesign_area_id ?>").slider()
+					jQuery("#fontSize<?php echo $area->id ?>").slider()
 						.on("slide", function(ev){
 							clearTimeout(typingTimer);
 							typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
@@ -143,53 +144,53 @@ $productId     = $input->getInt('pid', 0);
 				<?php endif; ?>
 
 				// Onkeyup, start the countdown.
-				jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").keyup(function(){
+				jQuery("#textArea<?php echo $area->id; ?>").keyup(function(){
 					clearTimeout(typingTimer);
 					typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 				});
 
 				<?php if ($area->color_code == 1 || empty($area->color_code)) : ?>
-					var colorPicker<?php echo $area->reddesign_area_id ?> = jQuery.farbtastic("#colorPickerContainer<?php echo $area->reddesign_area_id ?>");
-					colorPicker<?php echo $area->reddesign_area_id ?>.linkTo("#colorCode<?php echo $area->reddesign_area_id; ?>");
+					var colorPicker<?php echo $area->id ?> = jQuery.farbtastic("#colorPickerContainer<?php echo $area->id ?>");
+					colorPicker<?php echo $area->id ?>.linkTo("#colorCode<?php echo $area->id; ?>");
 
-					jQuery(document).on("keyup", "#C<?php echo $area->reddesign_area_id; ?>", function() {
-						var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
-						colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+					jQuery(document).on("keyup", "#C<?php echo $area->id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+						colorPicker<?php echo $area->id ?>.setColor(newColor);
 						clearTimeout(typingTimer);
 						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 					});
 
-					jQuery(document).on("keyup", "#M<?php echo $area->reddesign_area_id; ?>", function() {
-						var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
-						colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+					jQuery(document).on("keyup", "#M<?php echo $area->id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+						colorPicker<?php echo $area->id ?>.setColor(newColor);
 						clearTimeout(typingTimer);
 						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 					});
 
-					jQuery(document).on("keyup", "#Y<?php echo $area->reddesign_area_id; ?>", function() {
-						var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
-						colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+					jQuery(document).on("keyup", "#Y<?php echo $area->id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+						colorPicker<?php echo $area->id ?>.setColor(newColor);
 						clearTimeout(typingTimer);
 						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 					});
 
-					jQuery(document).on("keyup", "#K<?php echo $area->reddesign_area_id; ?>", function() {
-						var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
-						colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+					jQuery(document).on("keyup", "#K<?php echo $area->id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+						colorPicker<?php echo $area->id ?>.setColor(newColor);
 						clearTimeout(typingTimer);
 						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 					});
 
-					jQuery(document).on("keyup", "#colorCode<?php echo $area->reddesign_area_id; ?>", function() {
-						var hex = jQuery("#colorCode<?php echo $area->reddesign_area_id; ?>").val();
-						loadCMYKValues(hex, parseInt("<?php echo $area->reddesign_area_id; ?>"));
+					jQuery(document).on("keyup", "#colorCode<?php echo $area->id; ?>", function() {
+						var hex = jQuery("#colorCode<?php echo $area->id; ?>").val();
+						loadCMYKValues(hex, parseInt("<?php echo $area->id; ?>"));
 						clearTimeout(typingTimer);
 						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 					});
 
-					jQuery(document).on("mouseup", "#colorPickerContainer<?php echo $area->reddesign_area_id; ?>", function() {
-						var hex = jQuery("#colorCode<?php echo $area->reddesign_area_id; ?>").val();
-						loadCMYKValues(hex, parseInt("<?php echo $area->reddesign_area_id; ?>"));
+					jQuery(document).on("mouseup", "#colorPickerContainer<?php echo $area->id; ?>", function() {
+						var hex = jQuery("#colorCode<?php echo $area->id; ?>").val();
+						loadCMYKValues(hex, parseInt("<?php echo $area->id; ?>"));
 						customize(0);
 					});
 				<?php endif; ?>
@@ -321,26 +322,26 @@ $productId     = $input->getInt('pid', 0);
 			};
 			<?php foreach($this->productionBackgroundAreas as $area) : ?>
 
-			var fontColor = jQuery("#colorCode<?php echo $area->reddesign_area_id; ?>").val();
+			var fontColor = jQuery("#colorCode<?php echo $area->id; ?>").val();
 			fontColor = fontColor.replace("#", "");
 
 			design.areas.push({
-				"id" : 			"<?php echo $area->reddesign_area_id; ?>",
-				"textArea" :	jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").val(),
-				"fontArea" : 	jQuery("#fontArea<?php echo $area->reddesign_area_id; ?>").val(),
+				"id" : 			"<?php echo $area->id; ?>",
+				"textArea" :	jQuery("#textArea<?php echo $area->id; ?>").val(),
+				"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
 				"fontColor" :	fontColor,
-				"fontSize" :	jQuery("#fontSize<?php echo $area->reddesign_area_id; ?>").val(),
-				"fontTypeId" :	jQuery("#fontArea<?php echo $area->reddesign_area_id; ?>").val(),
+				"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val(),
+				"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
 				"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
 				"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
 			});
 
-			var textareacount = jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").val().replace(/ /g,'').length;
+			var textareacount = jQuery("#textArea<?php echo $area->id; ?>").val().replace(/ /g,'').length;
 			jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
 
 			<?php endforeach; ?>
 
-			design = JSON.stringify({Design: design });
+			/*design = JSON.stringify({Design: design });
 			jQuery.ajax({
 				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=designtype&task=ajaxGetDesign&format=raw&<?php echo JFactory::getSession()->getFormToken(); ?>=1",
 				data: { designarea : design },
@@ -378,21 +379,21 @@ $productId     = $input->getInt('pid', 0);
 				error: function(errMsg) {
 					alert("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AJAX_ERROR'); ?> " + errMsg);
 				}
-			});
+			});*/
 		}
 	}
 
 	/**
 	 * Set selected color for designarea.
 	 *
-	 * @param reddesign_area_id
+	 * @param id
 	 * @param colorCode
 	 */
-	function setColorCode(reddesign_area_id, colorCode)
+	function setColorCode(id, colorCode)
 	{
-		document.getElementById("colorCode" + reddesign_area_id).value = colorCode;
-		jQuery("#fontColor" + reddesign_area_id+ " div").css("backgroundColor", "#" + colorCode);
-		jQuery("#fontColor" + reddesign_area_id).show();
+		document.getElementById("colorCode" + id).value = colorCode;
+		jQuery("#fontColor" + id+ " div").css("backgroundColor", "#" + colorCode);
+		jQuery("#fontColor" + id).show();
 
 		customize(0);
 	}

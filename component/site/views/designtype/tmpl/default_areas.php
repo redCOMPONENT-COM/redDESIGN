@@ -180,9 +180,8 @@ if (isset($displayData))
 				<?php
 
 					// Case 1: using slider selector for font size.
-
-					FOFTemplateUtils::addJS('media://com_reddesign/assets/js/bootstrap-slider.js');
-					FOFTemplateUtils::addCSS('media://com_reddesign/assets/css/slider.css');
+					RHelperAsset::load('bootstrap-slider.js', 'com_reddesign');
+					RHelperAsset::load('slider.css', 'com_reddesign');
 				?>
 				<input type="hidden"
 					   id="fontSize<?php echo $area->id ?>"
