@@ -34,11 +34,6 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		parent::__construct($subject, $config);
 
 		$this->loadLanguage();
-
-		if (!defined('FOF_INCLUDED'))
-		{
-			JLoader::import('fof.include');
-		}
 	}
 
 	/**
@@ -285,10 +280,9 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 			foreach ($backgrounds as $background)
 			{
-				$dropdownHtml .= "<input type='radio' name='attribute[{gh}][property][{total_g}][redDesignBackground]' value='" .
-									$background->reddesign_background_id . "' />&nbsp;&nbsp;";
-				$dropdownHtml .= $background->title . "&nbsp;&nbsp;";
-				$dropdownHtml .= "<img src='" . FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $background->thumbnail .
+				$dropdownHtml .= "<input type='radio' name='attribute[{gh}][property][{total_g}][redDesignBackground]' value='" . $background->id . "' />&nbsp;&nbsp;";
+				$dropdownHtml .= $background->name . "&nbsp;&nbsp;";
+				$dropdownHtml .= "<img src='" . JURI::root() . "media/com_reddesign/backgrounds/thumbnails/" . $background->thumbnail .
 									"' alt='" . $background->title . "'/>&nbsp;&nbsp;&nbsp;";
 			}
 
@@ -328,21 +322,28 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		$db    = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
-		// Create the base insert statement.
-		$query->insert($db->quoteName('#__reddesign_attribute_mapping'))
-			->columns(array($db->quoteName('reddesign_designtype_id'), $db->quoteName('product_id'), $db->quoteName('property_id')))
-			->values((int) $property['redDesignBackground'] . ', ' . (int) $product->product_id . ', ' . (int) $propertyAfterSave->property_id);
+		// Delete all current mapping in database
+		$query->delete($db->quoteName('#__reddesign_attribute_mapping'))
+			->where($db->quoteName('product_id') . "=" . (int) $product->product_id);
 
-		// Set the query and execute the insert.
-		$db->setQuery($query);
+		if ($property['redDesignBackground'])
+		{
+			// Create the base insert statement.
+			$query->insert($db->quoteName('#__reddesign_attribute_mapping'))
+				->columns(array($db->quoteName('reddesign_designtype_id'), $db->quoteName('product_id'), $db->quoteName('property_id')))
+				->values((int) $property['redDesignBackground'] . ', ' . (int) $product->product_id . ', ' . (int) $propertyAfterSave->property_id);
 
-		try
-		{
-			$db->execute();
-		}
-		catch (RuntimeException $e)
-		{
-			throw new RuntimeException($e->getMessage(), $e->getCode());
+			// Set the query and execute the insert.
+			$db->setQuery($query);
+
+			try
+			{
+				$db->execute();
+			}
+			catch (RuntimeException $e)
+			{
+				throw new RuntimeException($e->getMessage(), $e->getCode());
+			}
 		}
 	}
 
