@@ -31,7 +31,7 @@ class ReddesignModelBackgrounds extends RModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'reddesign_background_id', 'b.reddesign_background_id',
+				'id', 'b.id',
 				'name', 'b.name',
 			);
 		}
@@ -55,8 +55,8 @@ class ReddesignModelBackgrounds extends RModelList
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		$filterDesignTypeId = $this->getUserStateFromRequest($this->context . '.filter_designtypeid', 'filter_designtypeid');
-		$this->setState('filter.designtypeid', $filterDesignTypeId);
+		$filterDesignTypeId = $this->getUserStateFromRequest($this->context . '.filter_designtype_id', 'filter_designtype_id');
+		$this->setState('filter.designtype_id', $filterDesignTypeId);
 
 		parent::populateState('b.name', 'asc');
 	}
@@ -75,7 +75,7 @@ class ReddesignModelBackgrounds extends RModelList
 			->from($db->quoteName('#__reddesign_backgrounds', 'b'));
 
 		// Filter by Design Type
-		$designTypeId = $this->getState('filter.designtypeid', 0);
+		$designTypeId = $this->getState('designtype_id', 0);
 
 		if ($designTypeId)
 		{
