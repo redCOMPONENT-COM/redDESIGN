@@ -125,7 +125,7 @@ RHelperAsset::load('imgareaselect-animated.css');
 				$data->imageWidth = $this->imageWidth;
 				$data->imageHeight = $this->imageHeight;
 				$data->fontsOptions = $this->fontsOptions;
-				// print_r($data);exit;
+				$data->inputFieldOptions = $this->inputFieldOptions;
 				echo RLayoutHelper::render('default', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/designareas/tmpl');
 			?>
 		</div>

@@ -34,6 +34,7 @@ if (isset($displayData))
 		$this->ratio = $displayData->ratio;
 		$this->imageWidth = $displayData->imageWidth;
 		$this->imageHeight = $displayData->imageHeight;
+		$this->inputFieldOptions = $displayData->inputFieldOptions;
 	}
 
 ?>
@@ -222,14 +223,14 @@ if (isset($displayData))
 						</td>
 						<td class="span4">
 							<a href="#" onclick="selectAreaForEdit(<?php echo $area->id . ',\'' .
-								$area->title . '\',' .
+								$area->name . '\',' .
 								$area->x1_pos . ',' .
 								$area->y1_pos . ',' .
 								$area->x2_pos . ',' .
 								$area->y2_pos . ',' .
 								$area->width . ',' .
 								$area->height; ?>);">
-								<strong><?php echo $area->title; ?></strong>
+								<strong><?php echo $area->name; ?></strong>
 							</a>
 						</td>
 						<td>
