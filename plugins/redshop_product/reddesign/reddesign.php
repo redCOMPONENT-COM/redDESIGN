@@ -37,6 +37,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		$this->loadLanguage();
 
+		jimport('redcore.bootstrap');
+
 		if (!defined('FOF_INCLUDED'))
 		{
 			JLoader::import('fof.include');
