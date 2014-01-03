@@ -246,7 +246,11 @@ class ReddesignViewDesigntype extends ReddesignView
 	 */
 	public function getTitle()
 	{
-		return JText::_('COM_REDDESIGN_DESIGNTYPE_HEADER');
+		$isNew = (int) $this->item->id <= 0;
+		$title = JText::_('COM_REDDESIGN_DESIGNTYPE_HEADER');
+		$state = $isNew ? JText::_('COM_REDDESIGN_COMMON_NEW') : JText::_('COM_REDDESIGN_COMMON_EDIT');
+
+		return $title . ' <small>' . $state . '</small>';
 	}
 
 	/**
