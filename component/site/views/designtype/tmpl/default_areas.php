@@ -16,6 +16,9 @@ RHelperAsset::load('farbtastic.min.js', 'com_reddesign');
 RHelperAsset::load('farbtastic.css', 'com_reddesign');
 RHelperAsset::load('color-converter.js', 'com_reddesign');
 
+RHelperAsset::load('raphael-min.js', 'com_reddesign');
+RHelperAsset::load('font.js', 'com_reddesign');
+
 if (isset($displayData))
 {
 	$this->item = $displayData->item;

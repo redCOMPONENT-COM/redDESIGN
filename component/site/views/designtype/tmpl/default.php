@@ -57,7 +57,7 @@ $productId     = $input->getInt('pid', 0);
 {RedDesignBreakDesignImage}
 	<div id="background-container">
 		<div id="backgroundImage">
-			<?php echo JHTML::_('image', 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->image_path, $this->defaultPreviewBg->title) ?>
+			<?php echo JHTML::_('image', JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->image_path, $this->defaultPreviewBg->name, array('id' => 'mainImage' )) ?>
 		</div>
 		<div id="progressBar" style="display: none;">
 			<div class="progress progress-striped active">
@@ -139,6 +139,10 @@ $productId     = $input->getInt('pid', 0);
 					jQuery("#fontSize<?php echo $area->id ?>").slider()
 						.on("slide", function(ev){
 							clearTimeout(typingTimer);
+
+							jQuery("svg").remove();
+							jQuery("#mainImage").show();
+
 							typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 						});
 				<?php endif; ?>
@@ -146,6 +150,10 @@ $productId     = $input->getInt('pid', 0);
 				// Onkeyup, start the countdown.
 				jQuery("#textArea<?php echo $area->id; ?>").keyup(function(){
 					clearTimeout(typingTimer);
+
+					jQuery("svg").remove();
+					jQuery("#mainImage").show();
+
 					typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 				});
 
@@ -271,6 +279,54 @@ $productId     = $input->getInt('pid', 0);
 		return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 	}
 
+	function svgLoad()
+	{
+		var img = jQuery('#mainImage');
+		var imgW = img.width();
+		var imgH = img.height();
+		var text2 = jQuery('#textArea2').val();
+		var font2 = jQuery("#fontSize2").val();
+		var color2 = jQuery("#colorCode2").val();
+
+		Raphael.registerFont({
+		    w: 189,
+		    face: {
+		        "font-family": "3",
+		        "font-weight": 400,
+		        "font-stretch": "normal",
+		        "units-per-em": "360",
+		        "panose-1": "2 0 0 0 0 0 0 0 0 0",
+		        ascent: "288",
+		        descent: "-72",
+		        bbox: "3.20724 -271 200 4.02432",
+		        "underline-thickness": "26.3672",
+		        "underline-position": "-24.9609",
+		        "unicode-range": "U+0030-U+0039"
+		    }
+		});
+		Raphael(function () {
+            var img = document.getElementById("mainImage");
+            img.style.display = "none";
+            var r = Raphael("backgroundImage", imgW, imgH), fonts = [0, r.getFont("1"), r.getFont("2"), r.getFont("3"), r.getFont("whoa")];
+            
+            r.image(img.src, 0, 0, imgW, imgH);
+
+            var a0 = r.print(25, 25, "Custom fonts", r.getFont("whoa", 800), 30).attr({
+            	'fill': '#990000', 
+            	'font-size': '25px',
+            	'font-family': '"Open Sans"'
+            });
+
+            var a1 = r.text(50, 50, text2).attr({
+            	'fill': '#' + color2, 
+            	'font-size': font2 + 'px',
+            	'font-family': '"Open Sans"',
+            	'width': '200px',
+            	'path': 'text path'
+            });
+        });
+	}
+
 	/**
 	 * Sends customize data to server and retreives the resulting image.
 	 *
@@ -280,6 +336,8 @@ $productId     = $input->getInt('pid', 0);
 
 		var customizeOrNot = 0;
 		var autoCustomizeParam = <?php echo $this->params->get('autoCustomize', 1); ?>;
+
+		svgLoad();
 
 		/**
 		 * 0 when customize function is called from an element different than button (textbox, font dropdown etc.)
@@ -309,7 +367,7 @@ $productId     = $input->getInt('pid', 0);
 			jQuery("#background-container").height(jQuery("#background").height());
 			jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px");
 			jQuery("#progressBar").css("padding-bottom", halfBackgroundHeight + "px");
-			jQuery("#backgroundImage").html("");
+			//jQuery("#backgroundImage").html("");
 			jQuery("#progressBar").show();
 
 
