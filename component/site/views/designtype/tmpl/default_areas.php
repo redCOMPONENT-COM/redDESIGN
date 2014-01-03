@@ -9,12 +9,12 @@
 
 defined('_JEXEC') or die();
 
-RHelperAsset::load('selectionboxmove.js');
+RHelperAsset::load('selectionboxmove.js', 'com_reddesign');
 
 // Colorpicker includes.
-RHelperAsset::load('farbtastic.js');
-RHelperAsset::load('farbtastic.css');
-RHelperAsset::load('color-converter.js');
+RHelperAsset::load('farbtastic.min.js', 'com_reddesign');
+RHelperAsset::load('farbtastic.css', 'com_reddesign');
+RHelperAsset::load('color-converter.js', 'com_reddesign');
 
 if (isset($displayData))
 {
