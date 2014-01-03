@@ -188,34 +188,66 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$productRelatedDesigntypeIds = implode(',', $productRelatedDesigntypeIds);
 			}
 
-			// Get redDESIGN frontend HTML.
-			$inputvars = array(
-				'id' => $designTypeId,
-				'task' => 'read',
-				'relatedDesignTypes' => $productRelatedDesigntypeIds,
-				'cid' => $params->get('cid', null),
-				'productId' => $data->product_id,
-				'Itemid' => $app->input->getInt('Itemid', null)
-			);
-			$input = new FOFInput($inputvars);
+			$displayData = new stdClass;
+			$displayData->params = JComponentHelper::getParams('com_reddesign');
 
-			ob_start();
-			FOFDispatcher::getTmpInstance('com_reddesign', 'designtype', array('input' => $input))->dispatch();
-			$html = ob_get_contents();
-			ob_end_clean();
+			$designtypesModel = RModel::getFrontInstance('Designtypes', array(), 'com_reddesign');
+			$designtypesModel->setId($designTypeId);
+			$displayData->item = $designtypesModel->getItems()[0];
+			$displayData->backgrounds = $designtypesModel->getBackgrounds();
+
+			foreach ($displayData->backgrounds as $background)
+			{
+				if ($background->isDefaultPreview)
+				{
+					$displayData->defaultPreviewBg = $background;
+				}
+
+				if ($background->isProductionBg)
+				{
+					$displayData->productionBackground = $background;
+				}
+			}
+
+			$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true), 'com_reddesign');
+			$displayData->fonts = $fontsModel->getItems();
+
+			if (empty($displayData->imageSize))
+			{
+				$displayData->imageSize = array(0, 0);
+			}
+
+			if (empty($displayData->defaultPreviewBg) || empty($displayData->productionBackground))
+			{
+				$app->enqueueMessage(JText::_('COM_REDDESIGN_DESIGNTYPE_NO_BACKGROUNDS'), 'notice');
+			}
+			else
+			{
+				$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
+				$areasModel->setState('reddesign_background_id', $this->productionBackground->reddesign_background_id);
+				$displayData->productionBackgroundAreas = $areasModel->getItems();
+				$displayData->imageSize = getimagesize(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->defaultPreviewBg->image_path);
+			}
+
+			if (empty($displayData->productionBackgroundAreas))
+			{
+				$app->enqueueMessage(JText::_('COM_REDDESIGN_DESIGNTYPE_NO_DESIGN_AREAS'), 'notice');
+			}
+
+			$html = RLayoutHelper::render('default', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
 
 			// Get background ID so you can get areas.
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_background_id'))
+			$query->select($db->quoteName('id'))
 				->from($db->quoteName('#__reddesign_backgrounds'))
 				->where($db->quoteName('isProductionBg') . ' = ' . 1)
-				->where($db->quoteName('reddesign_designtype_id') . ' = ' . $designTypeId);
+				->where($db->quoteName('designtype_id') . ' = ' . $designTypeId);
 			$db->setQuery($query);
 			$backgroundId = $db->loadResult();
 
 			// Get areas for the template tags replacement.
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_area_id'))
+			$query->select($db->quoteName('id'))
 				->from($db->quoteName('#__reddesign_areas'))
 				->where($db->quoteName('reddesign_background_id') . ' = ' . $backgroundId);
 			$db->setQuery($query);
