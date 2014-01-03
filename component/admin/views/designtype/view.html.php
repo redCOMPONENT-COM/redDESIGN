@@ -173,7 +173,7 @@ class ReddesignViewDesigntype extends ReddesignView
 					}
 				}
 			}
-
+			print_r($areas);exit;
 			$this->areas = $areas;
 
 			$this->inputFieldOptions = array(
