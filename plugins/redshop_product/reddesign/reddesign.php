@@ -37,12 +37,12 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		$this->loadLanguage();
 
-		jimport('redcore.bootstrap');
+		JLoader::import('redcore.bootstrap');
 
-		if (!defined('FOF_INCLUDED'))
+		/*if (!defined('FOF_INCLUDED'))
 		{
 			JLoader::import('fof.include');
-		}
+		}*/
 	}
 
 	/**
@@ -513,21 +513,21 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$js = '
 					function generateRedDesignData() {
 						var values = {};
-						var inputs = akeeba.jQuery("#designform :input");
+						var inputs = jQuery("#designform :input");
 
 						inputs.each(function() {
-							values[this.name] = akeeba.jQuery(this).val();
+							values[this.name] = jQuery(this).val();
 						});
 
-						values["backgroundImgSrc"] = akeeba.jQuery("#background").attr("src");
+						values["backgroundImgSrc"] = jQuery("#background").attr("src");
 
-						values["customUserWidth"] = akeeba.jQuery("input[id^=\"plg_dimension_width\"]").val();
-						values["customUserHeight"] = akeeba.jQuery("input[id^=\"plg_dimension_height\"]").val();
+						values["customUserWidth"] = jQuery("input[id^=\"plg_dimension_width\"]").val();
+						values["customUserHeight"] = jQuery("input[id^=\"plg_dimension_height\"]").val();
 						values["enteredDimensionunit"] = "cm";
 
 						var jsonString = JSON.stringify(values);
 
-						akeeba.jQuery("#redDesignData").val(jsonString);
+						jQuery("#redDesignData").val(jsonString);
 
 						getExtraParamsArray.redDesignData = encodeURIComponent(jsonString);
 					}
@@ -623,7 +623,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				}
 				else
 				{
-					$fontModel = FOFModel::getTmpInstance('Font', 'ReddesignModel');
+					$fontModel = RModel::getAdminInstance('Font', array('ignore_request' => true), 'com_reddesign');
 					$fontName = $fontModel->getItem($area['fontTypeId']);
 					$fontName = $fontName->title;
 				}
@@ -667,12 +667,12 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 				$downloadFileName = 'production-file-' . $orderItem->order_id . '-' . $orderItem->order_item_id;
 
-				$productionPdf = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $orderItemMapping->productionPdf . '.pdf');
+				$productionPdf = JURI::root() . 'media/com_reddesign/backgrounds/orders/pdf/' . $orderItemMapping->productionPdf . '.pdf';
 				echo '<a href="' . $productionPdf . '" download="' . $downloadFileName . '.pdf">' .
 					JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
 					' PDF</a><br/><br/>';
 
-				$productionEps = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/eps/' . $orderItemMapping->productionEps . '.eps');
+				$productionEps = JURI::root() . 'media/com_reddesign/backgrounds/orders/eps/' . $orderItemMapping->productionEps . '.eps';
 				echo '<a href="' . $productionEps . '" download="' . $downloadFileName . '.eps">' .
 					JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
 					' EPS</a>';
@@ -774,15 +774,15 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	public function prepareDesignTypeData($redDesignData)
 	{
 		// Get design type data.
-		$designTypeModel = FOFModel::getTmpInstance('Designtype', 'ReddesignModel')->reddesign_designtype_id($redDesignData->reddesign_designtype_id);
-		$designType      = $designTypeModel->getItem($redDesignData->reddesign_designtype_id);
+		$designtypesModel = RModel::getFrontInstance('Designtypes', array(), 'com_reddesign');
+		$designtypesModel->setId($designTypeId);
+		$designType = $designtypesModel->getItems()[0];
 
 		$data = array();
 		$data['designType'] = $designType;
 
 		// Get Background Data
-		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($redDesignData->production_background_id);
-		$data['designBackground'] = $backgroundModel->getItem($redDesignData->production_background_id);
+		$data['designBackground'] = $designtypesModel->getProductionBackground();
 
 		// Get designAreas
 		$data['designAreas'] = array();
