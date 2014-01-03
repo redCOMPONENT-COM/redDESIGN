@@ -221,7 +221,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 		foreach ($backgrounds as $background)
 		{
-			if ((int) $background->reddesign_background_id == $selectedDesignType)
+			if ((int) $background->id == $selectedDesignType)
 			{
 				$checked = 'checked="checked"';
 			}
@@ -232,10 +232,9 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 			$dropdownHtml .= '<input type="radio"
 								name="attribute[' . $property->k . '][property][' . $property->g . '][redDesignBackground]"
-								value="' . $background->reddesign_background_id . '"' . $checked . ' />' . "&nbsp;&nbsp;";
-			$dropdownHtml .= $background->title . "&nbsp;&nbsp;";
-			$dropdownHtml .= "<img src='" . FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $background->thumbnail .
-								"' alt='" . $background->title . "'/>&nbsp;&nbsp;&nbsp;";
+								value="' . $background->id . '"' . $checked . ' />' . "&nbsp;&nbsp;";
+			$dropdownHtml .= $background->name . "&nbsp;&nbsp;";
+			$dropdownHtml .= JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $background->thumbnail, $background->name) . "&nbsp;&nbsp;&nbsp;";
 		}
 
 		$dropdownHtml .= '</div>';
