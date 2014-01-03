@@ -286,6 +286,7 @@ $productId     = $input->getInt('pid', 0);
 		var imgH = img.height();
 		var text2 = jQuery('#textArea2').val();
 		var font2 = jQuery("#fontSize2").val();
+		var color2 = jQuery("#colorCode2").val();
 
 		Raphael.registerFont({
 		    w: 189,
@@ -317,10 +318,11 @@ $productId     = $input->getInt('pid', 0);
             });
 
             var a1 = r.text(50, 50, text2).attr({
-            	'fill': '#990000', 
+            	'fill': '#' + color2, 
             	'font-size': font2 + 'px',
             	'font-family': '"Open Sans"',
-            	'width': '200px'
+            	'width': '200px',
+            	'path': 'text path'
             });
         });
 	}
