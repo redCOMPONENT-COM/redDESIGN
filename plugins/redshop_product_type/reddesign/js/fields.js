@@ -989,5 +989,11 @@ function showBackgrounds(id) {
 	else
 	{
 		designBackgrounds.style.display = "none";
+
+		var inputs = designBackgrounds.getElementsByTagName('input');
+		for (index = 0; index < inputs.length; ++index)
+		{
+			inputs[index].checked = false;
+		}
 	}
 }
