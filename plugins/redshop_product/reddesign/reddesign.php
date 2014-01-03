@@ -234,8 +234,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$app->enqueueMessage(JText::_('COM_REDDESIGN_DESIGNTYPE_NO_DESIGN_AREAS'), 'notice');
 			}
 
-			//print_r($displayData);exit();
-
 			$html = RLayoutHelper::render('default', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
 
 			// Get background ID so you can get areas.
