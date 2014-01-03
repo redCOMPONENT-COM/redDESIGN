@@ -38,6 +38,7 @@ class ReddesignControllerBackground extends RControllerForm
 
 		$data = $this->input->post->get('jform', array(), 'array');
 		$file = $this->input->files->get('jform');
+
 		// Get Eps if has been added
 		$file = $this->input->files->get('bg_eps_file', null);
 
@@ -214,5 +215,33 @@ class ReddesignControllerBackground extends RControllerForm
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Method for load Background Form by AJAX
+	 *
+	 * @return array
+	 */
+	public function ajaxBackgroundForm()
+	{
+		$app = JFactory::getApplication();
+		$input = $app->input;
+
+		$designTypeId = $input->getInt('designtype_id');
+
+		if ($designTypeId)
+		{
+			/** @var RedshopbModelUsers $usersModel */
+
+			$view = $this->getView('Background', 'html');
+			$model = RModel::getAdminInstance('Background', array('ignore_request' => true));
+			$view->setModel($model, true);
+
+			$model->setState('filter.designtypeid', $designTypeId);
+
+			$view->display();
+		}
+
+		$app->close();
 	}
 }

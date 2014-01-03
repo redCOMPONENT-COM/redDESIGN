@@ -1,59 +1,68 @@
 <?php
 /**
- * @package     Reddesign.Backend
- * @subpackage  Views
+ * @package     RedDesign.Component
+ * @subpackage  Administrator
  *
- * @copyright   Copyright (C) 2012 - 2013 redCOMPONENT.com. All rights reserved.
+ * @copyright   Copyright (C) 2013 redCOMPONENT.com. All rights reserved.
  * @license     GNU General Public License version 2 or later, see LICENSE.
  */
 
 defined('_JEXEC') or die;
 
-// HTML helpers
-JHtml::_('behavior.keepalive');
-JHtml::_('rbootstrap.tooltip');
-JHtml::_('rjquery.chosen', 'select');
 
-$action = JRoute::_('index.php?option=com_reddesign&view=background');
+if (count($displayData) > 0)
+{
+	$this->item = $displayData->item;
+}
+
+$return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->reddesign_designtype_id . '&tab=backgrounds';
+
 ?>
-<form id="adminForm" name="adminForm" class="form-validate form-horizontal" action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" >
+<form id="background" name="background" method="post" action="index.php" enctype="multipart/form-data">
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
+	<input type="hidden" name="option" value="com_reddesign">
+	<input type="hidden" name="view" value="background">
+	<input type="hidden" name="task" value="save">
+	<input type="hidden" name="returnurl" value="<?php echo base64_encode($return_url); ?>" />
+	<input type="hidden" name="reddesign_designtype_id" id="background_reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>" />
+	<input type="hidden" name="reddesign_background_id" id="reddesign_background_id" value="" />
 	<div id="backgrounds-configuration">
 
 		<h3 id="backgroundTitle"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_TITLE'); ?></h3>
 
 		<div class="control-group">
 			<label class="control-label ">
-				<?php echo $this->form->getLabel('name'); ?>
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_TITLE'); ?>
 			</label>
 
 			<div class="controls">
-				<?php echo $this->form->getInput('name'); ?>
+				<input type="text" name="title" id="bg_title" value="">
 				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_TITLE_DESC'); ?></span>
 			</div>
 		</div>
 
 		<div class="control-group">
 			<label for="enabled" class="control-label">
-				<?php echo $this->form->getLabel('state'); ?>
+				<?php echo JText::_('JPUBLISHED'); ?>
 			</label>
 			<div class="controls">
-				<?php echo $this->form->getInput('state'); ?>
+				<?php echo JHTML::_('select.booleanlist', 'enabled', null, 1); ?>
 			</div>
 		</div>
 
 		<div class="control-group">
 			<label class="control-label " for="bg_eps_file">
-				<?php echo $this->form->getLabel('bg_eps_file'); ?>
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_FILE'); ?>
 			</label>
 			<div class="controls">
-				<?php echo $this->form->getInput('bg_eps_file'); ?>
+				<input type="file" name="bg_eps_file" id="bg_eps_file" value="">
 			</div>
 		</div>
 
 		<div class="control-group" id="isProductionBgContainer">
 			<div class="controls">
-				<?php echo $this->form->getInput('isProductionBg'); ?>
-				<?php echo $this->form->getLabel('isProductionBg'); ?>
+				<input type="checkbox" id="isProductionBg" name="isProductionBg" checked="checked" value="1">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_IS_PRODUCTION_BACKGROUND'); ?>
 				<span class="help-block">
 					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_IS_PRODUCTION_BACKGROUND_DESC'); ?>
 				</span>
@@ -62,8 +71,8 @@ $action = JRoute::_('index.php?option=com_reddesign&view=background');
 
 		<div class="control-group" id="isPreviewBgContainer">
 			<div class="controls">
-				<?php echo $this->form->getInput('isPreviewBg'); ?>
-				<?php echo $this->form->getLabel('isPreviewBg'); ?>
+				<input type="checkbox" id="isPreviewBg" name="isPreviewBg" checked="checked" value="1">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_IS_PREVIEW_BACKGROUND'); ?>
 				<span class="help-block">
 					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_IS_PREVIEW_BACKGROUND_DESC'); ?>
 				</span>
@@ -72,8 +81,8 @@ $action = JRoute::_('index.php?option=com_reddesign&view=background');
 
 		<div class="control-group" id="isDefaultPreviewContainer">
 			<div class="controls">
-				<?php echo $this->form->getInput('isDefaultPreview'); ?>
-				<?php echo $this->form->getLabel('isDefaultPreview'); ?>
+				<input type="checkbox" id="isDefaultPreview" name="isDefaultPreview" checked="checked" value="1">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_DEFAULT_PREVIEW'); ?>
 				<span class="help-block">
 					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_DEFAULT_PREVIEW_DESC'); ?>
 				</span>
@@ -82,8 +91,8 @@ $action = JRoute::_('index.php?option=com_reddesign&view=background');
 
 		<div class="control-group" id="useCheckerboardContainer">
 			<div class="controls">
-				<?php echo $this->form->getInput('useCheckerboard'); ?>
-				<?php echo $this->form->getLabel('useCheckerboard'); ?>
+				<input type="checkbox" id="useCheckerboard" name="useCheckerboard" checked="checked" value="1">
+				<?php echo JText::_('COM_REDDESIGN_BACKGROUND_USE_CHECKERBOARD'); ?>
 				<span class="help-block">
 					<?php echo JText::_('COM_REDDESIGN_BACKGROUND_USE_CHECKERBOARD_DESC'); ?>
 				</span>
@@ -91,11 +100,11 @@ $action = JRoute::_('index.php?option=com_reddesign&view=background');
 		</div>
 
 		<div class="control-group previewbg" style="display: none">
-			<label class="control-label " for="thumbnail">
-				<?php echo $this->form->getLabel('thumbnail'); ?>
+			<label class="control-label " for="bg_thumbnail">
+				<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
 			</label>
 			<div class="controls">
-				<?php echo $this->form->getInput('thumbnail'); ?>&nbsp;<a href="#" class="modal" id="BgThumbnailLink"></a>
+				<input type="file" name="thumbnail" id="bg_thumbnail" value="">&nbsp;<a href="#" class="modal" id="BgThumbnailLink"></a>
 				<span class="help-block">
 					<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?>
 				</span>
@@ -109,10 +118,4 @@ $action = JRoute::_('index.php?option=com_reddesign&view=background');
 		<input type="button" class="btn" id="cancelBgBtn" value="<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>"/>
 	</div>
 
-	<input type="hidden" name="option" value="com_reddesign">
-	<input type="hidden" name="view" value="background">
-	<input type="hidden" name="task" value="">
-	<input type="hidden" name="designtype_id" id="designtype_id" value="<?php echo $this->item->designtype_id; ?>" />
-	<input type="hidden" name="id" value="<?php echo $this->item->id; ?>">
-	<?php echo JHtml::_('form.token'); ?>
 </form>

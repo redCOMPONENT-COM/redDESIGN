@@ -141,7 +141,7 @@ class ReddesignViewDesigntype extends ReddesignView
 
 			$areas = array();
 
-			/*if ($this->backgrounds)
+			if ($this->backgrounds)
 			{
 				foreach ($this->backgrounds as $background)
 				{
@@ -150,8 +150,8 @@ class ReddesignViewDesigntype extends ReddesignView
 					{
 						$this->productionBackground = $background;
 
-						$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $this->productionBackground->eps_file;
-						$previewFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $this->productionBackground->image_path;
+						$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $this->productionBackground->eps_file;
+						$previewFileLocation = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $this->productionBackground->image_path;
 
 						// Read EPS size.
 						$im = new Imagick;
@@ -168,12 +168,12 @@ class ReddesignViewDesigntype extends ReddesignView
 
 						// Get all areas existing in the database for this specific background.
 						$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
-						$areasModel->setState('reddesign_background_id', $background->reddesign_background_id);
+						$areasModel->setState('reddesign_background_id', $background->id);
 						$areas = $areasModel->getItems();
 					}
 				}
-			}*/
-
+			}
+			print_r($areas);exit;
 			$this->areas = $areas;
 
 			$this->inputFieldOptions = array(
