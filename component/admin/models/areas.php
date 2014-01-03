@@ -28,7 +28,7 @@ class ReddesignModelAreas extends RModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'reddesign_area_id', 'a.reddesign_area_id',
+				'id', 'a.id',
 				'title', 'a.title',
 			);
 		}
