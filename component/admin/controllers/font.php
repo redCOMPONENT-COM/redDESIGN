@@ -61,6 +61,8 @@ class ReddesignControllerFont extends RControllerForm
 
 				$this->input->post->set('jform', $data);
 
+				exec('php ' . JPATH_ROOT . '/libraries/reddesign/cufon/convert.php -b "Raphael.registerFont" -n "' . $data['name'] . '" ' . JPATH_ROOT . '/media/com_reddesign/fonts/' . $uploaded_file['mangled_filename'] . ' -u "U+??" > ' . JPATH_ROOT . '/media/com_reddesign/js/fonts/' . $data['name'] . '.js');
+
 				return parent::save($key, $urlVar);
 			}
 			else
