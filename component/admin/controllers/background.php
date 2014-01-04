@@ -131,20 +131,20 @@ class ReddesignControllerBackground extends RControllerForm
 		// On edit
 		if (!!$data['id'])
 		{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			$query
+				->select($db->qn(array('eps_file', 'image_path', 'thumbnail')))
+				->from($db->qn('#__reddesign_backgrounds'))
+				->where($db->qn('id') . ' = ' . $db->q((int) $data['id']));
+
+			$db->setQuery($query);
+			$db->execute();
+			$oldImages = $db->loadObject();
+
 			// If images has been updated remove old images
 			if ($updatedEPS || $updatedThumbnail)
 			{
-				$db = JFactory::getDbo();
-				$query = $db->getQuery(true);
-				$query
-					->select($db->qn(array('eps_file', 'image_path', 'thumbnail')))
-					->from($db->qn('#__reddesign_backgrounds'))
-					->where($db->qn('id') . ' = ' . $db->q((int) $data['id']));
-
-				$db->setQuery($query);
-				$db->execute();
-				$oldImages = $db->loadObject();
-
 				if ($updatedEPS)
 				{
 					// Delete old EPS
@@ -169,17 +169,25 @@ class ReddesignControllerBackground extends RControllerForm
 					}
 				}
 			}
+			else
+			{
+				$data['eps_file'] = $oldImages->eps_file;
+				$data['image_path'] = $oldImages->image_path;
+				$data['thumbnail'] = $oldImages->thumbnail;
+			}
 		}
-
-		// Update the database with the new path of the EPS file
-		$data['eps_file'] = $uploaded_file['mangled_filename'];
-
-		// Update the database with the new path to the image
-		$data['image_path'] = $jpegPreviewFile;
-
-		if ($thumbPreviewFile)
+		else
 		{
-			$data['thumbnail'] = $thumbPreviewFile;
+			// Update the database with the new path of the EPS file
+			$data['eps_file'] = $uploaded_file['mangled_filename'];
+
+			// Update the database with the new path to the image
+			$data['image_path'] = $jpegPreviewFile;
+
+			if ($thumbPreviewFile)
+			{
+				$data['thumbnail'] = $thumbPreviewFile;
+			}
 		}
 
 		// If this new background will be the PDF Production background, switch it against the previous production background
