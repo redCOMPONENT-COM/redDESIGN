@@ -4,17 +4,17 @@ SET foreign_key_checks = 0;
 -- Table structure for table `#__reddesign_area`
 --
 CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
-  `reddesign_area_id`         INT(11)     NOT NULL AUTO_INCREMENT,
-  `title`                     VARCHAR(255),
+  `id`                        INT(11)     NOT NULL AUTO_INCREMENT,
+  `name`                      VARCHAR(255),
   `alias`                     VARCHAR(255),
-  `published`                 TINYINT(3) NOT NULL DEFAULT '1',
+  `state`                     TINYINT(3)  NOT NULL DEFAULT '1',
   `ordering`                  INT(10)     NOT NULL DEFAULT '0',
-  `created_by`                INT(11)    DEFAULT NULL,
-  `created_date`              DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified_by`               INT(11)    DEFAULT NULL,
-  `modified_data`             DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `checked_out`               INT(11)    DEFAULT NULL,
-  `checked_out_time`          DATETIME   NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by`                INT(11)     DEFAULT NULL,
+  `created_date`              DATETIME    NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by`               INT(11)     DEFAULT NULL,
+  `modified_data`             DATETIME    NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `checked_out`               INT(11)     DEFAULT NULL,
+  `checked_out_time`          DATETIME    NOT NULL DEFAULT '0000-00-00 00:00:00',
   `x1_pos`                    INT(11)     NOT NULL,
   `y1_pos`                    INT(11)     NOT NULL,
   `x2_pos`                    INT(11)     NOT NULL,
@@ -33,9 +33,9 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
   `maxFontSize`               INT(11)     NOT NULL,
   `maxline`                   INT(150)    NOT NULL,
   `input_field_type`          TINYINT(3)  NOT NULL DEFAULT '0',
-  PRIMARY KEY (`reddesign_area_id`),
+  PRIMARY KEY (`id`),
   FOREIGN KEY (`reddesign_background_id`)
-    REFERENCES `#__reddesign_backgrounds` (`reddesign_background_id`)
+    REFERENCES `#__reddesign_backgrounds` (`id`)
       ON DELETE CASCADE
       ON UPDATE NO ACTION
 )
@@ -71,11 +71,11 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
 CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
   `id`                      INT(11)       NOT NULL AUTO_INCREMENT,
   `name`                    VARCHAR(255),
-  `state`                   TINYINT(4)    NOT NULL DEFAULT '1',
+  `state`                   TINYINT(3)    NOT NULL DEFAULT '1',
   `ordering`                INT(10)       NOT NULL DEFAULT '0',
-  `created_by`              BIGINT(20)    NOT NULL DEFAULT '0',
+  `created_by`              INT(11)       DEFAULT NULL,
   `created_date`            DATETIME      NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified_by`             BIGINT(20)    NOT NULL DEFAULT '0',
+  `modified_by`             INT(11)       DEFAULT NULL,
   `modified_date`           DATETIME      NOT NULL DEFAULT '0000-00-00 00:00:00',
   `checked_out`             INT(11)       DEFAULT NULL,
   `checked_out_time`        DATETIME      NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -120,12 +120,12 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   `alias`            VARCHAR(255),
   `state`            TINYINT(3)   NOT NULL DEFAULT '1',
   `ordering`         INT(10)      NOT NULL DEFAULT '0',
-  `created_by`       BIGINT(20)   NOT NULL DEFAULT '0',
-  `created_on`       DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified_by`      BIGINT(20)   NOT NULL DEFAULT '0',
-  `modified_on`      DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `locked_by`        BIGINT(20)   NOT NULL DEFAULT '0',
-  `locked_on`        DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by`       INT(11)      DEFAULT NULL,
+  `created_date`     DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by`      INT(11)      DEFAULT NULL,
+  `modified_date`    DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `checked_out`      INT(11)      DEFAULT NULL,
+  `checked_out_time` DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
   `eps_file`         VARCHAR(255),
   `image_path`       VARCHAR(255) NOT NULL,
   `thumbnail`        VARCHAR(255),
@@ -175,6 +175,19 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_orderitem_mapping` (
   PRIMARY KEY (`order_item_id`)
 )
   ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  DEFAULT COLLATE = utf8_general_ci;
+
+--
+-- Table structure for table `#__reddesign_property_area_xref`
+--
+CREATE TABLE IF NOT EXISTS `#__reddesign_property_area_xref` (
+  `property_id`       INT(11) NOT NULL,
+  `reddesign_area_id` INT(11) NOT NULL,
+  `display_type`      ENUM('TEXT','FONT','FONTSIZE','COLOR') NOT NULL,
+  PRIMARY KEY (`property_id`,`reddesign_area_id`)
+)
+  ENGINE=InnoDB
   DEFAULT CHARSET = utf8
   DEFAULT COLLATE = utf8_general_ci;
 

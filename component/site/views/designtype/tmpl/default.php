@@ -11,6 +11,16 @@ defined('_JEXEC') or die();
 
 JHtml::_('behavior.modal');
 
+if (isset($displayData))
+{
+	$this->params = $displayData->params;
+	$this->item = $displayData->item;
+	$this->defaultPreviewBg = $displayData->defaultPreviewBg;
+	$this->productionBackground = $displayData->productionBackground;
+	$this->productionBackgroundAreas = $displayData->productionBackgroundAreas;
+	$this->fonts = $displayData->fonts;
+}
+
 /*
 {RedDesignBreakELEMENT} is a tag used in integration plugin to explode HTML string into smaller peaces. Those peaces are used in redSHOP templating.
 */
@@ -20,7 +30,7 @@ $productId     = $input->getInt('pid', 0);
 
 <?php // Part 0 - Title ?>
 {RedDesignBreakTitle}
-<h1><?php echo $this->item->title; ?></h1>
+<h1><?php echo $this->item->name; ?></h1>
 {RedDesignBreakTitle}
 
 <?php // Part 1 - Begin Form ?>
@@ -37,8 +47,8 @@ $productId     = $input->getInt('pid', 0);
 <?php // Part 2 - Select Backgrounds ?>
 {RedDesignBreakBackgrounds}
 	<div class="row-fluid">
-		<div class="well span12">
-			<?php echo $this->loadTemplate('backgrounds'); ?>
+		<div class="well span12">dasdasd
+			<?php echo RLayoutHelper::render('default_backgrounds', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl'); ?>
 		</div>
 	</div>
 {RedDesignBreakBackgrounds}
@@ -47,9 +57,7 @@ $productId     = $input->getInt('pid', 0);
 {RedDesignBreakDesignImage}
 	<div id="background-container">
 		<div id="backgroundImage">
-			<img id="background"
-				 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->defaultPreviewBg->image_path; ?>"
-				 alt="<?php echo $this->defaultPreviewBg->title;?>" />
+			<?php echo JHTML::_('image', JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->image_path, $this->defaultPreviewBg->name, array('id' => 'mainImage' )) ?>
 		</div>
 		<div id="progressBar" style="display: none;">
 			<div class="progress progress-striped active">
@@ -79,7 +87,7 @@ $productId     = $input->getInt('pid', 0);
 {RedDesignBreakDesignAreas}
 	<div class="row-fluid">
 		<div class="well span12">
-			<?php echo $this->loadTemplate('areas'); ?>
+			<?php echo RLayoutHelper::render('default_areas', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl'); ?>
 		</div>
 	</div>
 {RedDesignBreakDesignAreas}
@@ -95,19 +103,19 @@ $productId     = $input->getInt('pid', 0);
 	/**
 	 * Add click event to Customize button.
 	 */
-	akeeba.jQuery(document).ready(
+	jQuery(document).ready(
 		function () {
 			// Correct radio button selection.
-			akeeba.jQuery("#frame<?php echo $this->defaultPreviewBg->reddesign_background_id; ?>").attr("checked", "checked");
+			jQuery("#frame<?php echo $this->defaultPreviewBg->id; ?>").attr("checked", "checked");
 
 			// Customize function.
-			akeeba.jQuery(document).on("click", "#customizeDesign",
+			jQuery(document).on("click", "#customizeDesign",
 				function () {
 					// Add spinner to button.
-					akeeba.jQuery(this).button("loadingo");
+					jQuery(this).button("loadingo");
 					setTimeout(
 						function() {
-							akeeba.jQuery(this).button("reset");
+							jQuery(this).button("reset");
 						},
 						3000
 					);
@@ -128,61 +136,69 @@ $productId     = $input->getInt('pid', 0);
 				var doneTypingInterval = 400;
 
 				<?php if ($this->item->fontsizer == "slider") : ?>
-					akeeba.jQuery("#fontSize<?php echo $area->reddesign_area_id ?>").slider()
+					jQuery("#fontSize<?php echo $area->id ?>").slider()
 						.on("slide", function(ev){
 							clearTimeout(typingTimer);
+
+							jQuery("svg").remove();
+							jQuery("#mainImage").show();
+
 							typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 						});
 				<?php endif; ?>
 
 				// Onkeyup, start the countdown.
-				akeeba.jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").keyup(function(){
+				jQuery("#textArea<?php echo $area->id; ?>").keyup(function(){
 					clearTimeout(typingTimer);
+
+					jQuery("svg").remove();
+					jQuery("#mainImage").show();
+
 					typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 				});
 
 				<?php if ($area->color_code == 1 || empty($area->color_code)) : ?>
-					var colorPicker<?php echo $area->reddesign_area_id ?> = akeeba.jQuery.farbtastic("#colorPickerContainer<?php echo $area->reddesign_area_id ?>");
-					colorPicker<?php echo $area->reddesign_area_id ?>.linkTo("#colorCode<?php echo $area->reddesign_area_id; ?>");
+					var colorPicker<?php echo $area->id ?> = jQuery.farbtastic("#colorPickerContainer<?php echo $area->id ?>");
+					colorPicker<?php echo $area->id ?>.linkTo("#colorCode<?php echo $area->id; ?>");
 
-					akeeba.jQuery(document).on("keyup", "#C<?php echo $area->reddesign_area_id; ?>", function() {
-						var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
-						colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+					jQuery(document).on("keyup", "#C<?php echo $area->id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+						colorPicker<?php echo $area->id ?>.setColor(newColor);
 						clearTimeout(typingTimer);
 						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 					});
 
-					akeeba.jQuery(document).on("keyup", "#M<?php echo $area->reddesign_area_id; ?>", function() {
-						var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
-						colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+					jQuery(document).on("keyup", "#M<?php echo $area->id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+						colorPicker<?php echo $area->id ?>.setColor(newColor);
 						clearTimeout(typingTimer);
 						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 					});
 
-					akeeba.jQuery(document).on("keyup", "#Y<?php echo $area->reddesign_area_id; ?>", function() {
-						var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
-						colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+					jQuery(document).on("keyup", "#Y<?php echo $area->id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+						colorPicker<?php echo $area->id ?>.setColor(newColor);
 						clearTimeout(typingTimer);
 						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 					});
 
-					akeeba.jQuery(document).on("keyup", "#K<?php echo $area->reddesign_area_id; ?>", function() {
-						var newColor = getNewHexColor(parseInt("<?php echo $area->reddesign_area_id; ?>"));
-						colorPicker<?php echo $area->reddesign_area_id ?>.setColor(newColor);
+					jQuery(document).on("keyup", "#K<?php echo $area->id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+						colorPicker<?php echo $area->id ?>.setColor(newColor);
 						clearTimeout(typingTimer);
 						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 					});
 
-					akeeba.jQuery(document).on("keyup", "#colorCode<?php echo $area->reddesign_area_id; ?>", function() {
-						var hex = akeeba.jQuery("#colorCode<?php echo $area->reddesign_area_id; ?>").val();
-						loadCMYKValues(hex, parseInt("<?php echo $area->reddesign_area_id; ?>"));
+					jQuery(document).on("keyup", "#colorCode<?php echo $area->id; ?>", function() {
+						var hex = jQuery("#colorCode<?php echo $area->id; ?>").val();
+						loadCMYKValues(hex, parseInt("<?php echo $area->id; ?>"));
 						clearTimeout(typingTimer);
 						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
 					});
 
-					akeeba.jQuery(document).on("mouseup", "#colorPickerContainer<?php echo $area->reddesign_area_id; ?>", function() {
-						var hex = akeeba.jQuery("#colorCode<?php echo $area->reddesign_area_id; ?>").val();
-						loadCMYKValues(hex, parseInt("<?php echo $area->reddesign_area_id; ?>"));
+					jQuery(document).on("mouseup", "#colorPickerContainer<?php echo $area->id; ?>", function() {
+						var hex = jQuery("#colorCode<?php echo $area->id; ?>").val();
+						loadCMYKValues(hex, parseInt("<?php echo $area->id; ?>"));
 						customize(0);
 					});
 				<?php endif; ?>
@@ -202,10 +218,10 @@ $productId     = $input->getInt('pid', 0);
 		var colorObject = new RGB(hexToRgb(hex).r, hexToRgb(hex).g, hexToRgb(hex).b);
 		var cmyk = ColorConverter.toCMYK(colorObject);
 
-		akeeba.jQuery("#C" + areaId).val(cmyk.c);
-		akeeba.jQuery("#M" + areaId).val(cmyk.m);
-		akeeba.jQuery("#Y" + areaId).val(cmyk.y);
-		akeeba.jQuery("#K" + areaId).val(cmyk.k);
+		jQuery("#C" + areaId).val(cmyk.c);
+		jQuery("#M" + areaId).val(cmyk.m);
+		jQuery("#Y" + areaId).val(cmyk.y);
+		jQuery("#K" + areaId).val(cmyk.k);
 	}
 
 	/**
@@ -239,10 +255,10 @@ $productId     = $input->getInt('pid', 0);
 	 */
 	function getNewHexColor(areaId)
 	{
-		var c = akeeba.jQuery("#C" + areaId).val();
-		var m = akeeba.jQuery("#M" + areaId).val();
-		var y = akeeba.jQuery("#Y" + areaId).val();
-		var k = akeeba.jQuery("#K" + areaId).val();
+		var c = jQuery("#C" + areaId).val();
+		var m = jQuery("#M" + areaId).val();
+		var y = jQuery("#Y" + areaId).val();
+		var k = jQuery("#K" + areaId).val();
 
 		var colorObject = new CMYK(c, m, y, k);
 		var rgb = ColorConverter.toRGB(colorObject);
@@ -263,6 +279,54 @@ $productId     = $input->getInt('pid', 0);
 		return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 	}
 
+	function svgLoad()
+	{
+		var img = jQuery('#mainImage');
+		var imgW = img.width();
+		var imgH = img.height();
+		var text2 = jQuery('#textArea2').val();
+		var font2 = jQuery("#fontSize2").val();
+		var color2 = jQuery("#colorCode2").val();
+
+		Raphael.registerFont({
+		    w: 189,
+		    face: {
+		        "font-family": "3",
+		        "font-weight": 400,
+		        "font-stretch": "normal",
+		        "units-per-em": "360",
+		        "panose-1": "2 0 0 0 0 0 0 0 0 0",
+		        ascent: "288",
+		        descent: "-72",
+		        bbox: "3.20724 -271 200 4.02432",
+		        "underline-thickness": "26.3672",
+		        "underline-position": "-24.9609",
+		        "unicode-range": "U+0030-U+0039"
+		    }
+		});
+		Raphael(function () {
+            var img = document.getElementById("mainImage");
+            img.style.display = "none";
+            var r = Raphael("backgroundImage", imgW, imgH), fonts = [0, r.getFont("1"), r.getFont("2"), r.getFont("3"), r.getFont("whoa")];
+            
+            r.image(img.src, 0, 0, imgW, imgH);
+
+            var a0 = r.print(25, 25, "Custom fonts", r.getFont("whoa", 800), 30).attr({
+            	'fill': '#990000', 
+            	'font-size': '25px',
+            	'font-family': '"Open Sans"'
+            });
+
+            var a1 = r.text(50, 50, text2).attr({
+            	'fill': '#' + color2, 
+            	'font-size': font2 + 'px',
+            	'font-family': '"Open Sans"',
+            	'width': '200px',
+            	'path': 'text path'
+            });
+        });
+	}
+
 	/**
 	 * Sends customize data to server and retreives the resulting image.
 	 *
@@ -272,6 +336,8 @@ $productId     = $input->getInt('pid', 0);
 
 		var customizeOrNot = 0;
 		var autoCustomizeParam = <?php echo $this->params->get('autoCustomize', 1); ?>;
+
+		svgLoad();
 
 		/**
 		 * 0 when customize function is called from an element different than button (textbox, font dropdown etc.)
@@ -297,16 +363,16 @@ $productId     = $input->getInt('pid', 0);
 		if(customizeOrNot == 1)
 		{
 			// Add the progress bar
-			var halfBackgroundHeight =  ((akeeba.jQuery("#background").height() / 2)-10);
-			akeeba.jQuery("#background-container").height(akeeba.jQuery("#background").height());
-			akeeba.jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px");
-			akeeba.jQuery("#progressBar").css("padding-bottom", halfBackgroundHeight + "px");
-			akeeba.jQuery("#backgroundImage").html("");
-			akeeba.jQuery("#progressBar").show();
+			var halfBackgroundHeight =  ((jQuery("#background").height() / 2)-10);
+			jQuery("#background-container").height(jQuery("#background").height());
+			jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px");
+			jQuery("#progressBar").css("padding-bottom", halfBackgroundHeight + "px");
+			//jQuery("#backgroundImage").html("");
+			jQuery("#progressBar").show();
 
 
-			var reddesign_designtype_id = akeeba.jQuery("#reddesign_designtype_id").val();
-			var reddesign_background_id = akeeba.jQuery("#reddesign_background_id").val();
+			var reddesign_designtype_id = jQuery("#reddesign_designtype_id").val();
+			var reddesign_background_id = jQuery("#reddesign_background_id").val();
 			var design = {
 				areas: [],
 				reddesign_designtype_id : reddesign_designtype_id,
@@ -314,27 +380,27 @@ $productId     = $input->getInt('pid', 0);
 			};
 			<?php foreach($this->productionBackgroundAreas as $area) : ?>
 
-			var fontColor = akeeba.jQuery("#colorCode<?php echo $area->reddesign_area_id; ?>").val();
+			var fontColor = jQuery("#colorCode<?php echo $area->id; ?>").val();
 			fontColor = fontColor.replace("#", "");
 
 			design.areas.push({
-				"id" : 			"<?php echo $area->reddesign_area_id; ?>",
-				"textArea" :	akeeba.jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").val(),
-				"fontArea" : 	akeeba.jQuery("#fontArea<?php echo $area->reddesign_area_id; ?>").val(),
+				"id" : 			"<?php echo $area->id; ?>",
+				"textArea" :	jQuery("#textArea<?php echo $area->id; ?>").val(),
+				"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
 				"fontColor" :	fontColor,
-				"fontSize" :	akeeba.jQuery("#fontSize<?php echo $area->reddesign_area_id; ?>").val(),
-				"fontTypeId" :	akeeba.jQuery("#fontArea<?php echo $area->reddesign_area_id; ?>").val(),
-				"plg_dimension_base" :   akeeba.jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
-				"plg_dimension_base_input" :   akeeba.jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
+				"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val(),
+				"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
+				"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
+				"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
 			});
 
-			var textareacount = akeeba.jQuery("#textArea<?php echo $area->reddesign_area_id; ?>").val().replace(/ /g,'').length;
-			akeeba.jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
+			var textareacount = jQuery("#textArea<?php echo $area->id; ?>").val().replace(/ /g,'').length;
+			jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
 
 			<?php endforeach; ?>
 
-			design = JSON.stringify({Design: design });
-			akeeba.jQuery.ajax({
+			/*design = JSON.stringify({Design: design });
+			jQuery.ajax({
 				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=designtype&task=ajaxGetDesign&format=raw&<?php echo JFactory::getSession()->getFormToken(); ?>=1",
 				data: { designarea : design },
 				type: "post",
@@ -345,47 +411,47 @@ $productId     = $input->getInt('pid', 0);
 					}
 					else
 					{
-						var json = akeeba.jQuery.parseJSON(data);
+						var json = jQuery.parseJSON(data);
 
 						d = new Date();
-						akeeba.jQuery("#backgroundImage").html('<img alt="' + json.imageTitle + '" src="' + json.image + '?' + d.getTime() + '" id="background" />');
+						jQuery("#backgroundImage").html('<img alt="' + json.imageTitle + '" src="' + json.image + '?' + d.getTime() + '" id="background" />');
 
 						// Remove the progress bar
-						akeeba.jQuery("#progressBar").hide();
-						akeeba.jQuery("#background").show();
+						jQuery("#progressBar").hide();
+						jQuery("#background").show();
 						// This timeout returns back to fluid design after 10 seconds in case user changes browser witdh
 						setTimeout(function() {
-							akeeba.jQuery("#background-container").height("auto");
+							jQuery("#background-container").height("auto");
 						}, 5000);
 
 						<?php if ($this->item->fontsizer == 'auto' || $this->item->fontsizer == 'auto_chars') : ?>
-							akeeba.jQuery("#plg_dimension_base_input_<?php echo $productId;?>").attr({
+							jQuery("#plg_dimension_base_input_<?php echo $productId;?>").attr({
 								'default-height' : json.autoSizeData[0].canvasHeight,
 								'default-width': json.autoSizeData[0].canvasWidth
 							});
 
-							akeeba.jQuery("#autoSizeData").val(JSON.stringify(json.autoSizeData));
+							jQuery("#autoSizeData").val(JSON.stringify(json.autoSizeData));
 						<?php endif; ?>
 					}
 				},
 				error: function(errMsg) {
 					alert("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AJAX_ERROR'); ?> " + errMsg);
 				}
-			});
+			});*/
 		}
 	}
 
 	/**
 	 * Set selected color for designarea.
 	 *
-	 * @param reddesign_area_id
+	 * @param id
 	 * @param colorCode
 	 */
-	function setColorCode(reddesign_area_id, colorCode)
+	function setColorCode(id, colorCode)
 	{
-		document.getElementById("colorCode" + reddesign_area_id).value = colorCode;
-		akeeba.jQuery("#fontColor" + reddesign_area_id+ " div").css("backgroundColor", "#" + colorCode);
-		akeeba.jQuery("#fontColor" + reddesign_area_id).show();
+		document.getElementById("colorCode" + id).value = colorCode;
+		jQuery("#fontColor" + id+ " div").css("backgroundColor", "#" + colorCode);
+		jQuery("#fontColor" + id).show();
 
 		customize(0);
 	}
