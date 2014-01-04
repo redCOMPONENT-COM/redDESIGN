@@ -125,7 +125,7 @@ if (isset($displayData) && (count($displayData->items) > 0))
 				<?php endforeach; ?>
 			<?php else : ?>
 				<tr>
-					<td colspan="5">
+					<td colspan="7">
 						<?php echo JText::_('COM_REDDESIGN_COMMON_NORECORDS') ?>
 					</td>
 				</tr>

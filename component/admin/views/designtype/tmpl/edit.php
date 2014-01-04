@@ -16,6 +16,34 @@ JHTML::_('behavior.modal', 'a.jmodal');
 
 RHelperAsset::load('jquery.imgareaselect.pack.js');
 RHelperAsset::load('imgareaselect-animated.css');
+
+$generalTabClass = '';
+$backgroundTabClass = '';
+$areaTabClass = '';
+
+$tab = JFactory::getApplication()->input->get('tab', '');
+
+switch ($tab)
+{
+	case 'backgrounds':
+		$generalTabClass = '';
+		$backgroundTabClass = 'active';
+		$areaTabClass = '';
+		break;
+
+	case 'design-areas':
+		$generalTabClass = '';
+		$backgroundTabClass = '';
+		$areaTabClass = 'active';
+		break;
+
+	default:
+		$generalTabClass = 'active';
+		$backgroundTabClass = '';
+		$areaTabClass = '';
+		break;
+}
+
 ?>
 
 
@@ -28,18 +56,18 @@ RHelperAsset::load('imgareaselect-animated.css');
 <?php endif; ?>
 
 <ul class="nav nav-tabs">
-	<li class="active">
+	<li class="<?php echo $generalTabClass; ?>">
 		<a href="#general" id="generalLink" data-toggle="tab" onclick="clearAreaSelection();">
 			<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_GENERAL_TAB'); ?>
 		</a>
 	</li>
 	<?php if (!empty($this->item->id)) : ?>
-		<li>
+		<li class="<?php echo $backgroundTabClass; ?>">
 			<a href="#backgrounds"  id="backgroundsLink" data-toggle="tab" onclick="clearAreaSelection();">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS'); ?>
 			</a>
 		</li>
-		<li>
+		<li class="<?php echo $areaTabClass; ?>">
 			<a href="#design-areas" id="design-areasLink"  data-toggle="tab">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_DESIGN_AREAS'); ?>
 			</a>
@@ -48,7 +76,7 @@ RHelperAsset::load('imgareaselect-animated.css');
 </ul>
 
 <div id="my-tab-content" class="tab-content">
-	<div class="tab-pane active" id="general">
+	<div class="tab-pane <?php echo $generalTabClass; ?>" id="general">
 		<form enctype="multipart/form-data"
 			action="index.php?option=com_reddesign&task=designtype.edit&id=<?php echo $this->item->id; ?>"
 			method="post" name="adminForm" id="adminForm" class="form-horizontal">
@@ -92,7 +120,7 @@ RHelperAsset::load('imgareaselect-animated.css');
 		if (!empty($this->item->id))
 		{
 	?>
-		<div class="tab-pane" id="backgrounds">
+		<div class="tab-pane <?php echo $backgroundTabClass; ?>" id="backgrounds">
 			<div class="well">
 				<input type="button" class="btn btn-primary" id="addBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_ADD'); ?>"/>
 			</div>
@@ -114,8 +142,7 @@ RHelperAsset::load('imgareaselect-animated.css');
 				?>
 			</div>
 		</div>
-		<div class="tab-pane" id="design-areas">
-			<?php /*echo $this->loadTemplate('designareas');*/ ?>
+		<div class="tab-pane <?php echo $areaTabClass; ?>" id="design-areas">
 			<?php
 				$data = new stdClass;
 				$data->items = $this->areas;
@@ -141,12 +168,6 @@ RHelperAsset::load('imgareaselect-animated.css');
 
 
 <script type="text/javascript">
-	(function($){
-		$(document).ready(function () {
-			//ajaxLoadBackgroundForm();
-			//ajaxLoadBackgrounds();
-		});
-	})(jQuery);
 	/**
 	 * Function to clear area selection drawn over other tabs due to auto zIndex.
 	 * Without this function, area selections apear on top of all tabs.
@@ -155,56 +176,9 @@ RHelperAsset::load('imgareaselect-animated.css');
 	{
 		var imageAreaSelection = jQuery("img#background").imgAreaSelect({ instance: true });
 
-		if ((typeof imageAreaSelection != null) && (typeof imageAreaSelection != 'undefinded'))
+		if (imageAreaSelection)
 		{
 			imageAreaSelection.cancelSelection();
 		}
 	}
-
-	/**
-	 * Load Background Form
-	 * @return void
-	 */
-	function ajaxLoadBackgroundForm()
-	{
-		var url = 'index.php?option=com_reddesign&task=background.ajaxBackgroundForm&designtype_id=<?php echo $this->item->id ?>';
-		//url = 'index.php?option=com_reddesign&view=background&layout=edit&tmpl=component';
-		console.log('ajaxLoadBackgrounds: ' + url);
-		jQuery('#addBgBtn').parent().hide();
-		// Perform the ajax request
-		jQuery.ajax({
-			url: url
-		}).done(function (data) {
-			jQuery('#backgroundForm').html(data);
-		});
-	}
-
-	/**
-	 * Load Backgrounds list
-	 * @return void
-	 */
-	function ajaxLoadBackgrounds()
-	{
-		var url = 'index.php?option=com_reddesign&task=backgrounds.ajaxBackgrounds&designtype_id=<?php echo $this->item->id ?>';
-		console.log('ajaxLoadBackgrounds: ' + url);
-		jQuery('#addBgBtn').parent().hide();
-		// Perform the ajax request
-		jQuery.ajax({
-			url: url
-		}).done(function (data) {
-			jQuery('#backgroundsList').html(data);
-			jQuery('select').select2();
-			jQuery('.hasTooltip').tooltip({"animation": true, "html": true, "placement": "top",
-				"selector": false, "title": "", "trigger": "hover focus", "delay": 0, "container": false});
-
-			// JModal
-			SqueezeBox.initialize({});
-			SqueezeBox.assign($$('a.jmodal'), {
-				parse: 'rel'
-			});
-			console.log('SqueezeBox');
-		});
-	}
-
-
 </script>

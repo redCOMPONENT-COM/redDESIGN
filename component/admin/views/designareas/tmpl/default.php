@@ -23,20 +23,19 @@ RHelperAsset::load('farbtastic.css');
 RHelperAsset::load('color-converter.js');
 
 if (isset($displayData))
-	{
-		$this->areas = $displayData->items;
-		$this->item = $displayData->item;
-		$this->productionBackground = $displayData->productionBackground;
-		$this->fontsOptions = $displayData->fontsOptions;
-		$this->unit = $displayData->unit;
-		$this->pxToUnit = $displayData->pxToUnit;
-		$this->unitToPx = $displayData->unitToPx;
-		$this->ratio = $displayData->ratio;
-		$this->imageWidth = $displayData->imageWidth;
-		$this->imageHeight = $displayData->imageHeight;
-		$this->inputFieldOptions = $displayData->inputFieldOptions;
-	}
-
+{
+	$this->areas = $displayData->items;
+	$this->item = $displayData->item;
+	$this->productionBackground = $displayData->productionBackground;
+	$this->fontsOptions = $displayData->fontsOptions;
+	$this->unit = $displayData->unit;
+	$this->pxToUnit = $displayData->pxToUnit;
+	$this->unitToPx = $displayData->unitToPx;
+	$this->ratio = $displayData->ratio;
+	$this->imageWidth = $displayData->imageWidth;
+	$this->imageHeight = $displayData->imageHeight;
+	$this->inputFieldOptions = $displayData->inputFieldOptions;
+}
 ?>
 
 <?php if (empty($this->productionBackground)) : ?>
@@ -1167,24 +1166,25 @@ function preSaveArea(update) {
  *
  * @param update
  */
-function saveArea(update) {
+function saveArea(update)
+{
 	jQuery("#saveAreaBtn").button("loading");
 
 	var reddesign_area_id;
 	var areaName	= jQuery("#areaName").val();
-	var areaX1 	= jQuery("#areaX1").val();
-	var areaY1 	= jQuery("#areaY1").val();
-	var areaX2 	= jQuery("#areaX2").val();
-	var areaY2 	= jQuery("#areaY2").val();
-	var areaWidth  = jQuery("#areaWidth").val();
-	var areaHeight = jQuery("#areaHeight").val();
+	var areaX1 		= jQuery("#areaX1").val();
+	var areaY1 		= jQuery("#areaY1").val();
+	var areaX2 		= jQuery("#areaX2").val();
+	var areaY2 		= jQuery("#areaY2").val();
+	var areaWidth  	= jQuery("#areaWidth").val();
+	var areaHeight 	= jQuery("#areaHeight").val();
 
-	var areaX1_in_px = (areaX1 * unitToPx * ratio).toFixed(0);
-	var areaY1_in_px = (areaY1 * unitToPx * ratio).toFixed(0);
-	var areaX2_in_px = (areaX2 * unitToPx * ratio).toFixed(0);
-	var areaY2_in_px = (areaY2 * unitToPx * ratio).toFixed(0);
-	var areaWidth_in_px = (areaWidth * unitToPx * ratio).toFixed(0);
-	var areaHeight_in_px = (areaHeight * unitToPx * ratio).toFixed(0);
+	var areaX1_in_px 		= (areaX1 * unitToPx * ratio).toFixed(0);
+	var areaY1_in_px 		= (areaY1 * unitToPx * ratio).toFixed(0);
+	var areaX2_in_px 		= (areaX2 * unitToPx * ratio).toFixed(0);
+	var areaY2_in_px 		= (areaY2 * unitToPx * ratio).toFixed(0);
+	var areaWidth_in_px 	= (areaWidth * unitToPx * ratio).toFixed(0);
+	var areaHeight_in_px 	= (areaHeight * unitToPx * ratio).toFixed(0);
 
 	if(update != 0)
 	{
@@ -1210,10 +1210,13 @@ function saveArea(update) {
 			'jform[height]': areaHeight_in_px,
 		},
 		type: "post",
-		success: function (data) {
+		success: function (data)
+		{
 			var json = jQuery.parseJSON(data);
 
-			if(update == 0)
+			console.log(json);
+
+			if (update == 0)
 			{
 				drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
 				addAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
@@ -1228,10 +1231,12 @@ function saveArea(update) {
 				updateAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
 			}
 
-			setTimeout(function () {jQuery("#saveAreaBtn").button("reset")}, 500);
+			jQuery("#saveAreaBtn").button("reset");
+			// setTimeout(function () {jQuery("#saveAreaBtn").button("reset")}, 500);
 		},
-		error: function (data) {
-			alert(data);
+		error: function (data)
+		{
+			console.log(data);
 		}
 	});
 }
