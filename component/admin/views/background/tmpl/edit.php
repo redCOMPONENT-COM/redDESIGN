@@ -17,7 +17,8 @@ if (isset($displayData) && (count($displayData->item) > 0))
 	$this->form = $displayData->model->getForm();
 }
 
-$return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->designtype_id . '&tab=backgrounds';
+// $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->designtype_id . '&tab=backgrounds';
+$return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->item->designtype_id . '&tab=backgrounds';
 
 ?>
 
@@ -58,11 +59,20 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 				form.attr("enctype", "multipart/form-data");
 				form.attr("encoding", "multipart/form-data");
 				form.attr("target", "bgPostIframe");
-				// form.attr("file", jQuery('#jform_bg_eps_file').val());
 				form.submit();
 				jQuery("#bgPostIframe").load(function () {
 					iframeContents = jQuery("#bgPostIframe")[0].contentWindow.document.body.innerHTML;
-					jQuery("#bgMessage").html(iframeContents);
+
+					var jsonData = jQuery.parseJSON(iframeContents);
+
+					if (jsonData[0] == 0)
+					{
+						jQuery("#bgMessage").html(jsonData[1]);
+					}
+					else
+					{
+						window.location.href="<?php echo $return_url; ?>";
+					}
 				});
 
 				return false;
@@ -179,4 +189,4 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 
 </form>
 
-<iframe name="bgPostIframe" id="bgPostIframe" style="display: none" ></iframe>
+<iframe name="bgPostIframe" id="bgPostIframe" style="display: none;" ></iframe>
