@@ -153,11 +153,8 @@ class ReddesignViewDesigntype extends ReddesignView
 						$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $this->productionBackground->eps_file;
 						$previewFileLocation = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $this->productionBackground->image_path;
 
-						echo '<pre>EPS File: ' . $epsFileLocation . '</pre>';
-						echo '<pre>Preview File: ' . $epsFileLocation . '</pre>';
-
 						// Read EPS size.
-						/*$im = new Imagick;
+						$im = new Imagick;
 						$im->readImage($epsFileLocation);
 						$dimensions = $im->getImageGeometry();
 						$this->imageWidth = $dimensions['width'];
@@ -167,7 +164,7 @@ class ReddesignViewDesigntype extends ReddesignView
 						$previewImageSize = getimagesize($previewFileLocation);
 
 						// Scaling ratio
-						$this->ratio = $previewImageSize[0] / $this->imageWidth;*/
+						$this->ratio = $previewImageSize[0] / $this->imageWidth;
 
 						// Get all areas existing in the database for this specific background.
 						$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
