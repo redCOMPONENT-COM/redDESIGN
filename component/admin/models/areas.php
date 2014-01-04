@@ -28,7 +28,7 @@ class ReddesignModelAreas extends RModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'reddesign_area_id', 'a.reddesign_area_id',
+				'id', 'a.id',
 				'title', 'a.title',
 			);
 		}
@@ -52,7 +52,10 @@ class ReddesignModelAreas extends RModelList
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		parent::populateState('a.title', 'asc');
+		$filterBackgroundId = $this->getUserStateFromRequest($this->context . '.filter_reddesign_background_id', 'filter_reddesign_background_id');
+		$this->setState('filter.reddesign_background_id', $filterBackgroundId);
+
+		parent::populateState('a.name', 'asc');
 	}
 
 	/**
@@ -68,11 +71,19 @@ class ReddesignModelAreas extends RModelList
 			->select('a.*')
 			->from($db->quoteName('#__reddesign_areas', 'a'));
 
+		// Filter by Background ID
+		$backgroundId = $this->getState('reddesign_background_id', 0);
+
+		if ($backgroundId)
+		{
+			$query->where($db->qn('a.reddesign_background_id') . ' = ' . $db->quote($backgroundId));
+		}
+
 		// Ordering
 		$orderList = $this->getState('list.ordering');
 		$directionList = $this->getState('list.direction');
 
-		$order = !empty($orderList) ? $orderList : 'a.title';
+		$order = !empty($orderList) ? $orderList : 'a.name';
 		$direction = !empty($directionList) ? $directionList : 'ASC';
 		$query->order($db->escape($order) . ' ' . $db->escape($direction));
 

@@ -34,7 +34,7 @@ class ReddesignTableArea extends RTable
 	 * @var string
 	 * @since 0.9.1
 	 */
-	protected $_tableKey = 'reddesign_area_id';
+	protected $_tableKey = 'id';
 
 	/**
 	 * Field name to publish/unpublish table registers. Ex: state

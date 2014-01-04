@@ -12,7 +12,7 @@
 			/>
 		<field
 			name="name"
-			id="name"
+			id="bg_name"
 			type="text"
 			label="COM_REDDESIGN_BACKGROUND_FIELD_TITLE"
 			description="COM_REDDESIGN_BACKGROUND_FIELD_TITLE"
@@ -20,8 +20,8 @@
 			size="32"
 			/>
 		<field
-			name="state"
-			id="state"
+			name="bg_state"
+			id="bg_state"
 			type="radio"
 			label="JPUBLISHED"
 			description="JPUBLISHED"
@@ -44,32 +44,36 @@
 			id="isProductionBg"
 			type="checkbox"
 			label="COM_REDDESIGN_BACKGROUND_IS_PRODUCTION_BACKGROUND"
-			description="COM_REDDESIGN_BACKGROUND_IS_PRODUCTION_BACKGROUND"
+			description="COM_REDDESIGN_BACKGROUND_IS_PRODUCTION_BACKGROUND_DESC"
 			default="1"
+			value="1"
 			/>
 		<field
 			name="isPreviewBg"
 			id="isPreviewBg"
 			type="checkbox"
 			label="COM_REDDESIGN_BACKGROUND_IS_PREVIEW_BACKGROUND"
-			description="COM_REDDESIGN_BACKGROUND_IS_PREVIEW_BACKGROUND"
+			description="COM_REDDESIGN_BACKGROUND_IS_PREVIEW_BACKGROUND_DESC"
 			default="1"
+			value="1"
 			/>
 		<field
-			name="isDefaultPreviewContainer"
-			id="isDefaultPreviewContainer"
+			name="isDefaultPreview"
+			id="isDefaultPreview"
 			type="checkbox"
 			label="COM_REDDESIGN_BACKGROUND_DEFAULT_PREVIEW"
-			description="COM_REDDESIGN_BACKGROUND_DEFAULT_PREVIEW"
+			description="COM_REDDESIGN_BACKGROUND_DEFAULT_PREVIEW_DESC"
 			default="1"
+			value="1"
 			/>
 		<field
-			name="useCheckerboardContainer"
-			id="useCheckerboardContainer"
+			name="useCheckerboard"
+			id="useCheckerboard"
 			type="checkbox"
 			label="COM_REDDESIGN_BACKGROUND_USE_CHECKERBOARD"
-			description="COM_REDDESIGN_BACKGROUND_USE_CHECKERBOARD"
+			description="COM_REDDESIGN_BACKGROUND_USE_CHECKERBOARD_DESC"
 			default="1"
+			value="1"
 			/>
 		<field
 			name="thumbnail"

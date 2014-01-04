@@ -37,10 +37,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		$this->loadLanguage();
 
-		if (!defined('FOF_INCLUDED'))
-		{
-			JLoader::import('fof.include');
-		}
+		JLoader::import('redcore.bootstrap');
 	}
 
 	/**
@@ -186,34 +183,66 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$productRelatedDesigntypeIds = implode(',', $productRelatedDesigntypeIds);
 			}
 
-			// Get redDESIGN frontend HTML.
-			$inputvars = array(
-				'id' => $designTypeId,
-				'task' => 'read',
-				'relatedDesignTypes' => $productRelatedDesigntypeIds,
-				'cid' => $params->get('cid', null),
-				'productId' => $data->product_id,
-				'Itemid' => $app->input->getInt('Itemid', null)
-			);
-			$input = new FOFInput($inputvars);
+			$displayData = new stdClass;
+			$displayData->params = JComponentHelper::getParams('com_reddesign');
 
-			ob_start();
-			FOFDispatcher::getTmpInstance('com_reddesign', 'designtype', array('input' => $input))->dispatch();
-			$html = ob_get_contents();
-			ob_end_clean();
+			$designtypesModel = RModel::getFrontInstance('Designtypes', array(), 'com_reddesign');
+			$designtypesModel->setId($designTypeId);
+			$displayData->item = $designtypesModel->getItems()[0];
+			$displayData->backgrounds = $designtypesModel->getBackgrounds();
+
+			foreach ($displayData->backgrounds as $background)
+			{
+				if ($background->isDefaultPreview)
+				{
+					$displayData->defaultPreviewBg = $background;
+				}
+
+				if ($background->isProductionBg)
+				{
+					$displayData->productionBackground = $background;
+				}
+			}
+
+			$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true), 'com_reddesign');
+			$displayData->fonts = $fontsModel->getItems();
+
+			if (empty($displayData->imageSize))
+			{
+				$displayData->imageSize = array(0, 0);
+			}
+
+			if (empty($displayData->defaultPreviewBg) || empty($displayData->productionBackground))
+			{
+				$app->enqueueMessage(JText::_('COM_REDDESIGN_DESIGNTYPE_NO_BACKGROUNDS'), 'notice');
+			}
+			else
+			{
+				$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
+				$areasModel->setState('reddesign_background_id', $this->productionBackground->reddesign_background_id);
+				$displayData->productionBackgroundAreas = $areasModel->getItems();
+				$displayData->imageSize = getimagesize(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->defaultPreviewBg->image_path);
+			}
+
+			if (empty($displayData->productionBackgroundAreas))
+			{
+				$app->enqueueMessage(JText::_('COM_REDDESIGN_DESIGNTYPE_NO_DESIGN_AREAS'), 'notice');
+			}
+
+			$html = RLayoutHelper::render('default', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
 
 			// Get background ID so you can get areas.
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_background_id'))
+			$query->select($db->quoteName('id'))
 				->from($db->quoteName('#__reddesign_backgrounds'))
 				->where($db->quoteName('isProductionBg') . ' = ' . 1)
-				->where($db->quoteName('reddesign_designtype_id') . ' = ' . $designTypeId);
+				->where($db->quoteName('designtype_id') . ' = ' . $designTypeId);
 			$db->setQuery($query);
 			$backgroundId = $db->loadResult();
 
 			// Get areas for the template tags replacement.
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_area_id'))
+			$query->select($db->quoteName('id'))
 				->from($db->quoteName('#__reddesign_areas'))
 				->where($db->quoteName('reddesign_background_id') . ' = ' . $backgroundId);
 			$db->setQuery($query);
@@ -479,21 +508,21 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$js = '
 					function generateRedDesignData() {
 						var values = {};
-						var inputs = akeeba.jQuery("#designform :input");
+						var inputs = jQuery("#designform :input");
 
 						inputs.each(function() {
-							values[this.name] = akeeba.jQuery(this).val();
+							values[this.name] = jQuery(this).val();
 						});
 
-						values["backgroundImgSrc"] = akeeba.jQuery("#background").attr("src");
+						values["backgroundImgSrc"] = jQuery("#background").attr("src");
 
-						values["customUserWidth"] = akeeba.jQuery("input[id^=\"plg_dimension_width\"]").val();
-						values["customUserHeight"] = akeeba.jQuery("input[id^=\"plg_dimension_height\"]").val();
+						values["customUserWidth"] = jQuery("input[id^=\"plg_dimension_width\"]").val();
+						values["customUserHeight"] = jQuery("input[id^=\"plg_dimension_height\"]").val();
 						values["enteredDimensionunit"] = "cm";
 
 						var jsonString = JSON.stringify(values);
 
-						akeeba.jQuery("#redDesignData").val(jsonString);
+						jQuery("#redDesignData").val(jsonString);
 
 						getExtraParamsArray.redDesignData = encodeURIComponent(jsonString);
 					}
@@ -589,7 +618,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				}
 				else
 				{
-					$fontModel = FOFModel::getTmpInstance('Font', 'ReddesignModel');
+					$fontModel = RModel::getAdminInstance('Font', array('ignore_request' => true), 'com_reddesign');
 					$fontName = $fontModel->getItem($area['fontTypeId']);
 					$fontName = $fontName->title;
 				}
@@ -633,12 +662,12 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 				$downloadFileName = 'production-file-' . $orderItem->order_id . '-' . $orderItem->order_item_id;
 
-				$productionPdf = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/pdf/' . $orderItemMapping->productionPdf . '.pdf');
+				$productionPdf = JURI::root() . 'media/com_reddesign/backgrounds/orders/pdf/' . $orderItemMapping->productionPdf . '.pdf';
 				echo '<a href="' . $productionPdf . '" download="' . $downloadFileName . '.pdf">' .
 					JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
 					' PDF</a><br/><br/>';
 
-				$productionEps = FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/orders/eps/' . $orderItemMapping->productionEps . '.eps');
+				$productionEps = JURI::root() . 'media/com_reddesign/backgrounds/orders/eps/' . $orderItemMapping->productionEps . '.eps';
 				echo '<a href="' . $productionEps . '" download="' . $downloadFileName . '.eps">' .
 					JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
 					' EPS</a>';
@@ -740,15 +769,15 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	public function prepareDesignTypeData($redDesignData)
 	{
 		// Get design type data.
-		$designTypeModel = FOFModel::getTmpInstance('Designtype', 'ReddesignModel')->reddesign_designtype_id($redDesignData->reddesign_designtype_id);
-		$designType      = $designTypeModel->getItem($redDesignData->reddesign_designtype_id);
+		$designtypesModel = RModel::getFrontInstance('Designtypes', array(), 'com_reddesign');
+		$designtypesModel->setId($designTypeId);
+		$designType = $designtypesModel->getItems()[0];
 
 		$data = array();
 		$data['designType'] = $designType;
 
 		// Get Background Data
-		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($redDesignData->production_background_id);
-		$data['designBackground'] = $backgroundModel->getItem($redDesignData->production_background_id);
+		$data['designBackground'] = $designtypesModel->getProductionBackground();
 
 		// Get designAreas
 		$data['designAreas'] = array();

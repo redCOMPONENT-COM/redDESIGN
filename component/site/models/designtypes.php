@@ -19,8 +19,37 @@ JLoader::import('joomla.filesystem.file');
  *
  * @since       1.0
  */
-class ReddesignModelDesigntypes extends FOFModel
+class ReddesignModelDesigntypes extends RModelList
 {
+	/**
+	 * Designtype Id
+	 *
+	 * @var  int
+	 */
+	private $id;
+
+	/**
+	 * Get Id
+	 *
+	 * @return int  Designtype Id.
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
+
+	/**
+	 * Set Id
+	 *
+	 * @param   int  $id  Designtype Id.
+	 *
+	 * @return void.
+	 */
+	public function setId($id)
+	{
+		$this->id = (int) $id;
+	}
+
 	/**
 	 * Retrieve all backgrounds from the database that belongs to the current design.
 	 *
@@ -28,10 +57,10 @@ class ReddesignModelDesigntypes extends FOFModel
 	 */
 	public function getBackgrounds()
 	{
-		$backgroundModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel');
-		$backgroundModel->setState('reddesign_designtype_id', $this->getId());
+		$backgroundModel = RModel::getAdminInstance('Backgrounds', array(), 'com_reddesign');
+		$backgroundModel->setState('designtype_id', $this->getId());
 
-		$backgrounds = $backgroundModel->getItemList();
+		$backgrounds = $backgroundModel->getItems();
 
 		return $backgrounds;
 	}
@@ -78,4 +107,32 @@ class ReddesignModelDesigntypes extends FOFModel
 		return false;
 	}
 
+	/**
+	 * Build an SQL query to load the list data.
+	 *
+	 * @return  JDatabaseQuery
+	 */
+	protected function getListQuery()
+	{
+		$db = $this->getDbo();
+
+		$query = $db->getQuery(true)
+					->select('d.*')
+					->from($db->qn('#__reddesign_designtypes', 'd'));
+
+		if ($this->id > 0)
+		{
+			$query->where('d.id = ' . (int) $this->id);
+		}
+
+		// Ordering
+		$orderList = $this->getState('list.ordering');
+		$directionList = $this->getState('list.direction');
+
+		$order = !empty($orderList) ? $orderList : 'd.name';
+		$direction = !empty($directionList) ? $directionList : 'ASC';
+		$query->order($db->escape($order) . ' ' . $db->escape($direction));
+
+		return $query;
+	}
 }

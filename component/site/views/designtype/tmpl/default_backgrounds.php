@@ -8,6 +8,12 @@
  */
 
 defined('_JEXEC') or die();
+
+if (isset($displayData))
+{
+	$this->backgrounds = $displayData->backgrounds;
+}
+
 ?>
 <h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_FRAMES_TITLE') ?></h4>
 <div class="row-fluid">
@@ -16,7 +22,7 @@ defined('_JEXEC') or die();
 			<?php
 				if ($frame->isDefaultPreview)
 				{
-					$reddesign_background_id = $frame->reddesign_background_id;
+					$reddesign_background_id = $frame->id;
 				}
 			?>
 			<li>
@@ -29,15 +35,13 @@ defined('_JEXEC') or die();
 						   name="frame"
 						   value="<?php echo $frame->reddesign_background_id ?>"
 						<?php if ($frame->isDefaultPreview) : ?>
-						   checked="checked"'
+						   checked="checked"
 						<?php endif; ?>
 						/>
 				</div>
 				<div class="frame-detail">
 					<div class="frame-thumbnail-container">
-						<img class="img-polaroid frame-thumbnail"
-							 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $frame->thumbnail; ?>"
-							 alt="<?php echo $frame->title; ?>"/>
+						<?php echo JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $frame->thumbnail, $frame->title, 'class="img-polaroid frame-thumbnail"') ?>
 					</div>
 					<div class="pull-left">
 						<h5><?php echo $frame->title; ?></h5>
@@ -53,8 +57,10 @@ defined('_JEXEC') or die();
 					$productId = $this->config['input']->getInt('productId', 0);
 					$cid = $this->config['input']->getInt('cid', null);
 					$Itemid = $this->config['input']->getInt('Itemid', null);
-					$backgroundsModel = FOFModel::getTmpInstance('Backgrounds', 'ReddesignModel')->reddesign_designtype_id($relatedDesignType);
-					$relatedBackgrounds = $backgroundsModel->getItemList();
+
+					$backgroundsModel = RModel::getAdminInstance('Backgrounds', array(), 'com_reddesign');
+					$backgroundsModel->setState('designtype_id', $relatedDesignType);
+					$relatedBackgrounds = $backgroundModel->getItems();
 				?>
 				<?php foreach($relatedBackgrounds as $frame) : ?>
 					<li>
@@ -67,15 +73,13 @@ defined('_JEXEC') or die();
 									   name="frame"
 									   value="<?php echo $frame->reddesign_background_id ?>"
 									<?php if ($frame->isDefaultPreview) : ?>
-									   checked="checked"'
+									   checked="checked"
 									<?php endif; ?>
 								/>
 							</div>
 							<div class="frame-detail">
 								<div class="frame-thumbnail-container">
-									<img class="img-polaroid frame-thumbnail"
-										 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $frame->thumbnail; ?>"
-										 alt="<?php echo $frame->title; ?>"/>
+									<?php echo JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $frame->thumbnail, $frame->title, 'class="img-polaroid frame-thumbnail"') ?>
 								</div>
 								<div class="pull-left">
 									<h5><?php echo $frame->title; ?></h5>

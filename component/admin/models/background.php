@@ -68,7 +68,7 @@ class ReddesignModelBackground extends RModelAdmin
 		$query
 			->update($this->_db->qn('#__reddesign_backgrounds'))
 			->set($this->_db->qn('isProductionBg') . ' = ' . $this->_db->q(0))
-			->where($this->_db->qn('reddesign_designtype_id') . ' = ' . $this->_db->q($designId));
+			->where($this->_db->qn('designtype_id') . ' = ' . $this->_db->q($designId));
 
 		$this->_db->setQuery($query);
 
@@ -130,7 +130,7 @@ class ReddesignModelBackground extends RModelAdmin
 		$query
 			->update($this->_db->qn('#__reddesign_backgrounds'))
 			->set($this->_db->qn('isDefaultPreview') . ' = ' . $this->_db->q(0))
-			->where($this->_db->qn('reddesign_designtype_id') . ' = ' . $this->_db->q($designId));
+			->where($this->_db->qn('designtype_id') . ' = ' . $this->_db->q($designId));
 
 		$this->_db->setQuery($query);
 
