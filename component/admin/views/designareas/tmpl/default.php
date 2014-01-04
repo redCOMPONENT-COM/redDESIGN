@@ -1214,6 +1214,8 @@ function saveArea(update)
 		{
 			var json = jQuery.parseJSON(data);
 
+			console.log(json);
+
 			if (update == 0)
 			{
 				drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
@@ -1234,7 +1236,7 @@ function saveArea(update)
 		},
 		error: function (data)
 		{
-			alert(data);
+			console.log(data);
 		}
 	});
 }
