@@ -194,13 +194,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		// Get all the backgrounds that belongs to selected Design Type item.
 		if (!empty($designTypeId))
 		{
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
-				->from($db->quoteName('#__reddesign_backgrounds'))
-				->where($db->quoteName('isProductionBg') . ' = ' . 0)
-				->where($db->quoteName('reddesign_designtype_id') . ' IN (' . $designTypeId . ')');
-			$db->setQuery($query);
-			$backgrounds = $db->loadObjectList();
+			$backgrounds = $this->getReddesignBackgrounds($designTypeId);
 		}
 
 		$dropdownHtml = '<tr>'
@@ -219,23 +213,26 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 		$dropdownHtml .= '<div id="designBackgrounds' . $property->k . $property->g . '" ' . $style . ' class="designBackgrounds">';
 
-		foreach ($backgrounds as $background)
+		if (count($backgrounds) > 0)
 		{
-			if ((int) $background->reddesign_background_id == $selectedDesignType)
+			foreach ($backgrounds as $background)
 			{
-				$checked = 'checked="checked"';
-			}
-			else
-			{
-				$checked = '';
-			}
+				if ((int) $background->reddesign_background_id == $selectedDesignType)
+				{
+					$checked = 'checked="checked"';
+				}
+				else
+				{
+					$checked = '';
+				}
 
-			$dropdownHtml .= '<input type="radio"
-								name="attribute[' . $property->k . '][property][' . $property->g . '][redDesignBackground]"
-								value="' . $background->reddesign_background_id . '"' . $checked . ' />' . "&nbsp;&nbsp;";
-			$dropdownHtml .= $background->title . "&nbsp;&nbsp;";
-			$dropdownHtml .= "<img src='" . FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $background->thumbnail .
-								"' alt='" . $background->title . "'/>&nbsp;&nbsp;&nbsp;";
+				$dropdownHtml .= '<input type="radio"
+									name="attribute[' . $property->k . '][property][' . $property->g . '][redDesignBackground]"
+									value="' . $background->reddesign_background_id . '"' . $checked . ' />' . "&nbsp;&nbsp;";
+				$dropdownHtml .= $background->title . "&nbsp;&nbsp;";
+				$dropdownHtml .= "<img src='" . FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $background->thumbnail .
+									"' alt='" . $background->title . "'/>&nbsp;&nbsp;&nbsp;";
+			}
 		}
 
 		$dropdownHtml .= '</div>';
@@ -270,27 +267,24 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			$db->setQuery($query);
 			$designTypeId = $db->loadResult();
 
+			// Get all the backgrounds that belongs to selected Design Type item.
 			if (!empty($designTypeId))
 			{
-				// Get all the backgrounds that belongs to selected Design Type item.
-				$query = $db->getQuery(true);
-				$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
-					->from($db->quoteName('#__reddesign_backgrounds'))
-					->where($db->quoteName('isProductionBg') . ' = ' . 0)
-					->where($db->quoteName('reddesign_designtype_id') . ' IN (' . $designTypeId . ')');
-				$db->setQuery($query);
-				$backgrounds = $db->loadObjectList();
+				$backgrounds = $this->getReddesignBackgrounds($designTypeId);
 			}
 
 			$dropdownHtml = '';
 
-			foreach ($backgrounds as $background)
+			if (count($backgrounds) > 0)
 			{
-				$dropdownHtml .= "<input type='radio' name='attribute[{gh}][property][{total_g}][redDesignBackground]' value='" .
-									$background->reddesign_background_id . "' />&nbsp;&nbsp;";
-				$dropdownHtml .= $background->title . "&nbsp;&nbsp;";
-				$dropdownHtml .= "<img src='" . FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $background->thumbnail .
-									"' alt='" . $background->title . "'/>&nbsp;&nbsp;&nbsp;";
+				foreach ($backgrounds as $background)
+				{
+					$dropdownHtml .= "<input type='radio' name='attribute[{gh}][property][{total_g}][redDesignBackground]' value='" .
+										$background->reddesign_background_id . "' />&nbsp;&nbsp;";
+					$dropdownHtml .= $background->title . "&nbsp;&nbsp;";
+					$dropdownHtml .= "<img src='" . FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $background->thumbnail .
+										"' alt='" . $background->title . "'/>&nbsp;&nbsp;&nbsp;";
+				}
 			}
 
 			$addDropdownJs  = 'var backgroundsDropDownHtml = "' . $dropdownHtml . '";';
@@ -353,7 +347,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	 * @param   object  $data  Contains product and property id
 	 *
 	 * @throws  RuntimeException
-
+	 *
 	 * @return  void
 	 */
 	private function removeReddesignPropertyMapping($data)
@@ -379,5 +373,39 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		{
 			throw new RuntimeException($e->getMessage(), $e->getCode());
 		}
+	}
+
+	/**
+	 * Get all the backgrounds that belongs to selected Design Type item.
+	 *
+	 * @param   string  $designTypeId  Comma separated design type ids.
+	 *
+	 * @return  array                 Reddesign Background Object array
+	 */
+	private function getReddesignBackgrounds($designTypeId)
+	{
+		// Initialize variables.
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// Create the base select statement.
+		$query->select($db->quoteName(array('reddesign_background_id', 'title', 'thumbnail')))
+			->from($db->quoteName('#__reddesign_backgrounds'))
+			->where($db->quoteName('isDefaultPreview') . ' = ' . 1)
+			->where($db->quoteName('reddesign_designtype_id') . ' IN (' . $designTypeId . ')');
+
+		// Set the query and load the result.
+		$db->setQuery($query);
+
+		try
+		{
+			$backgrounds = $db->loadObjectList();
+		}
+		catch (RuntimeException $e)
+		{
+			throw new RuntimeException($e->getMessage(), $e->getCode());
+		}
+
+		return $backgrounds;
 	}
 }
