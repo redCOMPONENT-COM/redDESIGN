@@ -50,31 +50,24 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 				}
 			});
 
-			jQuery(document).on('click', '#saveBgBtn',
-				function ()
-				{
-					jQuery('#bgForm').submit(
-						function (event){
-							console.log(jQuery(this).serialize());
-							jQuery.ajax({
-								url: jQuery(this).attr('action'),
-								type: jQuery(this).attr('method'),
-								data: jQuery(this).serialize(),
-								cache: false
-							})
-							.success(function (data){})
-							.done(function (data){
-								jQuery('#bgMessage').html(data);
-							})
-							.fail(function (data){
-								jQuery('#bgMessage').html('<div class="error">' + data + '</div>');
-							});
+			jQuery("#bgFormSubmit").click(function ()
+			{
+				var form = jQuery('#bgForm');
+				form.attr("action", "index.php?option=com_reddesign&task=background.ajaxBackgroundSave");
+				form.attr("method", "post");
+				form.attr("enctype", "multipart/form-data");
+				form.attr("encoding", "multipart/form-data");
+				form.attr("target", "bgPostIframe");
+				// form.attr("file", jQuery('#jform_bg_eps_file').val());
+				form.submit();
+				jQuery("#bgPostIframe").load(function () {
+					iframeContents = jQuery("#bgPostIframe")[0].contentWindow.document.body.innerHTML;
+					jQuery("#bgMessage").html(iframeContents);
+				});
 
-							event.preventDefault();
-						}
-					);
-				}
-			);
+				return false;
+
+			});
 
 			jQuery(document).on('click', '#cancelBgBtn',
 				function () {
@@ -91,7 +84,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 <div id="bgMessage"></div>
 
 <form action="index.php?option=com_reddesign&task=background.ajaxBackgroundSave"
-	id="bgForm" name="adminForm" method="post" enctype="multipart/form-data" class="form-horizontal">
+	id="bgForm" name="adminForm" method="POST" enctype="multipart/form-data" class="form-horizontal">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 	<input type="hidden" name="returnurl" value="<?php echo base64_encode($return_url); ?>" />
 	<input type="hidden" name="jform[designtype_id]" id="background_reddesign_designtype_id" value="<?php echo $this->item->designtype_id; ?>" />
@@ -180,8 +173,10 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=
 	</div>
 
 	<div class="form-actions">
-		<input type="submit" class="btn btn-success" id="saveBgBtn" value="<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>"/>
+		<input type="button" class="btn btn-success" id="bgFormSubmit" value="<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>"/>
 		<input type="button" class="btn" id="cancelBgBtn" value="<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>"/>
 	</div>
 
 </form>
+
+<iframe name="bgPostIframe" id="bgPostIframe" style="display: none" ></iframe>

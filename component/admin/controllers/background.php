@@ -57,15 +57,11 @@ class ReddesignControllerBackground extends RControllerForm
 			if (!$data['reddesign_background_id'])
 			{
 				$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_FILE'), 'error');
-				/*$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
-				$this->redirect();*/
 			}
 		}
 		elseif (empty($data['name']))
 		{
 			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_TITLE'), 'error');
-			/*$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
-			$this->redirect();*/
 		}
 		else
 		{
@@ -93,9 +89,9 @@ class ReddesignControllerBackground extends RControllerForm
 			{
 				// Create a image preview thumbnail based on the EPS
 				$im = new Imagick;
-				$im->readImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $jpegPreviewFile);
+				$im->readImage(JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $jpegPreviewFile);
 				$im->thumbnailImage($params->get('max_background_thumbnail_width', 50), $params->get('max_background_thumbnail_height', 50), true);
-				$im->writeImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/thumbnails/' . $jpegPreviewFile);
+				$im->writeImage(JPATH_ROOT . '/media/com_reddesign/backgrounds/thumbnails/' . $jpegPreviewFile);
 				$im->clear();
 				$im->destroy();
 				$thumbPreviewFile = $jpegPreviewFile;
@@ -148,24 +144,24 @@ class ReddesignControllerBackground extends RControllerForm
 				if ($updatedEPS)
 				{
 					// Delete old EPS
-					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $oldImages->eps_file))
+					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->eps_file))
 					{
-						JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $oldImages->eps_file);
+						JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->eps_file);
 					}
 
 					// Delete old Image
-					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $oldImages->image_path))
+					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->image_path))
 					{
-						JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $oldImages->image_path);
+						JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->image_path);
 					}
 				}
 
 				if ($updatedThumbnail)
 				{
 					// Delete background old thumbnail
-					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/thumbnails/' . $oldImages->thumbnail))
+					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/thumbnails/' . $oldImages->thumbnail))
 					{
-						JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/thumbnails/' . $oldImages->thumbnail);
+						JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/thumbnails/' . $oldImages->thumbnail);
 					}
 				}
 			}
@@ -185,7 +181,7 @@ class ReddesignControllerBackground extends RControllerForm
 		// If this new background will be the PDF Production background, switch it against the previous production background
 		if ((int) $data['isProductionBg'])
 		{
-			$designId = (int) $data['reddesign_designtype_id'];
+			$designId = (int) $data['designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
 			$backgroundModel->unsetAllIsProductionBg($designId);
@@ -194,7 +190,7 @@ class ReddesignControllerBackground extends RControllerForm
 		// If this new background will be the preview background, switch it against the previous preview background
 		if ((int) $data['isDefaultPreview'])
 		{
-			$designId = (int) $data['reddesign_designtype_id'];
+			$designId = (int) $data['designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
 			$backgroundModel->unsetAllIsDefaultPreview($designId);
@@ -232,15 +228,15 @@ class ReddesignControllerBackground extends RControllerForm
 		$uploaded_file = null;
 		$jpegPreviewFile = null;
 		$backgroundModel = $this->getModel();
+		$input = JFactory::getApplication()->input;
 
-		$data = $this->input->get('jform', array(), 'array');
+		$data = $input->get('jform', array(), 'array');
 
-		print_r($data);
-
-		$file = $this->input->files->get('jform');
+		$file = $input->files->get('jform');
+		$file = $file['bg_eps_file'];
 
 		// Get Eps if has been added
-		$file = $this->input->files->get('bg_eps_file', null);
+		// $file = $this->input->files->get('bg_eps_file', null);
 
 		// Get Thumbnail if has been added
 		$thumbFile = $this->input->files->get('thumbnail', null);
@@ -255,20 +251,13 @@ class ReddesignControllerBackground extends RControllerForm
 			// If is a new background and the file is not attached return error
 			if (!$data['id'])
 			{
-				/*$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_FILE'), 'error');
-				$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
-				$this->redirect();*/
-				echo '<div class="alert alert-error">' . JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_FILE') . '</div>';
-
+				echo '<div class="alert alert-error">' . JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_FILE') . ' 1</div>';
 				$app->close();
 			}
 		}
 		elseif (empty($data['name']))
 		{
-			/*$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_TITLE'), 'error');
-			$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
-			$this->redirect();*/
-			echo '<div class="alert alert-error">' . JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_TITLE') . '</div>';
+			echo '<div class="alert alert-error">' . JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_TITLE') . ' 2</div>';
 			$app->close();
 		}
 		else
@@ -276,30 +265,33 @@ class ReddesignControllerBackground extends RControllerForm
 			$updatedEPS = true;
 
 			// Upload the background file
-			$uploaded_file = $this->uploadFile($file);
+			// $uploaded_file = $this->uploadFile($file);
+			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'backgrounds');
 
 			if (!$uploaded_file)
 			{
-				/*$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . (int) $data['reddesign_designtype_id'] . '&tab=backgrounds');
-				$this->redirect();*/
+				echo '<div class="alert alert-error">' . JText::_('COM_REDDESIGN_BACKGROUND_ERROR_UPLOAD_FAILED') . '</div>';
+				$app->close();
 			}
 
 			// Create an image preview of the EPS.
-			$jpegPreviewFile = $this->createBackgroundPreview($uploaded_file['mangled_filename']);
+			// @Thong: No need now
+			/*$jpegPreviewFile = $this->createBackgroundPreview($uploaded_file['mangled_filename']);
 
 			if (!$jpegPreviewFile)
 			{
 				return false;
-			}
+			}*/
+			$jpegPreviewFile = $uploaded_file['mangled_filename'];
 
 			// If no thumbnail file has been attached generate one based on the Background EPS
 			if (!$thumbFile['name'])
 			{
 				// Create a image preview thumbnail based on the EPS
 				$im = new Imagick;
-				$im->readImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $jpegPreviewFile);
+				$im->readImage(JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $jpegPreviewFile);
 				$im->thumbnailImage($params->get('max_background_thumbnail_width', 50), $params->get('max_background_thumbnail_height', 50), true);
-				$im->writeImage(JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/thumbnails/' . $jpegPreviewFile);
+				$im->writeImage(JPATH_ROOT . '/media/com_reddesign/backgrounds/thumbnails/' . $jpegPreviewFile);
 				$im->clear();
 				$im->destroy();
 				$thumbPreviewFile = $jpegPreviewFile;
@@ -333,7 +325,7 @@ class ReddesignControllerBackground extends RControllerForm
 		}
 
 		// On edit
-		if (!!$data['reddesign_background_id'])
+		if (!!$data['id'])
 		{
 			// If images has been updated remove old images
 			if ($updatedEPS || $updatedThumbnail)
@@ -343,7 +335,7 @@ class ReddesignControllerBackground extends RControllerForm
 				$query
 					->select($db->qn(array('eps_file', 'image_path', 'thumbnail')))
 					->from($db->qn('#__reddesign_backgrounds'))
-					->where($db->qn('reddesign_background_id') . ' = ' . $db->q((int) $data['reddesign_background_id']));
+					->where($db->qn('id') . ' = ' . $db->q((int) $data['id']));
 
 				$db->setQuery($query);
 				$db->execute();
@@ -352,24 +344,24 @@ class ReddesignControllerBackground extends RControllerForm
 				if ($updatedEPS)
 				{
 					// Delete old EPS
-					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $oldImages->eps_file))
+					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->eps_file))
 					{
-						JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $oldImages->eps_file);
+						JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->eps_file);
 					}
 
 					// Delete old Image
-					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $oldImages->image_path))
+					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->image_path))
 					{
-						JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $oldImages->image_path);
+						JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->image_path);
 					}
 				}
 
 				if ($updatedThumbnail)
 				{
 					// Delete background old thumbnail
-					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/thumbnails/' . $oldImages->thumbnail))
+					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/thumbnails/' . $oldImages->thumbnail))
 					{
-						JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/thumbnails/' . $oldImages->thumbnail);
+						JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/thumbnails/' . $oldImages->thumbnail);
 					}
 				}
 			}
@@ -389,7 +381,7 @@ class ReddesignControllerBackground extends RControllerForm
 		// If this new background will be the PDF Production background, switch it against the previous production background
 		if ((int) $data['isProductionBg'])
 		{
-			$designId = (int) $data['reddesign_designtype_id'];
+			$designId = (int) $data['designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
 			$backgroundModel->unsetAllIsProductionBg($designId);
@@ -398,7 +390,7 @@ class ReddesignControllerBackground extends RControllerForm
 		// If this new background will be the preview background, switch it against the previous preview background
 		if ((int) $data['isDefaultPreview'])
 		{
-			$designId = (int) $data['reddesign_designtype_id'];
+			$designId = (int) $data['designtype_id'];
 
 			// Set all other backgrounds as non PDF backgrounds
 			$backgroundModel->unsetAllIsDefaultPreview($designId);
@@ -419,8 +411,17 @@ class ReddesignControllerBackground extends RControllerForm
 			$data['isPreviewBg'] = 0;
 		}
 
-		return $data;
+		$backgroundTable = RTable::getAdminInstance('Background');
 
+		$backgroundTable->bind($data);
+
+		if (!$backgroundTable->store())
+		{
+			echo '<div class="alert alert-error">' . JText::_('COM_REDDESIGN_BACKGROUND_ERROR_STORE_FAILED') . '</div>';
+			$app->close();
+		}
+
+		echo '<div class="alert alert-success">' . JText::_('COM_REDDESIGN_BACKGROUND_STORE_SUCCESS') . '</div>';
 		$app->close();
 	}
 
