@@ -188,7 +188,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			$designtypesModel = RModel::getFrontInstance('Designtypes', array(), 'com_reddesign');
 			$designtypesModel->setId($designTypeId);
-			$displayData->item = $designtypesModel->getItems()[0];
+			$tmpItems = $designtypesModel->getItems();
+			$displayData->item = $tmpItems[0];
 			$displayData->backgrounds = $designtypesModel->getBackgrounds();
 
 			foreach ($displayData->backgrounds as $background)
