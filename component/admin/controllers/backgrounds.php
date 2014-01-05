@@ -39,23 +39,40 @@ class ReddesignControllerBackgrounds extends RControllerAdmin
 	 */
 	public function setProductionFileBg()
 	{
-		$designId	= $this->input->getInt('reddesign_designtype_id', '');
-		$bgId		= $this->input->getInt('reddesign_background_id', '');
-
-		$model = $this->getThisModel();
-
 		$app = JFactory::getApplication();
+		$model = RModel::getAdminInstance('Background', array('ignore_request' => true));
 
-		if (!$model->setAsProductionFileBg($designId, $bgId))
+		$designId	= $this->input->get('reddesign_designtype_id', 0);
+		$bgIds		= $this->input->get('cid', null, 'array');
+		$bgId 		= 0;
+		$return 	= $this->input->get('return', null, 'base64');
+
+		if (bgIds)
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_ERROR_SWITCHING_PDF_BG'), 'error');
+			$bgId = $bgIds[0];
+		}
+
+		if ((designId) && ($bgId))
+		{
+			if (!$model->setAsProductionFileBg($designId, $bgId))
+			{
+				$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_ERROR_SWITCHING_PDF_BG'), 'error');
+			}
+			else
+			{
+				$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_PDF_BG_UPDATED'));
+			}
+		}
+
+		if ($return)
+		{
+			$this->setRedirect(base64_decode($return));
 		}
 		else
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_PDF_BG_UPDATED'));
+			$this->setRedirect(JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designId . '&tab=backgrounds');
 		}
 
-		$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . $designId . '&tab=backgrounds');
 		$this->redirect();
 	}
 
@@ -68,48 +85,40 @@ class ReddesignControllerBackgrounds extends RControllerAdmin
 	 */
 	public function setPreviewBg()
 	{
-		$designId	= $this->input->getInt('reddesign_designtype_id', '');
-		$bgId		= $this->input->getInt('reddesign_background_id', '');
-
-		$model = $this->getThisModel();
-
 		$app = JFactory::getApplication();
+		$model = RModel::getAdminInstance('Background', array('ignore_request' => true));
 
-		if (!$model->setAsPreviewbg($designId, $bgId))
+		$designId	= $this->input->get('reddesign_designtype_id', 0);
+		$bgIds		= $this->input->get('cid', null, 'array');
+		$bgId 		= 0;
+		$return 	= $this->input->get('return', null, 'base64');
+
+		if (bgIds)
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_ERROR_SWITCHING_PREVIEW_BG'), 'error');
+			$bgId = $bgIds[0];
+		}
+
+		if ((designId) && ($bgId))
+		{
+			if (!$model->setAsPreviewbg($designId, $bgId))
+			{
+				$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_ERROR_SWITCHING_PREVIEW_BG'), 'error');
+			}
+			else
+			{
+				$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_PDF_PREVIEW_UPDATED'));
+			}
+		}
+
+		if ($return)
+		{
+			$this->setRedirect(base64_decode($return));
 		}
 		else
 		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUNDS_PDF_PREVIEW_UPDATED'));
+			$this->setRedirect(JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designId . '&tab=backgrounds');
 		}
 
-		$this->setRedirect('index.php?option=com_reddesign&view=designtype&id=' . $designId . '&tab=backgrounds');
 		$this->redirect();
-	}
-
-	/**
-	 * Method for load Backgrounds List by AJAX
-	 *
-	 * @return array
-	 */
-	public function ajaxBackgrounds()
-	{
-		$designTypeId = $this->input->getInt('designtype_id', null);
-
-		if ($designTypeId)
-		{
-			/** @var RedshopbModelUsers $usersModel */
-
-			$view = $this->getView('Backgrounds', 'html');
-			$model = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true));
-			$view->setModel($model, true);
-
-			$model->setState('filter.designtypeid', $designTypeId);
-
-			$view->display();
-		}
-
-		JFactory::getApplication()->close();
 	}
 }

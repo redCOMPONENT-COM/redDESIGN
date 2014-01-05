@@ -14,18 +14,20 @@ JHTML::_('behavior.modal', 'a.jmodal');
 if (isset($displayData) && (count($displayData->items) > 0))
 {
 	$this->items = $displayData->items;
+	$this->designtype_id = $displayData->designtype_id;
 }
+
+$return_url = JRoute::_(JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds');
 
 ?>
 
 <div class="form-container">
-	<form id="backgrounds_form" name="backgrounds" method="post" action="index.php">
+	<form id="backgrounds_form" name="backgrounds" method="post" action="index.php?option=com_reddesign&view=backgrounds">
 		<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
-		<input type="hidden" name="option" value="com_reddesign">
-		<input type="hidden" name="view" value="background">
 		<input type="hidden" name="task" id="backgrounds_task" value="">
-		<input type="hidden" name="reddesign_background_id" id="backgrounds_reddesign_background_id" value="">
-		<input type="hidden" name="reddesign_designtype_id" id="backgrounds_reddesign_designtype_id" value="<?php /*echo $this->item->id;*/ ?>">
+		<input type="hidden" name="cid[]" id="backgrounds_reddesign_background_id" value="">
+		<input type="hidden" name="reddesign_designtype_id" id="backgrounds_reddesign_designtype_id" value="<?php echo $this->designtype_id; ?>">
+		<input type="hidden" name="return" id="backgrounds_return" value="<?php echo base64_encode($return_url); ?>" />
 		<table id="itemsList" class="table table-striped">
 			<thead>
 			<tr>
@@ -235,12 +237,9 @@ if (isset($displayData) && (count($displayData->items) > 0))
 	/**
 	 *  Set a background as PDF production file background
 	 */
-	function setProductionFileBg(bgid) {
-		var backgrounds_reddesign_background_id;
-
-		backgrounds_reddesign_background_id = bgid;
-
-		jQuery('#backgrounds_task').val('setProductionFileBg');
+	function setProductionFileBg(bgid) 
+	{
+		jQuery('#backgrounds_task').val('backgrounds.setProductionFileBg');
 		jQuery('#backgrounds_reddesign_background_id').val(bgid);
 		jQuery('#backgrounds_form').submit();
 	}
@@ -248,31 +247,26 @@ if (isset($displayData) && (count($displayData->items) > 0))
 	/**
 	 *  Set a background as preview file background
 	 */
-	function setPreviewbg(bgid) {
-		var backgrounds_reddesign_background_id;
-
-		backgrounds_reddesign_background_id = bgid;
-
-		jQuery('#backgrounds_task').val('setPreviewBg');
+	function setPreviewbg(bgid)
+	{
+		jQuery('#backgrounds_task').val('backgrounds.setPreviewBg');
 		jQuery('#backgrounds_reddesign_background_id').val(bgid);
 		jQuery('#backgrounds_form').submit();
 	}
 
 
 	/**
-	 *  Removes a background form activation
+	 * Removes a background
+	 *
+	 * @param  int  bgid  Background ID
+	 *
+	 * @return void
 	 */
-	function removeBg(bgid) {
-		jQuery('#backgrounds_task').val('remove');
-		<?php $return_url_removeBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' /*. $this->item->id*/ . '&tab=backgrounds'; ?>
-		jQuery('#backgrounds_form').
-			append(
-				jQuery('<input/>')
-					.attr('type', 'hidden')
-					.attr('name', 'returnurl')
-					.val('<?php echo base64_encode($return_url_removeBg) ?>')
-			);
+	function removeBg(bgid)
+	{
+		jQuery('#backgrounds_task').val('backgrounds.delete');
 		jQuery('#backgrounds_reddesign_background_id').val(bgid);
+
 		jQuery('#backgrounds_form').submit();
 	}
 
@@ -281,7 +275,7 @@ if (isset($displayData) && (count($displayData->items) > 0))
 	 */
 	function modifyBg(bgid) {
 		jQuery('#backgrounds_task').val('save');
-		<?php $return_url_removeBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->id . '&tab=backgrounds'; ?>
+		<?php $return_url_removeBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds'; ?>
 		jQuery('#backgrounds_form').
 			append(
 				jQuery('<input/>')

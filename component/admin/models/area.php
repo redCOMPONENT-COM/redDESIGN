@@ -23,13 +23,14 @@ class ReddesignModelArea extends RModelAdmin
 	 *
 	 * @param   array  $data  Array data.
 	 *
-	 * @throws Exception
+	 * @throws exception
 	 * @access public
 	 *
-	 * @return mixed
+	 * @return void
 	 */
 	public function ajaxSave($data)
 	{
+		$input   = JFactory::getApplication()->input;
 		$table = $this->getTable('Area');
 
 		// Insert new order item

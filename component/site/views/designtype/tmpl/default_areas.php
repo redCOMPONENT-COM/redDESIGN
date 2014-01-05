@@ -17,12 +17,23 @@ RHelperAsset::load('farbtastic.css', 'com_reddesign');
 RHelperAsset::load('color-converter.js', 'com_reddesign');
 
 RHelperAsset::load('raphael-min.js', 'com_reddesign');
-RHelperAsset::load('font.js', 'com_reddesign');
+
+RHelperAsset::load('raphael.json.js', 'com_reddesign');
+
+RHelperAsset::load('elemental.min.js', 'com_reddesign');
+RHelperAsset::load('rappar.js', 'com_reddesign');
+RHelperAsset::load('jquery.vectron.js', 'com_reddesign');
+
+RHelperAsset::load('raphael-svg-import2.js', 'com_reddesign');
+
+//RHelperAsset::load('fonts/Amaze.js', 'com_reddesign');
+//RHelperAsset::load('fonts/Vaztek.js', 'com_reddesign');
 
 if (isset($displayData))
 {
 	$this->item = $displayData->item;
 	$this->productionBackgroundAreas = $displayData->productionBackgroundAreas;
+	$this->fonts = $displayData->fonts;
 }
 
 ?>
@@ -131,15 +142,7 @@ if (isset($displayData))
 					$defaultFonts = array();
 					$defaultFonts[] = JHTML::_('select.option', 0, 'Arial');
 
-					echo JHTML::_(
-									'select.genericlist',
-									$defaultFonts,
-									'fontArea' . $area->id,
-									'class="inputbox" onChange="customize(0);"',
-									'value',
-									'text',
-									null
-					);
+					echo JHTML::_('select.genericlist', $defaultFonts, 'fontArea' . $area->id, 'class="inputbox" onChange="customize(0);"', 'value', 'text', null);
 				}
 				else
 				{
@@ -150,20 +153,20 @@ if (isset($displayData))
 					{
 						$options = array();
 
-						foreach ($areaFontsIds as $areaFontsId)
+						foreach ($areaFontsIds as $key => $value)
 						{
-							$options[] = JHTML::_('select.option', $areaFontsId, $this->fonts[$areaFontsId]->title);
+							foreach ($this->fonts as $font => $f)
+							{
+								if ($f->id == $value)
+								{
+									$options[] = JHTML::_('select.option', trim($f->name), $f->name);
+									$fontFile = 'fonts/' . $f->name . '.js';
+									RHelperAsset::load($fontFile, 'com_reddesign');
+								}
+							}
 						}
 
-						echo JHTML::_(
-										'select.genericlist',
-										$options,
-										'fontArea' . $area->id,
-										'class="inputbox" onChange="customize(0);"',
-										'value',
-										'text',
-										null
-						);
+						echo JHTML::_('select.genericlist', $options, 'fontArea' . $area->id, 'class="inputbox" onChange="svgLoad();"', 'value', 'text', null);
 					}
 				}
 			?>
@@ -181,13 +184,13 @@ if (isset($displayData))
 		{RedDesignBreakDesignAreaChooseFontSize}
 			<?php if ($this->item->fontsizer === 'slider') : ?>
 				<?php
-
 					// Case 1: using slider selector for font size.
 					RHelperAsset::load('bootstrap-slider.js', 'com_reddesign');
 					RHelperAsset::load('slider.css', 'com_reddesign');
 				?>
 				<input type="hidden"
 					   id="fontSize<?php echo $area->id ?>"
+					   class="fontSizeSlider"
 					   name="fontSize<?php echo $area->id ?>"
 					   value="<?php echo $area->defaultFontSize ?>"
 					   data-slider-min="<?php echo $area->minFontSize ?>"
@@ -355,11 +358,7 @@ if (isset($displayData))
 					<div class="colorSelector_list" id="fontColor<?php echo $area->id ?>">
 						<div style="background-color:<?php echo $defaultColor; ?>;cursor:pointer;">&nbsp;</div>
 					</div>
-					<input type="hidden"
-						   class="colorCode<?php echo $area->id ?>"
-						   name="colorCode<?php echo $area->id ?>"
-						   value="<?php echo $defaultColorVal; ?>"
-						   id="colorCode<?php echo $area->id ?>">
+					<input type="hidden" class="colorCode<?php echo $area->id ?>" name="colorCode<?php echo $area->id ?>" value="<?php echo $defaultColorVal; ?>" id="colorCode<?php echo $area->id ?>">
 				</div>
 
 			<?php endif; ?>

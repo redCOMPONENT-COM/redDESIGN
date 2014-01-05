@@ -134,6 +134,7 @@ switch ($tab)
 				<?php
 				$data = new stdClass;
 				$data->items = $this->backgrounds;
+				$data->designtype_id = $this->item->id;
 				echo RLayoutHelper::render('default', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/backgrounds/tmpl');
 				?>
 			</div>
@@ -152,6 +153,7 @@ switch ($tab)
 				$data->imageHeight = $this->imageHeight;
 				$data->fontsOptions = $this->fontsOptions;
 				$data->inputFieldOptions = $this->inputFieldOptions;
+				$data->item->designtype_id = $this->item->id;
 				echo RLayoutHelper::render('default', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/designareas/tmpl');
 			?>
 		</div>
