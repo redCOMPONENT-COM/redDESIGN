@@ -35,7 +35,7 @@ class ReddesignControllerArea extends RControllerForm
 		if (!empty($fontIds))
 		{
 			$fontIds = implode(',', $fontIds);
-			$this->$input->set('font_id', $fontIds);
+			$this->input->set('font_id', $fontIds);
 		}
 
 		$data = $this->input->post->get('jform', array(), 'array');
