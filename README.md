@@ -1,4 +1,4 @@
-# redDESIGN 2.0 VN (Vietnam's team special repository. 
+# redDESIGN 2.0
 
 See info at: https://redweb.atlassian.net/wiki/display/RED/Vietnam+specific+repository)
 
@@ -10,7 +10,7 @@ The 2.0 version was created for Exakt.dk customer incorporating the SVG (vectori
 
 ## Status
 
-redcore branch: [![Build Status](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGNvn.png?branch=redcore&token=vxVVpxnq2ZPuMp3yebRz)](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGNvn/)
+redcore branch: [![Build Status](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGN.png?branch=redcore&token=vxVVpxnq2ZPuMp3yebRz)](https://magnum.travis-ci.com/redCOMPONENT-COM/redDESIGN/)
 
 
 For more information check:
