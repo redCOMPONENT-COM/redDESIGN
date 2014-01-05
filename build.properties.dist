@@ -1,6 +1,6 @@
 comp.name=redDESIGN
 www.dir=/var/www/redSHOP-1.2
-comp.version=0.1
-joomla.version=FoF
+comp.version=2.0
+joomla.version=redCORE
 repo.dir=Folder where the the extension repository is located
 package.dir=Folder where put the zipped package

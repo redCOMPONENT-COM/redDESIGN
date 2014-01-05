@@ -51,7 +51,7 @@ defined('_JEXEC') or die;
 		</div>
 		<div class="control-group character-group span3">
 			<label for="typography{{charId}}"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY') ?></label>
-			<select id="typography{{charId}}" name="typography">
+			<select id="typography{{charId}}" name="typography{{charId}}">
 				<option value="0"><?php echo JText::_('COM_REDDESIGN_SELECT_TYPOGRAPHY'); ?></option>
 				<option value="1"><?php echo JText::_('COM_REDDESIGN_FONT_X_HEIGHT'); ?></option>
 				<option value="2"><?php echo JText::_('COM_REDDESIGN_FONT_CAP_HEIGHT'); ?></option>

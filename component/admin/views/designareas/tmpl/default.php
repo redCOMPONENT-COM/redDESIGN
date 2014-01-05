@@ -486,7 +486,6 @@ if (isset($displayData))
 															else
 															{
 																$chkAllColors = '';
-																$color_codes = explode(',', $area->color_code);
 															}
 														?>
 														<input type="checkbox"
@@ -1207,7 +1206,7 @@ function saveArea(update)
 			'jform[x2_pos]': areaX2_in_px,
 			'jform[y2_pos]': areaY2_in_px,
 			'jform[width]': areaWidth_in_px,
-			'jform[height]': areaHeight_in_px,
+			'jform[height]': areaHeight_in_px
 		},
 		type: "post",
 		success: function (data)
@@ -1231,8 +1230,7 @@ function saveArea(update)
 				updateAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
 			}
 
-			jQuery("#saveAreaBtn").button("reset");
-			// setTimeout(function () {jQuery("#saveAreaBtn").button("reset")}, 500);
+			setTimeout(function () {jQuery("#saveAreaBtn").button("reset")}, 500);
 		},
 		error: function (data)
 		{

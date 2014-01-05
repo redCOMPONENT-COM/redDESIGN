@@ -17,10 +17,6 @@ JHTML::_('behavior.modal', 'a.jmodal');
 RHelperAsset::load('jquery.imgareaselect.pack.js');
 RHelperAsset::load('imgareaselect-animated.css');
 
-$generalTabClass = '';
-$backgroundTabClass = '';
-$areaTabClass = '';
-
 $tab = JFactory::getApplication()->input->get('tab', '');
 
 switch ($tab)

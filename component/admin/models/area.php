@@ -21,15 +21,15 @@ class ReddesignModelArea extends RModelAdmin
 	/**
 	 * Saves design areas for AJAX request.
 	 *
-	 * @param   string  $data  Array data.
-	 * 
+	 * @param   array  $data  Array data.
+	 *
+	 * @throws Exception
 	 * @access public
 	 *
-	 * @return void
+	 * @return mixed
 	 */
 	public function ajaxSave($data)
 	{
-		$input   = JFactory::getApplication()->input;
 		$table = $this->getTable('Area');
 
 		// Insert new order item
@@ -49,33 +49,5 @@ class ReddesignModelArea extends RModelAdmin
 		}
 
 		return true;
-
-		/*
-		foreach ($data as $key => $item)
-		{
-			if (strpos($key, 'item') === false)
-			{
-				continue;
-			}
-
-			// Insert new order item
-			if (!$table->bind((array) $item))
-			{
-				throw new Exception($table->getError());
-			}
-
-			if (!$table->check())
-			{
-				throw new Exception($table->getError());
-			}
-
-			if (!$table->store())
-			{
-				throw new Exception($table->getError());
-			}
-		}
-
-		return true;
-		*/
 	}
 }

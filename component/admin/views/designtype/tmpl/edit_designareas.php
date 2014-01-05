@@ -122,7 +122,7 @@ RHelperAsset::load('color-converter.js');
 					</span>
 					<div id="backgroundImageContainer">
 						<img id="background"
-							 src="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/') . $this->productionBackground->image_path; ?>"/>
+							 src="<?php echo JURI::base() . '/media/com_reddesign/assets/backgrounds/' . $this->productionBackground->image_path; ?>"/>
 						<?php foreach($this->areas as $area) : ?>
 							<div id="areaDiv<?php echo $area->reddesign_area_id; ?>">
 								<?php echo $area->title; ?>
@@ -465,7 +465,6 @@ RHelperAsset::load('color-converter.js');
 															else
 															{
 																$chkAllColors = '';
-																$color_codes = explode(',', $area->color_code);
 															}
 														?>
 														<input type="checkbox"

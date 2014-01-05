@@ -16,7 +16,8 @@ JHtml::_('rjquery.chosen', 'select');
 
 $action = JRoute::_('index.php?option=com_reddesign&view=background');
 ?>
-<form id="adminForm" name="adminForm" class="form-validate form-horizontal" action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" >
+<form id="adminForm" name="adminForm" class="form-validate form-horizontal"
+	  action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" >
 	<div id="backgrounds-configuration">
 
 		<h3 id="backgroundTitle"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_TITLE'); ?></h3>

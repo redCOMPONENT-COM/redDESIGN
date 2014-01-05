@@ -48,7 +48,9 @@ $productId     = $input->getInt('pid', 0);
 {RedDesignBreakBackgrounds}
 	<div class="row-fluid">
 		<div class="well span12">dasdasd
-			<?php echo RLayoutHelper::render('default_backgrounds', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl'); ?>
+			<?php
+				echo RLayoutHelper::render('default_backgrounds', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
+			?>
 		</div>
 	</div>
 {RedDesignBreakBackgrounds}
@@ -57,7 +59,10 @@ $productId     = $input->getInt('pid', 0);
 {RedDesignBreakDesignImage}
 	<div id="background-container">
 		<div id="backgroundImage">
-			<?php echo JHTML::_('image', JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->image_path, $this->defaultPreviewBg->name, array('id' => 'mainImage' )) ?>
+			<?php
+				$imgUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->image_path;
+				echo JHTML::_('image', $imgUrl, $this->defaultPreviewBg->name, array('id' => 'mainImage' ));
+			?>
 		</div>
 		<div id="progressBar" style="display: none;">
 			<div class="progress progress-striped active">
@@ -365,10 +370,9 @@ $productId     = $input->getInt('pid', 0);
 			// Add the progress bar
 			var halfBackgroundHeight =  ((jQuery("#background").height() / 2)-10);
 			jQuery("#background-container").height(jQuery("#background").height());
-			jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px");
-			jQuery("#progressBar").css("padding-bottom", halfBackgroundHeight + "px");
-			//jQuery("#backgroundImage").html("");
-			jQuery("#progressBar").show();
+			jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px")
+								.css("padding-bottom", halfBackgroundHeight + "px")
+								.show();
 
 
 			var reddesign_designtype_id = jQuery("#reddesign_designtype_id").val();
@@ -378,66 +382,25 @@ $productId     = $input->getInt('pid', 0);
 				reddesign_designtype_id : reddesign_designtype_id,
 				reddesign_background_id : reddesign_background_id
 			};
+
 			<?php foreach($this->productionBackgroundAreas as $area) : ?>
+				var fontColor = jQuery("#colorCode<?php echo $area->id; ?>").val();
+				fontColor = fontColor.replace("#", "");
 
-			var fontColor = jQuery("#colorCode<?php echo $area->id; ?>").val();
-			fontColor = fontColor.replace("#", "");
+				design.areas.push({
+					"id" : 			"<?php echo $area->id; ?>",
+					"textArea" :	jQuery("#textArea<?php echo $area->id; ?>").val(),
+					"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
+					"fontColor" :	fontColor,
+					"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val(),
+					"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
+					"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
+					"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
+				});
 
-			design.areas.push({
-				"id" : 			"<?php echo $area->id; ?>",
-				"textArea" :	jQuery("#textArea<?php echo $area->id; ?>").val(),
-				"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-				"fontColor" :	fontColor,
-				"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val(),
-				"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-				"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
-				"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
-			});
-
-			var textareacount = jQuery("#textArea<?php echo $area->id; ?>").val().replace(/ /g,'').length;
-			jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
-
+				var textareacount = jQuery("#textArea<?php echo $area->id; ?>").val().replace(/ /g,'').length;
+				jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
 			<?php endforeach; ?>
-
-			/*design = JSON.stringify({Design: design });
-			jQuery.ajax({
-				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=designtype&task=ajaxGetDesign&format=raw&<?php echo JFactory::getSession()->getFormToken(); ?>=1",
-				data: { designarea : design },
-				type: "post",
-				success: function(data) {
-					if (data == "Invalid Token")
-					{
-						alert("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_INVALID_TOKEN'); ?>");
-					}
-					else
-					{
-						var json = jQuery.parseJSON(data);
-
-						d = new Date();
-						jQuery("#backgroundImage").html('<img alt="' + json.imageTitle + '" src="' + json.image + '?' + d.getTime() + '" id="background" />');
-
-						// Remove the progress bar
-						jQuery("#progressBar").hide();
-						jQuery("#background").show();
-						// This timeout returns back to fluid design after 10 seconds in case user changes browser witdh
-						setTimeout(function() {
-							jQuery("#background-container").height("auto");
-						}, 5000);
-
-						<?php if ($this->item->fontsizer == 'auto' || $this->item->fontsizer == 'auto_chars') : ?>
-							jQuery("#plg_dimension_base_input_<?php echo $productId;?>").attr({
-								'default-height' : json.autoSizeData[0].canvasHeight,
-								'default-width': json.autoSizeData[0].canvasWidth
-							});
-
-							jQuery("#autoSizeData").val(JSON.stringify(json.autoSizeData));
-						<?php endif; ?>
-					}
-				},
-				error: function(errMsg) {
-					alert("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AJAX_ERROR'); ?> " + errMsg);
-				}
-			});*/
 		}
 	}
 

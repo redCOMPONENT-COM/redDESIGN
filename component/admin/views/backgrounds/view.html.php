@@ -62,40 +62,4 @@ class ReddesignViewBackgrounds extends ReddesignView
 	{
 		return JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS');
 	}
-
-	/**
-	 * Get the toolbar to render.
-	 *
-	 * @return  RToolbar
-	 */
-	/*public function getToolbar()
-	{
-		$user = JFactory::getUser();
-
-		$firstGroup = new RToolbarButtonGroup;
-		$secondGroup = new RToolbarButtonGroup;
-		$thirdGroup = new RToolbarButtonGroup;
-
-		if ($user->authorise('core.admin', 'com_reddesign.panel'))
-		{
-			$new = RToolbarBuilder::createNewButton('designtype.add');
-			$secondGroup->addButton($new);
-
-			$edit = RToolbarBuilder::createEditButton('designtype.edit');
-			$secondGroup->addButton($edit);
-
-			$checkin = RToolbarBuilder::createCheckinButton('designtypes.checkin');
-			$secondGroup->addButton($checkin);
-
-			$delete = RToolbarBuilder::createDeleteButton('designtypes.delete');
-			$thirdGroup->addButton($delete);
-		}
-
-		$toolbar = new RToolbar;
-		$toolbar->addGroup($firstGroup)
-			->addGroup($secondGroup)
-			->addGroup($thirdGroup);
-
-		return $toolbar;
-	}*/
 }

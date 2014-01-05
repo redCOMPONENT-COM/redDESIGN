@@ -281,7 +281,7 @@ if (isset($displayData) && (count($displayData->items) > 0))
 	 */
 	function modifyBg(bgid) {
 		jQuery('#backgrounds_task').val('save');
-		<?php $return_url_removeBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' /*. $this->item->id*/ . '&tab=backgrounds'; ?>
+		<?php $return_url_removeBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->id . '&tab=backgrounds'; ?>
 		jQuery('#backgrounds_form').
 			append(
 				jQuery('<input/>')
