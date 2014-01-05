@@ -14,6 +14,8 @@ if (isset($displayData))
 	$this->backgrounds = $displayData->backgrounds;
 }
 
+$reddesign_background_id = '';
+
 ?>
 <h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_FRAMES_TITLE') ?></h4>
 <div class="row-fluid">
@@ -41,7 +43,9 @@ if (isset($displayData))
 				</div>
 				<div class="frame-detail">
 					<div class="frame-thumbnail-container">
-						<?php echo JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $frame->thumbnail, $frame->title, 'class="img-polaroid frame-thumbnail"') ?>
+						<?php
+						echo JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $frame->thumbnail, $frame->title, 'class="img-polaroid frame-thumbnail"')
+						?>
 					</div>
 					<div class="pull-left">
 						<h5><?php echo $frame->title; ?></h5>
@@ -79,7 +83,10 @@ if (isset($displayData))
 							</div>
 							<div class="frame-detail">
 								<div class="frame-thumbnail-container">
-									<?php echo JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $frame->thumbnail, $frame->title, 'class="img-polaroid frame-thumbnail"') ?>
+									<?php
+										$imgUrl = 'media/com_reddesign/backgrounds/thumbnails/' . $frame->thumbnail;
+										echo JHTML::_('image', $imgUrl, $frame->title, 'class="img-polaroid frame-thumbnail"');
+									?>
 								</div>
 								<div class="pull-left">
 									<h5><?php echo $frame->title; ?></h5>

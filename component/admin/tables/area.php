@@ -27,19 +27,4 @@ class ReddesignTableArea extends RTable
 	 * @since 0.9.1
 	 */
 	protected $_tableName = 'reddesign_areas';
-
-	/**
-	 * The primary key of the table
-	 *
-	 * @var string
-	 * @since 0.9.1
-	 */
-	protected $_tableKey = 'id';
-
-	/**
-	 * Field name to publish/unpublish table registers. Ex: state
-	 *
-	 * @var  string
-	 */
-	protected $_tableFieldState = 'published';
 }

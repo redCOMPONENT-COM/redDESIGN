@@ -74,7 +74,7 @@ JHTML::_('behavior.modal');
 							</a>
 							&nbsp;
 							<a class="modal btn btn-mini"
-							   href="<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/' . $background->image_path); ?>">
+							   href="<?php echo JURI::base() . '/media/com_reddesign/backgrounds/' . $background->image_path; ?>">
 								<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
 							</a>
 						</td>
@@ -194,7 +194,7 @@ JHTML::_('behavior.modal');
 					}
 
 					jQuery("#BgThumbnailLink")
-						.attr("href", "<?php echo FOFTemplateUtils::parsePath('media://com_reddesign/assets/backgrounds/thumbnails/') . $background->thumbnail; ?>")
+						.attr("href", "<?php echo JURI::base() . '/media/com_reddesign/backgrounds/thumbnails/' . $background->thumbnail; ?>")
 						.text("<?php echo $background->thumbnail; ?>")
 					;
 

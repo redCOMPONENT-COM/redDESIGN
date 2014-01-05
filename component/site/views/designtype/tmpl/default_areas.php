@@ -150,9 +150,9 @@ if (isset($displayData))
 					{
 						$options = array();
 
-						foreach ($areaFontsIds as $key => $value)
+						foreach ($areaFontsIds as $areaFontsId)
 						{
-							$options[] = JHTML::_('select.option', $value, $this->fonts[$value]->title);
+							$options[] = JHTML::_('select.option', $areaFontsId, $this->fonts[$areaFontsId]->title);
 						}
 
 						echo JHTML::_(

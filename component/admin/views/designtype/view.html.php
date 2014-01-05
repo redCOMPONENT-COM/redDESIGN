@@ -170,7 +170,6 @@ class ReddesignViewDesigntype extends ReddesignView
 						$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
 						$areasModel->setState('reddesign_background_id', $background->id);
 						$areas = $areasModel->getItems();
-						//print_r($areas);exit;
 					}
 				}
 			}

@@ -227,6 +227,11 @@ class ReddesignControllerFont extends RControllerForm
 			$data['status']  = 'success';
 		}
 
+		if (empty($data['id']))
+		{
+			$data['id'] = $table->id;
+		}
+
 		echo json_encode($data);
 
 		JFactory::getApplication()->close();

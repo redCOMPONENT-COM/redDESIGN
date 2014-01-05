@@ -32,11 +32,10 @@ class ReddesignControllerBackground extends RControllerForm
 		$uploaded_file = null;
 		$jpegPreviewFile = null;
 		$backgroundModel = $this->getModel();
-		$input = JFactory::getApplication()->input;
 
-		$data = $input->get('jform', array(), 'array');
+		$data = $this->input->get('jform', array(), 'array');
 
-		$file = $input->files->get('jform');
+		$file = $this->input->files->get('jform');
 		$file = $file['bg_eps_file'];
 
 		// Get Eps if has been added
@@ -247,10 +246,7 @@ class ReddesignControllerBackground extends RControllerForm
 	 */
 	public function ajaxBackgroundForm()
 	{
-		$app = JFactory::getApplication();
-		$input = $app->input;
-
-		$designTypeId = $input->getInt('designtype_id');
+		$designTypeId = $this->input->getInt('designtype_id', null);
 
 		if ($designTypeId)
 		{
@@ -265,6 +261,6 @@ class ReddesignControllerBackground extends RControllerForm
 			$view->display();
 		}
 
-		$app->close();
+		JFactory::getApplication()->close();
 	}
 }
