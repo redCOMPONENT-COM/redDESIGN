@@ -117,10 +117,13 @@ switch ($tab)
 		{
 	?>
 		<div class="tab-pane <?php echo $backgroundTabClass; ?>" id="backgrounds">
-			<div class="well">
-				<input type="button" class="btn btn-primary" id="addBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_ADD'); ?>"/>
+			<div class="row">
+				<div class="span2 offset10">
+					<input type="button" class="btn btn-primary" id="addBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>"/>
+				</div>
 			</div>
-			<div id="backgroundForm" class="well" style="display:none;">
+
+			<div id="backgroundForm">
 				<?php
 				$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true));
 				$data = new stdClass;
