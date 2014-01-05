@@ -61,7 +61,7 @@ $productId     = $input->getInt('pid', 0);
 		<div id="backgroundImage">
 		</div>
 		<?php
-			$imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->image_path;
+			$imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->eps_file;
 		?>
 		<div style="display:none" id="mainImageSVG" data-svg="<?php echo $imageUrl; ?>"></div>
 		<input type="hidden" id="svgImags" name="svgImags" value="" />
@@ -202,7 +202,7 @@ $productId     = $input->getInt('pid', 0);
 
         jQuery.ajax({
             type: "GET",
-            url: "http://localhost/work/customboards/media/com_reddesign/backgrounds/index.svg",
+            url: "<?php echo $imageUrl; ?>",
             dataType: "xml",
             success: function (data) {
             	
