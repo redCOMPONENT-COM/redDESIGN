@@ -229,7 +229,8 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 								name="attribute[' . $property->k . '][property][' . $property->g . '][redDesignBackground]"
 								value="' . $background->id . '"' . $checked . ' />' . "&nbsp;&nbsp;";
 			$dropdownHtml .= $background->name . "&nbsp;&nbsp;";
-			$dropdownHtml .= JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $background->thumbnail, $background->name) . "&nbsp;&nbsp;&nbsp;";
+			$dropdownHtml .= JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $background->thumbnail, $background->name)
+				. "&nbsp;&nbsp;&nbsp;";
 		}
 
 		$dropdownHtml .= '</div>';
@@ -280,7 +281,8 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 			foreach ($backgrounds as $background)
 			{
-				$dropdownHtml .= "<input type='radio' name='attribute[{gh}][property][{total_g}][redDesignBackground]' value='" . $background->id . "' />&nbsp;&nbsp;";
+				$dropdownHtml .= "<input type='radio' name='attribute[{gh}][property][{total_g}][redDesignBackground]' value='"
+					. $background->id . "' />&nbsp;&nbsp;";
 				$dropdownHtml .= $background->name . "&nbsp;&nbsp;";
 				$dropdownHtml .= "<img src='" . JURI::root() . "media/com_reddesign/backgrounds/thumbnails/" . $background->thumbnail .
 									"' alt='" . $background->title . "'/>&nbsp;&nbsp;&nbsp;";
