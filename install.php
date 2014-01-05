@@ -34,5 +34,4 @@ if (!class_exists('Com_RedcoreInstallerScript'))
  */
 class Com_ReddesignInstallerScript extends Com_RedcoreInstallerScript
 {
-
 }
