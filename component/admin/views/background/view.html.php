@@ -63,38 +63,4 @@ class ReddesignViewBackground extends ReddesignView
 
 		return $title . ' <small>' . $state . '</small>';
 	}
-
-	/**
-	 * Get the toolbar to render.
-	 *
-	 * @return  RToolbar
-	 */
-	public function getToolbar()
-	{
-		$group = new RToolbarButtonGroup;
-
-		$save = RToolbarBuilder::createSaveButton('font.apply');
-		$saveAndClose = RToolbarBuilder::createSaveAndCloseButton('font.save');
-		$saveAndNew = RToolbarBuilder::createSaveAndNewButton('font.save2new');
-
-		$group->addButton($save)
-			->addButton($saveAndClose)
-			->addButton($saveAndNew);
-
-		if (empty($this->item->id))
-		{
-			$cancel = RToolbarBuilder::createCancelButton('font.cancel');
-		}
-		else
-		{
-			$cancel = RToolbarBuilder::createCloseButton('font.cancel');
-		}
-
-		$group->addButton($cancel);
-
-		$toolbar = new RToolbar;
-		$toolbar->addGroup($group);
-
-		return $toolbar;
-	}
 }

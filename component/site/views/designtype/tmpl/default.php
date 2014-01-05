@@ -47,9 +47,9 @@ $productId     = $input->getInt('pid', 0);
 <?php // Part 2 - Select Backgrounds ?>
 {RedDesignBreakBackgrounds}
 	<div class="row-fluid">
-		<div class="well span12">dasdasd
+		<div class="well span12">
 			<?php
-				echo RLayoutHelper::render('default_backgrounds', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
+			echo RLayoutHelper::render('default_backgrounds', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
 			?>
 		</div>
 	</div>
@@ -59,11 +59,12 @@ $productId     = $input->getInt('pid', 0);
 {RedDesignBreakDesignImage}
 	<div id="background-container">
 		<div id="backgroundImage">
-			<?php
-				$imgUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->image_path;
-				echo JHTML::_('image', $imgUrl, $this->defaultPreviewBg->name, array('id' => 'mainImage' ));
-			?>
 		</div>
+		<?php
+			$imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->image_path;
+		?>
+		<div style="display:none" id="mainImageSVG" data-svg="<?php echo $imageUrl; ?>"></div>
+		<input type="hidden" id="svgImags" name="svgImags" value="" />
 		<div id="progressBar" style="display: none;">
 			<div class="progress progress-striped active">
 				<div class="bar" style="width: 100%;"></div>
@@ -105,112 +106,137 @@ $productId     = $input->getInt('pid', 0);
 	var backgroundContainerWidth;
 	var backgroundContainerHeight;
 
+	
+	var area = new Array();
+	<?php foreach ($this->productionBackgroundAreas as  $area) : ?>
+		area[<?php echo $area->id; ?>]= new Array();
+		area[<?php echo $area->id; ?>]['id'] 	= "<?php echo $area->id; ?>";
+		area[<?php echo $area->id; ?>]['name'] 	= "<?php echo $area->name; ?>";
+		area[<?php echo $area->id; ?>]['x1_pos'] = "<?php echo $area->x1_pos; ?>";
+		area[<?php echo $area->id; ?>]['y1_pos'] = "<?php echo $area->y1_pos; ?>";
+		area[<?php echo $area->id; ?>]['x2_pos'] = "<?php echo $area->x2_pos; ?>";
+		area[<?php echo $area->id; ?>]['y2_pos'] = "<?php echo $area->y2_pos; ?>";
+		area[<?php echo $area->id; ?>]['width'] 	= "<?php echo $area->width; ?>";
+		area[<?php echo $area->id; ?>]['height'] = "<?php echo $area->height; ?>";
+		area[<?php echo $area->id; ?>]['font_size'] = "<?php echo $area->font_size; ?>";
+		area[<?php echo $area->id; ?>]['font_id'] = "<?php echo $area->font_id; ?>";
+		area[<?php echo $area->id; ?>]['color_code'] = "<?php echo $area->color_code; ?>";
+		area[<?php echo $area->id; ?>]['default_text'] 	= "<?php echo $area->default_text; ?>";
+		area[<?php echo $area->id; ?>]['textalign'] = "<?php echo $area->textalign; ?>";
+		area[<?php echo $area->id; ?>]['maxchar'] = "<?php echo $area->maxchar; ?>";
+		area[<?php echo $area->id; ?>]['defaultFontSize'] = "<?php echo $area->defaultFontSize; ?>";
+
+		area[<?php echo $area->id; ?>]['minFontSize'] = "<?php echo $area->minFontSize; ?>";
+		area[<?php echo $area->id; ?>]['maxFontSize'] = "<?php echo $area->maxFontSize; ?>";
+		area[<?php echo $area->id; ?>]['maxline'] = "<?php echo $area->maxline; ?>";
+		area[<?php echo $area->id; ?>]['input_field_type'] 	= "<?php echo $area->input_field_type; ?>";
+
+	<?php endforeach; ?>
+
 	/**
 	 * Add click event to Customize button.
 	 */
-	jQuery(document).ready(
-		function () {
+	jQuery(document).ready(function () {
+
 			// Correct radio button selection.
 			jQuery("#frame<?php echo $this->defaultPreviewBg->id; ?>").attr("checked", "checked");
 
 			// Customize function.
-			jQuery(document).on("click", "#customizeDesign",
-				function () {
+			jQuery(document).on("click", "#customizeDesign", function () {
 					// Add spinner to button.
 					jQuery(this).button("loadingo");
-					setTimeout(
-						function() {
+					setTimeout(function() {
 							jQuery(this).button("reset");
 						},
 						3000
 					);
-
 					customize(1);
-				}
-			);
+			});
 
-			<?php foreach ($this->productionBackgroundAreas as  $area) : ?>
+			/*
+			jQuery('#mainImageSVG').vectron({
+        		scale: 1
+      		}).ajaxSuccess(function(){
+  				jQuery('desc').remove();
+  				jQuery('defs').remove();
+  				svgLoad();
+  			});
+			*/
 
-				// Set up default text at images.
-				<?php if (!empty($area->default_text)) : ?>
-					customize(3);
-				<?php endif; ?>
+      		svgLoad();
 
-				// Delay AJAX submit because of typing.
-				var typingTimer;
-				var doneTypingInterval = 400;
+			//svgLoad();
 
-				<?php if ($this->item->fontsizer == "slider") : ?>
-					jQuery("#fontSize<?php echo $area->id ?>").slider()
-						.on("slide", function(ev){
-							clearTimeout(typingTimer);
+			// Onkeyup, start the countdown.
+			jQuery(".textAreaClass").keyup(function(){
+				svgLoad();
+			});
 
-							jQuery("svg").remove();
-							jQuery("#mainImage").show();
+			jQuery(".fontSizeSlider").slider().on("slide", function(ev){
+				svgLoad();
+			});
 
-							typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
-						});
-				<?php endif; ?>
+			jQuery(document).on("keyup", ".colorPickerSelectedColor", function() {
+				var id = jQuery(this).attr('id').replace('colorCode','');
+				var hex = jQuery("#colorCode" + id).val();
+				loadCMYKValues(hex, parseInt(id));
+				svgLoad();
+			});
 
-				// Onkeyup, start the countdown.
-				jQuery("#textArea<?php echo $area->id; ?>").keyup(function(){
-					clearTimeout(typingTimer);
-
-					jQuery("svg").remove();
-					jQuery("#mainImage").show();
-
-					typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
-				});
-
-				<?php if ($area->color_code == 1 || empty($area->color_code)) : ?>
-					var colorPicker<?php echo $area->id ?> = jQuery.farbtastic("#colorPickerContainer<?php echo $area->id ?>");
-					colorPicker<?php echo $area->id ?>.linkTo("#colorCode<?php echo $area->id; ?>");
-
-					jQuery(document).on("keyup", "#C<?php echo $area->id; ?>", function() {
-						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
-						colorPicker<?php echo $area->id ?>.setColor(newColor);
-						clearTimeout(typingTimer);
-						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
-					});
-
-					jQuery(document).on("keyup", "#M<?php echo $area->id; ?>", function() {
-						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
-						colorPicker<?php echo $area->id ?>.setColor(newColor);
-						clearTimeout(typingTimer);
-						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
-					});
-
-					jQuery(document).on("keyup", "#Y<?php echo $area->id; ?>", function() {
-						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
-						colorPicker<?php echo $area->id ?>.setColor(newColor);
-						clearTimeout(typingTimer);
-						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
-					});
-
-					jQuery(document).on("keyup", "#K<?php echo $area->id; ?>", function() {
-						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
-						colorPicker<?php echo $area->id ?>.setColor(newColor);
-						clearTimeout(typingTimer);
-						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
-					});
-
-					jQuery(document).on("keyup", "#colorCode<?php echo $area->id; ?>", function() {
-						var hex = jQuery("#colorCode<?php echo $area->id; ?>").val();
-						loadCMYKValues(hex, parseInt("<?php echo $area->id; ?>"));
-						clearTimeout(typingTimer);
-						typingTimer = setTimeout(function() { customize(0); }, doneTypingInterval);
-					});
-
-					jQuery(document).on("mouseup", "#colorPickerContainer<?php echo $area->id; ?>", function() {
-						var hex = jQuery("#colorCode<?php echo $area->id; ?>").val();
-						loadCMYKValues(hex, parseInt("<?php echo $area->id; ?>"));
-						customize(0);
-					});
-				<?php endif; ?>
-			<?php endforeach; ?>
 
 		}
 	);
+
+	function svgLoad() {
+
+		jQuery("#backgroundImage svg").remove();
+
+	    var svgW = jQuery("#mainImageSVG svg").attr('width');
+	    var svgH = jQuery("#mainImageSVG svg").attr('height');
+
+	    //var r = Raphael("backgroundImage", svgW, svgH);
+	    //var set = r.set();
+	    //r.importSVG(jQuery("#mainImageSVG").html(), set);
+
+	    var r = Raphael("backgroundImage", 500, 700);
+
+        jQuery.ajax({
+            type: "GET",
+            url: "http://localhost/work/customboards/media/com_reddesign/backgrounds/index.svg",
+            dataType: "xml",
+            success: function (data) {
+            	
+    			var set = r.set();
+    			r.importSVG(data, set);
+            }
+        });
+
+	    //console.log(jQuery("#mainImageSVG svg").html());
+	    //jQuery("#backgroundImage svg").append(jQuery("#mainImageSVG svg").html());
+	    //r.image(img.src, 0, 0, imgW, imgH);
+
+		jQuery( ".textAreaClass" ).each(function( index ) {
+
+			var id = jQuery(this).attr('id').replace('textArea','');
+			var text = jQuery('#textArea' + id).val();
+
+			var font = jQuery("#fontSize" +  + id).val();
+			var color = jQuery("#colorCode" + id).val().replace('#','');
+			var x1_pos = area[id]['x1_pos'];
+			var y1_pos = area[id]['y1_pos'];
+			var width = area[id]['width'];
+			var fontF =jQuery("#fontArea" + id).val();
+
+			Raphael(function () {
+				r.print(x1_pos, y1_pos, text, r.getFont(fontF, 700), font).attr({'fill': '#' + color, 'width': width });
+			});
+
+		});
+
+		var json = r.toJSON();
+		jQuery("#svgImags").val(json);
+		console.log(json);
+	}
 
 	/**
 	 * Load CMYK values into related CMYK area fields.
@@ -284,54 +310,7 @@ $productId     = $input->getInt('pid', 0);
 		return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 	}
 
-	function svgLoad()
-	{
-		var img = jQuery('#mainImage');
-		var imgW = img.width();
-		var imgH = img.height();
-		var text2 = jQuery('#textArea2').val();
-		var font2 = jQuery("#fontSize2").val();
-		var color2 = jQuery("#colorCode2").val();
-
-		Raphael.registerFont({
-		    w: 189,
-		    face: {
-		        "font-family": "3",
-		        "font-weight": 400,
-		        "font-stretch": "normal",
-		        "units-per-em": "360",
-		        "panose-1": "2 0 0 0 0 0 0 0 0 0",
-		        ascent: "288",
-		        descent: "-72",
-		        bbox: "3.20724 -271 200 4.02432",
-		        "underline-thickness": "26.3672",
-		        "underline-position": "-24.9609",
-		        "unicode-range": "U+0030-U+0039"
-		    }
-		});
-		Raphael(function () {
-            var img = document.getElementById("mainImage");
-            img.style.display = "none";
-            var r = Raphael("backgroundImage", imgW, imgH), fonts = [0, r.getFont("1"), r.getFont("2"), r.getFont("3"), r.getFont("whoa")];
-            
-            r.image(img.src, 0, 0, imgW, imgH);
-
-            var a0 = r.print(25, 25, "Custom fonts", r.getFont("whoa", 800), 30).attr({
-            	'fill': '#990000', 
-            	'font-size': '25px',
-            	'font-family': '"Open Sans"'
-            });
-
-            var a1 = r.text(50, 50, text2).attr({
-            	'fill': '#' + color2, 
-            	'font-size': font2 + 'px',
-            	'font-family': '"Open Sans"',
-            	'width': '200px',
-            	'path': 'text path'
-            });
-        });
-	}
-
+	
 	/**
 	 * Sends customize data to server and retreives the resulting image.
 	 *
@@ -341,9 +320,6 @@ $productId     = $input->getInt('pid', 0);
 
 		var customizeOrNot = 0;
 		var autoCustomizeParam = <?php echo $this->params->get('autoCustomize', 1); ?>;
-
-		svgLoad();
-
 		/**
 		 * 0 when customize function is called from an element different than button (textbox, font dropdown etc.)
 		 * 1 when customize function is called from the button
@@ -370,9 +346,7 @@ $productId     = $input->getInt('pid', 0);
 			// Add the progress bar
 			var halfBackgroundHeight =  ((jQuery("#background").height() / 2)-10);
 			jQuery("#background-container").height(jQuery("#background").height());
-			jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px")
-								.css("padding-bottom", halfBackgroundHeight + "px")
-								.show();
+			jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px").css("padding-bottom", halfBackgroundHeight + "px").show();
 
 
 			var reddesign_designtype_id = jQuery("#reddesign_designtype_id").val();
@@ -382,24 +356,25 @@ $productId     = $input->getInt('pid', 0);
 				reddesign_designtype_id : reddesign_designtype_id,
 				reddesign_background_id : reddesign_background_id
 			};
-
 			<?php foreach($this->productionBackgroundAreas as $area) : ?>
-				var fontColor = jQuery("#colorCode<?php echo $area->id; ?>").val();
-				fontColor = fontColor.replace("#", "");
 
-				design.areas.push({
-					"id" : 			"<?php echo $area->id; ?>",
-					"textArea" :	jQuery("#textArea<?php echo $area->id; ?>").val(),
-					"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-					"fontColor" :	fontColor,
-					"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val(),
-					"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-					"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
-					"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
-				});
+			var fontColor = jQuery("#colorCode<?php echo $area->id; ?>").val();
+			fontColor = fontColor.replace("#", "");
 
-				var textareacount = jQuery("#textArea<?php echo $area->id; ?>").val().replace(/ /g,'').length;
-				jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
+			design.areas.push({
+				"id" : 			"<?php echo $area->id; ?>",
+				"textArea" :	jQuery("#textArea<?php echo $area->id; ?>").val(),
+				"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
+				"fontColor" :	fontColor,
+				"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val(),
+				"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
+				"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
+				"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
+			});
+
+			var textareacount = jQuery("#textArea<?php echo $area->id; ?>").val().replace(/ /g,'').length;
+			jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
+
 			<?php endforeach; ?>
 		}
 	}
@@ -415,8 +390,8 @@ $productId     = $input->getInt('pid', 0);
 		document.getElementById("colorCode" + id).value = colorCode;
 		jQuery("#fontColor" + id+ " div").css("backgroundColor", "#" + colorCode);
 		jQuery("#fontColor" + id).show();
-
-		customize(0);
+		svgLoad();
+		//customize(0);
 	}
 
 	/**

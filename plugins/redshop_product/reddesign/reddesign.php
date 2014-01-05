@@ -219,7 +219,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			else
 			{
 				$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
-				$areasModel->setState('reddesign_background_id', $this->productionBackground->reddesign_background_id);
+				$areasModel->setState('reddesign_background_id', $displayData->productionBackground->id);
 				$displayData->productionBackgroundAreas = $areasModel->getItems();
 				$displayData->imageSize = getimagesize(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->defaultPreviewBg->image_path);
 			}
@@ -393,7 +393,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		else
 		{
 			$idx = $cart['idx'];
-
 			$cart[$idx]['redDesignData'] = $data['redDesignData'];
 		}
 	}
@@ -466,6 +465,14 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$db->setQuery($query);
 		$productType = $db->loadResult();
 
+		$query->select($db->quoteName('name'));
+		$query->from($db->quoteName('#__reddesign_fonts'));
+		$db->setQuery($query);
+		$fonts = $db->loadObjectList();
+
+		// $fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true));
+		// $fonts = $fontsModel->getItems();
+
 		if ($productType == 'redDESIGN')
 		{
 			if (!empty($product->order_item_id))
@@ -482,9 +489,42 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$redDesignData = json_decode($cart[$i]['redDesignData']);
 			}
 
-			if (isset($redDesignData->backgroundImgSrc))
+			if (isset($redDesignData->svgImags))
 			{
-				$product_image = "<div  class='product_image'><img width='" . CART_THUMB_WIDTH . "' src='" . $redDesignData->backgroundImgSrc . "'></div>";
+				$document = JFactory::getDocument();
+
+				RHelperAsset::load('raphael-min.js', 'com_reddesign');
+				RHelperAsset::load('raphael.json.js', 'com_reddesign');
+				RHelperAsset::load('d3.v3.min.js', 'com_reddesign');
+
+				foreach ($fonts as $font => $f)
+				{
+					$fontFile = 'fonts/' . $f->name . '.js';
+					RHelperAsset::load($fontFile, 'com_reddesign');
+				}
+
+				// $product_image 	= "<div  class='product_image'><img width='" . CART_THUMB_WIDTH . "' src='" . $redDesignData->backgroundImgSrc . "'></div>";
+				$product_image  = "<div id='product_image_" . $product->product_id . "'>";
+				$product_image 	.= "</div>";
+				$product_image  .= "<div style='display:none' id='svg_product_image_" . $product->product_id . "'>";
+				$product_image 	.= "</div>";
+
+				$js = "
+					jQuery(document).ready(function () {
+						var paper = Raphael('svg_product_image_" . $product->product_id . "');
+    					paper.fromJSON(" . $redDesignData->svgImags . ");
+
+    					jQuery('svg').attr('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+    					jQuery('desc').remove();
+    					
+    					var html = d3.select('svg').node().parentNode.innerHTML;
+						  var imgsrc = 'data:image/svg+xml;base64,'+ btoa(html);
+						  var img = '<img src=\"'+imgsrc+'\">'; 
+						  d3.select('#product_image_" . $product->product_id . "').html(img);
+    				});
+				";
+
+				$document->addScriptDeclaration($js);
 			}
 		}
 	}
@@ -520,11 +560,13 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						values["customUserHeight"] = jQuery("input[id^=\"plg_dimension_height\"]").val();
 						values["enteredDimensionunit"] = "cm";
 
+						values["svgImags"] = jQuery("#svgImags").val();
+
 						var jsonString = JSON.stringify(values);
 
 						jQuery("#redDesignData").val(jsonString);
 
-						getExtraParamsArray.redDesignData = encodeURIComponent(jsonString);
+						//getExtraParamsArray.redDesignData = encodeURIComponent(jsonString);
 					}
 			';
 			$document->addScriptDeclaration($js);

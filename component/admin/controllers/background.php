@@ -38,9 +38,6 @@ class ReddesignControllerBackground extends RControllerForm
 		$file = $this->input->files->get('jform');
 		$file = $file['bg_eps_file'];
 
-		// Get Eps if has been added
-		// $file = $this->input->files->get('bg_eps_file', null);
-
 		// Get Thumbnail if has been added
 		$thumbFile = $this->input->files->get('thumbnail', null);
 		$thumbPreviewFile = null;
@@ -68,7 +65,6 @@ class ReddesignControllerBackground extends RControllerForm
 			$updatedEPS = true;
 
 			// Upload the background file
-			// $uploaded_file = $this->uploadFile($file);
 			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'backgrounds');
 
 			if (!$uploaded_file)
@@ -78,14 +74,12 @@ class ReddesignControllerBackground extends RControllerForm
 			}
 
 			// Create an image preview of the EPS.
-			// @Thong: No need now
-			/*$jpegPreviewFile = $this->createBackgroundPreview($uploaded_file['mangled_filename']);
+			$jpegPreviewFile = $this->createBackgroundPreview($uploaded_file['mangled_filename']);
 
 			if (!$jpegPreviewFile)
 			{
 				return false;
-			}*/
-			$jpegPreviewFile = $uploaded_file['mangled_filename'];
+			}
 
 			// If no thumbnail file has been attached generate one based on the Background EPS
 			if (!$thumbFile['name'])
@@ -240,27 +234,39 @@ class ReddesignControllerBackground extends RControllerForm
 	}
 
 	/**
-	 * Method for load Background Form by AJAX
+	 * Creates a image based on a eps file to show the look and feel of the background into media://com_reddesign/assets/backgrounds/
 	 *
-	 * @return array
+	 * @param   string  $eps_file  the path to a .eps file
+	 *
+	 * @return  string
 	 */
-	public function ajaxBackgroundForm()
+	private function createBackgroundPreview($eps_file)
 	{
-		$designTypeId = $this->input->getInt('designtype_id', null);
+		$params = JComponentHelper::getParams('com_reddesign');
+		$max_thumb_width = $params->get('max_eps_thumbnail_width', 600);
+		$max_thumb_height = $params->get('max_eps_thumbnail_height', 400);
 
-		if ($designTypeId)
+		$eps_file_location = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $eps_file;
+
+		$image_name = substr($eps_file, 0, -3) . 'png';
+		$previewPath = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $image_name;
+
+		$cmd = 'convert -colorspace RGB ' . $eps_file_location . ' PNG32:' . $previewPath;
+		exec($cmd);
+
+		$checkerBoard = $this->input->getBool('useCheckerboard', 0);
+
+		// Set checkerboard transparency background.
+		if ($checkerBoard)
 		{
-			/** @var RedshopbModelUsers $usersModel */
-
-			$view = $this->getView('Background', 'html');
-			$model = RModel::getAdminInstance('Background', array('ignore_request' => true));
-			$view->setModel($model, true);
-
-			$model->setState('filter.designtypeid', $designTypeId);
-
-			$view->display();
+			$cmd = 'composite -compose Dst_Over -tile pattern:checkerboard ' . $previewPath . ' ' . $previewPath;
+			exec($cmd);
 		}
 
-		JFactory::getApplication()->close();
+		// Resize the image if it is needed
+		$cmd = 'convert ' . $previewPath . ' -resize ' . $max_thumb_width . 'x' . $max_thumb_height . '\> ' . $previewPath;
+		exec($cmd);
+
+		return $image_name;
 	}
 }

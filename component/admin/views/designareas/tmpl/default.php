@@ -36,6 +36,8 @@ if (isset($displayData))
 	$this->imageHeight = $displayData->imageHeight;
 	$this->inputFieldOptions = $displayData->inputFieldOptions;
 }
+
+$return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->item->designtype_id . '&tab=design-areas';
 ?>
 
 <?php if (empty($this->productionBackground)) : ?>
@@ -45,14 +47,7 @@ if (isset($displayData))
 
 <?php else : ?>
 
-	<?php
-		// Load JS template for design area setting rows.
-		// Echo $this->loadTemplate('designareas_js_tmpl');
-
-		// Load dynamically created JS.
-		// Echo $this->loadTemplate('designareas_js');
-	?>
-
+	<div id="areaMessage"></div>
 	<div class="designAreasContainer">
 		<h3><?php echo JText::sprintf('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS', $this->productionBackground->name); ?></h3>
 		<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DESC'); ?></span>
@@ -655,15 +650,14 @@ jQuery(document).ready(
 			onSelectEnd: populateSelectionFields
 		});
 
-		<?php
-
-		if ($this->areas != '')
-		{
-			foreach ($this->areas as  $area)
-			{
-		?>
-				var colorPicker<?php echo $area->id ?> = jQuery.farbtastic("#colorPickerContainer<?php echo $area->id ?>");
-				colorPicker<?php echo $area->id ?>.linkTo("#colorPickerSelectedColor<?php echo $area->id; ?>");
+		<?php if ($this->areas != '') : ?>
+			<?php foreach ($this->areas as  $area) : ?>
+				// Check div before add farbtastic
+				if (jQuery("#colorPickerContainer<?php echo $area->id ?>")[0])
+				{
+					var colorPicker<?php echo $area->id ?> = jQuery.farbtastic("#colorPickerContainer<?php echo $area->id ?>");
+					colorPicker<?php echo $area->id ?>.linkTo("#colorPickerSelectedColor<?php echo $area->id; ?>");
+				}
 
 				jQuery(document).on("keyup", "#C<?php echo $area->id; ?>", function() {
 					var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
@@ -705,10 +699,8 @@ jQuery(document).ready(
 				jQuery("#addColorButton<?php echo $area->id ?>").click(function () {
 					addColorToList(parseInt("<?php echo $area->id; ?>"))
 				});
-		<?php
-			}
-		}
-		?>
+			<?php endforeach; ?>
+		<?php endif; ?>
 	}
 );
 
@@ -749,15 +741,17 @@ function addColorToList(areaId)
 		}
 
 		jQuery("#colorCodes" + areaId).val(colorCodes);
+
 		jQuery.ajax({
-			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxUpdateColors&format=raw",
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxUpdateColors",
 			data: {
 				reddesign_area_id: areaId,
 				color_code: colorCodes
 			},
 			type: "post",
 			error: function (data) {
-				alert(data);
+				console.log('function addColorToList() Error');
+				console.log(data);
 			}
 		});
 	}
@@ -787,14 +781,15 @@ function removeColorFromList(areaId, colorToRemove)
 	jQuery("#colorCodes" + areaId).val(colorCodes);
 
 	jQuery.ajax({
-		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxUpdateColors&format=raw",
+		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxUpdateColors",
 		data: {
 			reddesign_area_id: areaId,
 			color_code: colorCodes
 		},
 		type: "post",
 		error: function (data) {
-			alert(data);
+			console.log('removeColorFromList() Error');
+			console.log(data);
 		}
 	});
 
@@ -1213,28 +1208,35 @@ function saveArea(update)
 		{
 			var json = jQuery.parseJSON(data);
 
-			console.log(json);
+			setTimeout(function () {jQuery("#saveAreaBtn").button("reset")}, 500);
 
-			if (update == 0)
+			if (json.status == 1)
 			{
-				drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
-				addAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
-				clearAreaSelection();
-				clearSelectionFields();
+				if (update == 0)
+				{
+					drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
+					addAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
+					clearAreaSelection();
+					clearSelectionFields();
+				}
+				else
+				{
+					jQuery("#areaDiv" + reddesign_area_id).remove();
+					drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
+					jQuery("#areaDiv" + reddesign_area_id).html(areaName + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
+					updateAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
+				}
+
+				window.location.href = "<?php echo $return_url; ?>";
 			}
 			else
 			{
-				jQuery("#areaDiv" + reddesign_area_id).remove();
-				drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
-				jQuery("#areaDiv" + reddesign_area_id).html(areaName + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
-				updateAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
+				jQuery('#areaMessage').html(json.message);
 			}
-
-			setTimeout(function () {jQuery("#saveAreaBtn").button("reset")}, 500);
 		},
 		error: function (data)
 		{
-			console.log(data);
+			console.log("Error: " + data);
 		}
 	});
 }
@@ -1331,8 +1333,12 @@ function addAreaRow(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, wi
 		);
 	<?php endforeach; ?>
 
-	var colorPicker = jQuery.farbtastic("#colorPickerContainer" + reddesign_area_id);
-	colorPicker.linkTo("#colorPickerSelectedColor" + reddesign_area_id);
+	// Check div before add farbtastic
+	if (jQuery("#colorPickerContainer" + reddesign_area_id)[0])
+	{
+		var colorPicker = jQuery.farbtastic("#colorPickerContainer" + reddesign_area_id);
+		colorPicker.linkTo("#colorPickerSelectedColor" + reddesign_area_id);
+	}
 
 	jQuery(document).on("keyup", "#C" + reddesign_area_id, function() {
 		var newColor = getNewHexColor(reddesign_area_id);
@@ -1441,7 +1447,7 @@ function updateImageAreas() {
 		data: {
 			reddesign_background_id: <?php echo $this->productionBackground->id; ?>
 		},
-		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxGetAreas&format=raw",
+		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxGetAreas",
 		success: function (data) {
 			json = jQuery.parseJSON(data);
 			jQuery.each( json, function( key, value ) {
@@ -1449,7 +1455,8 @@ function updateImageAreas() {
 			});
 		},
 		error: function (data) {
-			alert(data);
+			console.log('UpdateImageAreas function Error');
+			console.log(data);
 		}
 	});
 }
@@ -1506,18 +1513,28 @@ function cancelArea() {
  */
 function removeArea(reddesign_area_id) {
 	jQuery.ajax({
-		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxRemove&format=raw",
+		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxRemove",
 		data: {
-			reddesign_area_id: reddesign_area_id
+			id: reddesign_area_id
 		},
 		type: "post",
 		success: function (data) {
-			jQuery("#areaRow" + reddesign_area_id).remove();
-			jQuery("#areaSettingsRow" + reddesign_area_id).remove();
-			updateImageAreas();
+			var jsonData = jQuery.parseJSON(data);
+
+			if (jsonData.status == 1)
+			{
+				jQuery("#areaRow" + reddesign_area_id).remove();
+				jQuery("#areaSettingsRow" + reddesign_area_id).remove();
+				updateImageAreas();
+			}
+			else
+			{
+				alert(jsonData.message);
+			}
 		},
 		error: function (data) {
-			alert(data);
+			console.log('function removeArea() Error');
+			console.log(data);
 		}
 	});
 }
@@ -1527,9 +1544,19 @@ function removeArea(reddesign_area_id) {
  *
  * @param reddesign_area_id
  */
-function showAreaSettings(reddesign_area_id) {
-	jQuery(".areaSettingsRow").hide();
-	jQuery("#areaSettingsRow" + reddesign_area_id).slideToggle("slow");
+function showAreaSettings(reddesign_area_id)
+{
+	var areaSetting = jQuery("#areaSettingsRow" + reddesign_area_id);
+
+	if (areaSetting.css('display') == 'none')
+	{
+		jQuery(".areaSettingsRow").hide();
+		areaSetting.slideDown('slow');
+	}
+	else
+	{
+		areaSetting.slideUp('slow');
+	}
 }
 
 /**
@@ -1558,27 +1585,28 @@ function saveAreaSettings(reddesign_area_id) {
 	}
 
 	jQuery.ajax({
-		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&view=area&task=ajaxSave&format=raw",
+		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxSave",
 		data: {
-			reddesign_area_id: reddesign_area_id,
-			textalign: areaFontAlignment,
-			font_id: areaFonts,
-			font_size: fontsizerDropdown,
-			defaultFontSize: fontsizerSliderDefault,
-			minFontSize: fontsizerSliderMin,
-			maxFontSize: fontsizerSliderMax,
-			input_field_type: inputFieldType,
-			maxchar: maximumCharsAllowed,
-			maxline: maximumLinesAllowed,
-			color_code: colorCodes,
-			default_text: defaultText
+			'jform[id]': reddesign_area_id,
+			'jform[textalign]': areaFontAlignment,
+			'jform[font_id]': areaFonts,
+			'jform[font_size]': fontsizerDropdown,
+			'jform[defaultFontSize]': fontsizerSliderDefault,
+			'jform[minFontSize]': fontsizerSliderMin,
+			'jform[maxFontSize]': fontsizerSliderMax,
+			'jform[input_field_type]': inputFieldType,
+			'jform[maxchar]': maximumCharsAllowed,
+			'jform[maxline]': maximumLinesAllowed,
+			'jform[color_code]': colorCodes,
+			'jform[default_text]': defaultText
 		},
 		type: "post",
 		success: function (data) {
 			setTimeout(function () {jQuery("#saveAreaSettings" + reddesign_area_id).button("reset")}, 500);
 		},
 		error: function (data) {
-			alert(data);
+			console.log('function saveAreaSettings() Error');
+			console.log(data);
 		}
 	});
 }

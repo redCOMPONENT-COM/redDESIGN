@@ -42,13 +42,12 @@ class PlgSystemRedDESIGN extends JPlugin
 			// Remove JS if match
 			foreach ($doc->_scripts as $script => $value)
 			{
-                if (strpos($script, 'attribute.js') !== false)
-                {
-                    unset($doc->_scripts[$script]);
-                }
+				if (substr_count($script, 'reddesign/js/attribute.js'))
+				{
+					// Remove redSHOP core attribute.js if plugin's attribute.js is available.
+					unset($doc->_scripts[JURI::root(true) . '/components/com_redshop/assets/js/attribute.js']);
+				}
 			}
 		}
-
-		$doc->addScript('plugins/redshop_product/reddesign/js/attribute.js');
 	}
 }
