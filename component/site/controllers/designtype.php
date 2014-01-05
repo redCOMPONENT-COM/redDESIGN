@@ -20,18 +20,6 @@ defined('_JEXEC') or die;
 class ReddesignControllerDesigntype extends JController
 {
 	/**
-	 * Class constructor
-	 *
-	 * @param   array  $config  Config.
-	 *
-	 * @access public
-	 */
-	public function  __construct($config = array())
-	{
-		parent::__construct($config);
-	}
-
-	/**
 	 * Executes a task
 	 *
 	 * @param   string  $task  The task to be executed
