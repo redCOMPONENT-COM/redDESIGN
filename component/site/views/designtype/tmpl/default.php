@@ -61,7 +61,7 @@ $productId     = $input->getInt('pid', 0);
 		<div id="backgroundImage">
 		</div>
 		<?php
-			$imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->eps_file;
+			$imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->svg_file;
 		?>
 		<div style="display:none" id="mainImageSVG" data-svg="<?php echo $imageUrl; ?>"></div>
 		<input type="hidden" id="svgImags" name="svgImags" value="" />

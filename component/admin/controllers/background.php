@@ -36,7 +36,7 @@ class ReddesignControllerBackground extends RControllerForm
 		$data = $this->input->get('jform', array(), 'array');
 
 		$file = $this->input->files->get('jform');
-		$file = $file['bg_eps_file'];
+		$file = $file['bg_svg_file'];
 
 		// Get Thumbnail if has been added
 		$thumbFile = $this->input->files->get('thumbnail', null);
@@ -107,7 +107,7 @@ class ReddesignControllerBackground extends RControllerForm
 			$uploadedThumbFile = $fileHelper->uploadFile(
 				$thumbFile,
 				'backgrounds/thumbnails',
-				$params->get('max_eps_file_size', 2),
+				$params->get('max_svg_file_size', 2),
 				'jpg,JPG,jpeg,JPEG,png,PNG,gif,GIF'
 			);
 
@@ -127,7 +127,7 @@ class ReddesignControllerBackground extends RControllerForm
 			$db = JFactory::getDbo();
 			$query = $db->getQuery(true);
 			$query
-				->select($db->qn(array('eps_file', 'image_path', 'thumbnail')))
+				->select($db->qn(array('svg_file', 'image_path', 'thumbnail')))
 				->from($db->qn('#__reddesign_backgrounds'))
 				->where($db->qn('id') . ' = ' . $db->q((int) $data['id']));
 
@@ -141,9 +141,9 @@ class ReddesignControllerBackground extends RControllerForm
 				if ($updatedEPS)
 				{
 					// Delete old EPS
-					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->eps_file))
+					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->svg_file))
 					{
-						JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->eps_file);
+						JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->svg_file);
 					}
 
 					// Delete old Image
@@ -164,7 +164,7 @@ class ReddesignControllerBackground extends RControllerForm
 			}
 			else
 			{
-				$data['eps_file'] = $oldImages->eps_file;
+				$data['svg_file'] = $oldImages->svg_file;
 				$data['image_path'] = $oldImages->image_path;
 				$data['thumbnail'] = $oldImages->thumbnail;
 			}
@@ -172,7 +172,7 @@ class ReddesignControllerBackground extends RControllerForm
 		else
 		{
 			// Update the database with the new path of the EPS file
-			$data['eps_file'] = $uploaded_file['mangled_filename'];
+			$data['svg_file'] = $uploaded_file['mangled_filename'];
 
 			// Update the database with the new path to the image
 			$data['image_path'] = $jpegPreviewFile;
@@ -236,22 +236,22 @@ class ReddesignControllerBackground extends RControllerForm
 	/**
 	 * Creates a image based on a eps file to show the look and feel of the background into media://com_reddesign/assets/backgrounds/
 	 *
-	 * @param   string  $eps_file  the path to a .eps file
+	 * @param   string  $svg_file  the path to a .eps file
 	 *
 	 * @return  string
 	 */
-	private function createBackgroundPreview($eps_file)
+	private function createBackgroundPreview($svg_file)
 	{
 		$params = JComponentHelper::getParams('com_reddesign');
 		$max_thumb_width = $params->get('max_eps_thumbnail_width', 600);
 		$max_thumb_height = $params->get('max_eps_thumbnail_height', 400);
 
-		$eps_file_location = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $eps_file;
+		$svg_file_location = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $svg_file;
 
-		$image_name = substr($eps_file, 0, -3) . 'png';
+		$image_name = substr($svg_file, 0, -3) . 'png';
 		$previewPath = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $image_name;
 
-		$cmd = 'convert -colorspace RGB ' . $eps_file_location . ' PNG32:' . $previewPath;
+		$cmd = 'convert -colorspace RGB ' . $svg_file_location . ' PNG32:' . $previewPath;
 		exec($cmd);
 
 		$checkerBoard = $this->input->getBool('useCheckerboard', 0);

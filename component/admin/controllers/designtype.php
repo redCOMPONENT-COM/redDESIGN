@@ -154,7 +154,7 @@ class ReddesignControllerDesigntype extends RControllerForm
 
 		// Create production PDF file name
 		$userId = JFactory::getUser()->id;
-		$mangledname  = explode('.', $data['designBackground']->eps_file);
+		$mangledname  = explode('.', $data['designBackground']->svg_file);
 		$mangledname  = $mangledname[0];
 
 		// Get a (very!) randomised name
@@ -189,7 +189,7 @@ class ReddesignControllerDesigntype extends RControllerForm
 		$epsAreaText = '';
 		$epsTextFile = '';
 
-		$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']->eps_file;
+		$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']->svg_file;
 		$previewFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $data['designBackground']->image_path;
 		$pdfFilePath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/pdf/';
 		$epsFilePath = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/orders/eps/';

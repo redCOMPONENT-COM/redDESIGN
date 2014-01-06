@@ -35,7 +35,7 @@ $return_url = JRoute::_(JURI::base() . 'index.php?option=com_reddesign&view=desi
 					<?php echo JText::_('ID'); ?>
 				</th>
 				<th>
-					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_EPS_FILE'); ?>
+					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_SVG_FILE'); ?>
 				</th>
 				<th width="9%">
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_DEFAULT_PREVIEW_BACKGROUND'); ?>

@@ -151,10 +151,10 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 		<div class="control-group">
 			<label class="control-label">
-				<?php echo $this->form->getLabel('bg_eps_file'); ?>
+				<?php echo $this->form->getLabel('bg_svg_file'); ?>
 			</label>
 			<div class="controls">
-				<?php echo $this->form->getInput('bg_eps_file'); ?>
+				<?php echo $this->form->getInput('bg_svg_file'); ?>
 			</div>
 		</div>
 

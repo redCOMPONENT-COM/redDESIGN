@@ -49,31 +49,49 @@
 			>
 
 		<field
-				name="max_eps_file_size"
+				name="max_svg_file_size"
 				type="text"
 				size="5"
 				default="2"
-				label="COM_REDDESIGN_CONFIG_MAX_EPS_FILE_SIZE"
-				description="COM_REDDESIGN_CONFIG_MAX_EPS_FILE_SIZE_DESC"
+				label="COM_REDDESIGN_CONFIG_MAX_SVG_FILE_SIZE"
+				description="COM_REDDESIGN_CONFIG_MAX_SVG_FILE_SIZE_DESC"
 				/>
 
 		<field
-				name="max_eps_thumbnail_width"
+				name="max_svg_backend_bg_width"
 				type="text"
 				size="5"
 				default="600"
-				label="COM_REDDESIGN_CONFIG_MAX_EPS_PREVIEW_WIDTH"
-				description="COM_REDDESIGN_CONFIG_MAX_EPS_PREVIEW_WIDTH_DESC"
+				label="COM_REDDESIGN_CONFIG_MAX_SVG_BACKEND_PREVIEW_WIDTH"
+				description="COM_REDDESIGN_CONFIG_MAX_SVG_BACKEND_PREVIEW_WIDTH_DESC"
 				/>
 
 		<field
-				name="max_eps_thumbnail_height"
+				name="max_svg_backend_bg_height"
 				type="text"
 				size="5"
 				default="400"
-				label="COM_REDDESIGN_CONFIG_MAX_EPS_PREVIEW_HEIGHT"
-				description="COM_REDDESIGN_CONFIG_MAX_EPS_PREVIEW_HEIGHT_DESC"
+				label="COM_REDDESIGN_CONFIG_MAX_SVG_BACKEND_PREVIEW_HEIGHT"
+				description="COM_REDDESIGN_CONFIG_MAX_SVG_BACKEND_PREVIEW_HEIGHT_DESC"
 				/>
+
+		<field
+			name="max_svg_frontend_bg_width"
+			type="text"
+			size="5"
+			default="600"
+			label="COM_REDDESIGN_CONFIG_MAX_SVG_FRONTEND_PREVIEW_WIDTH"
+			description="COM_REDDESIGN_CONFIG_MAX_SVG_FRONTEND_PREVIEW_WIDTH_DESC"
+			/>
+
+		<field
+			name="max_svg_frontend_bg_height"
+			type="text"
+			size="5"
+			default="400"
+			label="COM_REDDESIGN_CONFIG_MAX_SVG_FRONTEND_PREVIEW_HEIGHT"
+			description="COM_REDDESIGN_CONFIG_MAX_SVG_FRONTEND_PREVIEW_HEIGHT_DESC"
+			/>
 
 		<field
 				name="max_background_thumbnail_width"
