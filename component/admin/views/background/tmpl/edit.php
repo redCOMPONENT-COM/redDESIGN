@@ -81,20 +81,46 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 			jQuery(document).on('click', '#cancelBgBtn',
 				function () {
-					jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_BACKGROUND_TITLE'); ?>");
-					document.getElementById('bgForm').reset();
+					hideShowBackgroundForm();
+				}
+			);
 
-					jQuery('#backgroundForm').fadeOut("fast");
-					jQuery('#addBgBtn').parent().fadeIn("fast");
+			jQuery(document).on('click', '#addBgBtn', function () {
+					hideShowBackgroundForm();
 				}
 			);
 		});
+
+	/**
+	 * Hides background form.
+	 *
+	 * @return void
+	 */
+	function hideShowBackgroundForm() {
+		var buttonValue = jQuery('#addBgBtn').val();
+		var hidden = "<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_SHOW_FORM'); ?>";
+		var shown = "<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>";
+
+		if (buttonValue == hidden)
+		{
+			document.getElementById("bgForm").reset();
+			jQuery('#addBgBtn').val("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>");
+			jQuery('#bgForm').fadeIn("slow");
+			jQuery("#saveBgBtn").val(shown);
+		}
+		else
+		{
+			jQuery("#bgForm").fadeOut("fast");
+
+			jQuery('#addBgBtn').val(hidden);
+		}
+	}
 </script>
 
 <div id="bgMessage"></div>
 
 <form action="index.php?option=com_reddesign&task=background.ajaxBackgroundSave"
-	id="bgForm" name="adminForm" method="POST" enctype="multipart/form-data" class="form-horizontal">
+	id="bgForm" name="adminForm" method="POST" enctype="multipart/form-data" class="form-horizontal well">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 	<input type="hidden" name="returnurl" value="<?php echo base64_encode($return_url); ?>" />
 	<input type="hidden" name="jform[designtype_id]" id="background_reddesign_designtype_id" value="<?php echo $this->item->designtype_id; ?>" />
@@ -125,10 +151,10 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 		<div class="control-group">
 			<label class="control-label">
-				<?php echo $this->form->getLabel('bg_eps_file'); ?>
+				<?php echo $this->form->getLabel('bg_svg_file'); ?>
 			</label>
 			<div class="controls">
-				<?php echo $this->form->getInput('bg_eps_file'); ?>
+				<?php echo $this->form->getInput('bg_svg_file'); ?>
 			</div>
 		</div>
 

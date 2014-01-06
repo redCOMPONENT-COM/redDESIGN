@@ -150,7 +150,7 @@ class ReddesignViewDesigntype extends ReddesignView
 					{
 						$this->productionBackground = $background;
 
-						$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $this->productionBackground->eps_file;
+						$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file;
 						$previewFileLocation = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $this->productionBackground->image_path;
 
 						// Read EPS size.

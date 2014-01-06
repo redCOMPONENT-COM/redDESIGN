@@ -12,11 +12,6 @@ defined('_JEXEC') or die();
 // JS templating framework
 RHelperAsset::load('mustache.min.js');
 
-// Select area JS includes.
-RHelperAsset::load('jquery.imgareaselect.pack.js');
-RHelperAsset::load('imgareaselect-animated.css');
-RHelperAsset::load('selectionboxmove.js');
-
 // Colorpicker includes.
 RHelperAsset::load('farbtastic.min.js');
 RHelperAsset::load('farbtastic.css');
@@ -1216,7 +1211,6 @@ function saveArea(update)
 				{
 					drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
 					addAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
-					clearAreaSelection();
 					clearSelectionFields();
 				}
 				else
@@ -1502,7 +1496,6 @@ function selectAreaForEdit(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_
  */
 function cancelArea() {
 	clearSelectionFields();
-	clearAreaSelection();
 	updateImageAreas();
 }
 

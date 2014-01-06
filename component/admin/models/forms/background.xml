@@ -32,8 +32,8 @@
 			<option class="btn" value="0">JNO</option>
 		</field>
 		<field
-			name="bg_eps_file"
-			id="bg_eps_file"
+			name="bg_svg_file"
+			id="bg_svg_file"
 			type="file"
 			label="COM_REDDESIGN_BACKGROUND_FIELD_FILE"
 			description="COM_REDDESIGN_BACKGROUND_FIELD_FILE"

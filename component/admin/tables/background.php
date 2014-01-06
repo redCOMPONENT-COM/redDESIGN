@@ -79,7 +79,7 @@ class ReddesignTableBackground extends RTable
 	/**
 	 * @var  string
 	 */
-	public $eps_file = '';
+	public $svg_file = '';
 
 	/**
 	 * @var  string
@@ -121,9 +121,9 @@ class ReddesignTableBackground extends RTable
 	protected function afterDelete($pk = null)
 	{
 		// Delete background EPS
-		if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $this->eps_file))
+		if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $this->svg_file))
 		{
-			JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $this->eps_file);
+			JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $this->svg_file);
 		}
 
 		// Delete background preview image

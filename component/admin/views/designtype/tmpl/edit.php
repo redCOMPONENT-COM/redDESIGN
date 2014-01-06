@@ -14,9 +14,6 @@ JHtml::_('rjquery.select2', 'select');
 
 JHTML::_('behavior.modal', 'a.jmodal');
 
-RHelperAsset::load('jquery.imgareaselect.pack.js');
-RHelperAsset::load('imgareaselect-animated.css');
-
 $tab = JFactory::getApplication()->input->get('tab', '');
 
 switch ($tab)
@@ -53,13 +50,13 @@ switch ($tab)
 
 <ul class="nav nav-tabs">
 	<li class="<?php echo $generalTabClass; ?>">
-		<a href="#general" id="generalLink" data-toggle="tab" onclick="clearAreaSelection();">
+		<a href="#general" id="generalLink" data-toggle="tab">
 			<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_GENERAL_TAB'); ?>
 		</a>
 	</li>
 	<?php if (!empty($this->item->id)) : ?>
 		<li class="<?php echo $backgroundTabClass; ?>">
-			<a href="#backgrounds"  id="backgroundsLink" data-toggle="tab" onclick="clearAreaSelection();">
+			<a href="#backgrounds"  id="backgroundsLink" data-toggle="tab">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS'); ?>
 			</a>
 		</li>
@@ -117,10 +114,13 @@ switch ($tab)
 		{
 	?>
 		<div class="tab-pane <?php echo $backgroundTabClass; ?>" id="backgrounds">
-			<div class="well">
-				<input type="button" class="btn btn-primary" id="addBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_ADD'); ?>"/>
+			<div class="row">
+				<div class="span2 offset10">
+					<input type="button" class="btn btn-primary" id="addBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>"/>
+				</div>
 			</div>
-			<div id="backgroundForm" class="well" style="display:none;">
+
+			<div id="backgroundForm">
 				<?php
 				$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true));
 				$data = new stdClass;
@@ -154,7 +154,9 @@ switch ($tab)
 				$data->fontsOptions = $this->fontsOptions;
 				$data->inputFieldOptions = $this->inputFieldOptions;
 				$data->item->designtype_id = $this->item->id;
-				echo RLayoutHelper::render('default', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/designareas/tmpl');
+				$data->params = $this->params;
+				echo RLayoutHelper::render('edit_area_js', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/area/tmpl');
+				echo RLayoutHelper::render('edit', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/area/tmpl');
 			?>
 		</div>
 
@@ -163,20 +165,3 @@ switch ($tab)
 	?>
 
 </div>
-
-
-<script type="text/javascript">
-	/**
-	 * Function to clear area selection drawn over other tabs due to auto zIndex.
-	 * Without this function, area selections apear on top of all tabs.
-	 */
-	function clearAreaSelection()
-	{
-		var imageAreaSelection = jQuery("img#background").imgAreaSelect({ instance: true });
-
-		if (imageAreaSelection)
-		{
-			imageAreaSelection.cancelSelection();
-		}
-	}
-</script>
