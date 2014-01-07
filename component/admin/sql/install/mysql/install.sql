@@ -187,7 +187,16 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_property_area_xref` (
   `display_type`      ENUM('TEXT','FONT','FONTSIZE','COLOR') NOT NULL,
   PRIMARY KEY (`property_id`,`reddesign_area_id`)
 )
-  ENGINE=InnoDB
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  DEFAULT COLLATE = utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS `#__reddesign_config` (
+  `id`     TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `params` TEXT             NOT NULL,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   DEFAULT COLLATE = utf8_general_ci;
 
