@@ -11,14 +11,11 @@ defined('_JEXEC') or die;
 
 JHTML::_('behavior.modal', 'a.jmodal');
 
-if (isset($displayData) && (count($displayData->items) > 0))
-{
-	$this->items = $displayData->items;
-	$this->designtype_id = $displayData->designtype_id;
-}
+// Set variables for using them in HMVC. For regular MVC $displayData can not be used.
+$this->items = $displayData->items;
+$this->designtype_id = $displayData->designtype_id;
 
 $return_url = JRoute::_(JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds');
-
 ?>
 
 <div class="form-container">

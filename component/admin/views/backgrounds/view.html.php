@@ -19,7 +19,12 @@ defined('_JEXEC') or die;
 class ReddesignViewBackgrounds extends ReddesignView
 {
 	/**
-	 * Do we have to display a sidebar ?
+	 * Var int
+	 */
+	public $designtype_id = null;
+
+	/**
+	 * Do we have to display a sidebar?
 	 *
 	 * @var  boolean
 	 */

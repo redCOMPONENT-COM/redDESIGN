@@ -17,7 +17,6 @@ if (isset($displayData) && (count($displayData->item) > 0))
 	$this->form = $displayData->model->getForm();
 }
 
-// $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&id=' . $this->item->designtype_id . '&tab=backgrounds';
 $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->item->designtype_id . '&tab=backgrounds';
 
 ?>
