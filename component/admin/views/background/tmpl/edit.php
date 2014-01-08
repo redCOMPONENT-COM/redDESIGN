@@ -53,15 +53,16 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			jQuery("#bgFormSubmit").click(function ()
 			{
 				var form = jQuery('#bgForm');
+
 				form.attr("action", "index.php?option=com_reddesign&task=background.ajaxBackgroundSave");
 				form.attr("method", "post");
 				form.attr("enctype", "multipart/form-data");
 				form.attr("encoding", "multipart/form-data");
 				form.attr("target", "bgPostIframe");
 				form.submit();
+
 				jQuery("#bgPostIframe").load(function () {
 					iframeContents = jQuery("#bgPostIframe")[0].contentWindow.document.body.innerHTML;
-
 					var jsonData = jQuery.parseJSON(iframeContents);
 
 					if (jsonData[0] == 0)
@@ -104,114 +105,120 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		{
 			document.getElementById("bgForm").reset();
 			jQuery('#addBgBtn').val("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>");
-			jQuery('#bgForm').fadeIn("slow");
+			jQuery('#bgFormContainer').fadeIn("slow");
 			jQuery("#saveBgBtn").val(shown);
 		}
 		else
 		{
-			jQuery("#bgForm").fadeOut("fast");
+			jQuery("#bgFormContainer").fadeOut("fast");
 
 			jQuery('#addBgBtn').val(hidden);
 		}
 	}
 </script>
 
-<div id="bgMessage"></div>
+<div>&nbsp;</div>
 
-<form action="index.php?option=com_reddesign&task=background.ajaxBackgroundSave"
-	id="bgForm" name="adminForm" method="POST" enctype="multipart/form-data" class="form-horizontal well">
-	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
-	<input type="hidden" name="returnurl" value="<?php echo base64_encode($return_url); ?>" />
-	<input type="hidden" name="jform[designtype_id]" id="background_reddesign_designtype_id" value="<?php echo $this->item->designtype_id; ?>" />
-	<input type="hidden" name="jform[id]" id="reddesign_background_id" value="" />
-	<div id="backgrounds-configuration" class="span12">
+<div id="bgFormContainer" class="well">
+	<form action="index.php?option=com_reddesign&task=background.ajaxBackgroundSave" id="bgForm" name="adminForm"
+	      method="POST" enctype="multipart/form-data" class="form-horizontal">
 
-		<h3 id="backgroundTitle"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_TITLE'); ?></h3>
+		<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
+		<input type="hidden" name="returnurl" value="<?php echo base64_encode($return_url); ?>" />
+		<input type="hidden" name="jform[designtype_id]" id="background_reddesign_designtype_id" value="<?php echo $this->item->designtype_id; ?>" />
+		<input type="hidden" name="jform[id]" id="reddesign_background_id" value="" />
 
-		<div class="control-group">
-			<label class="control-label ">
-				<?php echo $this->form->getLabel('name'); ?>
-			</label>
+		<div id="backgrounds-configuration" class="span12">
 
-			<div class="controls">
-				<?php echo $this->form->getInput('name'); ?>
-				<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_TITLE_DESC'); ?></span>
+			<h3 id="backgroundTitle"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_TITLE'); ?></h3>
+
+			<div class="control-group">
+				<label class="control-label ">
+					<?php echo $this->form->getLabel('name'); ?>
+				</label>
+				<div class="controls">
+					<?php echo $this->form->getInput('name'); ?>
+					<span class="help-block"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_FIELD_TITLE_DESC'); ?></span>
+				</div>
 			</div>
+
+			<div class="control-group">
+				<label class="control-label">
+					<?php echo $this->form->getLabel('bg_state'); ?>
+				</label>
+				<div class="controls">
+					<?php echo $this->form->getInput('bg_state'); ?>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">
+					<?php echo $this->form->getLabel('bg_svg_file'); ?>
+				</label>
+				<div class="controls">
+					<?php echo $this->form->getInput('bg_svg_file'); ?>
+				</div>
+			</div>
+
+			<div class="control-group" id="isProductionBgContainer">
+				<label class="control-label">
+					<?php echo $this->form->getLabel('isProductionBg'); ?>
+				</label>
+				<div class="controls">
+					<?php echo $this->form->getInput('isProductionBg'); ?>
+				</div>
+			</div>
+
+			<div class="control-group" id="isPreviewBgContainer">
+				<div class="control-label">
+					<?php echo $this->form->getLabel('isPreviewBg'); ?>
+				</div>
+				<div class="controls">
+					<?php echo $this->form->getInput('isPreviewBg'); ?>
+				</div>
+			</div>
+
+			<div class="control-group" id="isDefaultPreviewContainer">
+				<div class="control-label">
+					<?php echo $this->form->getLabel('isDefaultPreview'); ?>
+				</div>
+				<div class="controls">
+					<?php echo $this->form->getInput('isDefaultPreview'); ?>
+				</div>
+			</div>
+
+			<div class="control-group" id="useCheckerboardContainer">
+				<div class="control-label">
+					<?php echo $this->form->getLabel('useCheckerboard'); ?>
+				</div>
+				<div class="controls">
+					<?php echo $this->form->getInput('useCheckerboard'); ?>
+				</div>
+			</div>
+
+			<div class="control-group previewbg" style="display: none">
+				<label class="control-label " for="bg_thumbnail">
+					<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
+				</label>
+				<div class="controls">
+					<input type="file" name="thumbnail" id="bg_thumbnail" value="">&nbsp;<a href="#" class="modal" id="BgThumbnailLink"></a>
+					<span class="help-block">
+						<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?>
+					</span>
+				</div>
+			</div>
+
 		</div>
 
-		<div class="control-group">
-			<label class="control-label">
-				<?php echo $this->form->getLabel('bg_state'); ?>
-			</label>
-			<div class="controls">
-				<?php echo $this->form->getInput('bg_state'); ?>
-			</div>
+		<div class="form-actions">
+			<button class="btn btn-success" id="bgFormSubmit">
+				<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
+			</button>
+			<button class="btn" id="cancelBgBtn">
+				<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>
+			</button>
 		</div>
 
-		<div class="control-group">
-			<label class="control-label">
-				<?php echo $this->form->getLabel('bg_svg_file'); ?>
-			</label>
-			<div class="controls">
-				<?php echo $this->form->getInput('bg_svg_file'); ?>
-			</div>
-		</div>
-
-		<div class="control-group" id="isProductionBgContainer">
-			<label class="control-label">
-				<?php echo $this->form->getLabel('isProductionBg'); ?>
-			</label>
-			<div class="controls">
-				<?php echo $this->form->getInput('isProductionBg'); ?>
-			</div>
-		</div>
-
-		<div class="control-group" id="isPreviewBgContainer">
-			<div class="control-label">
-				<?php echo $this->form->getLabel('isPreviewBg'); ?>
-			</div>
-			<div class="controls">
-				<?php echo $this->form->getInput('isPreviewBg'); ?>
-			</div>
-		</div>
-
-		<div class="control-group" id="isDefaultPreviewContainer">
-			<div class="control-label">
-				<?php echo $this->form->getLabel('isDefaultPreview'); ?>
-			</div>
-			<div class="controls">
-				<?php echo $this->form->getInput('isDefaultPreview'); ?>
-			</div>
-		</div>
-
-		<div class="control-group" id="useCheckerboardContainer">
-			<div class="control-label">
-				<?php echo $this->form->getLabel('useCheckerboard'); ?>
-			</div>
-			<div class="controls">
-				<?php echo $this->form->getInput('useCheckerboard'); ?>
-			</div>
-		</div>
-
-		<div class="control-group previewbg" style="display: none">
-			<label class="control-label " for="bg_thumbnail">
-				<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
-			</label>
-			<div class="controls">
-				<input type="file" name="thumbnail" id="bg_thumbnail" value="">&nbsp;<a href="#" class="modal" id="BgThumbnailLink"></a>
-				<span class="help-block">
-					<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?>
-				</span>
-			</div>
-		</div>
-
-	</div>
-
-	<div class="form-actions">
-		<input type="button" class="btn btn-success" id="bgFormSubmit" value="<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>"/>
-		<input type="button" class="btn" id="cancelBgBtn" value="<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>"/>
-	</div>
-
-</form>
-
+	</form>
+</div>
 <iframe name="bgPostIframe" id="bgPostIframe" style="display: none;" ></iframe>

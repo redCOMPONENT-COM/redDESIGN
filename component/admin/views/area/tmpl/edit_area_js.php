@@ -53,16 +53,18 @@ $canvasHeight = $this->params->get('max_svg_backend_bg_height', 400);
 	 */
 	jQuery(document).ready(
 		function ($) {
-			jQuery("#svgCanvas").svg();
-			var svg = jQuery("#svgCanvas").svg("get");
-			svg.load(
-				"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>",
-				{
-					addTo: false,
-					changeSize: true,
-					onLoad: loadDone
-				}
-			);
+			<?php if (!empty($this->productionBackground->svg_file)) : ?>
+				jQuery("#svgCanvas").svg();
+				var svg = jQuery("#svgCanvas").svg("get");
+				svg.load(
+					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>",
+					{
+						addTo: false,
+						changeSize: true,
+						onLoad: loadDone
+					}
+				);
+			<?php endif; ?>
 		}
 	);
 

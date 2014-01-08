@@ -119,7 +119,6 @@ switch ($tab)
 					<input type="button" class="btn btn-primary" id="addBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>"/>
 				</div>
 			</div>
-
 			<div id="backgroundForm">
 				<?php
 				$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true));

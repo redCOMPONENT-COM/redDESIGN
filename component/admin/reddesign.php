@@ -11,10 +11,13 @@ defined('_JEXEC') or die;
 // Register component prefix.
 JLoader::registerPrefix('Reddesign', __DIR__);
 
-// Register library prefix
+// Register library prefix.
 RLoader::registerPrefix('Reddesign', JPATH_LIBRARIES . '/reddesign');
 
 $app = JFactory::getApplication();
+
+// Add custom style sheet.
+RHelperAsset::load('admin.css');
 
 // Check access.
 if (!JFactory::getUser()->authorise('core.manage', 'com_reddesign'))
