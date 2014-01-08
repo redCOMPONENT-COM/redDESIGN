@@ -102,8 +102,7 @@ $canvasHeight = $this->params->get('max_svg_backend_bg_height', 400);
 		}
 
 		if (!outline) {
-			outline = sketchpad.rect(0, 0, 0, 0,
-				{fill: "none", stroke: "#ca202c", strokeWidth: 15, strokeDashArray: "2,2"});
+			outline = sketchpad.rect(0, 0, 0, 0, {fill: "none", stroke: "#ca202c", strokeWidth: 15, strokeDashArray: "2,2"});
 			jQuery(outline).mouseup(endDrag);
 		}
 

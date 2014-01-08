@@ -140,24 +140,26 @@ switch ($tab)
 			</div>
 		</div>
 		<div class="tab-pane <?php echo $areaTabClass; ?>" id="design-areas">
-			<?php
-				$data = new stdClass;
-				$data->items = $this->areas;
-				$data->item = $this->item;
-				$data->productionBackground = $this->productionBackground;
-				$data->unit = $this->unit;
-				$data->pxToUnit = $this->pxToUnit;
-				$data->unitToPx = $this->unitToPx;
-				$data->ratio = $this->ratio;
-				$data->imageWidth = $this->imageWidth;
-				$data->imageHeight = $this->imageHeight;
-				$data->fontsOptions = $this->fontsOptions;
-				$data->inputFieldOptions = $this->inputFieldOptions;
-				$data->item->designtype_id = $this->item->id;
-				$data->params = $this->params;
-				echo RLayoutHelper::render('edit_area_js', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/area/tmpl');
-				echo RLayoutHelper::render('edit', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/area/tmpl');
-			?>
+			<div id="areaForm">
+				<?php
+					$data = new stdClass;
+					$data->items = $this->areas;
+					$data->item = $this->item;
+					$data->productionBackground = $this->productionBackground;
+					$data->unit = $this->unit;
+					$data->pxToUnit = $this->pxToUnit;
+					$data->unitToPx = $this->unitToPx;
+					$data->ratio = $this->ratio;
+					$data->imageWidth = $this->imageWidth;
+					$data->imageHeight = $this->imageHeight;
+					$data->fontsOptions = $this->fontsOptions;
+					$data->inputFieldOptions = $this->inputFieldOptions;
+					$data->item->designtype_id = $this->item->id;
+					$data->params = $this->params;
+					echo RLayoutHelper::render('edit_area_js', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/area/tmpl');
+					echo RLayoutHelper::render('edit', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/area/tmpl');
+				?>
+			</div>
 		</div>
 
 	<?php
