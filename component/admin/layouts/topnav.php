@@ -24,7 +24,7 @@ defined('_JEXEC') or die;
 	</li>
 	<li>
 		<a href="<?php echo JRoute::_('index.php?option=com_reddesign&view=config&layout=edit') ?>">
-			<?php echo JText::_('COM_REDDESIGN_CONFIG_GENERAL_CONFIGURATION'); ?>
+			<?php echo JText::_('COM_REDDESIGN_CONFIGURATION'); ?>
 		</a>
 	</li>
 	<li>
