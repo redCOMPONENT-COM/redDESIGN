@@ -30,7 +30,7 @@ class ReddesignControllerConfig extends RControllerForm
 	 *
 	 * @var  string
 	 */
-	protected $view_list = 'dashboard';
+	protected $view_list = 'designtypes';
 
 	/**
 	 * Method to check whether an ID is in the edit list.
