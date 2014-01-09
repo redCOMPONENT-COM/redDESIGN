@@ -18,6 +18,7 @@
 			description="COM_REDDESIGN_BACKGROUND_FIELD_TITLE"
 			maxlength="255"
 			size="32"
+			required="required"
 			/>
 		<field
 			name="bg_state"

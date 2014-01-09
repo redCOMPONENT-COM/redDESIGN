@@ -84,11 +84,6 @@ class ReddesignTableBackground extends RTable
 	/**
 	 * @var  string
 	 */
-	public $image_path = '';
-
-	/**
-	 * @var  string
-	 */
 	public $thumbnail = '';
 
 	/**
@@ -124,12 +119,6 @@ class ReddesignTableBackground extends RTable
 		if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $this->svg_file))
 		{
 			JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $this->svg_file);
-		}
-
-		// Delete background preview image
-		if (JFile::exists(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $this->image_path))
-		{
-			JFile::delete(JPATH_SITE . '/media/com_reddesign/assets/backgrounds/' . $this->image_path);
 		}
 
 		// Delete background thumbnail

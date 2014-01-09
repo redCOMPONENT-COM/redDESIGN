@@ -25,6 +25,7 @@ if (isset($displayData))
 	$this->params = $displayData->params;
 }
 
+$canvasWidth = $this->params->get('max_svg_backend_bg_width', 600);
 $canvasHeight = $this->params->get('max_svg_backend_bg_height', 400);
 ?>
 
@@ -35,9 +36,8 @@ $canvasHeight = $this->params->get('max_svg_backend_bg_height', 400);
 	 */
 	var pxToUnit    = parseFloat('<?php echo $this->pxToUnit;?>');
 	var unitToPx    = parseFloat('<?php echo $this->unitToPx;?>');
-	var ratio       = parseFloat('<?php echo $this->ratio; ?>');
-	var imageWidth  = parseFloat('<?php echo $this->imageWidth; ?>') * unitToPx * ratio;
-	var imageHeight = parseFloat('<?php echo $this->imageHeight; ?>') * unitToPx * ratio;
+	var imageWidth  = parseFloat('<?php echo $this->imageWidth; ?>') * unitToPx;
+	var imageHeight = parseFloat('<?php echo $this->imageHeight; ?>') * unitToPx;
 
 	/**
 	 * Initiate area selector variables.
@@ -53,16 +53,18 @@ $canvasHeight = $this->params->get('max_svg_backend_bg_height', 400);
 	 */
 	jQuery(document).ready(
 		function ($) {
-			jQuery("#svgCanvas").svg();
-			var svg = jQuery("#svgCanvas").svg("get");
-			svg.load(
-				"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>",
-				{
-					addTo: false,
-					changeSize: true,
-					onLoad: loadDone
-				}
-			);
+			<?php if (!empty($this->productionBackground->svg_file)) : ?>
+				jQuery("#svgCanvas").svg();
+				var svg = jQuery("#svgCanvas").svg("get");
+				svg.load(
+					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>",
+					{
+						addTo: false,
+						changeSize: true,
+						onLoad: loadDone
+					}
+				);
+			<?php endif; ?>
 		}
 	);
 
@@ -74,7 +76,7 @@ $canvasHeight = $this->params->get('max_svg_backend_bg_height', 400);
 	{
 		// Set preview size from the configuration.
 		var svg = jQuery("#svgCanvas").svg("get");
-		svg.root().setAttribute("width", "100%");
+		//svg.root().setAttribute("width", "<?php echo $canvasWidth;?>");
 		svg.root().setAttribute("height", "<?php echo $canvasHeight;?>");
 
 		sketchpad = svg;
@@ -102,15 +104,14 @@ $canvasHeight = $this->params->get('max_svg_backend_bg_height', 400);
 		}
 
 		if (!outline) {
-			outline = sketchpad.rect(0, 0, 0, 0,
-				{fill: "none", stroke: "#ca202c", strokeWidth: 15, strokeDashArray: "2,2"});
+			outline = sketchpad.rect(0, 0, 0, 0, {fill: "none", stroke: "#ca202c", strokeWidth: 15, strokeDashArray: "2,2"});
 			jQuery(outline).mouseup(endDrag);
 		}
 
-		var changeX = Math.min(event.clientX - offset.left, start.X) / ratio;
-		var changeY = Math.min(event.clientY - offset.top, start.Y) / ratio;
-		var width = Math.abs(event.clientX - offset.left - start.X) / ratio;
-		var height = Math.abs(event.clientY - offset.top - start.Y) / ratio;
+		var changeX = Math.min(event.clientX - offset.left, start.X);
+		var changeY = Math.min(event.clientY - offset.top, start.Y);
+		var width = Math.abs(event.clientX - offset.left - start.X);
+		var height = Math.abs(event.clientY - offset.top - start.Y);
 
 		sketchpad.change(outline, {
 			x: changeX,
@@ -135,11 +136,6 @@ $canvasHeight = $this->params->get('max_svg_backend_bg_height', 400);
 
 	/* Draw the selected element on the canvas */
 	function drawShape(x1, y1, x2, y2) {
-		x1 /= ratio;
-		y1 /= ratio;
-		x2 /= ratio;
-		y2 /= ratio;
-
 		var left = Math.min(x1, x2);
 		var top = Math.min(y1, y2);
 		var right = Math.max(x1, x2);

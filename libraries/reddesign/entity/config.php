@@ -169,7 +169,7 @@ final class ReddesignEntityConfig
 	 */
 	public function getFontPreviewText()
 	{
-		return $this->getString('thumbnail_height');
+		return $this->getString('font_preview_text');
 	}
 
 	/**
@@ -207,7 +207,7 @@ final class ReddesignEntityConfig
 	 *
 	 * @return  int  The max width of SVG preview file in frontend.
 	 */
-	public function getMaxSVGPreviewFrontWidth()
+	public function getMaxSVGPreviewSiteWidth()
 	{
 		return $this->getInt('max_svg_frontend_bg_width');
 	}
@@ -217,7 +217,7 @@ final class ReddesignEntityConfig
 	 *
 	 * @return  int  The max height of SVG preview file in frontend.
 	 */
-	public function getMaxSVGPreviewFrontHeight()
+	public function getMaxSVGPreviewSiteHeight()
 	{
 		return $this->getInt('max_svg_frontend_bg_height');
 	}

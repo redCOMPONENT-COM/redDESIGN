@@ -27,10 +27,9 @@ class ReddesignControllerBackground extends RControllerForm
 	{
 		// Init vars
 		$app = JFactory::getApplication();
-		$updatedEPS = false;
+		$updatedSVG = false;
 		$updatedThumbnail = false;
 		$uploaded_file = null;
-		$jpegPreviewFile = null;
 		$backgroundModel = $this->getModel();
 
 		$data = $this->input->get('jform', array(), 'array');
@@ -42,8 +41,10 @@ class ReddesignControllerBackground extends RControllerForm
 		$thumbFile = $this->input->files->get('thumbnail', null);
 		$thumbPreviewFile = null;
 
-		// Get component Params
-		$params = JComponentHelper::getParams('com_reddesign');
+		// Get component configuration
+		$config = ReddesignEntityConfig::getInstance();
+		$thumbnailWidth = $config->getMaxBackgroundThumbWidth();
+		$thumbnailHeight = $config->getMaxBackgroundThumbHeight();
 
 		// If file has has not been uploaded
 		if (empty($file['name']) || empty($file['type']))
@@ -62,7 +63,7 @@ class ReddesignControllerBackground extends RControllerForm
 		}
 		else
 		{
-			$updatedEPS = true;
+			$updatedSVG = true;
 
 			// Upload the background file
 			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'backgrounds');
@@ -73,25 +74,19 @@ class ReddesignControllerBackground extends RControllerForm
 				$app->close();
 			}
 
-			// Create an image preview of the EPS.
-			$jpegPreviewFile = $this->createBackgroundPreview($uploaded_file['mangled_filename']);
-
-			if (!$jpegPreviewFile)
-			{
-				return false;
-			}
-
-			// If no thumbnail file has been attached generate one based on the Background EPS
+			// If no thumbnail file has been attached generate one based on the Background SVG
 			if (!$thumbFile['name'])
 			{
-				// Create a image preview thumbnail based on the EPS
+				// Create a image preview thumbnail based on the SVG file.
+				$thumbPreviewFile = str_replace('.svg', '.png', $uploaded_file['mangled_filename']);
+				$thumbPreviewFile = JPATH_ROOT . '/media/com_reddesign/backgrounds/thumbnails/' . $thumbPreviewFile;
+
 				$im = new Imagick;
-				$im->readImage(JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $jpegPreviewFile);
-				$im->thumbnailImage($params->get('max_background_thumbnail_width', 50), $params->get('max_background_thumbnail_height', 50), true);
-				$im->writeImage(JPATH_ROOT . '/media/com_reddesign/backgrounds/thumbnails/' . $jpegPreviewFile);
+				$im->readImage(JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $uploaded_file['mangled_filename']);
+				$im->thumbnailImage($thumbnailWidth, $thumbnailHeight, true);
+				$im->writeImage('png:' . $thumbPreviewFile);
 				$im->clear();
 				$im->destroy();
-				$thumbPreviewFile = $jpegPreviewFile;
 			}
 		}
 
@@ -101,19 +96,16 @@ class ReddesignControllerBackground extends RControllerForm
 			$updatedThumbnail = true;
 
 			// Upload the attached thumbnail
-			require_once JPATH_ADMINISTRATOR . '/components/com_reddesign/helpers/file.php';
-			$fileHelper = new ReddesignHelperFile;
-
-			$uploadedThumbFile = $fileHelper->uploadFile(
+			$uploadedThumbFile = ReddesignHelpersFile::uploadFile(
 				$thumbFile,
 				'backgrounds/thumbnails',
-				$params->get('max_svg_file_size', 2),
+				$config->getMaxSVGFileSize(),
 				'jpg,JPG,jpeg,JPEG,png,PNG,gif,GIF'
 			);
 
 			$im = new Imagick;
 			$im->readImage($uploadedThumbFile['filepath']);
-			$im->thumbnailImage($params->get('max_designtype_thumbnail_width', 210), $params->get('max_designtype_thumbnail_height', 140), true);
+			$im->thumbnailImage($thumbnailWidth, $thumbnailHeight, true);
 			$im->writeImage($uploadedThumbFile['filepath']);
 			$im->clear();
 			$im->destroy();
@@ -127,7 +119,7 @@ class ReddesignControllerBackground extends RControllerForm
 			$db = JFactory::getDbo();
 			$query = $db->getQuery(true);
 			$query
-				->select($db->qn(array('svg_file', 'image_path', 'thumbnail')))
+				->select($db->qn(array('svg_file', 'thumbnail')))
 				->from($db->qn('#__reddesign_backgrounds'))
 				->where($db->qn('id') . ' = ' . $db->q((int) $data['id']));
 
@@ -136,20 +128,14 @@ class ReddesignControllerBackground extends RControllerForm
 			$oldImages = $db->loadObject();
 
 			// If images has been updated remove old images
-			if ($updatedEPS || $updatedThumbnail)
+			if ($updatedSVG || $updatedThumbnail)
 			{
-				if ($updatedEPS)
+				if ($updatedSVG)
 				{
-					// Delete old EPS
+					// Delete old SVG
 					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->svg_file))
 					{
 						JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->svg_file);
-					}
-
-					// Delete old Image
-					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->image_path))
-					{
-						JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->image_path);
 					}
 				}
 
@@ -165,17 +151,13 @@ class ReddesignControllerBackground extends RControllerForm
 			else
 			{
 				$data['svg_file'] = $oldImages->svg_file;
-				$data['image_path'] = $oldImages->image_path;
 				$data['thumbnail'] = $oldImages->thumbnail;
 			}
 		}
 		else
 		{
-			// Update the database with the new path of the EPS file
+			// Update the database with the new path of the SVG file.
 			$data['svg_file'] = $uploaded_file['mangled_filename'];
-
-			// Update the database with the new path to the image
-			$data['image_path'] = $jpegPreviewFile;
 
 			if ($thumbPreviewFile)
 			{
@@ -183,21 +165,21 @@ class ReddesignControllerBackground extends RControllerForm
 			}
 		}
 
-		// If this new background will be the PDF Production background, switch it against the previous production background
+		// If this new background will be the PDF Production background, switch it against the previous production background.
 		if ((int) $data['isProductionBg'])
 		{
 			$designId = (int) $data['designtype_id'];
 
-			// Set all other backgrounds as non PDF backgrounds
+			// Set all other backgrounds as non PDF backgrounds.
 			$backgroundModel->unsetAllIsProductionBg($designId);
 		}
 
-		// If this new background will be the preview background, switch it against the previous preview background
+		// If this new background will be the preview background, switch it against the previous preview background.
 		if ((int) $data['isDefaultPreview'])
 		{
 			$designId = (int) $data['designtype_id'];
 
-			// Set all other backgrounds as non PDF backgrounds
+			// Set all other backgrounds as non PDF backgrounds.
 			$backgroundModel->unsetAllIsDefaultPreview($designId);
 		}
 
@@ -231,42 +213,5 @@ class ReddesignControllerBackground extends RControllerForm
 		$session->set('application.queue', $app->getMessageQueue());
 		echo json_encode(array(1, ''), true);
 		$app->close();
-	}
-
-	/**
-	 * Creates a image based on a eps file to show the look and feel of the background into media://com_reddesign/assets/backgrounds/
-	 *
-	 * @param   string  $svg_file  the path to a .eps file
-	 *
-	 * @return  string
-	 */
-	private function createBackgroundPreview($svg_file)
-	{
-		$params = JComponentHelper::getParams('com_reddesign');
-		$max_thumb_width = $params->get('max_eps_thumbnail_width', 600);
-		$max_thumb_height = $params->get('max_eps_thumbnail_height', 400);
-
-		$svg_file_location = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $svg_file;
-
-		$image_name = substr($svg_file, 0, -3) . 'png';
-		$previewPath = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $image_name;
-
-		$cmd = 'convert -colorspace RGB ' . $svg_file_location . ' PNG32:' . $previewPath;
-		exec($cmd);
-
-		$checkerBoard = $this->input->getBool('useCheckerboard', 0);
-
-		// Set checkerboard transparency background.
-		if ($checkerBoard)
-		{
-			$cmd = 'composite -compose Dst_Over -tile pattern:checkerboard ' . $previewPath . ' ' . $previewPath;
-			exec($cmd);
-		}
-
-		// Resize the image if it is needed
-		$cmd = 'convert ' . $previewPath . ' -resize ' . $max_thumb_width . 'x' . $max_thumb_height . '\> ' . $previewPath;
-		exec($cmd);
-
-		return $image_name;
 	}
 }

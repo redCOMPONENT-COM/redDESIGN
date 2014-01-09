@@ -131,10 +131,7 @@ JHtml::_('rjquery.chosen', 'select');
 		</div>
 		<div class="tab-pane" id="permissions">
 			<div class="control-group">
-				<div class="control-label">
-					<?php echo $this->form->getLabel('rules'); ?>
-				</div>
-				<div class="controls">
+				<div>
 					<?php echo $this->form->getInput('rules'); ?>
 				</div>
 			</div>
