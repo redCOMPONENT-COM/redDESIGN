@@ -46,11 +46,6 @@ class ReddesignViewDesigntype extends ReddesignView
 	protected $productionBackground = null;
 
 	/**
-	 * @var  object
-	 */
-	protected $params;
-
-	/**
 	 * @var array
 	 */
 	protected $backgrounds = array();
@@ -106,6 +101,16 @@ class ReddesignViewDesigntype extends ReddesignView
 	protected $imageHeight;
 
 	/**
+	 * @var float
+	 */
+	protected $bgBackendWidth;
+
+	/**
+	 * @var float
+	 */
+	protected $bgBackendHeight;
+
+	/**
 	 * @var array
 	 */
 	protected $backgroundTypeOptions = array();
@@ -129,7 +134,7 @@ class ReddesignViewDesigntype extends ReddesignView
 		$this->item 	= $this->get('Item');
 		$this->form 	= $this->get('Form');
 		$this->document = JFactory::getDocument();
-		$this->params	= JComponentHelper::getParams('com_reddesign');
+		$config	= ReddesignEntityConfig::getInstance();
 
 		// If it's not a new design
 		if (!empty($this->item->id))
@@ -150,21 +155,21 @@ class ReddesignViewDesigntype extends ReddesignView
 					{
 						$this->productionBackground = $background;
 
-						$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file;
-						$previewFileLocation = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $this->productionBackground->image_path;
+						$svgFileLocation = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file;
 
-						// Read EPS size.
+						// Read SVG size.
 						$im = new Imagick;
-						$im->readImage($epsFileLocation);
+						$im->readImage($svgFileLocation);
 						$dimensions = $im->getImageGeometry();
 						$this->imageWidth = $dimensions['width'];
 						$this->imageHeight = $dimensions['height'];
 
-						// Read preview size, for scaling.
-						$previewImageSize = getimagesize($previewFileLocation);
+						// Backend preview size.
+						$this->bgBackendWidth = $config->getMaxSVGPreviewAdminWidth();
+						$this->bgBackendHeight = $config->getMaxSVGPreviewAdminHeight();
 
 						// Scaling ratio
-						$this->ratio = $previewImageSize[0] / $this->imageWidth;
+						$this->ratio = $this->bgBackendWidth / $this->imageWidth;
 
 						// Get all areas existing in the database for this specific background.
 						$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
@@ -204,7 +209,7 @@ class ReddesignViewDesigntype extends ReddesignView
 			);
 
 			// Unit for measures.
-			$this->unit = $this->params->get('unit', 'px');
+			$this->unit = $config->getUnit();
 
 			if ($this->unit == 'cm')
 			{

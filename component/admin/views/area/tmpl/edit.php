@@ -42,14 +42,8 @@ if (isset($displayData))
 	$this->params = $displayData->params;
 }
 
-$canvasWidth = $this->params->get('max_svg_backend_bg_width', 600);
-$canvasHeight = $this->params->get('max_svg_backend_bg_height', 400);
-
-$return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->item->designtype_id . '&tab=design-areas';
 ?>
 
-
-</div>
 <?php if (empty($this->productionBackground)) : ?>
 
 	<h3><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_NO_BACKGROUND'); ?></h3>

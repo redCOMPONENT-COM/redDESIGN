@@ -15,7 +15,9 @@ JHTML::_('behavior.modal', 'a.jmodal');
 $this->items = $displayData->items;
 $this->designtype_id = $displayData->designtype_id;
 
-$return_url = JRoute::_(JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds');
+$returnUrl = JRoute::_(JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds');
+
+$returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds';
 ?>
 
 	<form id="backgrounds_form" name="backgrounds" method="post" action="index.php?option=com_reddesign&view=backgrounds">
@@ -24,7 +26,7 @@ $return_url = JRoute::_(JURI::base() . 'index.php?option=com_reddesign&view=desi
 		<input type="hidden" name="task" id="backgrounds_task" value="">
 		<input type="hidden" name="cid[]" id="backgrounds_reddesign_background_id" value="">
 		<input type="hidden" name="reddesign_designtype_id" id="backgrounds_reddesign_designtype_id" value="<?php echo $this->designtype_id; ?>">
-		<input type="hidden" name="return" id="backgrounds_return" value="<?php echo base64_encode($return_url); ?>" />
+		<input type="hidden" name="return" id="backgrounds_return" value="<?php echo base64_encode($returnUrl); ?>" />
 
 		<?php if (empty($this->items)) : ?>
 			<div class="alert alert-info">
@@ -83,7 +85,7 @@ $return_url = JRoute::_(JURI::base() . 'index.php?option=com_reddesign&view=desi
 							</a>
 							&nbsp;
 							<a class="jmodal btn btn-mini"
-							   href="<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->image_path; ?>">
+							   href="<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg; ?>">
 								<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
 							</a>
 						</td>
@@ -254,7 +256,7 @@ $return_url = JRoute::_(JURI::base() . 'index.php?option=com_reddesign&view=desi
 	/**
 	 * Removes a background
 	 *
-	 * @param  int  bgid  Background ID
+	 * @param  bgid  int  Background ID
 	 *
 	 * @return void
 	 */
@@ -271,13 +273,12 @@ $return_url = JRoute::_(JURI::base() . 'index.php?option=com_reddesign&view=desi
 	 */
 	function modifyBg(bgid) {
 		jQuery('#backgrounds_task').val('save');
-		<?php $return_url_removeBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds'; ?>
 		jQuery('#backgrounds_form').
 			append(
 				jQuery('<input/>')
 					.attr('type', 'hidden')
 					.attr('name', 'returnurl')
-					.val('<?php echo base64_encode($return_url_removeBg) ?>')
+					.val('<?php echo base64_encode($returnUrlRemoveBg) ?>')
 			);
 		jQuery('#backgrounds_reddesign_background_id').val(bgid);
 		jQuery('#backgrounds_form').submit();
