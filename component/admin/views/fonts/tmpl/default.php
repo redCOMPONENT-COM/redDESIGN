@@ -59,19 +59,7 @@ else
 						<?php echo JText::_('COM_REDDESIGN_COMMON_NUM'); ?>
 					</th>
 					<th class="nowrap center hidden-phone">
-						<?php
-							echo JHtml::_(
-								'rsearchtools.sort',
-								'',
-								'f.ordering',
-								$listDirn,
-								$listOrder,
-								null,
-								'asc',
-								'',
-								'icon-sort'
-							);
-						?>
+						<?php echo JHtml::_('rsearchtools.sort', '', 'f.ordering', $listDirn, $listOrder, null, 'asc', '', 'icon-sort'); ?>
 					</th>
 					<th>
 						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>)"? />
@@ -98,7 +86,7 @@ else
 				<?php foreach ($this->items as $i => $row) : ?>
 					<tr>
 						<td>
-							<?php echo $row->ordering; ?>
+							<?php echo $i + 1; ?>
 						</td>
 						<td class="order nowrap center hidden-phone">
 							<span class="sortable-handler hasTooltip <?php echo $disableClassName ?>" title="<?php echo $disabledLabel ?>">
@@ -119,13 +107,7 @@ else
 							<?php echo JHtml::_('grid.id', $i, $row->id); ?>
 						</td>
 						<td>
-							<?php
-								echo JHtml::_(
-												'link',
-												JRoute::_('index.php?option=com_reddesign&task=font.edit&id=' . $row->id),
-												$row->name
-								);
-							?>
+							<?php echo JHtml::_('link', JRoute::_('index.php?option=com_reddesign&task=font.edit&id=' . $row->id), $row->name); ?>
 						</td>
 						<td>
 							<?php echo JHtml::_('rgrid.published', $row->state, $i, 'fonts.', true, 'cb'); ?>

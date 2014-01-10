@@ -30,7 +30,7 @@ class ReddesignModelDesigntypes extends RModelList
 	 *
 	 * @var  string
 	 */
-	protected $limitField = 'font_limit';
+	protected $limitField = 'designtype_limit';
 
 	/**
 	 * Limitstart field used by the pagination
@@ -54,7 +54,7 @@ class ReddesignModelDesigntypes extends RModelList
 				'state', 'd.state',
 				'ordering', 'd.ordering',
 				'created_by', 'd.created_by',
-				'created', 'd.created'
+				'created_date', 'd.created_date'
 			);
 		}
 

@@ -52,26 +52,14 @@ else
 			</div>
 		</div>
 	<?php else : ?>
-		<table class="table table-striped" id="table-items">
+		<table id="designtypesList" class="table table-striped">
 			<thead>
 				<tr>
 					<th>
 						<?php echo JText::_('COM_REDDESIGN_COMMON_NUM'); ?>
 					</th>
 					<th class="nowrap center hidden-phone">
-						<?php
-						echo JHtml::_(
-							'rsearchtools.sort',
-							'',
-							'd.ordering',
-							$listDirn,
-							$listOrder,
-							null,
-							'asc',
-							'',
-							'icon-sort'
-						);
-						?>
+						<?php echo JHtml::_('rsearchtools.sort', '', 'd.ordering', $listDirn, $listOrder, null, 'asc', '', 'icon-sort'); ?>
 					</th>
 					<th>
 						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>)"? />
@@ -80,7 +68,7 @@ else
 						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_DESIGNTYPES_NAME', 'd.name', $listDirn, $listOrder);?>
 					</th>
 					<th>
-						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_DESIGNTYPES_FIELD_ENABLED', 'd.state', $listDirn, $listOrder);?>
+						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_COMMON_ENABLED', 'd.state', $listDirn, $listOrder);?>
 					</th>
 					<th>
 						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_COMMON_ID', 'd.id', $listDirn, $listOrder); ?>
@@ -98,7 +86,7 @@ else
 				<?php foreach ($this->items as $i => $row) : ?>
 					<tr>
 						<td>
-							<?php echo $row->ordering; ?>
+							<?php echo $i + 1; ?>
 						</td>
 						<td class="order nowrap center hidden-phone">
 							<span class="sortable-handler hasTooltip <?php echo $disableClassName ?>" title="<?php echo $disabledLabel ?>">
@@ -119,13 +107,7 @@ else
 							<?php echo JHtml::_('grid.id', $i, $row->id); ?>
 						</td>
 						<td>
-							<?php
-							echo JHtml::_(
-								'link',
-								JRoute::_('index.php?option=com_reddesign&task=designtype.edit&id=' . $row->id),
-								$row->name
-							);
-							?>
+							<?php echo JHtml::_('link', JRoute::_('index.php?option=com_reddesign&task=designtype.edit&id=' . $row->id), $row->name); ?>
 						</td>
 						<td>
 							<?php echo JHtml::_('rgrid.published', $row->state, $i, 'designtypes.', true, 'cb'); ?>
