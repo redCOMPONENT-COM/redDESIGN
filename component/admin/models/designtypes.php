@@ -23,7 +23,7 @@ class ReddesignModelDesigntypes extends RModelList
 	 *
 	 * @var  string
 	 */
-	protected $filterFormName = 'filter_fonts';
+	protected $filterFormName = 'filter_designtypes';
 
 	/**
 	 * Limitstart field used by the pagination

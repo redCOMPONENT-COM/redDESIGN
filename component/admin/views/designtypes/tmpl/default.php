@@ -9,17 +9,13 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('rjquery.select2', 'select');
-
-$userId = JFactory::getUser()->id;
-
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 $saveOrderingUrl = 'index.php?option=com_reddesign&task=designtypes.saveOrderAjax&tmpl=component';
 $disableClassName = '';
 $disabledLabel = '';
 
-if ($listOrder == 'f.ordering')
+if ($listOrder == 'd.ordering')
 {
 	JHtml::_('rsortablelist.sortable', 'designtypesList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
@@ -67,7 +63,7 @@ else
 						echo JHtml::_(
 							'rsearchtools.sort',
 							'',
-							'f.ordering',
+							'd.ordering',
 							$listDirn,
 							$listOrder,
 							null,
