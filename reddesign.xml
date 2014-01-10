@@ -64,7 +64,6 @@
 			<folder>tables</folder>
 			<folder>views</folder>
 			<filename>access.xml</filename>
-			<filename>config.xml</filename>
 			<filename>controller.php</filename>
 			<filename>reddesign.php</filename>
 		</files>

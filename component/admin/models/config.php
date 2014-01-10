@@ -27,10 +27,22 @@ class ReddesignModelConfig extends RModelAdmin
 	 */
 	public function save($data)
 	{
-		$new = array(
-			'id' => 1,
-			'params' => json_encode($data)
-		);
+		if (array_key_exists('tags', $data))
+		{
+			unset($data['tags']);
+		}
+
+		// Check if #__reddesign_config table is empty.
+		$item = $this->getItem(1);
+
+		if ($item)
+		{
+			$new = array('id' => 1, 'params' => json_encode($data));
+		}
+		else
+		{
+			$new = array('params' => json_encode($data));
+		}
 
 		return parent::save($new);
 	}

@@ -5,5 +5,10 @@ DROP TABLE IF EXISTS `#__reddesign_designtypes`;
 DROP TABLE IF EXISTS `#__reddesign_fonts`;
 DROP TABLE IF EXISTS `#__reddesign_chars`;
 DROP TABLE IF EXISTS `#__reddesign_backgrounds`;
+DROP TABLE IF EXISTS `#__reddesign_product_mapping`;
+DROP TABLE IF EXISTS `#__reddesign_attribute_mapping`;
+DROP TABLE IF EXISTS `#__reddesign_orderitem_mapping`;
+DROP TABLE IF EXISTS `#__reddesign_property_area_xref`;
+DROP TABLE IF EXISTS `#__reddesign_config`;
 
 SET foreign_key_checks = 1;
