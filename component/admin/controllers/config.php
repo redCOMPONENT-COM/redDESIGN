@@ -19,13 +19,6 @@ defined('_JEXEC') or die;
 class ReddesignControllerConfig extends RControllerForm
 {
 	/**
-	 * The URL view item variable.
-	 *
-	 * @var  string
-	 */
-	protected $view_item = 'config';
-
-	/**
 	 * The URL view list variable.
 	 *
 	 * @var  string

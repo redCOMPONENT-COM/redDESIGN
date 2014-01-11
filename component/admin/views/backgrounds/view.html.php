@@ -23,6 +23,7 @@ class ReddesignViewBackgrounds extends ReddesignView
 	 */
 	public $designtype_id = null;
 
+	public $bgBackendHeight = 400;
 	/**
 	 * Do we have to display a sidebar?
 	 *

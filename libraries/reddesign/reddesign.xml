@@ -11,6 +11,8 @@
     <version>1.0.0</version>
     <description>Reddesign library</description>
     <files>
+	    <folder>cufon</folder>
+	    <folder>entity</folder>
 		<folder>helpers</folder>
         <folder>input</folder>
         <folder>view</folder>

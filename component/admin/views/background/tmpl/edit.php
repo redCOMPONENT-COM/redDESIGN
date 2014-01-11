@@ -196,18 +196,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				</div>
 			</div>
 
-			<div class="control-group previewbg" style="display: none">
-				<label class="control-label " for="bg_thumbnail">
-					<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL'); ?>
-				</label>
-				<div class="controls">
-					<input type="file" name="thumbnail" id="bg_thumbnail" value="">&nbsp;<a href="#" class="modal" id="BgThumbnailLink"></a>
-					<span class="help-block">
-						<?php echo JText::_('COM_REDDESIGN_COMMON_THUMBNAIL_DESC'); ?>
-					</span>
-				</div>
-			</div>
-
 		</div>
 
 		<div class="form-actions">

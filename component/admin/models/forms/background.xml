@@ -76,13 +76,5 @@
 			default="1"
 			value="1"
 			/>
-		<field
-			name="thumbnail"
-			id="thumbnail"
-			type="file"
-			label="COM_REDDESIGN_COMMON_THUMBNAIL"
-			description="COM_REDDESIGN_COMMON_THUMBNAIL"
-			class="inputbox"
-			/>
 	</fieldset>
 </form>

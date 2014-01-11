@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   `checked_out`      INT(11)      DEFAULT NULL,
   `checked_out_time` DATETIME     NOT NULL DEFAULT '0000-00-00 00:00:00',
   `svg_file`         VARCHAR(255),
-  `thumbnail`        VARCHAR(255),
+  `image_path`       VARCHAR(255) NOT NULL,
   `isProductionBg`   TINYINT(1)   NOT NULL,
   `isPreviewBg`      TINYINT(1)   NOT NULL,
   `isDefaultPreview` TINYINT(1)   NOT NULL,

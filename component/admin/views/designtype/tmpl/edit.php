@@ -109,10 +109,8 @@ switch ($tab)
 			</div>
 		</form>
 	</div>
-	<?php
-		if (!empty($this->item->id))
-		{
-	?>
+
+	<?php if (!empty($this->item->id)) : ?>
 		<div class="tab-pane <?php echo $backgroundTabClass; ?>" id="backgrounds">
 			<div class="row">
 				<div class="span2 offset10">
@@ -121,20 +119,21 @@ switch ($tab)
 			</div>
 			<div id="backgroundForm">
 				<?php
-				$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true));
-				$data = new stdClass;
-				$data->item = new stdClass;
-				$data->item->designtype_id = $this->item->id;
-				$data->model = $backgroundModel;
-				echo RLayoutHelper::render('edit', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/background/tmpl');
+					$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true));
+					$data = new stdClass;
+					$data->item = new stdClass;
+					$data->item->designtype_id = $this->item->id;
+					$data->model = $backgroundModel;
+					echo RLayoutHelper::render('edit', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/background/tmpl');
 				?>
 			</div>
 			<div id="backgroundsList">
 				<?php
-				$data = new stdClass;
-				$data->items = $this->backgrounds;
-				$data->designtype_id = $this->item->id;
-				echo RLayoutHelper::render('default', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/backgrounds/tmpl');
+					$data = new stdClass;
+					$data->items = $this->backgrounds;
+					$data->designtype_id = $this->item->id;
+					$data->bgBackendHeight = $this->bgBackendHeight;
+					echo RLayoutHelper::render('default', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/backgrounds/tmpl');
 				?>
 			</div>
 		</div>
@@ -151,18 +150,16 @@ switch ($tab)
 					$data->ratio = $this->ratio;
 					$data->imageWidth = $this->imageWidth;
 					$data->imageHeight = $this->imageHeight;
+					$data->bgBackendWidth = $this->bgBackendWidth;
+					$data->bgBackendHeight = $this->bgBackendHeight;
 					$data->fontsOptions = $this->fontsOptions;
 					$data->inputFieldOptions = $this->inputFieldOptions;
 					$data->item->designtype_id = $this->item->id;
-					$data->params = $this->params;
 					echo RLayoutHelper::render('edit_area_js', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/area/tmpl');
 					echo RLayoutHelper::render('edit', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/area/tmpl');
 				?>
 			</div>
 		</div>
-
-	<?php
-		}
-	?>
+	<?php endif; ?>
 
 </div>

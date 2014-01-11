@@ -38,10 +38,10 @@ if (isset($displayData))
 	$this->ratio = $displayData->ratio;
 	$this->imageWidth = $displayData->imageWidth;
 	$this->imageHeight = $displayData->imageHeight;
+	$this->bgBackendWidth = $displayData->bgBackendWidth;
+	$this->bgBackendHeight = $displayData->bgBackendHeight;
 	$this->inputFieldOptions = $displayData->inputFieldOptions;
-	$this->params = $displayData->params;
 }
-
 ?>
 
 <?php if (empty($this->productionBackground)) : ?>
@@ -134,7 +134,7 @@ if (isset($displayData))
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMG_HELP'); ?>
 				</span>
 				<div id="backgroundImageContainer">
-					<div id="svgCanvas" style="width: <?php echo $canvasWidth ?>; height: <?php echo $canvasHeight; ?>;">
+					<div id="svgCanvas" style="width: <?php echo $this->bgBackendWidth ?>; height: <?php echo $this->bgBackendHeight; ?>;">
 				</div>
 				<h3>
 					<?php
