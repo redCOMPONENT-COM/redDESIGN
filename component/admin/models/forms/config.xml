@@ -94,24 +94,6 @@
 			/>
 
 		<field
-				name="max_background_thumbnail_width"
-				type="text"
-				size="5"
-				default="50"
-				label="COM_REDDESIGN_CONFIG_MAX_BACKGROUND_THUMBNAIL_WIDTH"
-				description="COM_REDDESIGN_CONFIG_MAX_BACKGROUND_THUMBNAIL_WIDTH_DESC"
-				/>
-
-		<field
-				name="max_background_thumbnail_height"
-				type="text"
-				size="5"
-				default="50"
-				label="COM_REDDESIGN_CONFIG_MAX_BACKGROUND_THUMBNAIL_HEIGHT"
-				description="COM_REDDESIGN_CONFIG_MAX_BACKGROUND_THUMBNAIL_HEIGHT_DESC"
-				/>
-
-		<field
 			name="productionFilePadding"
 			type="text"
 			size="5"

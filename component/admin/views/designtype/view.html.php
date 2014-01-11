@@ -136,6 +136,10 @@ class ReddesignViewDesigntype extends ReddesignView
 		$this->document = JFactory::getDocument();
 		$config	= ReddesignEntityConfig::getInstance();
 
+		// Backend preview size.
+		$this->bgBackendWidth = $config->getMaxSVGPreviewAdminWidth();
+		$this->bgBackendHeight = $config->getMaxSVGPreviewAdminHeight();
+
 		// If it's not a new design
 		if (!empty($this->item->id))
 		{
@@ -163,10 +167,6 @@ class ReddesignViewDesigntype extends ReddesignView
 						$dimensions = $im->getImageGeometry();
 						$this->imageWidth = $dimensions['width'];
 						$this->imageHeight = $dimensions['height'];
-
-						// Backend preview size.
-						$this->bgBackendWidth = $config->getMaxSVGPreviewAdminWidth();
-						$this->bgBackendHeight = $config->getMaxSVGPreviewAdminHeight();
 
 						// Scaling ratio
 						$this->ratio = $this->bgBackendWidth / $this->imageWidth;

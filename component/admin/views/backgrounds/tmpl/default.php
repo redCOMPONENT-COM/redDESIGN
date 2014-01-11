@@ -9,7 +9,7 @@
 
 defined('_JEXEC') or die;
 
-JHTML::_('behavior.modal', 'a.jmodal');
+JHtml::_('behavior.modal', 'a.jmodal');
 
 // Set variables for using them in HMVC. For regular MVC $displayData can not be used.
 $this->items = $displayData->items;
@@ -85,7 +85,7 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 							</a>
 							&nbsp;
 							<a class="jmodal btn btn-mini"
-							   href="<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg; ?>">
+							   href="<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>">
 								<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
 							</a>
 						</td>
@@ -212,10 +212,6 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 						jQuery("#isDefaultPreviewContainer").hide();
 						jQuery("#useCheckerboardContainer").hide();
 					}
-
-					jQuery("#BgThumbnailLink")
-						.attr("href", "<?php echo JURI::root() . 'com_reddesign/backgrounds/thumbnails/' . $background->thumbnail; ?>")
-						.text("<?php echo $background->thumbnail; ?>");
 
 					jQuery("#saveBgBtn").val("<?php echo JText::_('COM_REDDESIGN_COMMON_UPDATE'); ?>");
 

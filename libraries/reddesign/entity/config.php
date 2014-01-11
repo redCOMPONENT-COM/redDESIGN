@@ -223,26 +223,6 @@ final class ReddesignEntityConfig
 	}
 
 	/**
-	 * Get the max width of Background thumbnail file.
-	 *
-	 * @return  int  The the max width of Background thumbnail file.
-	 */
-	public function getMaxBackgroundThumbWidth()
-	{
-		return $this->getInt('max_background_thumbnail_width');
-	}
-
-	/**
-	 * Get the max height of SVG preview file in frontend.
-	 *
-	 * @return  int  The max height of SVG preview file in frontend.
-	 */
-	public function getMaxBackgroundThumbHeight()
-	{
-		return $this->getInt('max_background_thumbnail_height');
-	}
-
-	/**
 	 * Get the padding of production file.
 	 *
 	 * @return  int  The padding of production file.

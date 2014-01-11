@@ -28,7 +28,6 @@ class ReddesignControllerBackground extends RControllerForm
 		// Init vars
 		$app = JFactory::getApplication();
 		$updatedSVG = false;
-		$updatedThumbnail = false;
 		$uploaded_file = null;
 		$backgroundModel = $this->getModel();
 
@@ -37,14 +36,8 @@ class ReddesignControllerBackground extends RControllerForm
 		$file = $this->input->files->get('jform');
 		$file = $file['bg_svg_file'];
 
-		// Get Thumbnail if has been added
-		$thumbFile = $this->input->files->get('thumbnail', null);
-		$thumbPreviewFile = null;
-
 		// Get component configuration
 		$config = ReddesignEntityConfig::getInstance();
-		$thumbnailWidth = $config->getMaxBackgroundThumbWidth();
-		$thumbnailHeight = $config->getMaxBackgroundThumbHeight();
 
 		// If file has has not been uploaded
 		if (empty($file['name']) || empty($file['type']))
@@ -66,51 +59,13 @@ class ReddesignControllerBackground extends RControllerForm
 			$updatedSVG = true;
 
 			// Upload the background file
-			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'backgrounds');
+			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'backgrounds', $config->getMaxSVGFileSize());
 
 			if (!$uploaded_file)
 			{
 				echo json_encode(array(0, '<div class="alert alert-error">' . JText::_('COM_REDDESIGN_BACKGROUND_ERROR_UPLOAD_FAILED') . '</div>'), true);
 				$app->close();
 			}
-
-			// If no thumbnail file has been attached generate one based on the Background SVG
-			if (!$thumbFile['name'])
-			{
-				// Create a image preview thumbnail based on the SVG file.
-				$thumbPreviewFile = str_replace('.svg', '.png', $uploaded_file['mangled_filename']);
-				$thumbPreviewFile = JPATH_ROOT . '/media/com_reddesign/backgrounds/thumbnails/' . $thumbPreviewFile;
-
-				$im = new Imagick;
-				$im->readImage(JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $uploaded_file['mangled_filename']);
-				$im->thumbnailImage($thumbnailWidth, $thumbnailHeight, true);
-				$im->writeImage('png:' . $thumbPreviewFile);
-				$im->clear();
-				$im->destroy();
-			}
-		}
-
-		// If thumbnail has been attached upload it and set component parameters max size
-		if ($thumbFile['name'])
-		{
-			$updatedThumbnail = true;
-
-			// Upload the attached thumbnail
-			$uploadedThumbFile = ReddesignHelpersFile::uploadFile(
-				$thumbFile,
-				'backgrounds/thumbnails',
-				$config->getMaxSVGFileSize(),
-				'jpg,JPG,jpeg,JPEG,png,PNG,gif,GIF'
-			);
-
-			$im = new Imagick;
-			$im->readImage($uploadedThumbFile['filepath']);
-			$im->thumbnailImage($thumbnailWidth, $thumbnailHeight, true);
-			$im->writeImage($uploadedThumbFile['filepath']);
-			$im->clear();
-			$im->destroy();
-
-			$thumbPreviewFile = $uploadedThumbFile['mangled_filename'];
 		}
 
 		// On edit
@@ -118,8 +73,7 @@ class ReddesignControllerBackground extends RControllerForm
 		{
 			$db = JFactory::getDbo();
 			$query = $db->getQuery(true);
-			$query
-				->select($db->qn(array('svg_file', 'thumbnail')))
+			$query->select($db->qn('svg_file'))
 				->from($db->qn('#__reddesign_backgrounds'))
 				->where($db->qn('id') . ' = ' . $db->q((int) $data['id']));
 
@@ -128,7 +82,7 @@ class ReddesignControllerBackground extends RControllerForm
 			$oldImages = $db->loadObject();
 
 			// If images has been updated remove old images
-			if ($updatedSVG || $updatedThumbnail)
+			if ($updatedSVG)
 			{
 				if ($updatedSVG)
 				{
@@ -138,31 +92,16 @@ class ReddesignControllerBackground extends RControllerForm
 						JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->svg_file);
 					}
 				}
-
-				if ($updatedThumbnail)
-				{
-					// Delete background old thumbnail
-					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/thumbnails/' . $oldImages->thumbnail))
-					{
-						JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/thumbnails/' . $oldImages->thumbnail);
-					}
-				}
 			}
 			else
 			{
 				$data['svg_file'] = $oldImages->svg_file;
-				$data['thumbnail'] = $oldImages->thumbnail;
 			}
 		}
 		else
 		{
 			// Update the database with the new path of the SVG file.
 			$data['svg_file'] = $uploaded_file['mangled_filename'];
-
-			if ($thumbPreviewFile)
-			{
-				$data['thumbnail'] = $thumbPreviewFile;
-			}
 		}
 
 		// If this new background will be the PDF Production background, switch it against the previous production background.

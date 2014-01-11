@@ -21,12 +21,10 @@ if (isset($displayData))
 	$this->ratio = $displayData->ratio;
 	$this->imageWidth = $displayData->imageWidth;
 	$this->imageHeight = $displayData->imageHeight;
+	$this->bgBackendWidth = $displayData->bgBackendWidth;
+	$this->bgBackendHeight = $displayData->bgBackendHeight;
 	$this->inputFieldOptions = $displayData->inputFieldOptions;
-	$this->params = $displayData->params;
 }
-
-$canvasWidth = $this->params->get('max_svg_backend_bg_width', 600);
-$canvasHeight = $this->params->get('max_svg_backend_bg_height', 400);
 ?>
 
 <script type="text/javascript">
@@ -76,8 +74,8 @@ $canvasHeight = $this->params->get('max_svg_backend_bg_height', 400);
 	{
 		// Set preview size from the configuration.
 		var svg = jQuery("#svgCanvas").svg("get");
-		//svg.root().setAttribute("width", "<?php echo $canvasWidth;?>");
-		svg.root().setAttribute("height", "<?php echo $canvasHeight;?>");
+		//svg.root().setAttribute("width", "<?php echo $this->bgBackendWidth;?>");
+		svg.root().setAttribute("height", "<?php echo $this->bgBackendHeight;?>");
 
 		sketchpad = svg;
 		var surface = svg.rect(0, 0, "100%", "100%", {id: "svgCanvas", fill: "transparent"});
