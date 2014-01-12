@@ -31,11 +31,6 @@ class ReddesignViewDesigntype extends ReddesignView
 	protected $item;
 
 	/**
-	 * @var  object
-	 */
-	protected $document;
-
-	/**
 	 * @var array
 	 */
 	protected $areas = array();
@@ -49,11 +44,6 @@ class ReddesignViewDesigntype extends ReddesignView
 	 * @var array
 	 */
 	protected $backgrounds = array();
-
-	/**
-	 * @var float
-	 */
-	protected $ratio;
 
 	/**
 	 * @var array
@@ -76,46 +66,6 @@ class ReddesignViewDesigntype extends ReddesignView
 	protected $fontsOptions = array();
 
 	/**
-	 * @var string
-	 */
-	protected $unit;
-
-	/**
-	 * @var float
-	 */
-	protected $pxToUnit;
-
-	/**
-	 * @var float
-	 */
-	protected $unitToPx;
-
-	/**
-	 * @var float
-	 */
-	protected $imageWidth;
-
-	/**
-	 * @var float
-	 */
-	protected $imageHeight;
-
-	/**
-	 * @var float
-	 */
-	protected $bgBackendWidth;
-
-	/**
-	 * @var float
-	 */
-	protected $bgBackendHeight;
-
-	/**
-	 * @var array
-	 */
-	protected $backgroundTypeOptions = array();
-
-	/**
 	 * Do not display the sidebar
 	 *
 	 * @var  boolean
@@ -133,12 +83,6 @@ class ReddesignViewDesigntype extends ReddesignView
 	{
 		$this->item 	= $this->get('Item');
 		$this->form 	= $this->get('Form');
-		$this->document = JFactory::getDocument();
-		$config	= ReddesignEntityConfig::getInstance();
-
-		// Backend preview size.
-		$this->bgBackendWidth = $config->getMaxSVGPreviewAdminWidth();
-		$this->bgBackendHeight = $config->getMaxSVGPreviewAdminHeight();
 
 		// If it's not a new design
 		if (!empty($this->item->id))
@@ -159,18 +103,6 @@ class ReddesignViewDesigntype extends ReddesignView
 					{
 						$this->productionBackground = $background;
 
-						$svgFileLocation = JPATH_ROOT . '/media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file;
-
-						// Read SVG size.
-						$im = new Imagick;
-						$im->readImage($svgFileLocation);
-						$dimensions = $im->getImageGeometry();
-						$this->imageWidth = $dimensions['width'];
-						$this->imageHeight = $dimensions['height'];
-
-						// Scaling ratio
-						$this->ratio = $this->bgBackendWidth / $this->imageWidth;
-
 						// Get all areas existing in the database for this specific background.
 						$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
 						$areasModel->setState('reddesign_background_id', $background->id);
@@ -178,6 +110,12 @@ class ReddesignViewDesigntype extends ReddesignView
 					}
 				}
 			}
+
+			// Image measures.
+			$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file);
+			$attr = $xml->attributes();
+			//printf("%s x %s", $attr->width, $attr->height);
+			//print_r($attr);
 
 			$this->areas = $areas;
 
@@ -201,42 +139,6 @@ class ReddesignViewDesigntype extends ReddesignView
 			foreach ($this->fonts as $font)
 			{
 				$this->fontsOptions[] = JHtml::_('select.option', $font->id, $font->name);
-			}
-
-			$this->backgroundTypeOptions = array(
-				JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_PRODUCTION_BG')),
-				JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_PREVIEW_BG'))
-			);
-
-			// Unit for measures.
-			$this->unit = $config->getUnit();
-
-			if ($this->unit == 'cm')
-			{
-				/**
-				 * Default DPI in Imagick is used and it is 72 DPI.
-				 * Thag gives us 1px = 0.035278cm.
-				 */
-				$this->pxToUnit = '0.035277778';
-
-				// From above 1cm = 28,346456514px.
-				$this->unitToPx = '28.346456514';
-			}
-			elseif ($this->unit == 'mm')
-			{
-				/**
-				 * Default DPI in Imagick is used and it is 72 DPI.
-				 * Thag gives us 1px = 0.35277778mm.
-				 */
-				$this->pxToUnit = '0.35277778';
-
-				// From above 1mm = 2,834645651px.
-				$this->unitToPx = '2.834645651';
-			}
-			else
-			{
-				$this->pxToUnit = '1';
-				$this->unitToPx = '1';
 			}
 		}
 

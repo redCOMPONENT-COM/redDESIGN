@@ -15,16 +15,14 @@ if (isset($displayData))
 	$this->item = $displayData->item;
 	$this->productionBackground = $displayData->productionBackground;
 	$this->fontsOptions = $displayData->fontsOptions;
-	$this->unit = $displayData->unit;
-	$this->pxToUnit = $displayData->pxToUnit;
-	$this->unitToPx = $displayData->unitToPx;
-	$this->ratio = $displayData->ratio;
-	$this->imageWidth = $displayData->imageWidth;
-	$this->imageHeight = $displayData->imageHeight;
-	$this->bgBackendWidth = $displayData->bgBackendWidth;
-	$this->bgBackendHeight = $displayData->bgBackendHeight;
 	$this->inputFieldOptions = $displayData->inputFieldOptions;
 }
+
+// Preview and unit configuration
+$config = ReddesignEntityConfig::getInstance();
+$bgBackendPreviewWidth = $config->getMaxSVGPreviewAdminWidth();
+$bgBackendPreviewHeight = $config->getMaxSVGPreviewAdminHeight();
+
 ?>
 
 <script type="text/javascript">
@@ -32,10 +30,10 @@ if (isset($displayData))
 	/**
 	 * Initiate PX to Unit conversation variables
 	 */
-	var pxToUnit    = parseFloat('<?php echo $this->pxToUnit;?>');
+	/*var pxToUnit    = parseFloat('<?php echo $this->pxToUnit;?>');
 	var unitToPx    = parseFloat('<?php echo $this->unitToPx;?>');
 	var imageWidth  = parseFloat('<?php echo $this->imageWidth; ?>') * unitToPx;
-	var imageHeight = parseFloat('<?php echo $this->imageHeight; ?>') * unitToPx;
+	var imageHeight = parseFloat('<?php echo $this->imageHeight; ?>') * unitToPx;*/
 
 	/**
 	 * Initiate area selector variables.
@@ -74,8 +72,8 @@ if (isset($displayData))
 	{
 		// Set preview size from the configuration.
 		var svg = jQuery("#svgCanvas").svg("get");
-		//svg.root().setAttribute("width", "<?php echo $this->bgBackendWidth;?>");
-		svg.root().setAttribute("height", "<?php echo $this->bgBackendHeight;?>");
+		//svg.root().setAttribute("width", "<?php echo $bgBackendPreviewWidth;?>");
+		svg.root().setAttribute("height", "<?php echo $bgBackendPreviewHeight;?>");
 
 		sketchpad = svg;
 		var surface = svg.rect(0, 0, "100%", "100%", {id: "svgCanvas", fill: "transparent"});
