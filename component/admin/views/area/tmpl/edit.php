@@ -31,6 +31,7 @@ if (isset($displayData))
 	$this->areas = $displayData->items;
 	$this->item = $displayData->item;
 	$this->productionBackground = $displayData->productionBackground;
+	$this->productionBgAttributes = $displayData->productionBgAttributes;
 	$this->fontsOptions = $displayData->fontsOptions;
 	$this->inputFieldOptions = $displayData->inputFieldOptions;
 }
@@ -136,7 +137,8 @@ $unit = $config->getUnit();
 						<div id="svgCanvas" style="width: <?php echo $bgBackendPreviewWidth ?>; height: <?php echo $bgBackendPreviewHeight; ?>;">
 						</div>
 						<h3>
-							<?php echo JText::sprintf('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMAGE_MEASURES', 0, $unit, 0, $unit);
+							<?php
+								echo JText::sprintf('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMAGE_MEASURES', $this->productionBgAttributes->width, $unit, $this->productionBgAttributes->height, $unit);
 							?>
 						</h3>
 					</div>

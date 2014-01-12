@@ -134,6 +134,7 @@ switch ($tab)
 					$data->items = $this->areas;
 					$data->item = $this->item;
 					$data->productionBackground = $this->productionBackground;
+					$data->productionBgAttributes = $this->productionBgAttributes;
 					$data->fontsOptions = $this->fontsOptions;
 					$data->inputFieldOptions = $this->inputFieldOptions;
 					$data->item->designtype_id = $this->item->id;

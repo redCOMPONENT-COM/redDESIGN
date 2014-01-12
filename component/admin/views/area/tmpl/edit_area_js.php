@@ -14,6 +14,7 @@ if (isset($displayData))
 	$this->areas = $displayData->items;
 	$this->item = $displayData->item;
 	$this->productionBackground = $displayData->productionBackground;
+	$this->productionBgAttributes = $displayData->productionBgAttributes;
 	$this->fontsOptions = $displayData->fontsOptions;
 	$this->inputFieldOptions = $displayData->inputFieldOptions;
 }
@@ -36,7 +37,7 @@ $bgBackendPreviewHeight = $config->getMaxSVGPreviewAdminHeight();
 	var imageHeight = parseFloat('<?php echo $this->imageHeight; ?>') * unitToPx;*/
 
 	/**
-	 * Initiate area selector variables.
+	 * Initiate SVG area selector variables. Basically it is drawing rectangle.
 	 */
 	var drawNodes = [];
 	var sketchpad = null;

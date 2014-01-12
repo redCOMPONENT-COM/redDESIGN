@@ -41,6 +41,13 @@ class ReddesignViewDesigntype extends ReddesignView
 	protected $productionBackground = null;
 
 	/**
+	 * Production background attributes
+	 *
+	 * @var  object
+	 */
+	public $productionBgAttributes = null;
+
+	/**
 	 * @var array
 	 */
 	protected $backgrounds = array();
@@ -111,13 +118,11 @@ class ReddesignViewDesigntype extends ReddesignView
 				}
 			}
 
-			// Image measures.
-			$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file);
-			$attr = $xml->attributes();
-			//printf("%s x %s", $attr->width, $attr->height);
-			//print_r($attr);
-
 			$this->areas = $areas;
+
+			// Production background measures.
+			$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file);
+			$this->productionBgAttributes = $xml->attributes();
 
 			$this->inputFieldOptions = array(
 				JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTBOX')),
