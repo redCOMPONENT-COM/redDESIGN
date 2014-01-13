@@ -21,102 +21,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 ?>
 
-<script type="text/javascript">
-	jQuery(document).ready(
-		function () {
-			if(jQuery("#jform_isPreviewBg").is(":checked"))
-			{
-				jQuery("#isDefaultPreviewContainer").show();
-				jQuery("#useCheckerboardContainer").show();
-			}
-			else
-			{
-				jQuery("#isDefaultPreviewContainer").hide();
-				jQuery("#useCheckerboardContainer").hide();
-			}
-
-			jQuery("#jform_isPreviewBg").change(function() {
-				if (jQuery("#jform_isPreviewBg").is(":checked"))
-				{
-					jQuery("#isDefaultPreviewContainer").show();
-					jQuery("#useCheckerboardContainer").show();
-				}
-				else
-				{
-					jQuery("#isDefaultPreviewContainer").hide();
-					jQuery("#jform_isDefaultPreview").attr('checked', false);
-					jQuery("#useCheckerboardContainer").hide();
-					jQuery("#jform_useCheckerboard").attr('checked', false);
-				}
-			});
-
-			jQuery("#bgFormSubmit").click(function ()
-			{
-				var form = jQuery('#bgForm');
-
-				form.attr("action", "index.php?option=com_reddesign&task=background.ajaxBackgroundSave");
-				form.attr("method", "post");
-				form.attr("enctype", "multipart/form-data");
-				form.attr("encoding", "multipart/form-data");
-				form.attr("target", "bgPostIframe");
-				form.submit();
-
-				jQuery("#bgPostIframe").load(function () {
-					iframeContents = jQuery("#bgPostIframe")[0].contentWindow.document.body.innerHTML;
-					var jsonData = jQuery.parseJSON(iframeContents);
-
-					if (jsonData[0] == 0)
-					{
-						jQuery("#bgMessage").html(jsonData[1]);
-					}
-					else
-					{
-						window.location.href="<?php echo $return_url; ?>";
-					}
-				});
-
-				return false;
-
-			});
-
-			jQuery(document).on('click', '#cancelBgBtn',
-				function () {
-					hideShowBackgroundForm();
-				}
-			);
-
-			jQuery(document).on('click', '#addBgBtn', function () {
-					hideShowBackgroundForm();
-				}
-			);
-		});
-
-	/**
-	 * Hides background form.
-	 *
-	 * @return void
-	 */
-	function hideShowBackgroundForm() {
-		var buttonValue = jQuery('#addBgBtn').val();
-		var hidden = "<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_SHOW_FORM'); ?>";
-		var shown = "<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>";
-
-		if (buttonValue == hidden)
-		{
-			document.getElementById("bgForm").reset();
-			jQuery('#addBgBtn').val("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>");
-			jQuery('#bgFormContainer').fadeIn("slow");
-			jQuery("#saveBgBtn").val(shown);
-		}
-		else
-		{
-			jQuery("#bgFormContainer").fadeOut("fast");
-
-			jQuery('#addBgBtn').val(hidden);
-		}
-	}
-</script>
-
 <div>&nbsp;</div>
 
 <div id="bgFormContainer" class="well">
@@ -210,3 +114,98 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	</form>
 </div>
 <iframe name="bgPostIframe" id="bgPostIframe" style="display: none;" ></iframe>
+
+<script type="text/javascript">
+	jQuery(document).ready(
+		function () {
+			if(jQuery("#jform_isPreviewBg").is(":checked"))
+			{
+				jQuery("#isDefaultPreviewContainer").show();
+				jQuery("#useCheckerboardContainer").show();
+			}
+			else
+			{
+				jQuery("#isDefaultPreviewContainer").hide();
+				jQuery("#useCheckerboardContainer").hide();
+			}
+
+			jQuery("#jform_isPreviewBg").change(function() {
+				if (jQuery("#jform_isPreviewBg").is(":checked"))
+				{
+					jQuery("#isDefaultPreviewContainer").show();
+					jQuery("#useCheckerboardContainer").show();
+				}
+				else
+				{
+					jQuery("#isDefaultPreviewContainer").hide();
+					jQuery("#jform_isDefaultPreview").attr('checked', false);
+					jQuery("#useCheckerboardContainer").hide();
+					jQuery("#jform_useCheckerboard").attr('checked', false);
+				}
+			});
+
+			jQuery("#bgFormSubmit").click(function ()
+			{
+				var form = jQuery('#bgForm');
+
+				form.attr("action", "index.php?option=com_reddesign&task=background.ajaxBackgroundSave");
+				form.attr("method", "post");
+				form.attr("enctype", "multipart/form-data");
+				form.attr("encoding", "multipart/form-data");
+				form.attr("target", "bgPostIframe");
+				form.submit();
+
+				jQuery("#bgPostIframe").load(function () {
+					iframeContents = jQuery("#bgPostIframe")[0].contentWindow.document.body.innerHTML;
+					var jsonData = jQuery.parseJSON(iframeContents);
+
+					if (jsonData[0] == 0)
+					{
+						jQuery("#bgMessage").html(jsonData[1]);
+					}
+					else
+					{
+						window.location.href="<?php echo $return_url; ?>";
+					}
+				});
+
+				return false;
+			});
+
+			jQuery(document).on('click', '#cancelBgBtn',
+				function () {
+					hideShowBackgroundForm();
+				}
+			);
+
+			jQuery(document).on('click', '#addBgBtn', function () {
+					hideShowBackgroundForm();
+				}
+			);
+		}
+	);
+
+	/**
+	 * Hides background form.
+	 *
+	 * @return void
+	 */
+	function hideShowBackgroundForm() {
+		var buttonValue = jQuery('#addBgBtn').val();
+		var hidden = "<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_SHOW_FORM'); ?>";
+		var shown = "<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>";
+
+		if (buttonValue == hidden)
+		{
+			jQuery('#addBgBtn').val("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>");
+			jQuery('#bgFormContainer').fadeIn("slow");
+			jQuery("#saveBgBtn").val(shown);
+		}
+		else
+		{
+			document.getElementById("bgForm").reset();
+			jQuery("#bgFormContainer").fadeOut("fast");
+			jQuery('#addBgBtn').val(hidden);
+		}
+	}
+</script>

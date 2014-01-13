@@ -15,28 +15,30 @@ JHtml::_('behavior.modal', 'a.jmodal');
 $this->items = $displayData->items;
 $this->designtype_id = $displayData->designtype_id;
 
-$returnUrl = JRoute::_(JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds');
+// Preview and unit configuration
+$config = ReddesignEntityConfig::getInstance();
+$bgBackendPreviewWidth = $config->getMaxSVGPreviewAdminWidth();
 
+$returnUrl = JRoute::_(JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds');
 $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds';
 ?>
 
-	<form id="backgrounds_form" name="backgrounds" method="post" action="index.php?option=com_reddesign&view=backgrounds">
+<form id="backgrounds_form" name="backgrounds" method="post" action="index.php?option=com_reddesign&view=backgrounds">
 
-		<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
-		<input type="hidden" name="task" id="backgrounds_task" value="">
-		<input type="hidden" name="cid[]" id="backgrounds_reddesign_background_id" value="">
-		<input type="hidden" name="reddesign_designtype_id" id="backgrounds_reddesign_designtype_id" value="<?php echo $this->designtype_id; ?>">
-		<input type="hidden" name="return" id="backgrounds_return" value="<?php echo base64_encode($returnUrl); ?>" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
+	<input type="hidden" name="task" id="backgrounds_task" value="">
+	<input type="hidden" name="cid[]" id="backgrounds_reddesign_background_id" value="">
+	<input type="hidden" name="reddesign_designtype_id" id="backgrounds_reddesign_designtype_id" value="<?php echo $this->designtype_id; ?>">
+	<input type="hidden" name="return" id="backgrounds_return" value="<?php echo base64_encode($returnUrl); ?>" />
 
-		<?php if (empty($this->items)) : ?>
-			<div class="alert alert-info">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				<div class="pagination-centered">
-					<h3><?php echo JText::_('COM_REDDESIGN_COMMON_NOTHING_TO_DISPLAY') ?></h3>
-				</div>
+	<?php if (empty($this->items)) : ?>
+		<div class="alert alert-info">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<div class="pagination-centered">
+				<h3><?php echo JText::_('COM_REDDESIGN_COMMON_NOTHING_TO_DISPLAY') ?></h3>
 			</div>
-		<?php else : ?>
-
+		</div>
+	<?php else : ?>
 		<table id="itemsList" class="table table-striped">
 			<thead>
 				<tr>
@@ -84,10 +86,14 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 								<strong><?php echo $background->name; ?></strong>
 							</a>
 							&nbsp;
-							<a class="jmodal btn btn-mini"
-							   href="<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>">
+							<a class="jmodal btn btn-mini" href="#modalPreview<?php echo $background->id; ?>">
 								<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
 							</a>
+							<div style="display: none">
+								<div id="modalPreview<?php echo $background->id; ?>">
+									<svg id="bgPreviewSvg<?php echo $background->id; ?>"></svg>
+								</div>
+							</div>
 						</td>
 						<td class="switchBg td-align-center">
 							<?php if (!$background->isDefaultPreview) : ?>
@@ -136,15 +142,33 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-		<?php endif; ?>
-
-	</form>
+	<?php endif; ?>
+</form>
 
 <script type="text/javascript">
 	jQuery(document).ready(
 		function ($) {
-			// Selects background for edit and populates field data accordingly.
+
+			// Hide form if there are items in the list.
+			<?php if (!empty($this->items)) : ?>
+				hideShowBackgroundForm();
+			<?php endif; ?>
+
 			<?php foreach ($this->items as $background) : ?>
+//SNAP CODE BELOW
+				var snap<?php echo $background->id ?> = Snap("#bgPreviewSvg<?php echo $background->id; ?>");
+				Snap.load(
+					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>", function (f) {
+						snap<?php echo $background->id ?>.append(f);
+
+						f.attr({id: "rootSvgId"});
+						f.paper.select("svg").id = "bgLoadedSvg<?php echo $background->id; ?>";
+
+						/*document.getElementById("bgLoadedSvg<?php echo $background->id; ?>").setAttribute("width", "600px");
+						document.getElementById("bgLoadedSvg<?php echo $background->id; ?>").setAttribute("height", "450px");*/
+				});
+
+			// Selects background for edit and populates field data accordingly.
 				jQuery(document).on("click", "#editBackground<?php echo $background->id; ?>", function() {
 					jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_TITLE_BACKGROUNDS_EDIT'); ?>");
 					jQuery("#reddesign_background_id").val("<?php echo $background->id; ?>");
@@ -213,18 +237,16 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 						jQuery("#useCheckerboardContainer").hide();
 					}
 
-					jQuery("#saveBgBtn").val("<?php echo JText::_('COM_REDDESIGN_COMMON_UPDATE'); ?>");
-
-					jQuery('#addBgBtn').parent().hide();
-					jQuery('#backgroundForm').fadeIn("slow");
-
-					jQuery('body').animate({
-						'scrollTop':   jQuery('#backgroundForm').offset().top
-					}, 1000);
+					jQuery('#bgFormContainer').fadeIn("slow");
+					jQuery("#saveBgBtn").val("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>");
 				});
 			<?php endforeach ?>
 
+			jQuery("#saveBgBtn").val("<?php echo JText::_('COM_REDDESIGN_COMMON_UPDATE'); ?>");
 
+			jQuery('#backgroundForm').fadeIn("slow");
+
+			jQuery('body').animate({'scrollTop': jQuery('#backgroundForm').offset().top}, 1000);
 		}
 	);
 

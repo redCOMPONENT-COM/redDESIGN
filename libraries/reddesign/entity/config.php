@@ -163,6 +163,16 @@ final class ReddesignEntityConfig
 	}
 
 	/**
+	 * Get DPI resolution of source SVG files.
+	 *
+	 * @return  int  SVG DPI.
+	 */
+	public function getSourceDpi()
+	{
+		return $this->getInt('source_dpi');
+	}
+
+	/**
 	 * Get the Font Preview Text
 	 *
 	 * @return  string  The text for font preview
@@ -193,16 +203,6 @@ final class ReddesignEntityConfig
 	}
 
 	/**
-	 * Get the max height of SVG preview file in backend.
-	 *
-	 * @return  int  The max height of SVG preview file in backend.
-	 */
-	public function getMaxSVGPreviewAdminHeight()
-	{
-		return $this->getInt('max_svg_backend_bg_height');
-	}
-
-	/**
 	 * Get the max width of SVG preview file in frontend.
 	 *
 	 * @return  int  The max width of SVG preview file in frontend.
@@ -210,16 +210,6 @@ final class ReddesignEntityConfig
 	public function getMaxSVGPreviewSiteWidth()
 	{
 		return $this->getInt('max_svg_frontend_bg_width');
-	}
-
-	/**
-	 * Get the max height of SVG preview file in frontend.
-	 *
-	 * @return  int  The max height of SVG preview file in frontend.
-	 */
-	public function getMaxSVGPreviewSiteHeight()
-	{
-		return $this->getInt('max_svg_frontend_bg_height');
 	}
 
 	/**

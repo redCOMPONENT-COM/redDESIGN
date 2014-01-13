@@ -105,21 +105,17 @@ class ReddesignControllerBackground extends RControllerForm
 		}
 
 		// If this new background will be the PDF Production background, switch it against the previous production background.
-		if ((int) $data['isProductionBg'])
+		if (!empty($data['isProductionBg']))
 		{
-			$designId = (int) $data['designtype_id'];
-
 			// Set all other backgrounds as non PDF backgrounds.
-			$backgroundModel->unsetAllIsProductionBg($designId);
+			$backgroundModel->unsetAllIsProductionBg($data['designtype_id']);
 		}
 
 		// If this new background will be the preview background, switch it against the previous preview background.
-		if ((int) $data['isDefaultPreview'])
+		if (!empty($data['isDefaultPreview']))
 		{
-			$designId = (int) $data['designtype_id'];
-
 			// Set all other backgrounds as non PDF backgrounds.
-			$backgroundModel->unsetAllIsDefaultPreview($designId);
+			$backgroundModel->unsetAllIsDefaultPreview($data['designtype_id']);
 		}
 
 		if (empty($data['isProductionBg']))
