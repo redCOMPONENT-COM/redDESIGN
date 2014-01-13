@@ -90,7 +90,9 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 								<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
 							</a>
 							<div style="display: none">
-								<div id="modalPreview<?php echo $background->id; ?>"></div>
+								<div id="modalPreview<?php echo $background->id; ?>">
+									<svg id="bgPreviewSvg<?php echo $background->id; ?>"></svg>
+								</div>
 							</div>
 						</td>
 						<td class="switchBg td-align-center">
@@ -153,24 +155,20 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 			<?php endif; ?>
 
 			<?php foreach ($this->items as $background) : ?>
+//SNAP CODE BELOW
+				var snap<?php echo $background->id ?> = Snap("#bgPreviewSvg<?php echo $background->id; ?>");
+				Snap.load(
+					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>", function (f) {
+						snap<?php echo $background->id ?>.append(f);
 
-				// Loads SVG file with right size for the modal preview.
-				jQuery("#modalPreview<?php echo $background->id; ?>").svg();
-				var svgBg<?php echo $background->id ?> = jQuery("#modalPreview<?php echo $background->id; ?>").svg("get");
-				svgBg<?php echo $background->id; ?>.load(
-					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>",
-					{
-						addTo: false,
-						changeSize: true,
-						onLoad: function (svg) {
-							// Measures of default lightbox.
-							svg.root().setAttribute("width", "600px");
-							svg.root().setAttribute("height", "450px");
-						}
-					}
-				);
+						f.attr({id: "rootSvgId"});
+						f.paper.select("svg").id = "bgLoadedSvg<?php echo $background->id; ?>";
 
-				// Selects background for edit and populates field data accordingly.
+						/*document.getElementById("bgLoadedSvg<?php echo $background->id; ?>").setAttribute("width", "600px");
+						document.getElementById("bgLoadedSvg<?php echo $background->id; ?>").setAttribute("height", "450px");*/
+				});
+
+			// Selects background for edit and populates field data accordingly.
 				jQuery(document).on("click", "#editBackground<?php echo $background->id; ?>", function() {
 					jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_TITLE_BACKGROUNDS_EDIT'); ?>");
 					jQuery("#reddesign_background_id").val("<?php echo $background->id; ?>");

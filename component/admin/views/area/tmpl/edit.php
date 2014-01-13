@@ -18,13 +18,14 @@ RHelperAsset::load('farbtastic.css');
 RHelperAsset::load('color-converter.js');
 
 // SVG jQuery Plugin
-RHelperAsset::load('jquery.svg.css');
+/*RHelperAsset::load('jquery.svg.css');
 RHelperAsset::load('jquery.svg.min.js');
 RHelperAsset::load('jquery.svganim.min.js');
 RHelperAsset::load('jquery.svgdom.min.js');
 RHelperAsset::load('jquery.svgfilter.min.js');
 RHelperAsset::load('jquery.svggraph.min.js');
-RHelperAsset::load('jquery.svgplot.min.js');
+RHelperAsset::load('jquery.svgplot.min.js');*/
+RHelperAsset::load('snap.svg.js');
 
 if (isset($displayData))
 {
@@ -133,7 +134,7 @@ if (isset($displayData))
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMG_HELP'); ?>
 					</span>
 					<div id="backgroundImageContainer">
-						<div id="svgCanvas" style="width: <?php echo $bgBackendPreviewWidth ?>; height: <?php echo $bgBackendPreviewHeight; ?>;">
+						<div id="svgCanvas">
 						</div>
 						<h3>
 							<?php
