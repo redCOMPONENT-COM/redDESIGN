@@ -18,7 +18,6 @@ $this->designtype_id = $displayData->designtype_id;
 // Preview and unit configuration
 $config = ReddesignEntityConfig::getInstance();
 $bgBackendPreviewWidth = $config->getMaxSVGPreviewAdminWidth();
-$bgBackendPreviewHeight = $config->getMaxSVGPreviewAdminHeight();
 
 $returnUrl = JRoute::_(JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds');
 $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds';
@@ -164,8 +163,9 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 						addTo: false,
 						changeSize: true,
 						onLoad: function (svg) {
-							svg.root().setAttribute("width", "<?php echo $bgBackendPreviewWidth;?>");
-							svg.root().setAttribute("height", "<?php echo $bgBackendPreviewHeight;?>");
+							// Measures of default lightbox.
+							svg.root().setAttribute("width", "600px");
+							svg.root().setAttribute("height", "450px");
 						}
 					}
 				);

@@ -41,6 +41,41 @@ class ReddesignViewDesigntype extends ReddesignView
 	protected $productionBackground = null;
 
 	/**
+	 * @var float
+	 */
+	public $bgBackendPreviewWidth = 600;
+
+	/**
+	 * @var float
+	 */
+	public $bgBackendPreviewHeight = 400;
+
+	/**
+	 * @var string
+	 */
+	public $unit = 'px';
+
+	/**
+	 * @var int
+	 */
+	public $sourceDpi = 72;
+
+	/**
+	 * @var float
+	 */
+	public $ratio;
+
+	/**
+	 * @var float
+	 */
+	public $pxToUnit;
+
+	/**
+	 * @var float
+	 */
+	public $unitToPx;
+
+	/**
 	 * Production background attributes
 	 *
 	 * @var  object
@@ -91,6 +126,12 @@ class ReddesignViewDesigntype extends ReddesignView
 		$this->item 	= $this->get('Item');
 		$this->form 	= $this->get('Form');
 
+		// Preview and unit configuration
+		$config = ReddesignEntityConfig::getInstance();
+		$this->bgBackendPreviewWidth = $config->getMaxSVGPreviewAdminWidth();
+		$this->unit = $config->getUnit();
+		$this->sourceDpi = $config->getSourceDpi();
+
 		// If it's not a new design
 		if (!empty($this->item->id))
 		{
@@ -123,6 +164,27 @@ class ReddesignViewDesigntype extends ReddesignView
 			// Production background measures.
 			$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file);
 			$this->productionBgAttributes = $xml->attributes();
+
+			$this->productionBgAttributes->width  = str_replace('px', '', $this->productionBgAttributes->width);
+			$this->productionBgAttributes->height = str_replace('px', '', $this->productionBgAttributes->height);
+
+			// Calculate width and height in the selected unit at the configuration. 1 inch = 25.4 mm
+			switch ($this->unit)
+			{
+				case 'mm':
+					$this->pxToUnit = 25.4 / $this->sourceDpi;
+					$this->unitToPx = 0.03937007874 * $this->pxToUnit * $this->sourceDpi;
+					break;
+				case 'cm':
+					$this->pxToUnit = 2.54 / $this->sourceDpi;
+					$this->unitToPx = 0.3937007874 * $this->pxToUnit * $this->sourceDpi;
+					break;
+				case 'px':
+				default:
+					$this->pxToUnit = '1';
+					$this->unitToPx = '1';
+					break;
+			}
 
 			$this->inputFieldOptions = array(
 				JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTBOX')),

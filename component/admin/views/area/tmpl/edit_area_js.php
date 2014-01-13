@@ -14,15 +14,15 @@ if (isset($displayData))
 	$this->areas = $displayData->items;
 	$this->item = $displayData->item;
 	$this->productionBackground = $displayData->productionBackground;
+	$this->bgBackendPreviewWidth = $displayData->bgBackendPreviewWidth;
+	$this->unit = $displayData->unit;
+	$this->pxToUnit = $displayData->pxToUnit;
+	$this->unitToPx = $displayData->unitToPx;
+	$this->sourceDpi = $displayData->sourceDpi;
 	$this->productionBgAttributes = $displayData->productionBgAttributes;
 	$this->fontsOptions = $displayData->fontsOptions;
 	$this->inputFieldOptions = $displayData->inputFieldOptions;
 }
-
-// Preview and unit configuration
-$config = ReddesignEntityConfig::getInstance();
-$bgBackendPreviewWidth = $config->getMaxSVGPreviewAdminWidth();
-$bgBackendPreviewHeight = $config->getMaxSVGPreviewAdminHeight();
 
 ?>
 
@@ -31,10 +31,14 @@ $bgBackendPreviewHeight = $config->getMaxSVGPreviewAdminHeight();
 	/**
 	 * Initiate PX to Unit conversation variables
 	 */
-	/*var pxToUnit    = parseFloat('<?php echo $this->pxToUnit;?>');
+	var pxToUnit    = parseFloat('<?php echo $this->pxToUnit;?>');
 	var unitToPx    = parseFloat('<?php echo $this->unitToPx;?>');
-	var imageWidth  = parseFloat('<?php echo $this->imageWidth; ?>') * unitToPx;
-	var imageHeight = parseFloat('<?php echo $this->imageHeight; ?>') * unitToPx;*/
+	var imageWidth  = parseFloat('<?php echo $this->productionBgAttributes->width; ?>');
+	var imageHeight = parseFloat('<?php echo $this->productionBgAttributes->height; ?>');
+	var previewWidth  = parseFloat('<?php echo $this->bgBackendPreviewWidth; ?>');
+
+	var ratio = previewWidth / imageWidth;
+	var previewHeight = imageHeight * ratio;
 
 	/**
 	 * Initiate SVG area selector variables. Basically it is drawing rectangle.
@@ -73,8 +77,8 @@ $bgBackendPreviewHeight = $config->getMaxSVGPreviewAdminHeight();
 	{
 		// Set preview size from the configuration.
 		var svg = jQuery("#svgCanvas").svg("get");
-		//svg.root().setAttribute("width", "<?php echo $bgBackendPreviewWidth;?>");
-		svg.root().setAttribute("height", "<?php echo $bgBackendPreviewHeight;?>");
+		svg.root().setAttribute("width", previewWidth + "px");
+		svg.root().setAttribute("height", previewHeight + "px");
 
 		sketchpad = svg;
 		var surface = svg.rect(0, 0, "100%", "100%", {id: "svgCanvas", fill: "transparent"});

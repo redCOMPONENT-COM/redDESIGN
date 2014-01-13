@@ -31,16 +31,15 @@ if (isset($displayData))
 	$this->areas = $displayData->items;
 	$this->item = $displayData->item;
 	$this->productionBackground = $displayData->productionBackground;
+	$this->bgBackendPreviewWidth = $displayData->bgBackendPreviewWidth;
+	$this->unit = $displayData->unit;
+	$this->pxToUnit = $displayData->pxToUnit;
+	$this->unitToPx = $displayData->unitToPx;
+	$this->sourceDpi = $displayData->sourceDpi;
 	$this->productionBgAttributes = $displayData->productionBgAttributes;
 	$this->fontsOptions = $displayData->fontsOptions;
 	$this->inputFieldOptions = $displayData->inputFieldOptions;
 }
-
-// Preview and unit configuration
-$config = ReddesignEntityConfig::getInstance();
-$bgBackendPreviewWidth = $config->getMaxSVGPreviewAdminWidth();
-$bgBackendPreviewHeight = $config->getMaxSVGPreviewAdminHeight();
-$unit = $config->getUnit();
 
 ?>
 
@@ -75,7 +74,7 @@ $unit = $config->getUnit();
 						<div class="controls">
 							<input  type="text" id="areaWidth" name="areaWidth"
 							        value=""
-							        onkeyup="selectAreaOnWidthKeyUp();">&nbsp;<?php echo $unit; ?>
+							        onkeyup="selectAreaOnWidthKeyUp();">&nbsp;<?php echo $this->unit; ?>
 						</div>
 					</div>
 					<div class="control-group">
@@ -85,7 +84,7 @@ $unit = $config->getUnit();
 						<div class="controls">
 							<input  type="text" id="areaHeight" name="areaHeight"
 							        value=""
-							        onkeyup="selectAreaOnHeightKeyUp();">&nbsp;<?php echo $unit; ?>
+							        onkeyup="selectAreaOnHeightKeyUp();">&nbsp;<?php echo $this->unit; ?>
 						</div>
 					</div>
 					<div class="control-group">
@@ -95,7 +94,7 @@ $unit = $config->getUnit();
 						<div class="controls">
 							<input  type="text" id="areaX1" name="areaX1"
 							        value=""
-							        onkeyup="selectAreaOnX1KeyUp();">&nbsp;<?php echo $unit; ?>
+							        onkeyup="selectAreaOnX1KeyUp();">&nbsp;<?php echo $this->unit; ?>
 						</div>
 					</div>
 					<div class="control-group">
@@ -105,7 +104,7 @@ $unit = $config->getUnit();
 						<div class="controls">
 							<input  type="text" id="areaY1" name="areaY1"
 							        value=""
-							        onkeyup="selectAreaOnY1KeyUp();">&nbsp;<?php echo $unit; ?>
+							        onkeyup="selectAreaOnY1KeyUp();">&nbsp;<?php echo $this->unit; ?>
 						</div>
 					</div>
 					<div class="control-group">
@@ -115,7 +114,7 @@ $unit = $config->getUnit();
 						<div class="controls">
 							<input  type="text" id="areaX2" name="areaX2"
 							        value=""
-							        onkeyup="selectAreaOnX2KeyUp();">&nbsp;<?php echo $unit; ?>
+							        onkeyup="selectAreaOnX2KeyUp();">&nbsp;<?php echo $this->unit; ?>
 						</div>
 					</div>
 					<div class="control-group">
@@ -125,7 +124,7 @@ $unit = $config->getUnit();
 						<div class="controls">
 							<input  type="text" id="areaY2" name="areaY2"
 							        value=""
-							        onkeyup="selectAreaOnY2KeyUp();">&nbsp;<?php echo $unit; ?>
+							        onkeyup="selectAreaOnY2KeyUp();">&nbsp;<?php echo $this->unit; ?>
 						</div>
 					</div>
 				</div>
@@ -138,7 +137,13 @@ $unit = $config->getUnit();
 						</div>
 						<h3>
 							<?php
-								echo JText::sprintf('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMAGE_MEASURES', $this->productionBgAttributes->width, $unit, $this->productionBgAttributes->height, $unit);
+								echo JText::sprintf(
+														'COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMAGE_MEASURES',
+														round($this->productionBgAttributes->width * $this->pxToUnit, 2),
+														$this->unit,
+														round($this->productionBgAttributes->height * $this->pxToUnit, 2),
+														$this->unit
+								);
 							?>
 						</h3>
 					</div>

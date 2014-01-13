@@ -134,6 +134,11 @@ switch ($tab)
 					$data->items = $this->areas;
 					$data->item = $this->item;
 					$data->productionBackground = $this->productionBackground;
+					$data->bgBackendPreviewWidth = $this->bgBackendPreviewWidth;
+					$data->unit = $this->unit;
+					$data->pxToUnit = $this->pxToUnit;
+					$data->unitToPx = $this->unitToPx;
+					$data->sourceDpi = $this->sourceDpi;
 					$data->productionBgAttributes = $this->productionBgAttributes;
 					$data->fontsOptions = $this->fontsOptions;
 					$data->inputFieldOptions = $this->inputFieldOptions;
