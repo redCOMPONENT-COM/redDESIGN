@@ -155,18 +155,17 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 			<?php endif; ?>
 
 			<?php foreach ($this->items as $background) : ?>
-//SNAP CODE BELOW
 				var snap<?php echo $background->id ?> = Snap("#bgPreviewSvg<?php echo $background->id; ?>");
 				Snap.load(
-					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>", function (f) {
+					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>",
+					function (f) {
 						snap<?php echo $background->id ?>.append(f);
 
-						f.attr({id: "rootSvgId"});
-						f.paper.select("svg").id = "bgLoadedSvg<?php echo $background->id; ?>";
-
-						/*document.getElementById("bgLoadedSvg<?php echo $background->id; ?>").setAttribute("width", "600px");
-						document.getElementById("bgLoadedSvg<?php echo $background->id; ?>").setAttribute("height", "450px");*/
-				});
+						var svgLoaded = jQuery("#bgPreviewSvg<?php echo $background->id; ?>").find("svg")[0];
+						svgLoaded.setAttribute("width", "600px");
+						svgLoaded.setAttribute("height", "450px");
+					}
+				);
 
 			// Selects background for edit and populates field data accordingly.
 				jQuery(document).on("click", "#editBackground<?php echo $background->id; ?>", function() {
