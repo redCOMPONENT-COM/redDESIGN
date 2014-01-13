@@ -134,8 +134,8 @@ if (isset($displayData))
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMG_HELP'); ?>
 					</span>
 					<div id="backgroundImageContainer">
-						<div id="svgCanvas">
-						</div>
+						<svg id="svgForAreas">
+						</svg>
 						<h3>
 							<?php
 								echo JText::sprintf(
