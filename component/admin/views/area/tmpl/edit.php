@@ -75,7 +75,9 @@ if (isset($displayData))
 						<div class="controls">
 							<input  type="text" id="areaWidth" name="areaWidth"
 							        value=""
-							        onkeyup="selectAreaOnWidthKeyUp();">&nbsp;<?php echo $this->unit; ?>
+							        onkeyup="selectAreaOnWidthKeyUp();"
+									placeholder="&nbsp;<?php echo $this->unit; ?>"
+								>
 						</div>
 					</div>
 					<div class="control-group">
@@ -85,7 +87,9 @@ if (isset($displayData))
 						<div class="controls">
 							<input  type="text" id="areaHeight" name="areaHeight"
 							        value=""
-							        onkeyup="selectAreaOnHeightKeyUp();">&nbsp;<?php echo $this->unit; ?>
+							        onkeyup="selectAreaOnHeightKeyUp();"
+									placeholder="&nbsp;<?php echo $this->unit; ?>"
+								>
 						</div>
 					</div>
 					<div class="control-group">
@@ -95,7 +99,9 @@ if (isset($displayData))
 						<div class="controls">
 							<input  type="text" id="areaX1" name="areaX1"
 							        value=""
-							        onkeyup="selectAreaOnX1KeyUp();">&nbsp;<?php echo $this->unit; ?>
+							        onkeyup="selectAreaOnX1KeyUp();"
+									placeholder="&nbsp;<?php echo $this->unit; ?>"
+								>
 						</div>
 					</div>
 					<div class="control-group">
@@ -105,7 +111,10 @@ if (isset($displayData))
 						<div class="controls">
 							<input  type="text" id="areaY1" name="areaY1"
 							        value=""
-							        onkeyup="selectAreaOnY1KeyUp();">&nbsp;<?php echo $this->unit; ?>
+							        onkeyup="selectAreaOnY1KeyUp();"
+									placeholder="&nbsp;<?php echo $this->unit; ?>"
+								>
+
 						</div>
 					</div>
 					<div class="control-group">
@@ -115,7 +124,9 @@ if (isset($displayData))
 						<div class="controls">
 							<input  type="text" id="areaX2" name="areaX2"
 							        value=""
-							        onkeyup="selectAreaOnX2KeyUp();">&nbsp;<?php echo $this->unit; ?>
+							        onkeyup="selectAreaOnX2KeyUp();"
+									placeholder="&nbsp;<?php echo $this->unit; ?>"
+								>
 						</div>
 					</div>
 					<div class="control-group">
@@ -125,7 +136,9 @@ if (isset($displayData))
 						<div class="controls">
 							<input  type="text" id="areaY2" name="areaY2"
 							        value=""
-							        onkeyup="selectAreaOnY2KeyUp();">&nbsp;<?php echo $this->unit; ?>
+							        onkeyup="selectAreaOnY2KeyUp();"
+									placeholder="&nbsp;<?php echo $this->unit; ?>"
+								>
 						</div>
 					</div>
 				</div>
