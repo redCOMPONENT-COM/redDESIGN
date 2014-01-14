@@ -103,7 +103,7 @@ if (isset($displayData))
 	function DrawRectangle(x, y, w, h){
 		var element = loadedSvg.rect(x, y, w, h);
 		element.attr({
-			fill: "#FFF",
+			fill: "none",
 			stroke: "#F00"
 		});
 	}
