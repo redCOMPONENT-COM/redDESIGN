@@ -1,7 +1,7 @@
 SET foreign_key_checks = 0;
 
 --
--- Table structure for table `#__reddesign_area`
+-- Table structure for table `#__reddesign_areas`
 --
 CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
   `id`                        INT(11)     NOT NULL AUTO_INCREMENT,
