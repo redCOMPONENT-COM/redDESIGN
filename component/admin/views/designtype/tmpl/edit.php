@@ -14,6 +14,25 @@ JHtml::_('rjquery.select2', 'select');
 
 JHTML::_('behavior.modal', 'a.jmodal');
 
+
+// JS templating framework
+RHelperAsset::load('mustache.min.js', 'com_reddesign');
+
+// Colorpicker includes.
+RHelperAsset::load('farbtastic.min.js', 'com_reddesign');
+RHelperAsset::load('farbtastic.css', 'com_reddesign');
+RHelperAsset::load('color-converter.js', 'com_reddesign');
+
+// SVG jQuery Plugin
+RHelperAsset::load('jquery.svg.css', 'com_reddesign');
+RHelperAsset::load('jquery.svg.min.js', 'com_reddesign');
+RHelperAsset::load('jquery.svganim.min.js', 'com_reddesign');
+RHelperAsset::load('jquery.svgdom.min.js', 'com_reddesign');
+RHelperAsset::load('jquery.svgfilter.min.js', 'com_reddesign');
+RHelperAsset::load('jquery.svggraph.min.js', 'com_reddesign');
+RHelperAsset::load('jquery.svgplot.min.js', 'com_reddesign');
+RHelperAsset::load('snap.svg.js', 'com_reddesign');
+
 $tab = JFactory::getApplication()->input->get('tab', '');
 
 switch ($tab)
