@@ -43,8 +43,8 @@ if (isset($displayData))
 	/**
 	 * Initiate SVG area selector variables. Basically it is drawing rectangle.
 	 */
-	var svgCanvas;
-	var svgPath;
+	var mouseDownX = 0;
+	var mouseDownY = 0;
 
 	/**
 	 * Initiate snap.svg
@@ -56,7 +56,7 @@ if (isset($displayData))
 
 				Snap.load(
 					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>", function (f) {
-						snapForAreas.append(f);
+						snapForAreas.g().append(f);
 
 						var svgForAreasLoaded = jQuery("#svgForAreas").find("svg")[0];
 						//svgLoaded.setAttribute("viewBox", "0 0 600 450");
@@ -64,50 +64,39 @@ if (isset($displayData))
 						svgForAreasLoaded.setAttribute("height", previewHeight);
 						//svgLoaded.setAttribute('preserveAspectRatio', 'xMinYMin meet');
 						svgForAreasLoaded.setAttribute("id", "svgCanvas");
+
+						g = f.select("g");
+
+						// Register events on document load.
+						g.mousedown(OnMouseDown);
+						g.mouseup(OnMouseUp);
 				});
 			<?php endif; ?>
 		}
-
-
 	);
 
-	function startDrawTouch(event)
-	{
-		var touch = event.changedTouches[0];
-		svgPath =  createSvgElement("rect");
-		svgPath.setAttribute("fill", "none");
-		svgPath.setAttribute("shape-rendering", "geometricPrecision");
-		svgPath.setAttribute("stroke-linejoin", "round");
-		svgPath.setAttribute("stroke", "#000000");
-
-		svgPath.setAttribute("d", "M" + touch.clientX  + "," + touch.clientY);
-		svgCanvas.appendChild(svgPath);
+	function OnMouseDown(e){
+		var offset = jQuery("#svgCanvas").offset();
+		mouseDownX = e.pageX - offset.left;
+		mouseDownY = e.pageY - offset.top;
 	}
 
-	function continueDrawTouch(event)
-	{
-		if (svgPath)
-		{
-			var touch = event.changedTouches[0];
-			var newSegment = svgPath.createSVGPathSegLinetoAbs(touch.clientX, touch.clientY);
-			svgPath.pathSegList.appendItem(newSegment);
-		}
+	function OnMouseUp(e){
+		var offset = jQuery("#svgCanvas").offset();
+		var upX = e.pageX - offset.left;
+		var upY = e.pageY - offset.top;
+
+		var width = upX - mouseDownX;
+		var height = upY - mouseDownY;
+
+		DrawRectangle(mouseDownX, mouseDownY, width, height);
 	}
 
-	function endDrawTouch(event)
-	{
-		if (svgPath)
-		{
-			var pathData = svgPath.getAttribute("d");
-			var touch = event.changedTouches[0];
-			pathData = pathData + " L" + touch.clientX + "," + touch.clientY
-			svgPath.setAttribute("d", pathData);
-			svgPath = null;
-		}
-	}
-
-	function createSvgElement(tagName)
-	{
-		return document.createElementNS("http://www.w3.org/2000/svg", tagName);
+	function DrawRectangle(x, y, w, h){
+		var element = paper.rect(x, y, w, h);
+		element.attr({
+			fill: "#FFF",
+			stroke: "#F00"
+		});
 	}
 </script>
