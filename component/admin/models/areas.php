@@ -53,7 +53,7 @@ class ReddesignModelAreas extends RModelList
 	protected function populateState($ordering = null, $direction = null)
 	{
 		$filterBackgroundId = $this->getUserStateFromRequest($this->context . '.filter_reddesign_background_id', 'filter_reddesign_background_id');
-		$this->setState('filter.reddesign_background_id', $filterBackgroundId);
+		$this->setState('filter.background_id', $filterBackgroundId);
 
 		parent::populateState('a.name', 'asc');
 	}
@@ -72,11 +72,11 @@ class ReddesignModelAreas extends RModelList
 			->from($db->quoteName('#__reddesign_areas', 'a'));
 
 		// Filter by Background ID
-		$backgroundId = $this->getState('reddesign_background_id', 0);
+		$backgroundId = $this->getState('background_id', 0);
 
 		if ($backgroundId)
 		{
-			$query->where($db->qn('a.reddesign_background_id') . ' = ' . $db->quote($backgroundId));
+			$query->where($db->qn('a.background_id') . ' = ' . $db->quote($backgroundId));
 		}
 
 		// Ordering

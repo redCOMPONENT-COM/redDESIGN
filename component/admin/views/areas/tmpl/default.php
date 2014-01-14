@@ -9,6 +9,7 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.modal', 'a.jmodal');
-
+// Set variables for using them in HMVC. For regular MVC $displayData can not be used.
+$this->areas = $displayData->items;
+$this->designtype_id = $displayData->item->designtype_id;
 ?>

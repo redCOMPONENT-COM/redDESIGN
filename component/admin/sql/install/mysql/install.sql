@@ -1,7 +1,7 @@
 SET foreign_key_checks = 0;
 
 --
--- Table structure for table `#__reddesign_area`
+-- Table structure for table `#__reddesign_areas`
 --
 CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
   `id`                        INT(11)     NOT NULL AUTO_INCREMENT,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
   `color_code`                TEXT        NOT NULL,
   `default_text`              TEXT,
   `textalign`                 INT(11)     NOT NULL,
-  `reddesign_background_id`   INT(11)     NOT NULL,
+  `background_id`             INT(11)     NOT NULL,
   `maxchar`                   INT(10)     NOT NULL,
   `defaultFontSize`           INT(11)     NOT NULL,
   `minFontSize`               INT(11)     NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
   `maxline`                   INT(150)    NOT NULL,
   `input_field_type`          TINYINT(3)  NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`reddesign_background_id`)
+  FOREIGN KEY (`background_id`)
     REFERENCES `#__reddesign_backgrounds` (`id`)
       ON DELETE CASCADE
       ON UPDATE NO ACTION
