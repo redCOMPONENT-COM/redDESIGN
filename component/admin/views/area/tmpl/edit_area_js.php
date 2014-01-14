@@ -43,6 +43,7 @@ if (isset($displayData))
 	/**
 	 * Initiate SVG area selector variables. Basically it is drawing rectangle.
 	 */
+	var loadedSvg;
 	var mouseDownX = 0;
 	var mouseDownY = 0;
 
@@ -55,22 +56,29 @@ if (isset($displayData))
 				var snapForAreas = Snap("#svgForAreas");
 
 				Snap.load(
-					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>", function (f) {
-						snapForAreas.g().append(f);
+					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>",
+					function (f) {
+						//snapForAreas.g().append(f);
+						snapForAreas.append(f);
 
 						var svgForAreasLoaded = jQuery("#svgForAreas").find("svg")[0];
-						//svgLoaded.setAttribute("viewBox", "0 0 600 450");
 						svgForAreasLoaded.setAttribute("width", previewWidth);
 						svgForAreasLoaded.setAttribute("height", previewHeight);
-						//svgLoaded.setAttribute('preserveAspectRatio', 'xMinYMin meet');
 						svgForAreasLoaded.setAttribute("id", "svgCanvas");
+						//svgLoaded.setAttribute('preserveAspectRatio', 'xMinYMin meet');
+						//svgLoaded.setAttribute("viewBox", "0 0 600 450");
 
-						g = f.select("g");
+						/*g = f.select("g");
 
 						// Register events on document load.
 						g.mousedown(OnMouseDown);
-						g.mouseup(OnMouseUp);
-				});
+						g.mouseup(OnMouseUp);*/
+					}
+				);
+
+				loadedSvg = Snap("#svgForAreas");
+				loadedSvg.mousedown(OnMouseDown);
+				loadedSvg.mouseup(OnMouseUp);
 			<?php endif; ?>
 		}
 	);
@@ -93,7 +101,7 @@ if (isset($displayData))
 	}
 
 	function DrawRectangle(x, y, w, h){
-		var element = paper.rect(x, y, w, h);
+		var element = loadedSvg.rect(x, y, w, h);
 		element.attr({
 			fill: "#FFF",
 			stroke: "#F00"
