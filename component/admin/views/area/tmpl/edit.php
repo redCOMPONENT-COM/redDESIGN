@@ -149,21 +149,25 @@ if (isset($displayData))
 						</h3>
 					</div>
 				</div>
-				<div class="form-actions">
-					<button id="saveAreaBtn"
-							class="btn btn-success"
-							data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVING_AREA'); ?>"
-							onclick="preSaveArea(jQuery('#designAreaId').val());"
-					>
-						<span>
-							<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
-						</span>
-					</button>
-					<button id="cancelAreaBtn" class="btn" onclick="cancelArea();">
-						<span>
-							<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>
-						</span>
-					</button>
+			</div>
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="form-actions">
+						<button id="saveAreaBtn"
+								class="btn btn-success"
+								data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVING_AREA'); ?>"
+								onclick="preSaveArea(jQuery('#designAreaId').val());"
+							>
+							<span>
+								<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
+							</span>
+						</button>
+						<button id="cancelAreaBtn" class="btn" onclick="cancelArea();">
+							<span>
+								<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>
+							</span>
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>

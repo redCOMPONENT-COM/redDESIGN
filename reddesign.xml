@@ -10,7 +10,6 @@
 	<license>GNU/GPL</license>
 	<version>2.0</version>
 	<description>COM_REDDESIGN_XML_DESC</description>
-
 	<scriptfile>install.php</scriptfile>
 	<redcore version="1.0"/>
 
