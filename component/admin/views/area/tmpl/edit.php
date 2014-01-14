@@ -58,7 +58,7 @@ if (isset($displayData))
 		<span class="help-block"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_DESC'); ?></span>
 		<div class="well">
 			<div id="selectorControls" class="row-fluid">
-				<div class="span3">
+				<div class="span4">
 					<input id="designAreaId" name="designAreaId" type="hidden" value="0">
 					<div class="control-group">
 						<label for="areaName" class="control-label">
@@ -129,7 +129,7 @@ if (isset($displayData))
 						</div>
 					</div>
 				</div>
-				<div class="span9">
+				<div class="span8">
 					<span class="help-block">
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMG_HELP'); ?>
 					</span>
