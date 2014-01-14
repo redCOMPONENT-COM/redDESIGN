@@ -58,42 +58,52 @@ if (isset($displayData))
 					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>", function (f) {
 						snapForAreas.append(f);
 
-						jQuery("#svgForAreas").find("svg")
-							.attr("width", previewWidth)
-							.attr("height", previewHeight)
-							.attr("id", "svgCanvas")
-							.mousedown(OnMouseDown)
-							.mouseup(OnMouseUp);
-
+						var svgForAreasLoaded = jQuery("#svgForAreas").find("svg")[0];
+						//svgLoaded.setAttribute("viewBox", "0 0 600 450");
+						svgForAreasLoaded.setAttribute("width", previewWidth);
+						svgForAreasLoaded.setAttribute("height", previewHeight);
+						//svgLoaded.setAttribute('preserveAspectRatio', 'xMinYMin meet');
+						svgForAreasLoaded.setAttribute("id", "svgCanvas");
 				});
 			<?php endif; ?>
 		}
+
+
 	);
 
-	function OnMouseDown(e){
-		var offset = jQuery("#svgCanvas").offset();
-		mouseDownX = e.pageX - offset.left;
-		mouseDownY = e.pageY - offset.top;
+	function startDrawTouch(event)
+	{
+		var touch = event.changedTouches[0];
+		svgPath =  createSvgElement("rect");
+		svgPath.setAttribute("fill", "none");
+		svgPath.setAttribute("shape-rendering", "geometricPrecision");
+		svgPath.setAttribute("stroke-linejoin", "round");
+		svgPath.setAttribute("stroke", "#000000");
+
+		svgPath.setAttribute("d", "M" + touch.clientX  + "," + touch.clientY);
+		svgCanvas.appendChild(svgPath);
 	}
 
-	function OnMouseUp(e){
-		var offset = jQuery("#svgCanvas").offset();
-		var upX = e.pageX - offset.left;
-		var upY = e.pageY - offset.top;
-
-		var width = upX - mouseDownX;
-		var height = upY - mouseDownY;
-
-		DrawRectangle(mouseDownX, mouseDownY, width, height);
+	function continueDrawTouch(event)
+	{
+		if (svgPath)
+		{
+			var touch = event.changedTouches[0];
+			var newSegment = svgPath.createSVGPathSegLinetoAbs(touch.clientX, touch.clientY);
+			svgPath.pathSegList.appendItem(newSegment);
+		}
 	}
 
-	function DrawRectangle(x, y, w, h){
-		var svgElement = document.getElementById("svgForAreas");
-		var paper = Snap(svgElement);
-		paper.rect(x, y, w, h).attr({
-			fill: "#FFF",
-			stroke: "#F00"
-		});
+	function endDrawTouch(event)
+	{
+		if (svgPath)
+		{
+			var pathData = svgPath.getAttribute("d");
+			var touch = event.changedTouches[0];
+			pathData = pathData + " L" + touch.clientX + "," + touch.clientY
+			svgPath.setAttribute("d", pathData);
+			svgPath = null;
+		}
 	}
 
 	function createSvgElement(tagName)
