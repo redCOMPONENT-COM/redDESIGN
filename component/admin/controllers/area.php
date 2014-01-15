@@ -30,7 +30,9 @@ class ReddesignControllerArea extends RControllerForm
 		$app = JFactory::getApplication();
 		$response = array();
 
-		$data = $this->input->post->get('jform', array(), 'array');
+		$data = $this->input->get('jform', array(), 'array');
+
+		//print_r($data);
 
 		$model = RModel::getAdminInstance('Area');
 
@@ -119,12 +121,12 @@ class ReddesignControllerArea extends RControllerForm
 		$areaId		= $this->input->getInt('id', null);
 		$colorCodes = $this->input->getString('color_code', '');
 
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$field = $db->quoteName('color_code') . ' = ' . $db->quote($colorCodes);
-		$condition = $db->quoteName('id') . '=' . (int) $areaId;
-		$query->update($db->quoteName('#__reddesign_areas'))->set($field)->where($condition);
-		$db->setQuery($query);
-		$db->query();
+		$model = $this->getModel();
+		$table = $model->getTable();
+
+		$table->load($areaId);
+		$table->color_code = $colorCodes;
+
+		$table->store();
 	}
 }

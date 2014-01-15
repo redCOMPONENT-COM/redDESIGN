@@ -17,7 +17,7 @@ RLoader::registerPrefix('Reddesign', JPATH_LIBRARIES . '/reddesign');
 $app = JFactory::getApplication();
 
 // Add custom style sheet.
-RHelperAsset::load('admin.css');
+RHelperAsset::load('admin.css', 'com_reddesign');
 
 // Check access.
 if (!JFactory::getUser()->authorise('core.manage', 'com_reddesign'))
