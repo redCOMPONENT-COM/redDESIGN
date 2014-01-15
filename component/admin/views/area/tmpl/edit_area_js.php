@@ -229,15 +229,15 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 					var newHeight = sizerBBox.height + (dy - sizerBBox.y);
 					var newHeight = this.rectH + dy;
 					*/
-					var currentHeight = parseFloat(rect.attr('height'));
+
 					rect.attr({
 						width: this.rectW + dx,
-						height: this.rectH + dy - currentHeight
+						height: this.rectH + dy
 					});
 
 					sizer.attr({
 						x: this.sizerX + dx,
-						y: this.sizerY + dy - currentHeight
+						y: this.sizerY + dy
 					})
 				}
 
