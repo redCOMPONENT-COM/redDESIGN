@@ -524,7 +524,7 @@ $this->unit = $displayData->unit;
 	}
 
 	/**
-	 * Scrolls the screen up to allow user to edit the area details
+	 * Shows a hidden area containing the editable parameters of an area
 	 *
 	 * @param reddesign_area_id
 	 */
