@@ -460,5 +460,68 @@ $this->unit = $displayData->unit;
 </tbody>
 </table>
 
+<script type="application/javascript">
+	/**
+	 * Deletes an area.
+	 *
+	 * @param reddesign_area_id
+	 */
+	function removeArea(reddesign_area_id) {
+		jQuery.ajax({
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxRemove",
+			data: {
+				id: reddesign_area_id
+			},
+			type: "post",
+			success: function (data) {
+				var jsonData = jQuery.parseJSON(data);
+
+				if (jsonData.status == 1)
+				{
+					jQuery("#areaRow" + reddesign_area_id).remove();
+					jQuery("#areaSettingsRow" + reddesign_area_id).remove();
+					updateImageAreas();
+				}
+				else
+				{
+					alert(jsonData.message);
+				}
+			},
+			error: function (data) {
+				console.log('function removeArea() Error');
+				console.log(data);
+			}
+		});
+	}
+
+	/**
+	 * @Todo: this function should update the SVG with the existing areas
+	 * is for example called when afterRemoving an area you need to refresh all areas (see removeArea)
+	 */
+	function updateImageAreas() {
+		/*
+		var json;
+
+		jQuery("#backgroundImageContainer div").remove();
+
+		jQuery.ajax({
+			data: {
+				reddesign_background_id: <?php echo $this->productionBackground->id; ?>
+			},
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxGetAreas",
+			success: function (data) {
+				json = jQuery.parseJSON(data);
+				jQuery.each( json, function( key, value ) {
+					drawArea(value.reddesign_area_id, value.title, value.x1_pos, value.y1_pos, value.width, value.height)
+				});
+			},
+			error: function (data) {
+				console.log('UpdateImageAreas function Error');
+				console.log(data);
+			}
+		});
+		*/
+	}
+</script>
 
 
