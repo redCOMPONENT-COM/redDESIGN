@@ -50,7 +50,9 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	var mouseDownY = 0;
 	var elemClicked;
 	var rect;
+	var sizer;
 	var insideElement = "false";
+	var insideSizer = "false";
 
 	/**
 	 * Initiate snap.svg
@@ -141,6 +143,35 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 					insideElement = "false";
 				};
 
+				gotInSizer = function() {
+					insideElement = "true";
+					insideSizer = "true";
+				};
+
+				gotOutSizer = function() {
+					insideSizer = "false";
+					rect.hover(gotIn, gotOut);
+				};
+
+				moveSizer = function () {
+					rectBBox = rect.getBBox();
+					sizerBBox = sizer.getBBox();
+
+					var newWidth = rectBBox.width + sizerBBox.x2;
+					var newHeight = rectBBox.height + sizerBBox.y2;
+					rect.attr({
+						"width": newWidth,
+						"height": newHeight
+					});
+
+					var sizerX = newWidth - 10;
+					var sizerY = newHeight - 10;
+					sizer.attr({
+						x: sizerX,
+						y: sizerY
+					});
+				};
+
 				function DrawRectangle(x, y, w, h) {
 					var element = rootSnapSvgObject.rect(x, y, w, h);
 					element.attr({
@@ -149,8 +180,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 						strokeWidth: 3
 					});
 					jQuery(element.node).attr('id', 'rct' + x + y);
-
-					element.drag();
 
 					element.hover(gotIn, gotOut);
 
@@ -172,6 +201,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 						mouseDownY = e.pageY - offset.top;
 
 						rect = DrawRectangle(mouseDownX, mouseDownY, 0, 0);
+						sizer = rootSnapSvgObject.rect(mouseDownX, mouseDownY, 0, 0);
 
 						jQuery("#svgForAreas").mousemove(function(e) {
 							var offset = jQuery("#svgForAreas").offset();
@@ -181,9 +211,32 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 							var width = upX - mouseDownX;
 							var height = upY - mouseDownY;
 
-							rect.attr( { "width": width > 0 ? width : 0,
-								"height": height > 0 ? height : 0 } );
+							rect.attr({
+								"width": width > 0 ? width : 0,
+								"height": height > 0 ? height : 0
+							});
 
+							if (insideSizer == "false")
+							{
+								var sizerX = (mouseDownX + width) - 10;
+								var sizerY = (mouseDownY + height) - 10;
+
+								sizer.attr({
+									fill: "#CA202C",
+									stroke: "none",
+									width: "10",
+									height: "10",
+									x: sizerX,
+									y: sizerY
+								});
+
+								sizer.hover(gotInSizer, gotOutSizer);
+
+								sizer.drag(moveSizer);
+							}
+
+							var g = rootSnapSvgObject.group(rect, sizer);
+							g.drag();
 						});
 					}
 				});
