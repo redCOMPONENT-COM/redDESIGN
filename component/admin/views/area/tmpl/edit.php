@@ -136,8 +136,8 @@ if (isset($displayData))
 					<span class="help-block">
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMG_HELP'); ?>
 					</span>
-					<div id="backgroundImageContainer">
-						<svg id="svgForAreas">
+					<div id="backgroundImageContainer" style="position: relative;">
+						<svg id="svgForAreas" style="position: relative;">
 						</svg>
 						<h3>
 							<?php
