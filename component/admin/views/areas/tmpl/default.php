@@ -10,10 +10,12 @@
 defined('_JEXEC') or die;
 
 // Set variables for using them in HMVC. For regular MVC $displayData can not be used.
+$this->item = $displayData->item;
 $this->areas = $displayData->items;
 $this->designtype_id =	$displayData->item->designtype_id;
 $this->pxToUnit = $displayData->pxToUnit;
 $this->unit = $displayData->unit;
+$this->fontsOptions = $displayData->fontsOptions;
 
 ?>
 
@@ -302,7 +304,6 @@ $this->unit = $displayData->unit;
 
 		<div class="span5">
 			<fieldset>
-
 				<legend><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_LEGEND_TEXT_COLOR_SETTINGS'); ?></legend>
 
 				<div class="row-fluid">
