@@ -133,6 +133,15 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 							<label for="<?php echo 'areaFonts' . $area->id; ?>">
 								<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALLOWED_FONTS') ?>
 								<?php
+								/*
+								 * @Todo: this is a terrible hotfix for fastfixing a not storing
+								 * font_id  in database issue.But it needs to be moved to the
+								 * areas model asap.
+								 * It Converts the font_id JSON field to an array.
+								 */
+								$registry = new JRegistry;
+								$registry->loadString($area->font_id);
+								$selectedFonts = $registry->toArray();
 								echo JHtml::_(
 									'select.genericlist',
 									$this->fontsOptions,
@@ -140,7 +149,7 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 									' multiple="multiple" ',
 									'value',
 									'text',
-									explode(',', $area->font_id)
+									$selectedFonts
 								);
 								?>
 							</label>
@@ -148,7 +157,9 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 
 					</div>
 					<div class="offset2 span4">
+
 						<?php if ($this->item->fontsizer == 'dropdown_numbers' || $this->item->fontsizer == 'dropdown_labels') : ?>
+
 							<div class="control-group">
 								<label for="fontsizerDropdown<?php echo $area->id; ?>">
 									<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>
@@ -500,27 +511,27 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 	 */
 	function updateImageAreas() {
 		/*
-		var json;
+		 var json;
 
-		jQuery("#backgroundImageContainer div").remove();
+		 jQuery("#backgroundImageContainer div").remove();
 
-		jQuery.ajax({
-			data: {
-				reddesign_background_id: <?php echo $this->productionBackground->id; ?>
-			},
-			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxGetAreas",
-			success: function (data) {
-				json = jQuery.parseJSON(data);
-				jQuery.each( json, function( key, value ) {
-					drawArea(value.reddesign_area_id, value.title, value.x1_pos, value.y1_pos, value.width, value.height)
-				});
-			},
-			error: function (data) {
-				console.log('UpdateImageAreas function Error');
-				console.log(data);
-			}
-		});
-		*/
+		 jQuery.ajax({
+		 data: {
+		 reddesign_background_id: <?php echo $this->productionBackground->id; ?>
+		 },
+		 url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxGetAreas",
+		 success: function (data) {
+		 json = jQuery.parseJSON(data);
+		 jQuery.each( json, function( key, value ) {
+		 drawArea(value.reddesign_area_id, value.title, value.x1_pos, value.y1_pos, value.width, value.height)
+		 });
+		 },
+		 error: function (data) {
+		 console.log('UpdateImageAreas function Error');
+		 console.log(data);
+		 }
+		 });
+		 */
 	}
 
 	/**
@@ -597,5 +608,3 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 	}
 
 </script>
-
-
