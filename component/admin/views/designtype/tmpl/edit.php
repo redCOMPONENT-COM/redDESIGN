@@ -9,10 +9,13 @@
 
 defined('_JEXEC') or die();
 
-JHTML::_('behavior.framework');
+JHtml::_('behavior.framework');
 JHtml::_('rjquery.select2', 'select');
 
-JHTML::_('behavior.modal', 'a.jmodal');
+JHtml::_('behavior.modal', 'a.jmodal');
+
+// Snap.SVG
+RHelperAsset::load('snap.svg.js', 'com_reddesign');
 
 $tab = JFactory::getApplication()->input->get('tab', '');
 

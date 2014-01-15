@@ -17,16 +17,6 @@ RHelperAsset::load('farbtastic.min.js');
 RHelperAsset::load('farbtastic.css');
 RHelperAsset::load('color-converter.js');
 
-// SVG jQuery Plugin
-/*RHelperAsset::load('jquery.svg.css');
-RHelperAsset::load('jquery.svg.min.js');
-RHelperAsset::load('jquery.svganim.min.js');
-RHelperAsset::load('jquery.svgdom.min.js');
-RHelperAsset::load('jquery.svgfilter.min.js');
-RHelperAsset::load('jquery.svggraph.min.js');
-RHelperAsset::load('jquery.svgplot.min.js');*/
-RHelperAsset::load('snap.svg.js');
-
 if (isset($displayData))
 {
 	$this->areas = $displayData->items;
