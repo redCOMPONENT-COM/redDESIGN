@@ -148,9 +148,7 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 
 					</div>
 					<div class="offset2 span4">
-
 						<?php if ($this->item->fontsizer == 'dropdown_numbers' || $this->item->fontsizer == 'dropdown_labels') : ?>
-
 							<div class="control-group">
 								<label for="fontsizerDropdown<?php echo $area->id; ?>">
 									<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>
