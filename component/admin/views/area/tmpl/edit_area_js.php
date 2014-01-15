@@ -152,8 +152,8 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 								sizer.attr({
 									fill: "#CA202C",
 									stroke: "none",
-									width: "10",
-									height: "10",
+									width: width > 0 ? 10 : 0,
+									height: height > 0 ? 10 : 0,
 									x: sizerX,
 									y: sizerY
 								});
@@ -165,29 +165,24 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 					}
 				});
 
-				function onSizerMove(dx, dy)
+				onSizerMove = function(dx, dy)
 				{
 					elementsGroup.undrag();
-					/*var rectBBox = rect.getBBox();
-					var sizerBBox = sizer.getBBox();
+					var offset = jQuery("#svgForAreas").offset();
 
-					var newWidth = rectBBox.width + (dx - 10);
-					var newHeight = sizerBBox.height + (dy - sizerBBox.y);
-					var newHeight = this.rectH + dy;
-					*/
-
+					console.log(dy);
 					rect.attr({
 						width: this.rectW + dx,
-						height: this.rectH + dy
+						height: this.rectH + (dy - offset.top)
 					});
 
 					sizer.attr({
 						x: this.sizerX + dx,
-						y: this.sizerY + dy
+						y: this.sizerY + (dy - offset.top)
 					})
-				}
+				};
 
-				function onSizerStart()
+				onSizerStart = function()
 				{
 					var rectBBox = rect.getBBox();
 					var sizerBBox = sizer.getBBox();
@@ -197,13 +192,16 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 					this.rectW = rectBBox.width;
 					this.rectH = rectBBox.height;
-				}
+					this.rectY = rectBBox.y;
+				};
 
-				function onSizerEnd()
+				onSizerEnd = function()
 				{
 					elementsGroup.drag();
 					sizer.hover(gotInSizer, gotOutSizer);
 					rect.hover(gotIn, gotOut);
+
+					populateFields(rect);
 				}
 
 
@@ -339,4 +337,15 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		jQuery("#areaHeight").val("");
 	}
 
+	function populateFields(rectangle)
+	{
+		rectBoundingBox = rectangle.getBBox();
+
+		jQuery("#areaX1").val(rectBoundingBox.x);
+		jQuery("#areaY1").val(rectBoundingBox.y);
+		jQuery("#areaX2").val(rectBoundingBox.x2);
+		jQuery("#areaY2").val(rectBoundingBox.y2);
+		jQuery("#areaWidth").val(rectBoundingBox.width);
+		jQuery("#areaHeight").val(rectBoundingBox.height);
+	}
 </script>
