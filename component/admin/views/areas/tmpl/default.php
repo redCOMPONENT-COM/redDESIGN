@@ -544,6 +544,59 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 			areaSetting.hide("slow");
 		}
 	}
+
+	/**
+	 * Saves settings for an area
+	 *
+	 * @param reddesign_area_id
+	 */
+	function saveAreaSettings(reddesign_area_id) {
+		jQuery("#saveAreaSettings" + reddesign_area_id).button("loading");
+
+		var areaFontAlignment = jQuery("#areaFontAlignment" + reddesign_area_id).val();
+		var fontsizerDropdown = jQuery("#fontsizerDropdown" + reddesign_area_id).val();
+		var fontsizerSliderDefault = jQuery("#fontsizerSliderDefault" + reddesign_area_id).val();
+		var fontsizerSliderMin = jQuery("#fontsizerSliderMin" + reddesign_area_id).val();
+		var fontsizerSliderMax = jQuery("#fontsizerSliderMax" + reddesign_area_id).val();
+		var inputFieldType = jQuery("#inputFieldType" + reddesign_area_id).val();
+		var maximumCharsAllowed = jQuery("#maximumCharsAllowed" + reddesign_area_id).val();
+		var maximumLinesAllowed = jQuery("#maximumLinesAllowed" + reddesign_area_id).val();
+		var areaFonts = jQuery('[name="areaFonts' + reddesign_area_id + '[]"]').val();
+		var colorCodes = jQuery("#colorCodes" + reddesign_area_id).val();
+		var defaultText = jQuery("#defaultText" + reddesign_area_id).val();
+
+		if (jQuery("#allColors" + reddesign_area_id).is(":checked"))
+		{
+			colorCodes = 1;
+		}
+
+		jQuery.ajax({
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxSave",
+			data: {
+				'jform[id]': reddesign_area_id,
+				'jform[textalign]': areaFontAlignment,
+				'jform[font_id]': areaFonts,
+				'jform[font_size]': fontsizerDropdown,
+				'jform[defaultFontSize]': fontsizerSliderDefault,
+				'jform[minFontSize]': fontsizerSliderMin,
+				'jform[maxFontSize]': fontsizerSliderMax,
+				'jform[input_field_type]': inputFieldType,
+				'jform[maxchar]': maximumCharsAllowed,
+				'jform[maxline]': maximumLinesAllowed,
+				'jform[color_code]': colorCodes,
+				'jform[default_text]': defaultText
+			},
+			type: "post",
+			success: function (data) {
+				setTimeout(function () {jQuery("#saveAreaSettings" + reddesign_area_id).button("reset")}, 500);
+			},
+			error: function (data) {
+				console.log('function saveAreaSettings() Error');
+				console.log(data);
+			}
+		});
+	}
+
 </script>
 
 
