@@ -10,10 +10,13 @@
 defined('_JEXEC') or die;
 
 // Set variables for using them in HMVC. For regular MVC $displayData can not be used.
+$this->item = $displayData->item;
 $this->areas = $displayData->items;
 $this->designtype_id =	$displayData->item->designtype_id;
 $this->pxToUnit = $displayData->pxToUnit;
 $this->unit = $displayData->unit;
+$this->fontsOptions = $displayData->fontsOptions;
+$this->inputFieldOptions = $displayData->inputFieldOptions;
 
 ?>
 
@@ -302,7 +305,6 @@ $this->unit = $displayData->unit;
 
 		<div class="span5">
 			<fieldset>
-
 				<legend><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_LEGEND_TEXT_COLOR_SETTINGS'); ?></legend>
 
 				<div class="row-fluid">
@@ -432,7 +434,7 @@ $this->unit = $displayData->unit;
 					type="button"
 					class="btn btn-success"
 					data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVE_AREA_SETTINGS'); ?>"
-					onclick="saveAreaSettings(<?php echo $area->id; ?>);">
+					onclick="saveAreaSettings(<?php echo $area->id . ',\'' . $area->name . '\''; ?>);">
 										<span>
 											<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
 										</span>
@@ -460,5 +462,142 @@ $this->unit = $displayData->unit;
 </tbody>
 </table>
 
+<script type="application/javascript">
+	/**
+	 * Deletes an area.
+	 *
+	 * @param reddesign_area_id
+	 */
+	function removeArea(reddesign_area_id) {
+		jQuery.ajax({
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxRemove",
+			data: {
+				id: reddesign_area_id
+			},
+			type: "post",
+			success: function (data) {
+				var jsonData = jQuery.parseJSON(data);
+
+				if (jsonData.status == 1)
+				{
+					jQuery("#areaRow" + reddesign_area_id).remove();
+					jQuery("#areaSettingsRow" + reddesign_area_id).remove();
+					updateImageAreas();
+				}
+				else
+				{
+					alert(jsonData.message);
+				}
+			},
+			error: function (data) {
+				console.log('function removeArea() Error');
+				console.log(data);
+			}
+		});
+	}
+
+	/**
+	 * @Todo: this function should update the SVG with the existing areas
+	 * is for example called when afterRemoving an area you need to refresh all areas (see removeArea)
+	 */
+	function updateImageAreas() {
+		/*
+		var json;
+
+		jQuery("#backgroundImageContainer div").remove();
+
+		jQuery.ajax({
+			data: {
+				reddesign_background_id: <?php echo $this->productionBackground->id; ?>
+			},
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxGetAreas",
+			success: function (data) {
+				json = jQuery.parseJSON(data);
+				jQuery.each( json, function( key, value ) {
+					drawArea(value.reddesign_area_id, value.title, value.x1_pos, value.y1_pos, value.width, value.height)
+				});
+			},
+			error: function (data) {
+				console.log('UpdateImageAreas function Error');
+				console.log(data);
+			}
+		});
+		*/
+	}
+
+	/**
+	 * Shows a hidden area containing the editable parameters of an area
+	 *
+	 * @param reddesign_area_id
+	 */
+	function showAreaSettings(reddesign_area_id)
+	{
+		var areaSetting = jQuery("#areaSettingsRow" + reddesign_area_id);
+
+		if (areaSetting.css('display') == 'none')
+		{
+			jQuery(".areaSettingsRow").hide();
+			areaSetting.show("slow")
+		}
+		else
+		{
+			areaSetting.hide("slow");
+		}
+	}
+
+	/**
+	 * Saves settings for an area
+	 *
+	 * @param reddesign_area_id
+	 */
+	function saveAreaSettings(reddesign_area_id, areaName) {
+		jQuery("#saveAreaSettings" + reddesign_area_id).button("loading");
+
+		var areaFontAlignment = jQuery("#areaFontAlignment" + reddesign_area_id).val();
+		var fontsizerDropdown = jQuery("#fontsizerDropdown" + reddesign_area_id).val();
+		var fontsizerSliderDefault = jQuery("#fontsizerSliderDefault" + reddesign_area_id).val();
+		var fontsizerSliderMin = jQuery("#fontsizerSliderMin" + reddesign_area_id).val();
+		var fontsizerSliderMax = jQuery("#fontsizerSliderMax" + reddesign_area_id).val();
+		var inputFieldType = jQuery("#inputFieldType" + reddesign_area_id).val();
+		var maximumCharsAllowed = jQuery("#maximumCharsAllowed" + reddesign_area_id).val();
+		var maximumLinesAllowed = jQuery("#maximumLinesAllowed" + reddesign_area_id).val();
+		var areaFonts = jQuery("#areaFonts" + reddesign_area_id).val();
+		var colorCodes = jQuery("#colorCodes" + reddesign_area_id).val();
+		var defaultText = jQuery("#defaultText" + reddesign_area_id).val();
+
+		if (jQuery("#allColors" + reddesign_area_id).is(":checked"))
+		{
+			colorCodes = 1;
+		}
+
+		jQuery.ajax({
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxSave",
+			data: {
+				'jform[id]': reddesign_area_id,
+				'jform[name]': areaName,
+				'jform[textalign]': areaFontAlignment,
+				'jform[font_id]': areaFonts,
+				'jform[font_size]': fontsizerDropdown,
+				'jform[defaultFontSize]': fontsizerSliderDefault,
+				'jform[minFontSize]': fontsizerSliderMin,
+				'jform[maxFontSize]': fontsizerSliderMax,
+				'jform[input_field_type]': inputFieldType,
+				'jform[maxchar]': maximumCharsAllowed,
+				'jform[maxline]': maximumLinesAllowed,
+				'jform[color_code]': colorCodes,
+				'jform[default_text]': defaultText
+			},
+			type: "post",
+			success: function (data) {
+				setTimeout(function () {jQuery("#saveAreaSettings" + reddesign_area_id).button("reset")}, 500);
+			},
+			error: function (data) {
+				console.log('function saveAreaSettings() Error');
+				console.log(data);
+			}
+		});
+	}
+
+</script>
 
 

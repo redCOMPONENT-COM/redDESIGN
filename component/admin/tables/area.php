@@ -27,4 +27,25 @@ class ReddesignTableArea extends RTable
 	 * @since 0.9.1
 	 */
 	protected $_tableName = 'reddesign_areas';
+
+	/**
+	 * Overloaded bind function
+	 *
+	 * @param   array  $array   Named array to bind
+	 * @param   mixed  $ignore  An optional array or space separated list of properties to ignore while binding.
+	 *
+	 * @return  mixed  Null if operation was satisfactory, otherwise returns an error
+	 * @since   1.6
+	 */
+	public function bind($array, $ignore = '')
+	{
+		if (isset($array['font_id']) && is_array($array['font_id']))
+		{
+			$registry = new JRegistry;
+			$registry->loadArray($array['font_id']);
+			$array['font_id'] = (string) $registry;
+		}
+
+		return parent::bind($array, $ignore);
+	}
 }
