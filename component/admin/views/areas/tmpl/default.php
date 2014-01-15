@@ -434,7 +434,7 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 					type="button"
 					class="btn btn-success"
 					data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SAVE_AREA_SETTINGS'); ?>"
-					onclick="saveAreaSettings(<?php echo $area->id; ?>);">
+					onclick="saveAreaSettings(<?php echo $area->id . ',\'' . $area->name . '\''; ?>);">
 										<span>
 											<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
 										</span>
@@ -550,7 +550,7 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 	 *
 	 * @param reddesign_area_id
 	 */
-	function saveAreaSettings(reddesign_area_id) {
+	function saveAreaSettings(reddesign_area_id, areaName) {
 		jQuery("#saveAreaSettings" + reddesign_area_id).button("loading");
 
 		var areaFontAlignment = jQuery("#areaFontAlignment" + reddesign_area_id).val();
@@ -561,7 +561,7 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 		var inputFieldType = jQuery("#inputFieldType" + reddesign_area_id).val();
 		var maximumCharsAllowed = jQuery("#maximumCharsAllowed" + reddesign_area_id).val();
 		var maximumLinesAllowed = jQuery("#maximumLinesAllowed" + reddesign_area_id).val();
-		var areaFonts = jQuery('[name="areaFonts' + reddesign_area_id + '[]"]').val();
+		var areaFonts = jQuery("#areaFonts" + reddesign_area_id).val();
 		var colorCodes = jQuery("#colorCodes" + reddesign_area_id).val();
 		var defaultText = jQuery("#defaultText" + reddesign_area_id).val();
 
@@ -574,6 +574,7 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxSave",
 			data: {
 				'jform[id]': reddesign_area_id,
+				'jform[name]': areaName,
 				'jform[textalign]': areaFontAlignment,
 				'jform[font_id]': areaFonts,
 				'jform[font_size]': fontsizerDropdown,

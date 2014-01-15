@@ -30,19 +30,11 @@ class ReddesignControllerArea extends RControllerForm
 		$app = JFactory::getApplication();
 		$response = array();
 
-		$fontIds = $this->input->getString('font_id', '');
-
-		if (!empty($fontIds))
-		{
-			$fontIds = implode(',', $fontIds);
-			$this->input->set('font_id', $fontIds);
-		}
-
 		$data = $this->input->post->get('jform', array(), 'array');
 
 		$model = RModel::getAdminInstance('Area');
 
-		if ($model->ajaxSave($data))
+		if ($model->save($data))
 		{
 			$response['status']		= 1;
 			$response['message']	= '<div class="alert alert-success">' . JText::sprintf('COM_REDDESIGN_DESIGNTYPE_AREA_SAVED', $data['name']) . '</div>';
