@@ -53,6 +53,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	var sizer;
 	var insideElement = "false";
 	var insideSizer = "false";
+	var elementsGroup;
 
 	/**
 	 * Initiate snap.svg
@@ -79,62 +80,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 					}
 				);
 
-				// Start, move, and up are the drag functions.
-				start = function() {
-					// storing original coordinates
-					this.ox = this.attr("x");
-					this.oy = this.attr("y");
-					this.attr({
-						opacity: 1
-					});
-
-					if (this.attr("y") < 60 && this.attr("x") < 60)
-					{
-						this.attr({
-							fill: "#000"
-						});
-					}
-				};
-
-				move = function(dx, dy) {
-					// Move will be called with dx and dy.
-					if (this.attr("y") > previewHeight || this.attr("x") > previewWidth)
-					{
-						this.attr({
-							x: this.ox + dx,
-							y: this.oy + dy
-						});
-					}
-					else
-					{
-						nowX = Math.min(previewWidth, this.ox + dx);
-						nowY = Math.min(previewHeight, this.oy + dy);
-						nowX = Math.max(0, nowX);
-						nowY = Math.max(0, nowY);
-						this.attr({
-							x: nowX,
-							y: nowY
-						});
-						if (this.attr("fill") != "#000") this.attr({
-							fill: "#000"
-						});
-					}
-				};
-
-				up = function() {
-					// Restoring state.
-					this.attr({
-						opacity: .5
-					});
-
-					if (this.attr("y") < 60 && this.attr("x") < 60)
-					{
-						this.attr({
-							fill: "#AEAEAE"
-						});
-					}
-				};
-
 				gotIn = function() {
 					insideElement = "true";
 				};
@@ -151,25 +96,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				gotOutSizer = function() {
 					insideSizer = "false";
 					rect.hover(gotIn, gotOut);
-				};
-
-				moveSizer = function () {
-					rectBBox = rect.getBBox();
-					sizerBBox = sizer.getBBox();
-
-					var newWidth = rectBBox.width + sizerBBox.x2;
-					var newHeight = rectBBox.height + sizerBBox.y2;
-					rect.attr({
-						"width": newWidth,
-						"height": newHeight
-					});
-
-					var sizerX = newWidth - 10;
-					var sizerY = newHeight - 10;
-					sizer.attr({
-						x: sizerX,
-						y: sizerY
-					});
 				};
 
 				function DrawRectangle(x, y, w, h) {
@@ -202,6 +128,8 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 						rect = DrawRectangle(mouseDownX, mouseDownY, 0, 0);
 						sizer = rootSnapSvgObject.rect(mouseDownX, mouseDownY, 0, 0);
+						sizer.hover(gotInSizer, gotOutSizer);
+						sizer.drag(onSizerMove, onSizerStart, onSizerEnd);
 
 						jQuery("#svgForAreas").mousemove(function(e) {
 							var offset = jQuery("#svgForAreas").offset();
@@ -212,8 +140,8 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 							var height = upY - mouseDownY;
 
 							rect.attr({
-								"width": width > 0 ? width : 0,
-								"height": height > 0 ? height : 0
+								width: width > 0 ? width : 0,
+								height: height > 0 ? height : 0
 							});
 
 							if (insideSizer == "false")
@@ -229,28 +157,66 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 									x: sizerX,
 									y: sizerY
 								});
-
-								sizer.hover(gotInSizer, gotOutSizer);
-
-								sizer.drag(moveSizer);
 							}
 
-							var g = rootSnapSvgObject.group(rect, sizer);
-							g.drag();
+							elementsGroup = rootSnapSvgObject.group(rect, sizer);
+							elementsGroup.drag();
 						});
 					}
 				});
 
+				function onSizerMove(dx, dy)
+				{
+					elementsGroup.undrag();
+					/*var rectBBox = rect.getBBox();
+					var sizerBBox = sizer.getBBox();
+
+					var newWidth = rectBBox.width + (dx - 10);
+					var newHeight = sizerBBox.height + (dy - sizerBBox.y);
+					var newHeight = this.rectH + dy;
+					*/
+
+					rect.attr({
+						width: this.rectW + dx,
+						height: this.rectH + dy
+					});
+
+					sizer.attr({
+						x: this.sizerX + dx,
+						y: this.sizerY + dy
+					})
+				}
+
+				function onSizerStart()
+				{
+					var rectBBox = rect.getBBox();
+					var sizerBBox = sizer.getBBox();
+
+					this.sizerX = sizerBBox.x;
+					this.sizerY = sizerBBox.y;
+
+					this.rectW = rectBBox.width;
+					this.rectH = rectBBox.height;
+				}
+
+				function onSizerEnd()
+				{
+					elementsGroup.drag();
+					sizer.hover(gotInSizer, gotOutSizer);
+					rect.hover(gotIn, gotOut);
+				}
+
+
 				jQuery("#svgForAreas").mouseup(function(e) {
-					jQuery("#svgForAreas").unbind('mousemove');
+						jQuery("#svgForAreas").unbind('mousemove');
 
-					var BBox = rect.getBBox();
+						var BBox = rect.getBBox();
 
-					if ( BBox.width == 0 && BBox.height == 0 )
-					{
-						rect.remove();
-					}
-				});
+						if ( BBox.width == 0 && BBox.height == 0 )
+						{
+							rect.remove();
+						}
+					});
 			<?php endif; ?>
 		}
 	);
