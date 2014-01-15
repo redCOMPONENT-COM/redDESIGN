@@ -522,6 +522,26 @@ $this->unit = $displayData->unit;
 		});
 		*/
 	}
+
+	/**
+	 * Shows a hidden area containing the editable parameters of an area
+	 *
+	 * @param reddesign_area_id
+	 */
+	function showAreaSettings(reddesign_area_id)
+	{
+		var areaSetting = jQuery("#areaSettingsRow" + reddesign_area_id);
+
+		if (areaSetting.css('display') == 'none')
+		{
+			jQuery(".areaSettingsRow").hide();
+			areaSetting.show("slow")
+		}
+		else
+		{
+			areaSetting.hide("slow");
+		}
+	}
 </script>
 
 
