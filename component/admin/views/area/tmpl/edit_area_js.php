@@ -60,6 +60,60 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	 */
 	jQuery(document).ready(
 		function ($) {
+
+
+			<?php if ($this->areas != '') : ?>
+				<?php foreach ($this->areas as  $area) : ?>
+				// Check div before add farbtastic
+				/*if (jQuery("#colorPickerContainer<?php echo $area->id ?>")[0])
+				{
+					var colorPicker<?php echo $area->id ?> = jQuery.farbtastic("#colorPickerContainer<?php echo $area->id ?>");
+					colorPicker<?php echo $area->id ?>.linkTo("#colorPickerSelectedColor<?php echo $area->id; ?>");
+				}*/
+
+				jQuery(document).on("keyup", "#C<?php echo $area->id; ?>", function() {
+					var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+					colorPicker<?php echo $area->id ?>.setColor(newColor);
+				});
+
+				jQuery(document).on("keyup", "#M<?php echo $area->id; ?>", function() {
+					var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+					colorPicker<?php echo $area->id ?>.setColor(newColor);
+				});
+
+				jQuery(document).on("keyup", "#Y<?php echo $area->id; ?>", function() {
+					var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+					colorPicker<?php echo $area->id ?>.setColor(newColor);
+				});
+
+				jQuery(document).on("keyup", "#K<?php echo $area->id; ?>", function() {
+					var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+					colorPicker<?php echo $area->id ?>.setColor(newColor);
+				});
+
+				jQuery(document).on("keyup", "#colorPickerSelectedColor<?php echo $area->id; ?>", function() {
+					var hex = jQuery("#colorPickerSelectedColor<?php echo $area->id; ?>").val();
+					loadCMYKValues(hex, parseInt("<?php echo $area->id; ?>"));
+				});
+
+				jQuery(document).on("mouseup", "#colorPickerContainer<?php echo $area->id; ?>", function() {
+					var hex = jQuery("#colorPickerSelectedColor<?php echo $area->id; ?>").val();
+					loadCMYKValues(hex, parseInt("<?php echo $area->id; ?>"));
+				});
+
+				jQuery("#allColors<?php echo $area->id; ?>").click(function () {
+					jQuery("#colorsContainer<?php echo $area->id; ?>").toggle(!this.checked);
+					jQuery("#addColorContainer<?php echo $area->id; ?>").toggle(!this.checked);
+					jQuery("#selectedColorsPalette<?php echo $area->id; ?>").toggle(!this.checked);
+				});
+
+
+				jQuery("#addColorButton<?php echo $area->id ?>").click(function () {
+					addColorToList(parseInt("<?php echo $area->id; ?>"))
+				});
+				<?php endforeach; ?>
+			<?php endif; ?>
+
 			<?php if (!empty($this->productionBackground->svg_file)) : ?>
 				rootSnapSvgObject = Snap("#svgForAreas");
 
@@ -278,7 +332,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			data: {
 				'jform[id]': reddesign_area_id,
 				'jform[name]': areaName,
-				'jform[background_id]': productionBackground,
+				'jform[reddesign_background_id]': productionBackground,
 				'jform[x1_pos]': areaX1_in_px,
 				'jform[y1_pos]': areaY1_in_px,
 				'jform[x2_pos]': areaX2_in_px,
@@ -323,6 +377,63 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				console.log("Error: " + data);
 			}
 		});
+	}
+
+	/**
+	 * Adds selected color to the list.
+	 *
+	 * @param areaId integer Area ID.
+	 *
+	 * @return void
+	 */
+	function addColorToList(areaId)
+	{
+
+		var selectedColor = jQuery("#colorPickerSelectedColor" + areaId).val();
+		var colorCodes = jQuery("#colorCodes" + areaId).val();
+
+		// Check if the same color is already added.
+		if (colorCodes.indexOf(selectedColor) == -1)
+		{
+			// Create color div element.
+			var element = '<div class="colorDiv" ' +
+				'id="' + areaId + '-' + selectedColor.replace("#","") + '" ' +
+				'style="background-color:' + selectedColor + ';" ' +
+				'onclick="removeColorFromList(' + areaId + ', \'' + selectedColor + '\');">' +
+				'<i class="glyphicon icon-remove"></i>' +
+				'<input type="hidden" value="' + selectedColor + '" />' +
+				'</div>';
+			jQuery("#selectedColorsPalette" + areaId).append(element);
+
+			// Update color codes hidden input field.
+			if (colorCodes == "" || parseInt(colorCodes) == 1)
+			{
+				colorCodes = selectedColor;
+			}
+			else
+			{
+				colorCodes = colorCodes + "," + selectedColor;
+			}
+
+			jQuery("#colorCodes" + areaId).val(colorCodes);
+
+			jQuery.ajax({
+				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxUpdateColors",
+				data: {
+					id: areaId,
+					color_code: colorCodes
+				},
+				type: "post",
+				error: function (data) {
+					console.log('function addColorToList() Error');
+					console.log(data);
+				}
+			});
+		}
+		else
+		{
+			alert("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_COLOR_ALREADY_ADDED'); ?>");
+		}
 	}
 
 	/**
