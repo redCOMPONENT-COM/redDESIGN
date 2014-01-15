@@ -10,12 +10,12 @@
 defined('_JEXEC') or die();
 
 // JS templating framework
-RHelperAsset::load('mustache.min.js');
+RHelperAsset::load('mustache.min.js', 'com_reddesign');
 
 // Colorpicker includes.
-RHelperAsset::load('farbtastic.min.js');
-RHelperAsset::load('farbtastic.css');
-RHelperAsset::load('color-converter.js');
+RHelperAsset::load('farbtastic.min.js', 'com_reddesign');
+RHelperAsset::load('farbtastic.css', 'com_reddesign');
+RHelperAsset::load('color-converter.js', 'com_reddesign');
 
 if (isset($displayData))
 {
