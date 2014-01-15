@@ -522,6 +522,26 @@ $this->unit = $displayData->unit;
 		});
 		*/
 	}
+
+	/**
+	 * Scrolls the screen up to allow user to edit the area details
+	 *
+	 * @param reddesign_area_id
+	 */
+	function showAreaSettings(reddesign_area_id)
+	{
+		var areaSetting = jQuery("#areaSettingsRow" + reddesign_area_id);
+
+		if (areaSetting.css('display') == 'none')
+		{
+			jQuery(".areaSettingsRow").hide();
+			areaSetting.show("slow")
+		}
+		else
+		{
+			areaSetting.hide("slow");
+		}
+	}
 </script>
 
 
