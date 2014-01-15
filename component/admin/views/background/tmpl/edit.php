@@ -117,7 +117,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 <script type="text/javascript">
 	jQuery(document).ready(
-		function () {
+		function ($) {
 			if(jQuery("#jform_isPreviewBg").is(":checked"))
 			{
 				jQuery("#isDefaultPreviewContainer").show();
