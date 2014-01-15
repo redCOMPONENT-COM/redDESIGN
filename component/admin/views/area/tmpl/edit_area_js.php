@@ -44,9 +44,6 @@ if (isset($displayData))
 	 * Initiate SVG area selector variables. Basically it is drawing rectangle.
 	 */
 	var rootSnapSvgObject;
-	/*var mouseDownX = 0;
-	var mouseDownY = 0;*/
-
 	var mouseDownX = 0;
 	var mouseDownY = 0;
 	var elemClicked;
@@ -145,14 +142,12 @@ if (isset($displayData))
 				function DrawRectangle(x, y, w, h) {
 					var element = rootSnapSvgObject.rect(x, y, w, h);
 					element.attr({
-						fill: "gray",
-						opacity: .5,
+						fill: "transparent",
 						stroke: "#CA202C",
 						strokeWidth: 3
 					});
 					jQuery(element.node).attr('id', 'rct' + x + y);
 
-					//element.drag(move, start, up);
 					element.drag();
 
 					element.hover(gotIn, gotOut);
