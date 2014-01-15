@@ -16,6 +16,7 @@ $this->designtype_id =	$displayData->item->designtype_id;
 $this->pxToUnit = $displayData->pxToUnit;
 $this->unit = $displayData->unit;
 $this->fontsOptions = $displayData->fontsOptions;
+$this->inputFieldOptions = $displayData->inputFieldOptions;
 
 ?>
 
