@@ -54,6 +54,8 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	var insideElement = "false";
 	var insideSizer = "false";
 	var elementsGroup;
+	var reddesign_area_id = 0;
+	var areaBoxes = new Array();
 
 	/**
 	 * Initiate snap.svg
@@ -152,24 +154,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 					rect.hover(gotIn, gotOut);
 				};
 
-				function DrawRectangle(x, y, w, h) {
-					var element = rootSnapSvgObject.rect(x, y, w, h);
-					element.attr({
-						fill: "transparent",
-						stroke: "#CA202C",
-						strokeWidth: 3
-					});
-					jQuery(element.node).attr('id', 'rct' + x + y);
-
-					element.hover(gotIn, gotOut);
-
-					element.click(function(e) {
-						elemClicked = jQuery(element.node).attr('id');
-					});
-
-					return element;
-				}
-
 				jQuery("#svgForAreas").mousedown(function(e) {
 					if (insideElement == "false")
 					{
@@ -216,7 +200,18 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 							elementsGroup = rootSnapSvgObject.group(rect, sizer);
 							elementsGroup.drag();
 
-							populateFields(rect)
+							var rectBBox = rect.getBBox();
+
+							this.rectW = rectBBox.width;
+							this.rectH = rectBBox.height;
+							this.rectX = rectBBox.x;
+							this.rectY = rectBBox.y;
+							this.rectY2 = rectBBox.y2;
+							this.rectX2 = rectBBox.x2;
+
+							setCoordinatesToValues(this.rectX, this.rectY, this.rectX2, this.rectY2, this.rectX2 - this.rectX, this.rectY2 - this.rectY);
+
+							//populateFields(rect);
 						});
 					}
 				});
@@ -225,16 +220,21 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				{
 					elementsGroup.undrag();
 					var offset = jQuery("#svgForAreas").offset();
+					//this.rectX2 = this.sizerX + dx;
+					//this.rectY2 = this.sizerY + dy;
+					//console.log(dy);
+					this.rectX = this.orectX;
+					this.rectY = this.orectY;
+					this.rectX2 = this.orectX2 + dx;
+					this.rectY2 = this.orectY2 + dy;
 
-					console.log(dy);
 					rect.attr({
-						width: this.rectW + dx,
-						height: this.rectH + (dy - offset.top)
+						width: this.rectX2 - this.rectX,
+						height: this.rectY2 - this.rectY //(dy - offset.top)
 					});
-
 					sizer.attr({
-						x: this.sizerX + dx,
-						y: this.sizerY + (dy - offset.top)
+						x: this.rectX2 - this.rectX,
+						y: this.rectY2 - this.rectY//(dy - offset.top)
 					})
 				};
 
@@ -243,12 +243,20 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 					var rectBBox = rect.getBBox();
 					var sizerBBox = sizer.getBBox();
 
+					this.orectX = areaBoxes[current_area_id]['x'];
+					this.orectY = areaBoxes[current_area_id]['y'];
+					this.orectX2 = areaBoxes[current_area_id]['x2'];
+					this.orectY2 = areaBoxes[current_area_id]['y2'];
+
 					this.sizerX = sizerBBox.x;
 					this.sizerY = sizerBBox.y;
 
-					this.rectW = rectBBox.width;
-					this.rectH = rectBBox.height;
+					//this.rectW = rectBBox.width;
+					//this.rectH = rectBBox.height;
+					/*this.rectX = rectBBox.x;
 					this.rectY = rectBBox.y;
+					this.rectY2 = rectBBox.y2;
+					this.rectX2 = rectBBox.x2;*/
 				};
 
 				onSizerEnd = function()
@@ -257,8 +265,63 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 					sizer.hover(gotInSizer, gotOutSizer);
 					rect.hover(gotIn, gotOut);
 
-					populateFields(rect);
+					areaBoxes[current_area_id]['x'] = this.rectX;
+					areaBoxes[current_area_id]['y'] = this.rectY;
+					areaBoxes[current_area_id]['x2'] = this.rectX2;
+					areaBoxes[current_area_id]['y2'] = this.rectY2;
+
+					setCoordinatesToValues(this.rectX, this.rectY, this.rectX2, this.rectY2, this.rectX2 - this.rectX, this.rectY2 - this.rectY);
+
+					//populateFields(rect);
 				}
+
+			onRectMove = function(dx, dy)
+			{
+				//elementsGroup.undrag();
+				var offset = jQuery("#svgForAreas").offset();
+				this.rectX = this.orectX + dx;
+				this.rectY = this.orectY + dy;
+				this.rectX2 = this.orectX2 + dx;
+				this.rectY2 = this.orectY2 + dy;
+			};
+
+			onRectStart = function()
+			{
+				var rectBBox = rect.getBBox();
+				this.orectX = areaBoxes[current_area_id]['x'];
+				this.orectY = areaBoxes[current_area_id]['y'];
+				this.orectX2 = areaBoxes[current_area_id]['x2'];
+				this.orectY2 = areaBoxes[current_area_id]['y2'];
+
+				//this.rectW = rectBBox.width;
+				//this.rectH = rectBBox.height;
+				/*this.rectX = rectBBox.x;
+				this.rectY = rectBBox.y;
+				this.rectX2 = rectBBox.x2;
+				this.rectY2 = rectBBox.y2;*/
+			};
+
+			onRectEnd = function()
+			{
+				elementsGroup.drag();
+				sizer.hover(gotInSizer, gotOutSizer);
+				rect.hover(gotIn, gotOut);
+				areaBoxes[current_area_id]['x'] = this.rectX;
+				areaBoxes[current_area_id]['y'] = this.rectY;
+				areaBoxes[current_area_id]['x2'] = this.rectX2;
+				areaBoxes[current_area_id]['y2'] = this.rectY2;
+
+				/*rect.attr({
+					x: this.rectX,
+					y: this.rectY,
+					x2: this.rectX2,
+					y2: this.rectY2
+				});*/
+
+				setCoordinatesToValues(this.rectX, this.rectY, this.rectX2, this.rectY2, this.rectX2 - this.rectX, this.rectY2 - this.rectY);
+
+				//populateFields(rect);
+			}
 
 
 				jQuery("#svgForAreas").mouseup(function(e) {
@@ -545,6 +608,354 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	}
 
 	/**
+	 * Selects area for edit and populates field data accordingly
+	 *
+	 * @param reddesign_area_id
+	 * @param title
+	 * @param x1_pos
+	 * @param y1_pos
+	 * @param x2_pos
+	 * @param y2_pos
+	 * @param width
+	 * @param height
+	 */
+	function selectAreaForEdit(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, width, height) {
+
+		jQuery("#designAreaId").val(reddesign_area_id);
+		jQuery("#areaName").val(title);
+		if (areaBoxes[reddesign_area_id])
+		{
+			current_area_id = reddesign_area_id;
+		}
+		else
+		{
+			areaBoxes[reddesign_area_id] = new Array();
+			areaBoxes[reddesign_area_id]['x'] = x1_pos;
+			areaBoxes[reddesign_area_id]['x2'] = x2_pos;
+			areaBoxes[reddesign_area_id]['y'] = y1_pos;
+			areaBoxes[reddesign_area_id]['y2'] = y2_pos;
+			current_area_id = reddesign_area_id;
+			selectArea(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
+		}
+
+		setCoordinatesToValues(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
+
+		jQuery("#areaDiv" + reddesign_area_id).html(title + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
+	}
+
+	function setCoordinatesToValues(x1_pos, y1_pos, x2_pos, y2_pos, width, height)
+	{
+		// Convert pixel to selected unit. Use ratio to calculate and display real mertics instead of scaled down.
+		var x1_pos_in_unit = (parseFloat(x1_pos) / ratio) * pxToUnit;
+		var y1_pos_in_unit = (parseFloat(y1_pos) / ratio) * pxToUnit;
+		var x2_pos_in_unit = (parseFloat(x2_pos) / ratio) * pxToUnit;
+		var y2_pos_in_unit = (parseFloat(y2_pos) / ratio) * pxToUnit;
+		var width_in_unit  = (parseFloat(width) / ratio) * pxToUnit;
+		var height_in_unit = (parseFloat(height) / ratio) * pxToUnit;
+
+		jQuery("#areaX1").val(x1_pos_in_unit.toFixed(0));
+		jQuery("#areaY1").val(y1_pos_in_unit.toFixed(0));
+		jQuery("#areaX2").val(x2_pos_in_unit.toFixed(0));
+		jQuery("#areaY2").val(y2_pos_in_unit.toFixed(0));
+		jQuery("#areaWidth").val(width_in_unit.toFixed(0));
+		jQuery("#areaHeight").val(height_in_unit.toFixed(0));
+	}
+
+	function DrawRectangle(x, y, w, h) {
+		var element = rootSnapSvgObject.rect(x, y, w, h);
+		element.attr({
+			fill: "transparent",
+			stroke: "#CA202C",
+			strokeWidth: 3
+		});
+		jQuery(element.node).attr('id', 'rct' + x + y);
+
+		element.hover(gotIn, gotOut);
+
+		element.click(function(e) {
+			elemClicked = jQuery(element.node).attr('id');
+		});
+
+		return element;
+	}
+
+	/**
+	 * Selects area with given parameters. Used onkeyup event in parameter input fields.
+	 *
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 */
+	selectArea = function(x1, y1, x2, y2, width, height) {
+		var offset = jQuery("#svgForAreas").offset();
+
+		rect = DrawRectangle(x1, y1, x2, y2);
+
+		rect.attr({
+			width: width > 0 ? width : 0,
+			height: height > 0 ? height : 0,
+			rectY: y1,
+			rectX: x1,
+			rectY2: y2,
+			rectX: x2
+		});
+
+		sizer = rootSnapSvgObject.rect(x2, y2, 0, 0);
+		//var rectBBox = rect.getBBox();
+
+
+		this.rectW = width;
+		this.rectH = height;
+		this.rectY = y2;
+		this.rectX = x2;
+
+		var sizerX = (x2)-10;
+		var sizerY = (y2)-10;
+
+		sizer.attr({
+			fill: "#CA202C",
+			stroke: "none",
+			width: width > 0 ? 10 : 0,
+			height: height > 0 ? 10 : 0,
+			x: sizerX,
+			y: sizerY,
+			sizerX: sizerX,
+			sizerY: sizerY
+		});
+
+		elementsGroup = rootSnapSvgObject.group(rect, sizer);
+
+		elementsGroup.drag();
+		rect.hover(gotIn, gotOut);
+		rect.drag(onRectMove, onRectStart, onRectEnd);
+		sizer.hover(gotInSizer, gotOutSizer);
+		sizer.drag(onSizerMove, onSizerStart, onSizerEnd);
+
+
+		populateFields(rect);
+
+
+		/*jQuery("#svgForAreas").mousemove(function(e) {
+			var offset = jQuery("#svgForAreas").offset();
+			var upX = e.pageX - offset.left;
+			var upY = e.pageY - offset.top;
+
+			var width = upX - mouseDownX;
+			var height = upY - mouseDownY;
+
+			rect.attr({
+				width: width > 0 ? width : 0,
+				height: height > 0 ? height : 0
+			});
+
+			if (insideSizer == "false")
+			{
+				var sizerX = (mouseDownX + width) - 10;
+				var sizerY = (mouseDownY + height) - 10;
+
+				sizer.attr({
+					fill: "#CA202C",
+					stroke: "none",
+					width: width > 0 ? 10 : 0,
+					height: height > 0 ? 10 : 0,
+					x: sizerX,
+					y: sizerY
+				});
+			}
+
+			elementsGroup = rootSnapSvgObject.group(rect, sizer);
+			elementsGroup.drag();
+
+			populateFields(rect)
+		});*/
+	}
+
+	/**
+	 * Updates selection with entered width.
+	 */
+	function selectAreaOnWidthKeyUp()
+	{
+		var width, selection, x2;
+
+		width = jQuery("#areaWidth").val();
+		selection = selectionObjectInstance.getSelection();
+
+		// Convert width to a coordinate.
+		width = parseFloat(width) * unitToPx * ratio;
+
+		// Calculate X2 coordinate
+		x2 = selection.x1 + width;
+
+		if (width > 0 && x2 < imageWidth)
+		{
+			selectionObjectInstance = jQuery("img#background").imgAreaSelect({
+				instance: true,
+				handles: true,
+				x1: selection.x1,
+				y1: selection.y1,
+				x2: x2,
+				y2: selection.y2
+			});
+
+			populateFields(selectionObjectInstance.getSelection());
+		}
+	}
+
+	/**
+	 * Updates selection with entered height.
+	 */
+	function selectAreaOnHeightKeyUp()
+	{
+		var height, selection, y2;
+
+		height = jQuery("#areaHeight").val();
+		selection = selectionObjectInstance.getSelection();
+
+		// Convert height to a coordinate.
+		height = parseFloat(height) * unitToPx * ratio;
+		y2 = selection.y1 + height;
+
+		if (height > 0 && y2 < imageHeight)
+		{
+			selectionObjectInstance = jQuery("img#background").imgAreaSelect({
+				instance: true,
+				handles: true,
+				x1: selection.x1,
+				y1: selection.y1,
+				x2: selection.x2,
+				y2: y2
+			});
+
+			populateFields(selectionObjectInstance.getSelection());
+		}
+	}
+
+	/**
+	 * Updates selection with entered X1.
+	 */
+	function selectAreaOnX1KeyUp()
+	{
+		var x1, x2, selection;
+
+		x1 = jQuery("#areaX1").val();
+		selection = selectionObjectInstance.getSelection();
+
+		// Convert X1 to pixels coordinate.
+		x1 = parseFloat(x1) * unitToPx * ratio;
+
+		// Calculate X2 coordinate.
+		x2 = x1 + selection.width;
+
+		if(x1 > 0 && x2 < imageWidth)
+		{
+			selectionObjectInstance = jQuery("img#background").imgAreaSelect({
+				instance: true,
+				handles: true,
+				x1: x1,
+				y1: selection.y1,
+				x2: x2,
+				y2: selection.y2
+			});
+
+			populateFields(selectionObjectInstance.getSelection());
+		}
+	}
+
+	/**
+	 * Updates selection with entered Y1.
+	 */
+	function selectAreaOnY1KeyUp()
+	{
+		var y1, y2, selection;
+
+		y1 = jQuery("#areaY1").val();
+		selection = selectionObjectInstance.getSelection();
+
+		// Convert X1 to pixels coordinate.
+		y1 = parseFloat(y1) * unitToPx * ratio;
+
+		// Calculate Y2 coordinate.
+		y2 = y1 + selection.height;
+
+		if(y1 > 0 && y2 < imageHeight)
+		{
+			selectionObjectInstance = jQuery("img#background").imgAreaSelect({
+				instance: true,
+				handles: true,
+				x1: selection.x1,
+				y1: y1,
+				x2: selection.x2,
+				y2: y2
+			});
+
+			populateFields(selectionObjectInstance.getSelection());
+		}
+	}
+
+	/**
+	 * Updates selection with entered X2.
+	 */
+	function selectAreaOnX2KeyUp()
+	{
+		var x2, x1, selection;
+
+		x2 = jQuery("#areaX2").val();
+		selection = selectionObjectInstance.getSelection();
+
+		// Convert X1 to pixels coordinate.
+		x2 = parseFloat(x2) * unitToPx * ratio;
+
+		// Calculate X1 coordinate.
+		x1 = x2 - selection.width;
+
+		if(x2 < imageWidth && x1 > 0)
+		{
+			selectionObjectInstance = jQuery("img#background").imgAreaSelect({
+				instance: true,
+				handles: true,
+				x1: x1,
+				y1: selection.y1,
+				x2: x2,
+				y2: selection.y2
+			});
+
+			populateFields(selectionObjectInstance.getSelection());
+		}
+	}
+
+	/**
+	 * Updates selection with entered Y2.
+	 */
+	function selectAreaOnY2KeyUp()
+	{
+		var y2, y1, selection;
+
+		y2 = jQuery("#areaY2").val();
+		selection = selectionObjectInstance.getSelection();
+
+		// Convert X1 to pixels coordinate.
+		y2 = parseFloat(y2) * unitToPx * ratio;
+
+		// Calculate X1 coordinate.
+		y1 = y2 - selection.height;
+
+		if(y2 < imageHeight && y1 > 0)
+		{
+			selectionObjectInstance = jQuery("img#background").imgAreaSelect({
+				instance: true,
+				handles: true,
+				x1: selection.x1,
+				y1: y1,
+				x2: selection.x2,
+				y2: y2
+			});
+
+			populateFields(selectionObjectInstance.getSelection());
+		}
+	}
+
+	/**
 	 * Clears parameter input fields. Used when select area is not displayed anymore.
 	 */
 	function clearSelectionFields() {
@@ -561,7 +972,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	function populateFields(rectangle)
 	{
 		rectBoundingBox = rectangle.getBBox();
-
+console.log(rectBoundingBox);
 		jQuery("#areaX1").val(Math.round(rectBoundingBox.x));
 		jQuery("#areaY1").val(Math.round(rectBoundingBox.y));
 		jQuery("#areaX2").val(Math.round(rectBoundingBox.x2));
