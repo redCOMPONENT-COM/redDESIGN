@@ -24,6 +24,8 @@ if (isset($displayData))
 	$this->inputFieldOptions = $displayData->inputFieldOptions;
 }
 
+$return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->item->designtype_id . '&tab=design-areas';
+
 ?>
 
 <script type="text/javascript">
@@ -199,4 +201,123 @@ if (isset($displayData))
 			<?php endif; ?>
 		}
 	);
+	/**
+	 * Makes sure that the area has a name, alert otherwise
+	 *
+	 * @param update
+	 */
+	function preSaveArea(update) {
+		if(!jQuery("#areaName").val())
+		{
+			alert("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_NO_AREA_NAME'); ?>");
+		}
+		else
+		{
+			saveArea(update);
+		}
+	}
+
+	/**
+	 * Saves area into the DB via AJAX. And prepares image for another selection.
+	 *
+	 * @param update
+	 */
+	function saveArea(update)
+	{
+		jQuery("#saveAreaBtn").button("loading");
+
+		var reddesign_area_id;
+		var areaName	= jQuery("#areaName").val();
+		var areaX1 		= jQuery("#areaX1").val();
+		var areaY1 		= jQuery("#areaY1").val();
+		var areaX2 		= jQuery("#areaX2").val();
+		var areaY2 		= jQuery("#areaY2").val();
+		var areaWidth  	= jQuery("#areaWidth").val();
+		var areaHeight 	= jQuery("#areaHeight").val();
+
+		var areaX1_in_px 		= (areaX1 * unitToPx * ratio).toFixed(0);
+		var areaY1_in_px 		= (areaY1 * unitToPx * ratio).toFixed(0);
+		var areaX2_in_px 		= (areaX2 * unitToPx * ratio).toFixed(0);
+		var areaY2_in_px 		= (areaY2 * unitToPx * ratio).toFixed(0);
+		var areaWidth_in_px 	= (areaWidth * unitToPx * ratio).toFixed(0);
+		var areaHeight_in_px 	= (areaHeight * unitToPx * ratio).toFixed(0);
+
+		if(update != 0)
+		{
+			// if update is not 0 than it holds reddesign_area_id and we are doing update of existing area
+			reddesign_area_id = update;
+		}
+		else
+		{
+			reddesign_area_id = '';
+		}
+
+		var productionBackground = <?php echo $this->productionBackground->id; ?>;
+
+		jQuery.ajax({
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxSave",
+			data: {
+				'jform[id]': reddesign_area_id,
+				'jform[name]': areaName,
+				'jform[background_id]': productionBackground,
+				'jform[x1_pos]': areaX1_in_px,
+				'jform[y1_pos]': areaY1_in_px,
+				'jform[x2_pos]': areaX2_in_px,
+				'jform[y2_pos]': areaY2_in_px,
+				'jform[width]': areaWidth_in_px,
+				'jform[height]': areaHeight_in_px
+			},
+			type: "post",
+			success: function (data)
+			{
+				var json = jQuery.parseJSON(data);
+
+				setTimeout(function () {jQuery("#saveAreaBtn").button("reset")}, 500);
+
+				if (json.status == 1)
+				{
+					if (update == 0)
+					{
+						//drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
+						//addAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
+						clearSelectionFields();
+					}
+					/* @Todo
+					 else
+					 {
+					 jQuery("#areaDiv" + reddesign_area_id).remove();
+					 drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
+					 jQuery("#areaDiv" + reddesign_area_id).html(areaName + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
+				 updateAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
+				 }
+				 */
+
+					window.location.href = "<?php echo $return_url; ?>";
+				}
+				else
+				{
+					jQuery('#system-message-container').html(json.message);
+				}
+			},
+			error: function (data)
+			{
+				console.log("Error: " + data);
+			}
+		});
+	}
+
+	/**
+	 * Clears parameter input fields. Used when select area is not displayed anymore.
+	 */
+	function clearSelectionFields() {
+		jQuery("#designAreaId").val("0");
+		jQuery("#areaName").val("");
+		jQuery("#areaX1").val("");
+		jQuery("#areaY1").val("");
+		jQuery("#areaX2").val("");
+		jQuery("#areaY2").val("");
+		jQuery("#areaWidth").val("");
+		jQuery("#areaHeight").val("");
+	}
+
 </script>
