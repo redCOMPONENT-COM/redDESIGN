@@ -311,16 +311,8 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				areaBoxes[current_area_id]['x2'] = this.rectX2;
 				areaBoxes[current_area_id]['y2'] = this.rectY2;
 
-				/*rect.attr({
-					x: this.rectX,
-					y: this.rectY,
-					x2: this.rectX2,
-					y2: this.rectY2
-				});*/
-
 				setCoordinatesToValues(this.rectX, this.rectY, this.rectX2, this.rectY2, this.rectX2 - this.rectX, this.rectY2 - this.rectY);
 
-				//populateFields(rect);
 			}
 
 
@@ -702,8 +694,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		});
 
 		sizer = rootSnapSvgObject.rect(x2, y2, 0, 0);
-		//var rectBBox = rect.getBBox();
-
 
 		this.rectW = width;
 		this.rectH = height;
@@ -732,43 +722,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		sizer.hover(gotInSizer, gotOutSizer);
 		sizer.drag(onSizerMove, onSizerStart, onSizerEnd);
 
-
-		populateFields(rect);
-
-
-		/*jQuery("#svgForAreas").mousemove(function(e) {
-			var offset = jQuery("#svgForAreas").offset();
-			var upX = e.pageX - offset.left;
-			var upY = e.pageY - offset.top;
-
-			var width = upX - mouseDownX;
-			var height = upY - mouseDownY;
-
-			rect.attr({
-				width: width > 0 ? width : 0,
-				height: height > 0 ? height : 0
-			});
-
-			if (insideSizer == "false")
-			{
-				var sizerX = (mouseDownX + width) - 10;
-				var sizerY = (mouseDownY + height) - 10;
-
-				sizer.attr({
-					fill: "#CA202C",
-					stroke: "none",
-					width: width > 0 ? 10 : 0,
-					height: height > 0 ? 10 : 0,
-					x: sizerX,
-					y: sizerY
-				});
-			}
-
-			elementsGroup = rootSnapSvgObject.group(rect, sizer);
-			elementsGroup.drag();
-
-			populateFields(rect)
-		});*/
+		setCoordinatesToValues(x1, y1, x2, y2, x2 - x1, y2 - y1);
 	}
 
 	/**
@@ -779,26 +733,25 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		var width, selection, x2;
 
 		width = jQuery("#areaWidth").val();
-		selection = selectionObjectInstance.getSelection();
 
 		// Convert width to a coordinate.
 		width = parseFloat(width) * unitToPx * ratio;
 
 		// Calculate X2 coordinate
-		x2 = selection.x1 + width;
+		x2 = jQuery("#areaX1").val() + width;
 
 		if (width > 0 && x2 < imageWidth)
 		{
-			selectionObjectInstance = jQuery("img#background").imgAreaSelect({
-				instance: true,
-				handles: true,
-				x1: selection.x1,
-				y1: selection.y1,
-				x2: x2,
-				y2: selection.y2
-			});
-
-			populateFields(selectionObjectInstance.getSelection());
+			if (current_area_id > 0)
+			{
+				areaBoxes[current_area_id]['x2'] = x2;
+				setCoordinatesToValues(areaBoxes[current_area_id]['x'],
+					areaBoxes[current_area_id]['y'],
+					areaBoxes[current_area_id]['x2'],
+					areaBoxes[current_area_id]['y2'],
+					areaBoxes[current_area_id]['x2'] - areaBoxes[current_area_id]['x'],
+					areaBoxes[current_area_id]['y2'] - areaBoxes[current_area_id]['y']);
+			}
 		}
 	}
 
@@ -810,24 +763,23 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		var height, selection, y2;
 
 		height = jQuery("#areaHeight").val();
-		selection = selectionObjectInstance.getSelection();
 
 		// Convert height to a coordinate.
 		height = parseFloat(height) * unitToPx * ratio;
-		y2 = selection.y1 + height;
+		y2 = jQuery("#areaY1").val() + height;
 
 		if (height > 0 && y2 < imageHeight)
 		{
-			selectionObjectInstance = jQuery("img#background").imgAreaSelect({
-				instance: true,
-				handles: true,
-				x1: selection.x1,
-				y1: selection.y1,
-				x2: selection.x2,
-				y2: y2
-			});
-
-			populateFields(selectionObjectInstance.getSelection());
+			if (current_area_id > 0)
+			{
+				areaBoxes[current_area_id]['y2'] = y2;
+				setCoordinatesToValues(areaBoxes[current_area_id]['x'],
+					areaBoxes[current_area_id]['y'],
+					areaBoxes[current_area_id]['x2'],
+					areaBoxes[current_area_id]['y2'],
+					areaBoxes[current_area_id]['x2'] - areaBoxes[current_area_id]['x'],
+					areaBoxes[current_area_id]['y2'] - areaBoxes[current_area_id]['y']);
+			}
 		}
 	}
 
@@ -839,26 +791,26 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		var x1, x2, selection;
 
 		x1 = jQuery("#areaX1").val();
-		selection = selectionObjectInstance.getSelection();
 
 		// Convert X1 to pixels coordinate.
 		x1 = parseFloat(x1) * unitToPx * ratio;
 
 		// Calculate X2 coordinate.
-		x2 = x1 + selection.width;
+		x2 = x1 + jQuery("#areaWidth").val();
 
 		if(x1 > 0 && x2 < imageWidth)
 		{
-			selectionObjectInstance = jQuery("img#background").imgAreaSelect({
-				instance: true,
-				handles: true,
-				x1: x1,
-				y1: selection.y1,
-				x2: x2,
-				y2: selection.y2
-			});
-
-			populateFields(selectionObjectInstance.getSelection());
+			if (current_area_id > 0)
+			{
+				areaBoxes[current_area_id]['x'] = x1;
+				areaBoxes[current_area_id]['x2'] = x2;
+				setCoordinatesToValues(areaBoxes[current_area_id]['x'],
+					areaBoxes[current_area_id]['y'],
+					areaBoxes[current_area_id]['x2'],
+					areaBoxes[current_area_id]['y2'],
+					areaBoxes[current_area_id]['x2'] - areaBoxes[current_area_id]['x'],
+					areaBoxes[current_area_id]['y2'] - areaBoxes[current_area_id]['y']);
+			}
 		}
 	}
 
@@ -870,26 +822,26 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		var y1, y2, selection;
 
 		y1 = jQuery("#areaY1").val();
-		selection = selectionObjectInstance.getSelection();
 
 		// Convert X1 to pixels coordinate.
 		y1 = parseFloat(y1) * unitToPx * ratio;
 
 		// Calculate Y2 coordinate.
-		y2 = y1 + selection.height;
+		y2 = y1 + jQuery("#areaHeight").val();
 
 		if(y1 > 0 && y2 < imageHeight)
 		{
-			selectionObjectInstance = jQuery("img#background").imgAreaSelect({
-				instance: true,
-				handles: true,
-				x1: selection.x1,
-				y1: y1,
-				x2: selection.x2,
-				y2: y2
-			});
-
-			populateFields(selectionObjectInstance.getSelection());
+			if (current_area_id > 0)
+			{
+				areaBoxes[current_area_id]['y'] = y1;
+				areaBoxes[current_area_id]['y2'] = y2;
+				setCoordinatesToValues(areaBoxes[current_area_id]['x'],
+					areaBoxes[current_area_id]['y'],
+					areaBoxes[current_area_id]['x2'],
+					areaBoxes[current_area_id]['y2'],
+					areaBoxes[current_area_id]['x2'] - areaBoxes[current_area_id]['x'],
+					areaBoxes[current_area_id]['y2'] - areaBoxes[current_area_id]['y']);
+			}
 		}
 	}
 
@@ -901,26 +853,26 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		var x2, x1, selection;
 
 		x2 = jQuery("#areaX2").val();
-		selection = selectionObjectInstance.getSelection();
 
 		// Convert X1 to pixels coordinate.
 		x2 = parseFloat(x2) * unitToPx * ratio;
 
 		// Calculate X1 coordinate.
-		x1 = x2 - selection.width;
+		x1 = x2 - jQuery("#areaWidth").val();
 
 		if(x2 < imageWidth && x1 > 0)
 		{
-			selectionObjectInstance = jQuery("img#background").imgAreaSelect({
-				instance: true,
-				handles: true,
-				x1: x1,
-				y1: selection.y1,
-				x2: x2,
-				y2: selection.y2
-			});
-
-			populateFields(selectionObjectInstance.getSelection());
+			if (current_area_id > 0)
+			{
+				areaBoxes[current_area_id]['x'] = x1;
+				areaBoxes[current_area_id]['x2'] = x2;
+				setCoordinatesToValues(areaBoxes[current_area_id]['x'],
+					areaBoxes[current_area_id]['y'],
+					areaBoxes[current_area_id]['x2'],
+					areaBoxes[current_area_id]['y2'],
+					areaBoxes[current_area_id]['x2'] - areaBoxes[current_area_id]['x'],
+					areaBoxes[current_area_id]['y2'] - areaBoxes[current_area_id]['y']);
+			}
 		}
 	}
 
@@ -932,26 +884,26 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		var y2, y1, selection;
 
 		y2 = jQuery("#areaY2").val();
-		selection = selectionObjectInstance.getSelection();
 
 		// Convert X1 to pixels coordinate.
 		y2 = parseFloat(y2) * unitToPx * ratio;
 
 		// Calculate X1 coordinate.
-		y1 = y2 - selection.height;
+		y1 = y2 - jQuery("#areaHeight").val();
 
 		if(y2 < imageHeight && y1 > 0)
 		{
-			selectionObjectInstance = jQuery("img#background").imgAreaSelect({
-				instance: true,
-				handles: true,
-				x1: selection.x1,
-				y1: y1,
-				x2: selection.x2,
-				y2: y2
-			});
-
-			populateFields(selectionObjectInstance.getSelection());
+			if (current_area_id > 0)
+			{
+				areaBoxes[current_area_id]['y'] = y1;
+				areaBoxes[current_area_id]['y2'] = y2;
+				setCoordinatesToValues(areaBoxes[current_area_id]['x'],
+					areaBoxes[current_area_id]['y'],
+					areaBoxes[current_area_id]['x2'],
+					areaBoxes[current_area_id]['y2'],
+					areaBoxes[current_area_id]['x2'] - areaBoxes[current_area_id]['x'],
+					areaBoxes[current_area_id]['y2'] - areaBoxes[current_area_id]['y']);
+			}
 		}
 	}
 
@@ -972,7 +924,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	function populateFields(rectangle)
 	{
 		rectBoundingBox = rectangle.getBBox();
-console.log(rectBoundingBox);
 		jQuery("#areaX1").val(Math.round(rectBoundingBox.x));
 		jQuery("#areaY1").val(Math.round(rectBoundingBox.y));
 		jQuery("#areaX2").val(Math.round(rectBoundingBox.x2));
