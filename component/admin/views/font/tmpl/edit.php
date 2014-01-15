@@ -21,7 +21,9 @@ $action = JRoute::_('index.php?option=com_reddesign&view=font');
 		<li class="active">
 			<a href="#general" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_COMMON_GENERAL'); ?></a>
 		</li>
-		<?php if (!empty($this->item->id)) : ?>
+		<?php // @Todo: while we decide what to do with chars I'm hiding it ?>
+		<?php //if (!empty($this->item->id)) ?>
+		<?php if (false) : ?>
 			<li>
 				<a href="#chars" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTERS'); ?></a>
 			</li>
@@ -31,7 +33,9 @@ $action = JRoute::_('index.php?option=com_reddesign&view=font');
 		<div class="tab-pane active" id="general">
 			<?php echo $this->loadTemplate('general') ?>
 		</div>
-		<?php if (!empty($this->item->id)) : ?>
+		<?php // @Todo: while we decide what to do with chars I'm hiding it ?>
+		<?php //if (!empty($this->item->id)) ?>
+		<?php if (false) : ?>
 			<div class="tab-pane" id="chars">
 				<?php echo $this->loadTemplate('chars') ?>
 			</div>
