@@ -161,6 +161,8 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 							elementsGroup = rootSnapSvgObject.group(rect, sizer);
 							elementsGroup.drag();
+
+							populateFields(rect)
 						});
 					}
 				});
@@ -341,11 +343,11 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	{
 		rectBoundingBox = rectangle.getBBox();
 
-		jQuery("#areaX1").val(rectBoundingBox.x);
-		jQuery("#areaY1").val(rectBoundingBox.y);
-		jQuery("#areaX2").val(rectBoundingBox.x2);
-		jQuery("#areaY2").val(rectBoundingBox.y2);
-		jQuery("#areaWidth").val(rectBoundingBox.width);
-		jQuery("#areaHeight").val(rectBoundingBox.height);
+		jQuery("#areaX1").val(Math.round(rectBoundingBox.x));
+		jQuery("#areaY1").val(Math.round(rectBoundingBox.y));
+		jQuery("#areaX2").val(Math.round(rectBoundingBox.x2));
+		jQuery("#areaY2").val(Math.round(rectBoundingBox.y2));
+		jQuery("#areaWidth").val(Math.round(rectBoundingBox.width));
+		jQuery("#areaHeight").val(Math.round(rectBoundingBox.height));
 	}
 </script>
