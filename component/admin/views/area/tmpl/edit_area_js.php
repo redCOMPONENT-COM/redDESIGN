@@ -166,6 +166,12 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 						rect = DrawRectangle(mouseDownX, mouseDownY, 0, 0);
 						sizer = rootSnapSvgObject.rect(mouseDownX, mouseDownY, 0, 0);
+
+						elementsGroup = rootSnapSvgObject.group(rect, sizer);
+
+						elementsGroup.drag();
+						rect.hover(gotIn, gotOut);
+						rect.drag(onRectMove, onRectStart, onRectEnd);
 						sizer.hover(gotInSizer, gotOutSizer);
 						sizer.drag(onSizerMove, onSizerStart, onSizerEnd);
 
@@ -197,8 +203,8 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 								});
 							}
 
-							elementsGroup = rootSnapSvgObject.group(rect, sizer);
-							elementsGroup.drag();
+							//elementsGroup = rootSnapSvgObject.group(rect, sizer);
+							//elementsGroup.drag();
 
 							var rectBBox = rect.getBBox();
 
@@ -209,7 +215,15 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 							this.rectY2 = rectBBox.y2;
 							this.rectX2 = rectBBox.x2;
 
-							setCoordinatesToValues(this.rectX, this.rectY, this.rectX2, this.rectY2, this.rectX2 - this.rectX, this.rectY2 - this.rectY);
+							reddesign_area_id = Math.floor((Math.random()*10000)+1100);
+							areaBoxes[reddesign_area_id] = new Array();
+							areaBoxes[reddesign_area_id]['x'] = this.rectX;
+							areaBoxes[reddesign_area_id]['x2'] = this.rectX2;
+							areaBoxes[reddesign_area_id]['y'] = this.rectY;
+							areaBoxes[reddesign_area_id]['y2'] = this.rectY2;
+							current_area_id = reddesign_area_id;
+
+							//setCoordinatesToValues(this.rectX, this.rectY, this.rectX2, this.rectY2, this.rectX2 - this.rectX, this.rectY2 - this.rectY, false);
 
 							//populateFields(rect);
 						});
@@ -233,8 +247,8 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 						height: this.rectY2 - this.rectY //(dy - offset.top)
 					});
 					sizer.attr({
-						x: this.rectX2 - this.rectX,
-						y: this.rectY2 - this.rectY//(dy - offset.top)
+						x: this.rectX2,
+						y: this.rectY2//(dy - offset.top)
 					})
 				};
 
@@ -270,7 +284,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 					areaBoxes[current_area_id]['x2'] = this.rectX2;
 					areaBoxes[current_area_id]['y2'] = this.rectY2;
 
-					setCoordinatesToValues(this.rectX, this.rectY, this.rectX2, this.rectY2, this.rectX2 - this.rectX, this.rectY2 - this.rectY);
+					setCoordinatesToValues(this.rectX, this.rectY, this.rectX2, this.rectY2, this.rectX2 - this.rectX, this.rectY2 - this.rectY, true);
 
 					//populateFields(rect);
 				}
@@ -303,7 +317,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 			onRectEnd = function()
 			{
-				elementsGroup.drag();
+				//elementsGroup.drag();
 				sizer.hover(gotInSizer, gotOutSizer);
 				rect.hover(gotIn, gotOut);
 				areaBoxes[current_area_id]['x'] = this.rectX;
@@ -311,7 +325,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				areaBoxes[current_area_id]['x2'] = this.rectX2;
 				areaBoxes[current_area_id]['y2'] = this.rectY2;
 
-				setCoordinatesToValues(this.rectX, this.rectY, this.rectX2, this.rectY2, this.rectX2 - this.rectX, this.rectY2 - this.rectY);
+				setCoordinatesToValues(this.rectX, this.rectY, this.rectX2, this.rectY2, this.rectX2 - this.rectX, this.rectY2 - this.rectY, true);
 
 			}
 
@@ -635,7 +649,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		jQuery("#areaDiv" + reddesign_area_id).html(title + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
 	}
 
-	function setCoordinatesToValues(x1_pos, y1_pos, x2_pos, y2_pos, width, height)
+	function setCoordinatesToValues(x1_pos, y1_pos, x2_pos, y2_pos, width, height, showIt)
 	{
 		// Convert pixel to selected unit. Use ratio to calculate and display real mertics instead of scaled down.
 		var x1_pos_in_unit = (parseFloat(x1_pos) / ratio) * pxToUnit;
@@ -651,6 +665,22 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		jQuery("#areaY2").val(y2_pos_in_unit.toFixed(0));
 		jQuery("#areaWidth").val(width_in_unit.toFixed(0));
 		jQuery("#areaHeight").val(height_in_unit.toFixed(0));
+
+		if(rect && !showIt)
+		{
+			rect.attr({
+				x: x1_pos,
+				y: y1_pos,
+				x2: x2_pos,
+				y2: y2_pos,
+				width: x2_pos - x1_pos,
+				height: y2_pos - y1_pos //(dy - offset.top)
+			});
+			sizer.attr({
+				x: x2_pos,
+				y: y2_pos//(dy - offset.top)
+			});
+		}
 	}
 
 	function DrawRectangle(x, y, w, h) {
