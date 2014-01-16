@@ -1190,7 +1190,7 @@ function saveArea(update)
 		data: {
 			'jform[id]': reddesign_area_id,
 			'jform[name]': areaName,
-			'jform[reddesign_background_id]': <?php echo $this->productionBackground->id; ?>,
+			'jform[background_id]': <?php echo $this->productionBackground->id; ?>,
 			'jform[x1_pos]': areaX1_in_px,
 			'jform[y1_pos]': areaY1_in_px,
 			'jform[x2_pos]': areaX2_in_px,
@@ -1439,7 +1439,7 @@ function updateImageAreas() {
 
 	jQuery.ajax({
 		data: {
-			reddesign_background_id: <?php echo $this->productionBackground->id; ?>
+			background_id: <?php echo $this->productionBackground->id; ?>
 		},
 		url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxGetAreas",
 		success: function (data) {

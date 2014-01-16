@@ -27,7 +27,7 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 	<input type="hidden" name="task" id="backgrounds_task" value="">
-	<input type="hidden" name="cid[]" id="backgrounds_reddesign_background_id" value="">
+	<input type="hidden" name="cid[]" id="backgrounds_background_id" value="">
 	<input type="hidden" name="reddesign_designtype_id" id="backgrounds_reddesign_designtype_id" value="<?php echo $this->designtype_id; ?>">
 	<input type="hidden" name="return" id="backgrounds_return" value="<?php echo base64_encode($returnUrl); ?>" />
 
@@ -170,7 +170,7 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 			// Selects background for edit and populates field data accordingly.
 				jQuery(document).on("click", "#editBackground<?php echo $background->id; ?>", function() {
 					jQuery("#backgroundTitle").html("<?php echo JText::_('COM_REDDESIGN_TITLE_BACKGROUNDS_EDIT'); ?>");
-					jQuery("#reddesign_background_id").val("<?php echo $background->id; ?>");
+					jQuery("#background_id").val("<?php echo $background->id; ?>");
 					jQuery("#jform_bg_name").val("<?php echo $background->name; ?>");
 
 					// State field
@@ -255,7 +255,7 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 	function setProductionFileBg(bgid) 
 	{
 		jQuery('#backgrounds_task').val('backgrounds.setProductionFileBg');
-		jQuery('#backgrounds_reddesign_background_id').val(bgid);
+		jQuery('#backgrounds_background_id').val(bgid);
 		jQuery('#backgrounds_form').submit();
 	}
 
@@ -265,7 +265,7 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 	function setPreviewbg(bgid)
 	{
 		jQuery('#backgrounds_task').val('backgrounds.setPreviewBg');
-		jQuery('#backgrounds_reddesign_background_id').val(bgid);
+		jQuery('#backgrounds_background_id').val(bgid);
 		jQuery('#backgrounds_form').submit();
 	}
 
@@ -280,7 +280,7 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 	function removeBg(bgid)
 	{
 		jQuery('#backgrounds_task').val('backgrounds.delete');
-		jQuery('#backgrounds_reddesign_background_id').val(bgid);
+		jQuery('#backgrounds_background_id').val(bgid);
 
 		jQuery('#backgrounds_form').submit();
 	}
@@ -297,7 +297,7 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 					.attr('name', 'returnurl')
 					.val('<?php echo base64_encode($returnUrlRemoveBg) ?>')
 			);
-		jQuery('#backgrounds_reddesign_background_id').val(bgid);
+		jQuery('#backgrounds_background_id').val(bgid);
 		jQuery('#backgrounds_form').submit();
 	}
 </script>

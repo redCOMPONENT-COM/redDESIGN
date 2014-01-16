@@ -52,7 +52,7 @@ class ReddesignModelAreas extends RModelList
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		$filterBackgroundId = $this->getUserStateFromRequest($this->context . '.filter_reddesign_background_id', 'filter_reddesign_background_id');
+		$filterBackgroundId = $this->getUserStateFromRequest($this->context . '.filter_background_id', 'filter_background_id');
 		$this->setState('filter.background_id', $filterBackgroundId);
 
 		parent::populateState('a.name', 'asc');

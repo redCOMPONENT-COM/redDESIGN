@@ -517,7 +517,7 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 
 		 jQuery.ajax({
 		 data: {
-		 reddesign_background_id: <?php echo $this->productionBackground->id; ?>
+		 background_id: <?php echo $this->productionBackground->id; ?>
 		 },
 		 url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxGetAreas",
 		 success: function (data) {
