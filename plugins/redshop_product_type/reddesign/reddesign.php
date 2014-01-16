@@ -154,90 +154,98 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	 */
 	public function productTypeAttributeValue($property)
 	{
-		$product = $property->product;
-		$backgrounds = array();
-
-		$db = JFactory::getDbo();
-
-		// Get selected design type.
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('reddesign_designtype_id'))
-			->from($db->quoteName('#__reddesign_attribute_mapping'))
-			->where($db->quoteName('product_id') . ' = ' . (int) $product->product_id)
-			->where($db->quoteName('property_id') . ' = ' . (int) $property->property_id);
-
-		$db->setQuery($query);
-		$selectedDesignType = $db->loadResult();
-
-		$checked = '';
-		$style   = 'style="display: none;"';
-
-		if ($selectedDesignType)
+		if (!empty($property->product))
 		{
-			$checked = 'checked="checked"';
-			$style   = '';
-		}
+			$product = $property->product;
+			$backgrounds = array();
 
-		// Get selected design type.
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('reddesign_designtype_id'))
-			->from($db->quoteName('#__reddesign_product_mapping'))
-			->where($db->quoteName('product_id') . ' = ' . (int) $product->product_id);
-		$db->setQuery($query);
-		$designTypeId = $db->loadResult();
+			$db = JFactory::getDbo();
 
-		// Get all the backgrounds that belongs to selected Design Type item.
-		if (!empty($designTypeId))
-		{
+			// Get selected design type.
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName(array('id', 'name', 'thumbnail')))
-				->from($db->quoteName('#__reddesign_backgrounds'))
-				->where($db->quoteName('isProductionBg') . ' = ' . 0)
-				->where($db->quoteName('designtype_id') . ' IN (' . $designTypeId . ')');
-			$db->setQuery($query);
-			$backgrounds = $db->loadObjectList();
-		}
+			$query->select($db->quoteName('reddesign_designtype_id'))
+				->from($db->quoteName('#__reddesign_attribute_mapping'))
+				->where($db->quoteName('product_id') . ' = ' . (int) $product->product_id)
+				->where($db->quoteName('property_id') . ' = ' . (int) $property->property_id);
 
-		$dropdownHtml = '<tr>'
-		. '<td>'
-			. '<div>'
-			. '<input type="checkbox"
+			$db->setQuery($query);
+			$selectedDesignType = $db->loadResult();
+
+			$checked = '';
+			$style   = 'style="display: none;"';
+
+			if ($selectedDesignType)
+			{
+				$checked = 'checked="checked"';
+				$style   = '';
+			}
+
+			// Get selected design type.
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('reddesign_designtype_id'))
+				->from($db->quoteName('#__reddesign_product_mapping'))
+				->where($db->quoteName('product_id') . ' = ' . (int) $product->product_id);
+			$db->setQuery($query);
+			$designTypeId = $db->loadResult();
+
+			// Get all the backgrounds that belongs to selected Design Type item.
+			if (!empty($designTypeId))
+			{
+				$query = $db->getQuery(true);
+				$query->select($db->quoteName(array('id', 'name', 'svg_file')))
+					->from($db->quoteName('#__reddesign_backgrounds'))
+					->where($db->quoteName('isProductionBg') . ' = ' . 0)
+					->where($db->quoteName('designtype_id') . ' IN (' . $designTypeId . ')');
+				$db->setQuery($query);
+				$backgrounds = $db->loadObjectList();
+			}
+
+			$dropdownHtml = '<tr>'
+				. '<td>'
+				. '<div>'
+				. '<input type="checkbox"
 					id="useBackgrounds' . $property->k . $property->g . '"
 					name="useBackgrounds' . $property->k . $property->g . '"
 					onclick="showBackgrounds(\'' . $property->k . $property->g . '\')"
 					value="useBackgrounds' . $property->k . $property->g . '"
 					' . $checked . '>'
 				. '<label for="useBackgrounds' . $property->k . $property->g . '">'
-					. JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_BACKGROUND_ATTRIBUTE')
+				. JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_BACKGROUND_ATTRIBUTE')
 				. '</label>' .
-			'</div>';
+				'</div>';
 
-		$dropdownHtml .= '<div id="designBackgrounds' . $property->k . $property->g . '" ' . $style . ' class="designBackgrounds">';
+			$dropdownHtml .= '<div id="designBackgrounds' . $property->k . $property->g . '" ' . $style . ' class="designBackgrounds">';
 
-		foreach ($backgrounds as $background)
-		{
-			if ((int) $background->id == $selectedDesignType)
+			foreach ($backgrounds as $background)
 			{
-				$checked = 'checked="checked"';
-			}
-			else
-			{
-				$checked = '';
-			}
+				if ((int) $background->id == $selectedDesignType)
+				{
+					$checked = 'checked="checked"';
+				}
+				else
+				{
+					$checked = '';
+				}
+				//$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $background->svg_file;
 
-			$dropdownHtml .= '<input type="radio"
+				$dropdownHtml .= '<input type="radio"
 								name="attribute[' . $property->k . '][property][' . $property->g . '][redDesignBackground]"
 								value="' . $background->id . '"' . $checked . ' />' . "&nbsp;&nbsp;";
-			$dropdownHtml .= $background->name . "&nbsp;&nbsp;";
-			$dropdownHtml .= JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $background->thumbnail, $background->name)
-				. "&nbsp;&nbsp;&nbsp;";
+				$dropdownHtml .= $background->name . "&nbsp;&nbsp;";
+				$dropdownHtml .= "<img src='" . JURI::root() . "media/com_reddesign/backgrounds/" . $background->svg_file .
+									"' alt='" . $background->name . "' style='width:100px;' />&nbsp;&nbsp;&nbsp;";
+				//$dropdownHtml .= JHTML::_('image', 'media/com_reddesign/assets/backgrounds/' . $background->svg_file, $background->name)
+				//	. "&nbsp;&nbsp;&nbsp;";
+			}
+
+			$dropdownHtml .= '</div>';
+
+			$dropdownHtml .= '</td></tr>';
+
+			echo $dropdownHtml;
+
 		}
 
-		$dropdownHtml .= '</div>';
-
-		$dropdownHtml .= '</td></tr>';
-
-		echo $dropdownHtml;
 	}
 
 	/**
@@ -269,7 +277,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			{
 				// Get all the backgrounds that belongs to selected Design Type item.
 				$query = $db->getQuery(true);
-				$query->select($db->quoteName(array('id', 'name', 'thumbnail')))
+				$query->select($db->quoteName(array('id', 'name', 'svg_file')))
 					->from($db->quoteName('#__reddesign_backgrounds'))
 					->where($db->quoteName('isProductionBg') . ' = ' . 0)
 					->where($db->quoteName('designtype_id') . ' IN (' . $designTypeId . ')');
@@ -284,8 +292,8 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 				$dropdownHtml .= "<input type='radio' name='attribute[{gh}][property][{total_g}][redDesignBackground]' value='"
 					. $background->id . "' />&nbsp;&nbsp;";
 				$dropdownHtml .= $background->name . "&nbsp;&nbsp;";
-				$dropdownHtml .= "<img src='" . JURI::root() . "media/com_reddesign/backgrounds/thumbnails/" . $background->thumbnail .
-									"' alt='" . $background->title . "'/>&nbsp;&nbsp;&nbsp;";
+				$dropdownHtml .= "<img src='" . JURI::root() . "media/com_reddesign/backgrounds/" . $background->svg_file .
+									"' alt='" . $background->name . "' style='width:100px;' />&nbsp;&nbsp;&nbsp;";
 			}
 
 			$addDropdownJs  = 'var backgroundsDropDownHtml = "' . $dropdownHtml . '";';
