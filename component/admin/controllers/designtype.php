@@ -96,7 +96,7 @@ class ReddesignControllerDesigntype extends RControllerForm
 			$query = $db->getQuery(true);
 			$query->select($db->quoteName('reddesign_area_id'));
 			$query->from($db->quoteName('#__reddesign_areas'));
-			$query->where($db->quoteName('reddesign_background_id') . ' = ' . $redDesignData->production_background_id);
+			$query->where($db->quoteName('background_id') . ' = ' . $redDesignData->production_background_id);
 			$db->setQuery($query);
 			$areaIds = $db->loadColumn();
 

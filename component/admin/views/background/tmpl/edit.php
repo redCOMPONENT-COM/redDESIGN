@@ -30,7 +30,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 		<input type="hidden" name="returnurl" value="<?php echo base64_encode($return_url); ?>" />
 		<input type="hidden" name="jform[designtype_id]" id="background_reddesign_designtype_id" value="<?php echo $this->item->designtype_id; ?>" />
-		<input type="hidden" name="jform[id]" id="reddesign_background_id" value="" />
+		<input type="hidden" name="jform[id]" id="background_id" value="" />
 
 		<div id="backgrounds-configuration" class="span12">
 

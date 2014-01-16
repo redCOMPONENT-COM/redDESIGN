@@ -350,11 +350,11 @@ $productId     = $input->getInt('pid', 0);
 
 
 			var reddesign_designtype_id = jQuery("#reddesign_designtype_id").val();
-			var reddesign_background_id = jQuery("#reddesign_background_id").val();
+			var background_id = jQuery("#background_id").val();
 			var design = {
 				areas: [],
 				reddesign_designtype_id : reddesign_designtype_id,
-				reddesign_background_id : reddesign_background_id
+				background_id : background_id
 			};
 			<?php foreach($this->productionBackgroundAreas as $area) : ?>
 
@@ -397,11 +397,11 @@ $productId     = $input->getInt('pid', 0);
 	/**
 	 * Set selected background for designarea.
 	 *
-	 * @param reddesign_background_id
+	 * @param background_id
 	 */
-	function setBackground(reddesign_background_id)
+	function setBackground(background_id)
 	{
-		document.getElementById("reddesign_background_id").value = reddesign_background_id;
+		document.getElementById("background_id").value = background_id;
 
 		customize(3);
 	}

@@ -58,7 +58,7 @@ class ReddesignControllerDesigntype extends JController
 		$designType = $designTypeModel->getItem($design->id);
 
 		$backgroundModel = FOFModel::getTmpInstance('Background', array('ignore_request' => true));
-		$background = $backgroundModel->getItem($design->reddesign_background_id);
+		$background = $backgroundModel->getItem($design->background_id);
 		$backgroundImage = $background->image_path;
 
 		// Get a (very!) randomized name

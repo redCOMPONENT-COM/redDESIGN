@@ -35,9 +35,9 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	 */
 	var pxToUnit    = parseFloat('<?php echo $this->pxToUnit;?>');
 	var unitToPx    = parseFloat('<?php echo $this->unitToPx;?>');
-	var imageWidth  = parseFloat('<?php echo $this->productionBgAttributes->width; ?>');
-	var imageHeight = parseFloat('<?php echo $this->productionBgAttributes->height; ?>');
-	var previewWidth  = parseFloat('<?php echo $this->bgBackendPreviewWidth; ?>');
+	var imageWidth  = parseFloat('<?php echo (!empty($this->productionBgAttributes->width) ? $this->productionBgAttributes->width : ''); ?>');
+	var imageHeight = parseFloat('<?php echo (!empty($this->productionBgAttributes->height) ? $this->productionBgAttributes->height : ''); ?>');
+	var previewWidth  = parseFloat('<?php echo (!empty($this->bgBackendPreviewWidth) ? $this->bgBackendPreviewWidth : ''); ?>');
 
 	var ratio = previewWidth / imageWidth;
 	var previewHeight = imageHeight * ratio;
@@ -231,7 +231,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		var group = rootSnapSvgObject.select("#group" + currentRectangleId);
 		group.undrag();
 
-		this.drag(onSizerMove, onSizerStartMove, onSizerEndMove);
+		this.drag(onSizerMove, onSizerStartMove);
 	}
 
 	function sizerOut()
@@ -335,14 +335,14 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			reddesign_area_id = '';
 		}
 
-		var productionBackground = <?php echo $this->productionBackground->id; ?>;
+		var productionBackground = <?php echo (!empty($this->productionBackground->id) ? $this->productionBackground->id : 0); ?>;
 
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxSave",
 			data: {
 				'jform[id]': reddesign_area_id,
 				'jform[name]': areaName,
-				'jform[reddesign_background_id]': productionBackground,
+				'jform[background_id]': productionBackground,
 				'jform[x1_pos]': areaX1_in_px,
 				'jform[y1_pos]': areaY1_in_px,
 				'jform[x2_pos]': areaX2_in_px,

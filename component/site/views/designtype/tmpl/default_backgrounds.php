@@ -22,7 +22,7 @@ if (isset($displayData))
 			<?php
 				if ($frame->isDefaultPreview)
 				{
-					$reddesign_background_id = $frame->id;
+					$background_id = $frame->id;
 				}
 			?>
 			<li>
@@ -30,10 +30,10 @@ if (isset($displayData))
 				<div class="frame-selection">
 					<input type="radio"
 						   class="price-modifier"
-						   onChange ="setBackground(<?php echo $frame->reddesign_background_id;?>);"
-						   id="frame<?php echo $frame->reddesign_background_id;?>"
+						   onChange ="setBackground(<?php echo $frame->background_id;?>);"
+						   id="frame<?php echo $frame->background_id;?>"
 						   name="frame"
-						   value="<?php echo $frame->reddesign_background_id ?>"
+						   value="<?php echo $frame->background_id ?>"
 						<?php if ($frame->isDefaultPreview) : ?>
 						   checked="checked"
 						<?php endif; ?>
@@ -69,9 +69,9 @@ if (isset($displayData))
 								<input type="radio"
 									   class="price-modifier"
 									   onclick ="location.href='<?php echo JURI::base() ?>index.php?option=com_redshop&view=product&pid=<?php echo $productId ?>&cid=<?php echo $cid ?>&Itemid=<?php echo $Itemid ?>&designTypeId=<?php echo $relatedDesignType; ?>'"
-									   id="frame<?php echo $frame->reddesign_background_id;?>"
+									   id="frame<?php echo $frame->background_id;?>"
 									   name="frame"
-									   value="<?php echo $frame->reddesign_background_id ?>"
+									   value="<?php echo $frame->background_id ?>"
 									<?php if ($frame->isDefaultPreview) : ?>
 									   checked="checked"
 									<?php endif; ?>
@@ -92,15 +92,15 @@ if (isset($displayData))
 		<?php endforeach; ?>
 
 		<input type="hidden"
-			   name="reddesign_background_id"
-			   id="reddesign_background_id"
-			   value="<?php echo $reddesign_background_id;?>"
+			   name="background_id"
+			   id="background_id"
+			   value="<?php echo $background_id;?>"
 			/>
 
 		<input type="hidden"
 			   name="production_background_id"
 			   id="production_background_id"
-			   value="<?php echo $this->productionBackground->reddesign_background_id;?>"
+			   value="<?php echo $this->productionBackground->background_id;?>"
 			/>
 
 	</ul>
