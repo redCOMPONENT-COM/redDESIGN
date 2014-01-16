@@ -83,7 +83,7 @@ class ReddesignViewDesigntype extends JView
 		else
 		{
 			$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
-			$areasModel->setState('reddesign_background_id', $this->productionBackground->reddesign_background_id);
+			$areasModel->setState('background_id', $this->productionBackground->background_id);
 			$this->productionBackgroundAreas = $areasModel->getItems();
 			$this->imageSize = getimagesize(JURI::root() . 'media/com_reddesign/assets/backgrounds/' . $this->defaultPreviewBg->image_path);
 		}

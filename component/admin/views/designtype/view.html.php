@@ -153,59 +153,59 @@ class ReddesignViewDesigntype extends ReddesignView
 
 						// Get all areas existing in the database for this specific background.
 						$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
-						$areasModel->setState('reddesign_background_id', $background->id);
+						$areasModel->setState('background_id', $background->id);
 						$areas = $areasModel->getItems();
 					}
 				}
-			}
 
-			$this->areas = $areas;
+				$this->areas = $areas;
 
-			// Production background measures.
-			$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file);
-			$this->productionBgAttributes = $xml->attributes();
+				// Production background measures.
+				$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file);
+				$this->productionBgAttributes = $xml->attributes();
 
-			$this->productionBgAttributes->width  = str_replace('px', '', $this->productionBgAttributes->width);
-			$this->productionBgAttributes->height = str_replace('px', '', $this->productionBgAttributes->height);
+				$this->productionBgAttributes->width  = str_replace('px', '', $this->productionBgAttributes->width);
+				$this->productionBgAttributes->height = str_replace('px', '', $this->productionBgAttributes->height);
 
-			// Calculate width and height in the selected unit at the configuration. 1 inch = 25.4 mm
-			switch ($this->unit)
-			{
-				case 'mm':
-					$this->pxToUnit = 25.4 / $this->sourceDpi;
-					$this->unitToPx = 0.03937007874 * $this->pxToUnit * $this->sourceDpi;
-					break;
-				case 'cm':
-					$this->pxToUnit = 2.54 / $this->sourceDpi;
-					$this->unitToPx = 0.3937007874 * $this->pxToUnit * $this->sourceDpi;
-					break;
-				case 'px':
-				default:
-					$this->pxToUnit = '1';
-					$this->unitToPx = '1';
-					break;
-			}
+				// Calculate width and height in the selected unit at the configuration. 1 inch = 25.4 mm
+				switch ($this->unit)
+				{
+					case 'mm':
+						$this->pxToUnit = 25.4 / $this->sourceDpi;
+						$this->unitToPx = 0.03937007874 * $this->pxToUnit * $this->sourceDpi;
+						break;
+					case 'cm':
+						$this->pxToUnit = 2.54 / $this->sourceDpi;
+						$this->unitToPx = 0.3937007874 * $this->pxToUnit * $this->sourceDpi;
+						break;
+					case 'px':
+					default:
+						$this->pxToUnit = '1';
+						$this->unitToPx = '1';
+						break;
+				}
 
-			$this->inputFieldOptions = array(
-				JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTBOX')),
-				JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTAREA'))
-			);
+				$this->inputFieldOptions = array(
+					JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTBOX')),
+					JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTAREA'))
+				);
 
-			$this->alignmentOptions = array(
-				JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_COMMON_SELECT')),
-				JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_COMMON_LEFT')),
-				JHtml::_('select.option', '2', JText::_('COM_REDDESIGN_COMMON_RIGHT')),
-				JHtml::_('select.option', '3', JText::_('COM_REDDESIGN_COMMON_CENTER'))
-			);
+				$this->alignmentOptions = array(
+					JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_COMMON_SELECT')),
+					JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_COMMON_LEFT')),
+					JHtml::_('select.option', '2', JText::_('COM_REDDESIGN_COMMON_RIGHT')),
+					JHtml::_('select.option', '3', JText::_('COM_REDDESIGN_COMMON_CENTER'))
+				);
 
-			// Get all fonts in the system to be choosen or not for the current design.
-			$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true));
-			$this->fonts = $fontsModel->getItems();
-			$this->fontsOptions = array();
+				// Get all fonts in the system to be choosen or not for the current design.
+				$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true));
+				$this->fonts = $fontsModel->getItems();
+				$this->fontsOptions = array();
 
-			foreach ($this->fonts as $font)
-			{
-				$this->fontsOptions[] = JHtml::_('select.option', $font->id, $font->name);
+				foreach ($this->fonts as $font)
+				{
+					$this->fontsOptions[] = JHtml::_('select.option', $font->id, $font->name);
+				}
 			}
 		}
 

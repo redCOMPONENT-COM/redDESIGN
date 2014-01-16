@@ -220,7 +220,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			else
 			{
 				$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
-				$areasModel->setState('reddesign_background_id', $displayData->productionBackground->id);
+				$areasModel->setState('background_id', $displayData->productionBackground->id);
 				$displayData->productionBackgroundAreas = $areasModel->getItems();
 				$displayData->imageSize = getimagesize(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->defaultPreviewBg->image_path);
 			}
@@ -245,7 +245,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$query = $db->getQuery(true);
 			$query->select($db->quoteName('id'))
 				->from($db->quoteName('#__reddesign_areas'))
-				->where($db->quoteName('reddesign_background_id') . ' = ' . $backgroundId);
+				->where($db->quoteName('background_id') . ' = ' . $backgroundId);
 			$db->setQuery($query);
 			$areas = $db->loadColumn();
 
@@ -829,7 +829,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('reddesign_area_id'));
 		$query->from($db->quoteName('#__reddesign_areas'));
-		$query->where($db->quoteName('reddesign_background_id') . ' = ' . $redDesignData->production_background_id);
+		$query->where($db->quoteName('background_id') . ' = ' . $redDesignData->production_background_id);
 		$db->setQuery($query);
 		$areaIds = $db->loadColumn();
 
