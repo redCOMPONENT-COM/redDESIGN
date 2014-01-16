@@ -174,7 +174,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		var width = upX - mouseDownX;
 		var height = upY - mouseDownY;
 
-		movingRect = rootSnapSvgObject.select("#" + currentRectangleId);
+		var movingRect = rootSnapSvgObject.select("#" + currentRectangleId);
 		movingRect.attr({
 			width: width > 0 ? width : 0,
 			height: height > 0 ? height : 0
@@ -231,58 +231,53 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		var group = rootSnapSvgObject.select("#group" + currentRectangleId);
 		group.undrag();
 
-		this.drag(onSizerMove, onSizerStartMove);
+		rootSnapSvgObject.mousedown(onBegginResizeRectangle);
 	}
 
 	function sizerOut()
 	{
-		/*var group = rootSnapSvgObject.select("#group" + currentRectangleId);
+		//currentRectangleId = "none";
+		var group = rootSnapSvgObject.select("#group" + currentRectangleId);
 		group.drag();
-		this.undrag();
-		currentRectangleId = "none";*/
+		group.hover(groupIn, groupOut);
 	}
 
-	function onSizerMove(dx, dy)
+	function onBegginResizeRectangle(e)
 	{
-		var sizerBBox = this.getBBox();
-		var rectangle = rootSnapSvgObject.select("#" + currentRectangleId);
-		var rectBBox = rectangle.getBBox();
+		rootSnapSvgObject.mousemove(resizeRectangle);
+		rootSnapSvgObject.mouseup(endResizingRectangle);
+	}
+
+	function resizeRectangle(e)
+	{
 		var offset = jQuery("#svgForAreas").offset();
+		var upX = e.pageX - offset.left;
+		var upY = e.pageY - offset.top;
 
-		var newWidth = rectBBox.width + dx;
-		var newHeight = rectBBox.height + dy;
+		var width = upX - mouseDownX;
+		var height = upY - mouseDownY;
 
-		if (newWidth > 0 && newHeight > 0)
-		{
-			rectangle.attr({
-				width: newWidth,
-				height: newHeight
-			});
-		}
+		var movingRect = rootSnapSvgObject.select("#" + currentRectangleId);
+		movingRect.attr({
+			width: width > 0 ? width : 0,
+			height: height > 0 ? height : 0
+		});
 
-		var newX = sizerBBox.x + dx;
-		var newY = sizerBBox.y + dy;
-
-		if (newX > 0 && newY > 0)
-		{
-			this.attr({
-				x: newX,
-				y: newY
-			});
-		}
-
-		console.log(dx + " - " + dy + " - " + offset.top + " - " + (dy - offset.top) + " *** " + this.dy + " *** " + this.y);
+		var sizerX = mouseDownX + width;
+		var sizerY = mouseDownY + height;
+		var sizer = rootSnapSvgObject.select("#sizer" + currentRectangleId);
+		sizer.attr({
+			width: width > 0 ? 10 : 0,
+			height: height > 0 ? 10 : 0,
+			x: sizerX,
+			y: sizerY
+		});
 	}
 
-	function onSizerStartMove()
+	function endResizingRectangle(e)
 	{
-
+		rootSnapSvgObject.unmousemove();
 	}
-
-	/*function onSizerEndMove()
-	{
-
-	}*/
 
 	/**
 	 * Makes sure that the area has a name, alert otherwise
