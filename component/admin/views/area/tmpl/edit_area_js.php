@@ -48,21 +48,15 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	var rootSnapSvgObject;
 	var mouseDownX = 0;
 	var mouseDownY = 0;
-	var elemClicked;
-	var rect;
-	var sizer;
-	var insideElement = "false";
-	var insideSizer = "false";
-	var elementsGroup;
-	var reddesign_area_id = 0;
-	var areaBoxes = new Array();
+	var currentRectangleId = "none";
+	var currentGroupIdOnHover = "none";
+	var insideGroup = "false";
 
 	/**
 	 * Initiate snap.svg
 	 */
 	jQuery(document).ready(
 		function ($) {
-
 
 			<?php if ($this->areas != '') : ?>
 				<?php foreach ($this->areas as  $area) : ?>
@@ -133,216 +127,163 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 						rootElement.setAttribute("width", previewWidth);
 						rootElement.setAttribute("height", previewHeight);
 						rootElement.setAttribute("overflow", "hidden");
+
+						rootSnapSvgObject.mousedown(onBegginDrawRectangle);
+
+						rootSnapSvgObject.mouseup(endDrawRectangle);
 					}
 				);
 
-				gotIn = function() {
-					insideElement = "true";
-				};
 
-				gotOut = function() {
-					insideElement = "false";
-				};
-
-				gotInSizer = function() {
-					insideElement = "true";
-					insideSizer = "true";
-				};
-
-				gotOutSizer = function() {
-					insideSizer = "false";
-					rect.hover(gotIn, gotOut);
-				};
-
-				jQuery("#svgForAreas").mousedown(function(e) {
-					if (insideElement == "false")
-					{
-						// Prevent text edit cursor while dragging in webkit browsers
-						e.originalEvent.preventDefault();
-
-						var offset = jQuery("#svgForAreas").offset();
-						mouseDownX = e.pageX - offset.left;
-						mouseDownY = e.pageY - offset.top;
-
-						rect = DrawRectangle(mouseDownX, mouseDownY, 0, 0);
-						sizer = rootSnapSvgObject.rect(mouseDownX, mouseDownY, 0, 0);
-
-						elementsGroup = rootSnapSvgObject.group(rect, sizer);
-
-						elementsGroup.drag();
-						rect.hover(gotIn, gotOut);
-						rect.drag(onRectMove, onRectStart, onRectEnd);
-						sizer.hover(gotInSizer, gotOutSizer);
-						sizer.drag(onSizerMove, onSizerStart, onSizerEnd);
-
-						jQuery("#svgForAreas").mousemove(function(e) {
-							var offset = jQuery("#svgForAreas").offset();
-							var upX = e.pageX - offset.left;
-							var upY = e.pageY - offset.top;
-
-							var width = upX - mouseDownX;
-							var height = upY - mouseDownY;
-
-							rect.attr({
-								width: width > 0 ? width : 0,
-								height: height > 0 ? height : 0
-							});
-
-							if (insideSizer == "false")
-							{
-								var sizerX = (mouseDownX + width) - 10;
-								var sizerY = (mouseDownY + height) - 10;
-
-								sizer.attr({
-									fill: "#CA202C",
-									stroke: "none",
-									width: width > 0 ? 10 : 0,
-									height: height > 0 ? 10 : 0,
-									x: sizerX,
-									y: sizerY
-								});
-							}
-
-							//elementsGroup = rootSnapSvgObject.group(rect, sizer);
-							//elementsGroup.drag();
-
-							var rectBBox = rect.getBBox();
-
-							this.rectW = rectBBox.width;
-							this.rectH = rectBBox.height;
-							this.rectX = rectBBox.x;
-							this.rectY = rectBBox.y;
-							this.rectY2 = rectBBox.y2;
-							this.rectX2 = rectBBox.x2;
-
-							reddesign_area_id = Math.floor((Math.random()*10000)+1100);
-							areaBoxes[reddesign_area_id] = new Array();
-							areaBoxes[reddesign_area_id]['x'] = this.rectX;
-							areaBoxes[reddesign_area_id]['x2'] = this.rectX2;
-							areaBoxes[reddesign_area_id]['y'] = this.rectY;
-							areaBoxes[reddesign_area_id]['y2'] = this.rectY2;
-							current_area_id = reddesign_area_id;
-
-							//setCoordinatesToValues(this.rectX, this.rectY, this.rectX2, this.rectY2, this.rectX2 - this.rectX, this.rectY2 - this.rectY, false);
-
-							//populateFields(rect);
-						});
-					}
-				});
-
-				onSizerMove = function(dx, dy)
-				{
-					elementsGroup.undrag();
-					var offset = jQuery("#svgForAreas").offset();
-					//this.rectX2 = this.sizerX + dx;
-					//this.rectY2 = this.sizerY + dy;
-					//console.log(dy);
-					this.rectX = this.orectX;
-					this.rectY = this.orectY;
-					this.rectX2 = this.orectX2 + dx;
-					this.rectY2 = this.orectY2 + dy;
-
-					rect.attr({
-						width: this.rectX2 - this.rectX,
-						height: this.rectY2 - this.rectY //(dy - offset.top)
-					});
-					sizer.attr({
-						x: this.rectX2,
-						y: this.rectY2//(dy - offset.top)
-					})
-				};
-
-				onSizerStart = function()
-				{
-					var rectBBox = rect.getBBox();
-					var sizerBBox = sizer.getBBox();
-
-					this.orectX = areaBoxes[current_area_id]['x'];
-					this.orectY = areaBoxes[current_area_id]['y'];
-					this.orectX2 = areaBoxes[current_area_id]['x2'];
-					this.orectY2 = areaBoxes[current_area_id]['y2'];
-
-					this.sizerX = sizerBBox.x;
-					this.sizerY = sizerBBox.y;
-
-					//this.rectW = rectBBox.width;
-					//this.rectH = rectBBox.height;
-					/*this.rectX = rectBBox.x;
-					this.rectY = rectBBox.y;
-					this.rectY2 = rectBBox.y2;
-					this.rectX2 = rectBBox.x2;*/
-				};
-
-				onSizerEnd = function()
-				{
-					elementsGroup.drag();
-					sizer.hover(gotInSizer, gotOutSizer);
-					rect.hover(gotIn, gotOut);
-
-					areaBoxes[current_area_id]['x'] = this.rectX;
-					areaBoxes[current_area_id]['y'] = this.rectY;
-					areaBoxes[current_area_id]['x2'] = this.rectX2;
-					areaBoxes[current_area_id]['y2'] = this.rectY2;
-
-					setCoordinatesToValues(this.rectX, this.rectY, this.rectX2, this.rectY2, this.rectX2 - this.rectX, this.rectY2 - this.rectY, true);
-
-					//populateFields(rect);
-				}
-
-			onRectMove = function(dx, dy)
-			{
-				//elementsGroup.undrag();
-				var offset = jQuery("#svgForAreas").offset();
-				this.rectX = this.orectX + dx;
-				this.rectY = this.orectY + dy;
-				this.rectX2 = this.orectX2 + dx;
-				this.rectY2 = this.orectY2 + dy;
-			};
-
-			onRectStart = function()
-			{
-				var rectBBox = rect.getBBox();
-				this.orectX = areaBoxes[current_area_id]['x'];
-				this.orectY = areaBoxes[current_area_id]['y'];
-				this.orectX2 = areaBoxes[current_area_id]['x2'];
-				this.orectY2 = areaBoxes[current_area_id]['y2'];
-
-				//this.rectW = rectBBox.width;
-				//this.rectH = rectBBox.height;
-				/*this.rectX = rectBBox.x;
-				this.rectY = rectBBox.y;
-				this.rectX2 = rectBBox.x2;
-				this.rectY2 = rectBBox.y2;*/
-			};
-
-			onRectEnd = function()
-			{
-				//elementsGroup.drag();
-				sizer.hover(gotInSizer, gotOutSizer);
-				rect.hover(gotIn, gotOut);
-				areaBoxes[current_area_id]['x'] = this.rectX;
-				areaBoxes[current_area_id]['y'] = this.rectY;
-				areaBoxes[current_area_id]['x2'] = this.rectX2;
-				areaBoxes[current_area_id]['y2'] = this.rectY2;
-
-				setCoordinatesToValues(this.rectX, this.rectY, this.rectX2, this.rectY2, this.rectX2 - this.rectX, this.rectY2 - this.rectY, true);
-
-			}
-
-
-				jQuery("#svgForAreas").mouseup(function(e) {
-						jQuery("#svgForAreas").unbind('mousemove');
-
-						var BBox = rect.getBBox();
-
-						if ( BBox.width == 0 && BBox.height == 0 )
-						{
-							rect.remove();
-						}
-					});
 			<?php endif; ?>
 		}
 	);
+
+	function onBegginDrawRectangle(e)
+	{
+		if (insideGroup == "false")
+		{
+			var offset = jQuery("#svgForAreas").offset();
+			mouseDownX = e.pageX - offset.left;
+			mouseDownY = e.pageY - offset.top;
+
+			rootSnapSvgObject.mousemove(onDrawingRectangle);
+
+			var currentRectangle = drawRectangle(mouseDownX, mouseDownY, 0, 0, "transparent", "#CA202C", 3);
+			currentRectangle.node.id = currentRectangle.id;
+			currentRectangleId = currentRectangle.node.id;
+
+			var currentSizer = drawRectangle(mouseDownX, mouseDownY, 10, 10, "#CA202C", "none", 0);
+			currentSizer.node.id = "sizer" + currentRectangleId;
+			currentSizer.hover(sizerIn, sizerOut);
+
+			var group = rootSnapSvgObject.group(currentSizer, currentRectangle);
+			group.node.id = "group" + currentRectangleId;
+			group.hover(groupIn, groupOut);
+			group.drag();
+
+		}
+	}
+
+	function onDrawingRectangle(e)
+	{
+		var offset = jQuery("#svgForAreas").offset();
+		var upX = e.pageX - offset.left;
+		var upY = e.pageY - offset.top;
+
+		var width = upX - mouseDownX;
+		var height = upY - mouseDownY;
+
+		movingRect = rootSnapSvgObject.select("#" + currentRectangleId);
+		movingRect.attr({
+			width: width > 0 ? width : 0,
+			height: height > 0 ? height : 0
+		});
+
+		var sizerX = mouseDownX + width;
+		var sizerY = mouseDownY + height;
+		var sizer = rootSnapSvgObject.select("#sizer" + currentRectangleId);
+		sizer.attr({
+			width: width > 0 ? 10 : 0,
+			height: height > 0 ? 10 : 0,
+			x: sizerX,
+			y: sizerY
+		});
+
+	}
+
+	function endDrawRectangle(e)
+	{
+		rootSnapSvgObject.unmousemove();
+		currentRectangleId = "none";
+	}
+
+	function drawRectangle(x, y, w, h, fill, stroke, strokeWidth)
+	{
+		var rectangle = rootSnapSvgObject.rect(x, y, w, h);
+
+		rectangle.attr({
+			fill: fill,
+			stroke: stroke,
+			strokeWidth: strokeWidth
+		});
+
+		return rectangle;
+	}
+
+	function groupIn()
+	{
+		currentGroupIdOnHover = this.node.id;
+		insideGroup = "true";
+	}
+
+	function groupOut()
+	{
+		currentGroupIdOnHover = "none";
+		insideGroup = "false";
+	}
+
+	function sizerIn()
+	{
+		var sizerId = this.node.id;
+		currentRectangleId = sizerId.replace("sizer", "");
+
+		var group = rootSnapSvgObject.select("#group" + currentRectangleId);
+		group.undrag();
+
+		this.drag(onSizerMove, onSizerStartMove, onSizerEndMove);
+	}
+
+	function sizerOut()
+	{
+		/*var group = rootSnapSvgObject.select("#group" + currentRectangleId);
+		group.drag();
+		this.undrag();
+		currentRectangleId = "none";*/
+	}
+
+	function onSizerMove(dx, dy)
+	{
+		var sizerBBox = this.getBBox();
+		var rectangle = rootSnapSvgObject.select("#" + currentRectangleId);
+		var rectBBox = rectangle.getBBox();
+		var offset = jQuery("#svgForAreas").offset();
+
+		var newWidth = rectBBox.width + dx;
+		var newHeight = rectBBox.height + dy;
+
+		if (newWidth > 0 && newHeight > 0)
+		{
+			rectangle.attr({
+				width: newWidth,
+				height: newHeight
+			});
+		}
+
+		var newX = sizerBBox.x + dx;
+		var newY = sizerBBox.y + dy;
+
+		if (newX > 0 && newY > 0)
+		{
+			this.attr({
+				x: newX,
+				y: newY
+			});
+		}
+
+		console.log(dx + " - " + dy + " - " + offset.top + " - " + (dy - offset.top) + " *** " + this.dy + " *** " + this.y);
+	}
+
+	function onSizerStartMove()
+	{
+
+	}
+
+	/*function onSizerEndMove()
+	{
+
+	}*/
+
 	/**
 	 * Makes sure that the area has a name, alert otherwise
 	 *
@@ -683,24 +624,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		}
 	}
 
-	function DrawRectangle(x, y, w, h) {
-		var element = rootSnapSvgObject.rect(x, y, w, h);
-		element.attr({
-			fill: "transparent",
-			stroke: "#CA202C",
-			strokeWidth: 3
-		});
-		jQuery(element.node).attr('id', 'rct' + x + y);
-
-		element.hover(gotIn, gotOut);
-
-		element.click(function(e) {
-			elemClicked = jQuery(element.node).attr('id');
-		});
-
-		return element;
-	}
-
 	/**
 	 * Selects area with given parameters. Used onkeyup event in parameter input fields.
 	 *
@@ -709,7 +632,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	 * @param x2
 	 * @param y2
 	 */
-	selectArea = function(x1, y1, x2, y2, width, height) {
+	/*selectArea = function(x1, y1, x2, y2, width, height) {
 		var offset = jQuery("#svgForAreas").offset();
 
 		rect = DrawRectangle(x1, y1, x2, y2);
@@ -753,7 +676,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		sizer.drag(onSizerMove, onSizerStart, onSizerEnd);
 
 		setCoordinatesToValues(x1, y1, x2, y2, x2 - x1, y2 - y1);
-	}
+	}*/
 
 	/**
 	 * Updates selection with entered width.
