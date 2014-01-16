@@ -48,9 +48,8 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	var rootSnapSvgObject;
 	var mouseDownX = 0;
 	var mouseDownY = 0;
-	var currentRectangleId = "none";
-	var currentGroupIdOnHover = "none";
 	var insideGroup = "false";
+	var currentRectangleId;
 
 	/**
 	 * Initiate snap.svg
@@ -149,15 +148,15 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 			rootSnapSvgObject.mousemove(onDrawingRectangle);
 
-			var currentRectangle = drawRectangle(mouseDownX, mouseDownY, 0, 0, "transparent", "#CA202C", 3);
-			currentRectangle.node.id = currentRectangle.id;
-			currentRectangleId = currentRectangle.node.id;
+			this.currentRectangle = drawRectangle(mouseDownX, mouseDownY, 0, 0, "transparent", "#CA202C", 3);
+			this.currentRectangle.node.id = this.currentRectangle.id;
+			var currentRectangleId = this.currentRectangle.node.id;
 
 			var currentSizer = drawRectangle(mouseDownX, mouseDownY, 10, 10, "#CA202C", "none", 0);
 			currentSizer.node.id = "sizer" + currentRectangleId;
 			currentSizer.hover(sizerIn, sizerOut);
 
-			var group = rootSnapSvgObject.group(currentSizer, currentRectangle);
+			var group = rootSnapSvgObject.group(currentSizer, this.currentRectangle);
 			group.node.id = "group" + currentRectangleId;
 			group.hover(groupIn, groupOut);
 			group.drag();
@@ -174,7 +173,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		var width = upX - mouseDownX;
 		var height = upY - mouseDownY;
 
-		var movingRect = rootSnapSvgObject.select("#" + currentRectangleId);
+		var movingRect = rootSnapSvgObject.select("#" + this.currentRectangle.node.id);
 		movingRect.attr({
 			width: width > 0 ? width : 0,
 			height: height > 0 ? height : 0
@@ -182,7 +181,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 		var sizerX = mouseDownX + width;
 		var sizerY = mouseDownY + height;
-		var sizer = rootSnapSvgObject.select("#sizer" + currentRectangleId);
+		var sizer = rootSnapSvgObject.select("#sizer" + this.currentRectangle.node.id);
 		sizer.attr({
 			width: width > 0 ? 10 : 0,
 			height: height > 0 ? 10 : 0,
@@ -195,7 +194,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	function endDrawRectangle(e)
 	{
 		rootSnapSvgObject.unmousemove();
-		currentRectangleId = "none";
 	}
 
 	function drawRectangle(x, y, w, h, fill, stroke, strokeWidth)
@@ -225,19 +223,17 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 	function sizerIn()
 	{
-		var sizerId = this.node.id;
-		currentRectangleId = sizerId.replace("sizer", "");
-
-		var group = rootSnapSvgObject.select("#group" + currentRectangleId);
+		var group = this.parent();
 		group.undrag();
 
-		rootSnapSvgObject.mousedown(onBegginResizeRectangle);
+		currentRectangleId = this.node.id.replace("sizer", "");
+
+		this.mousedown(onBegginResizeRectangle);
 	}
 
 	function sizerOut()
 	{
-		//currentRectangleId = "none";
-		var group = rootSnapSvgObject.select("#group" + currentRectangleId);
+		var group = this.parent();
 		group.drag();
 		group.hover(groupIn, groupOut);
 	}
@@ -263,15 +259,15 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			height: height > 0 ? height : 0
 		});
 
+		var sizer = rootSnapSvgObject.select("#sizer" + currentRectangleId);
 		var sizerX = mouseDownX + width;
 		var sizerY = mouseDownY + height;
-		var sizer = rootSnapSvgObject.select("#sizer" + currentRectangleId);
 		sizer.attr({
 			width: width > 0 ? 10 : 0,
 			height: height > 0 ? 10 : 0,
 			x: sizerX,
 			y: sizerY
-		});
+		}); 		console.log(currentRectangleId + " " + width + " " + height + " " + sizerX + " " + sizerY);
 	}
 
 	function endResizingRectangle(e)
