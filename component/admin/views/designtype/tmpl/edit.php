@@ -15,7 +15,7 @@ JHtml::_('rjquery.select2', 'select');
 JHtml::_('behavior.modal', 'a.jmodal');
 
 // Snap.SVG
-RHelperAsset::load('snap.svg.js', 'com_reddesign');
+RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
 
 $tab = JFactory::getApplication()->input->get('tab', '');
 
