@@ -813,8 +813,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	{
 		// Get design type data.
 		$designtypesModel = RModel::getFrontInstance('Designtypes', array(), 'com_reddesign');
-		$designtypesModel->setId($designTypeId);
-		$designType = $designtypesModel->getItems()[0];
+		$designtypesModel->setId($redDesignData['id']);
+		$designTypes = $designtypesModel->getItems();
+		$designType = $designTypes[0];
 
 		$data = array();
 		$data['designType'] = $designType;
