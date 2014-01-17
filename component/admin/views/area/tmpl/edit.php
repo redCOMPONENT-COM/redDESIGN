@@ -65,7 +65,7 @@ if (isset($displayData))
 						<div class="controls">
 							<input  type="text" id="areaWidth" name="areaWidth"
 							        value=""
-							        onkeyup="selectAreaOnWidthKeyUp();"
+							        class="area-textbox-control"
 									placeholder="&nbsp;<?php echo $this->unit; ?>"
 								>
 						</div>
@@ -77,7 +77,7 @@ if (isset($displayData))
 						<div class="controls">
 							<input  type="text" id="areaHeight" name="areaHeight"
 							        value=""
-							        onkeyup="selectAreaOnHeightKeyUp();"
+							        class="area-textbox-control"
 									placeholder="&nbsp;<?php echo $this->unit; ?>"
 								>
 						</div>
@@ -89,7 +89,7 @@ if (isset($displayData))
 						<div class="controls">
 							<input  type="text" id="areaX1" name="areaX1"
 							        value=""
-							        onkeyup="selectAreaOnX1KeyUp();"
+							        class="area-textbox-control"
 									placeholder="&nbsp;<?php echo $this->unit; ?>"
 								>
 						</div>
@@ -101,7 +101,7 @@ if (isset($displayData))
 						<div class="controls">
 							<input  type="text" id="areaY1" name="areaY1"
 							        value=""
-							        onkeyup="selectAreaOnY1KeyUp();"
+							        class="area-textbox-control"
 									placeholder="&nbsp;<?php echo $this->unit; ?>"
 								>
 
@@ -114,7 +114,7 @@ if (isset($displayData))
 						<div class="controls">
 							<input  type="text" id="areaX2" name="areaX2"
 							        value=""
-							        onkeyup="selectAreaOnX2KeyUp();"
+							        class="area-textbox-control"
 									placeholder="&nbsp;<?php echo $this->unit; ?>"
 								>
 						</div>
@@ -126,7 +126,7 @@ if (isset($displayData))
 						<div class="controls">
 							<input  type="text" id="areaY2" name="areaY2"
 							        value=""
-							        onkeyup="selectAreaOnY2KeyUp();"
+							        class="area-textbox-control"
 									placeholder="&nbsp;<?php echo $this->unit; ?>"
 								>
 						</div>
