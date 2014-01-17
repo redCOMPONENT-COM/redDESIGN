@@ -143,9 +143,9 @@ if (isset($displayData))
 							<?php
 								echo JText::sprintf(
 														'COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMAGE_MEASURES',
-														round($this->productionBgAttributes->width * $this->pxToUnit, 2),
+														round($this->productionBgAttributes->width / $this->pxToUnit, 2),
 														$this->unit,
-														round($this->productionBgAttributes->height * $this->pxToUnit, 2),
+														round($this->productionBgAttributes->height / $this->pxToUnit, 2),
 														$this->unit
 								);
 							?>

@@ -171,17 +171,17 @@ class ReddesignViewDesigntype extends ReddesignView
 				switch ($this->unit)
 				{
 					case 'mm':
-						$this->pxToUnit = 25.4 / $this->sourceDpi;
-						$this->unitToPx = 0.03937007874 * $this->pxToUnit * $this->sourceDpi;
+						$this->unitToPx = 0.03937007874 * $this->sourceDpi;
+						$this->pxToUnit = $this->sourceDpi / 25.4;
 						break;
 					case 'cm':
-						$this->pxToUnit = 2.54 / $this->sourceDpi;
-						$this->unitToPx = 0.3937007874 * $this->pxToUnit * $this->sourceDpi;
+						$this->unitToPx = 0.3937007874 * $this->sourceDpi;
+						$this->pxToUnit = $this->sourceDpi / 2.54;
 						break;
 					case 'px':
 					default:
-						$this->pxToUnit = '1';
 						$this->unitToPx = '1';
+						$this->pxToUnit = '1';
 						break;
 				}
 
