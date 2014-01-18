@@ -144,7 +144,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 						rootSnapSvgObject.mouseup(endDrawRectangle);
 					}
 				);
-
 			<?php endif; ?>
 		}
 	);
@@ -346,9 +345,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	}
 
 	function draggingGroup(dx, dy, x, y) {
-		//var thisBox = this.getBBox();
-		//console.log(thisBox.x, thisBox.y, thisBox);
-		//console.log(this.node.getBoundingClientRect());
 		lx = dx + ox;
 		ly = dy + oy;
 		this.transform('t' + lx + ',' + ly);
@@ -359,10 +355,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		oy = ly;
 
 		updateFieldsAfterDrag(this);
-		//console.log(this.getBBox());
-		var currenRectangleId = this.node.id.replace("group", "");
-		var movingRect = rootSnapSvgObject.select("#" + areaBoxes[current_area_id]['rectId']);
-		console.log(this.matrix);  console.log(this.attr("y"));
 	}
 
 	/**
@@ -377,22 +369,13 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	function updateFieldsAfterDrag(group)
 	{
 		var movingRect = rootSnapSvgObject.select("#" + areaBoxes[current_area_id]['rectId']);
-		console.log(group.matrix.e);
-		console.log(group.matrix.f);
 
 		var x1 = parseFloat(movingRect.attr("x")) + group.matrix.e;
 		var y1 = parseFloat(movingRect.attr("y")) + group.matrix.f;
 		var x2 = x1 + parseFloat(movingRect.attr("width"));
 		var y2 = y1 + parseFloat(movingRect.attr("height"));
 
-		populateFieldsWithCoordinatesFromImage(
-			x1,
-			y1,
-			x2,
-			y2,
-			movingRect.attr("width"),
-			movingRect.attr("height")
-		);
+		populateFieldsWithCoordinatesFromImage(x1, y1, x2, y2, movingRect.attr("width"), movingRect.attr("height"));
 	}
 
 	/**
