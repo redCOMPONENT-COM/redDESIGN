@@ -15,7 +15,7 @@ JHtml::_('rjquery.select2', 'select');
 JHtml::_('behavior.modal', 'a.jmodal');
 
 // Snap.SVG
-RHelperAsset::load('snap.svg.js', 'com_reddesign');
+RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
 
 $tab = JFactory::getApplication()->input->get('tab', '');
 
@@ -139,8 +139,7 @@ switch ($tab)
 				$data->productionBackground = $this->productionBackground;
 				$data->bgBackendPreviewWidth = $this->bgBackendPreviewWidth;
 				$data->unit = $this->unit;
-				$data->pxToUnit = $this->pxToUnit;
-				$data->unitToPx = $this->unitToPx;
+				$data->unitConversionRatio = $this->unitConversionRatio;
 				$data->sourceDpi = $this->sourceDpi;
 				$data->productionBgAttributes = $this->productionBgAttributes;
 				$data->fontsOptions = $this->fontsOptions;

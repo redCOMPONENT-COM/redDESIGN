@@ -24,8 +24,7 @@ if (isset($displayData))
 	$this->productionBackground = $displayData->productionBackground;
 	$this->bgBackendPreviewWidth = $displayData->bgBackendPreviewWidth;
 	$this->unit = $displayData->unit;
-	$this->pxToUnit = $displayData->pxToUnit;
-	$this->unitToPx = $displayData->unitToPx;
+	$this->unitConversionRatio = $displayData->unitConversionRatio;
 	$this->sourceDpi = $displayData->sourceDpi;
 	$this->productionBgAttributes = $displayData->productionBgAttributes;
 	$this->fontsOptions = $displayData->fontsOptions;
@@ -143,9 +142,9 @@ if (isset($displayData))
 							<?php
 								echo JText::sprintf(
 														'COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMAGE_MEASURES',
-														round($this->productionBgAttributes->width * $this->pxToUnit, 2),
+														round($this->productionBgAttributes->width / $this->unitConversionRatio, 2),
 														$this->unit,
-														round($this->productionBgAttributes->height * $this->pxToUnit, 2),
+														round($this->productionBgAttributes->height / $this->unitConversionRatio, 2),
 														$this->unit
 								);
 							?>
@@ -165,7 +164,7 @@ if (isset($displayData))
 								<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
 							</span>
 						</button>
-						<button id="cancelAreaBtn" class="btn" onclick="cancelArea();">
+						<button id="cancelAreaBtn" class="btn" onclick="clearSelectionFields();">
 							<span>
 								<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>
 							</span>
