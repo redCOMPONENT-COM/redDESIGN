@@ -249,30 +249,30 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 	function groupIn()
 	{
-		console.log(insideGroup = "true");
+		insideGroup = "true";
 
 	}
 
 	function groupOut()
 	{
-		console.log(insideGroup = "false");
+		insideGroup = "false";
 	}
 
 	function sizerIn()
 	{
-		/*var group = this.parent();
-		group.undrag();*/
-
+		this.attr({cursor: "crosshair"});
 		areaBoxes[current_area_id]['rectId'] = this.node.id.replace("sizer", "");
 	}
 
 	function sizerOut()
 	{
-
+		this.attr({cursor: "auto"});
 	}
 
 	function rectangleIn()
 	{
+		this.attr({cursor: "move"});
+
 		var group = this.parent();
 		group.drag();
 
@@ -281,6 +281,8 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 	function rectangleOut()
 	{
+		this.attr({cursor: "auto"});
+
 		var group = this.parent();
 		group.undrag();
 
