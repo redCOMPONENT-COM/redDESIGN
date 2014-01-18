@@ -139,8 +139,7 @@ switch ($tab)
 				$data->productionBackground = $this->productionBackground;
 				$data->bgBackendPreviewWidth = $this->bgBackendPreviewWidth;
 				$data->unit = $this->unit;
-				$data->pxToUnit = $this->pxToUnit;
-				$data->unitToPx = $this->unitToPx;
+				$data->unitConversionRatio = $this->unitConversionRatio;
 				$data->sourceDpi = $this->sourceDpi;
 				$data->productionBgAttributes = $this->productionBgAttributes;
 				$data->fontsOptions = $this->fontsOptions;

@@ -68,12 +68,7 @@ class ReddesignViewDesigntype extends ReddesignView
 	/**
 	 * @var float
 	 */
-	public $pxToUnit;
-
-	/**
-	 * @var float
-	 */
-	public $unitToPx;
+	public $unitConversionRatio;
 
 	/**
 	 * Production background attributes
@@ -171,17 +166,14 @@ class ReddesignViewDesigntype extends ReddesignView
 				switch ($this->unit)
 				{
 					case 'mm':
-						$this->unitToPx = 0.03937007874 * $this->sourceDpi;
-						$this->pxToUnit = $this->sourceDpi / 25.4;
+						$this->unitConversionRatio = $this->sourceDpi / 25.4;
 						break;
 					case 'cm':
-						$this->unitToPx = 0.3937007874 * $this->sourceDpi;
-						$this->pxToUnit = $this->sourceDpi / 2.54;
+						$this->unitConversionRatio = $this->sourceDpi / 2.54;
 						break;
 					case 'px':
 					default:
-						$this->unitToPx = '1';
-						$this->pxToUnit = '1';
+						$this->unitConversionRatio = '1';
 						break;
 				}
 

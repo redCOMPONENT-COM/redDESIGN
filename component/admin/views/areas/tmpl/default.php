@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 $this->item = $displayData->item;
 $this->areas = $displayData->items;
 $this->designtype_id =	$displayData->item->designtype_id;
-$this->pxToUnit = $displayData->pxToUnit;
+$this->unitConversionRatio = $displayData->unitConversionRatio;
 $this->unit = $displayData->unit;
 $this->fontsOptions = $displayData->fontsOptions;
 $this->inputFieldOptions = $displayData->inputFieldOptions;
@@ -71,17 +71,17 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 			</td>
 			<td>
 				<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_WIDTH'); ?></strong>
-				<?php echo round($area->width * $this->pxToUnit) . $this->unit; ?>,
+				<?php echo round($area->width / $this->unitConversionRatio, 2) . $this->unit; ?>,
 				<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_HEIGHT'); ?></strong>
-				<?php echo round($area->height * $this->pxToUnit) . $this->unit; ?>,
+				<?php echo round($area->height / $this->unitConversionRatio, 2) . $this->unit; ?>,
 				<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X1'); ?></strong>
-				<?php echo round($area->x1_pos * $this->pxToUnit) . $this->unit; ?>,
+				<?php echo round($area->x1_pos / $this->unitConversionRatio, 2) . $this->unit; ?>,
 				<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y1'); ?></strong>
-				<?php echo round($area->y1_pos * $this->pxToUnit) . $this->unit; ?>,
+				<?php echo round($area->y1_pos / $this->unitConversionRatio, 2) . $this->unit; ?>,
 				<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_X2'); ?></strong>
-				<?php echo round($area->x2_pos * $this->pxToUnit) . $this->unit; ?>,
+				<?php echo round($area->x2_pos / $this->unitConversionRatio, 2) . $this->unit; ?>,
 				<strong><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_Y2'); ?></strong>
-				<?php echo round($area->y2_pos * $this->pxToUnit) . $this->unit; ?>
+				<?php echo round($area->y2_pos / $this->unitConversionRatio, 2) . $this->unit; ?>
 			</td>
 			<td>
 				<button type="button"
