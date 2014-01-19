@@ -50,6 +50,11 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	var insideGroup = "false";
 	var areaBoxes = new Array();
 
+	var lx = 0,
+		ly = 0,
+		ox = 0,
+		oy = 0;
+
 	/**
 	 * Initiate snap.svg
 	 */
@@ -139,7 +144,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 						rootSnapSvgObject.mouseup(endDrawRectangle);
 					}
 				);
-
 			<?php endif; ?>
 		}
 	);
@@ -174,12 +178,11 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			areaBoxes[current_area_id]['sizer'] = drawRectangle(mouseDownX, mouseDownY, 10, 10, "#CA202C", 1, "none", 0);
 			areaBoxes[current_area_id]['sizer'].node.id = "sizer" + areaBoxes[current_area_id]['rectId'];
 			areaBoxes[current_area_id]['sizer'].hover(sizerIn, sizerOut);
-			areaBoxes[current_area_id]['sizer'].mousedown(onBegginResizeRectangle);
+			areaBoxes[current_area_id]['sizer'].mousedown(begginResizeRectangle);
 
 			var group = rootSnapSvgObject.group(areaBoxes[current_area_id]['sizer'], areaBoxes[current_area_id]['rect']);
 			group.node.id = "group" + areaBoxes[current_area_id]['rectId'];
 			group.hover(groupIn, groupOut);
-			//group.drag();
 
 			rootSnapSvgObject.group().node.id = "areaBoxesLayer";
 			rootSnapSvgObject.select("#areaBoxesLayer").append(group);
@@ -274,9 +277,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		this.attr({cursor: "move"});
 
 		var group = this.parent();
-		group.drag();
-
-		this.mouseup(updateFieldsAfterDrag);
+		group.drag(draggingGroup, startDraggingGroup, endDraggingGroup);
 	}
 
 	function rectangleOut()
@@ -285,11 +286,9 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 		var group = this.parent();
 		group.undrag();
-
-		this.unmouseup();
 	}
 
-	function onBegginResizeRectangle(e)
+	function begginResizeRectangle(e)
 	{
 		rootSnapSvgObject.mousemove(resizeRectangle);
 		rootSnapSvgObject.mouseup(endResizingRectangle);
@@ -341,82 +340,42 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		);
 	}
 
-	function updateFieldsAfterDrag()
+	function startDraggingGroup(x, y, e) {
+
+	}
+
+	function draggingGroup(dx, dy, x, y) {
+		lx = dx + ox;
+		ly = dy + oy;
+		this.transform('t' + lx + ',' + ly);
+	}
+
+	function endDraggingGroup(e) {
+		ox = lx;
+		oy = ly;
+
+		updateFieldsAfterDrag(this);
+	}
+
+	/**
+	 * We have to use translated axises from the group's matrix in order to calculate
+	 * new position of the rectangle moved. The rectangle is part of the group.
+	 * Group's matrix is consisted from [a b c d e f], e and f gives the translated axis in
+	 * the x and y respectively. Which means that new position of an element inside group can be
+	 * determined like: x + e and y + f.
+	 *
+	 * @param   group  The group which was dragged.
+	 */
+	function updateFieldsAfterDrag(group)
 	{
 		var movingRect = rootSnapSvgObject.select("#" + areaBoxes[current_area_id]['rectId']);
-		var measures = movingRect.node.getBoundingClientRect();
-		var offset = jQuery("#svgForAreas").offset();
 
-		var x1 = measures.left - offset.left; console.log(x1);
-		var y1 = measures.bottom; console.log(y1);
-		var x2 = measures.right * scalingImageForPreviewRatio; console.log(x2);
-		var y2 = measures.bottom * scalingImageForPreviewRatio; console.log(y2);
-		var width = measures.width - offset.left; console.log(width);
-		var height = measures.height - offset.top; console.log(height);
+		var x1 = parseFloat(movingRect.attr("x")) + group.matrix.e;
+		var y1 = parseFloat(movingRect.attr("y")) + group.matrix.f;
+		var x2 = x1 + parseFloat(movingRect.attr("width"));
+		var y2 = y1 + parseFloat(movingRect.attr("height"));
 
-		populateFieldsWithCoordinatesFromImage(
-			movingRect.attr("x"),
-			movingRect.attr("y"),
-			parseFloat(movingRect.attr("x")) + parseFloat(movingRect.attr("width")),
-			parseFloat(movingRect.attr("x")) + parseFloat(movingRect.attr("height")),
-			movingRect.attr("width"),
-			movingRect.attr("height")
-		);
-		/*populateFieldsWithCoordinatesFromImage(
-			this.attr('x'),
-			this.attr('y'),
-			parseFloat(this.attr('x')) + parseFloat(this.attr('width')),
-			parseFloat(this.attr('x')) + parseFloat(this.attr('height')),
-			this.attr('width'),
-			this.attr('height')
-		);
-
-		areaBoxes[current_area_id]['x'] = this.attr('x');
-		areaBoxes[current_area_id]['y'] = this.attr('y');
-		areaBoxes[current_area_id]['x2'] = parseFloat(this.attr('x')) + parseFloat(this.attr('width'));
-		areaBoxes[current_area_id]['y2'] = parseFloat(this.attr('x')) + parseFloat(this.attr('height'));
-
-		rootSnapSvgObject.unmouseup();
-		var offset = jQuery("#svgForAreas").offset();
-		var upX = e.pageX - offset.left - mouseDownX;
-		var upY = e.pageY - offset.top - mouseDownY;
-
-		var movingRect = areaBoxes[current_area_id]['rect'];//  rootSnapSvgObject.select("#" + areaBoxes[current_area_id]['rectId']);
-
-		var x = upX + areaBoxes[current_area_id]['x'];
-		var y = upY + areaBoxes[current_area_id]['y'];
-
-		movingRect.attr({
-			x: x > 0 ? x : 0,
-			y: y > 0 ? y : 0
-		});
-
-		var sizer = areaBoxes[current_area_id]['sizer']; //rootSnapSvgObject.select("#sizer" + areaBoxes[current_area_id]['rectId']);
-		sizer.attr({
-			x: x + parseFloat(movingRect.attr('width')),
-			y: y + parseFloat(movingRect.attr('height'))
-		});
-		//console.log(areaBoxes[current_area_id]['rectId'] + " " + upX + " + " + " " + originalRectMoveX + " = " + x);
-
-		var movingRect = areaBoxes[current_area_id]['rect'];//  rootSnapSvgObject.select("#" + areaBoxes[current_area_id]['rectId']);
-		setCoordinatesToValues(
-			movingRect.attr('x'),
-			movingRect.attr('y'),
-			parseFloat(movingRect.attr('x')) + parseFloat(movingRect.attr('width')),
-			parseFloat(movingRect.attr('x')) + parseFloat(movingRect.attr('height')),
-			movingRect.attr('width'),
-			movingRect.attr('height'));
-		//console.log(movingRect);
-
-		//console.log(x);
-		//console.log(y);
-
-		areaBoxes[current_area_id]['x'] = x;
-		areaBoxes[current_area_id]['y'] = y;
-		areaBoxes[current_area_id]['x2'] = x + areaBoxes[current_area_id]['width'];
-		areaBoxes[current_area_id]['y2'] = y + areaBoxes[current_area_id]['height'];
-
-		//setPositionToCurrentRectangle();*/
+		populateFieldsWithCoordinatesFromImage(x1, y1, x2, y2, movingRect.attr("width"), movingRect.attr("height"));
 	}
 
 	/**
@@ -496,19 +455,8 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				{
 					if (update == 0)
 					{
-						//drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
-						//addAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
 						clearSelectionFields();
 					}
-					/* @Todo
-					 else
-					 {
-					 jQuery("#areaDiv" + reddesign_area_id).remove();
-					 drawArea(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.width, json.height);
-					 jQuery("#areaDiv" + reddesign_area_id).html(areaName + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
-				 updateAreaRow(json.reddesign_area_id, json.title, json.x1_pos, json.y1_pos, json.x2_pos, json.y2_pos, json.width, json.height);
-				 }
-				 */
 
 					window.location.href = "<?php echo $return_url; ?>";
 				}
@@ -916,12 +864,11 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		areaBoxes[current_area_id]['sizer'] = drawRectangle(x2, y2, 10, 10, "#CA202C", 1, "none", 0);
 		areaBoxes[current_area_id]['sizer'].node.id = "sizer" + areaBoxes[current_area_id]['rectId'];
 		areaBoxes[current_area_id]['sizer'].hover(sizerIn, sizerOut);
-		areaBoxes[current_area_id]['sizer'].mousedown(onBegginResizeRectangle);
+		areaBoxes[current_area_id]['sizer'].mousedown(begginResizeRectangle);
 
 		areaBoxes[current_area_id]['group'] = rootSnapSvgObject.group(areaBoxes[current_area_id]['sizer'], areaBoxes[current_area_id]['rect']);
 		areaBoxes[current_area_id]['group'].node.id = "group" + areaBoxes[current_area_id]['rectId'];
 		areaBoxes[current_area_id]['group'].hover(groupIn, groupOut);
-		//areaBoxes[current_area_id]['group'].drag(moveRectangle, begginMoveRectangle, endMoveRectangle);
 
 		rootSnapSvgObject.group().node.id = "areaBoxesLayer";
 		rootSnapSvgObject.select("#areaBoxesLayer").append(areaBoxes[current_area_id]['group']);
