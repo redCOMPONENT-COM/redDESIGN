@@ -555,66 +555,126 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		height = parseFloat(height.replace(unit, ""));
 		height = height * unitConversionRatio * scalingImageForPreviewRatio;
 
-		switch(jQuery(obj).prop('name'))
+		// If canvas is empty draw new rectangle.
+		if(typeof current_area_id === "undefined")
 		{
-			case 'areaWidth':
-				width = fieldValue;
-				x2 = x1 + fieldValue;
-				if (fieldValue > 0 && x2 < imageWidth)
-				{
-					jQuery("#areaX2").val(x2);
-				}
-				break;
+			// Remove previous selections.
+			rootSnapSvgObject.select("#areaBoxesLayer").remove();
 
-			case 'areaHeight':
-				height = fieldValue;
-				y2 = y1 + fieldValue;
+			// Set other coordinates.
+			switch(jQuery(obj).prop('name'))
+			{
+				case 'areaWidth':
+					width = fieldValue;
+					x1 = 1; y1 = 1; height = 25; x2 = width; y2 = height;
+					break;
+				case 'areaHeight':
+					height = fieldValue;
+					x1 = 1; y1 = 1; width = 25; x2 = width; y2 = height;
+					break;
 
-				if (fieldValue > 0 && y2 < imageHeight)
-				{
-					jQuery("#areaY2").val(y2);
-				}
-				break;
+				case 'areaX1':
+					x1 = fieldValue;
+					y1 = 1; width = 25; height = 25; x2 = width; y2 = height;
+					break;
+				case 'areaY1':
+					y1 = fieldValue;
+					x1 = 1; width = 25; height = 25; x2 = width; y2 = height;
+					break;
+				case 'areaX2':
+					x2 = fieldValue;
+					x1 = 1; y1 = 1; width = x2; height = 25; y2 = height;
+					break;
+				case 'areaY2':
+					y2 = fieldValue;
+					x1 = 1; y1 = 1; width = 25; height = y2; x2 = width;
+					break;
+			}
 
-			case 'areaX1':
-				x1 = fieldValue;
-				x2 = width + fieldValue;
+			var currentRectangle = drawRectangle(x1, y1, width, height, "white", 0.7, "#CA202C", 3);
+			currentRectangle.hover(rectangleIn, rectangleOut);
+			current_area_id = currentRectangle.id;
+			areaBoxes[current_area_id] = new Array();
 
-				if(fieldValue > 0 && x2 < imageWidth)
-				{
-					jQuery("#areaX2").val(x2);
-				}
-				break;
+			areaBoxes[current_area_id]['rect'] = currentRectangle;
+			areaBoxes[current_area_id]['rect'].node.id = areaBoxes[current_area_id]['rect'].id;
+			areaBoxes[current_area_id]['rectId'] = areaBoxes[current_area_id]['rect'].node.id;
 
-			case 'areaY1':
-				y1 = fieldValue;
-				y2 = height + fieldValue;
+			areaBoxes[current_area_id]['sizer'] = drawRectangle(x2, y2, 10, 10, "#CA202C", 1, "none", 0);
+			areaBoxes[current_area_id]['sizer'].node.id = "sizer" + areaBoxes[current_area_id]['rectId'];
+			areaBoxes[current_area_id]['sizer'].hover(sizerIn, sizerOut);
+			areaBoxes[current_area_id]['sizer'].mousedown(begginResizeRectangle);
 
-				if(fieldValue > 0 && y2 < imageHeight)
-				{
-					jQuery("#areaY2").val(y2);
-				}
-				break;
+			var group = rootSnapSvgObject.group(areaBoxes[current_area_id]['sizer'], areaBoxes[current_area_id]['rect']);
+			group.node.id = "group" + areaBoxes[current_area_id]['rectId'];
+			group.hover(groupIn, groupOut);
 
-			case 'areaX2':
-				x2 = fieldValue;
-				x1 = fieldValue - width;
+			rootSnapSvgObject.group().node.id = "areaBoxesLayer";
+			rootSnapSvgObject.select("#areaBoxesLayer").append(group);
+		}
+		else
+		{
+			switch(jQuery(obj).prop('name'))
+			{
+				case 'areaWidth':
+					width = fieldValue;
+					x2 = x1 + fieldValue;
+					if (fieldValue > 0 && x2 < imageWidth)
+					{
+						jQuery("#areaX2").val(x2);
+					}
+					break;
 
-				if(fieldValue < imageWidth && x1 > 0)
-				{
-					jQuery("#areaX1").val(x1);
-				}
-				break;
+				case 'areaHeight':
+					height = fieldValue;
+					y2 = y1 + fieldValue;
 
-			case 'areaY2':
-				y2 = fieldValue;
-				y1 = fieldValue - height;
+					if (fieldValue > 0 && y2 < imageHeight)
+					{
+						jQuery("#areaY2").val(y2);
+					}
+					break;
 
-				if(fieldValue < imageHeight && y1 > 0)
-				{
-					jQuery("#areaY1").val(y1);
-				}
-				break;
+				case 'areaX1':
+					x1 = fieldValue;
+					x2 = width + fieldValue;
+
+					if(fieldValue > 0 && x2 < imageWidth)
+					{
+						jQuery("#areaX2").val(x2);
+					}
+					break;
+
+				case 'areaY1':
+					y1 = fieldValue;
+					y2 = height + fieldValue;
+
+					if(fieldValue > 0 && y2 < imageHeight)
+					{
+						jQuery("#areaY2").val(y2);
+					}
+					break;
+
+				case 'areaX2':
+					x2 = fieldValue;
+					x1 = fieldValue - width;
+
+					if(fieldValue < imageWidth && x1 > 0)
+					{
+						jQuery("#areaX1").val(x1);
+					}
+					break;
+
+				case 'areaY2':
+					y2 = fieldValue;
+					y1 = fieldValue - height;
+
+					if(fieldValue < imageHeight && y1 > 0)
+					{
+						jQuery("#areaY1").val(y1);
+					}
+					break;
+			}
 		}
 
 		areaBoxes[current_area_id]['x'] = x1;
@@ -632,6 +692,11 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		var y = areaBoxes[current_area_id]['y'] * unitConversionRatio * scalingImageForPreviewRatio;
 		var width = areaBoxes[current_area_id]['width'] * unitConversionRatio * scalingImageForPreviewRatio;
 		var height = areaBoxes[current_area_id]['height'] * unitConversionRatio * scalingImageForPreviewRatio;
+
+		x = isNaN(x) ? 0 : x;
+		y = isNaN(y) ? 0 : y;
+		width = isNaN(width) ? 25 : width;
+		height = isNaN(height) ? 25 : height;
 
 		var movingRect = areaBoxes[current_area_id]['rect'];
 		movingRect.attr({
