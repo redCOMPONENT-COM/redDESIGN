@@ -10,9 +10,7 @@
 defined('_JEXEC') or die();
 
 JHtml::_('behavior.framework');
-
 ?>
-
 <div id="basic_configuration" class="span12">
 	<?php if (!empty($this->item->font_file)) : ?>
 		<div class="control-group">
@@ -21,7 +19,7 @@ JHtml::_('behavior.framework');
 			</label>
 
 			<div class="controls">
-				<?php echo JHtml::image('media/com_reddesign/fonts/' . $this->fontThumbnail, '') ?>
+				<span style="font-family: '<?php echo $this->item->name; ?>', Arial; font-size:30px;">Lorem ipsum</span>
 			</div>
 		</div>
 	<?php else : ?>

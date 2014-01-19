@@ -89,4 +89,35 @@ class ReddesignModelAreas extends RModelList
 
 		return $query;
 	}
+
+	/**
+	 * Get List of used fonts for areas
+	 *
+	 * @param   array  $areas  List of area objects
+	 *
+	 * @return  array
+	 */
+	public function getSelectedFonts($areas = null)
+	{
+		$selectedFonts = array();
+		if (!empty($areas))
+		{
+			foreach($areas as $area)
+			{
+				$fonts = (array) json_decode($area->font_id);
+
+				if (!empty($fonts) && is_array($fonts))
+				{
+					foreach($fonts as $font)
+					{
+						$selectedFonts[$font] = $font;
+					}
+				}
+			}
+		}
+
+		return $selectedFonts;
+	}
+
+
 }
