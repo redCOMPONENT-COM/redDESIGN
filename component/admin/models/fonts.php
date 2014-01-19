@@ -93,6 +93,15 @@ class ReddesignModelFonts extends RModelList
 					->select('f.*')
 					->from($db->qn('#__reddesign_fonts', 'f'));
 
+		// Filter by Font IDs
+		$fontIds = (array) $this->getState('filter.id', array());
+		JArrayHelper::toInteger($fontIds);
+
+		if (count($fontIds) > 0)
+		{
+			$query->where('f.id IN (' . implode(',', $fontIds) . ')');
+		}
+
 		// Filter search
 		$search = $this->getState('filter.search_fonts');
 

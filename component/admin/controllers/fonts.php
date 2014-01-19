@@ -10,22 +10,25 @@
 defined('_JEXEC') or die;
 
 /**
- * Companies Controller
+ * Fonts Controller
  *
  * @package     Reddesign.Backend
  * @subpackage  Controllers
  * @since       1.0
  */
+
 class ReddesignControllerFonts extends RControllerAdmin
 {
 	/**
-	 * constructor (registers additional tasks to methods)
+	 * Constructor.
+	 *
+	 * @param   array  $config  An optional associative array of configuration settings.
+	 *
+	 * @throws  Exception
 	 */
-	public function __construct()
+	public function __construct($config = array())
 	{
-		parent::__construct();
-
-		// Write this to make two tasks use the same method (in this example the add method uses the edit method)
+		parent::__construct($config);
 		$this->registerTask('add', 'edit');
 	}
 }

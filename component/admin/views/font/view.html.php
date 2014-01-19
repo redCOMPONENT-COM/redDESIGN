@@ -57,7 +57,16 @@ class ReddesignViewFont extends ReddesignView
 		$this->form = $this->get('Form');
 		$this->item = $this->get('Item');
 
-		$this->fontThumbnail = substr($this->item->font_file, 0, -3) . 'png';
+		if ($this->item->id > 0)
+		{
+			$fontStyleDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($this->item->id);
+
+			if (!empty($fontStyleDeclaration))
+			{
+				$document = JFactory::getDocument();
+				$document->addStyleDeclaration($fontStyleDeclaration);
+			}
+		}
 
 		// Typography options for the chars tab.
 		$this->typographies = array(

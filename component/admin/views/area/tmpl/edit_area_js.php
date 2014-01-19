@@ -21,6 +21,7 @@ if (isset($displayData))
 	$this->productionBgAttributes = $displayData->productionBgAttributes;
 	$this->fontsOptions = $displayData->fontsOptions;
 	$this->inputFieldOptions = $displayData->inputFieldOptions;
+	$this->selectedFontsDeclaration = $displayData->selectedFontsDeclaration;
 }
 
 $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->item->designtype_id . '&tab=design-areas';
@@ -126,6 +127,8 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				Snap.load(
 					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>",
 					function (f) {
+						var styleDeclaration = Snap.parse('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>');
+						rootSnapSvgObject.append(styleDeclaration);
 						rootSnapSvgObject.append(f);
 
 						var loadedSvgFromFile = jQuery("#svgForAreas").find("svg")[0];
@@ -789,6 +792,14 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			selectArea(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
 			populateFieldsWithCoordinatesFromAreasList(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
 		}
+
+		var textElement = Snap.parse(
+			'<text fill="black" font-size="14px" x="'
+				+ (parseFloat(areaBoxes[current_area_id]['rect'].attr('x')) + 4)
+				+ '" y="' + (parseFloat(areaBoxes[current_area_id]['rect'].attr('y')) + 18)
+				+ '">' + title + '</text>');
+
+		areaBoxes[current_area_id]['group'].append(textElement);
 
 		jQuery("#areaDiv" + reddesign_area_id).html(title + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
 	}
