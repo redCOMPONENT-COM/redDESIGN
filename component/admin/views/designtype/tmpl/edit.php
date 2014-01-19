@@ -145,6 +145,7 @@ switch ($tab)
 				$data->fontsOptions = $this->fontsOptions;
 				$data->inputFieldOptions = $this->inputFieldOptions;
 				$data->item->designtype_id = $this->item->id;
+				$data->selectedFontsDeclaration = $this->selectedFontsDeclaration;
 				echo RLayoutHelper::render('edit_area_js', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/area/tmpl');
 				echo RLayoutHelper::render('edit', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/area/tmpl');
 				echo RLayoutHelper::render('default', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/areas/tmpl');

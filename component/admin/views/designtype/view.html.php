@@ -88,6 +88,11 @@ class ReddesignViewDesigntype extends ReddesignView
 	protected $inputFieldOptions = array();
 
 	/**
+	 * @var string
+	 */
+	protected $selectedFontsDeclaration = '';
+
+	/**
 	 * @var array
 	 */
 	protected $fonts = array();
@@ -150,6 +155,9 @@ class ReddesignViewDesigntype extends ReddesignView
 						$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
 						$areasModel->setState('background_id', $background->id);
 						$areas = $areasModel->getItems();
+
+						$selectedFonts = $areasModel->getSelectedFonts($areas);
+						$this->selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
 					}
 				}
 
