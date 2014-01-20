@@ -39,6 +39,7 @@ final class ReddesignEntityConfig
 	{
 		// Get the config data from the model.
 		require_once JPATH_ADMINISTRATOR . '/components/com_reddesign/models/config.php';
+		require_once JPATH_ADMINISTRATOR . '/components/com_reddesign/tables/config.php';
 		$model = JModelLegacy::getInstance('Config', 'ReddesignModel');
 		$this->config = $model->getItem();
 	}
