@@ -187,7 +187,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			}
 
 			$displayData = new stdClass;
-			$displayData->params = JComponentHelper::getParams('com_reddesign');
+			$displayData->config = ReddesignEntityConfig::getInstance();
+			$displayData->relatedDesignTypes = $productRelatedDesigntypeIds;
 
 			$designtypesModel = RModel::getFrontInstance('Designtypes', array(), 'com_reddesign');
 			$designtypesModel->setId($designTypeId);
@@ -293,65 +294,68 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			$areasFinshedOutput = '';
 
-			foreach ($areas as $areaId)
+			if (!empty($areas))
 			{
-				$areasLoopTemplateInstance = $areasLoopTemplate;
+				foreach ($areas as $areaId)
+				{
+					$areasLoopTemplateInstance = $areasLoopTemplate;
 
-				// Get area specific content.
-				$areaHtml = explode('{RedDesignBreakDesignArea' . $areaId . '}', $htmlAreas);
-				$areaHtml = $areaHtml[1];
+					// Get area specific content.
+					$areaHtml = explode('{RedDesignBreakDesignArea' . $areaId . '}', $htmlAreas);
+					$areaHtml = $areaHtml[1];
 
-				// Get specific area title.
-				$htmlElement = explode('{RedDesignBreakDesignAreaTitle}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:AreaTitle}", $htmlElement, $areasLoopTemplateInstance);
+					// Get specific area title.
+					$htmlElement = explode('{RedDesignBreakDesignAreaTitle}', $areaHtml);
+					$htmlElement = $htmlElement[1];
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:AreaTitle}", $htmlElement, $areasLoopTemplateInstance);
 
-				// Get input text label.
-				$htmlElement = explode('{RedDesignBreakDesignAreaInputTextLabel}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:InputTextLabel}", $htmlElement, $areasLoopTemplateInstance);
+					// Get input text label.
+					$htmlElement = explode('{RedDesignBreakDesignAreaInputTextLabel}', $areaHtml);
+					$htmlElement = $htmlElement[1];
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:InputTextLabel}", $htmlElement, $areasLoopTemplateInstance);
 
-				// Get input text.
-				$htmlElement = explode('{RedDesignBreakDesignAreaInputText}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:InputText}", $htmlElement, $areasLoopTemplateInstance);
+					// Get input text.
+					$htmlElement = explode('{RedDesignBreakDesignAreaInputText}', $areaHtml);
+					$htmlElement = $htmlElement[1];
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:InputText}", $htmlElement, $areasLoopTemplateInstance);
 
-				// Get choose font label.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontLabel}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontLabel}", $htmlElement, $areasLoopTemplateInstance);
+					// Get choose font label.
+					$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontLabel}', $areaHtml);
+					$htmlElement = $htmlElement[1];
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontLabel}", $htmlElement, $areasLoopTemplateInstance);
 
-				// Get choose font input.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseFont}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFont}", $htmlElement, $areasLoopTemplateInstance);
+					// Get choose font input.
+					$htmlElement = explode('{RedDesignBreakDesignAreaChooseFont}', $areaHtml);
+					$htmlElement = $htmlElement[1];
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFont}", $htmlElement, $areasLoopTemplateInstance);
 
-				// Get choose font size label.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontSizeLabel}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontSizeLabel}", $htmlElement, $areasLoopTemplateInstance);
+					// Get choose font size label.
+					$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontSizeLabel}', $areaHtml);
+					$htmlElement = $htmlElement[1];
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontSizeLabel}", $htmlElement, $areasLoopTemplateInstance);
 
-				// Get choose font size input.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontSize}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontSize}", $htmlElement, $areasLoopTemplateInstance);
+					// Get choose font size input.
+					$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontSize}', $areaHtml);
+					$htmlElement = $htmlElement[1];
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontSize}", $htmlElement, $areasLoopTemplateInstance);
 
-				// Get choose color label.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseColorLabel}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColorLabel}", $htmlElement, $areasLoopTemplateInstance);
+					// Get choose color label.
+					$htmlElement = explode('{RedDesignBreakDesignAreaChooseColorLabel}', $areaHtml);
+					$htmlElement = $htmlElement[1];
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColorLabel}", $htmlElement, $areasLoopTemplateInstance);
 
-				// Get choose color label.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseColor}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColor}", $htmlElement, $areasLoopTemplateInstance);
+					// Get choose color label.
+					$htmlElement = explode('{RedDesignBreakDesignAreaChooseColor}', $areaHtml);
+					$htmlElement = $htmlElement[1];
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColor}", $htmlElement, $areasLoopTemplateInstance);
 
-				// Get choose color label.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseColor}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColor}", $htmlElement, $areasLoopTemplateInstance);
+					// Get choose color label.
+					$htmlElement = explode('{RedDesignBreakDesignAreaChooseColor}', $areaHtml);
+					$htmlElement = $htmlElement[1];
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColor}", $htmlElement, $areasLoopTemplateInstance);
 
-				$areasFinshedOutput .= $areasLoopTemplateInstance;
+					$areasFinshedOutput .= $areasLoopTemplateInstance;
+				}
 			}
 
 			$start = '{redDESIGN:AreasLoopStart}';

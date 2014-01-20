@@ -29,6 +29,10 @@ class ReddesignViewDesigntype extends JView
 
 	public $productionBackgroundAreas;
 
+	public $relatedDesignTypes;
+
+	public $config;
+
 	/**
 	 * Executes before rendering the page for the Read task.
 	 *
@@ -40,7 +44,9 @@ class ReddesignViewDesigntype extends JView
 	{
 		$app = JFactory::getApplication();
 		$model = $this->getModel();
-		$this->params = JComponentHelper::getParams('com_reddesign');
+
+		// Component configuration.
+		$this->config = ReddesignEntityConfig::getInstance();
 
 		// Get Design
 		$designTypeId = JFactory::getApplication()->input->getInt('id', null);

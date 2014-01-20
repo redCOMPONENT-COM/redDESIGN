@@ -12,6 +12,7 @@ defined('_JEXEC') or die();
 if (isset($displayData))
 {
 	$this->backgrounds = $displayData->backgrounds;
+	$this->relatedDesignTypes = $displayData->relatedDesignTypes;
 }
 
 ?>
@@ -46,7 +47,7 @@ if (isset($displayData))
 						        width="150"
 						        height="150"
 						>
-							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BROWSER_NOT_SUPORTED_FALLBACK'); ?>
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BROWSER_NOT_SUPPORTED_FALLBACK'); ?>
 						</object>
 					</div>
 					<div class="pull-left">
@@ -57,45 +58,47 @@ if (isset($displayData))
 			</li>
 		<?php endforeach; ?>
 
-		<?php foreach($this->relatedDesignTypes as $relatedDesignType) : ?>
-			<?php if (!empty($relatedDesignType)) : ?>
-				<?php
-					$productId = $this->config['input']->getInt('productId', 0);
-					$cid = $this->config['input']->getInt('cid', null);
-					$Itemid = $this->config['input']->getInt('Itemid', null);
+		<?php if (!empty($this->relatedDesignTypes)) : ?>
+			<?php foreach($this->relatedDesignTypes as $relatedDesignType) : ?>
+				<?php if (!empty($relatedDesignType)) : ?>
+					<?php
+						$productId = $this->config['input']->getInt('productId', 0);
+						$cid = $this->config['input']->getInt('cid', null);
+						$Itemid = $this->config['input']->getInt('Itemid', null);
 
-					$backgroundsModel = RModel::getAdminInstance('Backgrounds', array(), 'com_reddesign');
-					$backgroundsModel->setState('designtype_id', $relatedDesignType);
-					$relatedBackgrounds = $backgroundModel->getItems();
-				?>
-				<?php foreach($relatedBackgrounds as $frame) : ?>
-					<li>
-						<div class="frame-container">
-							<div class="frame-selection">
-								<input type="radio"
-									   class="price-modifier"
-									   onclick ="location.href='<?php echo JURI::base() ?>index.php?option=com_redshop&view=product&pid=<?php echo $productId ?>&cid=<?php echo $cid ?>&Itemid=<?php echo $Itemid ?>&designTypeId=<?php echo $relatedDesignType; ?>'"
-									   id="frame<?php echo $frame->background_id;?>"
-									   name="frame"
-									   value="<?php echo $frame->background_id ?>"
-									<?php if ($frame->isDefaultPreview) : ?>
-									   checked="checked"
-									<?php endif; ?>
-								/>
-							</div>
-							<div class="frame-detail">
-								<div class="frame-thumbnail-container">
-									<?php echo JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $frame->thumbnail, $frame->name, 'class="img-polaroid frame-thumbnail"') ?>
+						$backgroundsModel = RModel::getAdminInstance('Backgrounds', array(), 'com_reddesign');
+						$backgroundsModel->setState('designtype_id', $relatedDesignType);
+						$relatedBackgrounds = $backgroundModel->getItems();
+					?>
+					<?php foreach($relatedBackgrounds as $frame) : ?>
+						<li>
+							<div class="frame-container">
+								<div class="frame-selection">
+									<input type="radio"
+										   class="price-modifier"
+										   onclick ="location.href='<?php echo JURI::base() ?>index.php?option=com_redshop&view=product&pid=<?php echo $productId ?>&cid=<?php echo $cid ?>&Itemid=<?php echo $Itemid ?>&designTypeId=<?php echo $relatedDesignType; ?>'"
+										   id="frame<?php echo $frame->background_id;?>"
+										   name="frame"
+										   value="<?php echo $frame->background_id ?>"
+										<?php if ($frame->isDefaultPreview) : ?>
+										   checked="checked"
+										<?php endif; ?>
+									/>
 								</div>
-								<div class="pull-left">
-									<h5><?php echo $frame->name; ?></h5>
+								<div class="frame-detail">
+									<div class="frame-thumbnail-container">
+										<?php echo JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $frame->thumbnail, $frame->name, 'class="img-polaroid frame-thumbnail"') ?>
+									</div>
+									<div class="pull-left">
+										<h5><?php echo $frame->name; ?></h5>
+									</div>
 								</div>
 							</div>
-						</div>
-					</li>
-				<?php endforeach; ?>
-			<?php endif; ?>
-		<?php endforeach; ?>
+						</li>
+					<?php endforeach; ?>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		<?php endif; ?>
 
 		<input type="hidden"
 			   name="background_id"
