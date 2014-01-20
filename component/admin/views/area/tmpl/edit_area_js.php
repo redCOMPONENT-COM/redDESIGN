@@ -49,6 +49,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	var mouseDownX = 0;
 	var mouseDownY = 0;
 	var insideGroup = "false";
+	var current_area_id = '';
 	var areaBoxes = new Array();
 
 	var lx = 0,
@@ -533,6 +534,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	function onAreaValuesChange(obj) {
 		var fieldValue = jQuery(obj).val();
 		fieldValue = parseFloat(fieldValue.replace(unit, ""));
+		fieldValue = fieldValue * unitConversionRatio * scalingImageForPreviewRatio;
 
 		var x1 = jQuery("#areaX1").val();
 		x1 = parseFloat(x1.replace(unit, ""));
@@ -559,53 +561,56 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		height = height * unitConversionRatio * scalingImageForPreviewRatio;
 
 		// If canvas is empty draw new rectangle.
-		if(typeof current_area_id === "undefined")
+		if(current_area_id == '')
 		{
+			x1 = 1; y1 = 1; height = 25; width = 25; x2 = x1 + width; y2 = y1 + height;
 			// Set other coordinates.
 			switch(jQuery(obj).prop('name'))
 			{
 				case 'areaWidth':
 					width = fieldValue;
-					x1 = 1; y1 = 1; height = 25; x2 = width; y2 = height;
+					x2 = x1 + width;
 					break;
 				case 'areaHeight':
 					height = fieldValue;
-					x1 = 1; y1 = 1; width = 25; x2 = width; y2 = height;
+					y2 = y1 + height;
 					break;
 
 				case 'areaX1':
 					x1 = fieldValue;
-					y1 = 1; width = 25; height = 25; x2 = width; y2 = height;
+					x2 = x1 + width;
 					break;
 				case 'areaY1':
 					y1 = fieldValue;
-					x1 = 1; width = 25; height = 25; x2 = width; y2 = height;
+					y2 = y1 + height;
 					break;
 				case 'areaX2':
 					x2 = fieldValue;
-					x1 = 1; y1 = 1; width = x2; height = 25; y2 = height;
+					width = x2 - x1;
 					break;
 				case 'areaY2':
 					y2 = fieldValue;
-					x1 = 1; y1 = 1; width = 25; height = y2; x2 = width;
+					height = y2 - y1;
 					break;
 			}
 
-			var currentRectangle = drawRectangle(x1, x2, 0, 0, "white", 0.7, "#CA202C", 3);
+			var currentRectangle = drawRectangle(x1, y1, width, height, "white", 0.7, "#CA202C", 3);
 			currentRectangle.hover(rectangleIn, rectangleOut);
 
 			current_area_id = currentRectangle.id;
 			areaBoxes[current_area_id] = new Array();
 			areaBoxes[current_area_id]['x'] = x1;
-			areaBoxes[current_area_id]['y'] = x2;
-			areaBoxes[current_area_id]['width'] = 0;
-			areaBoxes[current_area_id]['height'] = 0;
+			areaBoxes[current_area_id]['y'] = y1;
+			areaBoxes[current_area_id]['x2'] = x2;
+			areaBoxes[current_area_id]['y2'] = y2;
+			areaBoxes[current_area_id]['width'] = width;
+			areaBoxes[current_area_id]['height'] = height;
 			areaBoxes[current_area_id]['rect'] = currentRectangle;
 
 			areaBoxes[current_area_id]['rect'].node.id = areaBoxes[current_area_id]['rect'].id;
 			areaBoxes[current_area_id]['rectId'] = areaBoxes[current_area_id]['rect'].node.id;
 
-			areaBoxes[current_area_id]['sizer'] = drawRectangle(width, height, 10, 10, "#CA202C", 1, "none", 0);
+			areaBoxes[current_area_id]['sizer'] = drawRectangle(x2, y2, 10, 10, "#CA202C", 1, "none", 0);
 			areaBoxes[current_area_id]['sizer'].node.id = "sizer" + areaBoxes[current_area_id]['rectId'];
 			areaBoxes[current_area_id]['sizer'].hover(sizerIn, sizerOut);
 			areaBoxes[current_area_id]['sizer'].mousedown(begginResizeRectangle);
@@ -683,10 +688,10 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	}
 
 	function setPositionToCurrentRectangle() {
-		var x = areaBoxes[current_area_id]['x'] * unitConversionRatio * scalingImageForPreviewRatio;
-		var y = areaBoxes[current_area_id]['y'] * unitConversionRatio * scalingImageForPreviewRatio;
-		var width = areaBoxes[current_area_id]['width'] * unitConversionRatio * scalingImageForPreviewRatio;
-		var height = areaBoxes[current_area_id]['height'] * unitConversionRatio * scalingImageForPreviewRatio;
+		var x = areaBoxes[current_area_id]['x'];
+		var y = areaBoxes[current_area_id]['y'];
+		var width = areaBoxes[current_area_id]['width'];
+		var height = areaBoxes[current_area_id]['height'];
 
 		x = isNaN(x) ? 0 : x;
 		y = isNaN(y) ? 0 : y;
@@ -833,7 +838,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		if (typeof areaBoxes[reddesign_area_id] !== "undefined")
 		{
 			current_area_id = reddesign_area_id;
-			populateFieldsWithCoordinatesFromAreasList(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
 		}
 		else
 		{
@@ -846,9 +850,9 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			areaBoxes[reddesign_area_id]['width'] = width;
 			areaBoxes[reddesign_area_id]['height'] = height;
 			current_area_id = reddesign_area_id;
-			selectArea(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
-			populateFieldsWithCoordinatesFromAreasList(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
 		}
+		selectArea(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
+		populateFieldsWithCoordinatesFromAreasList(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
 
 		var textElement = Snap.parse(
 			'<text fill="black" font-size="14px" x="'
@@ -943,25 +947,27 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		x1 *= scalingImageForPreviewRatio;
 		y1 *= scalingImageForPreviewRatio;
 		x2 *= scalingImageForPreviewRatio;
-		x2 *= scalingImageForPreviewRatio;
+		y2 *= scalingImageForPreviewRatio;
 		width *= scalingImageForPreviewRatio;
 		height *= scalingImageForPreviewRatio;
 
-		var currentRectangle = drawRectangle(x1, x2, width, height, "white", 0.7, "#CA202C", 3);
+		var currentRectangle = drawRectangle(x1, y1, width, height, "white", 0.7, "#CA202C", 3);
+		currentRectangle.id = "rect" + current_area_id;
 		currentRectangle.hover(rectangleIn, rectangleOut);
 
-		current_area_id = currentRectangle.id;
 		areaBoxes[current_area_id] = new Array();
 		areaBoxes[current_area_id]['x'] = x1;
-		areaBoxes[current_area_id]['y'] = x2;
-		areaBoxes[current_area_id]['width'] = 0;
-		areaBoxes[current_area_id]['height'] = 0;
+		areaBoxes[current_area_id]['y'] = y1;
+		areaBoxes[current_area_id]['x2'] = x2;
+		areaBoxes[current_area_id]['y2'] = y2;
+		areaBoxes[current_area_id]['width'] = width;
+		areaBoxes[current_area_id]['height'] = height;
 		areaBoxes[current_area_id]['rect'] = currentRectangle;
 
-		areaBoxes[current_area_id]['rect'].node.id = areaBoxes[current_area_id]['rect'].id;
+		areaBoxes[current_area_id]['rect'].node.id = "area" + areaBoxes[current_area_id]['rect'].id;
 		areaBoxes[current_area_id]['rectId'] = areaBoxes[current_area_id]['rect'].node.id;
 
-		areaBoxes[current_area_id]['sizer'] = drawRectangle(width, height, 10, 10, "#CA202C", 1, "none", 0);
+		areaBoxes[current_area_id]['sizer'] = drawRectangle(x2, y2, 10, 10, "#CA202C", 1, "none", 0);
 		areaBoxes[current_area_id]['sizer'].node.id = "sizer" + areaBoxes[current_area_id]['rectId'];
 		areaBoxes[current_area_id]['sizer'].hover(sizerIn, sizerOut);
 		areaBoxes[current_area_id]['sizer'].mousedown(begginResizeRectangle);
@@ -969,6 +975,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		var group = rootSnapSvgObject.group(areaBoxes[current_area_id]['sizer'], areaBoxes[current_area_id]['rect']);
 		group.node.id = "group" + areaBoxes[current_area_id]['rectId'];
 		group.hover(groupIn, groupOut);
+		areaBoxes[current_area_id]['group'] = group;
 
 		rootSnapSvgObject.group().node.id = "areaBoxesLayer";
 		rootSnapSvgObject.select("#areaBoxesLayer").append(group);
