@@ -11,6 +11,9 @@ defined('_JEXEC') or die();
 
 JHtml::_('behavior.modal');
 
+RHelperAsset::load('lib/jquery.min.js', 'redcore');
+RHelperAsset::load('snap.svg.js', 'com_reddesign');
+
 if (isset($displayData))
 {
 	$this->item = $displayData->item;
@@ -21,13 +24,34 @@ if (isset($displayData))
 	$this->config = $displayData->config;
 }
 
+$imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->svg_file;
 $autoCustomize = $this->config->getAutoCustomize();
+$previewWidth = $this->config->getMaxSVGPreviewSiteWidth();
+$unit = $this->config->getUnit();
+$sourceDpi = $this->config->getSourceDpi();
+
+$selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($this->fonts);
+
+// Calculate width and height in the selected unit at the configuration. 1 inch = 25.4 mm
+switch ($this->unit)
+{
+	case 'mm':
+		$unitConversionRatio = $sourceDpi / 25.4;
+		break;
+	case 'cm':
+		$unitConversionRatio = $sourceDpi / 2.54;
+		break;
+	case 'px':
+	default:
+		$unitConversionRatio = '1';
+		break;
+}
 
 /*
 {RedDesignBreakELEMENT} is a tag used in integration plugin to explode HTML string into smaller peaces. Those peaces are used in redSHOP templating.
 */
-$input         = JFactory::getApplication()->input;
-$productId     = $input->getInt('pid', 0);
+$input = JFactory::getApplication()->input;
+$productId = $input->getInt('pid', 0);
 ?>
 
 <?php // Part 0 - Title ?>
@@ -43,7 +67,7 @@ $productId     = $input->getInt('pid', 0);
 	<input type="hidden" name="task" id="task" value="">
 	<input type="hidden" name="designAreas" id="designAreas" value="">
 	<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
-	<input type="hidden" id="reddesign_designtype_id" name="reddesign_designtype_id" value="<?php echo $this->item->reddesign_designtype_id; ?>">
+	<input type="hidden" id="reddesign_designtype_id" name="reddesign_designtype_id" value="<?php echo $this->item->id; ?>">
 {RedDesignBreakFormBegin}
 
 <?php // Part 2 - Select Backgrounds ?>
@@ -60,18 +84,16 @@ $productId     = $input->getInt('pid', 0);
 <?php // Part 3 - Design Image ?>
 {RedDesignBreakDesignImage}
 	<div id="background-container">
-		<div id="backgroundImage">
-		</div>
-		<?php
-			$imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->svg_file;
-		?>
-		<div style="display:none" id="mainImageSVG" data-svg="<?php echo $imageUrl; ?>"></div>
-		<input type="hidden" id="svgImags" name="svgImags" value="" />
+
+		<svg id="mainSvgImage">
+		</svg>
+
 		<div id="progressBar" style="display: none;">
 			<div class="progress progress-striped active">
 				<div class="bar" style="width: 100%;"></div>
 			</div>
 		</div>
+
 	</div>
 {RedDesignBreakDesignImage}
 
@@ -105,34 +127,44 @@ $productId     = $input->getInt('pid', 0);
 </form>
 
 <script type="text/javascript">
-	var backgroundContainerWidth;
-	var backgroundContainerHeight;
+	var rootSnapSvgObject;
 
-	
+	/**
+	 * Initiate PX to Unit conversation variables
+	 */
+	var unit = "<?php echo $unit;?>";
+	var imageWidth;
+	var imageHeight;
+	var previewWidth  = parseFloat("<?php echo $previewWidth; ?>");
+	var unitConversionRatio = parseFloat("<?php echo $unitConversionRatio;?>");
+	var scalingImageForPreviewRatio;
+	var previewHeight;
+
+
 	var area = new Array();
+
 	<?php foreach ($this->productionBackgroundAreas as  $area) : ?>
-		area[<?php echo $area->id; ?>]= new Array();
-		area[<?php echo $area->id; ?>]['id'] 	= "<?php echo $area->id; ?>";
-		area[<?php echo $area->id; ?>]['name'] 	= "<?php echo $area->name; ?>";
-		area[<?php echo $area->id; ?>]['x1_pos'] = "<?php echo $area->x1_pos; ?>";
-		area[<?php echo $area->id; ?>]['y1_pos'] = "<?php echo $area->y1_pos; ?>";
-		area[<?php echo $area->id; ?>]['x2_pos'] = "<?php echo $area->x2_pos; ?>";
-		area[<?php echo $area->id; ?>]['y2_pos'] = "<?php echo $area->y2_pos; ?>";
-		area[<?php echo $area->id; ?>]['width'] 	= "<?php echo $area->width; ?>";
-		area[<?php echo $area->id; ?>]['height'] = "<?php echo $area->height; ?>";
-		area[<?php echo $area->id; ?>]['font_size'] = "<?php echo $area->font_size; ?>";
-		area[<?php echo $area->id; ?>]['font_id'] = "<?php echo $area->font_id; ?>";
-		area[<?php echo $area->id; ?>]['color_code'] = "<?php echo $area->color_code; ?>";
-		area[<?php echo $area->id; ?>]['default_text'] 	= "<?php echo $area->default_text; ?>";
-		area[<?php echo $area->id; ?>]['textalign'] = "<?php echo $area->textalign; ?>";
-		area[<?php echo $area->id; ?>]['maxchar'] = "<?php echo $area->maxchar; ?>";
-		area[<?php echo $area->id; ?>]['defaultFontSize'] = "<?php echo $area->defaultFontSize; ?>";
+		area[<?php echo $area->id ?>]= new Array();
+		area[<?php echo $area->id ?>]['id'] 	= "<?php echo $area->id; ?>";
+		area[<?php echo $area->id ?>]['name'] 	= "<?php echo $area->name; ?>";
+		area[<?php echo $area->id ?>]['x1_pos'] = "<?php echo $area->x1_pos; ?>";
+		area[<?php echo $area->id ?>]['y1_pos'] = "<?php echo $area->y1_pos; ?>";
+		area[<?php echo $area->id ?>]['x2_pos'] = "<?php echo $area->x2_pos; ?>";
+		area[<?php echo $area->id ?>]['y2_pos'] = "<?php echo $area->y2_pos; ?>";
+		area[<?php echo $area->id ?>]['width'] 	= "<?php echo $area->width; ?>";
+		area[<?php echo $area->id ?>]['height'] = "<?php echo $area->height; ?>";
+		area[<?php echo $area->id ?>]['font_size'] = "<?php echo $area->font_size; ?>";
+		area[<?php echo $area->id ?>]['font_id'] = "<?php echo $area->font_id; ?>";
+		area[<?php echo $area->id ?>]['color_code'] = "<?php echo $area->color_code; ?>";
+		area[<?php echo $area->id ?>]['default_text'] 	= "<?php echo $area->default_text; ?>";
+		area[<?php echo $area->id ?>]['textalign'] = "<?php echo $area->textalign; ?>";
+		area[<?php echo $area->id ?>]['maxchar'] = "<?php echo $area->maxchar; ?>";
+		area[<?php echo $area->id ?>]['defaultFontSize'] = "<?php echo $area->defaultFontSize; ?>";
 
-		area[<?php echo $area->id; ?>]['minFontSize'] = "<?php echo $area->minFontSize; ?>";
-		area[<?php echo $area->id; ?>]['maxFontSize'] = "<?php echo $area->maxFontSize; ?>";
-		area[<?php echo $area->id; ?>]['maxline'] = "<?php echo $area->maxline; ?>";
-		area[<?php echo $area->id; ?>]['input_field_type'] 	= "<?php echo $area->input_field_type; ?>";
-
+		area[<?php echo $area->id ?>]['minFontSize'] = "<?php echo $area->minFontSize; ?>";
+		area[<?php echo $area->id ?>]['maxFontSize'] = "<?php echo $area->maxFontSize; ?>";
+		area[<?php echo $area->id ?>]['maxline'] = "<?php echo $area->maxline; ?>";
+		area[<?php echo $area->id ?>]['input_field_type'] 	= "<?php echo $area->input_field_type; ?>";
 	<?php endforeach; ?>
 
 	/**
@@ -146,7 +178,7 @@ $productId     = $input->getInt('pid', 0);
 			// Customize function.
 			jQuery(document).on("click", "#customizeDesign", function () {
 					// Add spinner to button.
-					jQuery(this).button("loadingo");
+					jQuery(this).button("loading");
 					setTimeout(function() {
 							jQuery(this).button("reset");
 						},
@@ -155,90 +187,26 @@ $productId     = $input->getInt('pid', 0);
 					customize(1);
 			});
 
-			/*
-			jQuery('#mainImageSVG').vectron({
-        		scale: 1
-      		}).ajaxSuccess(function(){
-  				jQuery('desc').remove();
-  				jQuery('defs').remove();
-  				svgLoad();
-  			});
-			*/
+			<?php if (!empty($this->productionBackground->svg_file)) : ?>
+				rootSnapSvgObject = Snap("#svgForAreas");
 
-      		svgLoad();
-
-			//svgLoad();
-
-			// Onkeyup, start the countdown.
-			jQuery(".textAreaClass").keyup(function(){
-				svgLoad();
-			});
-
-			jQuery(".fontSizeSlider").slider().on("slide", function(ev){
-				svgLoad();
-			});
+				Snap.load(
+					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>",
+					function (f) {
+						rootSnapSvgObject.append(f);
+					}
+				);
+			<?php endif; ?>
 
 			jQuery(document).on("keyup", ".colorPickerSelectedColor", function() {
 				var id = jQuery(this).attr('id').replace('colorCode','');
 				var hex = jQuery("#colorCode" + id).val();
 				loadCMYKValues(hex, parseInt(id));
-				svgLoad();
 			});
 
 
 		}
 	);
-
-	function svgLoad() {
-
-		jQuery("#backgroundImage svg").remove();
-
-	    var svgW = jQuery("#mainImageSVG svg").attr('width');
-	    var svgH = jQuery("#mainImageSVG svg").attr('height');
-
-	    //var r = Raphael("backgroundImage", svgW, svgH);
-	    //var set = r.set();
-	    //r.importSVG(jQuery("#mainImageSVG").html(), set);
-
-	    var r = Raphael("backgroundImage", 500, 700);
-
-        jQuery.ajax({
-            type: "GET",
-            url: "<?php echo $imageUrl; ?>",
-            dataType: "xml",
-            success: function (data) {
-            	
-    			var set = r.set();
-    			r.importSVG(data, set);
-            }
-        });
-
-	    //console.log(jQuery("#mainImageSVG svg").html());
-	    //jQuery("#backgroundImage svg").append(jQuery("#mainImageSVG svg").html());
-	    //r.image(img.src, 0, 0, imgW, imgH);
-
-		jQuery( ".textAreaClass" ).each(function( index ) {
-
-			var id = jQuery(this).attr('id').replace('textArea','');
-			var text = jQuery('#textArea' + id).val();
-
-			var font = jQuery("#fontSize" +  + id).val();
-			var color = jQuery("#colorCode" + id).val().replace('#','');
-			var x1_pos = area[id]['x1_pos'];
-			var y1_pos = area[id]['y1_pos'];
-			var width = area[id]['width'];
-			var fontF =jQuery("#fontArea" + id).val();
-
-			Raphael(function () {
-				r.print(x1_pos, y1_pos, text, r.getFont(fontF, 700), font).attr({'fill': '#' + color, 'width': width });
-			});
-
-		});
-
-		var json = r.toJSON();
-		jQuery("#svgImags").val(json);
-		console.log(json);
-	}
 
 	/**
 	 * Load CMYK values into related CMYK area fields.
