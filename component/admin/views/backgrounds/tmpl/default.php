@@ -89,7 +89,7 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 							<a class="jmodal btn btn-mini" href="#modalPreview<?php echo $background->id; ?>">
 								<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
 							</a>
-							<div style="display: none">
+							<div style="visibility: hidden;height: 1px;">
 								<div id="modalPreview<?php echo $background->id; ?>">
 									<svg id="bgPreviewSvg<?php echo $background->id; ?>"></svg>
 								</div>
