@@ -66,7 +66,7 @@
 			   label="COM_REDDESIGN_BACKGROUND_USE_CHECKERBOARD"
 			   description="COM_REDDESIGN_BACKGROUND_USE_CHECKERBOARD_DESC"
 			   default="1"
-			   value="1"
+               value="1"
 		/>
 	</fieldset>
 </form>
