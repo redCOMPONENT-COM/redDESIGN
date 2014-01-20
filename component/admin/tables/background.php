@@ -99,7 +99,7 @@ class ReddesignTableBackground extends RTable
 	/**
 	 * @var  bool
 	 */
-	public $useCheckerboard = '1';
+	public $useCheckerboard = '0';
 
 	/**
 	 * @var  bool
