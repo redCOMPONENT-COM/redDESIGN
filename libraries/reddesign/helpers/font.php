@@ -31,12 +31,13 @@ final class ReddesignHelpersFont
 		if (!empty($fonts))
 		{
 			/** @var ReddesignModelFonts $fontsModel */
-			$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true));
-			$fontsModel->setState('id', $fonts);
+			$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true), 'com_reddesign');
+			$fontsModel->setState('filter.id', $fonts);
 
 			$fontStyleDeclaration = RLayoutHelper::render('svg.font-face', array(
 					'items' => $fontsModel->getItems(),
-				)
+				),
+				JPATH_ROOT . '/administrator/components/com_reddesign/layouts'
 			);
 
 			return trim(preg_replace('/\s+/', ' ', $fontStyleDeclaration));

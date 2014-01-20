@@ -239,8 +239,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$displayData->productionBackgroundAreas = $areasModel->getItems();
 				$displayData->imageSize = getimagesize(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->defaultPreviewBg->image_path);
 
-				$selectedFonts = $areasModel->getSelectedFonts($areas);
-				$this->selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
+				$selectedFonts = $areasModel->getSelectedFonts($displayData->productionBackgroundAreas);
+				$displayData->selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
 			}
 
 			if (empty($displayData->productionBackgroundAreas))

@@ -23,6 +23,7 @@ if (isset($displayData))
 	$this->defaultPreviewBgAttributes = $displayData->defaultPreviewBgAttributes;
 	$this->fonts = $displayData->fonts;
 	$this->config = $displayData->config;
+	$this->selectedFontsDeclaration = $displayData->selectedFontsDeclaration;
 }
 
 $imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->svg_file;
@@ -30,8 +31,6 @@ $autoCustomize = $this->config->getAutoCustomize();
 $previewWidth = $this->config->getMaxSVGPreviewSiteWidth();
 $unit = $this->config->getUnit();
 $sourceDpi = $this->config->getSourceDpi();
-
-$selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($this->fonts);
 
 // Calculate width and height in the selected unit at the configuration. 1 inch = 25.4 mm
 switch ($this->unit)
@@ -153,7 +152,7 @@ $productId = $input->getInt('pid', 0);
 				Snap.load(
 					"<?php echo $imageUrl; ?>",
 					function (f) {
-						var styleDeclaration = Snap.parse('<defs><style type="text/css"><?php echo $selectedFontsDeclaration; ?></style></defs>');
+						var styleDeclaration = Snap.parse('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>');
 						rootSnapSvgObject.append(styleDeclaration);
 						rootSnapSvgObject.append(f);
 
