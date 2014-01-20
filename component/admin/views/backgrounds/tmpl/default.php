@@ -227,16 +227,16 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 
 					// Use CheckerBoard field
 					<?php
-						if ($background->usecheckerboard)
+						if ($background->useCheckerboard)
 						{
-							$usecheckerboardChecked = 'true';
+							$useCheckerboardChecked = 'true';
 						}
 						else
 						{
-							$usecheckerboardChecked = 'false';
+							$useCheckerboardChecked = 'false';
 						}
 					?>
-					jQuery("#jform_usecheckerboard").prop("checked", <?php echo $usecheckerboardChecked; ?>);
+					jQuery("#jform_usecheckerboard").prop("checked", <?php echo $useCheckerboardChecked; ?>);
 
 					if (jQuery("#jform_isPreviewBg").is(":checked"))
 					{

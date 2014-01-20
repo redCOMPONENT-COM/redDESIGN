@@ -133,9 +133,9 @@ class ReddesignControllerBackground extends RControllerForm
 			$data['isPreviewBg'] = 0;
 		}
 
-		if (empty($data['usecheckerboard']))
+		if (empty($data['useCheckerboard']))
 		{
-			$data['usecheckerboard'] = 0;
+			$data['useCheckerboard'] = 0;
 		}
 
 		$backgroundTable = RTable::getAdminInstance('Background');
