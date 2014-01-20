@@ -41,10 +41,16 @@ if (isset($displayData))
 				</div>
 				<div class="frame-detail">
 					<div class="frame-thumbnail-container">
-						<?php echo JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $frame->thumbnail, $frame->title, 'class="img-polaroid frame-thumbnail"') ?>
+						<object type="image/svg+xml"
+						        data="<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $frame->svg_file; ?>"
+						        width="150"
+						        height="150"
+						>
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BROWSER_NOT_SUPORTED_FALLBACK'); ?>
+						</object>
 					</div>
 					<div class="pull-left">
-						<h5><?php echo $frame->title; ?></h5>
+						<h5><?php echo $frame->name; ?></h5>
 					</div>
 				</div>
 			</div>
@@ -79,10 +85,10 @@ if (isset($displayData))
 							</div>
 							<div class="frame-detail">
 								<div class="frame-thumbnail-container">
-									<?php echo JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $frame->thumbnail, $frame->title, 'class="img-polaroid frame-thumbnail"') ?>
+									<?php echo JHTML::_('image', 'media/com_reddesign/backgrounds/thumbnails/' . $frame->thumbnail, $frame->name, 'class="img-polaroid frame-thumbnail"') ?>
 								</div>
 								<div class="pull-left">
-									<h5><?php echo $frame->title; ?></h5>
+									<h5><?php echo $frame->name; ?></h5>
 								</div>
 							</div>
 						</div>
