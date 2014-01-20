@@ -20,6 +20,7 @@ if (isset($displayData))
 	$this->defaultPreviewBg = $displayData->defaultPreviewBg;
 	$this->productionBackground = $displayData->productionBackground;
 	$this->productionBackgroundAreas = $displayData->productionBackgroundAreas;
+	$this->defaultPreviewBgAttributes = $displayData->defaultPreviewBgAttributes;
 	$this->fonts = $displayData->fonts;
 	$this->config = $displayData->config;
 }
@@ -85,8 +86,9 @@ $productId = $input->getInt('pid', 0);
 {RedDesignBreakDesignImage}
 	<div id="background-container">
 
-		<svg id="mainSvgImage">
-		</svg>
+		<div id="svgContainer">
+			<svg id="mainSvgImage"></svg>
+		</div>
 
 		<div id="progressBar" style="display: none;">
 			<div class="progress progress-striped active">
@@ -133,26 +135,43 @@ $productId = $input->getInt('pid', 0);
 	 * Initiate PX to Unit conversation variables
 	 */
 	var unit = "<?php echo $unit;?>";
-	var imageWidth;
-	var imageHeight;
+	var imageWidth  = parseFloat("<?php echo (!empty($this->defaultPreviewBgAttributes->width) ? $this->defaultPreviewBgAttributes->width : ''); ?>");
+	var imageHeight = parseFloat("<?php echo (!empty($this->defaultPreviewBgAttributes->height) ? $this->defaultPreviewBgAttributes->height : ''); ?>");
 	var previewWidth  = parseFloat("<?php echo $previewWidth; ?>");
+
 	var unitConversionRatio = parseFloat("<?php echo $unitConversionRatio;?>");
-	var scalingImageForPreviewRatio;
-	var previewHeight;
+	var scalingImageForPreviewRatio = previewWidth / imageWidth;
+	var previewHeight = imageHeight * scalingImageForPreviewRatio;
 
 	/**
 	 * Add click event to Customize button.
 	 */
 	jQuery(document).ready(function () {
-			<?php if (!empty($this->productionBackground->svg_file)) : ?>
-			rootSnapSvgObject = Snap("#mainSvgImage");
+			<?php if (!empty($this->defaultPreviewBg->svg_file)) : ?>
+				rootSnapSvgObject = Snap("#mainSvgImage");
 
-			Snap.load(
-				"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>",
-				function (f) {
-					rootSnapSvgObject.append(f);
-				}
-			);
+				Snap.load(
+					"<?php echo $imageUrl; ?>",
+					function (f) {
+						var styleDeclaration = Snap.parse('<defs><style type="text/css"><?php echo $selectedFontsDeclaration; ?></style></defs>');
+						rootSnapSvgObject.append(styleDeclaration);
+						rootSnapSvgObject.append(f);
+
+						// Set preview size at loaded file.
+						var loadedSvgFromFile = jQuery("#mainSvgImage").find("svg")[0];
+						loadedSvgFromFile.setAttribute("width", previewWidth);
+						loadedSvgFromFile.setAttribute("height", previewHeight);
+						loadedSvgFromFile.setAttribute("id", "svgCanvas");
+
+						// Set preview size at svg container element.
+						var rootElement = document.getElementById("mainSvgImage");
+						rootElement.setAttribute("width", previewWidth);
+						rootElement.setAttribute("height", previewHeight);
+						rootElement.setAttribute("overflow", "hidden");
+
+						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
+					}
+				);
 			<?php endif; ?>
 
 			// Correct radio button selection.
@@ -254,7 +273,7 @@ $productId = $input->getInt('pid', 0);
 		return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 	}
 
-	
+
 	/**
 	 * Sends customize data to server and retreives the resulting image.
 	 *
