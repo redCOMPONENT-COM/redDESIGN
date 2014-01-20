@@ -17,6 +17,7 @@
 		<sql>
 			<file driver="mysql" charset="utf8">sql/install/mysql/install.sql</file>
 			<file driver="mysqli" charset="utf8">sql/install/mysql/install.sql</file>
+            <file driver="mysql" charset="utf8">sql/install/mysql/data.sql</file>
 		</sql>
 	</install>
 
