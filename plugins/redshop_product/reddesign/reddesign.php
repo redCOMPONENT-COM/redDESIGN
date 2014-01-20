@@ -38,6 +38,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$this->loadLanguage();
 
 		JLoader::import('redcore.bootstrap');
+
+		// Register library prefix.
+		RLoader::registerPrefix('Reddesign', JPATH_LIBRARIES . '/reddesign');
 	}
 
 	/**

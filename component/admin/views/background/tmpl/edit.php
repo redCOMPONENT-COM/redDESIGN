@@ -106,7 +106,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			<button class="btn btn-success" id="bgFormSubmit">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_SAVE'); ?>
 			</button>
-			<button class="btn" id="cancelBgBtn">
+			<button class="btn" type="button" id="cancelBgBtn">
 				<?php echo JText::_('COM_REDDESIGN_COMMON_CANCEL'); ?>
 			</button>
 		</div>
@@ -174,6 +174,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 			jQuery(document).on('click', '#cancelBgBtn',
 				function () {
+					jQuery('#addBgBtn').val("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>")
 					hideShowBackgroundForm();
 				}
 			);
