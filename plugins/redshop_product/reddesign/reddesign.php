@@ -184,7 +184,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			}
 
 			$displayData = new stdClass;
-			$displayData->params = JComponentHelper::getParams('com_reddesign');
+
+			$displayData->config = ReddesignEntityConfig::getInstance();
 
 			$designtypesModel = RModel::getFrontInstance('Designtypes', array(), 'com_reddesign');
 			$designtypesModel->setId($designTypeId);

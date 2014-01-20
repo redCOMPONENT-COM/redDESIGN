@@ -24,7 +24,7 @@ RLoader::registerPrefix('Reddesign', JPATH_LIBRARIES . '/reddesign');
 RHelperAsset::load('site.css');
 
 // Set the controller page
-$controller = $jinput->getCmd('view');
+$controller = $jinput->getCmd('view', 'designtypes');
 
 if (!file_exists(JPATH_COMPONENT . '/controllers/' . $controller . '.php'))
 {

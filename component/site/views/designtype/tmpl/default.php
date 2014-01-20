@@ -13,13 +13,15 @@ JHtml::_('behavior.modal');
 
 if (isset($displayData))
 {
-	$this->params = $displayData->params;
 	$this->item = $displayData->item;
 	$this->defaultPreviewBg = $displayData->defaultPreviewBg;
 	$this->productionBackground = $displayData->productionBackground;
 	$this->productionBackgroundAreas = $displayData->productionBackgroundAreas;
 	$this->fonts = $displayData->fonts;
+	$this->config = $displayData->config;
 }
+
+$autoCustomize = $this->config->getAutoCustomize();
 
 /*
 {RedDesignBreakELEMENT} is a tag used in integration plugin to explode HTML string into smaller peaces. Those peaces are used in redSHOP templating.
@@ -76,7 +78,7 @@ $productId     = $input->getInt('pid', 0);
 <?php // Part 4 - "Customize it!" Button (Controlled by configuration parameters.) ?>
 {RedDesignBreakButtonCustomizeIt}
 	<div class="customize-it-btn row-fluid">
-		<?php if (!empty($this->productionBackgroundAreas) && ($this->params->get('autoCustomize', 1) == 0 || $this->params->get('autoCustomize', 1) == 2) ) : ?>
+		<?php if (!empty($this->productionBackgroundAreas) && ($autoCustomize == 0 || $autoCustomize == 2) ) : ?>
 			<button type="button"
 					class="btn btn-success"
 					data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>"
@@ -319,7 +321,7 @@ $productId     = $input->getInt('pid', 0);
 	function customize(button) {
 
 		var customizeOrNot = 0;
-		var autoCustomizeParam = <?php echo $this->params->get('autoCustomize', 1); ?>;
+		var autoCustomizeParam = parseInt("<?php echo $autoCustomize; ?>");
 		/**
 		 * 0 when customize function is called from an element different than button (textbox, font dropdown etc.)
 		 * 1 when customize function is called from the button

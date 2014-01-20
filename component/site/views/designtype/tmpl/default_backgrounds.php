@@ -12,6 +12,7 @@ defined('_JEXEC') or die();
 if (isset($displayData))
 {
 	$this->backgrounds = $displayData->backgrounds;
+	$this->relatedDesignTypes = $displayData->relatedDesignTypes;
 }
 
 ?>
