@@ -90,9 +90,7 @@
 
 	<!-- Plugins to install -->
 	<plugins>
-		<plugin group="redshop_product"		 name="reddesign"           published="published" />
-		<plugin group="redshop_product"		 name="quantity_discount"   published="published" />
-		<plugin group="redshop_product"		 name="discount_calculator" published="published" />
-		<plugin group="redshop_product_type" name="reddesign"           published="published" />
+		<plugin group="redshop_product"		 name="reddesign" published="published" />
+		<plugin group="redshop_product_type" name="reddesign" published="published" />
 	</plugins>
 </extension>
