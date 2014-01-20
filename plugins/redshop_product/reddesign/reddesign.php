@@ -39,6 +39,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		JLoader::import('redcore.bootstrap');
 
+		// Register component prefix
+		JLoader::registerPrefix('Reddesign', JPATH_ADMINISTRATOR . '/components/com_reddesign');
+
 		// Register library prefix.
 		RLoader::registerPrefix('Reddesign', JPATH_LIBRARIES . '/reddesign');
 	}
@@ -209,6 +212,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				}
 			}
 
+			/** @var ReddesignModelFonts $fontsModel */
 			$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true), 'com_reddesign');
 			$displayData->fonts = $fontsModel->getItems();
 
@@ -223,10 +227,14 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			}
 			else
 			{
+				/** @var ReddesignModelAreas $areasModel */
 				$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
 				$areasModel->setState('background_id', $displayData->productionBackground->id);
 				$displayData->productionBackgroundAreas = $areasModel->getItems();
 				$displayData->imageSize = getimagesize(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->defaultPreviewBg->image_path);
+
+				$selectedFonts = $areasModel->getSelectedFonts($areas);
+				$this->selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
 			}
 
 			if (empty($displayData->productionBackgroundAreas))

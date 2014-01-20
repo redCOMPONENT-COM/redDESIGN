@@ -188,7 +188,7 @@ $productId = $input->getInt('pid', 0);
 			});
 
 			<?php if (!empty($this->productionBackground->svg_file)) : ?>
-				rootSnapSvgObject = Snap("#svgForAreas");
+				rootSnapSvgObject = Snap("#mainSvgImage");
 
 				Snap.load(
 					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>",
