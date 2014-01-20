@@ -60,13 +60,13 @@
 			   default="1"
 			   value="1"
 		/>
-		<field name="useCheckerboard"
-			   id="useCheckerboard"
+		<field name="usecheckerboard"
+			   id="usecheckerboard"
 			   type="checkbox"
 			   label="COM_REDDESIGN_BACKGROUND_USE_CHECKERBOARD"
 			   description="COM_REDDESIGN_BACKGROUND_USE_CHECKERBOARD_DESC"
 			   default="1"
-			   value="1"
+               value="1"
 		/>
 	</fieldset>
 </form>

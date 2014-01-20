@@ -93,10 +93,10 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 			<div class="control-group" id="useCheckerboardContainer">
 				<div class="control-label">
-					<?php echo $this->form->getLabel('useCheckerboard'); ?>
+					<?php echo $this->form->getLabel('usecheckerboard'); ?>
 				</div>
 				<div class="controls">
-					<?php echo $this->form->getInput('useCheckerboard'); ?>
+					<?php echo $this->form->getInput('usecheckerboard'); ?>
 				</div>
 			</div>
 
@@ -140,7 +140,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 					jQuery("#isDefaultPreviewContainer").hide();
 					jQuery("#jform_isDefaultPreview").attr('checked', false);
 					jQuery("#useCheckerboardContainer").hide();
-					jQuery("#jform_useCheckerboard").attr('checked', false);
+					jQuery("#jform_usecheckerboard").attr('checked', false);
 				}
 			});
 

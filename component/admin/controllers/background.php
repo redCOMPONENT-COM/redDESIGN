@@ -69,7 +69,7 @@ class ReddesignControllerBackground extends RControllerForm
 		}
 
 		// On edit
-		if (!!$data['id'])
+		if (!empty($data['id']))
 		{
 			$db = JFactory::getDbo();
 			$query = $db->getQuery(true);
@@ -131,6 +131,11 @@ class ReddesignControllerBackground extends RControllerForm
 		if (empty($data['isPreviewBg']))
 		{
 			$data['isPreviewBg'] = 0;
+		}
+
+		if (empty($data['usecheckerboard']))
+		{
+			$data['usecheckerboard'] = 0;
 		}
 
 		$backgroundTable = RTable::getAdminInstance('Background');

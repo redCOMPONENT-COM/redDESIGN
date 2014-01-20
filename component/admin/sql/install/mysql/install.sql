@@ -131,6 +131,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   `isProductionBg`   TINYINT(1)   NOT NULL,
   `isPreviewBg`      TINYINT(1)   NOT NULL,
   `isDefaultPreview` TINYINT(1)   NOT NULL,
+  `usecheckerboard`  TINYINT(1)   NOT NULL DEFAULT '1',
   `designtype_id`    INT(11)      NOT NULL,
   PRIMARY KEY (`id`)
 )

@@ -99,6 +99,11 @@ class ReddesignTableBackground extends RTable
 	/**
 	 * @var  bool
 	 */
+	public $usecheckerboard = '1';
+
+	/**
+	 * @var  bool
+	 */
 	public $designtype_id;
 	/**
 	 * Removes background related files after deleting background from the database.
