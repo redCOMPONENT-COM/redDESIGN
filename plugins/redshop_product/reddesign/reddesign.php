@@ -209,6 +209,12 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				}
 			}
 
+			// Default background measures.
+			$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->defaultPreviewBg->svg_file);
+			$displayData->defaultPreviewBgAttributes = $xml->attributes();
+			$displayData->defaultPreviewBgAttributes->width  = str_replace('px', '', $displayData->defaultPreviewBgAttributes->width);
+			$displayData->defaultPreviewBgAttributes->height = str_replace('px', '', $displayData->defaultPreviewBgAttributes->height);
+
 			$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true), 'com_reddesign');
 			$displayData->fonts = $fontsModel->getItems();
 
@@ -500,10 +506,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			if (isset($redDesignData->svgImags))
 			{
 				$document = JFactory::getDocument();
-
-				RHelperAsset::load('raphael-min.js', 'com_reddesign');
-				RHelperAsset::load('raphael.json.js', 'com_reddesign');
-				RHelperAsset::load('d3.v3.min.js', 'com_reddesign');
 
 				foreach ($fonts as $font => $f)
 				{

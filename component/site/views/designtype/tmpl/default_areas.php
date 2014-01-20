@@ -16,19 +16,6 @@ RHelperAsset::load('farbtastic.min.js', 'com_reddesign');
 RHelperAsset::load('farbtastic.css', 'com_reddesign');
 RHelperAsset::load('color-converter.js', 'com_reddesign');
 
-RHelperAsset::load('raphael-min.js', 'com_reddesign');
-
-RHelperAsset::load('raphael.json.js', 'com_reddesign');
-
-RHelperAsset::load('elemental.min.js', 'com_reddesign');
-RHelperAsset::load('rappar.js', 'com_reddesign');
-RHelperAsset::load('jquery.vectron.js', 'com_reddesign');
-
-RHelperAsset::load('raphael-svg-import2.js', 'com_reddesign');
-
-//RHelperAsset::load('fonts/Amaze.js', 'com_reddesign');
-//RHelperAsset::load('fonts/Vaztek.js', 'com_reddesign');
-
 if (isset($displayData))
 {
 	$this->item = $displayData->item;
@@ -92,7 +79,7 @@ if (isset($displayData))
 			<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->textalign; ?>" />
 
 			<label for="textArea<?php echo $area->id; ?>">
-				<strong><?php echo $area->title; ?></strong>
+				<strong><?php echo $area->name; ?></strong>
 			</label>
 		{RedDesignBreakDesignAreaTitle}
 
