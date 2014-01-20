@@ -15,7 +15,7 @@
 			id="font_file"
 			type="file"
 			label="COM_REDDESIGN_FONT_FIELD_FILE"
-			description="COM_REDDESIGN_FONT_FIELD_FILE"
+			description="COM_REDDESIGN_FONT_FIELD_FILE_DESC"
 			class="inputbox"
 			/>
 		<field
