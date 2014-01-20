@@ -994,4 +994,23 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		jQuery("#areaWidth").val("");
 		jQuery("#areaHeight").val("");
 	}
+
+	/**
+	 * Controls what needs to be shown regarding to input field type.
+	 *
+	 * @param areaId
+	 */
+	function changeInputFieldType(areaId)
+	{
+		var selectedType = jQuery("#inputFieldType" + areaId).val();
+
+		if (selectedType == 1)
+		{
+			jQuery("#maximumLinesAllowedContainer" + areaId).css("display", "inline");
+		}
+		else
+		{
+			jQuery("#maximumLinesAllowedContainer" + areaId).css("display", "none");
+		}
+	}
 </script>
