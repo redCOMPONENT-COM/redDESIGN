@@ -209,15 +209,21 @@ function productaddprice(product_id, relatedprd_id)
  */
 function setredDesignBackgroundByProperty(selectedproperty_id)
 {
-    for (property in propertyBackgroundRelation)
+    if ("undefined" !== typeof propertyBackgroundRelation)
     {
-        selectedproperty_id = parseInt(selectedproperty_id);
-        property            = parseInt(property);
-
-        if (property == selectedproperty_id)
+        for (property in propertyBackgroundRelation)
         {
-            setBackground(propertyBackgroundRelation[property]);
-        };
+            selectedproperty_id = parseInt(selectedproperty_id);
+            property            = parseInt(property);
+
+            if (property == selectedproperty_id)
+            {
+                if (propertyBackgroundRelation[property] > 0)
+                {
+                    setBackground(propertyBackgroundRelation[property]);
+                }
+            }
+        }
     }
 }
 
