@@ -49,13 +49,13 @@ class ReddesignControllerBackground extends RControllerForm
 				$app->close();
 			}
 		}
-		elseif (empty($data['name']))
-		{
-			echo json_encode(array(0, '<div class="alert alert-error">' . JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_TITLE') . '</div>'), true);
-			$app->close();
-		}
 		else
 		{
+			if (empty($data['name']))
+			{
+				$data['name'] = str_replace('.' . JFile::getExt($file['name']), '', $file['name']);
+			}
+
 			$updatedSVG = true;
 
 			// Upload the background file
