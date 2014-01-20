@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 JHtml::_('behavior.modal');
 
 RHelperAsset::load('lib/jquery.min.js', 'redcore');
-RHelperAsset::load('snap.svg.js', 'com_reddesign');
+RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
 
 if (isset($displayData))
 {
