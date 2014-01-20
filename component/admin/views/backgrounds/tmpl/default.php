@@ -159,11 +159,16 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 				Snap.load(
 					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>",
 					function (f) {
+
+						<?php if ($background->useCheckerboard) : ?>
+							var checkerbox = Snap.parse('<?php echo ReddesignHelpersSvg::getSVGCheckerboard(600, 450); ?>');
+							snap<?php echo $background->id ?>.append(checkerbox);
+						<?php endif; ?>
 						snap<?php echo $background->id ?>.append(f);
 
-						var svgLoaded = jQuery("#bgPreviewSvg<?php echo $background->id; ?>").find("svg")[0];
-						svgLoaded.setAttribute("width", "600px");
-						svgLoaded.setAttribute("height", "450px");
+						var svgLoaded = jQuery("#bgPreviewSvg<?php echo $background->id; ?>").find("svg")
+							.attr("width", "600px")
+							.attr("height", "450px");
 					}
 				);
 
@@ -236,7 +241,7 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 							$useCheckerboardChecked = 'false';
 						}
 					?>
-					jQuery("#jform_usecheckerboard").prop("checked", <?php echo $useCheckerboardChecked; ?>);
+					jQuery("#jform_useCheckerboard").prop("checked", <?php echo $useCheckerboardChecked; ?>);
 
 					if (jQuery("#jform_isPreviewBg").is(":checked"))
 					{

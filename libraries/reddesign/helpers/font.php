@@ -24,7 +24,7 @@ final class ReddesignHelpersFont
 	 *
 	 * @param   array  $fonts  List of fonts that is going to be loaded
 	 *
-	 * @return null
+	 * @return string
 	 */
 	public static function getFontStyleDeclaration($fonts = null)
 	{
