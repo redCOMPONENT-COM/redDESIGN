@@ -65,7 +65,7 @@
 			   type="checkbox"
 			   label="COM_REDDESIGN_BACKGROUND_USE_CHECKERBOARD"
 			   description="COM_REDDESIGN_BACKGROUND_USE_CHECKERBOARD_DESC"
-			   default="1"
+			   default="0"
                value="1"
 		/>
 	</fieldset>
