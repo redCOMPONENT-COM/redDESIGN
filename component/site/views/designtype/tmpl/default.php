@@ -357,8 +357,6 @@ $productId = $input->getInt('pid', 0);
 						+ ' y="' + (y1) + '"'
 						+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
 
-			//rootSnapSvgObject.append(textElement);
-			//console.log(textElement);
 			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
 				design.areas.push({
 					"id" : 			"<?php echo $area->id; ?>",
