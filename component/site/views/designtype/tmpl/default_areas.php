@@ -22,7 +22,6 @@ if (isset($displayData))
 	$this->productionBackgroundAreas = $displayData->productionBackgroundAreas;
 	$this->fonts = $displayData->fonts;
 }
-
 ?>
 
 {RedDesignBreakDesignAreasTitle}
@@ -246,6 +245,55 @@ if (isset($displayData))
 
 			<?php elseif ($area->color_code == 1) : ?>
 
+		<script type="text/javascript">
+			jQuery(document).ready(
+				function ($) {
+					// Check div before add farbtastic
+					if (jQuery("#colorPickerContainer<?php echo $area->id ?>")[0])
+					{
+						var colorPicker<?php echo $area->id ?> = jQuery.farbtastic("#colorPickerContainer<?php echo $area->id ?>");
+						colorPicker<?php echo $area->id ?>.linkTo("#colorPickerSelectedColor<?php echo $area->id; ?>");
+					}
+
+					jQuery(document).on("keyup", "#C<?php echo $area->id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+						colorPicker<?php echo $area->id ?>.setColor(newColor);
+					});
+
+					jQuery(document).on("keyup", "#M<?php echo $area->id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+						colorPicker<?php echo $area->id ?>.setColor(newColor);
+					});
+
+					jQuery(document).on("keyup", "#Y<?php echo $area->id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+						colorPicker<?php echo $area->id ?>.setColor(newColor);
+					});
+
+					jQuery(document).on("keyup", "#K<?php echo $area->id; ?>", function() {
+						var newColor = getNewHexColor(parseInt("<?php echo $area->id; ?>"));
+						colorPicker<?php echo $area->id ?>.setColor(newColor);
+					});
+
+					jQuery(document).on("keyup", "#colorPickerSelectedColor<?php echo $area->id; ?>", function() {
+						var hex = jQuery("#colorPickerSelectedColor<?php echo $area->id; ?>").val();
+						loadCMYKValues(hex, parseInt("<?php echo $area->id; ?>"));
+					});
+
+					jQuery(document).on("mouseup", "#colorPickerContainer<?php echo $area->id; ?>", function() {
+						var hex = jQuery("#colorPickerSelectedColor<?php echo $area->id; ?>").val();
+						loadCMYKValues(hex, parseInt("<?php echo $area->id; ?>"));
+					});
+
+					jQuery("#allColors<?php echo $area->id; ?>").click(function () {
+						jQuery("#colorsContainer<?php echo $area->id; ?>").toggle(!this.checked);
+						jQuery("#addColorContainer<?php echo $area->id; ?>").toggle(!this.checked);
+						jQuery("#selectedColorsPalette<?php echo $area->id; ?>").toggle(!this.checked);
+					});
+
+				});
+		</script>
+
 				<div id="colorsContainer<?php echo $area->id ?>" class="span6">
 					<div class="span9">
 						<label class="control-label">
@@ -257,7 +305,7 @@ if (isset($displayData))
 							<input class="span12 colorPickerSelectedColor"
 								   type="text"
 								   value="#cfcfcf"
-								   id="colorCode<?php echo $area->id ?>"
+								   id="colorPickerSelectedColor<?php echo $area->id ?>"
 								   name="colorCode<?php echo $area->id; ?>"
 								/>
 						</label>
