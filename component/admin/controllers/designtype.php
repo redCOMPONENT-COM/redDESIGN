@@ -118,7 +118,7 @@ class ReddesignControllerDesigntype extends RControllerForm
 					$area['fontSize'] = $redDesignData->$key;
 				}
 
-				$key = 'textArea' . $areaId;
+				$key = 'textArea_' . $areaId;
 				$area['textArea'] = $redDesignData->$key;
 
 				$data['designAreas'][] = $area;

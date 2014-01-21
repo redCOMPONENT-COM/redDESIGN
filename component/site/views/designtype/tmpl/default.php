@@ -61,7 +61,7 @@ $productId = $input->getInt('pid', 0);
 
 <?php // Part 1 - Begin Form ?>
 {RedDesignBreakFormBegin}
-<form id="designform" name="designform" method="post" action="index.php" class="row-fluid">
+<form id="designform" name="designform" method="post" action="index.php" class="row-fluid reddesign-form">
 	<input type="hidden" name="option" value="com_reddesign">
 	<input type="hidden" name="view" value="designtype">
 	<input type="hidden" name="task" id="task" value="">
@@ -192,6 +192,12 @@ $productId = $input->getInt('pid', 0);
 
 
 
+			jQuery(document).on("keyup", ".reddesign-form .textAreaClass", function() {
+				var id = jQuery(this).attr('id').replace('textArea_','');
+				var val = jQuery(this).val();
+				changeSVGTextElement(id, val);
+			});
+
 			jQuery(document).on("keyup", ".colorPickerSelectedColor", function() {
 				var id = jQuery(this).attr('id').replace('colorCode','');
 				var hex = jQuery("#colorCode" + id).val();
@@ -262,6 +268,21 @@ $productId = $input->getInt('pid', 0);
 	}
 
 	/**
+	 * Changes value of textelement on SVG object
+	 *
+	 * @param areaId    int     Area ID
+	 * @param val       string  New value
+	 *
+	 * @return string hexadecimal value
+	 */
+	function changeSVGTextElement(areaId, val)
+	{
+		var textElement = rootSnapSvgObject.select("#areaBoxesLayer #areaTextElement_" + areaId);
+		if (textElement)
+			textElement.node.innerHTML = val;
+	}
+
+	/**
 	 * Converts hexadecimal value into RGB value
 	 *
 	 * @param r int Red value
@@ -329,19 +350,19 @@ $productId = $input->getInt('pid', 0);
 				var y1 = parseFloat(<?php echo $area->y1_pos; ?> + 18) * scalingImageForPreviewRatio;
 
 				var textElement = Snap.parse(
-					'<text id="areaTextElement<?php echo $area->id; ?>" fill="#' + fontColor
+					'<text id="areaTextElement_<?php echo $area->id; ?>" fill="#' + fontColor
 						+ '" font-family="' + jQuery("#fontArea<?php echo $area->id; ?>").val() + '"'
 						+ ' font-size="18px"'
 						+ ' x="' + (x1) + '"'
 						+ ' y="' + (y1) + '"'
-						+ '>' + jQuery("#textArea<?php echo $area->id; ?>").val() + '</text>');
+						+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
 
 			//rootSnapSvgObject.append(textElement);
 			console.log(textElement);
 			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
 				design.areas.push({
 					"id" : 			"<?php echo $area->id; ?>",
-					"textArea" :	jQuery("#textArea<?php echo $area->id; ?>").val(),
+					"textArea" :	jQuery("#textArea_<?php echo $area->id; ?>").val(),
 					"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
 					"fontColor" :	fontColor,
 					"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val(),
@@ -350,7 +371,7 @@ $productId = $input->getInt('pid', 0);
 					"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
 				});
 
-				var textareacount = jQuery("#textArea<?php echo $area->id; ?>").val().replace(/ /g,'').length;
+				var textareacount = jQuery("#textArea_<?php echo $area->id; ?>").val().replace(/ /g,'').length;
 				jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
 
 			<?php endforeach; ?>

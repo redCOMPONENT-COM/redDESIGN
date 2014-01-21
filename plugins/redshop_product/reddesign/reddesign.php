@@ -870,7 +870,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$area['fontSize'] = $redDesignData->$key;
 			}
 
-			$key = 'textArea' . $areaId;
+			$key = 'textArea_' . $areaId;
 			$area['textArea'] = $redDesignData->$key;
 
 			$data['designAreas'][] = $area;
