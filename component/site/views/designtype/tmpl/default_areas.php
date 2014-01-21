@@ -133,10 +133,9 @@ if (isset($displayData))
 				}
 				else
 				{
-					$areaFontsIds 	= explode(',', $area->font_id);
+					$areaFontsIds = ReddesignHelpersFont::getSelectedFontsFromArea(array($area));
 
-					// If there is only one font allowed, don't show anything.
-					if (count($areaFontsIds) > 1)
+					if (count($areaFontsIds) > 0)
 					{
 						$options = array();
 
@@ -146,9 +145,7 @@ if (isset($displayData))
 							{
 								if ($f->id == $value)
 								{
-									$options[] = JHTML::_('select.option', trim($f->name), $f->name);
-									$fontFile = 'fonts/' . $f->name . '.js';
-									RHelperAsset::load($fontFile, 'com_reddesign');
+									$options[] = JHTML::_('select.option', $f->name, $f->name);
 								}
 							}
 						}

@@ -156,7 +156,7 @@ class ReddesignViewDesigntype extends ReddesignView
 						$areasModel->setState('background_id', $background->id);
 						$areas = $areasModel->getItems();
 
-						$selectedFonts = $areasModel->getSelectedFonts($areas);
+						$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($areas);
 						$this->selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
 					}
 				}
