@@ -63,6 +63,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			$query = $db->getQuery(true);
 			$query->select($db->quoteName(array('id', 'name')));
 			$query->from($db->quoteName('#__reddesign_designtypes'));
+			$query->order($db->quoteName('name'));
 			$db->setQuery($query);
 			$designTypes = $db->loadObjectList();
 
