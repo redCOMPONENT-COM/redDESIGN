@@ -146,8 +146,8 @@ $productId = $input->getInt('pid', 0);
 	 * Add click event to Customize button.
 	 */
 	jQuery(document).ready(function () {
+			rootSnapSvgObject = Snap("#mainSvgImage");
 			<?php if (!empty($this->defaultPreviewBg->svg_file)) : ?>
-				rootSnapSvgObject = Snap("#mainSvgImage");
 
 				Snap.load(
 					"<?php echo $imageUrl; ?>",
@@ -169,6 +169,8 @@ $productId = $input->getInt('pid', 0);
 						rootElement.setAttribute("overflow", "hidden");
 
 						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
+
+						customize(0);
 					}
 				);
 			<?php endif; ?>
@@ -314,28 +316,42 @@ $productId = $input->getInt('pid', 0);
 			var reddesign_designtype_id = jQuery("#reddesign_designtype_id").val();
 			var background_id = jQuery("#background_id").val();
 			var design = {
-				areas: [],
-				reddesign_designtype_id : reddesign_designtype_id,
-				background_id : background_id
+				'areas': [],
+				'reddesign_designtype_id' : reddesign_designtype_id,
+				'background_id' : background_id
 			};
 			<?php foreach($this->productionBackgroundAreas as $area) : ?>
 
-			var fontColor = jQuery("#colorCode<?php echo $area->id; ?>").val();
-			fontColor = fontColor.replace("#", "");
+				var fontColor = jQuery("input[name='colorCode<?php echo $area->id; ?>']").val();
+				fontColor = fontColor.replace("#", "");
 
-			design.areas.push({
-				"id" : 			"<?php echo $area->id; ?>",
-				"textArea" :	jQuery("#textArea<?php echo $area->id; ?>").val(),
-				"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-				"fontColor" :	fontColor,
-				"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val(),
-				"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-				"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
-				"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
-			});
+				var x1 = parseFloat(<?php echo $area->x1_pos; ?> + 4) * scalingImageForPreviewRatio;
+				var y1 = parseFloat(<?php echo $area->y1_pos; ?> + 18) * scalingImageForPreviewRatio;
 
-			var textareacount = jQuery("#textArea<?php echo $area->id; ?>").val().replace(/ /g,'').length;
-			jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
+				var textElement = Snap.parse(
+					'<text id="areaTextElement<?php echo $area->id; ?>" fill="#' + fontColor
+						+ '" font-family="' + jQuery("#fontArea<?php echo $area->id; ?>").val() + '"'
+						+ ' font-size="18px"'
+						+ ' x="' + (x1) + '"'
+						+ ' y="' + (y1) + '"'
+						+ '>' + jQuery("#textArea<?php echo $area->id; ?>").val() + '</text>');
+
+			//rootSnapSvgObject.append(textElement);
+			console.log(textElement);
+			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
+				design.areas.push({
+					"id" : 			"<?php echo $area->id; ?>",
+					"textArea" :	jQuery("#textArea<?php echo $area->id; ?>").val(),
+					"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
+					"fontColor" :	fontColor,
+					"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val(),
+					"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
+					"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
+					"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
+				});
+
+				var textareacount = jQuery("#textArea<?php echo $area->id; ?>").val().replace(/ /g,'').length;
+				jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
 
 			<?php endforeach; ?>
 		}
@@ -352,7 +368,7 @@ $productId = $input->getInt('pid', 0);
 		document.getElementById("colorCode" + id).value = colorCode;
 		jQuery("#fontColor" + id+ " div").css("backgroundColor", "#" + colorCode);
 		jQuery("#fontColor" + id).show();
-		svgLoad();
+		//svgLoad();
 		//customize(0);
 	}
 
