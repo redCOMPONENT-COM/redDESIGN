@@ -190,12 +190,14 @@ $productId = $input->getInt('pid', 0);
 					customize(1);
 			});
 
-
-
 			jQuery(document).on("keyup", ".reddesign-form .textAreaClass", function() {
 				var id = jQuery(this).attr('id').replace('textArea_', '');
-				var val = jQuery(this).val();
-				changeSVGTextElement(id, val);
+				changeSVGTextElement(id);
+			});
+
+			jQuery(document).on("change", ".reddesign-form .reddesign-font-selection", function() {
+				var id = jQuery(this).attr('id').replace('fontArea', '');
+				changeSVGTextElement(id);
 			});
 
 			jQuery(document).on("keyup", ".colorPickerSelectedColor", function() {
@@ -275,11 +277,17 @@ $productId = $input->getInt('pid', 0);
 	 *
 	 * @return string hexadecimal value
 	 */
-	function changeSVGTextElement(areaId, val)
+	function changeSVGTextElement(areaId)
 	{
+		var text = jQuery('#textArea_' + areaId);
+		var font = jQuery('#fontArea' + areaId);
 		var textElement = rootSnapSvgObject.select("#areaBoxesLayer #areaTextElement_" + areaId);
 		if (textElement)
-			textElement.node.innerHTML = val;
+		{
+			textElement.node.innerHTML = jQuery(text).val();
+			if (font)
+				textElement.attr('font-family', jQuery(font).val());
+		}
 	}
 
 	/**

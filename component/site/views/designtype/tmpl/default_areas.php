@@ -128,7 +128,7 @@ if (isset($displayData))
 					$defaultFonts = array();
 					$defaultFonts[] = JHTML::_('select.option', 0, 'Arial');
 
-					echo JHTML::_('select.genericlist', $defaultFonts, 'fontArea' . $area->id, 'class="inputbox" onChange="customize(0);"', 'value', 'text', null);
+					echo JHTML::_('select.genericlist', $defaultFonts, 'fontArea' . $area->id, 'class="inputbox reddesign-font-selection" onChange="customize(0);"', 'value', 'text', null);
 				}
 				else
 				{
@@ -149,7 +149,7 @@ if (isset($displayData))
 							}
 						}
 
-						echo JHTML::_('select.genericlist', $options, 'fontArea' . $area->id, 'class="inputbox" onChange="svgLoad();"', 'value', 'text', null);
+						echo JHTML::_('select.genericlist', $options, 'fontArea' . $area->id, 'class="inputbox reddesign-font-selection" onChange="svgLoad();"', 'value', 'text', null);
 					}
 				}
 			?>
