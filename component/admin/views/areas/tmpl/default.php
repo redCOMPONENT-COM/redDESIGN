@@ -133,15 +133,6 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 							<label for="<?php echo 'areaFonts' . $area->id; ?>">
 								<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ALLOWED_FONTS') ?>
 								<?php
-								/*
-								 * @Todo: this is a terrible hotfix for fastfixing a not storing
-								 * font_id  in database issue.But it needs to be moved to the
-								 * areas model asap.
-								 * It Converts the font_id JSON field to an array.
-								 */
-								$registry = new JRegistry;
-								$registry->loadString($area->font_id);
-								$selectedFonts = $registry->toArray();
 								echo JHtml::_(
 									'select.genericlist',
 									$this->fontsOptions,
@@ -149,7 +140,7 @@ $this->inputFieldOptions = $displayData->inputFieldOptions;
 									' multiple="multiple" ',
 									'value',
 									'text',
-									$selectedFonts
+									ReddesignHelpersFont::getSelectedFontsFromArea(array($area))
 								);
 								?>
 							</label>
