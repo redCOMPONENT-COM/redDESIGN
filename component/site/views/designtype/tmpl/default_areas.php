@@ -77,34 +77,34 @@ if (isset($displayData))
 		{RedDesignBreakDesignAreaTitle}
 			<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->textalign; ?>" />
 
-			<label for="textArea<?php echo $area->id; ?>">
+			<label for="textArea_<?php echo $area->id; ?>">
 				<strong><?php echo $area->name; ?></strong>
 			</label>
 		{RedDesignBreakDesignAreaTitle}
 
 		{RedDesignBreakDesignAreaInputTextLabel}
-			<label for="textArea<?php echo $area->id; ?>">
+			<label for="textArea_<?php echo $area->id; ?>">
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_INPUT_TEXT'); ?>
 			</label>
 		{RedDesignBreakDesignAreaInputTextLabel}
 
 		{RedDesignBreakDesignAreaInputText}
 			<?php if ($area->input_field_type == 1) : ?>
-				<textarea name="textArea<?php echo $area->id; ?>"
+				<textarea name="textArea_<?php echo $area->id; ?>"
 						  class="textAreaClass"
 						  style="text-align: <?php echo $textAlign; ?>;"
 						  placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
-						  id="textArea<?php echo $area->id; ?>"
+						  id="textArea_<?php echo $area->id; ?>"
 						  required="required"
 						  <?php echo $maxChar; ?>
 						  <?php echo $maxLine ?>><?php echo $area->default_text; ?></textarea>
 			<?php else : ?>
 				<input type="text"
-					   name="textArea<?php echo $area->id; ?>"
+					   name="textArea_<?php echo $area->id; ?>"
 					   class="textAreaClass"
 					   style="text-align: <?php echo $textAlign; ?>;"
 					   placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
-					   id="textArea<?php echo $area->id; ?>"
+					   id="textArea_<?php echo $area->id; ?>"
 					   value="<?php echo $area->default_text; ?>"
 					   <?php echo $maxChar; ?>
 					   required="required"
@@ -290,7 +290,6 @@ if (isset($displayData))
 						jQuery("#addColorContainer<?php echo $area->id; ?>").toggle(!this.checked);
 						jQuery("#selectedColorsPalette<?php echo $area->id; ?>").toggle(!this.checked);
 					});
-
 				});
 		</script>
 
