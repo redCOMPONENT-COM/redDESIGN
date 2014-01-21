@@ -200,10 +200,11 @@ $productId = $input->getInt('pid', 0);
 				changeSVGTextElement(id);
 			});
 
-			jQuery(document).on("keyup", ".colorPickerSelectedColor", function() {
-				var id = jQuery(this).attr('id').replace('colorCode','');
+			jQuery(document).on("keyup, change", ".reddesign-form .colorCode", function() {
+				var id = jQuery(this).attr('id').replace('colorCode', '');
 				var hex = jQuery("#colorCode" + id).val();
 				loadCMYKValues(hex, parseInt(id));
+
 			});
 
 
@@ -225,6 +226,8 @@ $productId = $input->getInt('pid', 0);
 		jQuery("#M" + areaId).val(cmyk.m);
 		jQuery("#Y" + areaId).val(cmyk.y);
 		jQuery("#K" + areaId).val(cmyk.k);
+
+		changeSVGTextElement(areaId);
 	}
 
 	/**
@@ -281,12 +284,15 @@ $productId = $input->getInt('pid', 0);
 	{
 		var text = jQuery('#textArea_' + areaId);
 		var font = jQuery('#fontArea' + areaId);
+		var color = jQuery('#colorCode' + areaId);
 		var textElement = rootSnapSvgObject.select("#areaBoxesLayer #areaTextElement_" + areaId);
 		if (textElement)
 		{
 			textElement.node.innerHTML = jQuery(text).val();
 			if (font)
 				textElement.attr('font-family', jQuery(font).val());
+			if (color)
+				textElement.attr('fill', '#' + jQuery(color).val().replace('#',''));
 		}
 	}
 
@@ -395,8 +401,7 @@ $productId = $input->getInt('pid', 0);
 		document.getElementById("colorCode" + id).value = colorCode;
 		jQuery("#fontColor" + id+ " div").css("backgroundColor", "#" + colorCode);
 		jQuery("#fontColor" + id).show();
-		//svgLoad();
-		//customize(0);
+		changeSVGTextElement(id);
 	}
 
 	/**

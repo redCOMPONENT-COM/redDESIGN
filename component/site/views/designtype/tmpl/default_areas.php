@@ -149,7 +149,7 @@ if (isset($displayData))
 							}
 						}
 
-						echo JHTML::_('select.genericlist', $options, 'fontArea' . $area->id, 'class="inputbox reddesign-font-selection" onChange="svgLoad();"', 'value', 'text', null);
+						echo JHTML::_('select.genericlist', $options, 'fontArea' . $area->id, 'class="inputbox reddesign-font-selection"', 'value', 'text', null);
 					}
 				}
 			?>
@@ -252,7 +252,7 @@ if (isset($displayData))
 					if (jQuery("#colorPickerContainer<?php echo $area->id ?>")[0])
 					{
 						var colorPicker<?php echo $area->id ?> = jQuery.farbtastic("#colorPickerContainer<?php echo $area->id ?>");
-						colorPicker<?php echo $area->id ?>.linkTo("#colorPickerSelectedColor<?php echo $area->id; ?>");
+						colorPicker<?php echo $area->id ?>.linkTo("#colorCode<?php echo $area->id; ?>");
 					}
 
 					jQuery(document).on("keyup", "#C<?php echo $area->id; ?>", function() {
@@ -275,13 +275,13 @@ if (isset($displayData))
 						colorPicker<?php echo $area->id ?>.setColor(newColor);
 					});
 
-					jQuery(document).on("keyup", "#colorPickerSelectedColor<?php echo $area->id; ?>", function() {
-						var hex = jQuery("#colorPickerSelectedColor<?php echo $area->id; ?>").val();
+					jQuery(document).on("keyup", "#colorCode<?php echo $area->id; ?>", function() {
+						var hex = jQuery("#colorCode<?php echo $area->id; ?>").val();
 						loadCMYKValues(hex, parseInt("<?php echo $area->id; ?>"));
 					});
 
 					jQuery(document).on("mouseup", "#colorPickerContainer<?php echo $area->id; ?>", function() {
-						var hex = jQuery("#colorPickerSelectedColor<?php echo $area->id; ?>").val();
+						var hex = jQuery("#colorCode<?php echo $area->id; ?>").val();
 						loadCMYKValues(hex, parseInt("<?php echo $area->id; ?>"));
 					});
 
@@ -299,12 +299,12 @@ if (isset($displayData))
 							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_COLOR_PICKER'); ?>
 							<div id="colorPickerContainer<?php echo $area->id; ?>" class="colorPickerContainer"></div>
 						</label>
-						<label for="colorPickerSelectedColor<?php echo $area->id; ?>">
+						<label for="colorCode<?php echo $area->id; ?>">
 							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SELECTED_COLOR') ?>
-							<input class="span12 colorPickerSelectedColor"
+							<input class="span12 colorPickerSelectedColor colorCode"
 								   type="text"
 								   value="#cfcfcf"
-								   id="colorPickerSelectedColor<?php echo $area->id ?>"
+								   id="colorCode<?php echo $area->id ?>"
 								   name="colorCode<?php echo $area->id; ?>"
 								/>
 						</label>
