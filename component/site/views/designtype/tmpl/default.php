@@ -193,7 +193,7 @@ $productId = $input->getInt('pid', 0);
 
 
 			jQuery(document).on("keyup", ".reddesign-form .textAreaClass", function() {
-				var id = jQuery(this).attr('id').replace('textArea_','');
+				var id = jQuery(this).attr('id').replace('textArea_', '');
 				var val = jQuery(this).val();
 				changeSVGTextElement(id, val);
 			});
@@ -358,7 +358,7 @@ $productId = $input->getInt('pid', 0);
 						+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
 
 			//rootSnapSvgObject.append(textElement);
-			console.log(textElement);
+			//console.log(textElement);
 			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
 				design.areas.push({
 					"id" : 			"<?php echo $area->id; ?>",

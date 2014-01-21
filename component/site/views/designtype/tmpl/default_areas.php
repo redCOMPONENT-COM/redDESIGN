@@ -290,9 +290,6 @@ if (isset($displayData))
 						jQuery("#addColorContainer<?php echo $area->id; ?>").toggle(!this.checked);
 						jQuery("#selectedColorsPalette<?php echo $area->id; ?>").toggle(!this.checked);
 					});
-
-
-
 				});
 		</script>
 
