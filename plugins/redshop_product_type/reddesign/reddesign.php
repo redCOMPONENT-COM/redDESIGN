@@ -194,7 +194,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 				$query = $db->getQuery(true);
 				$query->select($db->quoteName(array('id', 'name', 'svg_file')))
 					->from($db->quoteName('#__reddesign_backgrounds'))
-					->where($db->quoteName('isProductionBg') . ' = ' . 0)
+					// ToDo Fix RD-144 ->where($db->quoteName('isProductionBg') . ' = ' . 0)
 					->where($db->quoteName('designtype_id') . ' IN (' . $designTypeId . ')');
 				$db->setQuery($query);
 				$backgrounds = $db->loadObjectList();

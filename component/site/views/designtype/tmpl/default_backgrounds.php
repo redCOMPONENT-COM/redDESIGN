@@ -13,7 +13,10 @@ if (isset($displayData))
 {
 	$this->backgrounds = $displayData->backgrounds;
 	$this->relatedDesignTypes = $displayData->relatedDesignTypes;
+	$this->productionBackground = $displayData->productionBackground;
 }
+
+$background_id = null;
 
 ?>
 <h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_FRAMES_TITLE') ?></h4>
@@ -100,7 +103,7 @@ if (isset($displayData))
 			<?php endforeach; ?>
 		<?php endif; ?>
 
-		<!--<input type="hidden"
+		<input type="hidden"
 			   name="background_id"
 			   id="background_id"
 			   value="<?php echo $background_id;?>"
@@ -110,7 +113,7 @@ if (isset($displayData))
 			   name="production_background_id"
 			   id="production_background_id"
 			   value="<?php echo $this->productionBackground->id;?>"
-			/>-->
+			/>
 
 	</ul>
 </div>
