@@ -237,9 +237,10 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
 				$areasModel->setState('background_id', $displayData->productionBackground->id);
 				$displayData->productionBackgroundAreas = $areasModel->getItems();
+
 				$displayData->imageSize = getimagesize(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->defaultPreviewBg->image_path);
 
-				$selectedFonts = $areasModel->getSelectedFonts($displayData->productionBackgroundAreas);
+				$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayData->productionBackgroundAreas);
 				$displayData->selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
 			}
 
