@@ -502,7 +502,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			if (!empty($product->order_item_id))
 			{
-				$_js .= 'console.log("Product ID: ' . $product->order_item_id . '");';
 				$query = $db->getQuery(true);
 				$query->select($db->quoteName('redDesignData'));
 				$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
