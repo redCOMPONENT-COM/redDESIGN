@@ -264,13 +264,13 @@ if (isset($displayData))
 
 		<div class="btn-group btn-group-textAlign">
 			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="left">
-				<i class="icon-align-left"></i><?php echo JText::_('COM_REDDESIGN_COMMON_LEFT'); ?>
+				<i class="icon-align-left"></i>&nbsp;
 			</button>
 			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="center">
-				<i class="icon-align-center"></i><?php echo JText::_('COM_REDDESIGN_COMMON_CENTER'); ?>
+				<i class="icon-align-center"></i>&nbsp;
 			</button>
 			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="right">
-				<i class="icon-align-right"></i><?php echo JText::_('COM_REDDESIGN_COMMON_RIGHT'); ?>
+				<i class="icon-align-right"></i>&nbsp;
 			</button>
 		</div>
 		{RedDesignBreakDesignAreaChooseFontSize}
