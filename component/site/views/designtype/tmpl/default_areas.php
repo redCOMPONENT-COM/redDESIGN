@@ -21,6 +21,7 @@ if (isset($displayData))
 	$this->item = $displayData->item;
 	$this->productionBackgroundAreas = $displayData->productionBackgroundAreas;
 	$this->fonts = $displayData->fonts;
+	$this->unitConversionRatio = $displayData->unitConversionRatio;
 }
 ?>
 
@@ -75,8 +76,6 @@ if (isset($displayData))
 		?>
 
 		{RedDesignBreakDesignAreaTitle}
-			<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->textalign; ?>" />
-
 			<label for="textArea_<?php echo $area->id; ?>">
 				<strong><?php echo $area->name; ?></strong>
 			</label>
@@ -165,7 +164,13 @@ if (isset($displayData))
 		{RedDesignBreakDesignAreaChooseFontSizeLabel}
 
 		{RedDesignBreakDesignAreaChooseFontSize}
-			<?php $defaultFontSizeOutput = false; ?>
+			<?php
+				$defaultFontSizeOutput = false;
+
+				if ($this->item->fontsizer === 'auto' || $this->item->fontsizer === 'auto_chars'):
+					$area->defaultFontSize = round($area->height * $this->unitConversionRatio, 0);
+				endif;
+			?>
 			<?php if ($this->item->fontsizer === 'slider') : ?>
 				<?php
 					// Case 1: using slider selector for font size.
@@ -253,6 +258,21 @@ if (isset($displayData))
 				       value="<?php echo (isset($area->defaultFontSize) && $area->defaultFontSize > 0) ? $area->defaultFontSize : 12; ?>"
 					/>
 			<?php endif; ?>
+
+
+		<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->textalign; ?>" />
+
+		<div class="btn-group btn-group-textAlign">
+			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="left">
+				<i class="icon-align-left"></i><?php echo JText::_('COM_REDDESIGN_COMMON_LEFT'); ?>
+			</button>
+			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="center">
+				<i class="icon-align-center"></i><?php echo JText::_('COM_REDDESIGN_COMMON_CENTER'); ?>
+			</button>
+			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="right">
+				<i class="icon-align-right"></i><?php echo JText::_('COM_REDDESIGN_COMMON_RIGHT'); ?>
+			</button>
+		</div>
 		{RedDesignBreakDesignAreaChooseFontSize}
 
 		{RedDesignBreakDesignAreaChooseColorLabel}

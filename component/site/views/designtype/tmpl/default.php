@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 
 JHtml::_('behavior.modal');
 
-RHelperAsset::load('lib/jquery.min.js', 'redcore');
+//RHelperAsset::load('lib/jquery.min.js', 'redcore');
 RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
 
 if (isset($displayData))
@@ -46,7 +46,10 @@ switch ($this->unit)
 		$unitConversionRatio = '1';
 		break;
 }
-
+if (isset($displayData))
+{
+	$this->unitConversionRatio = $displayData->unitConversionRatio = $unitConversionRatio;
+}
 /*
 {RedDesignBreakELEMENT} is a tag used in integration plugin to explode HTML string into smaller peaces. Those peaces are used in redSHOP templating.
 */
@@ -141,6 +144,7 @@ $productId = $input->getInt('pid', 0);
 	var unitConversionRatio = parseFloat("<?php echo $unitConversionRatio;?>");
 	var scalingImageForPreviewRatio = previewWidth / imageWidth;
 	var previewHeight = imageHeight * scalingImageForPreviewRatio;
+	var areasContainer = [];
 
 	/**
 	 * Add click event to Customize button.
@@ -205,14 +209,19 @@ $productId = $input->getInt('pid', 0);
 				changeSVGTextElement(id);
 			});
 
-			$('.fontSizeSlider').slider()
-				.on('slide', function(ev){
-					var id = jQuery(this).attr('id').replace('fontSizeSlider', '');
-					console.log(this);
-					console.log(ev);
-					jQuery('#fontSize' + id).val(ev.value);
-					changeSVGTextElement(id);
-				});
+			jQuery(document).on("click", ".reddesign-form .btn-group-textAlign button", function() {
+				var id = jQuery(this).attr('name').replace('textAlignButton', '');
+				jQuery('#textAlign' + id).val(jQuery(this).attr('value'));
+				changeSVGTextElement(id);
+			});
+
+			if (jQuery('.fontSizeSlider').length > 0)
+				jQuery('.fontSizeSlider').slider()
+					.on('slide', function(ev){
+						var id = jQuery(this).attr('id').replace('fontSizeSlider', '');
+						jQuery('#fontSize' + id).val(ev.value);
+						changeSVGTextElement(id);
+					});
 
 			jQuery(document).on("keyup, change", ".reddesign-form .colorCode", function() {
 				var id = jQuery(this).attr('id').replace('colorCode', '');
@@ -220,7 +229,6 @@ $productId = $input->getInt('pid', 0);
 				loadCMYKValues(hex, parseInt(id));
 
 			});
-
 
 		}
 	);
@@ -300,7 +308,13 @@ $productId = $input->getInt('pid', 0);
 		var font = jQuery('#fontArea' + areaId);
 		var color = jQuery('#colorCode' + areaId);
 		var fontSize = jQuery('#fontSize' + areaId);
+		var textAlign = jQuery('#textAlign' + areaId);
+
+		text.css('text-align', jQuery(textAlign).val());
+
+
 		var textElement = rootSnapSvgObject.select("#areaBoxesLayer #areaTextElement_" + areaId);
+
 		if (textElement)
 		{
 			textElement.node.innerHTML = jQuery(text).val();
@@ -309,7 +323,27 @@ $productId = $input->getInt('pid', 0);
 			if (color)
 				textElement.attr('fill', '#' + jQuery(color).val().replace('#',''));
 			if (fontSize)
+			{
 				textElement.attr('font-size', jQuery(fontSize).val());
+				textElement.attr('y', parseFloat(areasContainer[areaId]['y1']) + (parseFloat(jQuery(fontSize).val() * scalingImageForPreviewRatio)));
+			}
+			if (textAlign)
+			{
+				var textAlignValue = jQuery(textAlign).val();
+				textElement.attr('text-anchor', textAlignValue.replace('left','start').replace('center','middle').replace('right','end'));
+				if (textAlignValue == 'left')
+				{
+					textElement.attr('x', areasContainer[areaId]['x1']);
+				}
+				else if (textAlignValue == 'center')
+				{
+					textElement.attr('x', parseFloat(areasContainer[areaId]['x1']) + (parseFloat(areasContainer[areaId]['width']) / 2));
+				}
+				else if (textAlignValue == 'right')
+				{
+					textElement.attr('x', parseFloat(areasContainer[areaId]['x2']));
+				}
+			}
 		}
 	}
 
@@ -372,20 +406,32 @@ $productId = $input->getInt('pid', 0);
 				'reddesign_designtype_id' : reddesign_designtype_id,
 				'background_id' : background_id
 			};
-			<?php foreach($this->productionBackgroundAreas as $area) : ?>
+			<?php foreach($this->productionBackgroundAreas as $area) :?>
 
 				var fontColor = jQuery("input[name='colorCode<?php echo $area->id; ?>']").val();
 				fontColor = fontColor.replace("#", "");
 
-				var x1 = parseFloat(<?php echo $area->x1_pos; ?> + 4) * scalingImageForPreviewRatio;
-				var y1 = parseFloat(<?php echo $area->y1_pos; ?> + 18) * scalingImageForPreviewRatio;
+				var x1 = parseFloat(<?php echo $area->x1_pos; ?>) * scalingImageForPreviewRatio;
+				var y1 = parseFloat(<?php echo $area->y1_pos; ?>) * scalingImageForPreviewRatio;
+				var x2 = parseFloat(<?php echo $area->x2_pos; ?>) * scalingImageForPreviewRatio;
+				var y2 = parseFloat(<?php echo $area->y2_pos; ?>) * scalingImageForPreviewRatio;
+				var width = x2 - x1;
+				var height = y2 - y1;
+
+				areasContainer[<?php echo $area->id; ?>] = new Array();
+				areasContainer[<?php echo $area->id; ?>]['x1'] = x1;
+				areasContainer[<?php echo $area->id; ?>]['y1'] = y1;
+				areasContainer[<?php echo $area->id; ?>]['x2'] = x2;
+				areasContainer[<?php echo $area->id; ?>]['y2'] = y2;
+				areasContainer[<?php echo $area->id; ?>]['width'] = width;
+				areasContainer[<?php echo $area->id; ?>]['height'] = height;
 
 				var textElement = Snap.parse(
 					'<text id="areaTextElement_<?php echo $area->id; ?>" fill="#' + fontColor
 						+ '" font-family="' + jQuery("#fontArea<?php echo $area->id; ?>").val() + '"'
 						+ ' font-size="' + jQuery("#fontSize<?php echo $area->id; ?>").val() + 'px"'
 						+ ' x="' + (x1) + '"'
-						+ ' y="' + (y1) + '"'
+						+ ' y="' + (y1 + (parseFloat(jQuery("#fontSize<?php echo $area->id; ?>").val()) * scalingImageForPreviewRatio)) + '"'
 						+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
 
 			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);

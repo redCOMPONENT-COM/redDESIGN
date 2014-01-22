@@ -37,13 +37,21 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		$this->loadLanguage();
 
-		JLoader::import('redcore.bootstrap');
-
 		// Register component prefix
 		JLoader::registerPrefix('Reddesign', JPATH_ADMINISTRATOR . '/components/com_reddesign');
 
 		// Register library prefix.
-		RLoader::registerPrefix('Reddesign', JPATH_LIBRARIES . '/reddesign');
+		JLoader::registerPrefix('Reddesign', JPATH_LIBRARIES . '/reddesign');
+
+		JLoader::import('redcore.bootstrap');
+
+		JFactory::getApplication()->input->set('redcore', true);
+
+		// Load bootstrap + fontawesome
+		JHtml::_('rbootstrap.framework');
+
+		RHelperAsset::load('component.js', 'redcore');
+		RHelperAsset::load('component.min.css', 'redcore');
 	}
 
 	/**
