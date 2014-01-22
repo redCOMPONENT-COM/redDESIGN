@@ -324,8 +324,15 @@ $productId = $input->getInt('pid', 0);
 				textElement.attr('fill', '#' + jQuery(color).val().replace('#',''));
 			if (fontSize)
 			{
-				textElement.attr('font-size', jQuery(fontSize).val());
-				textElement.attr('y', parseFloat(areasContainer[areaId]['y1']) + (parseFloat(jQuery(fontSize).val() * scalingImageForPreviewRatio)));
+				var fontSize = jQuery(fontSize).val().split(":");
+				var fontSizeValue = 0;
+				if (fontSize.length > 1)
+					fontSizeValue = fontSize[1];
+				else
+					fontSizeValue = fontSize[0];
+
+				textElement.attr('font-size', fontSizeValue);
+				textElement.attr('y', parseFloat(areasContainer[areaId]['y1']) + ((parseFloat(fontSizeValue) * scalingImageForPreviewRatio)));
 			}
 			if (textAlign)
 			{
@@ -426,12 +433,19 @@ $productId = $input->getInt('pid', 0);
 				areasContainer[<?php echo $area->id; ?>]['width'] = width;
 				areasContainer[<?php echo $area->id; ?>]['height'] = height;
 
+				var fontSize = jQuery("#fontSize<?php echo $area->id; ?>").val().split(":");
+				var fontSizeValue = 0;
+				if (fontSize.length > 1)
+					fontSizeValue = fontSize[1];
+				else
+					fontSizeValue = fontSize[0];
+
 				var textElement = Snap.parse(
 					'<text id="areaTextElement_<?php echo $area->id; ?>" fill="#' + fontColor
 						+ '" font-family="' + jQuery("#fontArea<?php echo $area->id; ?>").val() + '"'
-						+ ' font-size="' + jQuery("#fontSize<?php echo $area->id; ?>").val() + 'px"'
+						+ ' font-size="' + fontSizeValue + 'px"'
 						+ ' x="' + (x1) + '"'
-						+ ' y="' + (y1 + (parseFloat(jQuery("#fontSize<?php echo $area->id; ?>").val()) * scalingImageForPreviewRatio)) + '"'
+						+ ' y="' + (y1 + (parseFloat(fontSizeValue) * scalingImageForPreviewRatio)) + '"'
 						+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
 
 			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
