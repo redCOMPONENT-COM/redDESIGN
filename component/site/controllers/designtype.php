@@ -54,10 +54,10 @@ class ReddesignControllerDesigntype extends JController
 		$design->loadString($this->input->getString('designarea', ''), 'JSON');
 		$design = $design->get('Design');
 
-		$designTypeModel = RModel::getAdminInstance('Designtype', array('ignore_request' => true));
+		$designTypeModel = RModel::getAdminInstance('Designtype', array('ignore_request' => true), 'com_reddesign');
 		$designType = $designTypeModel->getItem($design->id);
 
-		$backgroundModel = FOFModel::getTmpInstance('Background', array('ignore_request' => true));
+		$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true), 'com_reddesign');
 		$background = $backgroundModel->getItem($design->background_id);
 		$backgroundImage = $background->image_path;
 
