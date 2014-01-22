@@ -200,6 +200,20 @@ $productId = $input->getInt('pid', 0);
 				changeSVGTextElement(id);
 			});
 
+			jQuery(document).on("change", ".reddesign-form .reddesign-font-size-selection", function() {
+				var id = jQuery(this).attr('id').replace('fontSize', '');
+				changeSVGTextElement(id);
+			});
+
+			$('.fontSizeSlider').slider()
+				.on('slide', function(ev){
+					var id = jQuery(this).attr('id').replace('fontSizeSlider', '');
+					console.log(this);
+					console.log(ev);
+					jQuery('#fontSize' + id).val(ev.value);
+					changeSVGTextElement(id);
+				});
+
 			jQuery(document).on("keyup, change", ".reddesign-form .colorCode", function() {
 				var id = jQuery(this).attr('id').replace('colorCode', '');
 				var hex = jQuery("#colorCode" + id).val();
@@ -285,6 +299,7 @@ $productId = $input->getInt('pid', 0);
 		var text = jQuery('#textArea_' + areaId);
 		var font = jQuery('#fontArea' + areaId);
 		var color = jQuery('#colorCode' + areaId);
+		var fontSize = jQuery('#fontSize' + areaId);
 		var textElement = rootSnapSvgObject.select("#areaBoxesLayer #areaTextElement_" + areaId);
 		if (textElement)
 		{
@@ -293,6 +308,8 @@ $productId = $input->getInt('pid', 0);
 				textElement.attr('font-family', jQuery(font).val());
 			if (color)
 				textElement.attr('fill', '#' + jQuery(color).val().replace('#',''));
+			if (fontSize)
+				textElement.attr('font-size', jQuery(fontSize).val());
 		}
 	}
 
@@ -366,7 +383,7 @@ $productId = $input->getInt('pid', 0);
 				var textElement = Snap.parse(
 					'<text id="areaTextElement_<?php echo $area->id; ?>" fill="#' + fontColor
 						+ '" font-family="' + jQuery("#fontArea<?php echo $area->id; ?>").val() + '"'
-						+ ' font-size="18px"'
+						+ ' font-size="' + jQuery("#fontSize<?php echo $area->id; ?>").val() + 'px"'
 						+ ' x="' + (x1) + '"'
 						+ ' y="' + (y1) + '"'
 						+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
