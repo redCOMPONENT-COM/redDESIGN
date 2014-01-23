@@ -114,7 +114,7 @@ else
 							<?php if ($row->checked_out) : ?>
 								<?php
 								$editor = JFactory::getUser($row->checked_out);
-								$canCheckin = $row->checked_out == $userId || $row->checked_out == 0;
+								$canCheckin = $row->checked_out == $userId;
 								echo JHtml::_('rgrid.checkedout', $i, $editor->name, $row->checked_out_time, 'designtypes.', $canCheckin);
 								?>
 							<?php endif; ?>
