@@ -526,6 +526,43 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			{
 				$document = JFactory::getDocument();
 
+				// Get plugin param for width & height
+				$defaultPreviewWidth = $this->params->get('defaultCartPreviewWidth', 0);
+				$defaultPreviewHeight = $this->params->get('defaultPreviewHeight', 0);
+				$jsWidth = 0.0;
+				$jsHeight = 0.0;
+				$jsRatio = 1;
+
+				if (($defaultPreviewWidth == 0) && ($defaultPreviewHeight == 0))
+				{
+					// No input of width && height, get the original size
+					$jsWidth = (float) $redDesignData->svgWidth;
+					$jsHeight = (float) $redDesignData->svgHeight;
+				}
+				elseif ($defaultPreviewWidth == 0)
+				{
+					// Only height has input
+					$jsHeight = (float) $defaultPreviewHeight;
+					$jsRatio = $jsHeight / (float) $redDesignData->svgHeight;
+					$jsWidth = $jsRatio * (float) $redDesignData->svgWidth;
+				}
+				elseif ($defaultPreviewWidth == 0)
+				{
+					// Only width has input
+					$jsWidth = (float) $defaultPreviewWidth;
+					$jsRatio = $jsWidth / (float) $redDesignData->svgWidth;
+					$jsHeight = $jsRatio * (float) $redDesignData->svgHeight;
+				}
+				else
+				{
+					// All width & height has input
+					$jsWidth = (float) $defaultPreviewWidth;
+					$jsHeight = (float) $defaultPreviewHeight;
+					$widthRatio = $jsWidth / (float) $redDesignData->svgWidth;
+					$heightRatio = $jsHeight / (float) $redDesignData->svgHeight;
+					$jsRatio = ($widthRatio > $heightRatio) ? $heightRatio : $widthRatio;
+				}
+
 				foreach ($fonts as $font => $f)
 				{
 					$fontFile = 'fonts/' . $f->name . '.js';
@@ -553,9 +590,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 				$js = '
 					jQuery(document).ready(function () {
-						var previewWidth = 300;
-						var scalingImageForPreviewRatio = parseFloat(300) / parseFloat(' . (float) $redDesignData->svgWidth . ');
-						var previewHeight = parseFloat(' . (float) $redDesignData->svgHeight . ') * scalingImageForPreviewRatio;
+						var previewWidth = ' . $jsWidth . ';
+						var scalingImageForPreviewRatio = ' . $jsRatio . ';
+						var previewHeight = ' . $jsHeight . ';
 						var svg_' . $product->product_id . ' = Snap("#svg_image_' . $product->product_id . '");
 						Snap.load(
 							"' . $imageUrl . '",
