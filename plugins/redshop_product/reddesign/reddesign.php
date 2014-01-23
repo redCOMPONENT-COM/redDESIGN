@@ -602,13 +602,12 @@ class PlgRedshop_ProductReddesign extends JPlugin
 								jQuery("#product_image_' . $i . '").css("width", previewWidth + "px");
 								jQuery("#product_image_' . $i . '").css("height", previewHeight + "px");
 								svg_' . $i . '.append(f);
-								var group_' . $i . ' = Snap.parse(\'<g id="areaBoxesLayer">' . urldecode($redDesignData->svgImags) . '</g>\');
+								var group_' . $i . ' = Snap.parse(\'<g id="areaBoxesLayer' . $i . '">' . urldecode($redDesignData->svgImags) . '</g>\');
 
 								// Set preview size at loaded file.
 								var loadedSvgFromFile = jQuery("#svg_image_' . $i . '").find("svg")[0];
 								loadedSvgFromFile.setAttribute("width", "");
 								loadedSvgFromFile.setAttribute("height", "");
-								loadedSvgFromFile.setAttribute("id", "svgCanvas");
 
 								// Set preview size at svg container element.
 								var rootElement = document.getElementById("svg_image_' . $i . '");
@@ -619,7 +618,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 								svg_' . $i . '.add(group_' . $i . ');
 
 								// Resize text elements
-								jQuery("#areaBoxesLayer text").each(function (index){
+								jQuery("#areaBoxesLayer' . $i . ' text").each(function (index){
 									var fontSize = parseFloat(jQuery(this).attr("font-size"));
 									fontSize = fontSize * scalingImageForPreviewRatio;
 									jQuery(this).attr("font-size", fontSize + "px");
