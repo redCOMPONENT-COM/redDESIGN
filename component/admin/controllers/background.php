@@ -78,20 +78,18 @@ class ReddesignControllerBackground extends RControllerForm
 				->where($db->qn('id') . ' = ' . $db->q((int) $data['id']));
 
 			$db->setQuery($query);
-			$db->execute();
 			$oldImages = $db->loadObject();
 
 			// If images has been updated remove old images
 			if ($updatedSVG)
 			{
-				if ($updatedSVG)
+				// Delete old SVG
+				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->svg_file))
 				{
-					// Delete old SVG
-					if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->svg_file))
-					{
-						JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->svg_file);
-					}
+					JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $oldImages->svg_file);
 				}
+
+				$data['svg_file'] = $uploaded_file['mangled_filename'];
 			}
 			else
 			{
@@ -104,17 +102,17 @@ class ReddesignControllerBackground extends RControllerForm
 			$data['svg_file'] = $uploaded_file['mangled_filename'];
 		}
 
-		// If this new background will be the PDF Production background, switch it against the previous production background.
+		// If this new background will be the SVG Production background, switch it against the previous production background.
 		if (!empty($data['isProductionBg']))
 		{
-			// Set all other backgrounds as non PDF backgrounds.
+			// Set all other backgrounds as non SVG backgrounds.
 			$backgroundModel->unsetAllIsProductionBg($data['designtype_id']);
 		}
 
 		// If this new background will be the preview background, switch it against the previous preview background.
 		if (!empty($data['isDefaultPreview']))
 		{
-			// Set all other backgrounds as non PDF backgrounds.
+			// Set all other backgrounds as non SVG backgrounds.
 			$backgroundModel->unsetAllIsDefaultPreview($data['designtype_id']);
 		}
 
