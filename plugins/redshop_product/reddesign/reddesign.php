@@ -546,7 +546,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					$jsRatio = $jsHeight / (float) $redDesignData->svgHeight;
 					$jsWidth = $jsRatio * (float) $redDesignData->svgWidth;
 				}
-				elseif ($defaultPreviewWidth == 0)
+				elseif ($defaultPreviewHeight == 0)
 				{
 					// Only width has input
 					$jsWidth = (float) $defaultPreviewWidth;
@@ -578,14 +578,16 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					if ($background->isDefaultPreview)
 					{
 						$defaultPreviewBg = $background;
+
+						break;
 					}
 				}
 
 				$imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $defaultPreviewBg->svg_file;
 
 				// $product_image 	= "<div  class='product_image'><img width='" . CART_THUMB_WIDTH . "' src='" . $redDesignData->backgroundImgSrc . "'></div>";
-				$product_image  = "<div id='product_image_" . $product->product_id . "' style='position: relative;'>";
-				$product_image 	.= "<svg id='svg_image_" . $product->product_id . "' style='position: absolute;width: 100%; height: 100%; top: 0; left: 0;'></svg>";
+				$product_image  = "<div id='product_image_" . $i . "' style='position: relative;'>";
+				$product_image 	.= "<svg id='svg_image_" . $i . "' style='position: absolute;width: 100%; height: 100%; top: 0; left: 0;'></svg>";
 				$product_image 	.= "</div>";
 
 				$js = '
@@ -593,28 +595,28 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						var previewWidth = ' . $jsWidth . ';
 						var scalingImageForPreviewRatio = ' . $jsRatio . ';
 						var previewHeight = ' . $jsHeight . ';
-						var svg_' . $product->product_id . ' = Snap("#svg_image_' . $product->product_id . '");
+						var svg_' . $product->product_id . ' = Snap("#svg_image_' . $i . '");
 						Snap.load(
 							"' . $imageUrl . '",
 							function (f) {
-								jQuery("#product_image_' . $product->product_id . '").css("width", previewWidth + "px");
-								jQuery("#product_image_' . $product->product_id . '").css("height", previewHeight + "px");
-								svg_' . $product->product_id . '.append(f);
-								var group_' . $product->product_id . ' = Snap.parse(\'<g id="areaBoxesLayer">' . urldecode($redDesignData->svgImags) . '</g>\');
+								jQuery("#product_image_' . $i . '").css("width", previewWidth + "px");
+								jQuery("#product_image_' . $i . '").css("height", previewHeight + "px");
+								svg_' . $i . '.append(f);
+								var group_' . $i . ' = Snap.parse(\'<g id="areaBoxesLayer">' . urldecode($redDesignData->svgImags) . '</g>\');
 
 								// Set preview size at loaded file.
-								var loadedSvgFromFile = jQuery("#svg_image_' . $product->product_id . '").find("svg")[0];
+								var loadedSvgFromFile = jQuery("#svg_image_' . $i . '").find("svg")[0];
 								loadedSvgFromFile.setAttribute("width", "");
 								loadedSvgFromFile.setAttribute("height", "");
 								loadedSvgFromFile.setAttribute("id", "svgCanvas");
 
 								// Set preview size at svg container element.
-								var rootElement = document.getElementById("svg_image_' . $product->product_id . '");
+								var rootElement = document.getElementById("svg_image_' . $i . '");
 								rootElement.setAttribute("width", "");
 								rootElement.setAttribute("height", "");
 								rootElement.setAttribute("overflow", "hidden");
 
-								svg_' . $product->product_id . '.add(group_' . $product->product_id . ');
+								svg_' . $i . '.add(group_' . $i . ');
 
 								// Resize text elements
 								jQuery("#areaBoxesLayer text").each(function (index){
