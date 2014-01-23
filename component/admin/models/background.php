@@ -161,7 +161,7 @@ class ReddesignModelBackground extends RModelAdmin
 		$config = ReddesignEntityConfig::getInstance();
 
 		// Error in file upload
-		if (!empty($file['error']) && (int) $file['error'] > 0)
+		if (!empty($file['name']) && !empty($file['error']) && (int) $file['error'] > 0)
 		{
 			$app->enqueueMessage(
 				JText::sprintf('COM_REDDESIGN_FILE_HELPER_ERROR_FILE_TOOLARGE', str_replace('M', '', ini_get('upload_max_filesize'))),
