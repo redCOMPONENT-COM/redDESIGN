@@ -14,6 +14,8 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 $saveOrderingUrl = 'index.php?option=com_reddesign&task=designtypes.saveOrderAjax&tmpl=component';
 $disableClassName = '';
 $disabledLabel = '';
+$user = JFactory::getUser();
+$userId = $user->id;
 
 if ($listOrder == 'd.ordering')
 {
@@ -64,6 +66,8 @@ else
 					<th>
 						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>)"? />
 					</th>
+					<th width="1" nowrap="nowrap">
+					</th>
 					<th>
 						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_DESIGNTYPES_NAME', 'd.name', $listDirn, $listOrder);?>
 					</th>
@@ -77,7 +81,7 @@ else
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="6">
+					<td colspan="7">
 						<?php echo $this->pagination->getPaginationLinks(null, array('showLimitBox' => false)); ?>
 					</td>
 				</tr>
@@ -107,7 +111,20 @@ else
 							<?php echo JHtml::_('grid.id', $i, $row->id); ?>
 						</td>
 						<td>
-							<?php echo JHtml::_('link', JRoute::_('index.php?option=com_reddesign&task=designtype.edit&id=' . $row->id), $row->name); ?>
+							<?php if ($row->checked_out) : ?>
+								<?php
+								$editor = JFactory::getUser($row->checked_out);
+								$canCheckin = $row->checked_out == $userId || $row->checked_out == 0;
+								echo JHtml::_('rgrid.checkedout', $i, $editor->name, $row->checked_out_time, 'designtypes.', $canCheckin);
+								?>
+							<?php endif; ?>
+						</td>
+						<td>
+							<?php if ($row->checked_out) : ?>
+								<?php echo $row->name; ?>
+							<?php else : ?>
+								<?php echo JHtml::_('link', JRoute::_('index.php?option=com_reddesign&task=designtype.edit&id=' . $row->id), $row->name); ?>
+							<?php endif; ?>
 						</td>
 						<td>
 							<?php echo JHtml::_('rgrid.published', $row->state, $i, 'designtypes.', true, 'cb'); ?>
