@@ -40,6 +40,11 @@ class ReddesignTableDesigntype extends RTable
 	public $name;
 
 	/**
+	 * @var  string
+	 */
+	public $alias;
+
+	/**
 	 * @var  integer
 	 */
 	public $state = 1;
@@ -93,12 +98,22 @@ class ReddesignTableDesigntype extends RTable
 	 */
 	public function store($updateNulls = false)
 	{
+		$task = JFactory::getApplication()->input->get('task', 'save');
 		// Create alias for title
 		$this->alias = JFilterOutput::stringURLSafe($this->title);
 
 		if (!parent::store($updateNulls))
 		{
 			return false;
+		}
+
+		if ($task == 'save2copy')
+		{
+
+
+			// Reset the ID and then treat the request as for Apply.
+			$data[$key] = 0;
+			$task = 'apply';
 		}
 
 		return true;
