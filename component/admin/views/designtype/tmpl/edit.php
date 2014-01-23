@@ -144,6 +144,7 @@ switch ($tab)
 				$data->productionBgAttributes = $this->productionBgAttributes;
 				$data->fontsOptions = $this->fontsOptions;
 				$data->inputFieldOptions = $this->inputFieldOptions;
+				$data->alignmentOptions = $this->alignmentOptions;
 				$data->item->designtype_id = $this->item->id;
 				$data->selectedFontsDeclaration = $this->selectedFontsDeclaration;
 				echo RLayoutHelper::render('edit_area_js', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/area/tmpl');
