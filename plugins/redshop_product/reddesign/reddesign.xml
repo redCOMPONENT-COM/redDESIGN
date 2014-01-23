@@ -1,26 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5" type="plugin" group="redshop_product" method="upgrade">
-    <name>PLG_REDSHOP_PRODUCT_REDDESIGN</name>
-    <author>redCOMPONENT.com</author>
-    <creationDate>September 2013</creationDate>
-    <copyright>Copyright (C) 2013 redCOMPONENT.com. All rights reserved.</copyright>
-    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-    <authorEmail>email@redweb.dk</authorEmail>
-    <authorUrl>www.redcomponent.com</authorUrl>
-    <version>1.0.0</version>
-    <description>PLG_REDSHOP_PRODUCT_REDDESIGN_DESC</description>
-    <files>
-        <folder plugin="reddesign">js</folder>
-        <filename plugin="reddesign">reddesign.php</filename>
-    </files>
-    <languages>
-        <language tag="en-GB">language/en-GB/en-GB.plg_redshop_product_reddesign.ini</language>
-        <language tag="en-GB">language/en-GB/en-GB.plg_redshop_product_reddesign.sys.ini</language>
-    </languages>
-    <config>
-       <fields name="params">
+	<name>PLG_REDSHOP_PRODUCT_REDDESIGN</name>
+	<author>redCOMPONENT.com</author>
+	<creationDate>September 2013</creationDate>
+	<copyright>Copyright (C) 2013 redCOMPONENT.com. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>email@redweb.dk</authorEmail>
+	<authorUrl>www.redcomponent.com</authorUrl>
+	<version>1.0.0</version>
+	<description>PLG_REDSHOP_PRODUCT_REDDESIGN_DESC</description>
+	<files>
+		<folder plugin="reddesign">js</folder>
+		<filename plugin="reddesign">reddesign.php</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">language/en-GB/en-GB.plg_redshop_product_reddesign.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.plg_redshop_product_reddesign.sys.ini</language>
+	</languages>
+	<config>
+	   <fields name="params">
 		 <fieldset name="basic">
+			<field
+				name="defaultCartPreviewWidth"
+				label="PLG_REDSHOP_PRODUCT_REDDESIGN_DEFAULT_CART_PREVIEW_WIDTH"
+				description="PLG_REDSHOP_PRODUCT_REDDESIGN_DEFAULT_CART_PREVIEW_WIDTH_DESCRIPTION"
+				type="text"
+				filter="integer"
+				default="300" />
+			<field
+				name="defaultCartPreviewHeight"
+				label="PLG_REDSHOP_PRODUCT_REDDESIGN_DEFAULT_CART_PREVIEW_HEIGHT"
+				description="PLG_REDSHOP_PRODUCT_REDDESIGN_DEFAULT_CART_PREVIEW_HEIGHT_DESCRIPTION"
+				type="text"
+				filter="integer"
+				default="300" />
 		</fieldset>
 	</fields>
-    </config>
+	</config>
 </extension>
