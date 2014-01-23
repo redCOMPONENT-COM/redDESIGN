@@ -24,11 +24,11 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 <div>&nbsp;</div>
 
 <div id="bgFormContainer" class="well">
-	<form action="index.php?option=com_reddesign&task=background.ajaxBackgroundSave" id="bgForm" name="adminForm"
+	<form action="index.php?option=com_reddesign&task=background.backgroundSave" id="bgForm" name="adminForm"
 	      method="POST" enctype="multipart/form-data" class="form-horizontal">
 
-		<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
-		<input type="hidden" name="returnurl" value="<?php echo base64_encode($return_url); ?>" />
+		<?php echo JHtml::_('form.token'); ?>
+		<input type="hidden" name="jform[returnurl]" value="<?php echo base64_encode($return_url); ?>" />
 		<input type="hidden" name="jform[designtype_id]" id="background_reddesign_designtype_id" value="<?php echo $this->item->designtype_id; ?>" />
 		<input type="hidden" name="jform[id]" id="background_id" value="" />
 
@@ -144,15 +144,10 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				}
 			});
 
-			jQuery("#bgFormSubmit").click(function ()
+			/*jQuery("#bgFormSubmit").click(function ()
 			{
 				var form = jQuery('#bgForm');
-
-				form.attr("action", "index.php?option=com_reddesign&task=background.ajaxBackgroundSave");
-				form.attr("method", "post");
-				form.attr("enctype", "multipart/form-data");
-				form.attr("encoding", "multipart/form-data");
-				form.attr("target", "bgPostIframe");
+				//form.attr("target", "bgPostIframe");
 				form.submit();
 
 				jQuery("#bgPostIframe").load(function () {
@@ -170,7 +165,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				});
 
 				return false;
-			});
+			});*/
 
 			jQuery(document).on('click', '#cancelBgBtn',
 				function () {

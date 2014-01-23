@@ -141,4 +141,118 @@ class ReddesignModelBackground extends RModelAdmin
 
 		return true;
 	}
+
+	/**
+	 * Save Background from Design Type
+	 *
+	 * @param   array  $data  jform post values
+	 *
+	 * @return bool
+	 */
+	public function saveBackground($data)
+	{
+		$app = JFactory::getApplication();
+		$updatedSVG = false;
+		$uploaded_file = null;
+		$file = $app->input->files->get('jform');
+		$file = $file['bg_svg_file'];
+
+		// Get component configuration
+		$config = ReddesignEntityConfig::getInstance();
+
+		// If file has has not been uploaded
+		if (empty($file['name']) || empty($file['type']))
+		{
+			// If is a new background and the file is not attached return error
+			if (!$data['id'])
+			{
+				$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_NO_FILE'), 'error');
+
+				return false;
+			}
+		}
+		else
+		{
+			if (empty($data['name']))
+			{
+				$data['name'] = str_replace('.' . JFile::getExt($file['name']), '', $file['name']);
+			}
+
+			$updatedSVG = true;
+
+			// Upload the background file
+			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'backgrounds', $config->getMaxSVGFileSize(), 'svg');
+
+			if (!$uploaded_file)
+			{
+				$app->enqueueMessage(JText::_('COM_REDDESIGN_BACKGROUND_ERROR_UPLOAD_FAILED'), 'error');
+
+				return false;
+			}
+		}
+
+		// On edit
+		if (!empty($data['id']))
+		{
+			// If images has been updated remove old images
+			if ($updatedSVG)
+			{
+				$table = $this->getTable();
+				$table->load($data['id']);
+
+				// Delete old SVG
+				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $table->svg_file))
+				{
+					JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $table->svg_file);
+				}
+
+				$data['svg_file'] = $uploaded_file['mangled_filename'];
+			}
+			else
+			{
+				unset($data['svg_file']);
+			}
+		}
+		else
+		{
+			// Update the database with the new path of the SVG file.
+			$data['svg_file'] = $uploaded_file['mangled_filename'];
+		}
+
+		// If this new background will be the SVG Production background, switch it against the previous production background.
+		if (!empty($data['isProductionBg']))
+		{
+			// Set all other backgrounds as non SVG backgrounds.
+			$this->unsetAllIsProductionBg($data['designtype_id']);
+		}
+
+		// If this new background will be the preview background, switch it against the previous preview background.
+		if (!empty($data['isDefaultPreview']))
+		{
+			// Set all other backgrounds as non SVG backgrounds.
+			$this->unsetAllIsDefaultPreview($data['designtype_id']);
+		}
+
+		if (empty($data['isProductionBg']))
+		{
+			$data['isProductionBg'] = 0;
+		}
+
+		if (empty($data['isDefaultPreview']))
+		{
+			$data['isDefaultPreview'] = 0;
+		}
+
+		if (empty($data['isPreviewBg']))
+		{
+			$data['isPreviewBg'] = 0;
+		}
+
+		if (empty($data['useCheckerboard']))
+		{
+			$data['useCheckerboard'] = 0;
+		}
+
+		return parent::save($data);
+	}
 }
