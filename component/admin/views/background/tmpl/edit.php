@@ -144,29 +144,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				}
 			});
 
-			/*jQuery("#bgFormSubmit").click(function ()
-			{
-				var form = jQuery('#bgForm');
-				//form.attr("target", "bgPostIframe");
-				form.submit();
-
-				jQuery("#bgPostIframe").load(function () {
-					iframeContents = jQuery("#bgPostIframe")[0].contentWindow.document.body.innerHTML;
-					var jsonData = jQuery.parseJSON(iframeContents);
-
-					if (jsonData[0] == 0)
-					{
-						jQuery("#bgMessage").html(jsonData[1]);
-					}
-					else
-					{
-						window.location.href="<?php echo $return_url; ?>";
-					}
-				});
-
-				return false;
-			});*/
-
 			jQuery(document).on('click', '#cancelBgBtn',
 				function () {
 					jQuery('#addBgBtn').val("<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>")
