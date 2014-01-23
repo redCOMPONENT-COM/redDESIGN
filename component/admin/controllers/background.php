@@ -59,7 +59,7 @@ class ReddesignControllerBackground extends RControllerForm
 			$updatedSVG = true;
 
 			// Upload the background file
-			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'backgrounds', $config->getMaxSVGFileSize());
+			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'backgrounds', $config->getMaxSVGFileSize(), 'svg');
 
 			if (!$uploaded_file)
 			{
