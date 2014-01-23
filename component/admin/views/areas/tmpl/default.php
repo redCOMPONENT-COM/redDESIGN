@@ -17,6 +17,7 @@ $this->unitConversionRatio = $displayData->unitConversionRatio;
 $this->unit = $displayData->unit;
 $this->fontsOptions = $displayData->fontsOptions;
 $this->inputFieldOptions = $displayData->inputFieldOptions;
+$this->alignmentOptions = $displayData->alignmentOptions;
 
 ?>
 

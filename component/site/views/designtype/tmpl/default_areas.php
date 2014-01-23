@@ -21,6 +21,7 @@ if (isset($displayData))
 	$this->item = $displayData->item;
 	$this->productionBackgroundAreas = $displayData->productionBackgroundAreas;
 	$this->fonts = $displayData->fonts;
+	$this->unitConversionRatio = $displayData->unitConversionRatio;
 }
 ?>
 
@@ -75,8 +76,6 @@ if (isset($displayData))
 		?>
 
 		{RedDesignBreakDesignAreaTitle}
-			<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->textalign; ?>" />
-
 			<label for="textArea_<?php echo $area->id; ?>">
 				<strong><?php echo $area->name; ?></strong>
 			</label>
@@ -165,6 +164,13 @@ if (isset($displayData))
 		{RedDesignBreakDesignAreaChooseFontSizeLabel}
 
 		{RedDesignBreakDesignAreaChooseFontSize}
+			<?php
+				$defaultFontSizeOutput = false;
+
+				if ($this->item->fontsizer === 'auto' || $this->item->fontsizer === 'auto_chars'):
+					$area->defaultFontSize = round($area->height * $this->unitConversionRatio, 0);
+				endif;
+			?>
 			<?php if ($this->item->fontsizer === 'slider') : ?>
 				<?php
 					// Case 1: using slider selector for font size.
@@ -172,14 +178,15 @@ if (isset($displayData))
 					RHelperAsset::load('slider.css', 'com_reddesign');
 				?>
 				<input type="hidden"
-					   id="fontSize<?php echo $area->id ?>"
-					   class="fontSizeSlider"
-					   name="fontSize<?php echo $area->id ?>"
+					   id="fontSizeSlider<?php echo $area->id ?>"
+					   class="fontSizeSlider reddesign-font-size-selection"
+					   name="fontSizeSlider<?php echo $area->id ?>"
 					   value="<?php echo $area->defaultFontSize ?>"
 					   data-slider-min="<?php echo $area->minFontSize ?>"
 					   data-slider-max="<?php echo $area->maxFontSize ?>"
 					   data-slider-value="[<?php echo $area->defaultFontSize ?>]"
 				/>
+			<?php $defaultFontSizeOutput = true; ?>
 			<?php elseif ($this->item->fontsizer == 'dropdown_numbers' || $this->item->fontsizer == 'dropdown_labels') : ?>
 				<?php
 
@@ -191,6 +198,7 @@ if (isset($displayData))
 					if (count($areaFontSizes) > 1)
 					{
 						$sizeOptions = array();
+						$firstElement = null;
 
 						foreach ($areaFontSizes as $areaFontSize)
 						{
@@ -215,21 +223,56 @@ if (isset($displayData))
 								$optionText = $labels[0];
 							}
 
+							if (empty($firstElement))
+							{
+								$firstElement = $optionValue;
+							}
+
 							$sizeOptions[] = JHTML::_('select.option', $optionValue, $optionText);
 						}
 
 						echo JHTML::_(
-										'select.genericlist',
-										$sizeOptions,
-										'fontSize' . $area->id,
-										'class="inputbox" onChange="customize(0);"',
-										'value',
-										'text',
-										null
+							'select.genericlist',
+							$sizeOptions,
+							'fontSize' . $area->id,
+							'class="inputbox reddesign-font-size-selection"',
+							'value',
+							'text',
+							$firstElement
 						);
 					}
+					else
+					{
+						$defaultFontSizeOutput = true;
+					}
 				?>
+			<?php else : ?>
+				<?php $defaultFontSizeOutput = true; ?>
 			<?php endif; ?>
+
+			<?php if ($defaultFontSizeOutput): ?>
+				<input type="hidden"
+				       id="fontSize<?php echo $area->id ?>"
+				       class="reddesign-font-size-selection"
+				       name="fontSize<?php echo $area->id ?>"
+				       value="<?php echo (isset($area->defaultFontSize) && $area->defaultFontSize > 0) ? $area->defaultFontSize : 12; ?>"
+					/>
+			<?php endif; ?>
+
+
+		<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->textalign; ?>" />
+
+		<div class="btn-group btn-group-textAlign">
+			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="left">
+				<i class="icon-align-left"></i>&nbsp;
+			</button>
+			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="center">
+				<i class="icon-align-center"></i>&nbsp;
+			</button>
+			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="right">
+				<i class="icon-align-right"></i>&nbsp;
+			</button>
+		</div>
 		{RedDesignBreakDesignAreaChooseFontSize}
 
 		{RedDesignBreakDesignAreaChooseColorLabel}
