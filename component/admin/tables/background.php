@@ -105,6 +105,7 @@ class ReddesignTableBackground extends RTable
 	 * @var  bool
 	 */
 	public $designtype_id;
+
 	/**
 	 * Removes background related files after deleting background from the database.
 	 * Called after delete().
@@ -115,7 +116,7 @@ class ReddesignTableBackground extends RTable
 	 */
 	protected function afterDelete($pk = null)
 	{
-		// Delete background EPS
+		// Delete background SVG
 		if (JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $this->svg_file))
 		{
 			JFile::delete(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $this->svg_file);

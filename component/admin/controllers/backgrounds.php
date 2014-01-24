@@ -31,6 +31,20 @@ class ReddesignControllerBackgrounds extends RControllerAdmin
 	}
 
 	/**
+	 * Removes an item.
+	 *
+	 * @return  void
+	 */
+	public function delete()
+	{
+		$return 	= $this->input->get('return', null, 'base64');
+
+		parent::delete();
+
+		$this->setRedirect(base64_decode($return));
+	}
+
+	/**
 	 * Method to set  a background as the PDF background.
 	 *
 	 * @since	1.0

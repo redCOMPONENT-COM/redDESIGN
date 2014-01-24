@@ -13,7 +13,7 @@
 			   id="bg_name"
 			   type="text"
 			   label="COM_REDDESIGN_BACKGROUND_FIELD_TITLE"
-			   description="COM_REDDESIGN_BACKGROUND_FIELD_TITLE"
+			   description="COM_REDDESIGN_BACKGROUND_FIELD_TITLE_DESC"
 			   maxlength="255"
 			   size="32"
 			   required="required"
