@@ -300,7 +300,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 	function resizeRectangle(e)
 	{
-		var offset = jQuery("#svgForAreas").offset();
+		var offset = jQuery("#areaBoxesLayer").offset();
 		var upX = e.pageX - offset.left;
 		var upY = e.pageY - offset.top;
 
