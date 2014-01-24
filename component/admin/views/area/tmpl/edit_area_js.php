@@ -300,7 +300,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 	function resizeRectangle(e)
 	{
-		var offset = jQuery("#svgForAreas").offset();
+		var offset = jQuery("#areaBoxesLayer").offset();
 		var upX = e.pageX - offset.left;
 		var upY = e.pageY - offset.top;
 
@@ -967,7 +967,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		areaBoxes[current_area_id]['rect'].node.id = "area" + areaBoxes[current_area_id]['rect'].id;
 		areaBoxes[current_area_id]['rectId'] = areaBoxes[current_area_id]['rect'].node.id;
 
-		areaBoxes[current_area_id]['sizer'] = drawRectangle(x2, y2, 10, 10, "#CA202C", 1, "none", 0);
+		areaBoxes[current_area_id]['sizer'] = drawRectangle(x2, (y1 + height), 10, 10, "#CA202C", 1, "none", 0);
 		areaBoxes[current_area_id]['sizer'].node.id = "sizer" + areaBoxes[current_area_id]['rectId'];
 		areaBoxes[current_area_id]['sizer'].hover(sizerIn, sizerOut);
 		areaBoxes[current_area_id]['sizer'].mousedown(begginResizeRectangle);
