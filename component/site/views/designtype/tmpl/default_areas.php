@@ -135,6 +135,7 @@ if (isset($displayData))
 
 					if (count($areaFontsIds) > 0)
 					{
+						$firstFontSelected = null;
 						$options = array();
 
 						foreach ($areaFontsIds as $key => $value)
@@ -143,12 +144,24 @@ if (isset($displayData))
 							{
 								if ($f->id == $value)
 								{
-									$options[] = JHTML::_('select.option', $f->name, $f->name);
+									$options[] = JHTML::_('select.option', $f->id, $f->name);
+
+									if (empty($firstFontSelected))
+									{
+										$firstFontSelected = $f->id;
+									}
 								}
 							}
 						}
 
-						echo JHTML::_('select.genericlist', $options, 'fontArea' . $area->id, 'class="inputbox reddesign-font-selection"', 'value', 'text', null);
+						echo JHTML::_('select.genericlist',
+							$options,
+							'fontArea' . $area->id,
+							'class="inputbox reddesign-font-selection"',
+							'value',
+							'text',
+							$firstFontSelected
+						);
 					}
 				}
 			?>
@@ -197,6 +210,8 @@ if (isset($displayData))
 					// If only one font size allowed don't show anything.
 					if (count($areaFontSizes) > 1)
 					{
+						$firstFontSizeSelected = $areaFontSizes[0];
+						sort($areaFontSizes);
 						$sizeOptions = array();
 						$firstElement = null;
 
@@ -223,7 +238,7 @@ if (isset($displayData))
 								$optionText = $labels[0];
 							}
 
-							if (empty($firstElement))
+							if ($areaFontSize == $firstFontSizeSelected)
 							{
 								$firstElement = $optionValue;
 							}

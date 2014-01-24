@@ -134,6 +134,10 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   `useCheckerboard`  TINYINT(1)   NOT NULL DEFAULT '0',
   `designtype_id`    INT(11)      NOT NULL,
   PRIMARY KEY (`id`)
+  FOREIGN KEY (`designtype_id`)
+    REFERENCES `#__reddesign_designtypes` (`id`)
+      ON DELETE CASCADE
+      ON UPDATE NO ACTION
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8

@@ -234,7 +234,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			movingRect.attr('x'),
 			movingRect.attr('y'),
 			parseFloat(movingRect.attr('x')) + parseFloat(movingRect.attr('width')),
-			parseFloat(movingRect.attr('x')) + parseFloat(movingRect.attr('height')),
+			parseFloat(movingRect.attr('y')) + parseFloat(movingRect.attr('height')),
 			movingRect.attr('width'),
 			movingRect.attr('height')
 		);
@@ -300,7 +300,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 	function resizeRectangle(e)
 	{
-		var offset = jQuery("#svgForAreas").offset();
+		var offset = jQuery("#areaBoxesLayer").offset();
 		var upX = e.pageX - offset.left;
 		var upY = e.pageY - offset.top;
 
@@ -338,7 +338,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			movingRect.attr("x"),
 			movingRect.attr("y"),
 			parseFloat(movingRect.attr("x")) + parseFloat(movingRect.attr("width")),
-			parseFloat(movingRect.attr("x")) + parseFloat(movingRect.attr("height")),
+			parseFloat(movingRect.attr("y")) + parseFloat(movingRect.attr("height")),
 			movingRect.attr("width"),
 			movingRect.attr("height")
 		);
