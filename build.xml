@@ -126,6 +126,23 @@
                 <include name="**" />
             </fileset>
         </copy>
+
+        <!-- Plugins languages -->
+        <copy todir="${www.dir}/administrator/language" overwrite="true">
+            <fileset dir="${discover}/plugins/redshop_product/reddesign/language">
+                <include name="**" />
+            </fileset>
+        </copy>
+        <copy todir="${www.dir}/administrator/language" overwrite="true">
+            <fileset dir="${discover}/plugins/redshop_product_type/reddesign/language">
+                <include name="**" />
+            </fileset>
+        </copy>
+        <copy todir="${www.dir}/administrator/language" overwrite="true">
+            <fileset dir="${discover}/plugins/system/reddesign/language">
+                <include name="**" />
+            </fileset>
+        </copy>
     </target>
 
 </project>
