@@ -41,33 +41,10 @@ class ReddesignHelpersFile
 			return false;
 		}
 
-		// Get a (very!) randomised name
-		if (version_compare(JVERSION, '3.0', 'ge'))
-		{
-			$serverkey = JFactory::getConfig()->get('secret', '');
-		}
-		else
-		{
-			$serverkey = JFactory::getConfig()->getValue('secret', '');
-		}
-
-		$sig = $file['name'] . microtime() . $serverkey;
-
-		if (function_exists('sha256'))
-		{
-			$mangledname = sha256($sig);
-		}
-		elseif (function_exists('sha1'))
-		{
-			$mangledname = sha1($sig);
-		}
-		else
-		{
-			$mangledname = md5($sig);
-		}
+		$mangledName = self::getUniqueName($file['name']);
 
 		// ...and its full path
-		$filepath = JPath::clean(JPATH_SITE . '/media/com_reddesign/' . $destinationFolder . '/' . $mangledname . '.' . $fileExtension);
+		$filepath = JPath::clean(JPATH_SITE . '/media/com_reddesign/' . $destinationFolder . '/' . $mangledName . '.' . $fileExtension);
 
 		// If we have a name clash, abort the upload
 		if (JFile::exists($filepath))
@@ -102,13 +79,50 @@ class ReddesignHelpersFile
 
 		$resultFile = array(
 			'original_filename' => $file['name'],
-			'mangled_filename' => $mangledname . '.' . $fileExtension,
+			'mangled_filename' => $mangledName . '.' . $fileExtension,
 			'mime_type' => $mime,
 			'filepath' => $filepath
 		);
 
 		// Return the file info
 		return $resultFile;
+	}
+
+	/**
+	 * Checks if the file can be uploaded.
+	 *
+	 * @param   string  $name  Additional string you want to put into hash
+	 *
+	 * @return  boolean
+	 */
+	public static function getUniqueName($name = '')
+	{
+		// Get a (very!) randomised name
+		if (version_compare(JVERSION, '3.0', 'ge'))
+		{
+			$serverKey = JFactory::getConfig()->get('secret', '');
+		}
+		else
+		{
+			$serverKey = JFactory::getConfig()->getValue('secret', '');
+		}
+
+		$sig = $name . microtime() . $serverKey;
+
+		if (function_exists('sha256'))
+		{
+			$mangledName = sha256($sig);
+		}
+		elseif (function_exists('sha1'))
+		{
+			$mangledName = sha1($sig);
+		}
+		else
+		{
+			$mangledName = md5($sig);
+		}
+
+		return $mangledName;
 	}
 
 	/**

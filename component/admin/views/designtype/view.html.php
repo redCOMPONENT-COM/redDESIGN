@@ -163,12 +163,21 @@ class ReddesignViewDesigntype extends ReddesignView
 
 				$this->areas = $areas;
 
-				// Production background measures.
-				$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file);
-				$this->productionBgAttributes = $xml->attributes();
+				if (!empty($this->productionBackground) && JFile::exists(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file))
+				{
+					// Production background measures.
+					$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file);
+					$this->productionBgAttributes = $xml->attributes();
 
-				$this->productionBgAttributes->width  = str_replace('px', '', $this->productionBgAttributes->width);
-				$this->productionBgAttributes->height = str_replace('px', '', $this->productionBgAttributes->height);
+					$this->productionBgAttributes->width  = str_replace('px', '', $this->productionBgAttributes->width);
+					$this->productionBgAttributes->height = str_replace('px', '', $this->productionBgAttributes->height);
+				}
+				else
+				{
+					$this->productionBgAttributes = new stdClass;
+					$this->productionBgAttributes->width  = 0;
+					$this->productionBgAttributes->height = 0;
+				}
 
 				// Calculate width and height in the selected unit at the configuration. 1 inch = 25.4 mm
 				switch ($this->unit)

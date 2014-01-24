@@ -19,8 +19,7 @@ $this->designtype_id = $displayData->designtype_id;
 $config = ReddesignEntityConfig::getInstance();
 $bgBackendPreviewWidth = $config->getMaxSVGPreviewAdminWidth();
 
-$returnUrl = JRoute::_(JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds');
-$returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds';
+$returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->designtype_id . '&tab=backgrounds';
 ?>
 
 <form id="backgrounds_form" name="backgrounds" method="post" action="index.php?option=com_reddesign&view=backgrounds">
@@ -30,6 +29,7 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 	<input type="hidden" name="cid[]" id="backgrounds_background_id" value="">
 	<input type="hidden" name="reddesign_designtype_id" id="backgrounds_reddesign_designtype_id" value="<?php echo $this->designtype_id; ?>">
 	<input type="hidden" name="return" id="backgrounds_return" value="<?php echo base64_encode($returnUrl); ?>" />
+	<input type="hidden" name="returnurl" id="backgrounds_return2" value="<?php echo base64_encode($returnUrl); ?>" />
 
 	<?php if (empty($this->items)) : ?>
 		<div class="alert alert-info">
@@ -308,14 +308,8 @@ $returnUrlRemoveBg = JURI::base() . 'index.php?option=com_reddesign&view=designt
 	 */
 	function modifyBg(bgid) {
 		jQuery('#backgrounds_task').val('save');
-		jQuery('#backgrounds_form').
-			append(
-				jQuery('<input/>')
-					.attr('type', 'hidden')
-					.attr('name', 'returnurl')
-					.val('<?php echo base64_encode($returnUrlRemoveBg) ?>')
-			);
 		jQuery('#backgrounds_background_id').val(bgid);
+
 		jQuery('#backgrounds_form').submit();
 	}
 </script>
