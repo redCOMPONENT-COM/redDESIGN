@@ -247,11 +247,11 @@ class ReddesignControllerDesigntype extends RControllerForm
 			{
 				$fontModel = RModel::getAdminInstance('Font', array('ignore_request' => true));
 				$fontType = $fontModel->getItem($area['fontTypeId']);
-				$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/' . $fontType->font_file;
-			}
-			else
-			{
-				$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/fonts/arial.ttf';
+
+				if (JFile::exists(JPATH_SITE . '/media/com_reddesign/fonts/' . $fontType->font_file))
+				{
+					$fontTypeFileLocation = JPATH_ROOT . '/media/com_reddesign/fonts/' . $fontType->font_file;
+				}
 			}
 
 			$areaModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
