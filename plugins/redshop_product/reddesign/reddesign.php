@@ -595,7 +595,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						var previewWidth = ' . $jsWidth . ';
 						var scalingImageForPreviewRatio = ' . $jsRatio . ';
 						var previewHeight = ' . $jsHeight . ';
-						var svg_' . $product->product_id . ' = Snap("#svg_image_' . $i . '");
+						var svg_' . $i . ' = Snap("#svg_image_' . $i . '");
 						Snap.load(
 							"' . $imageUrl . '",
 							function (f) {
