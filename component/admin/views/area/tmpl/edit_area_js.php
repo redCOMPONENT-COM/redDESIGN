@@ -234,7 +234,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			movingRect.attr('x'),
 			movingRect.attr('y'),
 			parseFloat(movingRect.attr('x')) + parseFloat(movingRect.attr('width')),
-			parseFloat(movingRect.attr('x')) + parseFloat(movingRect.attr('height')),
+			parseFloat(movingRect.attr('y')) + parseFloat(movingRect.attr('height')),
 			movingRect.attr('width'),
 			movingRect.attr('height')
 		);
@@ -338,7 +338,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			movingRect.attr("x"),
 			movingRect.attr("y"),
 			parseFloat(movingRect.attr("x")) + parseFloat(movingRect.attr("width")),
-			parseFloat(movingRect.attr("x")) + parseFloat(movingRect.attr("height")),
+			parseFloat(movingRect.attr("y")) + parseFloat(movingRect.attr("height")),
 			movingRect.attr("width"),
 			movingRect.attr("height")
 		);
