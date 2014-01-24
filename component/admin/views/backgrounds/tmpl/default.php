@@ -308,14 +308,8 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 	 */
 	function modifyBg(bgid) {
 		jQuery('#backgrounds_task').val('save');
-		/*jQuery('#backgrounds_form').
-			append(
-				jQuery('<input/>')
-					.attr('type', 'hidden')
-					.attr('name', 'returnurl')
-					.val('<?php echo base64_encode($returnUrl) ?>')
-			);*/
 		jQuery('#backgrounds_background_id').val(bgid);
+
 		jQuery('#backgrounds_form').submit();
 	}
 </script>
