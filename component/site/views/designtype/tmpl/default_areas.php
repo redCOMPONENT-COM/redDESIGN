@@ -169,7 +169,7 @@ if (isset($displayData))
 
 		{RedDesignBreakDesignAreaChooseFontSizeLabel}
 			<?php // Font Size Selection ?>
-			<?php if ($this->item->fontsizer != 'auto' && $this->item->fontsizer != 'auto_chars') : ?>
+			<?php if (($this->item->fontsizer != 'auto' && $this->item->fontsizer != 'auto_chars') && ($area->font_size != '' || $this->item->fontsizer == 'slider')) : ?>
 				<label for="<?php echo 'fontSize' . $area->id; ?>">
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_FONTSIZE'); ?>
 				</label>
@@ -299,7 +299,7 @@ if (isset($displayData))
 		{RedDesignBreakDesignAreaChooseColor}
 			<?php if (empty($area->color_code)) : ?>
 
-				<input type="hidden" name="colorCode<?php echo $area->id ?>" value="000000" id="colorCode<?php echo $area->id ?>">
+				<input type="hidden" name="colorCode<?php echo $area->id ?>" value="#000000" id="colorCode<?php echo $area->id ?>">
 
 			<?php elseif ($area->color_code == 1) : ?>
 
