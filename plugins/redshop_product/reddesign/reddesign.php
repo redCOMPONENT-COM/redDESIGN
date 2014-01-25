@@ -91,7 +91,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		for ($i = 0, $n = count($results); $i < $n; $i++)
 		{
 			$result = $results[$i];
-			$relation[$result->property_id] = $result->reddesign_designtype_id;
+			$relation[$result->property_id] = $result->designtype_id;
 		}
 
 		$script = "
@@ -116,7 +116,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$query = $db->getQuery(true);
 
 		// Create the base select statement.
-		$query->select('reddesign_designtype_id, property_id')
+		$query->select('designtype_id, property_id')
 			->from($db->quoteName('#__reddesign_attribute_mapping'))
 			->where($db->quoteName('product_id') . ' = ' . (int) $productId);
 
@@ -176,7 +176,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			// Get related design type IDs. They are related because multiple design types can be assigned to a redSHOP product.
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_designtype_id'));
+			$query->select($db->quoteName('designtype_id'));
 			$query->from($db->quoteName('#__reddesign_product_mapping'));
 			$query->where($db->quoteName('product_id') . ' = ' . $data->product_id);
 			$db->setQuery($query);
@@ -670,7 +670,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 						var areas = rootSnapSvgObject.select("#areaBoxesLayer");
 						values["svgImags"] = encodeURIComponent(areas.innerSVG());
-						values["designtype_id"] = jQuery("#reddesign_designtype_id").val();
+						values["designtype_id"] = jQuery("#designtype_id").val();
 						values["svgWidth"] = rootSnapSvgObject.attr("width");
 						values["svgHeight"] = rootSnapSvgObject.attr("height");
 

@@ -70,7 +70,7 @@ $productId = $input->getInt('pid', 0);
 	<input type="hidden" name="task" id="task" value="">
 	<input type="hidden" name="designAreas" id="designAreas" value="">
 	<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
-	<input type="hidden" id="reddesign_designtype_id" name="reddesign_designtype_id" value="<?php echo $this->item->id; ?>">
+	<input type="hidden" id="designtype_id" name="designtype_id" value="<?php echo $this->item->id; ?>">
 {RedDesignBreakFormBegin}
 
 <?php // Part 2 - Select Backgrounds ?>

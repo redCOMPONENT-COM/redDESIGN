@@ -34,6 +34,22 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		parent::__construct($subject, $config);
 
 		$this->loadLanguage();
+
+		// Register component prefix
+		JLoader::registerPrefix('Reddesign', JPATH_ADMINISTRATOR . '/components/com_reddesign');
+
+		// Register library prefix.
+		JLoader::registerPrefix('Reddesign', JPATH_LIBRARIES . '/reddesign');
+
+		JLoader::import('redcore.bootstrap');
+
+		JFactory::getApplication()->input->set('redcore', true);
+
+		// Load bootstrap + fontawesome
+		JHtml::_('rbootstrap.framework');
+
+		RHelperAsset::load('component.js', 'redcore');
+		RHelperAsset::load('component.min.css', 'redcore');
 	}
 
 	/**
@@ -60,20 +76,12 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			$db = JFactory::getDbo();
 
 			// Get design types.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName(array('id', 'name')));
-			$query->from($db->quoteName('#__reddesign_designtypes'));
-			$query->order($db->quoteName('name'));
-			$db->setQuery($query);
-			$designTypes = $db->loadObjectList();
+			$designTypesModel = RModel::getAdminInstance('Designtypes', array('ignore_request' => true), 'com_reddesign');
+			$designTypesModel->setState('list.ordering', 'name');
+			$designTypes = $designTypesModel->getItems();
 
 			// Get selected design type.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_designtype_id'));
-			$query->from($db->quoteName('#__reddesign_product_mapping'));
-			$query->where($db->quoteName('product_id') . ' = ' . $product_data->product_id);
-			$db->setQuery($query);
-			$selectedDesignTypes = $db->loadResult();
+			$selectedDesignTypes = $designTypesModel->getProductDesignTypes($product_data->product_id);
 
 			$designTypeOptions = array();
 			$designTypeOptions[] = JHtml::_('select.option', '0', JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_SELECT'));
@@ -113,35 +121,11 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	 */
 	public function onAfterProductSave($row, $isNew)
 	{
-		$app = JFactory::getApplication();
-		$db = JFactory::getDbo();
+		$reddesignDesigntypeIds = JFactory::getApplication()->input->get('designType', array(), 'ARRAY');
 
-		$reddesignDesigntypeIds = $app->input->get('designType', array(), 'ARRAY');
-		$reddesignDesigntypeIds = implode(',', $reddesignDesigntypeIds);
+		$designTypesModel = RModel::getAdminInstance('Designtypes', array('ignore_request' => true), 'com_reddesign');
 
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('reddesign_designtype_id', 'product_id')));
-		$query->from($db->quoteName('#__reddesign_product_mapping'));
-		$query->where($db->quoteName('product_id') . ' = ' . $row->product_id);
-		$db->setQuery($query);
-		$map = $db->loadObject();
-
-		if (empty($map))
-		{
-			$map = new JObject;
-			$map->product_id = $row->product_id;
-			$map->reddesign_designtype_id = $reddesignDesigntypeIds;
-
-			return $db->insertObject('#__reddesign_product_mapping', $map);
-		}
-		else
-		{
-			$map->reddesign_designtype_id = $reddesignDesigntypeIds;
-
-			return $db->updateObject('#__reddesign_product_mapping', $map, 'product_id');
-		}
-
-		return null;
+		return $designTypesModel->saveProductDesignTypes($row->product_id, $reddesignDesigntypeIds);
 	}
 
 	/**
@@ -164,7 +148,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 			// Get selected design type.
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_designtype_id'))
+			$query->select($db->quoteName('designtype_id'))
 				->from($db->quoteName('#__reddesign_attribute_mapping'))
 				->where($db->quoteName('product_id') . ' = ' . (int) $product->product_id)
 				->where($db->quoteName('property_id') . ' = ' . (int) $property->property_id);
@@ -183,7 +167,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 			// Get selected design type.
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_designtype_id'))
+			$query->select($db->quoteName('designtype_id'))
 				->from($db->quoteName('#__reddesign_product_mapping'))
 				->where($db->quoteName('product_id') . ' = ' . (int) $product->product_id);
 			$db->setQuery($query);
@@ -268,7 +252,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 			// Get selected design type.
 			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_designtype_id'))
+			$query->select($db->quoteName('designtype_id'))
 				->from($db->quoteName('#__reddesign_product_mapping'))
 				->where($db->quoteName('product_id') . ' = ' . (int) $product->product_id);
 			$db->setQuery($query);
@@ -341,7 +325,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		{
 			// Create the base insert statement.
 			$query->insert($db->quoteName('#__reddesign_attribute_mapping'))
-				->columns(array($db->quoteName('reddesign_designtype_id'), $db->quoteName('product_id'), $db->quoteName('property_id')))
+				->columns(array($db->quoteName('designtype_id'), $db->quoteName('product_id'), $db->quoteName('property_id')))
 				->values((int) $property['redDesignBackground'] . ', ' . (int) $product->product_id . ', ' . (int) $propertyAfterSave->property_id);
 
 			// Set the query and execute the insert.
