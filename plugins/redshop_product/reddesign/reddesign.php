@@ -70,9 +70,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			return;
 		}
 
-		$input         = JFactory::getApplication()->input;
-		$view          = $input->get('view');
-		$document      = JFactory::getDocument();
+		$input    = JFactory::getApplication()->input;
+		$view     = $input->get('view');
+		$document = JFactory::getDocument();
 
 		if ($view != 'product')
 		{
@@ -201,11 +201,13 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$displayData->config = ReddesignEntityConfig::getInstance();
 			$displayData->relatedDesignTypes = $productRelatedDesigntypeIds;
 
-			$designtypesModel = RModel::getFrontInstance('Designtypes', array(), 'com_reddesign');
-			$designtypesModel->setId($designTypeId);
-			$tmpItems = $designtypesModel->getItems();
-			$displayData->item = $tmpItems[0];
-			$displayData->backgrounds = $designtypesModel->getBackgrounds();
+			$designTypeModel = RModel::getAdminInstance('Designtype', array(), 'com_reddesign');
+			$designTypeModel->setState('id', $designTypeId);
+			$displayData->item = $designTypeModel->getItem();
+
+			$backgroundModel = RModel::getAdminInstance('Backgrounds', array(), 'com_reddesign');
+			$backgroundModel->setState('designtype_id', $designTypeId);
+			$displayData->backgrounds = $backgroundModel->getItems();
 
 			foreach ($displayData->backgrounds as $background)
 			{
@@ -923,16 +925,15 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	public function prepareDesignTypeData($redDesignData)
 	{
 		// Get design type data.
-		$designtypesModel = RModel::getFrontInstance('Designtypes', array(), 'com_reddesign');
-		$designtypesModel->setId($redDesignData['id']);
-		$designTypes = $designtypesModel->getItems();
-		$designType = $designTypes[0];
+		$designTypeModel = RModel::getAdminInstance('Designtype', array(), 'com_reddesign');
+		$designTypeModel->setState('id', $redDesignData['id']);
+		$designType = $designTypeModel->getItem();
 
 		$data = array();
 		$data['designType'] = $designType;
 
 		// Get Background Data
-		$data['designBackground'] = $designtypesModel->getProductionBackground();
+		$data['designBackground'] = $designTypeModel->getProductionBackground($redDesignData['id']);
 
 		// Get designAreas
 		$data['designAreas'] = array();
