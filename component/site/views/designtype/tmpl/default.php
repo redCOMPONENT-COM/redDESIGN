@@ -143,30 +143,31 @@ $productId = $input->getInt('pid', 0);
 			rootSnapSvgObject = Snap("#mainSvgImage");
 			<?php if (!empty($this->defaultPreviewBg->svg_file)) : ?>
 
-			Snap.load(
-				"<?php echo $imageUrl; ?>",
-				function (f) {
-					var styleDeclaration = Snap.parse('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>');
-					rootSnapSvgObject.append(styleDeclaration);
-					rootSnapSvgObject.append(f);
+				Snap.load(
+					"<?php echo $imageUrl; ?>",
+					function (f) {
+						var styleDeclaration = Snap.parse('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>');
+						rootSnapSvgObject.append(styleDeclaration);
+						rootSnapSvgObject.append(f);
 
-					// Set preview size at loaded file.
-					var loadedSvgFromFile = jQuery("#mainSvgImage").find("svg")[0];
-					loadedSvgFromFile.setAttribute("width", previewWidth);
-					loadedSvgFromFile.setAttribute("height", previewHeight);
-					loadedSvgFromFile.setAttribute("id", "svgCanvas");
+						// Set preview size at loaded file.
+						var loadedSvgFromFile = jQuery("#mainSvgImage").find("svg")[0];
+						loadedSvgFromFile.setAttribute("width", previewWidth);
+						loadedSvgFromFile.setAttribute("height", previewHeight);
+						loadedSvgFromFile.setAttribute("id", "svgCanvas");
 
-					// Set preview size at svg container element.
-					var rootElement = document.getElementById("mainSvgImage");
-					rootElement.setAttribute("width", previewWidth);
-					rootElement.setAttribute("height", previewHeight);
-					rootElement.setAttribute("overflow", "hidden");
+						// Set preview size at svg container element.
+						var rootElement = document.getElementById("mainSvgImage");
+						rootElement.setAttribute("width", previewWidth);
+						rootElement.setAttribute("height", previewHeight);
+						rootElement.setAttribute("overflow", "hidden");
 
-					rootSnapSvgObject.group().node.id = "areaBoxesLayer";
+						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
 
-					customize(0);
-				}
-			);
+						customize(0);
+					}
+				);
+
 			<?php endif; ?>
 
 			// Correct radio button selection.

@@ -623,7 +623,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 								jQuery("#areaBoxesLayer' . $i . ' text").each(function (index){
 									var fontSize = parseFloat(jQuery(this).attr("font-size"));
 									fontSize = fontSize * scalingImageForPreviewRatio;
-									jQuery(this).attr("font-size", fontSize + "' . $fontUnit . ");
+									jQuery(this).attr("font-size", fontSize + "' . $fontUnit . '");
 
 									var xPos = parseFloat(jQuery(this).attr("x"));
 									xPos = xPos * scalingImageForPreviewRatio;
