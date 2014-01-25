@@ -19,14 +19,31 @@
 		<field name="unit"
 			   type="list"
 			   size="1"
-			   default=""
+			   default="px"
 			   label="COM_REDDESIGN_CONFIG_UNIT"
 			   description="COM_REDDESIGN_CONFIG_UNIT_DESC"
 		>
-			<option value="px">px</option>
-			<option value="mm">mm</option>
-			<option value="cm">cm</option>
+			<option value="px">COM_REDDESIGN_CONFIG_UNIT_PIXEL_LABEL</option>
+			<option value="mm">COM_REDDESIGN_CONFIG_UNIT_MILLIMETER_LABEL</option>
+			<option value="cm">COM_REDDESIGN_CONFIG_UNIT_CENTIMETER_LABEL</option>
 		</field>
+
+        <field name="fontUnit"
+               type="list"
+               size="1"
+               default="px"
+               label="COM_REDDESIGN_CONFIG_FONT_UNIT_LABEL"
+               description="COM_REDDESIGN_CONFIG_FONT_UNIT_LABEL_DESC"
+                >
+            <option value="%">COM_REDDESIGN_CONFIG_UNIT_PERCENTAGE_LABEL</option>
+            <option value="in">COM_REDDESIGN_CONFIG_UNIT_INCH_LABEL</option>
+            <option value="cm">COM_REDDESIGN_CONFIG_UNIT_CENTIMETER_LABEL</option>
+            <option value="mm">COM_REDDESIGN_CONFIG_UNIT_MILLIMETER_LABEL</option>
+            <option value="em">COM_REDDESIGN_CONFIG_UNIT_EMS_LABEL</option>
+            <option value="pt">COM_REDDESIGN_CONFIG_UNIT_POINT_LABEL</option>
+            <option value="pc">COM_REDDESIGN_CONFIG_UNIT_PICA_LABEL</option>
+            <option value="px">COM_REDDESIGN_CONFIG_UNIT_PIXEL_LABEL</option>
+        </field>
 
 		<field name="source_dpi"
 			   id="source_dpi"

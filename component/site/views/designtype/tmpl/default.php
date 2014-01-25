@@ -30,22 +30,11 @@ $imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPr
 $autoCustomize = $this->config->getAutoCustomize();
 $previewWidth = $this->config->getMaxSVGPreviewSiteWidth();
 $unit = $this->config->getUnit();
+$fontUnit = $this->config->getFontUnit();
 $sourceDpi = $this->config->getSourceDpi();
 
-// Calculate width and height in the selected unit at the configuration. 1 inch = 25.4 mm
-switch ($this->unit)
-{
-	case 'mm':
-		$unitConversionRatio = $sourceDpi / 25.4;
-		break;
-	case 'cm':
-		$unitConversionRatio = $sourceDpi / 2.54;
-		break;
-	case 'px':
-	default:
-		$unitConversionRatio = '1';
-		break;
-}
+$unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($this->unit, $sourceDpi);
+
 if (isset($displayData))
 {
 	$this->unitConversionRatio = $displayData->unitConversionRatio = $unitConversionRatio;
@@ -73,7 +62,7 @@ $productId = $input->getInt('pid', 0);
 	<input type="hidden" id="reddesign_designtype_id" name="reddesign_designtype_id" value="<?php echo $this->item->id; ?>">
 {RedDesignBreakFormBegin}
 
-<?php // Part 2 - Select Backgrounds ?>
+	<?php // Part 2 - Select Backgrounds ?>
 {RedDesignBreakBackgrounds}
 	<div class="row-fluid">
 		<div class="well span12">
@@ -84,7 +73,7 @@ $productId = $input->getInt('pid', 0);
 	</div>
 {RedDesignBreakBackgrounds}
 
-<?php // Part 3 - Design Image ?>
+	<?php // Part 3 - Design Image ?>
 {RedDesignBreakDesignImage}
 	<div id="background-container">
 
@@ -101,14 +90,14 @@ $productId = $input->getInt('pid', 0);
 	</div>
 {RedDesignBreakDesignImage}
 
-<?php // Part 4 - "Customize it!" Button (Controlled by configuration parameters.) ?>
+	<?php // Part 4 - "Customize it!" Button (Controlled by configuration parameters.) ?>
 {RedDesignBreakButtonCustomizeIt}
 	<div class="customize-it-btn row-fluid">
 		<?php if (!empty($this->productionBackgroundAreas) && ($autoCustomize == 0 || $autoCustomize == 2) ) : ?>
 			<button type="button"
-					class="btn btn-success"
-					data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>"
-					id="customizeDesign"
+			        class="btn btn-success"
+			        data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>"
+			        id="customizeDesign"
 				>
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE'); ?>
 			</button>
@@ -117,7 +106,7 @@ $productId = $input->getInt('pid', 0);
 {RedDesignBreakButtonCustomizeIt}
 
 
-<?php // Part 5 - Areas Begin ?>
+	<?php // Part 5 - Areas Begin ?>
 {RedDesignBreakDesignAreas}
 	<div class="row-fluid">
 		<div class="well span12">
@@ -126,7 +115,7 @@ $productId = $input->getInt('pid', 0);
 	</div>
 {RedDesignBreakDesignAreas}
 
-<?php // Part 6 - Form Ends ?>
+	<?php // Part 6 - Form Ends ?>
 {RedDesignBreakFormEndsAndJS}
 </form>
 
@@ -137,6 +126,7 @@ $productId = $input->getInt('pid', 0);
 	 * Initiate PX to Unit conversation variables
 	 */
 	var unit = "<?php echo $unit;?>";
+	var fontUnit = "<?php echo $fontUnit;?>";
 	var imageWidth  = parseFloat("<?php echo (!empty($this->defaultPreviewBgAttributes->width) ? $this->defaultPreviewBgAttributes->width : ''); ?>");
 	var imageHeight = parseFloat("<?php echo (!empty($this->defaultPreviewBgAttributes->height) ? $this->defaultPreviewBgAttributes->height : ''); ?>");
 	var previewWidth  = parseFloat("<?php echo $previewWidth; ?>");
@@ -177,6 +167,7 @@ $productId = $input->getInt('pid', 0);
 						customize(0);
 					}
 				);
+
 			<?php endif; ?>
 
 			// Correct radio button selection.
@@ -184,14 +175,14 @@ $productId = $input->getInt('pid', 0);
 
 			// Customize function.
 			jQuery(document).on("click", "#customizeDesign", function () {
-					// Add spinner to button.
-					jQuery(this).button("loading");
-					setTimeout(function() {
-							jQuery(this).button("reset");
-						},
-						3000
-					);
-					customize(1);
+				// Add spinner to button.
+				jQuery(this).button("loading");
+				setTimeout(function() {
+						jQuery(this).button("reset");
+					},
+					3000
+				);
+				customize(1);
 			});
 
 			jQuery(document).on("keyup", ".reddesign-form .textAreaClass", function() {
@@ -331,7 +322,7 @@ $productId = $input->getInt('pid', 0);
 				else
 					fontSizeValue = fontSize[0];
 
-				textElement.attr('font-size', fontSizeValue);
+				textElement.attr('font-size', fontSizeValue + fontUnit);
 				textElement.attr('y', parseFloat(areasContainer[areaId]['y1']) + ((parseFloat(fontSizeValue) * scalingImageForPreviewRatio)));
 			}
 			if (textAlign)
@@ -448,13 +439,13 @@ $productId = $input->getInt('pid', 0);
 						+ ' y="' + (y1 + (parseFloat(fontSizeValue) * scalingImageForPreviewRatio)) + '"'
 						+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
 
-			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
+				rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
 				design.areas.push({
 					"id" : 			"<?php echo $area->id; ?>",
 					"textArea" :	jQuery("#textArea_<?php echo $area->id; ?>").val(),
 					"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
 					"fontColor" :	fontColor,
-					"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val(),
+					"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val() + fontUnit,
 					"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
 					"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
 					"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()

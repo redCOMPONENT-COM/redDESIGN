@@ -487,6 +487,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	public function changeCartOrderItemImage(&$cart, &$product_image, $product, $i)
 	{
 		$db = JFactory::getDbo();
+		$config = ReddesignEntityConfig::getInstance();
+		$fontUnit = $config->getFontUnit();
 
 		// Get product type
 		$query = $db->getQuery(true);
@@ -621,7 +623,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 								jQuery("#areaBoxesLayer' . $i . ' text").each(function (index){
 									var fontSize = parseFloat(jQuery(this).attr("font-size"));
 									fontSize = fontSize * scalingImageForPreviewRatio;
-									jQuery(this).attr("font-size", fontSize + "px");
+									jQuery(this).attr("font-size", fontSize + "' . $fontUnit . '");
 
 									var xPos = parseFloat(jQuery(this).attr("x"));
 									xPos = xPos * scalingImageForPreviewRatio;
