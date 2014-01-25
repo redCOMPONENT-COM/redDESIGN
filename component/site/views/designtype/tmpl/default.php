@@ -167,7 +167,6 @@ $productId = $input->getInt('pid', 0);
 						customize(0);
 					}
 				);
-
 			<?php endif; ?>
 
 			// Correct radio button selection.
@@ -406,8 +405,9 @@ $productId = $input->getInt('pid', 0);
 			};
 			<?php foreach($this->productionBackgroundAreas as $area) :?>
 
-				var fontColor = jQuery("input[name='colorCode<?php echo $area->id; ?>']").val();
-				fontColor = fontColor.replace("#", "");
+				var fontColor = "000000";
+				if (jQuery("#colorCode<?php echo $area->id; ?>").length > 0)
+					fontColor = jQuery("#colorCode<?php echo $area->id; ?>").val().replace("#", "");
 
 				var x1 = parseFloat(<?php echo $area->x1_pos; ?>) * scalingImageForPreviewRatio;
 				var y1 = parseFloat(<?php echo $area->y1_pos; ?>) * scalingImageForPreviewRatio;
@@ -424,12 +424,15 @@ $productId = $input->getInt('pid', 0);
 				areasContainer[<?php echo $area->id; ?>]['width'] = width;
 				areasContainer[<?php echo $area->id; ?>]['height'] = height;
 
-				var fontSize = jQuery("#fontSize<?php echo $area->id; ?>").val().split(":");
-				var fontSizeValue = 0;
-				if (fontSize.length > 1)
-					fontSizeValue = fontSize[1];
-				else
-					fontSizeValue = fontSize[0];
+				var fontSizeValue = 12;
+				if (jQuery("#fontSize<?php echo $area->id; ?>").length > 0)
+				{
+					var fontSize = jQuery("#fontSize<?php echo $area->id; ?>").val().split(":");
+					if (fontSize.length > 1)
+						fontSizeValue = fontSize[1];
+					else
+						fontSizeValue = fontSize[0];
+				}
 
 				var textElement = Snap.parse(
 					'<text id="areaTextElement_<?php echo $area->id; ?>" fill="#' + fontColor
@@ -439,7 +442,7 @@ $productId = $input->getInt('pid', 0);
 						+ ' y="' + (y1 + (parseFloat(fontSizeValue) * scalingImageForPreviewRatio)) + '"'
 						+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
 
-				rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
+			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
 				design.areas.push({
 					"id" : 			"<?php echo $area->id; ?>",
 					"textArea" :	jQuery("#textArea_<?php echo $area->id; ?>").val(),
@@ -451,8 +454,11 @@ $productId = $input->getInt('pid', 0);
 					"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
 				});
 
-				var textareacount = jQuery("#textArea_<?php echo $area->id; ?>").val().replace(/ /g,'').length;
-				jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
+				if (jQuery("#textArea_<?php echo $area->id; ?>").length > 0)
+				{
+					var textareacount = jQuery("#textArea_<?php echo $area->id; ?>").val().replace(/ /g,'').length;
+					jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
+				}
 
 			<?php endforeach; ?>
 		}
