@@ -405,53 +405,53 @@ $productId = $input->getInt('pid', 0);
 			};
 			<?php foreach($this->productionBackgroundAreas as $area) :?>
 
-			var fontColor = jQuery("input[name='colorCode<?php echo $area->id; ?>']").val();
-			fontColor = fontColor.replace("#", "");
+				var fontColor = jQuery("input[name='colorCode<?php echo $area->id; ?>']").val();
+				fontColor = fontColor.replace("#", "");
 
-			var x1 = parseFloat(<?php echo $area->x1_pos; ?>) * scalingImageForPreviewRatio;
-			var y1 = parseFloat(<?php echo $area->y1_pos; ?>) * scalingImageForPreviewRatio;
-			var x2 = parseFloat(<?php echo $area->x2_pos; ?>) * scalingImageForPreviewRatio;
-			var y2 = parseFloat(<?php echo $area->y2_pos; ?>) * scalingImageForPreviewRatio;
-			var width = x2 - x1;
-			var height = y2 - y1;
+				var x1 = parseFloat(<?php echo $area->x1_pos; ?>) * scalingImageForPreviewRatio;
+				var y1 = parseFloat(<?php echo $area->y1_pos; ?>) * scalingImageForPreviewRatio;
+				var x2 = parseFloat(<?php echo $area->x2_pos; ?>) * scalingImageForPreviewRatio;
+				var y2 = parseFloat(<?php echo $area->y2_pos; ?>) * scalingImageForPreviewRatio;
+				var width = x2 - x1;
+				var height = y2 - y1;
 
-			areasContainer[<?php echo $area->id; ?>] = new Array();
-			areasContainer[<?php echo $area->id; ?>]['x1'] = x1;
-			areasContainer[<?php echo $area->id; ?>]['y1'] = y1;
-			areasContainer[<?php echo $area->id; ?>]['x2'] = x2;
-			areasContainer[<?php echo $area->id; ?>]['y2'] = y2;
-			areasContainer[<?php echo $area->id; ?>]['width'] = width;
-			areasContainer[<?php echo $area->id; ?>]['height'] = height;
+				areasContainer[<?php echo $area->id; ?>] = new Array();
+				areasContainer[<?php echo $area->id; ?>]['x1'] = x1;
+				areasContainer[<?php echo $area->id; ?>]['y1'] = y1;
+				areasContainer[<?php echo $area->id; ?>]['x2'] = x2;
+				areasContainer[<?php echo $area->id; ?>]['y2'] = y2;
+				areasContainer[<?php echo $area->id; ?>]['width'] = width;
+				areasContainer[<?php echo $area->id; ?>]['height'] = height;
 
-			var fontSize = jQuery("#fontSize<?php echo $area->id; ?>").val().split(":");
-			var fontSizeValue = 0;
-			if (fontSize.length > 1)
-				fontSizeValue = fontSize[1];
-			else
-				fontSizeValue = fontSize[0];
+				var fontSize = jQuery("#fontSize<?php echo $area->id; ?>").val().split(":");
+				var fontSizeValue = 0;
+				if (fontSize.length > 1)
+					fontSizeValue = fontSize[1];
+				else
+					fontSizeValue = fontSize[0];
 
-			var textElement = Snap.parse(
-				'<text id="areaTextElement_<?php echo $area->id; ?>" fill="#' + fontColor
-					+ '" font-family="' + jQuery("#fontArea<?php echo $area->id; ?>").val() + '"'
-					+ ' font-size="' + fontSizeValue + 'px"'
-					+ ' x="' + (x1) + '"'
-					+ ' y="' + (y1 + (parseFloat(fontSizeValue) * scalingImageForPreviewRatio)) + '"'
-					+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
+				var textElement = Snap.parse(
+					'<text id="areaTextElement_<?php echo $area->id; ?>" fill="#' + fontColor
+						+ '" font-family="' + jQuery("#fontArea<?php echo $area->id; ?>").val() + '"'
+						+ ' font-size="' + fontSizeValue + 'px"'
+						+ ' x="' + (x1) + '"'
+						+ ' y="' + (y1 + (parseFloat(fontSizeValue) * scalingImageForPreviewRatio)) + '"'
+						+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
 
-			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
-			design.areas.push({
-				"id" : 			"<?php echo $area->id; ?>",
-				"textArea" :	jQuery("#textArea_<?php echo $area->id; ?>").val(),
-				"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-				"fontColor" :	fontColor,
-				"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val() + fontUnit,
-				"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-				"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
-				"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
-			});
+				rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
+				design.areas.push({
+					"id" : 			"<?php echo $area->id; ?>",
+					"textArea" :	jQuery("#textArea_<?php echo $area->id; ?>").val(),
+					"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
+					"fontColor" :	fontColor,
+					"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val() + fontUnit,
+					"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
+					"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
+					"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
+				});
 
-			var textareacount = jQuery("#textArea_<?php echo $area->id; ?>").val().replace(/ /g,'').length;
-			jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
+				var textareacount = jQuery("#textArea_<?php echo $area->id; ?>").val().replace(/ /g,'').length;
+				jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
 
 			<?php endforeach; ?>
 		}
