@@ -224,18 +224,7 @@ class ReddesignControllerDesigntype extends RControllerForm
 		// Scaling ratio.
 		$ratio = $previewImageSize[0] / $imageWidth;
 
-		switch ($unit)
-		{
-			case 'cm':
-				$unitToPx = '28.346456514';
-				break;
-			case 'mm':
-				$unitToPx = '2.834645651';
-				break;
-			default:
-				$unitToPx = '1';
-				break;
-		}
+		$unitToPx = ReddesignHelpersSvg::getUnitToPixelsRatio($unit);
 
 		// Default DPI is 72.
 		$pdfLeftMargin = $params->get('productionFilePadding', 10) * $unitToPx;

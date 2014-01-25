@@ -160,7 +160,17 @@ final class ReddesignEntityConfig
 	 */
 	public function getUnit()
 	{
-		return $this->getString('unit');
+		return $this->getString('unit', 'px');
+	}
+
+	/**
+	 * Get the font unit.
+	 *
+	 * @return  string  The font unit
+	 */
+	public function getFontUnit()
+	{
+		return $this->getString('fontUnit', 'px');
 	}
 
 	/**

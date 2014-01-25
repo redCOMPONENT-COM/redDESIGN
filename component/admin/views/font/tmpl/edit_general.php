@@ -19,7 +19,9 @@ JHtml::_('behavior.framework');
 			</label>
 
 			<div class="controls">
-				<span style="font-family: '<?php echo $this->item->name; ?>', Arial; font-size:30px;">Lorem ipsum</span>
+				<span style="font-family: '<?php echo $this->item->name; ?>', Arial; font-size:30px;">
+					<?php echo $this->configuration->getFontPreviewText(); ?>
+				</span>
 			</div>
 		</div>
 	<?php else : ?>

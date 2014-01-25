@@ -56,6 +56,14 @@ JHtml::_('rjquery.chosen', 'select');
 			</div>
 			<div class="control-group">
 				<div class="control-label">
+					<?php echo $this->form->getLabel('fontUnit'); ?>
+				</div>
+				<div class="controls">
+					<?php echo $this->form->getInput('fontUnit'); ?>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="control-label">
 					<?php echo $this->form->getLabel('source_dpi'); ?>
 				</div>
 				<div class="controls">
