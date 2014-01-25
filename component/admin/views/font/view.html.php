@@ -41,6 +41,13 @@ class ReddesignViewFont extends ReddesignView
 	protected $displaySidebar = false;
 
 	/**
+	 * Application configuration
+	 *
+	 * @var  boolean
+	 */
+	protected $configuration = false;
+
+	/**
 	 * @var array
 	 */
 	public $typographies = null;
@@ -56,6 +63,8 @@ class ReddesignViewFont extends ReddesignView
 	{
 		$this->form = $this->get('Form');
 		$this->item = $this->get('Item');
+
+		$this->configuration = ReddesignEntityConfig::getInstance();
 
 		if ($this->item->id > 0)
 		{

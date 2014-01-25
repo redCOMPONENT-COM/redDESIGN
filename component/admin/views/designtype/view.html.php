@@ -179,20 +179,7 @@ class ReddesignViewDesigntype extends ReddesignView
 					$this->productionBgAttributes->height = 0;
 				}
 
-				// Calculate width and height in the selected unit at the configuration. 1 inch = 25.4 mm
-				switch ($this->unit)
-				{
-					case 'mm':
-						$this->unitConversionRatio = $this->sourceDpi / 25.4;
-						break;
-					case 'cm':
-						$this->unitConversionRatio = $this->sourceDpi / 2.54;
-						break;
-					case 'px':
-					default:
-						$this->unitConversionRatio = '1';
-						break;
-				}
+				$this->unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($this->unit, $this->sourceDpi);
 
 				$this->inputFieldOptions = array(
 					JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTBOX')),
