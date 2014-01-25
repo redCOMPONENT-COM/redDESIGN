@@ -465,10 +465,9 @@ $productId = $input->getInt('pid', 0);
 						"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
 					});
 
-				var textareacount = 0;
 				if (jQuery("#textArea_<?php echo $area->id; ?>").length > 0)
 				{
-					textareacount = jQuery("#textArea_<?php echo $area->id; ?>").val().replace(/ /g,'').length;
+					var textareacount = jQuery("#textArea_<?php echo $area->id; ?>").val().replace(/ /g,'').length;
 					jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
 				}
 
