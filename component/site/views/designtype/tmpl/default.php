@@ -60,10 +60,10 @@ $productId = $input->getInt('pid', 0);
 	<input type="hidden" name="designAreas" id="designAreas" value="">
 	<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
 	<input type="hidden" id="reddesign_designtype_id" name="reddesign_designtype_id" value="<?php echo $this->item->id; ?>">
-	{RedDesignBreakFormBegin}
+{RedDesignBreakFormBegin}
 
 	<?php // Part 2 - Select Backgrounds ?>
-	{RedDesignBreakBackgrounds}
+{RedDesignBreakBackgrounds}
 	<div class="row-fluid">
 		<div class="well span12">
 			<?php
@@ -71,10 +71,10 @@ $productId = $input->getInt('pid', 0);
 			?>
 		</div>
 	</div>
-	{RedDesignBreakBackgrounds}
+{RedDesignBreakBackgrounds}
 
 	<?php // Part 3 - Design Image ?>
-	{RedDesignBreakDesignImage}
+{RedDesignBreakDesignImage}
 	<div id="background-container">
 
 		<div id="svgContainer">
@@ -88,10 +88,10 @@ $productId = $input->getInt('pid', 0);
 		</div>
 
 	</div>
-	{RedDesignBreakDesignImage}
+{RedDesignBreakDesignImage}
 
 	<?php // Part 4 - "Customize it!" Button (Controlled by configuration parameters.) ?>
-	{RedDesignBreakButtonCustomizeIt}
+{RedDesignBreakButtonCustomizeIt}
 	<div class="customize-it-btn row-fluid">
 		<?php if (!empty($this->productionBackgroundAreas) && ($autoCustomize == 0 || $autoCustomize == 2) ) : ?>
 			<button type="button"
@@ -103,20 +103,20 @@ $productId = $input->getInt('pid', 0);
 			</button>
 		<?php endif; ?>
 	</div>
-	{RedDesignBreakButtonCustomizeIt}
+{RedDesignBreakButtonCustomizeIt}
 
 
 	<?php // Part 5 - Areas Begin ?>
-	{RedDesignBreakDesignAreas}
+{RedDesignBreakDesignAreas}
 	<div class="row-fluid">
 		<div class="well span12">
 			<?php echo RLayoutHelper::render('default_areas', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl'); ?>
 		</div>
 	</div>
-	{RedDesignBreakDesignAreas}
+{RedDesignBreakDesignAreas}
 
 	<?php // Part 6 - Form Ends ?>
-	{RedDesignBreakFormEndsAndJS}
+{RedDesignBreakFormEndsAndJS}
 </form>
 
 <script type="text/javascript">
