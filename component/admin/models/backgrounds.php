@@ -54,12 +54,12 @@ class ReddesignModelBackgrounds extends RModelList
 	 *
 	 * @return  void
 	 */
-	protected function populateState($ordering = null, $direction = null)
+	protected function populateState($ordering = 'b.name', $direction = 'asc')
 	{
 		$filterDesignTypeId = $this->getUserStateFromRequest($this->context . '.filter_designtype_id', 'filter_designtype_id');
 		$this->setState('designtype_id', $filterDesignTypeId);
 
-		parent::populateState('b.name', 'asc');
+		parent::populateState($ordering, $direction);
 	}
 
 	/**

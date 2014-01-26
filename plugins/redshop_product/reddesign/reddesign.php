@@ -171,26 +171,40 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		{
 			$app = JFactory::getApplication();
 			$db = JFactory::getDbo();
-
-			$designTypesModel = RModel::getAdminInstance('Designtypes', array(), 'com_reddesign');
-			$designTypesProductMapping = $designTypesModel->getProductDesignTypesMapping($data->product_id);
-
 			$designTypeId = $app->input->getInt('designtype_id', null);
+
+			$designTypesModel = RModel::getAdminInstance('Designtypes', array('ignore_request' => true), 'com_reddesign');
+			$designTypesProductMapping = $designTypesModel->getProductDesignTypesMapping($data->product_id);
 
 			if (empty($designTypeId))
 			{
 				$designTypeId = $designTypesProductMapping->default_designtype_id;
 			}
 
-			$displayData = new stdClass;
+			// List of variables passed to the view.
+			$displayData                             = new stdClass;
+			$displayData->config                     = null;
+			$displayData->item                       = null;
+			$displayData->relatedDesignTypeIds       = null;
+			$displayData->backgrounds                = null;
+			$displayData->defaultPreviewBg           = null;
+			$displayData->productionBackground       = null;
+			$displayData->defaultPreviewBgAttributes = null;
+			$displayData->fonts                      = null;
+			$displayData->imageSize                  = null;
+			$displayData->productionBackgroundAreas  = null;
+			$displayData->selectedFontsDeclaration   = null;
+
+			// Load values...
+
 			$displayData->config = ReddesignEntityConfig::getInstance();
-			$displayData->relatedDesignTypes = explode(',', $designTypesProductMapping->related_designtype_ids);
 
-			$designTypeModel = RModel::getAdminInstance('Designtype', array(), 'com_reddesign');
-			$designTypeModel->setState('id', $designTypeId);
-			$displayData->item = $designTypeModel->getItem();
+			$designTypeModel = RModel::getAdminInstance('Designtype', array('ignore_request' => true), 'com_reddesign');
+			$displayData->item = $designTypeModel->getItem($designTypeId);
 
-			$backgroundModel = RModel::getAdminInstance('Backgrounds', array(), 'com_reddesign');
+			$displayData->relatedDesignTypeIds = explode(',', $designTypesProductMapping->related_designtype_ids);
+
+			$backgroundModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true), 'com_reddesign');
 			$backgroundModel->setState('designtype_id', $designTypeId);
 			$displayData->backgrounds = $backgroundModel->getItems();
 
@@ -489,9 +503,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$query->from($db->quoteName('#__reddesign_fonts'));
 		$db->setQuery($query);
 		$fonts = $db->loadObjectList();
-
-		// $fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true));
-		// $fonts = $fontsModel->getItems();
 
 		if ($productType == 'redDESIGN')
 		{
@@ -913,8 +924,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	{
 		// Get design type data.
 		$designTypeModel = RModel::getAdminInstance('Designtype', array(), 'com_reddesign');
-		$designTypeModel->setState('id', $redDesignData['id']);
-		$designType = $designTypeModel->getItem();
+		$designType = $designTypeModel->getItem($redDesignData['id']);
 
 		$data = array();
 		$data['designType'] = $designType;
