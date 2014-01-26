@@ -91,7 +91,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 							</a>
 							<div style="height: 100%;width: 100%;left: -2000px;position: absolute;">
 								<div id="modalPreview<?php echo $background->id; ?>">
-									<svg id="bgPreviewSvg<?php echo $background->id; ?>"></svg>
+									<svg id="bgPreviewSvg<?php echo $background->id; ?>" width="600px" height="450px"></svg>
 								</div>
 							</div>
 						</td>
