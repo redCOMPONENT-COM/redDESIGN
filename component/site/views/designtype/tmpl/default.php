@@ -11,7 +11,6 @@ defined('_JEXEC') or die();
 
 JHtml::_('behavior.modal');
 
-//RHelperAsset::load('lib/jquery.min.js', 'redcore');
 RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
 
 if (isset($displayData))
@@ -33,15 +32,12 @@ $unit = $this->config->getUnit();
 $fontUnit = $this->config->getFontUnit();
 $sourceDpi = $this->config->getSourceDpi();
 
-$unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($this->unit, $sourceDpi);
+$unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourceDpi);
 
-if (isset($displayData))
-{
-	$this->unitConversionRatio = $displayData->unitConversionRatio = $unitConversionRatio;
-}
 /*
 {RedDesignBreakELEMENT} is a tag used in integration plugin to explode HTML string into smaller peaces. Those peaces are used in redSHOP templating.
 */
+
 $input = JFactory::getApplication()->input;
 $productId = $input->getInt('pid', 0);
 ?>

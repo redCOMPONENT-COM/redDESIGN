@@ -172,7 +172,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$app = JFactory::getApplication();
 			$db = JFactory::getDbo();
 
-			$designTypeId = $app->input->getInt('designTypeId', null);
+			$designTypeId = $app->input->getInt('designtype_id', null);
 
 			// Get related design type IDs. They are related because multiple design types can be assigned to a redSHOP product.
 			$query = $db->getQuery(true);

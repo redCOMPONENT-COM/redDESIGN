@@ -81,7 +81,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			$designTypes = $designTypesModel->getItems();
 
 			// Get selected design type.
-			$selectedDesignTypes = $designTypesModel->getProductDesignTypes($product_data->product_id);
+			$productDesignTypesMapping = $designTypesModel->getProductDesignTypesMapping($product_data->product_id);
 
 			$designTypeOptions = array();
 			$designTypeOptions[] = JHtml::_('select.option', '0', JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_SELECT'));
@@ -92,18 +92,34 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			}
 
 			$html = '<div>';
-				$html .= '<label for="designType">' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_DESIGN_TYPE') . '</label>';
+				$html .= '<label for="designType">' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_DEFAULT_DESIGN_TYPE') . '</label>';
+				$html .= '<div style="padding: 7px 0 7px 0" >';
+					$html .= JHtml::_(
+						'select.genericlist',
+						$designTypeOptions,
+						'defaultDesignType',
+						' class="inputbox" ',
+						'value',
+						'text',
+						$productDesignTypesMapping->default_designtype_id
+					);
+				$html .= '*</div>';
+			$html .= '</div>';
+
+			// Create multiple select list of related design types
+			$html .= '<div>';
+				$html .= '<label for="designType">' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_RELATED_DESIGN_TYPES') . '</label>';
 				$html .= '<div style="padding-top: 7px" >';
 					$html .= JHtml::_(
 										'select.genericlist',
 										$designTypeOptions,
-										'designType[]',
+										'relatedDesignTypes[]',
 										' multiple class="inputbox" size="9" ',
 										'value',
 										'text',
-										explode(',', $selectedDesignTypes)
+										explode(',', $productDesignTypesMapping->related_designtype_ids)
 									);
-				$html .= '</div>';
+				$html .= '*</div>';
 			$html .= '</div>';
 
 			echo $html;
@@ -121,11 +137,13 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	 */
 	public function onAfterProductSave($row, $isNew)
 	{
-		$reddesignDesigntypeIds = JFactory::getApplication()->input->get('designType', array(), 'ARRAY');
+		$input = JFactory::getApplication()->input;
+		$defaultDesigntypeId = $input->getInt('defaultDesignType', 0);
+		$relatedDesigntypeIds = $input->get('relatedDesignTypes', array(), 'ARRAY');
 
 		$designTypesModel = RModel::getAdminInstance('Designtypes', array('ignore_request' => true), 'com_reddesign');
 
-		return $designTypesModel->saveProductDesignTypes($row->product_id, $reddesignDesigntypeIds);
+		return $designTypesModel->saveProductDesignTypesMapping($row->product_id, $defaultDesigntypeId, $relatedDesigntypeIds);
 	}
 
 	/**
