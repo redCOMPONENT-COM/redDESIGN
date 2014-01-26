@@ -80,7 +80,7 @@ class ReddesignControllerDesigntype extends RControllerForm
 		{
 			// Get design type data.
 			$designTypeModel = RModel::getAdminInstance('DesignType', array('ignore_request' => true));
-			$designType      = $designTypeModel->getItem($redDesignData->reddesign_designtype_id);
+			$designType      = $designTypeModel->getItem($redDesignData->designtype_id);
 
 			$data = array();
 			$data['designType'] = $designType;
@@ -150,7 +150,7 @@ class ReddesignControllerDesigntype extends RControllerForm
 		$params = JComponentHelper::getParams('com_reddesign');
 
 		$designTypeModel = RModel::getAdminInstance('DesignType', array('ignore_request' => true));
-		$designTypeItem = $designTypeModel->getItem($data['designBackground']->reddesign_designtype_id);
+		$designTypeItem = $designTypeModel->getItem($data['designBackground']->designtype_id);
 
 		// Create production PDF file name
 		$userId = JFactory::getUser()->id;

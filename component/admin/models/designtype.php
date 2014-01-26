@@ -18,4 +18,64 @@ defined('_JEXEC') or die;
  */
 class ReddesignModelDesigntype extends RModelAdmin
 {
+	/**
+	 * Retrieve all backgrounds from the database that belongs to the current design.
+	 *
+	 * @param   int  $designTypeId  Design type ID
+	 *
+	 * @return  array  Array of backgrounds.
+	 */
+	public function getBackgrounds($designTypeId)
+	{
+		$backgroundModel = RModel::getAdminInstance('Backgrounds', array(), 'com_reddesign');
+		$backgroundModel->setState('designtype_id', $designTypeId);
+
+		return $backgroundModel->getItems();
+	}
+
+	/**
+	 * Retrieve the production file background from the backgrounds list.
+	 *
+	 *  @param   int  $designTypeId  Design type ID
+	 *
+	 * @return mixed  Returns the array that describes a background or null if there is no PDF background.
+	 */
+	public function getProductionBackground($designTypeId)
+	{
+		$backgrounds = $this->getBackgrounds($designTypeId);
+
+		foreach ($backgrounds as $background)
+		{
+			if ($background->isProductionBg)
+			{
+				return $background;
+			}
+		}
+
+		// If this point is reached means that this design don't have "Production background", just text.
+		return null;
+	}
+
+	/**
+	 * Retrieve the preview background to be used as background for previews.
+	 *
+	 *  @param   int  $designTypeId  Design type ID
+	 *
+	 * @return mixed  Returns the array that describes a background or false if there is no preview background.
+	 */
+	public function getDefaultPreviewBackground($designTypeId)
+	{
+		$backgrounds = $this->getBackgrounds($designTypeId);
+
+		foreach ($backgrounds as $background)
+		{
+			if ($background->isDefaultPreview)
+			{
+				return $background;
+			}
+		}
+
+		// If this point is reached means that this design don't have "Preview background" set.
+		return null;
+	}
 }

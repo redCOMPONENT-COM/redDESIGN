@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
   `isDefaultPreview` TINYINT(1)   NOT NULL,
   `useCheckerboard`  TINYINT(1)   NOT NULL DEFAULT '0',
   `designtype_id`    INT(11)      NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
   FOREIGN KEY (`designtype_id`)
     REFERENCES `#__reddesign_designtypes` (`id`)
       ON DELETE CASCADE
@@ -147,8 +147,9 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
 -- Table structure for table `#__reddesign_product_mapping`
 --
 CREATE TABLE IF NOT EXISTS `#__reddesign_product_mapping` (
-  `product_id`              INT(11) NOT NULL,
-  `reddesign_designtype_id` TEXT    NOT NULL,
+  `product_id`             INT(11) NOT NULL,
+  `default_designtype_id`  INT(11) NOT NULL,
+  `related_designtype_ids` TEXT    NOT NULL,
   PRIMARY KEY (`product_id`)
 )
   ENGINE = InnoDB
@@ -159,10 +160,10 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_product_mapping` (
 -- Table structure for table `#__reddesign_attribute_mapping`
 --
 CREATE TABLE IF NOT EXISTS `#__reddesign_attribute_mapping` (
-  `reddesign_designtype_id` INT(11) NOT NULL,
+  `designtype_id` INT(11) NOT NULL,
   `product_id`              INT(11) NOT NULL,
   `property_id`             INT(11) NOT NULL,
-  PRIMARY KEY (`reddesign_designtype_id`, `product_id`, `property_id`)
+  PRIMARY KEY (`designtype_id`, `product_id`, `property_id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8

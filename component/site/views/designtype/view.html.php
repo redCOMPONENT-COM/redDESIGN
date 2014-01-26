@@ -58,7 +58,7 @@ class ReddesignViewDesigntype extends JView
 
 		// Get Design related elements
 		$backgroundsModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true));
-		$backgroundsModel->setState('reddesign_designtype_id', $this->item->id);
+		$backgroundsModel->setState('designtype_id', $this->item->id);
 		$this->backgrounds = $backgroundsModel->getItems();
 
 		foreach ($this->backgrounds as $background)

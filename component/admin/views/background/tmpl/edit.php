@@ -29,7 +29,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 		<?php echo JHtml::_('form.token'); ?>
 		<input type="hidden" name="jform[returnurl]" value="<?php echo base64_encode($return_url); ?>" />
-		<input type="hidden" name="jform[designtype_id]" id="background_reddesign_designtype_id" value="<?php echo $this->item->designtype_id; ?>" />
+		<input type="hidden" name="jform[designtype_id]" id="background_designtype_id" value="<?php echo $this->item->designtype_id; ?>" />
 		<input type="hidden" name="jform[id]" id="background_id" value="" />
 
 		<div id="backgrounds-configuration" class="span12">

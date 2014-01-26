@@ -56,7 +56,7 @@ class ReddesignControllerBackgrounds extends RControllerAdmin
 		$app = JFactory::getApplication();
 		$model = RModel::getAdminInstance('Background', array('ignore_request' => true));
 
-		$designId	= $this->input->get('reddesign_designtype_id', 0);
+		$designId	= $this->input->get('designtype_id', 0);
 		$bgIds		= $this->input->get('cid', null, 'array');
 		$bgId 		= 0;
 		$return 	= $this->input->get('return', null, 'base64');
@@ -102,7 +102,7 @@ class ReddesignControllerBackgrounds extends RControllerAdmin
 		$app = JFactory::getApplication();
 		$model = RModel::getAdminInstance('Background', array('ignore_request' => true));
 
-		$designId	= $this->input->get('reddesign_designtype_id', 0);
+		$designId	= $this->input->get('designtype_id', 0);
 		$bgIds		= $this->input->get('cid', null, 'array');
 		$bgId 		= 0;
 		$return 	= $this->input->get('return', null, 'base64');
