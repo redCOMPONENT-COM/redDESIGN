@@ -172,34 +172,19 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$app = JFactory::getApplication();
 			$db = JFactory::getDbo();
 
-			$designTypeId = $app->input->getInt('designtype_id', null);
+			$designTypesModel = RModel::getAdminInstance('Designtypes', array(), 'com_reddesign');
+			$designTypesProductMapping = $designTypesModel->getProductDesignTypesMapping($data->product_id);
 
-			// Get related design type IDs. They are related because multiple design types can be assigned to a redSHOP product.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('designtype_id'));
-			$query->from($db->quoteName('#__reddesign_product_mapping'));
-			$query->where($db->quoteName('product_id') . ' = ' . $data->product_id);
-			$db->setQuery($query);
-			$productRelatedDesigntypeIds = $db->loadResult();
+			$designTypeId = $app->input->getInt('designtype_id', null);
 
 			if (empty($designTypeId))
 			{
-				$productRelatedDesigntypeIds = explode(',', $productRelatedDesigntypeIds);
-				$designTypeId = $productRelatedDesigntypeIds[0];
-				array_shift($productRelatedDesigntypeIds);
-				$productRelatedDesigntypeIds = implode(',', $productRelatedDesigntypeIds);
-			}
-			else
-			{
-				$productRelatedDesigntypeIds = str_replace($designTypeId, '', $productRelatedDesigntypeIds);
-				$productRelatedDesigntypeIds = explode(',', $productRelatedDesigntypeIds);
-				$productRelatedDesigntypeIds = array_filter($productRelatedDesigntypeIds);
-				$productRelatedDesigntypeIds = implode(',', $productRelatedDesigntypeIds);
+				$designTypeId = $designTypesProductMapping->default_designtype_id;
 			}
 
 			$displayData = new stdClass;
 			$displayData->config = ReddesignEntityConfig::getInstance();
-			$displayData->relatedDesignTypes = $productRelatedDesigntypeIds;
+			$displayData->relatedDesignTypes = explode(',', $designTypesProductMapping->related_designtype_ids);
 
 			$designTypeModel = RModel::getAdminInstance('Designtype', array(), 'com_reddesign');
 			$designTypeModel->setState('id', $designTypeId);

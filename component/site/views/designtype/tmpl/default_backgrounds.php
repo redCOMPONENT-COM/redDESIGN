@@ -18,6 +18,8 @@ if (isset($displayData))
 
 $background_id = null;
 
+$input = JFactory::getApplication()->input;
+
 ?>
 <h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_FRAMES_TITLE') ?></h4>
 <div class="row-fluid">
@@ -65,13 +67,13 @@ $background_id = null;
 			<?php foreach($this->relatedDesignTypes as $relatedDesignType) : ?>
 				<?php if (!empty($relatedDesignType)) : ?>
 					<?php
-						$productId = $this->config['input']->getInt('productId', 0);
-						$cid = $this->config['input']->getInt('cid', null);
-						$Itemid = $this->config['input']->getInt('Itemid', null);
+						$productId = $input->getInt('productId', 0);
+						$cid = $input->getInt('cid', null);
+						$Itemid = $input->getInt('Itemid', null);
 
 						$backgroundsModel = RModel::getAdminInstance('Backgrounds', array(), 'com_reddesign');
 						$backgroundsModel->setState('designtype_id', $relatedDesignType);
-						$relatedBackgrounds = $backgroundModel->getItems();
+						$relatedBackgrounds = $backgroundsModel->getItems();
 					?>
 					<?php foreach($relatedBackgrounds as $frame) : ?>
 						<li>
@@ -79,7 +81,7 @@ $background_id = null;
 								<div class="frame-selection">
 									<input type="radio"
 										   class="price-modifier"
-										   onclick ="location.href='<?php echo JURI::base() ?>index.php?option=com_redshop&view=product&pid=<?php echo $productId ?>&cid=<?php echo $cid ?>&Itemid=<?php echo $Itemid ?>&designTypeId=<?php echo $relatedDesignType; ?>'"
+										   onclick ="location.href='<?php echo JURI::base() ?>index.php?option=com_redshop&view=product&pid=<?php echo $productId ?>&cid=<?php echo $cid ?>&Itemid=<?php echo $Itemid ?>&designtype_id=<?php echo $relatedDesignType; ?>'"
 										   id="frame<?php echo $frame->id;?>"
 										   name="frame"
 										   value="<?php echo $frame->id ?>"

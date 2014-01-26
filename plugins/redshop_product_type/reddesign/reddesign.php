@@ -73,8 +73,6 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	{
 		if ($product_data->product_type == 'redDESIGN')
 		{
-			$db = JFactory::getDbo();
-
 			// Get design types.
 			$designTypesModel = RModel::getAdminInstance('Designtypes', array('ignore_request' => true), 'com_reddesign');
 			$designTypesModel->setState('list.ordering', 'name');
