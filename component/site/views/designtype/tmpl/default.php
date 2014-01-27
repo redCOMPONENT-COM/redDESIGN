@@ -298,12 +298,12 @@ $productId = $input->getInt('pid', 0);
 
 		text.css('text-align', jQuery(textAlign).val());
 
-
 		var textElement = rootSnapSvgObject.select("#areaBoxesLayer #areaTextElement_" + areaId);
 
 		if (textElement)
 		{
-			textElement.node.innerHTML = jQuery(text).val();
+			textElement.node.textContent = jQuery(text).val();
+
 			if (font)
 				textElement.attr('font-family', jQuery(font).val());
 			if (color)
@@ -436,7 +436,7 @@ $productId = $input->getInt('pid', 0);
 						+ ' font-size="' + fontSizeValue + 'px"'
 						+ ' x="' + (x1) + '"'
 						+ ' y="' + (y1 + (parseFloat(fontSizeValue) * scalingImageForPreviewRatio)) + '"'
-						+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
+						+ '><?php echo $area->name; ?></text>');
 
 			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
 				design.areas.push({

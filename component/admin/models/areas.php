@@ -72,7 +72,7 @@ class ReddesignModelAreas extends RModelList
 			->from($db->quoteName('#__reddesign_areas', 'a'));
 
 		// Filter by Background ID
-		$backgroundId = $this->getState('background_id', 0);
+		$backgroundId = $this->getState('filter.background_id', 0);
 
 		if ($backgroundId)
 		{
