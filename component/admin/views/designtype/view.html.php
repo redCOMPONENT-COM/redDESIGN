@@ -153,7 +153,7 @@ class ReddesignViewDesigntype extends ReddesignView
 
 						// Get all areas existing in the database for this specific background.
 						$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
-						$areasModel->setState('background_id', $background->id);
+						$areasModel->setState('filter.background_id', $background->id);
 						$areas = $areasModel->getItems();
 
 						$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($areas);

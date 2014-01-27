@@ -244,7 +244,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			{
 				/** @var ReddesignModelAreas $areasModel */
 				$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
-				$areasModel->setState('background_id', $displayData->productionBackground->id);
+				$areasModel->setState('filter.background_id', $displayData->productionBackground->id);
 				$displayData->productionBackgroundAreas = $areasModel->getItems();
 
 				$displayData->imageSize = getimagesize(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->defaultPreviewBg->image_path);
