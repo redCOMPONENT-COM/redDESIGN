@@ -162,7 +162,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 
 			$db = JFactory::getDbo();
 
-			// Get selected design type.
+			// Get selected design types
 			$query = $db->getQuery(true);
 			$query->select($db->quoteName('designtype_id'))
 				->from($db->quoteName('#__reddesign_attribute_mapping'))
@@ -227,7 +227,6 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 				{
 					$checked = '';
 				}
-				//$epsFileLocation = JPATH_ROOT . '/media/com_reddesign/assets/backgrounds/' . $background->svg_file;
 
 				$dropdownHtml .= '<input type="radio"
 								name="attribute[' . $property->k . '][property][' . $property->g . '][redDesignBackground]"
@@ -235,8 +234,6 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 				$dropdownHtml .= $background->name . "&nbsp;&nbsp;";
 				$dropdownHtml .= "<img src='" . JURI::root() . "media/com_reddesign/backgrounds/" . $background->svg_file .
 									"' alt='" . $background->name . "' style='width:100px;' />&nbsp;&nbsp;&nbsp;";
-				//$dropdownHtml .= JHTML::_('image', 'media/com_reddesign/assets/backgrounds/' . $background->svg_file, $background->name)
-				//	. "&nbsp;&nbsp;&nbsp;";
 			}
 
 			$dropdownHtml .= '</div>';
@@ -244,9 +241,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			$dropdownHtml .= '</td></tr>';
 
 			echo $dropdownHtml;
-
 		}
-
 	}
 
 	/**
