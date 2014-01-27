@@ -436,7 +436,7 @@ $productId = $input->getInt('pid', 0);
 						+ ' font-size="' + fontSizeValue + 'px"'
 						+ ' x="' + (x1) + '"'
 						+ ' y="' + (y1 + (parseFloat(fontSizeValue) * scalingImageForPreviewRatio)) + '"'
-						+ '><?php echo $area->name; ?></text>');
+						+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
 
 			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
 				design.areas.push({
