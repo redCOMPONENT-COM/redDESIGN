@@ -606,13 +606,13 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 								// Set preview size at loaded file.
 								var loadedSvgFromFile = jQuery("#svg_image_' . $i . '").find("svg")[0];
-								loadedSvgFromFile.setAttribute("width", "");
-								loadedSvgFromFile.setAttribute("height", "");
+								loadedSvgFromFile.setAttribute("width", "100%");
+								loadedSvgFromFile.setAttribute("height", "100%");
 
 								// Set preview size at svg container element.
 								var rootElement = document.getElementById("svg_image_' . $i . '");
-								rootElement.setAttribute("width", "");
-								rootElement.setAttribute("height", "");
+								rootElement.setAttribute("width", "100%");
+								rootElement.setAttribute("height", "100%");
 								rootElement.setAttribute("overflow", "hidden");
 
 								svg_' . $i . '.add(group_' . $i . ');
