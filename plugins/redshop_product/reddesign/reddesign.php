@@ -244,7 +244,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			{
 				/** @var ReddesignModelAreas $areasModel */
 				$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
-				$areasModel->setState('background_id', $displayData->productionBackground->id);
+				$areasModel->setState('filter.background_id', $displayData->productionBackground->id);
 				$displayData->productionBackgroundAreas = $areasModel->getItems();
 
 				$displayData->imageSize = getimagesize(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->defaultPreviewBg->image_path);
@@ -606,13 +606,13 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 								// Set preview size at loaded file.
 								var loadedSvgFromFile = jQuery("#svg_image_' . $i . '").find("svg")[0];
-								loadedSvgFromFile.setAttribute("width", "");
-								loadedSvgFromFile.setAttribute("height", "");
+								loadedSvgFromFile.setAttribute("width", "100%");
+								loadedSvgFromFile.setAttribute("height", "100%");
 
 								// Set preview size at svg container element.
 								var rootElement = document.getElementById("svg_image_' . $i . '");
-								rootElement.setAttribute("width", "");
-								rootElement.setAttribute("height", "");
+								rootElement.setAttribute("width", "100%");
+								rootElement.setAttribute("height", "100%");
 								rootElement.setAttribute("overflow", "hidden");
 
 								svg_' . $i . '.add(group_' . $i . ');

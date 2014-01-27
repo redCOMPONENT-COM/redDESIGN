@@ -298,12 +298,12 @@ $productId = $input->getInt('pid', 0);
 
 		text.css('text-align', jQuery(textAlign).val());
 
-
 		var textElement = rootSnapSvgObject.select("#areaBoxesLayer #areaTextElement_" + areaId);
 
 		if (textElement)
 		{
-			textElement.node.innerHTML = jQuery(text).val();
+			textElement.node.textContent = jQuery(text).val();
+
 			if (font)
 				textElement.attr('font-family', jQuery(font).val());
 			if (color)
