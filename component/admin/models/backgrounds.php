@@ -122,4 +122,38 @@ class ReddesignModelBackgrounds extends RModelList
 
 		return $mapping;
 	}
+
+	/**
+	 * Save backgrounds to properties mapping.
+	 *
+	 * @param   int  $propertyId    Property ID
+	 * @param   int  $backgroundId  Background ID
+	 *
+	 * @return  object  $mapping  Property ID - Background ID pair.
+	 */
+	public function saveBackgroundPropertyPair($propertyId, $backgroundId)
+	{
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->qn(array('property_id', 'background_id')))
+			->from($db->qn('#__reddesign_property_background_mapping'))
+			->where($db->qn('property_id') . ' = ' . $propertyId);
+		$db->setQuery($query);
+		$mapping = $db->loadObject();
+
+		if (empty($mapping))
+		{
+			$mapping = new JObject;
+			$mapping->property_id = $propertyId;
+			$mapping->background_id = $backgroundId;
+
+			return $db->insertObject('#__reddesign_property_background_mapping', $mapping);
+		}
+		else
+		{
+			$mapping->background_id = $backgroundId;
+
+			return $db->updateObject('#__reddesign_property_background_mapping', $mapping, 'property_id');
+		}
+	}
 }

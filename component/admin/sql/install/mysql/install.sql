@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_product_mapping` (
 CREATE TABLE IF NOT EXISTS `#__reddesign_property_background_mapping` (
   `property_id`   INT(11) NOT NULL,
   `background_id` INT(11) NOT NULL,
-  PRIMARY KEY (`property_id`, `background_id`)
+  PRIMARY KEY (`property_id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8

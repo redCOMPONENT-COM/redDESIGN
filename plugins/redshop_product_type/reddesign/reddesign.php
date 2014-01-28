@@ -332,7 +332,18 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	 */
 	public function onAttributePropertySaveLoop($product, &$property, &$propertyAfterSave)
 	{
-		$data              = new stdClass;
+		$backgroundModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true), 'com_reddesign');
+
+		try
+		{
+			$backgroundModel->saveBackgroundPropertyPair($propertyAfterSave->property_id, $property['redDesignBackground']);
+		}
+		catch (RuntimeException $e)
+		{
+			throw new RuntimeException($e->getMessage(), $e->getCode());
+		}
+
+		/*$data              = new stdClass;
 		$data->product_id  = $product->product_id;
 		$data->property_id = $propertyAfterSave->property_id;
 
@@ -365,7 +376,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			{
 				throw new RuntimeException($e->getMessage(), $e->getCode());
 			}
-		}
+		}*/
 	}
 
 	/**
