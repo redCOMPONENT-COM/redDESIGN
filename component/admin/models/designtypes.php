@@ -125,11 +125,10 @@ class ReddesignModelDesigntypes extends RModelList
 		$db = $this->getDbo();
 		$mapping = new JObject;
 		$mapping->product_id = $productId;
-		$mapping->default_designtype_id = 0;
 		$mapping->related_designtype_ids = 0;
 
 		$query = $db->getQuery(true);
-		$query->select($db->qn(array('product_id', 'default_designtype_id', 'related_designtype_ids')))
+		$query->select($db->qn(array('product_id', 'related_designtype_ids')))
 			->from($db->qn('#__reddesign_product_mapping'))
 			->where($db->qn('product_id') . ' = ' . $productId);
 		$db->setQuery($query);
@@ -147,18 +146,17 @@ class ReddesignModelDesigntypes extends RModelList
 	 * Save product - designtype mapping. Assign designtypes to a redSHOP product.
 	 *
 	 * @param   int    $productId             Product ID
-	 * @param   int    $defaultDesigntypeId   ID of design type which will be displayed first in the frontend.
 	 * @param   array  $relatedDesigntypeIds  Design Type IDs
 	 *
 	 * @return  bool
 	 */
-	public function saveProductDesignTypesMapping($productId, $defaultDesigntypeId, $relatedDesigntypeIds)
+	public function saveProductDesignTypesMapping($productId, $relatedDesigntypeIds)
 	{
 		$relatedDesigntypeIds = implode(',', $relatedDesigntypeIds);
 
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
-		$query->select($db->qn(array('product_id', 'default_designtype_id', 'related_designtype_ids')))
+		$query->select($db->qn(array('product_id', 'related_designtype_ids')))
 			->from($db->qn('#__reddesign_product_mapping'))
 			->where($db->qn('product_id') . ' = ' . $productId);
 		$db->setQuery($query);
@@ -168,14 +166,12 @@ class ReddesignModelDesigntypes extends RModelList
 		{
 			$mapping = new JObject;
 			$mapping->product_id = $productId;
-			$mapping->default_designtype_id = $defaultDesigntypeId;
 			$mapping->related_designtype_ids = $relatedDesigntypeIds;
 
 			return $db->insertObject('#__reddesign_product_mapping', $mapping);
 		}
 		else
 		{
-			$mapping->default_designtype_id = $defaultDesigntypeId;
 			$mapping->related_designtype_ids = $relatedDesigntypeIds;
 
 			return $db->updateObject('#__reddesign_product_mapping', $mapping, 'product_id');

@@ -178,7 +178,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			if (empty($designTypeId))
 			{
-				$designTypeId = $designTypesProductMapping->default_designtype_id;
+				// ToDo Default will come from preselected property option
+				// $designTypeId = $designTypesProductMapping->default_designtype_id;
 			}
 
 			// List of variables passed to the view.
