@@ -260,44 +260,9 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	public function loadFieldsJSFromPlugin($product)
 	{
 		$jsLoaded = false;
-		//$backgrounds = array();
 
 		if ($product->product_type == 'redDESIGN')
 		{
-			/*$db = JFactory::getDbo();
-			$document = JFactory::getDocument();
-
-			// Get selected design type.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('designtype_id'))
-				->from($db->quoteName('#__reddesign_product_mapping'))
-				->where($db->quoteName('product_id') . ' = ' . (int) $product->product_id);
-			$db->setQuery($query);
-			$designTypeId = $db->loadResult();
-
-			if (!empty($designTypeId))
-			{
-				// Get all the backgrounds that belongs to selected Design Type item.
-				$query = $db->getQuery(true);
-				$query->select($db->quoteName(array('id', 'name', 'svg_file')))
-					->from($db->quoteName('#__reddesign_backgrounds'))
-					->where($db->quoteName('isProductionBg') . ' = ' . 0)
-					->where($db->quoteName('designtype_id') . ' IN (' . $designTypeId . ')');
-				$db->setQuery($query);
-				$backgrounds = $db->loadObjectList();
-			}
-
-			$dropdownHtml = '';
-
-			foreach ($backgrounds as $background)
-			{
-				$dropdownHtml .= "<input type='radio' name='attribute[{gh}][property][{total_g}][redDesignBackground]' value='"
-					. $background->id . "' />&nbsp;&nbsp;";
-				$dropdownHtml .= $background->name . "&nbsp;&nbsp;";
-				$dropdownHtml .= "<img src='" . JURI::root() . "media/com_reddesign/backgrounds/" . $background->svg_file .
-									"' alt='" . $background->name . "' style='width:100px;' />&nbsp;&nbsp;&nbsp;";
-			}*/
-
 			$designTypesModel = RModel::getAdminInstance('Designtypes', array('ignore_request' => true), 'com_reddesign');
 			$designTypesProductMapping = $designTypesModel->getProductDesignTypesMapping($product->product_id);
 
