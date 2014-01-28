@@ -159,11 +159,12 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_product_mapping` (
 --
 -- Table structure for table `#__reddesign_attribute_mapping`
 --
-CREATE TABLE IF NOT EXISTS `#__reddesign_attribute_mapping` (
-  `designtype_id` INT(11) NOT NULL,
-  `product_id`              INT(11) NOT NULL,
-  `property_id`             INT(11) NOT NULL,
-  PRIMARY KEY (`designtype_id`, `product_id`, `property_id`)
+CREATE TABLE IF NOT EXISTS `#__reddesign_property_background_mapping` (
+  `property_id`   INT(11) NOT NULL,
+  `background_id` INT(11) NOT NULL,
+  PRIMARY KEY (`property_id`),
+  FOREIGN KEY (`property_id`) REFERENCES `#__redshop_product_attribute_property` (`property_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (`background_id`) REFERENCES `#__reddesign_backgrounds` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8

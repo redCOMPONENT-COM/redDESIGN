@@ -382,8 +382,10 @@ function addNewRow_attribute(tableRef){
 	var newTD1 = document.createElement('td');
 
 	var tmpBackgroundsDropDownHtml = backgroundsDropDownHtml;
-	backgroundsDropDownHtml = backgroundsDropDownHtml.replace("{gh}",gh);
-	backgroundsDropDownHtml = backgroundsDropDownHtml.replace("{total_g}",total_g);
+
+	// /{gh}/g means perform global replace in the string, not only once.
+	backgroundsDropDownHtml = backgroundsDropDownHtml.replace(/{gh}/g, gh);
+	backgroundsDropDownHtml = backgroundsDropDownHtml.replace(/{total_g}/g, total_g);
 
 	newTD1.innerHTML = '<table class="grey_solid_area"  width="100%" cellpadding="0" border="0" cellspacing="0" id="property_table' + gh + '">' +
 							'<tr class="attr_tbody" id="attr_tbody' + gh + p + '">' +
@@ -584,8 +586,10 @@ function addproperty(tableRef,rh){
 	var newTD9 = document.createElement('td');
 
 	var tmp2BackgroundsDropDownHtml = backgroundsDropDownHtml;
-	backgroundsDropDownHtml = backgroundsDropDownHtml.replace("{gh}",rh);
-	backgroundsDropDownHtml = backgroundsDropDownHtml.replace("{total_g}",h);
+
+	// /{gh}/g means perform global replace in the string, not only once.
+	backgroundsDropDownHtml = backgroundsDropDownHtml.replace(/{gh}/g,rh);
+	backgroundsDropDownHtml = backgroundsDropDownHtml.replace(/{total_g}/g,h);
 
 	newTD.innerHTML = '<table id="attribute_table'+h+'" class="attribute_value">' +
 						'<tr>' +
