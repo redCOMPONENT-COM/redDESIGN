@@ -142,7 +142,7 @@ if (isset($displayData))
 						</svg>
 						<div class="progressbar-holder" style="width: <?php echo $bgBackendPreviewWidth; ?>px; margin-top:20px;">
 							<div class="progress progress-striped" style="display:none;">
-								<div class="bar bar-success" style="width: 0%; text-align: center;"></div>
+								<div class="bar bar-success"></div>
 							</div>
 						</div>
 						<h3>

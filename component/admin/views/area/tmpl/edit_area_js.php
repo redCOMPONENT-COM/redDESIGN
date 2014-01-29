@@ -127,12 +127,15 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			jQuery.ajax({
 				url: "<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>",
 				dataType: "text",
+				cache: true,
 				xhrFields: {
 					onprogress: function (e) {
 						if (e.lengthComputable) {
-							var loadedPercentage = e.loaded / e.total * 100;
+							var loadedPercentage = parseInt(e.loaded / e.total * 100);
+							if (e.loaded == e.total)
+								finishedLoading = true;
 							$('#backgroundImageContainer .progress .bar-success')
-								.css('width', '' + (loadedPercentage) + '%')
+								.css('width', loadedPercentage + '%')
 								.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
 						}
 					}
@@ -149,9 +152,9 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 					else{
 						jQuery('#backgroundImageContainer .progressbar-holder').fadeOut(3000);
 					}
-					var styleDeclaration = Snap.parse('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>');
-					rootSnapSvgObject.append(styleDeclaration);
-					rootSnapSvgObject.append(Snap.parse(response));
+					jQuery("#svgForAreas")
+						.append('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>')
+						.append(response);
 
 					var loadedSvgFromFile = jQuery("#svgForAreas").find("svg")[0];
 					loadedSvgFromFile.setAttribute("width", previewWidth);
@@ -168,7 +171,9 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 					rootSnapSvgObject.mousedown(begginDrawRectangle);
 					rootSnapSvgObject.mouseup(endDrawRectangle);
 				}
-			});
+			}).done(function (response) {
+
+				});
 			<?php endif; ?>
 		}
 	);

@@ -56,3 +56,18 @@
 	width: 40%;
 	text-align: center !important;
 }
+
+.progressbar-table {
+    width: 100px;
+    float: left;
+    margin-right: 10px;
+}
+
+.progressbar-holder .bar-success {
+    width: 0%;
+    text-align: center;
+}
+
+.progressbar-table .progress{
+    margin-bottom: 0px;
+}

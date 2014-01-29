@@ -81,7 +81,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 						<td class="td-align-center">
 							<?php echo $background->id; ?>
 						</td>
-						<td class="td-align-left">
+						<td class="td-align-left" id="backgroundRow<?php echo $background->id; ?>">
 							<a id="editBackground<?php echo $background->id; ?>" class="editBackground" href="#">
 								<strong><?php echo $background->name; ?></strong>
 							</a>
@@ -89,13 +89,12 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 							<a class="jmodal btn btn-mini" href="#modalPreview<?php echo $background->id; ?>">
 								<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
 							</a>
-							<div style="height: 100%;width: 100%;left: -2000px;position: absolute;">
-								<div class="progressbar-holder" style="width: <?php echo $bgBackendPreviewWidth - 15; ?>px; margin-bottom:20px;">
-									<div class="progress progress-striped" style="display:none;">
-										<div class="bar bar-success" style="width: 0%; text-align: center;"></div>
-									</div>
+							<div class="progressbar-holder progressbar-table">
+								<div class="progress progress-striped" style="display:none;">
+									<div class="bar bar-success"></div>
 								</div>
-
+							</div>
+							<div style="height: 100%;width: 100%;left: -2000px;position: absolute;">
 								<div id="modalPreview<?php echo $background->id; ?>">
 									<svg id="bgPreviewSvg<?php echo $background->id; ?>" width="600px" height="450px"></svg>
 								</div>
@@ -159,48 +158,70 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 			<?php if (!empty($this->items)) : ?>
 				hideShowBackgroundForm();
 			<?php endif; ?>
+			var backgroundPreviews = [];
 
-			<?php foreach ($this->items as $background) : ?>
-			var snap<?php echo $background->id ?> = Snap("#bgPreviewSvg<?php echo $background->id; ?>");
-
-			jQuery.ajax({
-				url: "<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>",
-				dataType: "text",
-				xhrFields: {
-					onprogress: function (e) {
-						if (e.lengthComputable) {
-							var loadedPercentage = e.loaded / e.total * 100;
-							$('#modalPreview<?php echo $background->id; ?> .progress .bar-success')
-								.css('width', '' + (loadedPercentage) + '%')
-								.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
-						}
-					}
-				},
-				beforeSend: function (xhr) {
-					jQuery('#modalPreview<?php echo $background->id; ?> .progress').show().addClass('active');
-					jQuery('#modalPreview<?php echo $background->id; ?> .progress .bar-success').css('width', '0%');
-				},
-				success: function (response) {
-					jQuery('#modalPreview<?php echo $background->id; ?> .progress').removeClass('active');
-					if(typeof response === 'undefined' || response == false){
-						jQuery('#modalPreview<?php echo $background->id; ?> .progress')
-							.append('<div class="bar bar-danger" style="width: ' + (100 - parseInt(jQuery('#modalPreview<?php echo $background->id; ?> .progress .bar-success').css('width'))) + '%;"></div>');
-					}
-					else{
-						jQuery('#modalPreview<?php echo $background->id; ?> .progressbar-holder').hide();
-					}
-
-					<?php if ($background->useCheckerboard) : ?>
-					var checkerbox = Snap.parse('<?php echo ReddesignHelpersSvg::getSVGCheckerboard(600, 450); ?>');
-					snap<?php echo $background->id ?>.append(checkerbox);
-					<?php endif; ?>
-					snap<?php echo $background->id ?>.append(Snap.parse(response));
-
-					var svgLoaded = jQuery("#bgPreviewSvg<?php echo $background->id; ?>").find("svg")
-						.attr("width", "600px")
-						.attr("height", "450px");
-				}
+			jQuery(document).on("mousedown", ".jmodal", function(e) {
+				var backgroundId = jQuery(this).attr('href').replace('#modalPreview', '');
+				if (typeof backgroundPreviews[backgroundId]['progress'] != 'undefined')
+					return true;
+				loadPreviewBackground(backgroundId, this);
+				return false;
 			});
+
+			function loadPreviewBackground(backgroundId, modalButton)
+			{
+				if (typeof backgroundPreviews[backgroundId] === 'undefined')
+					return false;
+
+				jQuery.ajax({
+					url: backgroundPreviews[backgroundId]['svgUrl'],
+					dataType: "text",
+					cache: true,
+					xhrFields: {
+						 onprogress: function (e) {
+							 if (e.lengthComputable) {
+								 var loadedPercentage = parseInt(e.loaded / e.total * 100);
+								 $('#backgroundRow' + backgroundId + ' .progress .bar-success')
+								 .css('width', '' + (loadedPercentage) + '%')
+								 .html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
+							 }
+						 }
+					},
+					beforeSend: function (xhr) {
+						backgroundPreviews[backgroundId]['progress'] = true;
+						jQuery('#backgroundRow' + backgroundId + ' .progress').show().addClass('active');
+						jQuery('#backgroundRow' + backgroundId + ' .progress .bar-success').css('width', '0%');
+					},
+					success: function (response) {
+						jQuery('#backgroundRow' + backgroundId + ' .progress').removeClass('active');
+						if(typeof response === 'undefined' || response == false){
+							jQuery('#backgroundRow' + backgroundId + ' .progress')
+								.append('<div class="bar bar-danger" style="width: ' + (100 - parseInt(jQuery('#backgroundRow' + backgroundId + ' .progress .bar-success').css('width'))) + '%;"></div>');
+						}
+						else{
+							jQuery('#backgroundRow' + backgroundId + ' .progressbar-holder .progress .bar-success').css('width', '100%');
+						}
+
+						if (backgroundPreviews[backgroundId]['useCheckerboard'])
+							jQuery("#bgPreviewSvg" + backgroundId).append('<?php echo ReddesignHelpersSvg::getSVGCheckerboard(600, 450); ?>');
+
+						jQuery("#bgPreviewSvg" + backgroundId).append(response);
+
+						var svgLoaded = jQuery("#bgPreviewSvg" + backgroundId).find("svg")
+							.attr("width", "600px")
+							.attr("height", "450px");
+
+						SqueezeBox.fromElement(modalButton);
+					}
+				});
+			}
+			<?php foreach ($this->items as $background) : ?>
+			//var snap<?php echo $background->id ?> = Snap("#bgPreviewSvg<?php echo $background->id; ?>");
+
+			backgroundPreviews[<?php echo $background->id ?>] = [];
+			backgroundPreviews[<?php echo $background->id ?>]['svgUrl'] = "<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>";
+			backgroundPreviews[<?php echo $background->id ?>]['useCheckerboard'] = <?php echo ($background->useCheckerboard) ? 'true' : 'false'; ?>;
+
 
 			// Selects background for edit and populates field data accordingly.
 				jQuery(document).on("click", "#editBackground<?php echo $background->id; ?>", function() {

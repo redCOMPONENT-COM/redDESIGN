@@ -147,10 +147,11 @@ $productId = $input->getInt('pid', 0);
 			jQuery.ajax({
 				url: "<?php echo $imageUrl; ?>",
 				dataType: "text",
+				cache: true,
 				xhrFields: {
 					onprogress: function (e) {
 						if (e.lengthComputable) {
-							var loadedPercentage = e.loaded / e.total * 100;
+							var loadedPercentage = parseInt(e.loaded / e.total * 100);
 							$('#svgContainer .progress .bar-success')
 								.css('width', '' + (loadedPercentage) + '%')
 								.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
@@ -169,9 +170,10 @@ $productId = $input->getInt('pid', 0);
 					else{
 						jQuery('#svgContainer .progressbar-holder').fadeOut(3000);
 					}
-					var styleDeclaration = Snap.parse('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>');
-					rootSnapSvgObject.append(styleDeclaration);
-					rootSnapSvgObject.append(Snap.parse(response));
+
+					jQuery("#mainSvgImage")
+						.append('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>')
+						.append(response);
 
 					// Set preview size at loaded file.
 					var loadedSvgFromFile = jQuery("#mainSvgImage").find("svg")[0];
