@@ -18,6 +18,7 @@ $this->unit = $displayData->unit;
 $this->fontsOptions = $displayData->fontsOptions;
 $this->inputFieldOptions = $displayData->inputFieldOptions;
 $this->alignmentOptions = $displayData->alignmentOptions;
+$this->verticalAlignmentOptions = $displayData->verticalAlignmentOptions;
 
 ?>
 
@@ -123,6 +124,22 @@ $this->alignmentOptions = $displayData->alignmentOptions;
 										'value',
 										'text',
 										$area->textalign
+									);
+									?>
+								</label>
+							</div>
+
+							<div class="control-group">
+								<label for="<?php echo 'areaVerticalAlignment' . $area->id; ?>">
+									<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_VERTICAL_ALIGNMENT') ?>
+									<?php
+									echo JHtml::_('select.genericlist',
+										$this->verticalAlignmentOptions,
+										'areaVerticalAlignment' . $area->id,
+										'',
+										'value',
+										'text',
+										$area->verticalAlign
 									);
 									?>
 								</label>
@@ -555,6 +572,7 @@ $this->alignmentOptions = $displayData->alignmentOptions;
 		jQuery("#saveAreaSettings" + reddesign_area_id).button("loading");
 
 		var areaFontAlignment = jQuery("#areaFontAlignment" + reddesign_area_id).val();
+		var areaVerticalAlignment = jQuery("#areaVerticalAlignment" + reddesign_area_id).val();
 		var fontsizerDropdown = jQuery("#fontsizerDropdown" + reddesign_area_id).val();
 		var fontsizerSliderDefault = jQuery("#fontsizerSliderDefault" + reddesign_area_id).val();
 		var fontsizerSliderMin = jQuery("#fontsizerSliderMin" + reddesign_area_id).val();
@@ -577,6 +595,7 @@ $this->alignmentOptions = $displayData->alignmentOptions;
 				'jform[id]': reddesign_area_id,
 				'jform[name]': areaName,
 				'jform[textalign]': areaFontAlignment,
+				'jform[verticalAlign]': areaVerticalAlignment,
 				'jform[font_id]': areaFonts,
 				'jform[font_size]': fontsizerDropdown,
 				'jform[defaultFontSize]': fontsizerSliderDefault,
