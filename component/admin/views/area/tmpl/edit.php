@@ -16,6 +16,8 @@ RHelperAsset::load('mustache.min.js', 'com_reddesign');
 RHelperAsset::load('farbtastic.min.js', 'com_reddesign');
 RHelperAsset::load('farbtastic.css', 'com_reddesign');
 RHelperAsset::load('color-converter.js', 'com_reddesign');
+$config = ReddesignEntityConfig::getInstance();
+$bgBackendPreviewWidth = $config->getMaxSVGPreviewAdminWidth();
 
 if (isset($displayData))
 {
@@ -138,6 +140,11 @@ if (isset($displayData))
 					<div id="backgroundImageContainer">
 						<svg id="svgForAreas">
 						</svg>
+						<div class="progressbar-holder" style="width: <?php echo $bgBackendPreviewWidth; ?>px; margin-top:20px;">
+							<div class="progress progress-striped" style="display:none;">
+								<div class="bar bar-success"></div>
+							</div>
+						</div>
 						<h3>
 							<?php
 								echo JText::sprintf(

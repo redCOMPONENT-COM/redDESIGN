@@ -124,30 +124,59 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 			<?php if (!empty($this->productionBackground->svg_file)) : ?>
 				rootSnapSvgObject = Snap("#svgForAreas");
-
-				Snap.load(
-					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>",
-					function (f) {
-						var styleDeclaration = Snap.parse('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>');
-						rootSnapSvgObject.append(styleDeclaration);
-						rootSnapSvgObject.append(f);
-
-						var loadedSvgFromFile = jQuery("#svgForAreas").find("svg")[0];
-						loadedSvgFromFile.setAttribute("width", previewWidth);
-						loadedSvgFromFile.setAttribute("height", previewHeight);
-						loadedSvgFromFile.setAttribute("id", "svgCanvas");
-
-						var rootElement = document.getElementById("svgForAreas");
-						rootElement.setAttribute("width", previewWidth);
-						rootElement.setAttribute("height", previewHeight);
-						rootElement.setAttribute("overflow", "hidden");
-
-						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
-
-						rootSnapSvgObject.mousedown(begginDrawRectangle);
-						rootSnapSvgObject.mouseup(endDrawRectangle);
+			jQuery.ajax({
+				url: "<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>",
+				dataType: "text",
+				cache: true,
+				xhrFields: {
+					onprogress: function (e) {
+						if (e.lengthComputable) {
+							var loadedPercentage = parseInt(e.loaded / e.total * 100);
+							jQuery('#backgroundImageContainer .progress .bar-success')
+								.css('width', loadedPercentage + '%')
+								.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
+						}
 					}
-				);
+				},
+				beforeSend: function (xhr) {
+					jQuery('#backgroundImageContainer .progress').show().addClass('active');
+					jQuery('#backgroundImageContainer .progress .bar-success').css('width', '0%');
+				},
+				success: function (response) {
+					jQuery('#backgroundImageContainer .progress').removeClass('active');
+					if(typeof response === 'undefined' || response == false){
+						jQuery('#backgroundImageContainer .progress')
+							.append(
+								'<div class="bar bar-danger" style="width: '
+									+ (100 - parseInt(jQuery('#backgroundImageContainer .progress .bar-success').css('width')))
+									+ '%;"></div>'
+							);
+					}
+					else{
+						jQuery('#backgroundImageContainer .progressbar-holder').fadeOut(3000);
+					}
+					jQuery("#svgForAreas")
+						.append('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>')
+						.append(response);
+
+					var loadedSvgFromFile = jQuery("#svgForAreas").find("svg")[0];
+					loadedSvgFromFile.setAttribute("width", previewWidth);
+					loadedSvgFromFile.setAttribute("height", previewHeight);
+					loadedSvgFromFile.setAttribute("id", "svgCanvas");
+
+					var rootElement = document.getElementById("svgForAreas");
+					rootElement.setAttribute("width", previewWidth);
+					rootElement.setAttribute("height", previewHeight);
+					rootElement.setAttribute("overflow", "hidden");
+
+					rootSnapSvgObject.group().node.id = "areaBoxesLayer";
+
+					rootSnapSvgObject.mousedown(begginDrawRectangle);
+					rootSnapSvgObject.mouseup(endDrawRectangle);
+				}
+			}).done(function (response) {
+
+				});
 			<?php endif; ?>
 		}
 	);

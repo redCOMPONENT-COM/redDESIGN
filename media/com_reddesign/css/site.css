@@ -73,3 +73,8 @@ img.background-thumbnail {
 	list-style-type: none;
 	min-width: 330px;
 }
+
+.progressbar-holder .bar-success {
+    width: 0%;
+    text-align: center;
+}
