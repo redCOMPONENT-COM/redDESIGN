@@ -70,9 +70,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			return;
 		}
 
-		$input         = JFactory::getApplication()->input;
-		$view          = $input->get('view');
-		$document      = JFactory::getDocument();
+		$input    = JFactory::getApplication()->input;
+		$view     = $input->get('view');
+		$document = JFactory::getDocument();
 
 		if ($view != 'product')
 		{
@@ -91,7 +91,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		for ($i = 0, $n = count($results); $i < $n; $i++)
 		{
 			$result = $results[$i];
-			$relation[$result->property_id] = $result->reddesign_designtype_id;
+			$relation[$result->property_id] = $result->designtype_id;
 		}
 
 		$script = "
@@ -116,7 +116,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$query = $db->getQuery(true);
 
 		// Create the base select statement.
-		$query->select('reddesign_designtype_id, property_id')
+		$query->select('designtype_id, property_id')
 			->from($db->quoteName('#__reddesign_attribute_mapping'))
 			->where($db->quoteName('product_id') . ' = ' . (int) $productId);
 
@@ -171,41 +171,42 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		{
 			$app = JFactory::getApplication();
 			$db = JFactory::getDbo();
+			$designTypeId = $app->input->getInt('designtype_id', null);
 
-			$designTypeId = $app->input->getInt('designTypeId', null);
-
-			// Get related design type IDs. They are related because multiple design types can be assigned to a redSHOP product.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('reddesign_designtype_id'));
-			$query->from($db->quoteName('#__reddesign_product_mapping'));
-			$query->where($db->quoteName('product_id') . ' = ' . $data->product_id);
-			$db->setQuery($query);
-			$productRelatedDesigntypeIds = $db->loadResult();
+			$designTypesModel = RModel::getAdminInstance('Designtypes', array('ignore_request' => true), 'com_reddesign');
+			$designTypesProductMapping = $designTypesModel->getProductDesignTypesMapping($data->product_id);
 
 			if (empty($designTypeId))
 			{
-				$productRelatedDesigntypeIds = explode(',', $productRelatedDesigntypeIds);
-				$designTypeId = $productRelatedDesigntypeIds[0];
-				array_shift($productRelatedDesigntypeIds);
-				$productRelatedDesigntypeIds = implode(',', $productRelatedDesigntypeIds);
-			}
-			else
-			{
-				$productRelatedDesigntypeIds = str_replace($designTypeId, '', $productRelatedDesigntypeIds);
-				$productRelatedDesigntypeIds = explode(',', $productRelatedDesigntypeIds);
-				$productRelatedDesigntypeIds = array_filter($productRelatedDesigntypeIds);
-				$productRelatedDesigntypeIds = implode(',', $productRelatedDesigntypeIds);
+				$designTypeId = $designTypesProductMapping->default_designtype_id;
 			}
 
-			$displayData = new stdClass;
+			// List of variables passed to the view.
+			$displayData                             = new stdClass;
+			$displayData->config                     = null;
+			$displayData->item                       = null;
+			$displayData->relatedDesignTypeIds       = null;
+			$displayData->backgrounds                = null;
+			$displayData->defaultPreviewBg           = null;
+			$displayData->productionBackground       = null;
+			$displayData->defaultPreviewBgAttributes = null;
+			$displayData->fonts                      = null;
+			$displayData->imageSize                  = null;
+			$displayData->productionBackgroundAreas  = null;
+			$displayData->selectedFontsDeclaration   = null;
+
+			// Load values...
+
 			$displayData->config = ReddesignEntityConfig::getInstance();
-			$displayData->relatedDesignTypes = $productRelatedDesigntypeIds;
 
-			$designtypesModel = RModel::getFrontInstance('Designtypes', array(), 'com_reddesign');
-			$designtypesModel->setId($designTypeId);
-			$tmpItems = $designtypesModel->getItems();
-			$displayData->item = $tmpItems[0];
-			$displayData->backgrounds = $designtypesModel->getBackgrounds();
+			$designTypeModel = RModel::getAdminInstance('Designtype', array('ignore_request' => true), 'com_reddesign');
+			$displayData->item = $designTypeModel->getItem($designTypeId);
+
+			$displayData->relatedDesignTypeIds = explode(',', $designTypesProductMapping->related_designtype_ids);
+
+			$backgroundModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true), 'com_reddesign');
+			$backgroundModel->setState('designtype_id', $designTypeId);
+			$displayData->backgrounds = $backgroundModel->getItems();
 
 			foreach ($displayData->backgrounds as $background)
 			{
@@ -243,7 +244,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			{
 				/** @var ReddesignModelAreas $areasModel */
 				$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
-				$areasModel->setState('background_id', $displayData->productionBackground->id);
+				$areasModel->setState('filter.background_id', $displayData->productionBackground->id);
 				$displayData->productionBackgroundAreas = $areasModel->getItems();
 
 				$displayData->imageSize = getimagesize(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->defaultPreviewBg->image_path);
@@ -503,9 +504,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$db->setQuery($query);
 		$fonts = $db->loadObjectList();
 
-		// $fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true));
-		// $fonts = $fontsModel->getItems();
-
 		if ($productType == 'redDESIGN')
 		{
 			RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
@@ -608,13 +606,13 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 								// Set preview size at loaded file.
 								var loadedSvgFromFile = jQuery("#svg_image_' . $i . '").find("svg")[0];
-								loadedSvgFromFile.setAttribute("width", "");
-								loadedSvgFromFile.setAttribute("height", "");
+								loadedSvgFromFile.setAttribute("width", "100%");
+								loadedSvgFromFile.setAttribute("height", "100%");
 
 								// Set preview size at svg container element.
 								var rootElement = document.getElementById("svg_image_' . $i . '");
-								rootElement.setAttribute("width", "");
-								rootElement.setAttribute("height", "");
+								rootElement.setAttribute("width", "100%");
+								rootElement.setAttribute("height", "100%");
 								rootElement.setAttribute("overflow", "hidden");
 
 								svg_' . $i . '.add(group_' . $i . ');
@@ -672,7 +670,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 						var areas = rootSnapSvgObject.select("#areaBoxesLayer");
 						values["svgImags"] = encodeURIComponent(areas.innerSVG());
-						values["designtype_id"] = jQuery("#reddesign_designtype_id").val();
+						values["designtype_id"] = jQuery("#designtype_id").val();
 						values["svgWidth"] = rootSnapSvgObject.attr("width");
 						values["svgHeight"] = rootSnapSvgObject.attr("height");
 
@@ -925,16 +923,14 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	public function prepareDesignTypeData($redDesignData)
 	{
 		// Get design type data.
-		$designtypesModel = RModel::getFrontInstance('Designtypes', array(), 'com_reddesign');
-		$designtypesModel->setId($redDesignData['id']);
-		$designTypes = $designtypesModel->getItems();
-		$designType = $designTypes[0];
+		$designTypeModel = RModel::getAdminInstance('Designtype', array(), 'com_reddesign');
+		$designType = $designTypeModel->getItem($redDesignData['id']);
 
 		$data = array();
 		$data['designType'] = $designType;
 
 		// Get Background Data
-		$data['designBackground'] = $designtypesModel->getProductionBackground();
+		$data['designBackground'] = $designTypeModel->getProductionBackground($redDesignData['id']);
 
 		// Get designAreas
 		$data['designAreas'] = array();

@@ -11,7 +11,6 @@ defined('_JEXEC') or die();
 
 JHtml::_('behavior.modal');
 
-//RHelperAsset::load('lib/jquery.min.js', 'redcore');
 RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
 
 if (isset($displayData))
@@ -33,15 +32,12 @@ $unit = $this->config->getUnit();
 $fontUnit = $this->config->getFontUnit();
 $sourceDpi = $this->config->getSourceDpi();
 
-$unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($this->unit, $sourceDpi);
+$unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourceDpi);
 
-if (isset($displayData))
-{
-	$this->unitConversionRatio = $displayData->unitConversionRatio = $unitConversionRatio;
-}
 /*
 {RedDesignBreakELEMENT} is a tag used in integration plugin to explode HTML string into smaller peaces. Those peaces are used in redSHOP templating.
 */
+
 $input = JFactory::getApplication()->input;
 $productId = $input->getInt('pid', 0);
 ?>
@@ -59,7 +55,7 @@ $productId = $input->getInt('pid', 0);
 	<input type="hidden" name="task" id="task" value="">
 	<input type="hidden" name="designAreas" id="designAreas" value="">
 	<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
-	<input type="hidden" id="reddesign_designtype_id" name="reddesign_designtype_id" value="<?php echo $this->item->id; ?>">
+	<input type="hidden" id="designtype_id" name="designtype_id" value="<?php echo $this->item->id; ?>">
 {RedDesignBreakFormBegin}
 
 	<?php // Part 2 - Select Backgrounds ?>
@@ -302,12 +298,12 @@ $productId = $input->getInt('pid', 0);
 
 		text.css('text-align', jQuery(textAlign).val());
 
-
 		var textElement = rootSnapSvgObject.select("#areaBoxesLayer #areaTextElement_" + areaId);
 
 		if (textElement)
 		{
-			textElement.node.innerHTML = jQuery(text).val();
+			textElement.node.textContent = jQuery(text).val();
+
 			if (font)
 				textElement.attr('font-family', jQuery(font).val());
 			if (color)

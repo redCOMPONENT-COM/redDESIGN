@@ -54,12 +54,12 @@ class ReddesignModelBackgrounds extends RModelList
 	 *
 	 * @return  void
 	 */
-	protected function populateState($ordering = null, $direction = null)
+	protected function populateState($ordering = 'b.name', $direction = 'asc')
 	{
 		$filterDesignTypeId = $this->getUserStateFromRequest($this->context . '.filter_designtype_id', 'filter_designtype_id');
 		$this->setState('designtype_id', $filterDesignTypeId);
 
-		parent::populateState('b.name', 'asc');
+		parent::populateState($ordering, $direction);
 	}
 
 	/**
@@ -92,5 +92,68 @@ class ReddesignModelBackgrounds extends RModelList
 		$query->order($db->escape($order) . ' ' . $db->escape($direction));
 
 		return $query;
+	}
+
+	/**
+	 * Gets backgrounds to properties mapping.
+	 *
+	 * @param   int  $propertyId  Property ID
+	 *
+	 * @return  object  $mapping  Property ID - Background ID pair.
+	 */
+	public function getBackgroundPropertyPair($propertyId)
+	{
+		$db = $this->getDbo();
+		$mapping = new JObject;
+		$mapping->property_id = $propertyId;
+		$mapping->background_id = 0;
+
+		$query = $db->getQuery(true);
+		$query->select($db->qn(array('property_id', 'background_id')))
+			->from($db->qn('#__reddesign_property_background_mapping'))
+			->where($db->qn('property_id') . ' = ' . $propertyId);
+		$db->setQuery($query);
+		$result = $db->loadObject();
+
+		if (!empty($result))
+		{
+			$mapping = $result;
+		}
+
+		return $mapping;
+	}
+
+	/**
+	 * Save backgrounds to properties mapping.
+	 *
+	 * @param   int  $propertyId    Property ID
+	 * @param   int  $backgroundId  Background ID
+	 *
+	 * @return  object  $mapping  Property ID - Background ID pair.
+	 */
+	public function saveBackgroundPropertyPair($propertyId, $backgroundId)
+	{
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->qn(array('property_id', 'background_id')))
+			->from($db->qn('#__reddesign_property_background_mapping'))
+			->where($db->qn('property_id') . ' = ' . $propertyId);
+		$db->setQuery($query);
+		$mapping = $db->loadObject();
+
+		if (empty($mapping))
+		{
+			$mapping = new JObject;
+			$mapping->property_id = $propertyId;
+			$mapping->background_id = $backgroundId;
+
+			return $db->insertObject('#__reddesign_property_background_mapping', $mapping);
+		}
+		else
+		{
+			$mapping->background_id = $backgroundId;
+
+			return $db->updateObject('#__reddesign_property_background_mapping', $mapping, 'property_id');
+		}
 	}
 }

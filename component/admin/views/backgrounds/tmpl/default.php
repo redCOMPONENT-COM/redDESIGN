@@ -27,7 +27,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 	<input type="hidden" name="task" id="backgrounds_task" value="">
 	<input type="hidden" name="cid[]" id="backgrounds_background_id" value="">
-	<input type="hidden" name="reddesign_designtype_id" id="backgrounds_reddesign_designtype_id" value="<?php echo $this->designtype_id; ?>">
+	<input type="hidden" name="designtype_id" id="backgrounds_designtype_id" value="<?php echo $this->designtype_id; ?>">
 	<input type="hidden" name="return" id="backgrounds_return" value="<?php echo base64_encode($returnUrl); ?>" />
 	<input type="hidden" name="returnurl" id="backgrounds_return2" value="<?php echo base64_encode($returnUrl); ?>" />
 
@@ -90,16 +90,15 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 								<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
 							</a>
 							<div style="height: 100%;width: 100%;left: -2000px;position: absolute;">
-								<div id="modalPreview<?php echo $background->id; ?>">
-									<div class="progressbar-holder" style="width: <?php echo $bgBackendPreviewWidth - 15; ?>px; margin-bottom:20px;">
-										<div class="progress progress-striped" style="display:none;">
-											<div class="bar bar-success" style="width: 0%; text-align: center;"></div>
-										</div>
+								<div class="progressbar-holder" style="width: <?php echo $bgBackendPreviewWidth - 15; ?>px; margin-bottom:20px;">
+									<div class="progress progress-striped" style="display:none;">
+										<div class="bar bar-success" style="width: 0%; text-align: center;"></div>
 									</div>
-
-									<svg id="bgPreviewSvg<?php echo $background->id; ?>"></svg>
 								</div>
 
+								<div id="modalPreview<?php echo $background->id; ?>">
+									<svg id="bgPreviewSvg<?php echo $background->id; ?>" width="600px" height="450px"></svg>
+								</div>
 							</div>
 						</td>
 						<td class="switchBg td-align-center">

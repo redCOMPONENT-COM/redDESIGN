@@ -23,28 +23,28 @@
 }
 
 /* Frames */
-.frame-container {
+.background-container {
     float: left;
     min-height: 75px;
 }
 
-img.frame-thumbnail {
+img.background-thumbnail {
     max-height: 50px;
     max-width: 50px;
 }
 
-.frame-thumbnail-container {
+.background-thumbnail-container {
     float: left;
     padding-right: 10px;
 }
 
-.frame-selection {
+.background-selection {
     float: left;
     width: 10px;
     margin: 10px 11px 0px 0px;
 }
 
-.frame-detail {
+.background-detail {
     float: left;
     border-left: none;
     margin-right: 25px;
