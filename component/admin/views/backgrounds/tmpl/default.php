@@ -170,7 +170,6 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 					onprogress: function (e) {
 						if (e.lengthComputable) {
 							var loadedPercentage = e.loaded / e.total * 100;
-							console.log(loadedPercentage + '%');
 							$('#modalPreview<?php echo $background->id; ?> .progress .bar-success')
 								.css('width', '' + (loadedPercentage) + '%')
 								.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
@@ -202,22 +201,6 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 						.attr("height", "450px");
 				}
 			});
-
-				/*Snap.load(
-					"<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>",
-					function (f) {
-
-						<?php if ($background->useCheckerboard) : ?>
-							var checkerbox = Snap.parse('<?php echo ReddesignHelpersSvg::getSVGCheckerboard(600, 450); ?>');
-							snap<?php echo $background->id ?>.append(checkerbox);
-						<?php endif; ?>
-						snap<?php echo $background->id ?>.append(f);
-
-						var svgLoaded = jQuery("#bgPreviewSvg<?php echo $background->id; ?>").find("svg")
-							.attr("width", "600px")
-							.attr("height", "450px");
-					}
-				);*/
 
 			// Selects background for edit and populates field data accordingly.
 				jQuery(document).on("click", "#editBackground<?php echo $background->id; ?>", function() {
