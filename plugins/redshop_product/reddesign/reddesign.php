@@ -85,7 +85,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		// Adding script from Plugin as we need customization in attribute.js for property background relation.
 		$document->addScript('plugins/redshop_product/reddesign/js/attribute.js');
 
-		$results  = $this->getPropertyBackgroundRelation($product->product_id);
+		/*$results  = $this->getPropertyBackgroundRelation($product->product_id);
 		$relation = array();
 
 		for ($i = 0, $n = count($results); $i < $n; $i++)
@@ -98,7 +98,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			var propertyBackgroundRelation = " . json_encode($relation) . ";
 		";
 
-		$document->addScriptDeclaration($script);
+		$document->addScriptDeclaration($script);*/
 	}
 
 	/**
@@ -243,7 +243,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			}
 			else
 			{
-				/** @var ReddesignModelAreas $areasModel */
 				$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
 				$areasModel->setState('filter.background_id', $displayData->productionBackground->id);
 				$displayData->productionBackgroundAreas = $areasModel->getItems();

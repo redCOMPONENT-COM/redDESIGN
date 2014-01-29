@@ -156,4 +156,19 @@ class ReddesignModelBackgrounds extends RModelList
 			return $db->updateObject('#__reddesign_property_background_mapping', $mapping, 'property_id');
 		}
 	}
+
+	/**
+	 * Gets list of backgrounds from attribute properties for a product.
+	 *
+	 * @param   int  $product_id  Product ID
+	 *
+	 * @return  array  $backgrounds  Backgrounds saved as redSHOP attributes.
+	 */
+	public function getBackgroundAttributes($product_id)
+	{
+		// Get attributes and properites of this product
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->qn(array('attr.product_id', 'attr.')));
+	}
 }
