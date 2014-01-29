@@ -132,8 +132,6 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 					onprogress: function (e) {
 						if (e.lengthComputable) {
 							var loadedPercentage = parseInt(e.loaded / e.total * 100);
-							if (e.loaded == e.total)
-								finishedLoading = true;
 							$('#backgroundImageContainer .progress .bar-success')
 								.css('width', loadedPercentage + '%')
 								.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
