@@ -165,7 +165,9 @@ $productId = $input->getInt('pid', 0);
 				success: function (response) {
 					jQuery('#svgContainer .progress').removeClass('active');
 					if(typeof response === 'undefined' || response == false){
-						jQuery('#svgContainer .progress').append('<div class="bar bar-danger" style="width: ' + (100 - parseInt(jQuery('#svgContainer .progress .bar-success').css('width'))) + '%;"></div>');
+						jQuery('#svgContainer .progress').append(
+							'<div class="bar bar-danger" style="width: ' + (100 - parseInt(jQuery('#svgContainer .progress .bar-success').css('width'))) + '%;"></div>'
+						);
 					}
 					else{
 						jQuery('#svgContainer .progressbar-holder').fadeOut(3000);
