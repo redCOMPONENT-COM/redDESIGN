@@ -60,7 +60,7 @@
 .progressbar-table {
     width: 100px;
     float: left;
-    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .progressbar-holder .bar-success {
@@ -68,6 +68,6 @@
     text-align: center;
 }
 
-.progressbar-table .progress{
+.redcore .progressbar-table .progress{
     margin-bottom: 0px;
 }

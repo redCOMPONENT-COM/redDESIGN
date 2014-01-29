@@ -82,13 +82,15 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 							<?php echo $background->id; ?>
 						</td>
 						<td class="td-align-left" id="backgroundRow<?php echo $background->id; ?>">
-							<a id="editBackground<?php echo $background->id; ?>" class="editBackground" href="#">
-								<strong><?php echo $background->name; ?></strong>
-							</a>
-							&nbsp;
-							<a class="jmodal btn btn-mini" href="#modalPreview<?php echo $background->id; ?>">
-								<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
-							</a>
+							<div class="pull-left">
+								<a id="editBackground<?php echo $background->id; ?>" class="editBackground" href="#">
+									<strong><?php echo $background->name; ?></strong>
+								</a>
+								&nbsp;
+								<a class="jmodal btn btn-mini" href="#modalPreview<?php echo $background->id; ?>">
+									<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
+								</a>
+							</div>
 							<div class="progressbar-holder progressbar-table">
 								<div class="progress progress-striped" style="display:none;">
 									<div class="bar bar-success"></div>
