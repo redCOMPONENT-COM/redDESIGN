@@ -105,6 +105,11 @@ class ReddesignViewDesigntype extends ReddesignView
 	/**
 	 * @var array
 	 */
+	protected $verticalAlignmentOptions = array();
+
+	/**
+	 * @var array
+	 */
 	protected $fontsOptions = array();
 
 	/**
@@ -191,6 +196,13 @@ class ReddesignViewDesigntype extends ReddesignView
 					JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_COMMON_LEFT')),
 					JHtml::_('select.option', '2', JText::_('COM_REDDESIGN_COMMON_RIGHT')),
 					JHtml::_('select.option', '3', JText::_('COM_REDDESIGN_COMMON_CENTER'))
+				);
+
+				$this->verticalAlignmentOptions = array(
+					JHtml::_('select.option', '', JText::_('COM_REDDESIGN_COMMON_SELECT')),
+					JHtml::_('select.option', 'top', JText::_('COM_REDDESIGN_COMMON_TOP')),
+					JHtml::_('select.option', 'middle', JText::_('COM_REDDESIGN_COMMON_MIDDLE')),
+					JHtml::_('select.option', 'bottom', JText::_('COM_REDDESIGN_COMMON_BOTTOM'))
 				);
 
 				// Get all fonts in the system to be choosen or not for the current design.

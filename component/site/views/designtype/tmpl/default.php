@@ -75,6 +75,11 @@ $productId = $input->getInt('pid', 0);
 
 		<div id="svgContainer">
 			<svg id="mainSvgImage"></svg>
+			<div class="progressbar-holder" style="width: <?php echo $bgBackendPreviewWidth; ?>px; margin-top:20px;">
+				<div class="progress progress-striped" style="display:none;">
+					<div class="bar bar-success"></div>
+				</div>
+			</div>
 		</div>
 
 		<div id="progressBar" style="display: none;">
@@ -139,30 +144,57 @@ $productId = $input->getInt('pid', 0);
 			rootSnapSvgObject = Snap("#mainSvgImage");
 			<?php if (!empty($this->defaultPreviewBg->svg_file)) : ?>
 
-				Snap.load(
-					"<?php echo $imageUrl; ?>",
-					function (f) {
-						var styleDeclaration = Snap.parse('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>');
-						rootSnapSvgObject.append(styleDeclaration);
-						rootSnapSvgObject.append(f);
-
-						// Set preview size at loaded file.
-						var loadedSvgFromFile = jQuery("#mainSvgImage").find("svg")[0];
-						loadedSvgFromFile.setAttribute("width", previewWidth);
-						loadedSvgFromFile.setAttribute("height", previewHeight);
-						loadedSvgFromFile.setAttribute("id", "svgCanvas");
-
-						// Set preview size at svg container element.
-						var rootElement = document.getElementById("mainSvgImage");
-						rootElement.setAttribute("width", previewWidth);
-						rootElement.setAttribute("height", previewHeight);
-						rootElement.setAttribute("overflow", "hidden");
-
-						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
-
-						customize(0);
+			jQuery.ajax({
+				url: "<?php echo $imageUrl; ?>",
+				dataType: "text",
+				cache: true,
+				xhrFields: {
+					onprogress: function (e) {
+						if (e.lengthComputable) {
+							var loadedPercentage = parseInt(e.loaded / e.total * 100);
+							$('#svgContainer .progress .bar-success')
+								.css('width', '' + (loadedPercentage) + '%')
+								.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
+						}
 					}
-				);
+				},
+				beforeSend: function (xhr) {
+					jQuery('#svgContainer .progress').show().addClass('active');
+					jQuery('#svgContainer .progress .bar-success').css('width', '0%');
+				},
+				success: function (response) {
+					jQuery('#svgContainer .progress').removeClass('active');
+					if(typeof response === 'undefined' || response == false){
+						jQuery('#svgContainer .progress').append(
+							'<div class="bar bar-danger" style="width: ' + (100 - parseInt(jQuery('#svgContainer .progress .bar-success').css('width'))) + '%;"></div>'
+						);
+					}
+					else{
+						jQuery('#svgContainer .progressbar-holder').fadeOut(3000);
+					}
+
+					jQuery("#mainSvgImage")
+						.append('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>')
+						.append(response);
+
+					// Set preview size at loaded file.
+					var loadedSvgFromFile = jQuery("#mainSvgImage").find("svg")[0];
+					loadedSvgFromFile.setAttribute("width", previewWidth);
+					loadedSvgFromFile.setAttribute("height", previewHeight);
+					loadedSvgFromFile.setAttribute("id", "svgCanvas");
+
+					// Set preview size at svg container element.
+					var rootElement = document.getElementById("mainSvgImage");
+					rootElement.setAttribute("width", previewWidth);
+					rootElement.setAttribute("height", previewHeight);
+					rootElement.setAttribute("overflow", "hidden");
+
+					rootSnapSvgObject.group().node.id = "areaBoxesLayer";
+
+					customize(0);
+				}
+			});
+
 			<?php endif; ?>
 
 			// Correct radio button selection.

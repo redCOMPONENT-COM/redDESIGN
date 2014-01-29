@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_areas` (
   `color_code`                TEXT        NOT NULL,
   `default_text`              TEXT,
   `textalign`                 INT(11)     NOT NULL,
+  `verticalAlign`             VARCHAR(10) NOT NULL DEFAULT 'top',
   `background_id`             INT(11)     NOT NULL,
   `maxchar`                   INT(10)     NOT NULL,
   `defaultFontSize`           INT(11)     NOT NULL,
