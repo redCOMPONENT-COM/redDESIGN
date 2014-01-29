@@ -132,7 +132,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 					onprogress: function (e) {
 						if (e.lengthComputable) {
 							var loadedPercentage = parseInt(e.loaded / e.total * 100);
-							$('#backgroundImageContainer .progress .bar-success')
+							jQuery('#backgroundImageContainer .progress .bar-success')
 								.css('width', loadedPercentage + '%')
 								.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
 						}
@@ -145,7 +145,12 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				success: function (response) {
 					jQuery('#backgroundImageContainer .progress').removeClass('active');
 					if(typeof response === 'undefined' || response == false){
-						jQuery('#backgroundImageContainer .progress').append('<div class="bar bar-danger" style="width: ' + (100 - parseInt(jQuery('#backgroundImageContainer .progress .bar-success').css('width'))) + '%;"></div>');
+						jQuery('#backgroundImageContainer .progress')
+							.append(
+								'<div class="bar bar-danger" style="width: '
+									+ (100 - parseInt(jQuery('#backgroundImageContainer .progress .bar-success').css('width')))
+									+ '%;"></div>'
+							);
 					}
 					else{
 						jQuery('#backgroundImageContainer .progressbar-holder').fadeOut(3000);

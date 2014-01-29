@@ -163,15 +163,20 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 			jQuery(document).on("mousedown", ".jmodal", function(e) {
 				var backgroundId = jQuery(this).attr('href').replace('#modalPreview', '');
 				if (typeof backgroundPreviews[backgroundId]['progress'] != 'undefined')
+				{
 					return true;
+				}
 				loadPreviewBackground(backgroundId, this);
+
 				return false;
 			});
 
 			function loadPreviewBackground(backgroundId, modalButton)
 			{
 				if (typeof backgroundPreviews[backgroundId] === 'undefined')
+				{
 					return false;
+				}
 
 				jQuery.ajax({
 					url: backgroundPreviews[backgroundId]['svgUrl'],
@@ -194,11 +199,13 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 					},
 					success: function (response) {
 						jQuery('#backgroundRow' + backgroundId + ' .progress').removeClass('active');
-						if(typeof response === 'undefined' || response == false){
+						if(typeof response === 'undefined' || response == false)
+						{
 							jQuery('#backgroundRow' + backgroundId + ' .progress')
 								.append('<div class="bar bar-danger" style="width: ' + (100 - parseInt(jQuery('#backgroundRow' + backgroundId + ' .progress .bar-success').css('width'))) + '%;"></div>');
 						}
-						else{
+						else
+						{
 							jQuery('#backgroundRow' + backgroundId + ' .progressbar-holder .progress .bar-success').css('width', '100%');
 						}
 
@@ -216,10 +223,11 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 				});
 			}
 			<?php foreach ($this->items as $background) : ?>
-			//var snap<?php echo $background->id ?> = Snap("#bgPreviewSvg<?php echo $background->id; ?>");
 
 			backgroundPreviews[<?php echo $background->id ?>] = [];
-			backgroundPreviews[<?php echo $background->id ?>]['svgUrl'] = "<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>";
+			backgroundPreviews[<?php echo $background->id ?>]['svgUrl'] = "<?php
+				echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file;
+			?>";
 			backgroundPreviews[<?php echo $background->id ?>]['useCheckerboard'] = <?php echo ($background->useCheckerboard) ? 'true' : 'false'; ?>;
 
 
