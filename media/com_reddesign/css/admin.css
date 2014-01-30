@@ -71,3 +71,8 @@
 .redcore .progressbar-table .progress{
     margin-bottom: 0px;
 }
+
+.redcore div.font-list-preview {
+    font-size:20px;
+    margin:0px;
+}

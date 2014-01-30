@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field
+			name="id"
+			id="id"
+			type="hidden"
+			default="0"
+			label="COM_REDDESIGN_COMMON_ID"
+			description="COM_REDDESIGN_COMMON_ID"
+			readonly="true"
+			/>
+        <field
+                name="name"
+                id="name"
+                type="text"
+                label="COM_REDDESIGN_CLIPART_NAME"
+                description="COM_REDDESIGN_CLIPART_NAME_DESC"
+                maxlength="255"
+                size="32"
+                />
+		<field
+			name="clipartFile"
+			id="clipartFile"
+			type="file"
+			label="COM_REDDESIGN_CLIPART_FIELD_FILE"
+			description="COM_REDDESIGN_CLIPART_FIELD_FILE_DESC"
+			class="inputbox"
+			/>
+        <field
+                name="categoryId"
+                type="category"
+                extension="com_reddesign"
+                class="inputbox"
+                default=""
+                label="COM_REDDESIGN_CLIPART_CATEGORY_LABEL"
+                description="COM_REDDESIGN_CLIPART_CATEGORY_DESC"
+                required="true"
+                >
+            <option value="0">JOPTION_SELECT_CATEGORY</option>
+        </field>
+		<field
+			name="state"
+			id="state"
+			type="radio"
+			label="JPUBLISHED"
+			description="JPUBLISHED"
+			class="btn-group"
+			default="1"
+			>
+			<option class="btn" value="1">JYES</option>
+			<option class="btn" value="0">JNO</option>
+		</field>
+	</fieldset>
+</form>

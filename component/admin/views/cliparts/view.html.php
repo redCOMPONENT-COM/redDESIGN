@@ -10,13 +10,13 @@
 defined('_JEXEC') or die;
 
 /**
- * Fonts List View
+ * Cliparts List View
  *
  * @package     Reddesign.Backend
  * @subpackage  View
  * @since       2.0
  */
-class ReddesignViewFonts extends ReddesignView
+class ReddesignViewCliparts extends ReddesignView
 {
 	/**
 	 * Do we have to display a sidebar ?
@@ -24,13 +24,6 @@ class ReddesignViewFonts extends ReddesignView
 	 * @var  boolean
 	 */
 	protected $displaySidebar = false;
-
-	/**
-	 * Application configuration
-	 *
-	 * @var  boolean
-	 */
-	protected $configuration = false;
 
 	/**
 	 * Display the list
@@ -47,21 +40,12 @@ class ReddesignViewFonts extends ReddesignView
 		$this->state = $this->get('State');
 		$this->pagination = $this->get('Pagination');
 		$this->filterForm = $this->get('Form');
-		$this->configuration = ReddesignEntityConfig::getInstance();
 
 		$this->ordering = array();
 
 		foreach ($this->items as &$item)
 		{
 			$this->ordering[0][] = $item->id;
-		}
-
-		$fontStyleDeclaration = ReddesignHelpersFont::createFontStyleDeclaration($this->items);
-
-		if (!empty($fontStyleDeclaration))
-		{
-			$document = JFactory::getDocument();
-			$document->addStyleDeclaration($fontStyleDeclaration);
 		}
 
 		parent::display($tpl);
@@ -76,7 +60,7 @@ class ReddesignViewFonts extends ReddesignView
 	 */
 	public function getTitle()
 	{
-		return JText::_('COM_REDDESIGN_FONTS_LIST');
+		return JText::_('COM_REDDESIGN_CLIPART_LIST');
 	}
 
 	/**
@@ -91,23 +75,35 @@ class ReddesignViewFonts extends ReddesignView
 		$firstGroup = new RToolbarButtonGroup;
 		$secondGroup = new RToolbarButtonGroup;
 		$thirdGroup = new RToolbarButtonGroup;
+		$fourthGroup = new RToolbarButtonGroup;
 
 		if ($user->authorise('core.admin', 'com_reddesign.panel'))
 		{
-			$new = RToolbarBuilder::createNewButton('font.add');
+			$new = RToolbarBuilder::createNewButton('clipart.add');
 			$secondGroup->addButton($new);
 
-			$edit = RToolbarBuilder::createEditButton('font.edit');
+			$edit = RToolbarBuilder::createEditButton('clipart.edit');
 			$secondGroup->addButton($edit);
 
-			$delete = RToolbarBuilder::createDeleteButton('fonts.delete');
+			$delete = RToolbarBuilder::createDeleteButton('cliparts.delete');
 			$thirdGroup->addButton($delete);
+
+			$categories = RToolbarBuilder::createStandardButton(
+				'cliparts.categories',
+				JText::_('COM_REDDESIGN_CLIPART_CATEGORIES_LABEL'),
+				'',
+				'icon-sitemap',
+				false
+			);
+
+			$fourthGroup->addButton($categories);
 		}
 
 		$toolbar = new RToolbar;
 		$toolbar->addGroup($firstGroup)
 			->addGroup($secondGroup)
-			->addGroup($thirdGroup);
+			->addGroup($thirdGroup)
+			->addGroup($fourthGroup);
 
 		return $toolbar;
 	}
