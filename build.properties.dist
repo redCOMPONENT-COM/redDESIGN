@@ -4,7 +4,7 @@
 
 # Extension details:
 comp.name=redDESIGN
-comp.version=2.0
+comp.version=2.0.0.8
 
 # Version of Joomla where the extension can be installed: j2.x, j3.x or redCORE
 joomla.version=redCORE
