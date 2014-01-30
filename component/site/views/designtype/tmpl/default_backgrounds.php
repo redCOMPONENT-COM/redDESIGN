@@ -18,8 +18,10 @@ if (isset($displayData))
 	$this->attributesBackgrounds = $displayData->attributesBackgrounds;*/
 
 	$this->displayedBackground = $displayData->displayedBackground;
-	$this->designType = $displayData->designType;
 	$this->backgrounds = $displayData->backgrounds;
+	$this->designType = $displayData->designType;
+	$this->displayedProductionBackground = $displayData->displayedProductionBackground;
+	$this->displayedAreas = $displayData->displayedAreas;
 }
 
 $background_id = null;
@@ -27,9 +29,9 @@ $background_id = null;
 $input = JFactory::getApplication()->input;
 
 ?>
-<h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_FRAMES_TITLE') ?></h4>
+<h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_BACKGROUNDS_TITLE') ?></h4>
 <div class="row-fluid">
-	<ul id="frames" class="thumbnails">
+	<ul id="backgrounds" class="thumbnails">
 
 		<?php foreach($this->backgrounds as $background) : ?>
 			<li>
@@ -38,8 +40,8 @@ $input = JFactory::getApplication()->input;
 						<input type="radio"
 						       class="price-modifier"
 						       onChange ="setBackground(<?php echo $background->id;?>);"
-						       id="frame<?php echo $background->id;?>"
-						       name="frame"
+						       id="background<?php echo $background->id;?>"
+						       name="background<?php echo $background->id;?>"
 						       value="<?php echo $background->id ?>"
 							<?php if ($background->id == $this->displayedBackground->id) : ?>
 								checked="checked"

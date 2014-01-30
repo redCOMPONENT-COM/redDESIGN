@@ -266,9 +266,4 @@ class ReddesignModelBackground extends RModelAdmin
 
 		return parent::save($data);
 	}
-
-	/**
-	 * Gets production background. Parameter is background ID of a background
-	 * which is not production, but it is from the same Design Type.
-	 */
 }

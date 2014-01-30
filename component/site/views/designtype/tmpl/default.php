@@ -25,8 +25,10 @@ if (isset($displayData))
 	$this->selectedFontsDeclaration = $displayData->selectedFontsDeclaration;*/
 
 	$this->displayedBackground = $displayData->displayedBackground;
-	$this->designType = $displayData->designType;
 	$this->backgrounds = $displayData->backgrounds;
+	$this->designType = $displayData->designType;
+	$this->displayedProductionBackground = $displayData->displayedProductionBackground;
+	$this->displayedAreas = $displayData->displayedAreas;
 }
 
 $imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->displayedBackground->svg_file;
@@ -81,7 +83,7 @@ $productId = $input->getInt('pid', 0);
 
 		<div id="svgContainer">
 			<svg id="mainSvgImage"></svg>
-			<div class="progressbar-holder" style="width: <?php echo $bgBackendPreviewWidth; ?>px; margin-top:20px;">
+			<div class="progressbar-holder" style="width: <?php echo $displayData->displayedBackground->width; ?>px; margin-top:20px;">
 				<div class="progress progress-striped" style="display:none;">
 					<div class="bar bar-success"></div>
 				</div>
@@ -100,7 +102,7 @@ $productId = $input->getInt('pid', 0);
 	<?php // Part 4 - "Customize it!" Button (Controlled by configuration parameters.) ?>
 {RedDesignBreakButtonCustomizeIt}
 	<div class="customize-it-btn row-fluid">
-		<?php if (!empty($this->productionBackgroundAreas) && ($autoCustomize == 0 || $autoCustomize == 2) ) : ?>
+		<?php if (!empty($this->displayedAreas) && ($autoCustomize == 0 || $autoCustomize == 2) ) : ?>
 			<button type="button"
 			        class="btn btn-success"
 			        data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>"
@@ -134,8 +136,8 @@ $productId = $input->getInt('pid', 0);
 	 */
 	var unit = "<?php echo $unit;?>";
 	var fontUnit = "<?php echo $fontUnit;?>";
-	var imageWidth  = parseFloat("<?php echo (!empty($this->defaultPreviewBgAttributes->width) ? $this->defaultPreviewBgAttributes->width : ''); ?>");
-	var imageHeight = parseFloat("<?php echo (!empty($this->defaultPreviewBgAttributes->height) ? $this->defaultPreviewBgAttributes->height : ''); ?>");
+	var imageWidth  = parseFloat("<?php echo (!empty($displayData->displayedBackground->width) ? $displayData->displayedBackground->width : ''); ?>");
+	var imageHeight = parseFloat("<?php echo (!empty($displayData->displayedBackground->height) ? $displayData->displayedBackground->height : ''); ?>");
 	var previewWidth  = parseFloat("<?php echo $previewWidth; ?>");
 
 	var unitConversionRatio = parseFloat("<?php echo $unitConversionRatio;?>");
@@ -204,7 +206,7 @@ $productId = $input->getInt('pid', 0);
 			<?php endif; ?>
 
 			// Correct radio button selection.
-			jQuery("#frame<?php echo $this->defaultPreviewBg->id; ?>").attr("checked", "checked");
+			jQuery("#background<?php echo $this->displayedBackground->id; ?>").attr("checked", "checked");
 
 			// Customize function.
 			jQuery(document).on("click", "#customizeDesign", function () {
@@ -404,7 +406,7 @@ $productId = $input->getInt('pid', 0);
 		/**
 		 * 0 when customize function is called from an element different than button (textbox, font dropdown etc.)
 		 * 1 when customize function is called from the button
-		 * 3 when customize function is called from frames selection radio button
+		 * 3 when customize function is called from background selection radio button
 		 */
 
 		// Turn off or on customization according to the settings in config.xml.
@@ -437,7 +439,7 @@ $productId = $input->getInt('pid', 0);
 				'reddesign_designtype_id' : reddesign_designtype_id,
 				'background_id' : background_id
 			};
-			<?php foreach($this->productionBackgroundAreas as $area) :?>
+			<?php foreach($this->displayedAreas as $area) :?>
 
 				var fontColor = "000000";
 				if (jQuery("#colorCode<?php echo $area->id; ?>").length > 0)
