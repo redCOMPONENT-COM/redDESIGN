@@ -8,7 +8,7 @@
 	<authorUrl>www.redcomponent.com</authorUrl>
 	<copyright>(c) redCOMPONENT.com</copyright>
 	<license>GNU/GPL</license>
-	<version>2.0.0.7</version>
+	<version>2.0.0.8</version>
 	<description>COM_REDDESIGN_XML_DESC</description>
 	<scriptfile>install.php</scriptfile>
 	<redcore version="1.0"/>
@@ -54,6 +54,7 @@
 		<submenu>
 			<menu img="../media/com_reddesign/images/designarea_16.png" view="designtypes">COM_REDDESIGN_MENU_DESIGNTYPES</menu>
 			<menu img="../media/com_reddesign/images/font_16.png" view="fonts">COM_REDDESIGN_MENU_FONTS</menu>
+            <menu img="../media/com_reddesign/images/reddesign_16.png" view="fonts">COM_REDDESIGN_MENU_CLIPARTS</menu>
 			<menu img="../media/com_reddesign/images/reddesign_configuration_16.png" view="config" layout="edit">COM_REDDESIGN_MENU_CONFIGURATION</menu>
 		</submenu>
 		<files folder="component/admin">

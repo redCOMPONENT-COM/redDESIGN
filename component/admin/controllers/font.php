@@ -29,6 +29,7 @@ class ReddesignControllerFont extends RControllerForm
 	 */
 	public function save($key = null, $urlVar = null)
 	{
+		$config = ReddesignEntityConfig::getInstance();
 		$id = $this->input->getInt('id', null);
 		$file = $this->input->files->get('jform');
 		$file = $file['font_file'];
@@ -41,7 +42,7 @@ class ReddesignControllerFont extends RControllerForm
 			if (!empty($file['name']) && !empty($file['type']))
 			{
 				// Upload the font file
-				$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'fonts', 10, 'woff');
+				$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'fonts', $config->getMaxSVGFileSize(), 'woff');
 			}
 
 			// Delete font .ttf file
