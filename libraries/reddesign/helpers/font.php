@@ -20,22 +20,37 @@ defined('_JEXEC') or die;
 final class ReddesignHelpersFont
 {
 	/**
-	 * Returns Style Declaration for given fonts
+	 * Returns Style Declaration for given fonts Ids
 	 *
-	 * @param   array  $fonts  List of fonts that is going to be loaded
+	 * @param   array  $fontIds  List of font Ids that is going to be loaded
 	 *
 	 * @return string
 	 */
-	public static function getFontStyleDeclaration($fonts = null)
+	public static function getFontStyleDeclaration($fontIds = null)
 	{
-		if (!empty($fonts))
+		if (!empty($fontIds) || !empty($fontList))
 		{
 			/** @var ReddesignModelFonts $fontsModel */
 			$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true), 'com_reddesign');
-			$fontsModel->setState('filter.id', $fonts);
+			$fontsModel->setState('filter.id', $fontIds);
 
+			return self::createFontStyleDeclaration($fontsModel->getItems());
+		}
+	}
+
+	/**
+	 * Returns Style Declaration for given fonts objects
+	 *
+	 * @param   object  $fontList  List of font Ids that is going to be loaded
+	 *
+	 * @return string
+	 */
+	public static function createFontStyleDeclaration($fontList = null)
+	{
+		if (!empty($fontList))
+		{
 			$fontStyleDeclaration = RLayoutHelper::render('svg.font-face', array(
-					'items' => $fontsModel->getItems(),
+					'items' => $fontList,
 				),
 				JPATH_ROOT . '/administrator/components/com_reddesign/layouts'
 			);

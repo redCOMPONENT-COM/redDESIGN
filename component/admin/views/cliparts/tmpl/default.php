@@ -11,13 +11,13 @@ defined('_JEXEC') or die;
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
-$saveOrderingUrl = 'index.php?option=com_reddesign&task=fonts.saveOrderAjax&tmpl=component';
+$saveOrderingUrl = 'index.php?option=com_reddesign&task=cliparts.saveOrderAjax&tmpl=component';
 $disableClassName = '';
 $disabledLabel = '';
 
-if ($listOrder == 'f.ordering')
+if ($listOrder == 'c.ordering')
 {
-	JHtml::_('rsortablelist.sortable', 'fontsList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
+	JHtml::_('rsortablelist.sortable', 'clipartsList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
 else
 {
@@ -26,7 +26,7 @@ else
 }
 ?>
 
-<form action="index.php?option=com_reddesign&view=fonts" method="post" id="adminForm" name="adminForm">
+<form action="index.php?option=com_reddesign&view=cliparts" method="post" id="adminForm" name="adminForm">
 	<?php echo JText::_('COM_REDDESIGN_COMMON_FILTER'); ?>
 	<?php
 		echo RLayoutHelper::render(
@@ -35,9 +35,9 @@ else
 				'view' => $this,
 				'options' => array(
 					'filterButton' => false,
-					'searchField' => 'search_fonts',
-					'searchFieldSelector' => '#filter_search_fonts',
-					'limitFieldSelector' => '#list_search_fonts',
+					'searchField' => 'search_cliparts',
+					'searchFieldSelector' => '#filter_search_cliparts',
+					'limitFieldSelector' => '#list_search_cliparts',
 					'activeOrder' => $listOrder,
 					'activeDirection' => $listDirn
 				)
@@ -52,35 +52,38 @@ else
 			</div>
 		</div>
 	<?php else : ?>
-		<table id="fontsList" class="table table-striped">
+		<table id="clipartsList" class="table table-striped">
 			<thead>
 				<tr>
 					<th style="width:5%;">
 						<?php echo JText::_('COM_REDDESIGN_COMMON_NUM'); ?>
 					</th>
 					<th class="nowrap center hidden-phone" style="width:5%;">
-						<?php echo JHtml::_('rsearchtools.sort', '', 'f.ordering', $listDirn, $listOrder, null, 'asc', '', 'icon-sort'); ?>
+						<?php echo JHtml::_('rsearchtools.sort', '', 'c.ordering', $listDirn, $listOrder, null, 'asc', '', 'icon-sort'); ?>
 					</th>
 					<th style="width:5%;">
 						<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>)"? />
 					</th>
 					<th>
-						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_FONT_NAME', 'f.name', $listDirn, $listOrder);?>
+						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_CLIPART_NAME', 'c.name', $listDirn, $listOrder);?>
 					</th>
-					<th class="nowrap" style="width:30%;">
-						<?php echo JText::_('COM_REDDESIGN_FONT_THUMB_PREVIEW');?>
+					<th>
+						<?php echo JText::_('COM_REDDESIGN_CLIPART_PREVIEW');?>
+					</th>
+					<th>
+						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_CLIPART_CATEGORY', 'categoryName', $listDirn, $listOrder);?>
 					</th>
 					<th style="width:5%;">
-						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_COMMON_ENABLED', 'f.state', $listDirn, $listOrder);?>
+						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_COMMON_ENABLED', 'c.state', $listDirn, $listOrder);?>
 					</th>
 					<th style="width:5%;">
-						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_COMMON_ID', 'f.id', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('rsearchtools.sort', 'COM_REDDESIGN_COMMON_ID', 'c.id', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="7">
+					<td colspan="8">
 						<?php echo $this->pagination->getPaginationLinks(null, array('showLimitBox' => false)); ?>
 					</td>
 				</tr>
@@ -110,15 +113,16 @@ else
 							<?php echo JHtml::_('grid.id', $i, $row->id); ?>
 						</td>
 						<td>
-							<?php echo JHtml::_('link', JRoute::_('index.php?option=com_reddesign&task=font.edit&id=' . $row->id), $row->name); ?>
-						</td>
-						<td class="nowrap">
-							<div class="alert alert-success pull-left font-list-preview" style="font-family: '<?php echo $row->name; ?>', Arial;">
-								<?php echo $this->configuration->getFontPreviewText(); ?>
-							</div>
+							<?php echo JHtml::_('link', JRoute::_('index.php?option=com_reddesign&task=clipart.edit&id=' . $row->id), $row->name); ?>
 						</td>
 						<td>
-							<?php echo JHtml::_('rgrid.published', $row->state, $i, 'fonts.', true, 'cb'); ?>
+							<img class="thumbnail" src="<?php echo JURI::root() . 'media/com_reddesign/cliparts/' . $row->clipartFile; ?>" style="width:100px;" />
+						</td>
+						<td>
+							<?php echo $row->categoryName; ?>
+						</td>
+						<td>
+							<?php echo JHtml::_('rgrid.published', $row->state, $i, 'cliparts.', true, 'cb'); ?>
 						</td>
 						<td>
 							<?php echo $row->id;?>
