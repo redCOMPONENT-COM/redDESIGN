@@ -169,7 +169,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	{
 		if ($data->product_type == 'redDESIGN')
 		{
-			$app = JFactory::getApplication();
+			/*$app = JFactory::getApplication();
 			$db = JFactory::getDbo();
 			$designTypeId = $app->input->getInt('designtype_id', null);
 
@@ -209,6 +209,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$backgroundModel->setState('designtype_id', $designTypeId);
 			$displayData->backgrounds = $backgroundModel->getItems();
 
+			$backgroundModel->getBackgroundsFromAttributes($data->product_id);
+
 			foreach ($displayData->backgrounds as $background)
 			{
 				if ($background->isDefaultPreview)
@@ -228,7 +230,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$displayData->defaultPreviewBgAttributes->width  = str_replace('px', '', $displayData->defaultPreviewBgAttributes->width);
 			$displayData->defaultPreviewBgAttributes->height = str_replace('px', '', $displayData->defaultPreviewBgAttributes->height);
 
-			/** @var ReddesignModelFonts $fontsModel */
 			$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true), 'com_reddesign');
 			$displayData->fonts = $fontsModel->getItems();
 
@@ -256,7 +257,42 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			if (empty($displayData->productionBackgroundAreas))
 			{
 				$app->enqueueMessage(JText::_('COM_REDDESIGN_DESIGNTYPE_NO_DESIGN_AREAS'), 'notice');
+			}*/
+
+			$app = JFactory::getApplication();
+			$db = JFactory::getDbo();
+			$displayData = new JObject;
+			$displayData->displayedBackground = null;
+			$displayData->designType = null;
+			$displayData->backgrounds = null;
+
+				//$designTypeId = $app->input->getInt('designtype_id', null);
+			$displayedBackgroundId = $app->input->getInt('displayedBackgroundId', null);
+
+			// Get displayed background.
+			$backgroundsModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true), 'com_reddesign');
+			$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true), 'com_reddesign');
+			$designTypeModel = RModel::getAdminInstance('Designtype', array('ignore_request' => true), 'com_reddesign');
+
+			if (!$displayedBackgroundId)
+			{
+				$displayedAttrPropBackground = $backgroundsModel->getDefaultBackground($data->product_id);
+				$displayedBackgroundId = $displayedAttrPropBackground->background_id;
 			}
+
+			$displayData->displayedBackground = $backgroundModel->getItem($displayedBackgroundId);
+
+			// Get list of other backgrounds.
+			$attributePropertiesBackgounds = $backgroundsModel->getBackgroundsFromAttributes($data->product_id);
+			$backgrounds = array();
+
+			foreach ($attributePropertiesBackgounds as $attrPropertyBackground)
+			{
+				$backgrounds[] = $backgroundModel->getItem($attrPropertyBackground->background_id);
+			}
+
+			$displayData->backgrounds = $backgrounds;
+			$displayData->designType = $designTypeModel->getItem($displayData->displayedBackground->designtype_id);
 
 			$html = RLayoutHelper::render('default', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
 
@@ -265,7 +301,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$query->select($db->quoteName('id'))
 				->from($db->quoteName('#__reddesign_backgrounds'))
 				->where($db->quoteName('isProductionBg') . ' = ' . 1)
-				->where($db->quoteName('designtype_id') . ' = ' . $designTypeId);
+				->where($db->quoteName('designtype_id') . ' = ' . $displayData->displayedBackground->designtype_id);
 			$db->setQuery($query);
 			$backgroundId = $db->loadResult();
 
@@ -273,7 +309,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$query = $db->getQuery(true);
 			$query->select($db->quoteName('id'))
 				->from($db->quoteName('#__reddesign_areas'))
-				->where($db->quoteName('background_id') . ' = ' . $backgroundId);
+				->where($db->quoteName('background_id') . ' = ' . $displayData->displayedBackground->id);
 			$db->setQuery($query);
 			$areas = $db->loadColumn();
 

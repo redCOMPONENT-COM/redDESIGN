@@ -15,22 +15,27 @@ RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
 
 if (isset($displayData))
 {
-	$this->item = $displayData->item;
+	/*$this->item = $displayData->item;
 	$this->defaultPreviewBg = $displayData->defaultPreviewBg;
 	$this->productionBackground = $displayData->productionBackground;
 	$this->productionBackgroundAreas = $displayData->productionBackgroundAreas;
 	$this->defaultPreviewBgAttributes = $displayData->defaultPreviewBgAttributes;
 	$this->fonts = $displayData->fonts;
 	$this->config = $displayData->config;
-	$this->selectedFontsDeclaration = $displayData->selectedFontsDeclaration;
+	$this->selectedFontsDeclaration = $displayData->selectedFontsDeclaration;*/
+
+	$this->displayedBackground = $displayData->displayedBackground;
+	$this->designType = $displayData->designType;
+	$this->backgrounds = $displayData->backgrounds;
 }
 
-$imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->svg_file;
-$autoCustomize = $this->config->getAutoCustomize();
-$previewWidth = $this->config->getMaxSVGPreviewSiteWidth();
-$unit = $this->config->getUnit();
-$fontUnit = $this->config->getFontUnit();
-$sourceDpi = $this->config->getSourceDpi();
+$imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->displayedBackground->svg_file;
+$config = ReddesignEntityConfig::getInstance();
+$autoCustomize = $config->getAutoCustomize();
+$previewWidth = $config->getMaxSVGPreviewSiteWidth();
+$unit = $config->getUnit();
+$fontUnit = $config->getFontUnit();
+$sourceDpi = $config->getSourceDpi();
 
 $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourceDpi);
 
@@ -44,7 +49,7 @@ $productId = $input->getInt('pid', 0);
 
 <?php // Part 0 - Title ?>
 {RedDesignBreakTitle}
-<h1><?php echo $this->item->name; ?></h1>
+<h1><?php echo $this->designType->name; ?></h1>
 {RedDesignBreakTitle}
 
 <?php // Part 1 - Begin Form ?>
@@ -55,7 +60,8 @@ $productId = $input->getInt('pid', 0);
 	<input type="hidden" name="task" id="task" value="">
 	<input type="hidden" name="designAreas" id="designAreas" value="">
 	<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
-	<input type="hidden" id="designtype_id" name="designtype_id" value="<?php echo $this->item->id; ?>">
+	<input type="hidden" id="designtype_id" name="designtype_id" value="<?php //echo $this->designType->id; ?>">
+	<input type="hidden" id="displayedBackgroundId" name="displayedBackgroundId" value="<?php echo $this->displayedBackground->id; ?>">
 {RedDesignBreakFormBegin}
 
 	<?php // Part 2 - Select Backgrounds ?>
@@ -63,7 +69,7 @@ $productId = $input->getInt('pid', 0);
 	<div class="row-fluid">
 		<div class="well span12">
 			<?php
-			echo RLayoutHelper::render('default_backgrounds', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
+				echo RLayoutHelper::render('default_backgrounds', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
 			?>
 		</div>
 	</div>
@@ -342,7 +348,7 @@ $productId = $input->getInt('pid', 0);
 				textElement.attr('fill', '#' + jQuery(color).val().replace('#',''));
 			if (fontSize)
 			{
-				var fontSize = jQuery(fontSize).val().split(":");
+				fontSize = jQuery(fontSize).val().split(":");
 				var fontSizeValue = 0;
 				if (fontSize.length > 1)
 					fontSizeValue = fontSize[1];
