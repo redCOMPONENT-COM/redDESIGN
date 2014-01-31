@@ -100,13 +100,18 @@ class ReddesignViewFonts extends ReddesignView
 			$edit = RToolbarBuilder::createEditButton('font.edit');
 			$firstGroup->addButton($edit);
 
-			$assignAllFonts = RToolbarBuilder::createStandardButton(
-				'fonts.fontsToAllAreas',
-				JText::_('COM_REDDESIGN_FONTS_ASSIGN_SELECTED_FONTS'),
-				'',
-				'icon-save'
-			);
-			$secondGroup->addButton($assignAllFonts);
+			$config = ReddesignEntityConfig::getInstance();
+
+			if ($config->getShowAssignFontsToAllAreas())
+			{
+				$assignAllFonts = RToolbarBuilder::createStandardButton(
+					'fonts.fontsToAllAreas',
+					JText::_('COM_REDDESIGN_FONTS_ASSIGN_SELECTED_FONTS'),
+					'',
+					'icon-save'
+				);
+				$secondGroup->addButton($assignAllFonts);
+			}
 
 			$delete = RToolbarBuilder::createDeleteButton('fonts.delete');
 			$thirdGroup->addButton($delete);
