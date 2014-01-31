@@ -121,4 +121,20 @@ class ReddesignModelFonts extends RModelList
 
 		return $query;
 	}
+
+	/**
+	 * Assigns selected fonts to all areas.
+	 *
+	 * @param   string  $fontIds  JSON list of font IDs
+	 * @param   array   $areaIds  Array of area IDs
+	 *
+	 * @return  boolean
+	 */
+	public function fontsToAllAreas($fontIds, $areaIds)
+	{
+		$areaTable = RTable::getInstance('Area', 'ReddesignTable');
+		$areaTable->fontsToAllAreas($fontIds, $areaIds);
+
+		return true;
+	}
 }
