@@ -107,7 +107,7 @@ class ReddesignViewFonts extends ReddesignView
 				$assignAllFonts = RToolbarBuilder::createStandardButton(
 					'fonts.fontsToAllAreas',
 					JText::_('COM_REDDESIGN_FONTS_ASSIGN_SELECTED_FONTS'),
-					'',
+					'btn btn-warning',
 					'icon-save'
 				);
 				$secondGroup->addButton($assignAllFonts);
