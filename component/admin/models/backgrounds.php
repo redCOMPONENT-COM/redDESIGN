@@ -156,4 +156,65 @@ class ReddesignModelBackgrounds extends RModelList
 			return $db->updateObject('#__reddesign_property_background_mapping', $mapping, 'property_id');
 		}
 	}
+
+	/**
+	 * Gets join list of backgrounds as properties for a product.
+	 *
+	 * @param   int  $product_id  Product ID
+	 *
+	 * @return  array  Properties and backgrounds per product.
+	 */
+	public function getBackgroundsFromAttributes($product_id)
+	{
+		// Get attributes and properites of this product
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query->select(
+				$db->qn(
+					array('attr.product_id', 'attr.attribute_id', 'prop.property_id', 'prop.ordering', 'prop.setdefault_selected', 'bg.background_id')
+				)
+			)
+			->from(
+				$db->qn('#__redshop_product_attribute', 'attr')
+			)
+			->innerJoin(
+				$db->qn('#__redshop_product_attribute_property', 'prop') . ' ON (' . $db->qn('attr.attribute_id') . ' = ' . $db->qn('prop.attribute_id') . ')'
+			)
+			->innerJoin(
+				$db->qn('#__reddesign_property_background_mapping', 'bg') . ' ON (' . $db->qn('prop.property_id') . ' = ' . $db->qn('bg.property_id') . ')'
+			)
+			->where(
+				$db->qn('attr.product_id') . ' = ' . $product_id
+			)
+			->order(
+				$db->qn('prop.ordering') . ' ASC'
+			);
+		$db->setQuery($query);
+
+		return $db->loadObjectList();
+	}
+
+	/**
+	 * Get default background (default as default attribute, "preselected" option in attributes tab).
+	 *
+	 * @param   int  $product_id  Product ID
+	 *
+	 * @return  object
+	 */
+	public function getDefaultBackground($product_id)
+	{
+		$backgrounds = $this->getBackgroundsFromAttributes($product_id);
+		$defaultKey = 0;
+
+		foreach ($backgrounds as $key => $object)
+		{
+			if ($object->setdefault_selected)
+			{
+				$defaultKey = $key;
+				break;
+			}
+		}
+
+		return $backgrounds[$defaultKey];
+	}
 }

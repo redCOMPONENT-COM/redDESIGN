@@ -85,7 +85,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		// Adding script from Plugin as we need customization in attribute.js for property background relation.
 		$document->addScript('plugins/redshop_product/reddesign/js/attribute.js');
 
-		$results  = $this->getPropertyBackgroundRelation($product->product_id);
+		/*$results  = $this->getPropertyBackgroundRelation($product->product_id);
 		$relation = array();
 
 		for ($i = 0, $n = count($results); $i < $n; $i++)
@@ -98,7 +98,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			var propertyBackgroundRelation = " . json_encode($relation) . ";
 		";
 
-		$document->addScriptDeclaration($script);
+		$document->addScriptDeclaration($script);*/
 	}
 
 	/**
@@ -170,112 +170,59 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		if ($data->product_type == 'redDESIGN')
 		{
 			$app = JFactory::getApplication();
-			$db = JFactory::getDbo();
-			$designTypeId = $app->input->getInt('designtype_id', null);
+			$displayData = new JObject;
+			$displayData->displayedBackground = null;
+			$displayData->backgrounds = null;
+			$displayData->designType = null;
+			$displayData->displayedProductionBackground = null;
+			$displayData->displayedAreas = null;
+			$displayData->fonts = null;
 
-			$designTypesModel = RModel::getAdminInstance('Designtypes', array('ignore_request' => true), 'com_reddesign');
-			$designTypesProductMapping = $designTypesModel->getProductDesignTypesMapping($data->product_id);
+			$displayedBackgroundId = $app->input->getInt('displayedBackgroundId', null);
 
-			if (empty($designTypeId))
-			{
-				$designTypeId = $designTypesProductMapping->default_designtype_id;
-			}
-
-			// List of variables passed to the view.
-			$displayData                             = new stdClass;
-			$displayData->config                     = null;
-			$displayData->item                       = null;
-			$displayData->relatedDesignTypeIds       = null;
-			$displayData->backgrounds                = null;
-			$displayData->defaultPreviewBg           = null;
-			$displayData->productionBackground       = null;
-			$displayData->defaultPreviewBgAttributes = null;
-			$displayData->fonts                      = null;
-			$displayData->imageSize                  = null;
-			$displayData->productionBackgroundAreas  = null;
-			$displayData->selectedFontsDeclaration   = null;
-
-			// Load values...
-
-			$displayData->config = ReddesignEntityConfig::getInstance();
-
+			// Get displayed background.
+			$backgroundsModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true), 'com_reddesign');
+			$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true), 'com_reddesign');
 			$designTypeModel = RModel::getAdminInstance('Designtype', array('ignore_request' => true), 'com_reddesign');
-			$displayData->item = $designTypeModel->getItem($designTypeId);
-
-			$displayData->relatedDesignTypeIds = explode(',', $designTypesProductMapping->related_designtype_ids);
-
-			$backgroundModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true), 'com_reddesign');
-			$backgroundModel->setState('designtype_id', $designTypeId);
-			$displayData->backgrounds = $backgroundModel->getItems();
-
-			foreach ($displayData->backgrounds as $background)
-			{
-				if ($background->isDefaultPreview)
-				{
-					$displayData->defaultPreviewBg = $background;
-				}
-
-				if ($background->isProductionBg)
-				{
-					$displayData->productionBackground = $background;
-				}
-			}
-
-			// Default background measures.
-			$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->defaultPreviewBg->svg_file);
-			$displayData->defaultPreviewBgAttributes = $xml->attributes();
-			$displayData->defaultPreviewBgAttributes->width  = str_replace('px', '', $displayData->defaultPreviewBgAttributes->width);
-			$displayData->defaultPreviewBgAttributes->height = str_replace('px', '', $displayData->defaultPreviewBgAttributes->height);
-
-			/** @var ReddesignModelFonts $fontsModel */
+			$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
 			$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true), 'com_reddesign');
+
 			$displayData->fonts = $fontsModel->getItems();
 
-			if (empty($displayData->imageSize))
+			if (!$displayedBackgroundId)
 			{
-				$displayData->imageSize = array(0, 0);
+				$displayedAttrPropBackground = $backgroundsModel->getDefaultBackground($data->product_id);
+				$displayedBackgroundId = $displayedAttrPropBackground->background_id;
 			}
 
-			if (empty($displayData->defaultPreviewBg) || empty($displayData->productionBackground))
-			{
-				$app->enqueueMessage(JText::_('COM_REDDESIGN_DESIGNTYPE_NO_BACKGROUNDS'), 'notice');
-			}
-			else
-			{
-				/** @var ReddesignModelAreas $areasModel */
-				$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
-				$areasModel->setState('filter.background_id', $displayData->productionBackground->id);
-				$displayData->productionBackgroundAreas = $areasModel->getItems();
+			$displayData->displayedBackground = $backgroundModel->getItem($displayedBackgroundId);
 
-				$displayData->imageSize = getimagesize(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->defaultPreviewBg->image_path);
+			$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayData->displayedBackground->svg_file);
+			$xmlInfo = $xml->attributes();
+			$displayData->displayedBackground->width  = str_replace('px', '', $xmlInfo->width);
+			$displayData->displayedBackground->height = str_replace('px', '', $xmlInfo->height);
 
-				$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayData->productionBackgroundAreas);
-				$displayData->selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
-			}
 
-			if (empty($displayData->productionBackgroundAreas))
+
+			$displayedDesignTypeId = $displayData->displayedBackground->designtype_id;
+
+			// Get list of other backgrounds.
+			$attributePropertiesBackgounds = $backgroundsModel->getBackgroundsFromAttributes($data->product_id);
+			$backgrounds = array();
+
+			foreach ($attributePropertiesBackgounds as $attrPropertyBackground)
 			{
-				$app->enqueueMessage(JText::_('COM_REDDESIGN_DESIGNTYPE_NO_DESIGN_AREAS'), 'notice');
+				$backgrounds[] = $backgroundModel->getItem($attrPropertyBackground->background_id);
 			}
+
+			$displayData->backgrounds = $backgrounds;
+			$displayData->designType = $designTypeModel->getItem($displayedDesignTypeId);
+			$displayData->displayedProductionBackground = $designTypeModel->getProductionBackground($displayedDesignTypeId);
+
+			$areasModel->setState('filter.background_id', $displayData->displayedProductionBackground->id);
+			$displayData->displayedAreas = $areasModel->getItems();
 
 			$html = RLayoutHelper::render('default', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
-
-			// Get background ID so you can get areas.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('id'))
-				->from($db->quoteName('#__reddesign_backgrounds'))
-				->where($db->quoteName('isProductionBg') . ' = ' . 1)
-				->where($db->quoteName('designtype_id') . ' = ' . $designTypeId);
-			$db->setQuery($query);
-			$backgroundId = $db->loadResult();
-
-			// Get areas for the template tags replacement.
-			$query = $db->getQuery(true);
-			$query->select($db->quoteName('id'))
-				->from($db->quoteName('#__reddesign_areas'))
-				->where($db->quoteName('background_id') . ' = ' . $backgroundId);
-			$db->setQuery($query);
-			$areas = $db->loadColumn();
 
 			// Get title.
 			$htmlElement = explode('{RedDesignBreakTitle}', $html);
@@ -318,14 +265,14 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			$areasFinshedOutput = '';
 
-			if (!empty($areas))
+			if (!empty($displayData->displayedAreas))
 			{
-				foreach ($areas as $areaId)
+				foreach ($displayData->displayedAreas as $area)
 				{
 					$areasLoopTemplateInstance = $areasLoopTemplate;
 
 					// Get area specific content.
-					$areaHtml = explode('{RedDesignBreakDesignArea' . $areaId . '}', $htmlAreas);
+					$areaHtml = explode('{RedDesignBreakDesignArea' . $area->id . '}', $htmlAreas);
 					$areaHtml = $areaHtml[1];
 
 					// Get specific area title.

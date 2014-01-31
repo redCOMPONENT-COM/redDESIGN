@@ -150,7 +150,6 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_backgrounds` (
 --
 CREATE TABLE IF NOT EXISTS `#__reddesign_product_mapping` (
   `product_id`             INT(11) NOT NULL,
-  `default_designtype_id`  INT(11) NOT NULL,
   `related_designtype_ids` TEXT    NOT NULL,
   PRIMARY KEY (`product_id`)
 )
