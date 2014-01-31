@@ -100,7 +100,7 @@ class ReddesignControllerArea extends RControllerForm
 	public function ajaxGetAreas()
 	{
 		$model = RModel::getAdminInstance('Areas', array('ignore_request' => true));
-		$backgroundId = $this->input->getInt('background_id');
+		$backgroundId = $this->input->getInt('background_id', 0);
 
 		$model->setState('background_id', $backgroundId);
 		$items = $model->getItems();
