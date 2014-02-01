@@ -102,40 +102,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	}
 
 	/**
-	 * Get Attribute Property and redDESIGN Background Mapping
-	 *
-	 * @param   integer  $productId  Product Id
-	 *
-	 * @throws  RuntimeException
-	 * @return  mixed               Relation Object List
-	 */
-	private function getPropertyBackgroundRelation($productId)
-	{
-		// Initialize variables.
-		$db    = JFactory::getDbo();
-		$query = $db->getQuery(true);
-
-		// Create the base select statement.
-		$query->select('designtype_id, property_id')
-			->from($db->quoteName('#__reddesign_attribute_mapping'))
-			->where($db->quoteName('product_id') . ' = ' . (int) $productId);
-
-		// Set the query and load the result.
-		$db->setQuery($query);
-
-		try
-		{
-			$result = $db->loadObjectList();
-		}
-		catch (RuntimeException $e)
-		{
-			throw new RuntimeException($e->getMessage(), $e->getCode());
-		}
-
-		return $result;
-	}
-
-	/**
 	 * Stops loading redSHOP's jQuery file if true is returned.
 	 * This is used to prevent jQuery conflicts and multiple jQuery loads
 	 * during integration.
@@ -202,8 +168,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$displayData->displayedBackground->width  = str_replace('px', '', $xmlInfo->width);
 			$displayData->displayedBackground->height = str_replace('px', '', $xmlInfo->height);
 
-
-
 			$displayedDesignTypeId = $displayData->displayedBackground->designtype_id;
 
 			// Get list of other backgrounds.
@@ -221,6 +185,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			$areasModel->setState('filter.background_id', $displayData->displayedProductionBackground->id);
 			$displayData->displayedAreas = $areasModel->getItems();
+
+			$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayData->displayedAreas);
+			$displayData->selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
 
 			$html = RLayoutHelper::render('default', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
 
@@ -476,8 +443,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				// Get plugin param for width & height
 				$defaultPreviewWidth = $this->params->get('defaultCartPreviewWidth', 0);
 				$defaultPreviewHeight = $this->params->get('defaultPreviewHeight', 0);
-				$jsWidth = 0.0;
-				$jsHeight = 0.0;
 				$jsRatio = 1;
 
 				if (($defaultPreviewWidth == 0) && ($defaultPreviewHeight == 0))

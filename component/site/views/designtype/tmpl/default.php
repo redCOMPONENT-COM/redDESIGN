@@ -15,20 +15,12 @@ RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
 
 if (isset($displayData))
 {
-	/*$this->item = $displayData->item;
-	$this->defaultPreviewBg = $displayData->defaultPreviewBg;
-	$this->productionBackground = $displayData->productionBackground;
-	$this->productionBackgroundAreas = $displayData->productionBackgroundAreas;
-	$this->defaultPreviewBgAttributes = $displayData->defaultPreviewBgAttributes;
-	$this->fonts = $displayData->fonts;
-	$this->config = $displayData->config;
-	$this->selectedFontsDeclaration = $displayData->selectedFontsDeclaration;*/
-
 	$this->displayedBackground = $displayData->displayedBackground;
 	$this->backgrounds = $displayData->backgrounds;
 	$this->designType = $displayData->designType;
 	$this->displayedProductionBackground = $displayData->displayedProductionBackground;
 	$this->displayedAreas = $displayData->displayedAreas;
+	$this->selectedFontsDeclaration = $displayData->selectedFontsDeclaration;
 }
 
 $imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->displayedBackground->svg_file;
@@ -62,7 +54,7 @@ $productId = $input->getInt('pid', 0);
 	<input type="hidden" name="task" id="task" value="">
 	<input type="hidden" name="designAreas" id="designAreas" value="">
 	<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
-	<input type="hidden" id="designtype_id" name="designtype_id" value="<?php //echo $this->designType->id; ?>">
+	<input type="hidden" id="designtype_id" name="designtype_id" value="<?php echo $this->designType->id; ?>">
 	<input type="hidden" id="displayedBackgroundId" name="displayedBackgroundId" value="<?php echo $this->displayedBackground->id; ?>">
 {RedDesignBreakFormBegin}
 
@@ -150,59 +142,58 @@ $productId = $input->getInt('pid', 0);
 	 */
 	jQuery(document).ready(function () {
 			rootSnapSvgObject = Snap("#mainSvgImage");
-			<?php if (!empty($this->defaultPreviewBg->svg_file)) : ?>
 
-			jQuery.ajax({
-				url: "<?php echo $imageUrl; ?>",
-				dataType: "text",
-				cache: true,
-				xhrFields: {
-					onprogress: function (e) {
-						if (e.lengthComputable) {
-							var loadedPercentage = parseInt(e.loaded / e.total * 100);
-							$('#svgContainer .progress .bar-success')
-								.css('width', '' + (loadedPercentage) + '%')
-								.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
+			<?php if (!empty($this->displayedBackground->svg_file)) : ?>
+				jQuery.ajax({
+					url: "<?php echo $imageUrl; ?>",
+					dataType: "text",
+					cache: true,
+					xhrFields: {
+						onprogress: function (e) {
+							if (e.lengthComputable) {
+								var loadedPercentage = parseInt(e.loaded / e.total * 100);
+								$('#svgContainer .progress .bar-success')
+									.css('width', '' + (loadedPercentage) + '%')
+									.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
+							}
 						}
+					},
+					beforeSend: function (xhr) {
+						jQuery('#svgContainer .progress').show().addClass('active');
+						jQuery('#svgContainer .progress .bar-success').css('width', '0%');
+					},
+					success: function (response) {
+						jQuery('#svgContainer .progress').removeClass('active');
+						if(typeof response === 'undefined' || response == false){
+							jQuery('#svgContainer .progress').append(
+								'<div class="bar bar-danger" style="width: ' + (100 - parseInt(jQuery('#svgContainer .progress .bar-success').css('width'))) + '%;"></div>'
+							);
+						}
+						else{
+							jQuery('#svgContainer .progressbar-holder').fadeOut(3000);
+						}
+
+						jQuery("#mainSvgImage")
+							.append('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>')
+							.append(response);
+
+						// Set preview size at loaded file.
+						var loadedSvgFromFile = jQuery("#mainSvgImage").find("svg")[0];
+						loadedSvgFromFile.setAttribute("width", previewWidth);
+						loadedSvgFromFile.setAttribute("height", previewHeight);
+						loadedSvgFromFile.setAttribute("id", "svgCanvas");
+
+						// Set preview size at svg container element.
+						var rootElement = document.getElementById("mainSvgImage");
+						rootElement.setAttribute("width", previewWidth);
+						rootElement.setAttribute("height", previewHeight);
+						rootElement.setAttribute("overflow", "hidden");
+
+						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
+
+						customize(0);
 					}
-				},
-				beforeSend: function (xhr) {
-					jQuery('#svgContainer .progress').show().addClass('active');
-					jQuery('#svgContainer .progress .bar-success').css('width', '0%');
-				},
-				success: function (response) {
-					jQuery('#svgContainer .progress').removeClass('active');
-					if(typeof response === 'undefined' || response == false){
-						jQuery('#svgContainer .progress').append(
-							'<div class="bar bar-danger" style="width: ' + (100 - parseInt(jQuery('#svgContainer .progress .bar-success').css('width'))) + '%;"></div>'
-						);
-					}
-					else{
-						jQuery('#svgContainer .progressbar-holder').fadeOut(3000);
-					}
-
-					jQuery("#mainSvgImage")
-						.append('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>')
-						.append(response);
-
-					// Set preview size at loaded file.
-					var loadedSvgFromFile = jQuery("#mainSvgImage").find("svg")[0];
-					loadedSvgFromFile.setAttribute("width", previewWidth);
-					loadedSvgFromFile.setAttribute("height", previewHeight);
-					loadedSvgFromFile.setAttribute("id", "svgCanvas");
-
-					// Set preview size at svg container element.
-					var rootElement = document.getElementById("mainSvgImage");
-					rootElement.setAttribute("width", previewWidth);
-					rootElement.setAttribute("height", previewHeight);
-					rootElement.setAttribute("overflow", "hidden");
-
-					rootSnapSvgObject.group().node.id = "areaBoxesLayer";
-
-					customize(0);
-				}
-			});
-
+				});
 			<?php endif; ?>
 
 			// Correct radio button selection.
@@ -323,10 +314,7 @@ $productId = $input->getInt('pid', 0);
 	/**
 	 * Changes value of textelement on SVG object
 	 *
-	 * @param areaId    int     Area ID
-	 * @param val       string  New value
-	 *
-	 * @return string hexadecimal value
+	 * @param   areaId  int  Area ID
 	 */
 	function changeSVGTextElement(areaId)
 	{
@@ -345,9 +333,15 @@ $productId = $input->getInt('pid', 0);
 			textElement.node.textContent = jQuery(text).val();
 
 			if (font)
+			{
 				textElement.attr('font-family', jQuery(font).val());
+			}
+
 			if (color)
+			{
 				textElement.attr('fill', '#' + jQuery(color).val().replace('#',''));
+			}
+
 			if (fontSize)
 			{
 				fontSize = jQuery(fontSize).val().split(":");
@@ -360,10 +354,12 @@ $productId = $input->getInt('pid', 0);
 				textElement.attr('font-size', fontSizeValue + fontUnit);
 				textElement.attr('y', parseFloat(areasContainer[areaId]['y1']) + ((parseFloat(fontSizeValue) * scalingImageForPreviewRatio)));
 			}
+
 			if (textAlign)
 			{
 				var textAlignValue = jQuery(textAlign).val();
 				textElement.attr('text-anchor', textAlignValue.replace('left','start').replace('center','middle').replace('right','end'));
+
 				if (textAlignValue == 'left')
 				{
 					textElement.attr('x', areasContainer[areaId]['x1']);

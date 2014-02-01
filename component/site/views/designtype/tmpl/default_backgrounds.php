@@ -11,12 +11,6 @@ defined('_JEXEC') or die();
 
 if (isset($displayData))
 {
-	/*$this->item = $displayData->item;
-	$this->backgrounds = $displayData->backgrounds;
-	$this->relatedDesignTypeIds = $displayData->relatedDesignTypeIds;
-	$this->productionBackground = $displayData->productionBackground;
-	$this->attributesBackgrounds = $displayData->attributesBackgrounds;*/
-
 	$this->displayedBackground = $displayData->displayedBackground;
 	$this->backgrounds = $displayData->backgrounds;
 	$this->designType = $displayData->designType;
@@ -25,9 +19,6 @@ if (isset($displayData))
 }
 
 $background_id = null;
-
-$input = JFactory::getApplication()->input;
-
 ?>
 <h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_BACKGROUNDS_TITLE') ?></h4>
 <div class="row-fluid">
@@ -75,7 +66,7 @@ $input = JFactory::getApplication()->input;
 		<input type="hidden"
 			   name="production_background_id"
 			   id="production_background_id"
-			   value="<?php echo $this->productionBackground->id;?>"
+			   value="<?php echo $this->displayedProductionBackground->id;?>"
 			/>
 
 	</ul>
