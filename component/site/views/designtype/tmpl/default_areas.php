@@ -55,7 +55,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					break;
 			}
 
-			if ($this->item->fontsizer == 'auto' || $this->item->fontsizer == 'auto_chars')
+			if ($this->designType->fontsizer == 'auto' || $this->designType->fontsizer == 'auto_chars')
 			{
 				$textAlign = 'center';
 			}
