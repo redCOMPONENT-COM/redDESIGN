@@ -152,7 +152,7 @@ $productId = $input->getInt('pid', 0);
 						onprogress: function (e) {
 							if (e.lengthComputable) {
 								var loadedPercentage = parseInt(e.loaded / e.total * 100);
-								$('#svgContainer .progress .bar-success')
+								jQuery('#svgContainer .progress .bar-success')
 									.css('width', '' + (loadedPercentage) + '%')
 									.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
 							}
