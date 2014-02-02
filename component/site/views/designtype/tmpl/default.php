@@ -55,7 +55,6 @@ $productId = $input->getInt('pid', 0);
 	<input type="hidden" name="designAreas" id="designAreas" value="">
 	<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
 	<input type="hidden" id="designtype_id" name="designtype_id" value="<?php echo $this->designType->id; ?>">
-	<input type="hidden" id="displayedBackgroundId" name="displayedBackgroundId" value="<?php echo $this->displayedBackground->id; ?>">
 {RedDesignBreakFormBegin}
 
 	<?php // Part 2 - Select Backgrounds ?>
@@ -511,15 +510,13 @@ $productId = $input->getInt('pid', 0);
 	}
 
 	/**
-	 * Set selected background for designarea.
+	 * Navigate to selected background.
 	 *
-	 * @param background_id
+	 * @param url
 	 */
-	function setBackground(background_id)
+	function navigateBackground(url)
 	{
-		document.getElementById("background_id").value = background_id;
-
-		customize(3);
+		window.location = url;
 	}
 </script>
 {RedDesignBreakFormEndsAndJS}

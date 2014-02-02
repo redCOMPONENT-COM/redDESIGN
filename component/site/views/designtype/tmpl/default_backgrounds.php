@@ -16,9 +16,11 @@ if (isset($displayData))
 	$this->designType = $displayData->designType;
 	$this->displayedProductionBackground = $displayData->displayedProductionBackground;
 	$this->displayedAreas = $displayData->displayedAreas;
+	$this->product = $displayData->product;
 }
 
-$background_id = null;
+$input = JFactory::getApplication()->input;
+$itemId = $input->getInt('Itemid', 0);
 ?>
 <h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_BACKGROUNDS_TITLE') ?></h4>
 <div class="row-fluid">
@@ -30,9 +32,15 @@ $background_id = null;
 					<div class="background-selection">
 						<input type="radio"
 						       class="price-modifier"
-						       onChange ="setBackground(<?php echo $background->id;?>);"
+						       onChange ="navigateBackground('<?php
+																	echo JURI::base() .
+																			'index.php?option=com_redshop&view=product&pid=' . $this->product->product_id .
+																			'&cid=' . $this->product->category_id .
+																			'&displayedBackgroundId=' . $background->id .
+																			'&Itemid=' . $itemId;
+															?>');"
 						       id="background<?php echo $background->id;?>"
-						       name="background<?php echo $background->id;?>"
+						       name="background[]"
 						       value="<?php echo $background->id ?>"
 							<?php if ($background->id == $this->displayedBackground->id) : ?>
 								checked="checked"
