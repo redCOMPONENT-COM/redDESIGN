@@ -232,4 +232,14 @@ final class ReddesignEntityConfig
 	{
 		return $this->getInt('productionFilePadding');
 	}
+
+	/**
+	 * Get the padding of production file.
+	 *
+	 * @return  int  The padding of production file.
+	 */
+	public function getShowAssignFontsToAllAreas()
+	{
+		return $this->getBool('showAssignFontsToAllAreas');
+	}
 }

@@ -35,6 +35,7 @@ class ReddesignTableArea extends RTable
 	 * @param   mixed  $ignore  An optional array or space separated list of properties to ignore while binding.
 	 *
 	 * @return  mixed  Null if operation was satisfactory, otherwise returns an error
+	 *
 	 * @since   1.6
 	 */
 	public function bind($array, $ignore = '')
@@ -47,5 +48,35 @@ class ReddesignTableArea extends RTable
 		}
 
 		return parent::bind($array, $ignore);
+	}
+
+	/**
+	 * Assign list of fonts to all areas.
+	 *
+	 * @param   string  $fontIds  JSON list of font IDs
+	 * @param   array   $areaIds  Array of area IDs
+	 *
+	 * @throws  Exception
+	 * @return  boolean  True on success.
+	 */
+	public function fontsToAllAreas($fontIds, $areaIds)
+	{
+		// Initialise variables.
+		$k = $this->_tbl_key;
+
+		$query = $this->_db->getQuery(true);
+		$query->update($this->_tbl)
+			->set($this->_db->qn('font_id') . ' = ' . $this->_db->quote($fontIds))
+			->where($k . ' = ' . implode(' OR ' . $k . ' = ', $areaIds));
+
+		$this->_db->setQuery($query);
+
+		// Check for a database error.
+		if (!$this->_db->query())
+		{
+			throw new Exception(JText::_('COM_REDDESIGN_DB_ERROR'), 500);
+		}
+
+		return true;
 	}
 }

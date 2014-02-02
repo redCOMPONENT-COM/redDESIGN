@@ -15,22 +15,21 @@ RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
 
 if (isset($displayData))
 {
-	$this->item = $displayData->item;
-	$this->defaultPreviewBg = $displayData->defaultPreviewBg;
-	$this->productionBackground = $displayData->productionBackground;
-	$this->productionBackgroundAreas = $displayData->productionBackgroundAreas;
-	$this->defaultPreviewBgAttributes = $displayData->defaultPreviewBgAttributes;
-	$this->fonts = $displayData->fonts;
-	$this->config = $displayData->config;
+	$this->displayedBackground = $displayData->displayedBackground;
+	$this->backgrounds = $displayData->backgrounds;
+	$this->designType = $displayData->designType;
+	$this->displayedProductionBackground = $displayData->displayedProductionBackground;
+	$this->displayedAreas = $displayData->displayedAreas;
 	$this->selectedFontsDeclaration = $displayData->selectedFontsDeclaration;
 }
 
-$imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->defaultPreviewBg->svg_file;
-$autoCustomize = $this->config->getAutoCustomize();
-$previewWidth = $this->config->getMaxSVGPreviewSiteWidth();
-$unit = $this->config->getUnit();
-$fontUnit = $this->config->getFontUnit();
-$sourceDpi = $this->config->getSourceDpi();
+$imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->displayedBackground->svg_file;
+$config = ReddesignEntityConfig::getInstance();
+$autoCustomize = $config->getAutoCustomize();
+$previewWidth = $config->getMaxSVGPreviewSiteWidth();
+$unit = $config->getUnit();
+$fontUnit = $config->getFontUnit();
+$sourceDpi = $config->getSourceDpi();
 
 $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourceDpi);
 
@@ -44,7 +43,7 @@ $productId = $input->getInt('pid', 0);
 
 <?php // Part 0 - Title ?>
 {RedDesignBreakTitle}
-<h1><?php echo $this->item->name; ?></h1>
+<h1><?php echo $this->designType->name; ?></h1>
 {RedDesignBreakTitle}
 
 <?php // Part 1 - Begin Form ?>
@@ -55,7 +54,7 @@ $productId = $input->getInt('pid', 0);
 	<input type="hidden" name="task" id="task" value="">
 	<input type="hidden" name="designAreas" id="designAreas" value="">
 	<input type="hidden" id="autoSizeData" name="autoSizeData" value="" />
-	<input type="hidden" id="designtype_id" name="designtype_id" value="<?php echo $this->item->id; ?>">
+	<input type="hidden" id="designtype_id" name="designtype_id" value="<?php echo $this->designType->id; ?>">
 {RedDesignBreakFormBegin}
 
 	<?php // Part 2 - Select Backgrounds ?>
@@ -63,7 +62,7 @@ $productId = $input->getInt('pid', 0);
 	<div class="row-fluid">
 		<div class="well span12">
 			<?php
-			echo RLayoutHelper::render('default_backgrounds', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
+				echo RLayoutHelper::render('default_backgrounds', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
 			?>
 		</div>
 	</div>
@@ -75,7 +74,7 @@ $productId = $input->getInt('pid', 0);
 
 		<div id="svgContainer">
 			<svg id="mainSvgImage"></svg>
-			<div class="progressbar-holder" style="width: <?php echo $bgBackendPreviewWidth; ?>px; margin-top:20px;">
+			<div class="progressbar-holder" style="width: <?php echo $displayData->displayedBackground->width; ?>px; margin-top:20px;">
 				<div class="progress progress-striped" style="display:none;">
 					<div class="bar bar-success"></div>
 				</div>
@@ -94,7 +93,7 @@ $productId = $input->getInt('pid', 0);
 	<?php // Part 4 - "Customize it!" Button (Controlled by configuration parameters.) ?>
 {RedDesignBreakButtonCustomizeIt}
 	<div class="customize-it-btn row-fluid">
-		<?php if (!empty($this->productionBackgroundAreas) && ($autoCustomize == 0 || $autoCustomize == 2) ) : ?>
+		<?php if (!empty($this->displayedAreas) && ($autoCustomize == 0 || $autoCustomize == 2) ) : ?>
 			<button type="button"
 			        class="btn btn-success"
 			        data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>"
@@ -128,8 +127,8 @@ $productId = $input->getInt('pid', 0);
 	 */
 	var unit = "<?php echo $unit;?>";
 	var fontUnit = "<?php echo $fontUnit;?>";
-	var imageWidth  = parseFloat("<?php echo (!empty($this->defaultPreviewBgAttributes->width) ? $this->defaultPreviewBgAttributes->width : ''); ?>");
-	var imageHeight = parseFloat("<?php echo (!empty($this->defaultPreviewBgAttributes->height) ? $this->defaultPreviewBgAttributes->height : ''); ?>");
+	var imageWidth  = parseFloat("<?php echo (!empty($displayData->displayedBackground->width) ? $displayData->displayedBackground->width : ''); ?>");
+	var imageHeight = parseFloat("<?php echo (!empty($displayData->displayedBackground->height) ? $displayData->displayedBackground->height : ''); ?>");
 	var previewWidth  = parseFloat("<?php echo $previewWidth; ?>");
 
 	var unitConversionRatio = parseFloat("<?php echo $unitConversionRatio;?>");
@@ -142,63 +141,62 @@ $productId = $input->getInt('pid', 0);
 	 */
 	jQuery(document).ready(function () {
 			rootSnapSvgObject = Snap("#mainSvgImage");
-			<?php if (!empty($this->defaultPreviewBg->svg_file)) : ?>
 
-			jQuery.ajax({
-				url: "<?php echo $imageUrl; ?>",
-				dataType: "text",
-				cache: true,
-				xhrFields: {
-					onprogress: function (e) {
-						if (e.lengthComputable) {
-							var loadedPercentage = parseInt(e.loaded / e.total * 100);
-							$('#svgContainer .progress .bar-success')
-								.css('width', '' + (loadedPercentage) + '%')
-								.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
+			<?php if (!empty($this->displayedBackground->svg_file)) : ?>
+				jQuery.ajax({
+					url: "<?php echo $imageUrl; ?>",
+					dataType: "text",
+					cache: true,
+					xhrFields: {
+						onprogress: function (e) {
+							if (e.lengthComputable) {
+								var loadedPercentage = parseInt(e.loaded / e.total * 100);
+								jQuery('#svgContainer .progress .bar-success')
+									.css('width', '' + (loadedPercentage) + '%')
+									.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
+							}
 						}
+					},
+					beforeSend: function (xhr) {
+						jQuery('#svgContainer .progress').show().addClass('active');
+						jQuery('#svgContainer .progress .bar-success').css('width', '0%');
+					},
+					success: function (response) {
+						jQuery('#svgContainer .progress').removeClass('active');
+						if(typeof response === 'undefined' || response == false){
+							jQuery('#svgContainer .progress').append(
+								'<div class="bar bar-danger" style="width: ' + (100 - parseInt(jQuery('#svgContainer .progress .bar-success').css('width'))) + '%;"></div>'
+							);
+						}
+						else{
+							jQuery('#svgContainer .progressbar-holder').fadeOut(3000);
+						}
+
+						jQuery("#mainSvgImage")
+							.append('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>')
+							.append(response);
+
+						// Set preview size at loaded file.
+						var loadedSvgFromFile = jQuery("#mainSvgImage").find("svg")[0];
+						loadedSvgFromFile.setAttribute("width", previewWidth);
+						loadedSvgFromFile.setAttribute("height", previewHeight);
+						loadedSvgFromFile.setAttribute("id", "svgCanvas");
+
+						// Set preview size at svg container element.
+						var rootElement = document.getElementById("mainSvgImage");
+						rootElement.setAttribute("width", previewWidth);
+						rootElement.setAttribute("height", previewHeight);
+						rootElement.setAttribute("overflow", "hidden");
+
+						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
+
+						customize(0);
 					}
-				},
-				beforeSend: function (xhr) {
-					jQuery('#svgContainer .progress').show().addClass('active');
-					jQuery('#svgContainer .progress .bar-success').css('width', '0%');
-				},
-				success: function (response) {
-					jQuery('#svgContainer .progress').removeClass('active');
-					if(typeof response === 'undefined' || response == false){
-						jQuery('#svgContainer .progress').append(
-							'<div class="bar bar-danger" style="width: ' + (100 - parseInt(jQuery('#svgContainer .progress .bar-success').css('width'))) + '%;"></div>'
-						);
-					}
-					else{
-						jQuery('#svgContainer .progressbar-holder').fadeOut(3000);
-					}
-
-					jQuery("#mainSvgImage")
-						.append('<defs><style type="text/css"><?php echo $this->selectedFontsDeclaration; ?></style></defs>')
-						.append(response);
-
-					// Set preview size at loaded file.
-					var loadedSvgFromFile = jQuery("#mainSvgImage").find("svg")[0];
-					loadedSvgFromFile.setAttribute("width", previewWidth);
-					loadedSvgFromFile.setAttribute("height", previewHeight);
-					loadedSvgFromFile.setAttribute("id", "svgCanvas");
-
-					// Set preview size at svg container element.
-					var rootElement = document.getElementById("mainSvgImage");
-					rootElement.setAttribute("width", previewWidth);
-					rootElement.setAttribute("height", previewHeight);
-					rootElement.setAttribute("overflow", "hidden");
-
-					rootSnapSvgObject.group().node.id = "areaBoxesLayer";
-
-					customize(0);
-				}
-			});
-
+				});
 			<?php endif; ?>
 
 			// Correct radio button selection.
-			jQuery("#frame<?php echo $this->defaultPreviewBg->id; ?>").attr("checked", "checked");
+			jQuery("#background<?php echo $this->displayedBackground->id; ?>").attr("checked", "checked");
 
 			// Customize function.
 			jQuery(document).on("click", "#customizeDesign", function () {
@@ -315,10 +313,7 @@ $productId = $input->getInt('pid', 0);
 	/**
 	 * Changes value of textelement on SVG object
 	 *
-	 * @param areaId    int     Area ID
-	 * @param val       string  New value
-	 *
-	 * @return string hexadecimal value
+	 * @param   areaId  int  Area ID
 	 */
 	function changeSVGTextElement(areaId)
 	{
@@ -337,12 +332,18 @@ $productId = $input->getInt('pid', 0);
 			textElement.node.textContent = jQuery(text).val();
 
 			if (font)
+			{
 				textElement.attr('font-family', jQuery(font).val());
+			}
+
 			if (color)
+			{
 				textElement.attr('fill', '#' + jQuery(color).val().replace('#',''));
+			}
+
 			if (fontSize)
 			{
-				var fontSize = jQuery(fontSize).val().split(":");
+				fontSize = jQuery(fontSize).val().split(":");
 				var fontSizeValue = 0;
 				if (fontSize.length > 1)
 					fontSizeValue = fontSize[1];
@@ -352,10 +353,12 @@ $productId = $input->getInt('pid', 0);
 				textElement.attr('font-size', fontSizeValue + fontUnit);
 				textElement.attr('y', parseFloat(areasContainer[areaId]['y1']) + ((parseFloat(fontSizeValue) * scalingImageForPreviewRatio)));
 			}
+
 			if (textAlign)
 			{
 				var textAlignValue = jQuery(textAlign).val();
 				textElement.attr('text-anchor', textAlignValue.replace('left','start').replace('center','middle').replace('right','end'));
+
 				if (textAlignValue == 'left')
 				{
 					textElement.attr('x', areasContainer[areaId]['x1']);
@@ -398,7 +401,7 @@ $productId = $input->getInt('pid', 0);
 		/**
 		 * 0 when customize function is called from an element different than button (textbox, font dropdown etc.)
 		 * 1 when customize function is called from the button
-		 * 3 when customize function is called from frames selection radio button
+		 * 3 when customize function is called from background selection radio button
 		 */
 
 		// Turn off or on customization according to the settings in config.xml.
@@ -431,7 +434,7 @@ $productId = $input->getInt('pid', 0);
 				'reddesign_designtype_id' : reddesign_designtype_id,
 				'background_id' : background_id
 			};
-			<?php foreach($this->productionBackgroundAreas as $area) :?>
+			<?php foreach($this->displayedAreas as $area) :?>
 
 				var fontColor = "000000";
 				if (jQuery("#colorCode<?php echo $area->id; ?>").length > 0)
@@ -507,15 +510,13 @@ $productId = $input->getInt('pid', 0);
 	}
 
 	/**
-	 * Set selected background for designarea.
+	 * Navigate to selected background.
 	 *
-	 * @param background_id
+	 * @param url
 	 */
-	function setBackground(background_id)
+	function navigateBackground(url)
 	{
-		document.getElementById("background_id").value = background_id;
-
-		customize(3);
+		window.location = url;
 	}
 </script>
 {RedDesignBreakFormEndsAndJS}

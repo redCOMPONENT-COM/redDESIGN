@@ -18,11 +18,15 @@ RHelperAsset::load('color-converter.js', 'com_reddesign');
 
 if (isset($displayData))
 {
-	$this->item = $displayData->item;
-	$this->productionBackgroundAreas = $displayData->productionBackgroundAreas;
+	$this->designType = $displayData->designType;
+	$this->displayedAreas = $displayData->displayedAreas;
 	$this->fonts = $displayData->fonts;
-	$this->unitConversionRatio = $displayData->unitConversionRatio;
 }
+
+$config = ReddesignEntityConfig::getInstance();
+$unit = $config->getUnit();
+$sourceDpi = $config->getSourceDpi();
+$unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourceDpi);
 ?>
 
 {RedDesignBreakDesignAreasTitle}
@@ -31,7 +35,7 @@ if (isset($displayData))
 </h4>
 {RedDesignBreakDesignAreasTitle}
 
-<?php foreach ($this->productionBackgroundAreas as $area) : ?>
+<?php foreach ($this->displayedAreas as $area) : ?>
 
 	<?php echo '{RedDesignBreakDesignArea' . $area->id . '}'; ?>
 
@@ -51,7 +55,7 @@ if (isset($displayData))
 					break;
 			}
 
-			if ($this->item->fontsizer == 'auto' || $this->item->fontsizer == 'auto_chars')
+			if ($this->designType->fontsizer == 'auto' || $this->designType->fontsizer == 'auto_chars')
 			{
 				$textAlign = 'center';
 			}
@@ -169,7 +173,7 @@ if (isset($displayData))
 
 		{RedDesignBreakDesignAreaChooseFontSizeLabel}
 			<?php // Font Size Selection ?>
-			<?php if (($this->item->fontsizer != 'auto' && $this->item->fontsizer != 'auto_chars') && ($area->font_size != '' || $this->item->fontsizer == 'slider')) : ?>
+			<?php if (($this->designType->fontsizer != 'auto' && $this->designType->fontsizer != 'auto_chars') && ($area->font_size != '' || $this->designType->fontsizer == 'slider')) : ?>
 				<label for="<?php echo 'fontSize' . $area->id; ?>">
 					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_FONTSIZE'); ?>
 				</label>
@@ -180,11 +184,11 @@ if (isset($displayData))
 			<?php
 				$defaultFontSizeOutput = false;
 
-				if ($this->item->fontsizer === 'auto' || $this->item->fontsizer === 'auto_chars'):
-					$area->defaultFontSize = round($area->height * $this->unitConversionRatio, 0);
+				if ($this->designType->fontsizer === 'auto' || $this->designType->fontsizer === 'auto_chars'):
+					$area->defaultFontSize = round($area->height * $unitConversionRatio, 0);
 				endif;
 			?>
-			<?php if ($this->item->fontsizer === 'slider') : ?>
+			<?php if ($this->designType->fontsizer === 'slider') : ?>
 				<?php
 					// Case 1: using slider selector for font size.
 					RHelperAsset::load('bootstrap-slider.js', 'com_reddesign');
@@ -200,7 +204,7 @@ if (isset($displayData))
 					   data-slider-value="[<?php echo $area->defaultFontSize ?>]"
 				/>
 			<?php $defaultFontSizeOutput = true; ?>
-			<?php elseif ($this->item->fontsizer == 'dropdown_numbers' || $this->item->fontsizer == 'dropdown_labels') : ?>
+			<?php elseif ($this->designType->fontsizer == 'dropdown_numbers' || $this->designType->fontsizer == 'dropdown_labels') : ?>
 				<?php
 
 					// Case 2: using dropdown selector for font size.
@@ -217,7 +221,7 @@ if (isset($displayData))
 
 						foreach ($areaFontSizes as $areaFontSize)
 						{
-							if ($this->item->fontsizer == 'dropdown_numbers')
+							if ($this->designType->fontsizer == 'dropdown_numbers')
 							{
 								$optionValue = $areaFontSize;
 								$optionText = $areaFontSize;

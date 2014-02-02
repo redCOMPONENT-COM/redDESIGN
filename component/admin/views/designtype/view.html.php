@@ -125,6 +125,13 @@ class ReddesignViewDesigntype extends ReddesignView
 	protected $displaySidebar = false;
 
 	/**
+	 * Do we have to display a topbar inner layout ?
+	 *
+	 * @var  boolean
+	 */
+	protected $displayTopBarInnerLayout = false;
+
+	/**
 	 * Executes before rendering the page for the Add task.
 	 *
 	 * @param   string  $tpl  Subtemplate to use
