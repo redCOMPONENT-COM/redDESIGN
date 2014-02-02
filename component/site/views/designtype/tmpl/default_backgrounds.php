@@ -33,11 +33,12 @@ $itemId = $input->getInt('Itemid', 0);
 						<input type="radio"
 						       class="price-modifier"
 						       onChange ="navigateBackground('<?php
-																	echo JURI::base() .
+																	echo JRoute::_(
 																			'index.php?option=com_redshop&view=product&pid=' . $this->product->product_id .
 																			'&cid=' . $this->product->category_id .
 																			'&displayedBackgroundId=' . $background->id .
-																			'&Itemid=' . $itemId;
+																			'&Itemid=' . $itemId
+																	);
 															?>');"
 						       id="background<?php echo $background->id;?>"
 						       name="background[]"
