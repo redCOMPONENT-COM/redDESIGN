@@ -27,10 +27,10 @@ class ReddesignModelDesigntype extends RModelAdmin
 	 */
 	public function getBackgrounds($designTypeId)
 	{
-		$backgroundModel = RModel::getAdminInstance('Backgrounds', array(), 'com_reddesign');
-		$backgroundModel->setState('designtype_id', $designTypeId);
+		$backgroundsModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true), 'com_reddesign');
+		$backgroundsModel->setState('designtype_id', $designTypeId);
 
-		return $backgroundModel->getItems();
+		return $backgroundsModel->getItems();
 	}
 
 	/**

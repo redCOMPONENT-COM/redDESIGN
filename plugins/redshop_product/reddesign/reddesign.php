@@ -189,6 +189,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayData->displayedAreas);
 			$displayData->selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
 
+			$displayData->product = $data;
+
 			$html = RLayoutHelper::render('default', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
 
 			// Get title.

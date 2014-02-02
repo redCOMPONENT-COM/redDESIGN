@@ -450,7 +450,7 @@ function addNewRow_attribute(tableRef){
 											'</td>'+
 										'</tr>' +
 										'<tr>' +
-											'<td>' +
+											'<td colspan="7" style="white-space: normal;">' +
 												'<div>' +
 													'<input type="checkbox" id="useBackgrounds' + gh + '_' + total_g + '" name="useBackgrounds' + gh + '_' + total_g + '" onclick="showBackgrounds(\'' + gh + '_' + total_g + '\')" value="useBackgrounds' + gh + '_' + total_g + '">' +
 													'<label for="useBackgrounds' + gh + '_' + total_g + '">' + backgroundChckText + '</label>' +
@@ -651,7 +651,7 @@ function addproperty(tableRef,rh){
 							'</td>' +
 						'</tr>' +
 						'<tr>' +
-							'<td>' +
+							'<td colspan="7" style="white-space: normal;">' +
 								'<div>' +
 									'<input type="checkbox" id="useBackgrounds' + rh + '_' + h + '" name="useBackgrounds' + rh + '_' + h + '" onclick="showBackgrounds(\'' + rh + '_' + h + '\')" value="useBackgrounds' + rh + '_' + h + '">' +
 									'<label for="useBackgrounds' + rh + '_' + h + '">' + backgroundChckText + '</label>' +
