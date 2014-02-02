@@ -180,12 +180,12 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 				if ($propertyBackgroundMapping->background_id)
 				{
 					$checked = 'checked="checked"';
-					$display = 'style="display: inline;"';
+					$display = 'style="display: block;"';
 				}
 
 				// Create background attribute HTML.
 				$dropdownHtml = '<tr>' .
-									'<td>' .
+									'<td colspan="7" style="white-space: normal;">' .
 										'<div>' .
 											'<input type="checkbox" id="useBackgrounds' . $property->k . $property->g . '" ' .
 													'name="useBackgrounds' . $property->k . $property->g . '" ' .
