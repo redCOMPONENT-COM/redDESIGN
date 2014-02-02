@@ -33,6 +33,11 @@ class ReddesignViewDesigntype extends ReddesignView
 	/**
 	 * @var array
 	 */
+	protected $areaType = array();
+
+	/**
+	 * @var array
+	 */
 	protected $areas = array();
 
 	/**
@@ -189,6 +194,11 @@ class ReddesignViewDesigntype extends ReddesignView
 				$this->inputFieldOptions = array(
 					JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTBOX')),
 					JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTAREA'))
+				);
+
+				$this->areaType = array(
+					JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_AREA_TYPE_TEXT')),
+					JHtml::_('select.option', '2', JText::_('COM_REDDESIGN_AREA_TYPE_CLIPART'))
 				);
 
 				$this->alignmentOptions = array(
