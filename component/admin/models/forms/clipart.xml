@@ -21,11 +21,10 @@
                 />
 		<field
 			name="clipartFile"
-			id="clipartFile"
 			type="file"
 			label="COM_REDDESIGN_CLIPART_FIELD_FILE"
 			description="COM_REDDESIGN_CLIPART_FIELD_FILE_DESC"
-			class="inputbox"
+            accept="image/*"
 			/>
         <field
                 name="categoryId"
@@ -37,7 +36,6 @@
                 description="COM_REDDESIGN_CLIPART_CATEGORY_DESC"
                 required="true"
                 >
-            <option value="0">JOPTION_SELECT_CATEGORY</option>
         </field>
 		<field
 			name="state"

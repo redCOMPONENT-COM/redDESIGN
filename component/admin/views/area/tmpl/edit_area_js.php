@@ -19,8 +19,6 @@ if (isset($displayData))
 	$this->unitConversionRatio = $displayData->unitConversionRatio;
 	$this->sourceDpi = $displayData->sourceDpi;
 	$this->productionBgAttributes = $displayData->productionBgAttributes;
-	$this->fontsOptions = $displayData->fontsOptions;
-	$this->inputFieldOptions = $displayData->inputFieldOptions;
 	$this->selectedFontsDeclaration = $displayData->selectedFontsDeclaration;
 }
 
@@ -64,6 +62,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		function ($) {
 
 			<?php if ($this->areas != '') : ?>
+
 				<?php foreach ($this->areas as  $area) : ?>
 				// Check div before add farbtastic
 				if (jQuery("#colorPickerContainer<?php echo $area->id ?>")[0])
@@ -427,6 +426,36 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		}
 	}
 
+	function changeAreaType()
+	{
+		var areaId = jQuery("#designAreaId").val();
+		if (areaId == '' || parseInt(areaId) <= 0)
+		{
+			return true;
+		}
+
+		var targetRow = jQuery("#areaSettingsRow" + areaId + " td");
+		var dataVar = {
+			'areaId' : areaId,
+			'areaType' : jQuery("#areaType").val(),
+			'designType' : jQuery("#jform_id").val()
+		};
+
+		jQuery.ajax({
+			url       : 'index.php?option=com_reddesign&task=area.ajaxLoadAreaTypeLayout',
+			data      : dataVar,
+			cache     : false,
+			dataType  : 'text',
+				beforeSend: function () {
+				targetRow.addClass('opacity-40');
+			}
+		}).done(function (data) {
+			jQuery(targetRow).removeClass('opacity-40');
+			jQuery(targetRow).html(data);
+			jQuery("#areaSettingsRow" + areaId + " td select").select2({ width: 'resolve' });
+		});
+	}
+
 	/**
 	 * Saves area into the DB via AJAX. And prepares image for another selection.
 	 *
@@ -438,6 +467,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 		var reddesign_area_id;
 		var areaName   = jQuery("#areaName").val();
+		var areaType   = jQuery("#areaType").val();
 		var areaX1     = (jQuery("#areaX1").val()).replace(unit, "");
 		var areaY1     = (jQuery("#areaY1").val()).replace(unit, "");
 		var areaX2     = (jQuery("#areaX2").val()).replace(unit, "");
@@ -469,6 +499,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			data: {
 				'jform[id]': reddesign_area_id,
 				'jform[name]': areaName,
+				'jform[areaType]': areaType,
 				'jform[background_id]': productionBackground,
 				'jform[x1_pos]': areaX1_in_px,
 				'jform[y1_pos]': areaY1_in_px,
@@ -858,11 +889,13 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	 * @param y2_pos
 	 * @param width
 	 * @param height
+	 * @param areaType
 	 */
-	function selectAreaForEdit(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, width, height) {
+	function selectAreaForEdit(reddesign_area_id, title, x1_pos, y1_pos, x2_pos, y2_pos, width, height, areaType) {
 
 		jQuery("#designAreaId").val(reddesign_area_id);
 		jQuery("#areaName").val(title);
+		jQuery("#areaType").select2("val", areaType);
 
 		if (typeof areaBoxes[reddesign_area_id] !== "undefined")
 		{
@@ -878,6 +911,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			areaBoxes[reddesign_area_id]['y2'] = y2_pos;
 			areaBoxes[reddesign_area_id]['width'] = width;
 			areaBoxes[reddesign_area_id]['height'] = height;
+			areaBoxes[reddesign_area_id]['areaType'] = areaType;
 			current_area_id = reddesign_area_id;
 		}
 		selectArea(x1_pos, y1_pos, x2_pos, y2_pos, width, height);

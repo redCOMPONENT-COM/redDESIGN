@@ -88,11 +88,6 @@ class ReddesignViewDesigntype extends ReddesignView
 	protected $backgrounds = array();
 
 	/**
-	 * @var array
-	 */
-	protected $inputFieldOptions = array();
-
-	/**
 	 * @var string
 	 */
 	protected $selectedFontsDeclaration = '';
@@ -101,21 +96,6 @@ class ReddesignViewDesigntype extends ReddesignView
 	 * @var array
 	 */
 	protected $fonts = array();
-
-	/**
-	 * @var array
-	 */
-	protected $alignmentOptions = array();
-
-	/**
-	 * @var array
-	 */
-	protected $verticalAlignmentOptions = array();
-
-	/**
-	 * @var array
-	 */
-	protected $fontsOptions = array();
 
 	/**
 	 * Do not display the sidebar
@@ -197,40 +177,6 @@ class ReddesignViewDesigntype extends ReddesignView
 				}
 
 				$this->unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($this->unit, $this->sourceDpi);
-
-				$this->inputFieldOptions = array(
-					JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTBOX')),
-					JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_TEXTAREA'))
-				);
-
-				$this->areaType = array(
-					JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_AREA_TYPE_TEXT')),
-					JHtml::_('select.option', '2', JText::_('COM_REDDESIGN_AREA_TYPE_CLIPART'))
-				);
-
-				$this->alignmentOptions = array(
-					JHtml::_('select.option', '0', JText::_('COM_REDDESIGN_COMMON_SELECT')),
-					JHtml::_('select.option', '1', JText::_('COM_REDDESIGN_COMMON_LEFT')),
-					JHtml::_('select.option', '2', JText::_('COM_REDDESIGN_COMMON_RIGHT')),
-					JHtml::_('select.option', '3', JText::_('COM_REDDESIGN_COMMON_CENTER'))
-				);
-
-				$this->verticalAlignmentOptions = array(
-					JHtml::_('select.option', '', JText::_('COM_REDDESIGN_COMMON_SELECT')),
-					JHtml::_('select.option', 'top', JText::_('COM_REDDESIGN_COMMON_TOP')),
-					JHtml::_('select.option', 'middle', JText::_('COM_REDDESIGN_COMMON_MIDDLE')),
-					JHtml::_('select.option', 'bottom', JText::_('COM_REDDESIGN_COMMON_BOTTOM'))
-				);
-
-				// Get all fonts in the system to be choosen or not for the current design.
-				$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true));
-				$this->fonts = $fontsModel->getItems();
-				$this->fontsOptions = array();
-
-				foreach ($this->fonts as $font)
-				{
-					$this->fontsOptions[] = JHtml::_('select.option', $font->id, $font->name);
-				}
 			}
 		}
 

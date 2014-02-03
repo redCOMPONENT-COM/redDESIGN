@@ -29,8 +29,6 @@ if (isset($displayData))
 	$this->unitConversionRatio = $displayData->unitConversionRatio;
 	$this->sourceDpi = $displayData->sourceDpi;
 	$this->productionBgAttributes = $displayData->productionBgAttributes;
-	$this->fontsOptions = $displayData->fontsOptions;
-	$this->inputFieldOptions = $displayData->inputFieldOptions;
 }
 
 ?>
@@ -58,6 +56,21 @@ if (isset($displayData))
 						<div class="controls">
 							<input type="text" id="areaName" name="areaName" required="required" value="">
 						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_INPUT_FIELD_TYPE') ?>
+						</label>
+						<?php
+						echo JHtml::_('select.genericlist',
+							ReddesignHelpersArea::getAreaTypeSelectOptions(),
+							'areaType',
+							' onchange="changeAreaType();" ',
+							'value',
+							'text',
+							1
+						);
+						?>
 					</div>
 					<div class="control-group">
 						<label for="areaWidth" class="control-label">
@@ -148,11 +161,11 @@ if (isset($displayData))
 						<h3>
 							<?php
 								echo JText::sprintf(
-														'COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMAGE_MEASURES',
-														round($this->productionBgAttributes->width / $this->unitConversionRatio, 2),
-														$this->unit,
-														round($this->productionBgAttributes->height / $this->unitConversionRatio, 2),
-														$this->unit
+									'COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMAGE_MEASURES',
+									round($this->productionBgAttributes->width / $this->unitConversionRatio, 2),
+									$this->unit,
+									round($this->productionBgAttributes->height / $this->unitConversionRatio, 2),
+									$this->unit
 								);
 							?>
 						</h3>
