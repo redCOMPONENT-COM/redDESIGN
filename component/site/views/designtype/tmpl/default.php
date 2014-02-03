@@ -25,7 +25,6 @@ if (isset($displayData))
 
 $imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->displayedBackground->svg_file;
 $config = ReddesignEntityConfig::getInstance();
-$autoCustomize = $config->getAutoCustomize();
 $previewWidth = $config->getMaxSVGPreviewSiteWidth();
 $unit = $config->getUnit();
 $fontUnit = $config->getFontUnit();
@@ -190,7 +189,7 @@ $productId = $input->getInt('pid', 0);
 
 						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
 
-						customize(0);
+						customize();
 					}
 				});
 			<?php endif; ?>
@@ -207,7 +206,7 @@ $productId = $input->getInt('pid', 0);
 					},
 					3000
 				);
-				customize(1);
+				customize();
 			});
 
 			jQuery(document).on("keyup", ".reddesign-form .textAreaClass", function() {
@@ -394,105 +393,87 @@ $productId = $input->getInt('pid', 0);
 	 *
 	 * @param button Determines whether the call comes from "Customize it!" button or not.
 	 */
-	function customize(button) {
+	function customize() {
+		// Add the progress bar
+		var halfBackgroundHeight =  ((jQuery("#background").height() / 2)-10);
+		jQuery("#background-container").height(jQuery("#background").height());
+		jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px").css("padding-bottom", halfBackgroundHeight + "px").show();
 
-		var customizeOrNot = 0;
-		var autoCustomizeParam = parseInt("<?php echo $autoCustomize; ?>");
-		/**
-		 * 0 when customize function is called from an element different than button (textbox, font dropdown etc.)
-		 * 1 when customize function is called from the button
-		 * 3 when customize function is called from background selection radio button
-		 */
+		var reddesign_designtype_id = jQuery("#reddesign_designtype_id").val();
+		var background_id = jQuery("#background_id").val();
+		var design = {
+			'areas': [],
+			'reddesign_designtype_id' : reddesign_designtype_id,
+			'background_id' : background_id
+		};
 
-		// Turn off or on customization according to the settings in config.xml.
-		if((button == 1 && autoCustomizeParam == 0) || (button == 1 && autoCustomizeParam == 2))
-		{
-			customizeOrNot = 1;
-		}
-		else if(button == 0 && (autoCustomizeParam == 1 || autoCustomizeParam == 2))
-		{
-			customizeOrNot = 1;
-		}
-		else if(button == 3)
-		{
-			// This is the case when setBackground function is called
-			customizeOrNot = 1;
-		}
+		<?php foreach($this->displayedAreas as $area) :?>
 
-		if(customizeOrNot == 1)
-		{
-			// Add the progress bar
-			var halfBackgroundHeight =  ((jQuery("#background").height() / 2)-10);
-			jQuery("#background-container").height(jQuery("#background").height());
-			jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px").css("padding-bottom", halfBackgroundHeight + "px").show();
+			var fontColor = "000000";
 
+			if (jQuery("#colorCode<?php echo $area->id; ?>").length > 0)
+			{
+				fontColor = jQuery("#colorCode<?php echo $area->id; ?>").val().replace("#", "");
+			}
 
-			var reddesign_designtype_id = jQuery("#reddesign_designtype_id").val();
-			var background_id = jQuery("#background_id").val();
-			var design = {
-				'areas': [],
-				'reddesign_designtype_id' : reddesign_designtype_id,
-				'background_id' : background_id
-			};
-			<?php foreach($this->displayedAreas as $area) :?>
+			var x1 = parseFloat(<?php echo $area->x1_pos; ?>) * scalingImageForPreviewRatio;
+			var y1 = parseFloat(<?php echo $area->y1_pos; ?>) * scalingImageForPreviewRatio;
+			var x2 = parseFloat(<?php echo $area->x2_pos; ?>) * scalingImageForPreviewRatio;
+			var y2 = parseFloat(<?php echo $area->y2_pos; ?>) * scalingImageForPreviewRatio;
+			var width = x2 - x1;
+			var height = y2 - y1;
 
-				var fontColor = "000000";
-				if (jQuery("#colorCode<?php echo $area->id; ?>").length > 0)
-					fontColor = jQuery("#colorCode<?php echo $area->id; ?>").val().replace("#", "");
+			areasContainer[<?php echo $area->id; ?>] = new Array();
+			areasContainer[<?php echo $area->id; ?>]['x1'] = x1;
+			areasContainer[<?php echo $area->id; ?>]['y1'] = y1;
+			areasContainer[<?php echo $area->id; ?>]['x2'] = x2;
+			areasContainer[<?php echo $area->id; ?>]['y2'] = y2;
+			areasContainer[<?php echo $area->id; ?>]['width'] = width;
+			areasContainer[<?php echo $area->id; ?>]['height'] = height;
 
-				var x1 = parseFloat(<?php echo $area->x1_pos; ?>) * scalingImageForPreviewRatio;
-				var y1 = parseFloat(<?php echo $area->y1_pos; ?>) * scalingImageForPreviewRatio;
-				var x2 = parseFloat(<?php echo $area->x2_pos; ?>) * scalingImageForPreviewRatio;
-				var y2 = parseFloat(<?php echo $area->y2_pos; ?>) * scalingImageForPreviewRatio;
-				var width = x2 - x1;
-				var height = y2 - y1;
+			var fontSizeValue = 12;
+			if (jQuery("#fontSize<?php echo $area->id; ?>").length > 0)
+			{
+				var fontSize = jQuery("#fontSize<?php echo $area->id; ?>").val().split(":");
 
-				areasContainer[<?php echo $area->id; ?>] = new Array();
-				areasContainer[<?php echo $area->id; ?>]['x1'] = x1;
-				areasContainer[<?php echo $area->id; ?>]['y1'] = y1;
-				areasContainer[<?php echo $area->id; ?>]['x2'] = x2;
-				areasContainer[<?php echo $area->id; ?>]['y2'] = y2;
-				areasContainer[<?php echo $area->id; ?>]['width'] = width;
-				areasContainer[<?php echo $area->id; ?>]['height'] = height;
-
-				var fontSizeValue = 12;
-				if (jQuery("#fontSize<?php echo $area->id; ?>").length > 0)
+				if (fontSize.length > 1)
 				{
-					var fontSize = jQuery("#fontSize<?php echo $area->id; ?>").val().split(":");
-					if (fontSize.length > 1)
-						fontSizeValue = fontSize[1];
-					else
-						fontSizeValue = fontSize[0];
+					fontSizeValue = fontSize[1];
 				}
+				else
+				{
+					fontSizeValue = fontSize[0];
+				}
+			}
 
-				var textElement = Snap.parse(
-					'<text id="areaTextElement_<?php echo $area->id; ?>" fill="#' + fontColor
-						+ '" font-family="' + jQuery("#fontArea<?php echo $area->id; ?>").find(":selected").text() + '"'
-						+ ' font-size="' + fontSizeValue + 'px"'
-						+ ' x="' + (x1) + '"'
-						+ ' y="' + (y1 + (parseFloat(fontSizeValue) * scalingImageForPreviewRatio)) + '"'
-						+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
+			var textElement = Snap.parse(
+				'<text id="areaTextElement_<?php echo $area->id; ?>" fill="#' + fontColor
+					+ '" font-family="' + jQuery("#fontArea<?php echo $area->id; ?>").find(":selected").text() + '"'
+					+ ' font-size="' + fontSizeValue + 'px"'
+					+ ' x="' + (x1) + '"'
+					+ ' y="' + (y1 + (parseFloat(fontSizeValue) * scalingImageForPreviewRatio)) + '"'
+					+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>'
+			);
 
 			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
-				design.areas.push({
-					"id" : 			"<?php echo $area->id; ?>",
-					"textArea" :	jQuery("#textArea_<?php echo $area->id; ?>").val(),
-					"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-					"fontColor" :	fontColor,
-					"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val() + fontUnit,
-					"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-					"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
-					"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
-				});
 
-				if (jQuery("#textArea_<?php echo $area->id; ?>").length > 0)
-				{
-					var textareacount = jQuery("#textArea_<?php echo $area->id; ?>").val().replace(/ /g,'').length;
-					jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
-				}
+			design.areas.push({
+				"id" : 			"<?php echo $area->id; ?>",
+				"textArea" :	jQuery("#textArea_<?php echo $area->id; ?>").val(),
+				"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
+				"fontColor" :	fontColor,
+				"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val() + fontUnit,
+				"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
+				"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
+				"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
+			});
 
-			<?php endforeach; ?>
-		}
+			if (jQuery("#textArea_<?php echo $area->id; ?>").length > 0)
+			{
+				var textareacount = jQuery("#textArea_<?php echo $area->id; ?>").val().replace(/ /g,'').length;
+				jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
+			}
+		<?php endforeach; ?>
 	}
 
 	/**
@@ -597,8 +578,6 @@ $productId = $input->getInt('pid', 0);
 						rootElement.setAttribute("overflow", "hidden");
 
 						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
-
-
 					}
 				});
 
@@ -609,7 +588,7 @@ $productId = $input->getInt('pid', 0);
 			}
 		});
 
-		customize(0);
+		customize();
 	}
 </script>
 {RedDesignBreakFormEndsAndJS}
