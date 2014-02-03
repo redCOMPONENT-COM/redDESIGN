@@ -512,11 +512,104 @@ $productId = $input->getInt('pid', 0);
 	/**
 	 * Navigate to selected background.
 	 *
-	 * @param url
+	 * @param propertyId
 	 */
-	function navigateBackground(url)
+	function changeBackground(propertyId)
 	{
-		window.location = url;
+		//window.location = url;
+		var background = null;
+
+		jQuery("#mainSvgImage").empty();
+		jQuery("#areasContainer").empty();
+
+		jQuery.ajax({
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxLoadDesigntype",
+			data: {'propertyId': propertyId},
+			type: "post",
+			success: function (data)
+			{
+				jQuery("#areasContainer").html(data);
+			},
+			error: function (data)
+			{
+				console.log("Error: " + data);
+			}
+		});
+
+		jQuery.ajax({
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxGetBackground",
+			data: {'propertyId': propertyId},
+			type: "post",
+			success: function (data)
+			{
+
+				var background = jQuery.parseJSON(data);
+
+				var canvasWidth  = parseFloat("<?php echo $previewWidth; ?>");
+				var scalingRatio = canvasWidth / background.width;
+				var canvasHeight = background.height * scalingRatio;
+
+				rootSnapSvgObject = Snap("#mainSvgImage");
+
+				jQuery.ajax({
+					url: "<?php echo JURI::base() . 'media/com_reddesign/backgrounds/'; ?>" + background.svg_file,
+					dataType: "text",
+					cache: true,
+					xhrFields: {
+						onprogress: function (e) {
+							if (e.lengthComputable) {
+								var loadedPercentage = parseInt(e.loaded / e.total * 100);
+								jQuery('#svgContainer .progress .bar-success')
+									.css('width', '' + (loadedPercentage) + '%')
+									.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
+							}
+						}
+					},
+					beforeSend: function (xhr) {
+						jQuery('#svgContainer .progress').show().addClass('active');
+						jQuery('#svgContainer .progress .bar-success').css('width', '0%');
+					},
+					success: function (response) {
+						jQuery('#svgContainer .progress').removeClass('active');
+						if(typeof response === 'undefined' || response == false){
+							jQuery('#svgContainer .progress').append(
+								'<div class="bar bar-danger" style="width: ' + (100 - parseInt(jQuery('#svgContainer .progress .bar-success').css('width'))) + '%;"></div>'
+							);
+						}
+						else{
+							jQuery('#svgContainer .progressbar-holder').fadeOut(3000);
+						}
+
+						jQuery("#mainSvgImage")
+							.append('<defs><style type="text/css">' +  background.selectedFontsDeclaration + '</style></defs>')
+							.append(response);
+
+						// Set preview size at loaded file.
+						var loadedSvgFromFile = jQuery("#mainSvgImage").find("svg")[0];
+						loadedSvgFromFile.setAttribute("width", canvasWidth);
+						loadedSvgFromFile.setAttribute("height", canvasHeight);
+						loadedSvgFromFile.setAttribute("id", "svgCanvas");
+
+						// Set preview size at svg container element.
+						var rootElement = document.getElementById("mainSvgImage");
+						rootElement.setAttribute("width", canvasWidth);
+						rootElement.setAttribute("height", canvasHeight);
+						rootElement.setAttribute("overflow", "hidden");
+
+						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
+
+
+					}
+				});
+
+			},
+			error: function (data)
+			{
+				console.log("Error: " + data);
+			}
+		});
+
+		customize(0);
 	}
 </script>
 {RedDesignBreakFormEndsAndJS}

@@ -32,8 +32,6 @@ class ReddesignControllerArea extends RControllerForm
 
 		$data = $this->input->get('jform', array(), 'array');
 
-		//print_r($data);
-
 		$model = RModel::getAdminInstance('Area');
 
 		if ($model->save($data))

@@ -84,21 +84,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		// Adding script from Plugin as we need customization in attribute.js for property background relation.
 		$document->addScript('plugins/redshop_product/reddesign/js/attribute.js');
-
-		/*$results  = $this->getPropertyBackgroundRelation($product->product_id);
-		$relation = array();
-
-		for ($i = 0, $n = count($results); $i < $n; $i++)
-		{
-			$result = $results[$i];
-			$relation[$result->property_id] = $result->designtype_id;
-		}
-
-		$script = "
-			var propertyBackgroundRelation = " . json_encode($relation) . ";
-		";
-
-		$document->addScriptDeclaration($script);*/
 	}
 
 	/**
@@ -146,7 +131,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			$displayedBackgroundId = $app->input->getInt('displayedBackgroundId', null);
 
-			// Get displayed background.
+			// Get models.
 			$backgroundsModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true), 'com_reddesign');
 			$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true), 'com_reddesign');
 			$designTypeModel = RModel::getAdminInstance('Designtype', array('ignore_request' => true), 'com_reddesign');
@@ -300,7 +285,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			$start = '{redDESIGN:AreasLoopStart}';
 			$end = '{redDESIGN:AreasLoopEnd}';
-			$template_desc = preg_replace('#(' . $start . ')(.*)(' . $end . ')#si', $areasFinshedOutput, $template_desc);
+			$template_desc = preg_replace('#(' . $start . ')(.*)(' . $end . ')#si', '<div id="areasContainer">' . $areasFinshedOutput . '</div>', $template_desc);
 
 			// Get form end.
 			$htmlElement = explode('{RedDesignBreakFormEndsAndJS}', $html);
