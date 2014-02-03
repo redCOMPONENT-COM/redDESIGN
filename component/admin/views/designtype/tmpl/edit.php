@@ -142,10 +142,6 @@ switch ($tab)
 				$data->unitConversionRatio = $this->unitConversionRatio;
 				$data->sourceDpi = $this->sourceDpi;
 				$data->productionBgAttributes = $this->productionBgAttributes;
-				$data->fontsOptions = $this->fontsOptions;
-				$data->inputFieldOptions = $this->inputFieldOptions;
-				$data->alignmentOptions = $this->alignmentOptions;
-				$data->verticalAlignmentOptions = $this->verticalAlignmentOptions;
 				$data->item->designtype_id = $this->item->id;
 				$data->selectedFontsDeclaration = $this->selectedFontsDeclaration;
 				echo RLayoutHelper::render('edit_area_js', $data, $basePath = JPATH_ROOT . '/administrator/components/com_reddesign/views/area/tmpl');

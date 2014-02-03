@@ -116,7 +116,13 @@ else
 							<?php echo JHtml::_('link', JRoute::_('index.php?option=com_reddesign&task=clipart.edit&id=' . $row->id), $row->name); ?>
 						</td>
 						<td>
-							<img class="thumbnail" src="<?php echo JURI::root() . 'media/com_reddesign/cliparts/' . $row->clipartFile; ?>" style="width:100px;" />
+							<div class="pull-left thumbnail">
+								<object
+									class="thumbnailSVG"
+									data="<?php echo JURI::root() . 'media/com_reddesign/cliparts/' . $row->clipartFile; ?>"
+									type="image/svg+xml">
+								</object>
+							</div>
 						</td>
 						<td>
 							<?php echo $row->categoryName; ?>

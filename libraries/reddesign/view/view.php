@@ -84,6 +84,8 @@ abstract class ReddesignView extends RViewAdmin
 	{
 		parent::__construct($config);
 
+		$this->displayComponentVersion = true;
+
 		$this->sidebarData = array(
 			'active' => strtolower($this->_name)
 		);

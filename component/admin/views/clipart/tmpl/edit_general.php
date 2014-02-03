@@ -58,8 +58,11 @@ JHtml::_('behavior.framework');
 					<?php echo JText::_('COM_REDDESIGN_CLIPART_PREVIEW') ?>
 				</h4>
 
-				<div>
-					<img class="thumbnail" src="<?php echo JURI::root() . 'media/com_reddesign/cliparts/' . $this->item->clipartFile; ?>" />
+				<div class="pull-left thumbnail">
+					<object
+						data="<?php echo JURI::root() . 'media/com_reddesign/cliparts/' . $this->item->clipartFile; ?>"
+						type="image/svg+xml">
+					</object>
 				</div>
 			</div>
 		<?php endif; ?>

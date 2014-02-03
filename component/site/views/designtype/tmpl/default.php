@@ -333,7 +333,7 @@ $productId = $input->getInt('pid', 0);
 
 			if (font)
 			{
-				textElement.attr('font-family', jQuery(font).val());
+				textElement.attr('font-family', jQuery(font).find(':selected').text());
 			}
 
 			if (color)
@@ -467,7 +467,7 @@ $productId = $input->getInt('pid', 0);
 
 				var textElement = Snap.parse(
 					'<text id="areaTextElement_<?php echo $area->id; ?>" fill="#' + fontColor
-						+ '" font-family="' + jQuery("#fontArea<?php echo $area->id; ?>").val() + '"'
+						+ '" font-family="' + jQuery("#fontArea<?php echo $area->id; ?>").find(":selected").text() + '"'
 						+ ' font-size="' + fontSizeValue + 'px"'
 						+ ' x="' + (x1) + '"'
 						+ ' y="' + (y1 + (parseFloat(fontSizeValue) * scalingImageForPreviewRatio)) + '"'

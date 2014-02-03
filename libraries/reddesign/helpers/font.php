@@ -80,6 +80,26 @@ final class ReddesignHelpersFont
 	}
 
 	/**
+	 * Returns List of all fonts
+	 *
+	 * @return array
+	 */
+	public static function getFontSelectOptions()
+	{
+		// Get all fonts in the system to be choosen or not for the current design.
+		$fontsModel = RModel::getAdminInstance('Fonts', array('ignore_request' => true), 'com_reddesign');
+		$fonts = $fontsModel->getItems();
+		$fontsOptions = array();
+
+		foreach ($fonts as $font)
+		{
+			$fontsOptions[] = JHtml::_('select.option', $font->id, $font->name);
+		}
+
+		return $fontsOptions;
+	}
+
+	/**
 	 * Get List of used fonts for areas
 	 *
 	 * @param   array  $areas  List of area objects

@@ -89,6 +89,34 @@ class ReddesignControllerArea extends RControllerForm
 	}
 
 	/**
+	 * Removes design areas for AJAX request.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function ajaxLoadAreaTypeLayout()
+	{
+		$areaId = $this->input->getInt('areaId', 0);
+		$designTypeId = $this->input->getInt('designType', 0);
+		$areaType = $this->input->getInt('areaType', 1);
+
+		$areaModel = RModel::getAdminInstance('Area', array('ignore_request' => true));
+		$area = $areaModel->getItem($areaId);
+		$designTypeModel = RModel::getAdminInstance('DesignType', array('ignore_request' => true));
+		$designType = $designTypeModel->getItem($designTypeId);
+
+		$areaTypeName = ReddesignHelpersArea::getAreaType($areaType);
+		echo RLayoutHelper::render('area.' . $areaTypeName['name'] . 'options', array(
+				'area' => $area,
+				'designType' => $designType,
+			)
+		);
+
+		JFactory::getApplication()->close();
+	}
+
+	/**
 	 * Gets areas for AJAX request.
 	 *
 	 * @access public
