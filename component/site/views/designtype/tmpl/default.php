@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 
 JHtml::_('behavior.modal');
 
-RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
+RHelperAsset::load('snap.svg.js', 'com_reddesign');
 
 if (isset($displayData))
 {
@@ -221,20 +221,20 @@ $productId = $input->getInt('pid', 0);
 			});
 
 			if (jQuery('.fontSizeSlider').length > 0)
+			{
 				jQuery('.fontSizeSlider').slider()
 					.on('slide', function(ev){
 						var id = jQuery(this).attr('id').replace('fontSizeSlider', '');
 						jQuery('#fontSize' + id).val(ev.value);
 						changeSVGTextElement(id);
 					});
+			}
 
 			jQuery(document).on("keyup, change", ".reddesign-form .colorCode", function() {
 				var id = jQuery(this).attr('id').replace('colorCode', '');
 				var hex = jQuery("#colorCode" + id).val();
 				loadCMYKValues(hex, parseInt(id));
-
 			});
-
 		}
 	);
 
@@ -500,6 +500,8 @@ $productId = $input->getInt('pid', 0);
 		jQuery("#mainSvgImage").empty();
 		jQuery("#areasContainer").empty();
 
+		var areas;
+
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxLoadDesigntype",
 			data: {'propertyId': propertyId},
@@ -520,8 +522,9 @@ $productId = $input->getInt('pid', 0);
 			type: "post",
 			success: function (data)
 			{
-
 				var background = jQuery.parseJSON(data);
+
+				areas = background.areas;
 
 				var canvasWidth  = parseFloat("<?php echo $previewWidth; ?>");
 				var scalingRatio = canvasWidth / parseFloat(background.width);
@@ -575,6 +578,8 @@ $productId = $input->getInt('pid', 0);
 						rootElement.setAttribute("overflow", "hidden");
 
 						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
+
+						customizeJS(areas);
 					}
 				});
 			},
@@ -583,8 +588,6 @@ $productId = $input->getInt('pid', 0);
 				console.log("Error: " + data);
 			}
 		});
-
-		customize();
 	}
 
 	/**
@@ -613,6 +616,68 @@ $productId = $input->getInt('pid', 0);
 			svgTextElement.append(svgTSpan);
 
 			y += lineHeight;
+		}
+	}
+
+	function customizeJS(areas)
+	{
+		// Add the progress bar
+		var halfBackgroundHeight =  ((jQuery("#background").height() / 2)-10);
+		jQuery("#background-container").height(jQuery("#background").height());
+		jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px").css("padding-bottom", halfBackgroundHeight + "px").show();
+
+		var background_id = jQuery("#background_id").val();
+
+		for (var i=0; i<areas.length; i++)
+		{
+			var fontColor = "000000";
+
+			if (jQuery("#colorCode" + areas[i].id).length > 0)
+			{
+				fontColor = jQuery("#colorCode" + areas[i].id).val().replace("#", "");
+			}
+
+			var x1 = parseFloat(areas[i].x1_pos) * scalingImageForPreviewRatio;
+			var y1 = parseFloat(areas[i].y1_pos) * scalingImageForPreviewRatio;
+			var x2 = parseFloat(areas[i].x2_pos) * scalingImageForPreviewRatio;
+			var y2 = parseFloat(areas[i].y2_pos) * scalingImageForPreviewRatio;
+			var width = x2 - x1;
+			var height = y2 - y1;
+
+			areasContainer[areas[i].id] = new Array();
+			areasContainer[areas[i].id]['x1'] = x1;
+			areasContainer[areas[i].id]['y1'] = y1;
+			areasContainer[areas[i].id]['x2'] = x2;
+			areasContainer[areas[i].id]['y2'] = y2;
+			areasContainer[areas[i].id]['width'] = width;
+			areasContainer[areas[i].id]['height'] = height;
+
+			var fontSizeValue = 12;
+			if (jQuery("#fontSize" + areas[i].id).length > 0)
+			{
+				var fontSize = jQuery("#fontSize" + areas[i].id).val().split(":");
+
+				if (fontSize.length > 1)
+				{
+					fontSizeValue = fontSize[1];
+				}
+				else
+				{
+					fontSizeValue = fontSize[0];
+				}
+			}
+
+			var textElement = Snap.parse(
+				'<text id="areaTextElement_' +
+					areas[i].id + '" ' +
+					' x="' + x1 + '"' +
+					' y="' + y1 + '"' +
+					'></text>'
+			);
+
+			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
+
+			changeSVGTextElement(areas[i].id);
 		}
 	}
 </script>

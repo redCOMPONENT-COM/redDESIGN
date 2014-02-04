@@ -162,6 +162,8 @@ class ReddesignControllerDesigntype extends JController
 		$areasModel->setState('filter.background_id', $displayedBackground->id);
 		$displayedAreas = $areasModel->getItems();
 
+		$displayedBackground->areas = $displayedAreas;
+
 		$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayedAreas);
 		$displayedBackground->selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
 
