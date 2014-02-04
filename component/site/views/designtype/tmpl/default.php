@@ -527,8 +527,8 @@ $productId = $input->getInt('pid', 0);
 				areas = background.areas;
 
 				var canvasWidth  = parseFloat("<?php echo $previewWidth; ?>");
-				var scalingRatio = canvasWidth / background.width;
-				var canvasHeight = background.height * scalingRatio;
+				var scalingRatio = canvasWidth / parseFloat(background.width);
+				var canvasHeight = parseFloat(background.height) * scalingRatio;
 
 				rootSnapSvgObject = Snap("#mainSvgImage");
 

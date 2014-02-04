@@ -282,7 +282,9 @@ $this->unit = $displayData->unit;
 			},
 			type: "get",
 			success: function (data) {
+				jQuery("#designAreaId").val(reddesign_area_id);
 				changeAreaType();
+				jQuery("#saveAreaSettings" + reddesign_area_id).button("reset")
 			},
 			error: function (data) {
 				console.log('function saveAreaClipartSettings() Error');
