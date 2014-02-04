@@ -198,11 +198,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$htmlElement = $htmlElement[1];
 			$template_desc = str_replace("{redDESIGN:DesignImage}", $htmlElement, $template_desc);
 
-			// Get button "Customize it!", this button can be turned on at the configuration.
-			$htmlElement = explode('{RedDesignBreakButtonCustomizeIt}', $html);
-			$htmlElement = $htmlElement[1];
-			$template_desc = str_replace("{redDESIGN:ButtonCustomizeIt}", $htmlElement, $template_desc);
-
 			// Here's where it gets crazy. - Design Areas
 			$htmlAreas = explode('{RedDesignBreakDesignAreas}', $html);
 			$htmlAreas = $htmlAreas[1];

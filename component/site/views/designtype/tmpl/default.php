@@ -89,23 +89,7 @@ $productId = $input->getInt('pid', 0);
 	</div>
 {RedDesignBreakDesignImage}
 
-	<?php // Part 4 - "Customize it!" Button (Controlled by configuration parameters.) ?>
-{RedDesignBreakButtonCustomizeIt}
-	<div class="customize-it-btn row-fluid">
-		<?php if (!empty($this->displayedAreas) && ($autoCustomize == 0 || $autoCustomize == 2) ) : ?>
-			<button type="button"
-			        class="btn btn-success"
-			        data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>"
-			        id="customizeDesign"
-				>
-				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE'); ?>
-			</button>
-		<?php endif; ?>
-	</div>
-{RedDesignBreakButtonCustomizeIt}
-
-
-	<?php // Part 5 - Areas Begin ?>
+	<?php // Part 6 - Areas Begin ?>
 {RedDesignBreakDesignAreas}
 	<div class="row-fluid">
 		<div class="well span12">
@@ -114,7 +98,7 @@ $productId = $input->getInt('pid', 0);
 	</div>
 {RedDesignBreakDesignAreas}
 
-	<?php // Part 6 - Form Ends ?>
+	<?php // Part 7 - Form Ends ?>
 {RedDesignBreakFormEndsAndJS}
 </form>
 
@@ -391,7 +375,6 @@ $productId = $input->getInt('pid', 0);
 	/**
 	 * Sends customize data to server and retreives the resulting image.
 	 *
-	 * @param button Determines whether the call comes from "Customize it!" button or not.
 	 */
 	function customize() {
 		// Add the progress bar
@@ -399,13 +382,7 @@ $productId = $input->getInt('pid', 0);
 		jQuery("#background-container").height(jQuery("#background").height());
 		jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px").css("padding-bottom", halfBackgroundHeight + "px").show();
 
-		var reddesign_designtype_id = jQuery("#reddesign_designtype_id").val();
 		var background_id = jQuery("#background_id").val();
-		var design = {
-			'areas': [],
-			'reddesign_designtype_id' : reddesign_designtype_id,
-			'background_id' : background_id
-		};
 
 		<?php foreach($this->displayedAreas as $area) :?>
 
@@ -457,22 +434,6 @@ $productId = $input->getInt('pid', 0);
 
 			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
 
-			design.areas.push({
-				"id" : 			"<?php echo $area->id; ?>",
-				"textArea" :	jQuery("#textArea_<?php echo $area->id; ?>").val(),
-				"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-				"fontColor" :	fontColor,
-				"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val() + fontUnit,
-				"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-				"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
-				"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
-			});
-
-			if (jQuery("#textArea_<?php echo $area->id; ?>").length > 0)
-			{
-				var textareacount = jQuery("#textArea_<?php echo $area->id; ?>").val().replace(/ /g,'').length;
-				jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
-			}
 		<?php endforeach; ?>
 	}
 
