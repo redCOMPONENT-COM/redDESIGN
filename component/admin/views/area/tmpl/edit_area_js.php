@@ -63,7 +63,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 
 			<?php if ($this->areas != '') : ?>
 
-				<?php foreach ($this->areas as  $area) : ?>
+				<?php foreach ($this->areas as $area) : ?>
 				// Check div before add farbtastic
 				if (jQuery("#colorPickerContainer<?php echo $area->id ?>")[0])
 				{
