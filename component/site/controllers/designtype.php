@@ -149,22 +149,25 @@ class ReddesignControllerDesigntype extends JController
 	{
 		$app = JFactory::getApplication();
 		$propertyId = $app->input->getInt('propertyId', 0);
-		$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true), 'com_reddesign');
-		$displayedBackground = $backgroundModel->getItemByProperty($propertyId);
 
+		$designTypeModel = RModel::getAdminInstance('Designtype', array('ignore_request' => true), 'com_reddesign');
+		$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true), 'com_reddesign');
+		$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
+
+		$displayedBackground = $backgroundModel->getItemByProperty($propertyId);
 		$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayedBackground->svg_file);
 		$xmlInfo = $xml->attributes();
 		$displayedBackground->width  = str_replace('px', '', $xmlInfo->width);
 		$displayedBackground->height = str_replace('px', '', $xmlInfo->height);
 
-		$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
 		$areasModel->setState('filter.background_id', $displayedBackground->id);
-		$displayedAreas = $areasModel->getItems();
+		$displayedBackground->areas = $areasModel->getItems();
 
-		$displayedBackground->areas = $displayedAreas;
-
-		$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayedAreas);
+		$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayedBackground->areas);
 		$displayedBackground->selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
+
+		$productionBackground = $designTypeModel->getProductionBackground($displayedBackground->designtype_id);
+		$displayedBackground->productionBackgroundId = $productionBackground->id;
 
 		echo json_encode($displayedBackground);
 
