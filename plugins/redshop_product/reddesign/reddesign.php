@@ -387,20 +387,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$config = ReddesignEntityConfig::getInstance();
 		$fontUnit = $config->getFontUnit();
 
-		// Get product type
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('product_type'));
-		$query->from($db->quoteName('#__redshop_product'));
-		$query->where($db->quoteName('product_id') . ' = ' . $product->product_id);
-		$db->setQuery($query);
-		$productType = $db->loadResult();
-
-		$query->select($db->quoteName('name'));
-		$query->from($db->quoteName('#__reddesign_fonts'));
-		$db->setQuery($query);
-		$fonts = $db->loadObjectList();
-
-		if ($productType == 'redDESIGN')
+		if ($product->product_type == 'redDESIGN')
 		{
 			RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
 

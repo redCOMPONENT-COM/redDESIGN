@@ -325,12 +325,12 @@ $productId = $input->getInt('pid', 0);
 				textElement.attr('font-family', jQuery(font).find(':selected').text());
 			}
 
-			if (color)
+			if (color && typeof(jQuery(color).val()) != "undefined")
 			{
 				textElement.attr('fill', '#' + jQuery(color).val().replace('#',''));
 			}
 
-			if (fontSize)
+			if (fontSize && typeof(jQuery(fontSize).val()) != "undefined")
 			{
 				fontSize = jQuery(fontSize).val().split(":");
 
@@ -343,7 +343,7 @@ $productId = $input->getInt('pid', 0);
 				textElement.attr('y', parseFloat(areasContainer[areaId]['y1']) + ((parseFloat(fontSizeValue) * scalingImageForPreviewRatio)));
 			}
 
-			if (textAlign)
+			if (textAlign && typeof(jQuery(textAlign).val()) != "undefined")
 			{
 				var textAlignValue = jQuery(textAlign).val();
 				textElement.attr('text-anchor', textAlignValue.replace('left', 'start').replace('center', 'middle').replace('right', 'end'));
@@ -362,7 +362,7 @@ $productId = $input->getInt('pid', 0);
 				}
 			}
 
-			if (verticalAlign)
+			if (verticalAlign && typeof(jQuery(verticalAlign).val()) != "undefined")
 			{
 				var verticalAlignValue = jQuery(verticalAlign).val();
 
@@ -580,6 +580,13 @@ $productId = $input->getInt('pid', 0);
 						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
 
 						customizeJS(areas);
+
+						jQuery('.fontSizeSlider').slider()
+							.on('slide', function(ev){
+								var id = jQuery(this).attr('id').replace('fontSizeSlider', '');
+								jQuery('#fontSize' + id).val(ev.value);
+								changeSVGTextElement(id);console.log(id);
+							});
 					}
 				});
 			},
