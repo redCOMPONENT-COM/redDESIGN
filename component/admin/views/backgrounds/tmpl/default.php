@@ -164,9 +164,11 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 
 			jQuery(document).on("mousedown", ".jmodal", function(e) {
 				var backgroundId = jQuery(this).attr('href').replace('#modalPreview', '');
+
 				if (typeof backgroundPreviews[backgroundId]['progress'] != 'undefined')
 				{
-					return true;
+					e.stopPropagation();
+					return false;
 				}
 				loadPreviewBackground(backgroundId, this);
 
