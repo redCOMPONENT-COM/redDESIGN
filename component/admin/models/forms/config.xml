@@ -4,17 +4,6 @@
 			  label="COM_REDDESIGN_CONFIG_GENERAL_CONFIGURATION"
 			  description="COM_REDDESIGN_CONFIG_GENERAL_CONFIGURATION_DESC"
 	>
-		<field name="autoCustomize"
-			   type="list"
-			   default="1"
-			   class="chosen"
-			   label="COM_REDDESIGN_CONFIG_AUTOCUSTOMIZE"
-			   description="COM_REDDESIGN_CONFIG_AUTOCUSTOMIZE_DESC"
-		>
-			<option value="0">COM_REDDESIGN_CONFIG_USE_CUSTOMIZE_BUTTON</option>
-			<option value="1">COM_REDDESIGN_CONFIG_USE_AUTOMATIC_CUSTOMIZATION</option>
-			<option value="2">COM_REDDESIGN_CONFIG_USE_BOTH</option>
-		</field>
 
 		<field name="showAssignFontsToAllAreas"
 			   type="list"

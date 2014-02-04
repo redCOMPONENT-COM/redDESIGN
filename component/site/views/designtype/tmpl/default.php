@@ -25,7 +25,6 @@ if (isset($displayData))
 
 $imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->displayedBackground->svg_file;
 $config = ReddesignEntityConfig::getInstance();
-$autoCustomize = $config->getAutoCustomize();
 $previewWidth = $config->getMaxSVGPreviewSiteWidth();
 $unit = $config->getUnit();
 $fontUnit = $config->getFontUnit();
@@ -90,23 +89,7 @@ $productId = $input->getInt('pid', 0);
 	</div>
 {RedDesignBreakDesignImage}
 
-	<?php // Part 4 - "Customize it!" Button (Controlled by configuration parameters.) ?>
-{RedDesignBreakButtonCustomizeIt}
-	<div class="customize-it-btn row-fluid">
-		<?php if (!empty($this->displayedAreas) && ($autoCustomize == 0 || $autoCustomize == 2) ) : ?>
-			<button type="button"
-			        class="btn btn-success"
-			        data-loading-text="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE_LOADING') ?>"
-			        id="customizeDesign"
-				>
-				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BUTTON_CUSTOMIZE'); ?>
-			</button>
-		<?php endif; ?>
-	</div>
-{RedDesignBreakButtonCustomizeIt}
-
-
-	<?php // Part 5 - Areas Begin ?>
+	<?php // Part 6 - Areas Begin ?>
 {RedDesignBreakDesignAreas}
 	<div class="row-fluid">
 		<div class="well span12">
@@ -115,7 +98,7 @@ $productId = $input->getInt('pid', 0);
 	</div>
 {RedDesignBreakDesignAreas}
 
-	<?php // Part 6 - Form Ends ?>
+	<?php // Part 7 - Form Ends ?>
 {RedDesignBreakFormEndsAndJS}
 </form>
 
@@ -190,7 +173,7 @@ $productId = $input->getInt('pid', 0);
 
 						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
 
-						customize(0);
+						customize();
 					}
 				});
 			<?php endif; ?>
@@ -207,7 +190,7 @@ $productId = $input->getInt('pid', 0);
 					},
 					3000
 				);
-				customize(1);
+				customize();
 			});
 
 			jQuery(document).on("keyup", ".reddesign-form .textAreaClass", function() {
@@ -431,96 +414,66 @@ $productId = $input->getInt('pid', 0);
 	/**
 	 * Sends customize data to server and retreives the resulting image.
 	 *
-	 * @param button Determines whether the call comes from "Customize it!" button or not.
 	 */
-	function customize(button) {
+	function customize() {
+		// Add the progress bar
+		var halfBackgroundHeight =  ((jQuery("#background").height() / 2)-10);
+		jQuery("#background-container").height(jQuery("#background").height());
+		jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px").css("padding-bottom", halfBackgroundHeight + "px").show();
 
-		var customizeOrNot = 0;
-		var autoCustomizeParam = parseInt("<?php echo $autoCustomize; ?>");
-		/**
-		 * 0 when customize function is called from an element different than button (textbox, font dropdown etc.)
-		 * 1 when customize function is called from the button
-		 * 3 when customize function is called from background selection radio button
-		 */
+		var background_id = jQuery("#background_id").val();
 
-		// Turn off or on customization according to the settings in config.xml.
-		if((button == 1 && autoCustomizeParam == 0) || (button == 1 && autoCustomizeParam == 2))
-		{
-			customizeOrNot = 1;
-		}
-		else if(button == 0 && (autoCustomizeParam == 1 || autoCustomizeParam == 2))
-		{
-			customizeOrNot = 1;
-		}
-		else if(button == 3)
-		{
-			// This is the case when setBackground function is called
-			customizeOrNot = 1;
-		}
+		<?php foreach($this->displayedAreas as $area) :?>
 
-		if(customizeOrNot == 1)
-		{
-			// Add the progress bar
-			var halfBackgroundHeight =  ((jQuery("#background").height() / 2)-10);
-			jQuery("#background-container").height(jQuery("#background").height());
-			jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px").css("padding-bottom", halfBackgroundHeight + "px").show();
+			var fontColor = "000000";
 
+			if (jQuery("#colorCode<?php echo $area->id; ?>").length > 0)
+			{
+				fontColor = jQuery("#colorCode<?php echo $area->id; ?>").val().replace("#", "");
+			}
 
-			var reddesign_designtype_id = jQuery("#reddesign_designtype_id").val();
-			var background_id = jQuery("#background_id").val();
-			var design = {
-				'areas': [],
-				'reddesign_designtype_id' : reddesign_designtype_id,
-				'background_id' : background_id
-			};
-			<?php foreach($this->displayedAreas as $area) :?>
+			var x1 = parseFloat(<?php echo $area->x1_pos; ?>) * scalingImageForPreviewRatio;
+			var y1 = parseFloat(<?php echo $area->y1_pos; ?>) * scalingImageForPreviewRatio;
+			var x2 = parseFloat(<?php echo $area->x2_pos; ?>) * scalingImageForPreviewRatio;
+			var y2 = parseFloat(<?php echo $area->y2_pos; ?>) * scalingImageForPreviewRatio;
+			var width = x2 - x1;
+			var height = y2 - y1;
 
-				var fontColor = "000000";
-				if (jQuery("#colorCode<?php echo $area->id; ?>").length > 0)
-					fontColor = jQuery("#colorCode<?php echo $area->id; ?>").val().replace("#", "");
+			areasContainer[<?php echo $area->id; ?>] = new Array();
+			areasContainer[<?php echo $area->id; ?>]['x1'] = x1;
+			areasContainer[<?php echo $area->id; ?>]['y1'] = y1;
+			areasContainer[<?php echo $area->id; ?>]['x2'] = x2;
+			areasContainer[<?php echo $area->id; ?>]['y2'] = y2;
+			areasContainer[<?php echo $area->id; ?>]['width'] = width;
+			areasContainer[<?php echo $area->id; ?>]['height'] = height;
 
-				var x1 = parseFloat(<?php echo $area->x1_pos; ?>) * scalingImageForPreviewRatio;
-				var y1 = parseFloat(<?php echo $area->y1_pos; ?>) * scalingImageForPreviewRatio;
-				var x2 = parseFloat(<?php echo $area->x2_pos; ?>) * scalingImageForPreviewRatio;
-				var y2 = parseFloat(<?php echo $area->y2_pos; ?>) * scalingImageForPreviewRatio;
-				var width = x2 - x1;
-				var height = y2 - y1;
+			var fontSizeValue = 12;
+			if (jQuery("#fontSize<?php echo $area->id; ?>").length > 0)
+			{
+				var fontSize = jQuery("#fontSize<?php echo $area->id; ?>").val().split(":");
 
-				areasContainer[<?php echo $area->id; ?>] = new Array();
-				areasContainer[<?php echo $area->id; ?>]['x1'] = x1;
-				areasContainer[<?php echo $area->id; ?>]['y1'] = y1;
-				areasContainer[<?php echo $area->id; ?>]['x2'] = x2;
-				areasContainer[<?php echo $area->id; ?>]['y2'] = y2;
-				areasContainer[<?php echo $area->id; ?>]['width'] = width;
-				areasContainer[<?php echo $area->id; ?>]['height'] = height;
+				if (fontSize.length > 1)
+				{
+					fontSizeValue = fontSize[1];
+				}
+				else
+				{
+					fontSizeValue = fontSize[0];
+				}
+			}
 
-				var textElement = Snap.parse(
-					'<text id="areaTextElement_<?php echo $area->id; ?>" '
-						+ ' x="' + x1 + '"'
-						+ ' y="' + y1 + '"'
-						+ '></text>');
+			var textElement = Snap.parse(
+				'<text id="areaTextElement_<?php echo $area->id; ?>" '
+					+ ' x="' + x1 + '"'
+					+ ' y="' + y1 + '"'
+					+ '></text>'
+			);
 
 			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
-				design.areas.push({
-					"id" : 			"<?php echo $area->id; ?>",
-					"textArea" :	jQuery("#textArea_<?php echo $area->id; ?>").val(),
-					"fontArea" : 	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-					"fontColor" :	fontColor,
-					"fontSize" :	jQuery("#fontSize<?php echo $area->id; ?>").val() + fontUnit,
-					"fontTypeId" :	jQuery("#fontArea<?php echo $area->id; ?>").val(),
-					"plg_dimension_base" :   jQuery("#plg_dimension_base_<?php echo $productId;?>").val(),
-					"plg_dimension_base_input" :   jQuery("#plg_dimension_base_input_<?php echo $productId;?>").val()
-				});
 
-				if (jQuery("#textArea_<?php echo $area->id; ?>").length > 0)
-				{
-					var textareacount = jQuery("#textArea_<?php echo $area->id; ?>").val().replace(/ /g,'').length;
-					jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
-				}
-				changeSVGTextElement(<?php echo $area->id; ?>);
+			changeSVGTextElement(<?php echo $area->id; ?>);
 
-			<?php endforeach; ?>
-		}
+		<?php endforeach; ?>
 	}
 
 	/**
@@ -540,11 +493,98 @@ $productId = $input->getInt('pid', 0);
 	/**
 	 * Navigate to selected background.
 	 *
-	 * @param url
+	 * @param propertyId
 	 */
-	function navigateBackground(url)
+	function changeBackground(propertyId)
 	{
-		window.location = url;
+		jQuery("#mainSvgImage").empty();
+		jQuery("#areasContainer").empty();
+
+		jQuery.ajax({
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxLoadDesigntype",
+			data: {'propertyId': propertyId},
+			type: "post",
+			success: function (data)
+			{
+				jQuery("#areasContainer").html(data);
+			},
+			error: function (data)
+			{
+				console.log("Error: " + data);
+			}
+		});
+
+		jQuery.ajax({
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxGetBackground",
+			data: {'propertyId': propertyId},
+			type: "post",
+			success: function (data)
+			{
+
+				var background = jQuery.parseJSON(data);
+
+				var canvasWidth  = parseFloat("<?php echo $previewWidth; ?>");
+				var scalingRatio = canvasWidth / parseFloat(background.width);
+				var canvasHeight = parseFloat(background.height) * scalingRatio;
+
+				rootSnapSvgObject = Snap("#mainSvgImage");
+
+				jQuery.ajax({
+					url: "<?php echo JURI::base() . 'media/com_reddesign/backgrounds/'; ?>" + background.svg_file,
+					dataType: "text",
+					cache: true,
+					xhrFields: {
+						onprogress: function (e) {
+							if (e.lengthComputable) {
+								var loadedPercentage = parseInt(e.loaded / e.total * 100);
+								jQuery('#svgContainer .progress .bar-success')
+									.css('width', '' + (loadedPercentage) + '%')
+									.html(loadedPercentage + '% <?php echo JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true); ?>');
+							}
+						}
+					},
+					beforeSend: function (xhr) {
+						jQuery('#svgContainer .progress').show().addClass('active');
+						jQuery('#svgContainer .progress .bar-success').css('width', '0%');
+					},
+					success: function (response) {
+						jQuery('#svgContainer .progress').removeClass('active');
+						if(typeof response === 'undefined' || response == false){
+							jQuery('#svgContainer .progress').append(
+								'<div class="bar bar-danger" style="width: ' + (100 - parseInt(jQuery('#svgContainer .progress .bar-success').css('width'))) + '%;"></div>'
+							);
+						}
+						else{
+							jQuery('#svgContainer .progressbar-holder').fadeOut(3000);
+						}
+
+						jQuery("#mainSvgImage")
+							.append('<defs><style type="text/css">' +  background.selectedFontsDeclaration + '</style></defs>')
+							.append(response);
+
+						// Set preview size at loaded file.
+						var loadedSvgFromFile = jQuery("#mainSvgImage").find("svg")[0];
+						loadedSvgFromFile.setAttribute("width", canvasWidth);
+						loadedSvgFromFile.setAttribute("height", canvasHeight);
+						loadedSvgFromFile.setAttribute("id", "svgCanvas");
+
+						// Set preview size at svg container element.
+						var rootElement = document.getElementById("mainSvgImage");
+						rootElement.setAttribute("width", canvasWidth);
+						rootElement.setAttribute("height", canvasHeight);
+						rootElement.setAttribute("overflow", "hidden");
+
+						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
+					}
+				});
+			},
+			error: function (data)
+			{
+				console.log("Error: " + data);
+			}
+		});
+
+		customize();
 	}
 
 	/**
@@ -561,6 +601,7 @@ $productId = $input->getInt('pid', 0);
 		svgTextElement.node.textContent = '';
 
 		var lines = '';
+
 		for (var n = 0; n < sentences.length; n++)
 		{
 			var svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');

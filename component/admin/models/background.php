@@ -19,6 +19,48 @@ defined('_JEXEC') or die;
 class ReddesignModelBackground extends RModelAdmin
 {
 	/**
+	 * Method to get a single record.
+	 *
+	 * @param   integer  $pk  The id of the primary key.
+	 *
+	 * @return  mixed    Object on success, false on failure.
+	 */
+	public function getItem($pk = null)
+	{
+		$item = parent::getItem($pk);
+
+		$query = $this->_db->getQuery(true);
+		$query->select($this->_db->qn('property_id'))
+			->from($this->_db->qn('#__reddesign_property_background_mapping'))
+			->where($this->_db->qn('background_id') . ' = ' . $pk);
+		$this->_db->setQuery($query);
+		$propertyId = $this->_db->loadResult();
+
+		$item->property_id = $propertyId;
+
+		return $item;
+	}
+
+	/**
+	 * Gets background by redSHOP property ID.
+	 *
+	 * @param   integer  $propertyId  The id of the redSHOP property.
+	 *
+	 * @return  object    Object on success, false on failure.
+	 */
+	public function getItemByProperty($propertyId = null)
+	{
+		$query = $this->_db->getQuery(true);
+		$query->select($this->_db->qn('background_id'))
+			->from($this->_db->qn('#__reddesign_property_background_mapping'))
+			->where($this->_db->qn('property_id') . ' = ' . $propertyId);
+		$this->_db->setQuery($query);
+		$backgroundId = $this->_db->loadResult();
+
+		return $this->getItem($backgroundId);
+	}
+
+	/**
 	 * Set a specific designtype background as the background for the PDF production file
 	 *
 	 * @param   int  $designId  The designtype id

@@ -144,16 +144,6 @@ final class ReddesignEntityConfig
 	}
 
 	/**
-	 * Get the auto customize.
-	 *
-	 * @return  int  The auto customize.
-	 */
-	public function getAutoCustomize()
-	{
-		return $this->getInt('autoCustomize');
-	}
-
-	/**
 	 * Get the unit.
 	 *
 	 * @return  string  The unit

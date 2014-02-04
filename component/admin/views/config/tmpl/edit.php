@@ -40,14 +40,6 @@ JHtml::_('rjquery.chosen', 'select');
 		<div class="tab-pane active" id="general">
 			<div class="control-group">
 				<div class="control-label">
-					<?php echo $this->form->getLabel('autoCustomize'); ?>
-				</div>
-				<div class="controls">
-					<?php echo $this->form->getInput('autoCustomize'); ?>
-				</div>
-			</div>
-			<div class="control-group">
-				<div class="control-label">
 					<?php echo $this->form->getLabel('showAssignFontsToAllAreas'); ?>
 				</div>
 				<div class="controls">
