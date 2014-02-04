@@ -295,13 +295,13 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 		<div class="btn-group btn-group-textVerticalAlign">
 			<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="top">
-				<i class="icon-align-top"></i>&nbsp;
+				<i class="icon-collapse-top"></i>&nbsp;
 			</button>
 			<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="middle">
-				<i class="icon-align-middle"></i>&nbsp;
+				<i class="icon-expand"></i>&nbsp;
 			</button>
 			<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="bottom">
-				<i class="icon-align-bottom"></i>&nbsp;
+				<i class="icon-collapse"></i>&nbsp;
 			</button>
 		</div>
 		{RedDesignBreakDesignAreaChooseFontSize}
