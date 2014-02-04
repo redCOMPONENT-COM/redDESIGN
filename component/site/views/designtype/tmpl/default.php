@@ -231,6 +231,12 @@ $productId = $input->getInt('pid', 0);
 				changeSVGTextElement(id);
 			});
 
+			jQuery(document).on("click", ".reddesign-form .btn-group-textVerticalAlign button", function() {
+				var id = jQuery(this).attr('name').replace('textVerticalAlignButton', '');
+				jQuery('#verticalAlign' + id).val(jQuery(this).attr('value'));
+				changeSVGTextElement(id);
+			});
+
 			if (jQuery('.fontSizeSlider').length > 0)
 				jQuery('.fontSizeSlider').slider()
 					.on('slide', function(ev){
@@ -322,6 +328,8 @@ $productId = $input->getInt('pid', 0);
 		var color = jQuery('#colorCode' + areaId);
 		var fontSize = jQuery('#fontSize' + areaId);
 		var textAlign = jQuery('#textAlign' + areaId);
+		var verticalAlign = jQuery('#verticalAlign' + areaId);
+		var fontSizeValue = 12;
 
 		text.css('text-align', jQuery(textAlign).val());
 
@@ -329,8 +337,6 @@ $productId = $input->getInt('pid', 0);
 
 		if (textElement)
 		{
-			textElement.node.textContent = jQuery(text).val();
-
 			if (font)
 			{
 				textElement.attr('font-family', jQuery(font).find(':selected').text());
@@ -344,7 +350,7 @@ $productId = $input->getInt('pid', 0);
 			if (fontSize)
 			{
 				fontSize = jQuery(fontSize).val().split(":");
-				var fontSizeValue = 0;
+
 				if (fontSize.length > 1)
 					fontSizeValue = fontSize[1];
 				else
@@ -357,7 +363,7 @@ $productId = $input->getInt('pid', 0);
 			if (textAlign)
 			{
 				var textAlignValue = jQuery(textAlign).val();
-				textElement.attr('text-anchor', textAlignValue.replace('left','start').replace('center','middle').replace('right','end'));
+				textElement.attr('text-anchor', textAlignValue.replace('left', 'start').replace('center', 'middle').replace('right', 'end'));
 
 				if (textAlignValue == 'left')
 				{
@@ -371,6 +377,39 @@ $productId = $input->getInt('pid', 0);
 				{
 					textElement.attr('x', parseFloat(areasContainer[areaId]['x2']));
 				}
+			}
+
+			if (verticalAlign)
+			{
+				var verticalAlignValue = jQuery(verticalAlign).val();
+
+				if (verticalAlignValue == 'top')
+				{
+					textElement.attr('y', areasContainer[areaId]['y1']);
+				}
+				else if (verticalAlignValue == 'middle')
+				{
+					var yPos = parseFloat(areasContainer[areaId]['y1']) + (parseFloat(areasContainer[areaId]['height']) / 2);
+					if (fontSizeValue)
+						yPos -= (parseFloat(fontSizeValue) / 2);
+					textElement.attr('y', yPos);
+				}
+				else if (verticalAlignValue == 'bottom')
+				{
+					var yPos = parseFloat(areasContainer[areaId]['y1']) + (parseFloat(areasContainer[areaId]['height']));
+					if (fontSizeValue)
+						yPos -= fontSizeValue;
+					textElement.attr('y', yPos);
+				}
+			}
+
+			if (jQuery(text).is("textarea"))
+			{
+				createSVGTextMultiline(textElement, jQuery(text).val())
+			}
+			else
+			{
+				textElement.node.textContent = jQuery(text).val();
 			}
 		}
 	}
@@ -455,23 +494,11 @@ $productId = $input->getInt('pid', 0);
 				areasContainer[<?php echo $area->id; ?>]['width'] = width;
 				areasContainer[<?php echo $area->id; ?>]['height'] = height;
 
-				var fontSizeValue = 12;
-				if (jQuery("#fontSize<?php echo $area->id; ?>").length > 0)
-				{
-					var fontSize = jQuery("#fontSize<?php echo $area->id; ?>").val().split(":");
-					if (fontSize.length > 1)
-						fontSizeValue = fontSize[1];
-					else
-						fontSizeValue = fontSize[0];
-				}
-
 				var textElement = Snap.parse(
-					'<text id="areaTextElement_<?php echo $area->id; ?>" fill="#' + fontColor
-						+ '" font-family="' + jQuery("#fontArea<?php echo $area->id; ?>").find(":selected").text() + '"'
-						+ ' font-size="' + fontSizeValue + 'px"'
-						+ ' x="' + (x1) + '"'
-						+ ' y="' + (y1 + (parseFloat(fontSizeValue) * scalingImageForPreviewRatio)) + '"'
-						+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>');
+					'<text id="areaTextElement_<?php echo $area->id; ?>" '
+						+ ' x="' + x1 + '"'
+						+ ' y="' + y1 + '"'
+						+ '></text>');
 
 			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
 				design.areas.push({
@@ -490,6 +517,7 @@ $productId = $input->getInt('pid', 0);
 					var textareacount = jQuery("#textArea_<?php echo $area->id; ?>").val().replace(/ /g,'').length;
 					jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
 				}
+				changeSVGTextElement(<?php echo $area->id; ?>);
 
 			<?php endforeach; ?>
 		}
@@ -517,6 +545,34 @@ $productId = $input->getInt('pid', 0);
 	function navigateBackground(url)
 	{
 		window.location = url;
+	}
+
+	/**
+	 * Split text in multiline order by adding tspan elements
+	 *
+	 */
+	function createSVGTextMultiline(svgTextElement, title)
+	{
+		var x = svgTextElement.attr('x');
+		var y = parseFloat(svgTextElement.attr('y'));
+		var lineHeight = 16;
+
+		var sentences = title.split("\n");
+		svgTextElement.node.textContent = '';
+
+		var lines = '';
+		for (var n = 0; n < sentences.length; n++)
+		{
+			var svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+			svgTSpan.setAttributeNS(null, 'x', x);
+			svgTSpan.setAttributeNS(null, 'y', y);
+
+			var tSpanTextNode = document.createTextNode(sentences[n]);
+			svgTSpan.appendChild(tSpanTextNode);
+			svgTextElement.append(svgTSpan);
+
+			y += lineHeight;
+		}
 	}
 </script>
 {RedDesignBreakFormEndsAndJS}

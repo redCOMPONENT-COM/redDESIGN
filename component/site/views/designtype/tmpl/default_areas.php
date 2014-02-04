@@ -278,8 +278,8 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					/>
 			<?php endif; ?>
 
-
-		<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->textalign; ?>" />
+		<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $textAlign; ?>" />
+		<input id="verticalAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->verticalAlign; ?>" />
 
 		<div class="btn-group btn-group-textAlign">
 			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="left">
@@ -292,12 +292,26 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 				<i class="icon-align-right"></i>&nbsp;
 			</button>
 		</div>
+
+		<div class="btn-group btn-group-textVerticalAlign">
+			<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="top">
+				<i class="icon-collapse-top"></i>&nbsp;
+			</button>
+			<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="middle">
+				<i class="icon-expand"></i>&nbsp;
+			</button>
+			<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="bottom">
+				<i class="icon-collapse"></i>&nbsp;
+			</button>
+		</div>
 		{RedDesignBreakDesignAreaChooseFontSize}
 
 		{RedDesignBreakDesignAreaChooseColorLabel}
-			<label>
-				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_COLOR_CODE'); ?>
-			</label>
+			<?php if (!empty($area->color_code)) : ?>
+				<label>
+					<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_COLOR_CODE'); ?>
+				</label>
+			<?php endif; ?>
 		{RedDesignBreakDesignAreaChooseColorLabel}
 
 		{RedDesignBreakDesignAreaChooseColor}
