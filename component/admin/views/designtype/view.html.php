@@ -112,7 +112,7 @@ class ReddesignViewDesigntype extends ReddesignView
 	protected $displayTopBarInnerLayout = false;
 
 	/**
-	 * Do we have to display a topbar inner layout ?
+	 * Do not display the Joomla back button on edit screen
 	 *
 	 * @var  boolean
 	 */
