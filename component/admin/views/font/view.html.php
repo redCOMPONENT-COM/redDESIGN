@@ -53,6 +53,20 @@ class ReddesignViewFont extends ReddesignView
 	public $typographies = null;
 
 	/**
+	 * Do we have to display a topbar inner layout ?
+	 *
+	 * @var  boolean
+	 */
+	protected $displayTopBarInnerLayout = false;
+
+	/**
+	 * Do not display the Joomla back button on edit screen
+	 *
+	 * @var  boolean
+	 */
+	protected $displayBackToJoomla = false;
+
+	/**
 	 * Display method
 	 *
 	 * @param   string  $tpl  The template name
