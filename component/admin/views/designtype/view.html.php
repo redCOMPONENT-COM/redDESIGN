@@ -112,6 +112,13 @@ class ReddesignViewDesigntype extends ReddesignView
 	protected $displayTopBarInnerLayout = false;
 
 	/**
+	 * Do not display the Joomla back button on edit screen
+	 *
+	 * @var  boolean
+	 */
+	protected $displayBackToJoomla = false;
+
+	/**
 	 * Executes before rendering the page for the Add task.
 	 *
 	 * @param   string  $tpl  Subtemplate to use
