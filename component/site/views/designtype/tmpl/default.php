@@ -463,39 +463,17 @@ $productId = $input->getInt('pid', 0);
 			}
 
 			var textElement = Snap.parse(
-				'<text id="areaTextElement_<?php echo $area->id; ?>" fill="#' + fontColor
-					+ '" font-family="' + jQuery("#fontArea<?php echo $area->id; ?>").find(":selected").text() + '"'
-					+ ' font-size="' + fontSizeValue + 'px"'
-					+ ' x="' + (x1) + '"'
-					+ ' y="' + (y1 + (parseFloat(fontSizeValue) * scalingImageForPreviewRatio)) + '"'
-					+ '>' + jQuery("#textArea_<?php echo $area->id; ?>").val() + '</text>'
+				'<text id="areaTextElement_<?php echo $area->id; ?>" '
+					+ ' x="' + x1 + '"'
+					+ ' y="' + y1 + '"'
+					+ '></text>'
 			);
-				areasContainer[<?php echo $area->id; ?>] = new Array();
-				areasContainer[<?php echo $area->id; ?>]['x1'] = x1;
-				areasContainer[<?php echo $area->id; ?>]['y1'] = y1;
-				areasContainer[<?php echo $area->id; ?>]['x2'] = x2;
-				areasContainer[<?php echo $area->id; ?>]['y2'] = y2;
-				areasContainer[<?php echo $area->id; ?>]['width'] = width;
-				areasContainer[<?php echo $area->id; ?>]['height'] = height;
-
-				var textElement = Snap.parse(
-					'<text id="areaTextElement_<?php echo $area->id; ?>" '
-						+ ' x="' + x1 + '"'
-						+ ' y="' + y1 + '"'
-						+ '></text>');
 
 			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
 
-		
-				if (jQuery("#textArea_<?php echo $area->id; ?>").length > 0)
-				{
-					var textareacount = jQuery("#textArea_<?php echo $area->id; ?>").val().replace(/ /g,'').length;
-					jQuery("#rs_sticker_element_<?php echo $productId; ?>").html(textareacount);
-				}
-				changeSVGTextElement(<?php echo $area->id; ?>);
+			changeSVGTextElement(<?php echo $area->id; ?>);
 
-			<?php endforeach; ?>
-		}
+		<?php endforeach; ?>
 	}
 
 	/**
@@ -519,9 +497,6 @@ $productId = $input->getInt('pid', 0);
 	 */
 	function changeBackground(propertyId)
 	{
-		//window.location = url;
-		var background = null;
-
 		jQuery("#mainSvgImage").empty();
 		jQuery("#areasContainer").empty();
 
@@ -602,7 +577,6 @@ $productId = $input->getInt('pid', 0);
 						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
 					}
 				});
-
 			},
 			error: function (data)
 			{
@@ -627,6 +601,7 @@ $productId = $input->getInt('pid', 0);
 		svgTextElement.node.textContent = '';
 
 		var lines = '';
+
 		for (var n = 0; n < sentences.length; n++)
 		{
 			var svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
