@@ -500,6 +500,8 @@ $productId = $input->getInt('pid', 0);
 		jQuery("#mainSvgImage").empty();
 		jQuery("#areasContainer").empty();
 
+		var areas;
+
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxLoadDesigntype",
 			data: {'propertyId': propertyId},
@@ -520,8 +522,9 @@ $productId = $input->getInt('pid', 0);
 			type: "post",
 			success: function (data)
 			{
-
 				var background = jQuery.parseJSON(data);
+
+				areas = background.areas;
 
 				var canvasWidth  = parseFloat("<?php echo $previewWidth; ?>");
 				var scalingRatio = canvasWidth / background.width;
@@ -584,7 +587,7 @@ $productId = $input->getInt('pid', 0);
 			}
 		});
 
-		customize();
+		customizeJS(areas);
 	}
 
 	/**
@@ -614,6 +617,11 @@ $productId = $input->getInt('pid', 0);
 
 			y += lineHeight;
 		}
+	}
+
+	function customizeJS(areas)
+	{
+		console.log(areas);
 	}
 </script>
 {RedDesignBreakFormEndsAndJS}
