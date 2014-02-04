@@ -60,10 +60,19 @@ class ReddesignControllerDesigntype extends JController
 		$areasOutput = '';
 
 		$areasLoopTemplate = explode('{redDESIGN:AreasLoopStart}', $layoutFile);
-		$areasLoopTemplate = explode('{redDESIGN:AreasLoopEnd}', $areasLoopTemplate[1]);
-		$areasLoopTemplate = $areasLoopTemplate[0];
+		
+		if (!empty($areasLoopTemplate[1]))
+		{
+			$areasLoopTemplate = explode('{redDESIGN:AreasLoopEnd}', $areasLoopTemplate[1]);
+			$areasLoopTemplate = $areasLoopTemplate[0];	
+		}
+		else
+		{
+			$areasLoopTemplate = null;
+		}
+		
 
-		if (!empty($displayData->displayedAreas))
+		if (!empty($displayData->displayedAreas) && !empty($areasLoopTemplate))
 		{
 			foreach ($displayData->displayedAreas as $area)
 			{
