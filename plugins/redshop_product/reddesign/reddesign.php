@@ -404,13 +404,17 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 */
 	public function changeCartOrderItemImage(&$cart, &$product_image, $product, $i)
 	{
-		$db = JFactory::getDbo();
-		$config = ReddesignEntityConfig::getInstance();
-		$fontUnit = $config->getFontUnit();
-
 		if ($product->product_type == 'redDESIGN')
 		{
 			RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
+
+			$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true), 'com_reddesign');
+			$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
+
+			$db = JFactory::getDbo();
+			$document = JFactory::getDocument();
+			$config = ReddesignEntityConfig::getInstance();
+			$fontUnit = $config->getFontUnit();
 
 			if (!empty($product->order_item_id))
 			{
@@ -426,115 +430,70 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$redDesignData = json_decode($cart[$i]['redDesignData']);
 			}
 
-			if (isset($redDesignData->svgImags))
+			$defaultPreviewWidth = $this->params->get('defaultCartPreviewWidth', 0);
+
+			$displayedBackground = $backgroundModel->getItem($redDesignData->background_id);
+			$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayedBackground->svg_file);
+			$xmlInfo = $xml->attributes();
+			$displayedBackground->width  = str_replace('px', '', $xmlInfo->width);
+			$displayedBackground->height = str_replace('px', '', $xmlInfo->height);
+
+			$scalingImageForPreviewRatio = $defaultPreviewWidth / $displayedBackground->width;
+			$previewHeight = $displayedBackground->height * $scalingImageForPreviewRatio;
+
+			$areasModel->setState('filter.background_id', $displayedBackground->id);
+			$displayedAreas = $areasModel->getItems();
+
+			$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayedAreas);
+			$selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
+
+			$product_image = '<div id="product_image_' . $i . '" >' .
+								'<svg id="mainSvgImage' . $i . '"></svg>' .
+							'</div>';
+
+			if (!empty($redDesignData->areasInnerSVG))
 			{
-				$document = JFactory::getDocument();
-
-				// Get plugin param for width & height
-				$defaultPreviewWidth = $this->params->get('defaultCartPreviewWidth', 0);
-				$defaultPreviewHeight = $this->params->get('defaultPreviewHeight', 0);
-				$jsRatio = 1;
-
-				if (($defaultPreviewWidth == 0) && ($defaultPreviewHeight == 0))
-				{
-					// No input of width && height, get the original size
-					$jsWidth = (float) $redDesignData->svgWidth;
-					$jsHeight = (float) $redDesignData->svgHeight;
-				}
-				elseif ($defaultPreviewWidth == 0)
-				{
-					// Only height has input
-					$jsHeight = (float) $defaultPreviewHeight;
-					$jsRatio = $jsHeight / (float) $redDesignData->svgHeight;
-					$jsWidth = $jsRatio * (float) $redDesignData->svgWidth;
-				}
-				elseif ($defaultPreviewHeight == 0)
-				{
-					// Only width has input
-					$jsWidth = (float) $defaultPreviewWidth;
-					$jsRatio = $jsWidth / (float) $redDesignData->svgWidth;
-					$jsHeight = $jsRatio * (float) $redDesignData->svgHeight;
-				}
-				else
-				{
-					// All width & height has input
-					$jsWidth = (float) $defaultPreviewWidth;
-					$jsHeight = (float) $defaultPreviewHeight;
-					$widthRatio = $jsWidth / (float) $redDesignData->svgWidth;
-					$heightRatio = $jsHeight / (float) $redDesignData->svgHeight;
-					$jsRatio = ($widthRatio > $heightRatio) ? $heightRatio : $widthRatio;
-				}
-
-				foreach ($fonts as $font => $f)
-				{
-					$fontFile = 'fonts/' . $f->name . '.js';
-					RHelperAsset::load($fontFile, 'com_reddesign');
-				}
-
-				$backgroundsModel = RModel::getAdminInstance('Backgrounds', array('ignore_request' => true), 'com_reddesign');
-				$backgroundsModel->setState('designtype_id', $redDesignData->designtype_id);
-				$backgrounds = $backgroundsModel->getItems();
-
-				foreach ($backgrounds as $background)
-				{
-					if ($background->isDefaultPreview)
-					{
-						$defaultPreviewBg = $background;
-
-						break;
-					}
-				}
-
-				$imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $defaultPreviewBg->svg_file;
-
-				// $product_image 	= "<div  class='product_image'><img width='" . CART_THUMB_WIDTH . "' src='" . $redDesignData->backgroundImgSrc . "'></div>";
-				$product_image  = "<div id='product_image_" . $i . "' style='position: relative;'>";
-				$product_image 	.= "<svg id='svg_image_" . $i . "' style='position: absolute;width: 100%; height: 100%; top: 0; left: 0;'></svg>";
-				$product_image 	.= "</div>";
-
 				$js = '
 					jQuery(document).ready(function () {
-						var previewWidth = ' . $jsWidth . ';
-						var scalingImageForPreviewRatio = ' . $jsRatio . ';
-						var previewHeight = ' . $jsHeight . ';
-						var svg_' . $i . ' = Snap("#svg_image_' . $i . '");
-						Snap.load(
-							"' . $imageUrl . '",
-							function (f) {
-								jQuery("#product_image_' . $i . '").css("width", previewWidth + "px");
-								jQuery("#product_image_' . $i . '").css("height", previewHeight + "px");
-								svg_' . $i . '.append(f);
-								var group_' . $i . ' = Snap.parse(\'<g id="areaBoxesLayer' . $i . '">' . urldecode($redDesignData->svgImags) . '</g>\');
+						rootSnapSvgObject' . $i . ' = Snap("#mainSvgImage' . $i . '");
 
-								// Set preview size at loaded file.
-								var loadedSvgFromFile = jQuery("#svg_image_' . $i . '").find("svg")[0];
-								loadedSvgFromFile.setAttribute("width", "100%");
-								loadedSvgFromFile.setAttribute("height", "100%");
+						jQuery.ajax({
+							url: "' . JURI::base() . 'media/com_reddesign/backgrounds/' . $displayedBackground->svg_file . '",
+							dataType: "text",
+							cache: true,
+							success: function (response) {
+								jQuery("#mainSvgImage' . $i . '")
+										.append(\'<defs><style type="text/css">' . $selectedFontsDeclaration . '</style></defs>\')
+										.append(response);
 
-								// Set preview size at svg container element.
-								var rootElement = document.getElementById("svg_image_' . $i . '");
-								rootElement.setAttribute("width", "100%");
-								rootElement.setAttribute("height", "100%");
+								var loadedSvgFromFile = jQuery("#mainSvgImage' . $i . '").find("svg")[0];
+								loadedSvgFromFile.setAttribute("width", parseFloat("' . $defaultPreviewWidth . '"));
+								loadedSvgFromFile.setAttribute("height", parseFloat("' . $previewHeight . '"));
+								loadedSvgFromFile.setAttribute("id", "mainSvgImageCanvas' . $i . '");
+
+								var rootElement = document.getElementById("mainSvgImage' . $i . '");
+								rootElement.setAttribute("width", parseFloat("' . $defaultPreviewWidth . '"));
+								rootElement.setAttribute("height", parseFloat("' . $previewHeight . '"));
 								rootElement.setAttribute("overflow", "hidden");
 
-								svg_' . $i . '.add(group_' . $i . ');
+								var group_' . $i . ' = Snap.parse(\'<g id="areaBoxesLayer' . $i . '">' . urldecode($redDesignData->areasInnerSVG) . '</g>\');
+								rootSnapSvgObject' . $i . '.add(group_' . $i . ');
 
-								// Resize text elements
-								jQuery("#areaBoxesLayer' . $i . ' text").each(function (index){
-									var fontSize = parseFloat(jQuery(this).attr("font-size"));
-									fontSize = fontSize * scalingImageForPreviewRatio;
-									jQuery(this).attr("font-size", fontSize + "' . $fontUnit . '");
+								jQuery("#areaBoxesLayer' . $i . ' text").each(function (index, value){
+									var fontSize = parseFloat(jQuery(value).css("font-size"));
+									fontSize = fontSize * parseFloat("' . $scalingImageForPreviewRatio . '");
+									jQuery(value).css("font-size", fontSize + "' . $fontUnit . '");
 
-									var xPos = parseFloat(jQuery(this).attr("x"));
-									xPos = xPos * scalingImageForPreviewRatio;
-									jQuery(this).attr("x", xPos);
+									/*var xPos = parseFloat(jQuery(value).attr("x"));
+									xPos = xPos * parseFloat("' . $scalingImageForPreviewRatio . '");
+									jQuery(value).attr("x", xPos);
 
-									var yPos = parseFloat(jQuery(this).attr("y"));
-									yPos = yPos * scalingImageForPreviewRatio;
-									jQuery(this).attr("y", yPos);
+									var yPos = parseFloat(jQuery(value).attr("y"));
+									yPos = yPos * parseFloat("' . $scalingImageForPreviewRatio . '");
+									jQuery(value).attr("y", yPos);*/
 								});
 							}
-						);
+						});
     				});
 				';
 
@@ -568,19 +527,14 @@ class PlgRedshop_ProductReddesign extends JPlugin
 							values[this.name] = jQuery(this).val();
 						});
 
-						values["enteredDimensionunit"] = "cm";
+						values["designtype_id"] = jQuery("#designtype_id").val();
 
 						var areas = rootSnapSvgObject.select("#areaBoxesLayer");
-						values["svgImags"] = encodeURIComponent(areas.innerSVG());
-						values["designtype_id"] = jQuery("#designtype_id").val();
-						values["svgWidth"] = rootSnapSvgObject.attr("width");
-						values["svgHeight"] = rootSnapSvgObject.attr("height");
+						values["areasInnerSVG"] = encodeURIComponent(areas.innerSVG());
 
 						var jsonString = JSON.stringify(values);
 
 						jQuery("#redDesignData").val(jsonString);
-
-						//getExtraParamsArray.redDesignData = encodeURIComponent(jsonString);
 					}
 			';
 			$document->addScriptDeclaration($js);
