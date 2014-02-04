@@ -10,5 +10,7 @@ DROP TABLE IF EXISTS `#__reddesign_attribute_mapping`;
 DROP TABLE IF EXISTS `#__reddesign_orderitem_mapping`;
 DROP TABLE IF EXISTS `#__reddesign_property_area_xref`;
 DROP TABLE IF EXISTS `#__reddesign_config`;
+DROP TABLE IF EXISTS `#__reddesign_area_clipart_xref`;
+DROP TABLE IF EXISTS `#__reddesign_cliparts`;
 
 SET foreign_key_checks = 1;

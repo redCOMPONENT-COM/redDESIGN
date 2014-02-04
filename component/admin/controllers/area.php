@@ -37,10 +37,12 @@ class ReddesignControllerArea extends RControllerForm
 		if ($model->save($data))
 		{
 			$response['status']		= 1;
-			$response['message']	= '<div class="alert alert-success">' . JText::sprintf('COM_REDDESIGN_DESIGNTYPE_AREA_SAVED', $data['name']) . '</div>';
+			$response['message']	= '<div class="alert alert-success">'
+				. JText::sprintf('COM_REDDESIGN_DESIGNTYPE_AREA_SAVED', (!empty($data['name']) ? $data['name'] : ''))
+				. '</div>';
 
 			// Set message queue
-			$app->enqueueMessage(JText::sprintf('COM_REDDESIGN_DESIGNTYPE_AREA_SAVED', $data['name']), 'message');
+			$app->enqueueMessage(JText::sprintf('COM_REDDESIGN_DESIGNTYPE_AREA_SAVED', (!empty($data['name']) ? $data['name'] : '')), 'message');
 			$session = JFactory::getSession();
 			$session->set('application.queue', $app->getMessageQueue());
 
