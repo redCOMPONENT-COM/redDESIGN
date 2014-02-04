@@ -18,7 +18,10 @@ defined('_JEXEC') or die();
 </div>
 <div class="product_ChooseFontSize">
 	<div class="ChooseFontSize">{redDESIGN:ChooseFontSize}</div>
+	<div class="ChooseFontSize">{redDESIGN:ChooseHorizontalAlignment}</div>
+	<div class="ChooseFontSize">{redDESIGN:ChooseVerticalAlignment}</div>
 </div>
 <div class="product_ChooseColor">{redDESIGN:ChooseColor}</div>
+<div class="product_ChooseClipart">{redDESIGN:ChooseClipart}</div>
 <div class="clearfix"></div>
 {redDESIGN:AreasLoopEnd}
