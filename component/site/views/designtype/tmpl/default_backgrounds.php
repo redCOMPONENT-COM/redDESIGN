@@ -19,8 +19,6 @@ if (isset($displayData))
 	$this->product = $displayData->product;
 }
 
-$input = JFactory::getApplication()->input;
-$itemId = $input->getInt('Itemid', 0);
 ?>
 <h4 class="page-header"><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_BACKGROUNDS_TITLE') ?></h4>
 <div class="row-fluid">
