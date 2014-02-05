@@ -29,14 +29,20 @@ class ReddesignModelBackground extends RModelAdmin
 	{
 		$item = parent::getItem($pk);
 
-		$query = $this->_db->getQuery(true);
-		$query->select($this->_db->qn('property_id'))
-			->from($this->_db->qn('#__reddesign_property_background_mapping'))
-			->where($this->_db->qn('background_id') . ' = ' . $pk);
-		$this->_db->setQuery($query);
-		$propertyId = $this->_db->loadResult();
+		if (!empty($pk))
+		{
+			$query = $this->_db->getQuery(true);
+			$query->select($this->_db->qn('property_id'))
+				->from($this->_db->qn('#__reddesign_property_background_mapping'))
+				->where($this->_db->qn('background_id') . ' = ' . $pk);
+			$this->_db->setQuery($query);
+			$propertyId = $this->_db->loadResult();
 
-		$item->property_id = $propertyId;
+			if (!empty($propertyId))
+			{
+				$item->property_id = $propertyId;
+			}
+		}
 
 		return $item;
 	}

@@ -87,7 +87,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 									<strong><?php echo $background->name; ?></strong>
 								</a>
 								&nbsp;
-								<a class="jmodal btn btn-mini" href="#modalPreview<?php echo $background->id; ?>">
+								<a class="btn btn-mini modal-preview" href="#modalPreview<?php echo $background->id; ?>">
 									<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
 								</a>
 							</div>
@@ -162,7 +162,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 			<?php endif; ?>
 			var backgroundPreviews = [];
 
-			jQuery(document).on("mousedown", ".jmodal", function(e) {
+			jQuery(document).on("mousedown", ".modal-preview", function(e) {
 				var backgroundId = jQuery(this).attr('href').replace('#modalPreview', '');
 
 				if (typeof backgroundPreviews[backgroundId]['progress'] != 'undefined')

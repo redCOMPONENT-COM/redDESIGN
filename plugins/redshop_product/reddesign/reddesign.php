@@ -69,6 +69,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		{
 			return;
 		}
+		// Load CSS file
+		RHelperAsset::load('site.css', 'com_reddesign');
 
 		$input    = JFactory::getApplication()->input;
 		$view     = $input->get('view');

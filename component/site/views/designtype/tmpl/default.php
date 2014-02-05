@@ -26,6 +26,8 @@ if (isset($displayData))
 $imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->displayedBackground->svg_file;
 $config = ReddesignEntityConfig::getInstance();
 $previewWidth = $config->getMaxSVGPreviewSiteWidth();
+$clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
+$clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 $unit = $config->getUnit();
 $fontUnit = $config->getFontUnit();
 $sourceDpi = $config->getSourceDpi();
@@ -118,6 +120,35 @@ $productId = $input->getInt('pid', 0);
 	var scalingImageForPreviewRatio = previewWidth / imageWidth;
 	var previewHeight = imageHeight * scalingImageForPreviewRatio;
 	var areasContainer = [];
+
+	jQuery('.thumbnailSVG').each(function () {
+
+		var svgThumbnail = document.getElementById(jQuery(this).attr('id'));
+		svgThumbnail.addEventListener("load", function() {
+			setSVGElementScale(this);
+		});
+
+		// Some elements are already loaded
+		setSVGElementScale(svgThumbnail);
+	});
+
+	function setSVGElementScale(svgDocument)
+	{
+		if (svgDocument && typeof(svgDocument) != "undefined")
+		{
+			var svgDocumentContent = svgDocument.contentDocument;
+			if (svgDocumentContent && typeof(svgDocumentContent) != "undefined")
+			{
+				var svgElementInner = jQuery(svgDocumentContent.documentElement);
+				if (typeof(svgElementInner) != "undefined")
+				{
+					jQuery(svgElementInner).attr("height", <?php echo $clipartPreviewHeight; ?>);
+					jQuery(svgElementInner).attr("width", <?php echo $clipartPreviewWidth; ?>);
+					jQuery(svgElementInner).attr("preserveAspectRatio", "xMidYMid meet");
+				}
+			}
+		}
+	}
 
 	/**
 	 * Add click event to Customize button.
@@ -220,7 +251,16 @@ $productId = $input->getInt('pid', 0);
 				changeSVGElement(id);
 			});
 
-			jQuery(document).on("click", ".reddesign-form .change-selected-clipart", function() {
+			jQuery(document).on("click", ".reddesign-form .load-clipart-bank", function() {
+				var id = jQuery(this).attr('id').replace('loadClipartBank', '');
+				loadClipartBank(id);
+			});
+
+			jQuery(document).on("mousedown", ".reddesign-form .thumbnailSVG-pointer", function() {
+				jQuery(this).parent().find('[name^="selectedClipart"]').attr('checked', 'checked').change();
+			});
+
+			jQuery(document).on("change", ".reddesign-form .change-selected-clipart", function() {
 				var id = jQuery(this).attr('name').replace('selectedClipart', '');
 				changeSVGElement(id);
 			});
@@ -330,35 +370,58 @@ $productId = $input->getInt('pid', 0);
 	function changeSVGClipartElement(areaId)
 	{
 		var horizontalAlign = jQuery('#textAlign' + areaId);
+		var verticalAlign = jQuery('#verticalAlign' + areaId);
 		var selectedClipart = jQuery('[name="selectedClipart' + areaId + '"]:checked');
 		var svgElement = rootSnapSvgObject.select("#areaBoxesLayer #areaSVGElement_" + areaId);
 
 		if (svgElement)
 		{
+			var horizontalPosition = '';
+			var verticalPosition = '';
 			if (horizontalAlign && typeof(jQuery(horizontalAlign).val()) != "undefined")
 			{
-				var horizontalAlignValue = jQuery(horizontalAlign).val();
-				svgElement.attr('text-anchor', horizontalAlignValue.replace('left', 'start').replace('center', 'middle').replace('right', 'end'));
+				horizontalPosition = jQuery(horizontalAlign).val().replace('left', 'xMin').replace('center', 'xMid').replace('right', 'xMax');
+			}
 
-				if (horizontalAlignValue == 'left')
-				{
-					svgElement.attr('x', areasContainer[areaId]['x1']);
-				}
-				else if (horizontalAlignValue == 'center')
-				{
-					svgElement.attr('x', parseFloat(areasContainer[areaId]['x1']) + (parseFloat(areasContainer[areaId]['width']) / 2));
-				}
-				else if (horizontalAlignValue == 'right')
-				{
-					svgElement.attr('x', parseFloat(areasContainer[areaId]['x2']));
-				}
+			if (verticalAlign && typeof(jQuery(verticalAlign).val()) != "undefined")
+			{
+				verticalPosition = jQuery(verticalAlign).val().replace('top', 'YMin').replace('middle', 'YMid').replace('bottom', 'YMax');
+			}
+
+			if (horizontalPosition == '')
+			{
+				horizontalPosition = 'xMin';
+			}
+
+			if (verticalPosition == '')
+			{
+				verticalPosition = 'YMin';
 			}
 
 			if (selectedClipart && typeof(jQuery(selectedClipart).val()) != "undefined")
 			{
-				var selectedClipartSVG = jQuery('[name="clipart' + jQuery(selectedClipart).val() + '"]').html();
-				svgElement.empty();
-				svgElement.append(jQuery(selectedClipartSVG).clone());
+				var selectedClipartSVG = jQuery('#clipart' + areaId + '_' + jQuery(selectedClipart).val());
+				if (selectedClipartSVG && typeof(selectedClipartSVG) != "undefined")
+				{
+					var svgDocument = document.getElementById(jQuery(selectedClipartSVG).attr('id'));
+					if (svgDocument && typeof(svgDocument) != "undefined")
+					{
+						var svgDocumentContent = svgDocument.contentDocument;
+						if (svgDocumentContent && typeof(svgDocumentContent) != "undefined")
+						{
+							var svgElementInner = jQuery(svgDocumentContent.documentElement).clone();
+							if (typeof(svgElementInner) != "undefined")
+							{
+								jQuery(svgElementInner).attr("height", areasContainer[areaId]['height']);
+								jQuery(svgElementInner).attr("width", areasContainer[areaId]['width']);
+								jQuery(svgElementInner).attr("preserveAspectRatio", horizontalPosition + verticalPosition + " meet");
+
+								svgElement.clear();
+								svgElement.append(Snap.parse(svgElementInner[0].outerHTML));
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -748,6 +811,50 @@ $productId = $input->getInt('pid', 0);
 
 			changeSVGElement(areas[i].id);
 		}
+	}
+
+	function loadClipartBank(areaId)
+	{
+		console.log(jQuery("#clipartBank" + areaId).html());
+		if (jQuery("#clipartBank" + areaId).html().trim() != '')
+		{
+			jQuery("#featuredCliparts" + areaId).toggle("slow");
+			jQuery("#clipartBank" + areaId).toggle("slow");
+		}
+		else
+		{
+			var categoryId = jQuery("#category" + areaId).val();
+			jQuery.ajax({
+				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxLoadClipartBank",
+				data: {
+					'categoryId': categoryId,
+					'areaId': areaId
+				},
+				type: "get",
+				dataType: 'text',
+				success: function (data)
+				{
+					jQuery("#featuredCliparts" + areaId).slideUp("slow");
+
+					jQuery("#clipartBank" + areaId).show().html(data);
+					jQuery("#clipartBank" + areaId + " .flexslider2").removeClass("flexslider2").addClass("flexslider");
+					jQuery("#clipartBank" + areaId + " .flexslider").flexslider({
+						'slideshow': false,
+						'directionNav': true,
+						'minItems': 4,
+						'prevText': '',
+						'nextText': '',
+						'animation': 'slide',
+						'animationLoop': false
+					});
+				},
+				error: function (data)
+				{
+					console.log("Error: " + data);
+				}
+			});
+		}
+
 	}
 </script>
 {RedDesignBreakFormEndsAndJS}

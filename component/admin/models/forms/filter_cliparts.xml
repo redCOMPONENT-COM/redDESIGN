@@ -9,6 +9,17 @@
 			class="js-enter-submits"
 			/>
 	</fields>
+    <field
+            name="categoryId"
+            type="category"
+            extension="com_reddesign"
+            label="COM_REDDESIGN_CLIPART_CATEGORY_LABEL"
+            description="COM_REDDESIGN_CLIPART_CATEGORY_DESC"
+            class="select2"
+            onchange="this.form.submit();"
+            >
+        <option value="0">JOPTION_SELECT_CATEGORY</option>
+    </field>
 	<fields name="list">
 		<field
 			name="clipart_limit"

@@ -214,6 +214,26 @@ final class ReddesignEntityConfig
 	}
 
 	/**
+	 * Get the max width of Clipart preview.
+	 *
+	 * @return  int  The max width of Clipart preview.
+	 */
+	public function getMaxClipartPreviewWidth()
+	{
+		return $this->getInt('max_clipart_preview_width', 80);
+	}
+
+	/**
+	 * Get the max height of Clipart preview.
+	 *
+	 * @return  int  The max height of Clipart preview.
+	 */
+	public function getMaxClipartPreviewHeight()
+	{
+		return $this->getInt('max_clipart_preview_height', 80);
+	}
+
+	/**
 	 * Get the padding of production file.
 	 *
 	 * @return  int  The padding of production file.

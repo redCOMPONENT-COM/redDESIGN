@@ -173,4 +173,40 @@ class ReddesignControllerDesigntype extends JController
 
 		$app->close();
 	}
+
+	/**
+	 * Gets clipart bank
+	 *
+	 *  @return void
+	 */
+	public function ajaxLoadClipartBank()
+	{
+		$app = JFactory::getApplication();
+		$categoryId = $app->input->getInt('categoryId', 0);
+		$areaId = $app->input->getInt('areaId', 0);
+
+		$clipartsModel = RModel::getAdminInstance('Cliparts', array('ignore_request' => true), 'com_reddesign');
+		if ($categoryId > 0)
+		{
+			$clipartsModel->setState('filter.category_id', $categoryId);
+		}
+
+		$formName = 'clipartBankForm';
+		$pagination = $clipartsModel->getPagination();
+		$pagination->set('formName', $formName);
+
+		echo RLayoutHelper::render('clipart.bank', array(
+				'state' => $clipartsModel->getState(),
+				'areaId' => $areaId,
+				'items' => $clipartsModel->getItems(),
+				'pagination' => $pagination,
+				'filter_form' => $clipartsModel->getForm(),
+				'activeFilters' => $clipartsModel->getActiveFilters(),
+				'formName' => $formName,
+			),
+			JPATH_ROOT . '/administrator/components/com_reddesign/layouts'
+		);
+
+		$app->close();
+	}
 }

@@ -15,6 +15,15 @@ RHelperAsset::load('selectionboxmove.js', 'com_reddesign');
 RHelperAsset::load('farbtastic.min.js', 'com_reddesign');
 RHelperAsset::load('farbtastic.css', 'com_reddesign');
 RHelperAsset::load('color-converter.js', 'com_reddesign');
+JHtml::_('rjquery.flexslider', '.flexslider', array(
+	'slideshow' => false,
+	'directionNav' => true,
+	'minItems' => 4,
+	'prevText' => '',
+	'nextText' => '',
+	'animation' => 'slide',
+	'animationLoop' => false)
+);
 
 if (isset($displayData))
 {
@@ -27,6 +36,8 @@ $config = ReddesignEntityConfig::getInstance();
 $unit = $config->getUnit();
 $sourceDpi = $config->getSourceDpi();
 $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourceDpi);
+$clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
+$clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 ?>
 
 {RedDesignBreakDesignAreasTitle}
@@ -284,21 +295,6 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 			{RedDesignBreakDesignAreaChooseFontSize}
 
-			{RedDesignBreakDesignAreaChooseVerticalAlign}
-				<input id="verticalAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->verticalAlign; ?>" />
-				<div class="btn-group btn-group-textVerticalAlign">
-					<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="top">
-						<i class="icon-collapse-top"></i>&nbsp;
-					</button>
-					<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="middle">
-						<i class="icon-expand"></i>&nbsp;
-					</button>
-					<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="bottom">
-						<i class="icon-collapse"></i>&nbsp;
-					</button>
-				</div>
-			{RedDesignBreakDesignAreaChooseVerticalAlign}
-
 			{RedDesignBreakDesignAreaChooseColorLabel}
 				<?php if (!empty($area->color_code)) : ?>
 					<label>
@@ -471,19 +467,50 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			{RedDesignBreakDesignAreaChooseClipartLabel}
 
 			{RedDesignBreakDesignAreaChooseClipart}
-				<?php
-				$area->cliparts = ReddesignHelpersArea::getAreaFeaturedCliparts($area->id);
-				foreach ($area->cliparts as $clipart) : ?>
-					<div class="pull-left thumbnail">
-						<object
-							name="clipart<?php echo $clipart->id ;?>"
-							class="thumbnailSVG"
-							data="<?php echo JURI::root() . 'media/com_reddesign/cliparts/' . $clipart->clipartFile; ?>"
-							type="image/svg+xml">
-						</object>
-						<input type="radio" class="change-selected-clipart" name="selectedClipart<?php echo $area->id ?>" value="<?php echo $clipart->id; ?>" />
-					</div>
-				<?php endforeach; ?>
+				<button id="loadClipartBank<?php echo $area->id; ?>"
+				        type="button"
+				        class="btn btn-success load-clipart-bank">
+					<span>
+						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_BANK'); ?>
+					</span>
+				</button>
+				<div class="flexslider" id="featuredCliparts<?php echo $area->id ;?>">
+					<ul class="slides">
+						<?php
+						$area->cliparts = ReddesignHelpersArea::getAreaFeaturedCliparts($area->id);
+						$selected = null;
+						?>
+						<?php foreach ($area->cliparts as $clipart) :?>
+							<li>
+								<div class="pull-left thumbnail clipart-container" stle="pointer-events: none;">
+									<div
+										class="thumbnailSVG-pointer"
+										name="clipart<?php echo $area->id; ?>_<?php echo $clipart->id; ?>"
+										style="width:<?php echo $clipartPreviewWidth; ?>px; height:<?php echo $clipartPreviewHeight; ?>px;"></div>
+									<object
+										id="clipart<?php echo $area->id ;?>_<?php echo $clipart->id; ?>"
+										name="clipart<?php echo $area->id ;?>_<?php echo $clipart->id ;?>"
+										class="thumbnailSVG"
+										data="<?php echo JURI::root() . 'media/com_reddesign/cliparts/' . $clipart->clipartFile; ?>"
+										type="image/svg+xml">
+									</object>
+									<input
+										id="selectedClipart<?php echo $area->id ;?>_<?php echo $clipart->id; ?>"
+										type="radio"
+										<?php echo empty($selected) ? 'checked="checked"' : ''; ?>
+										class="change-selected-clipart hide"
+										name="selectedClipart<?php echo $area->id ?>"
+										value="<?php echo $clipart->id; ?>"
+										/>
+								</div>
+							</li>
+						<?php
+							$selected = true;
+						endforeach; ?>
+					</ul>
+				</div>
+				<div id="clipartBank<?php echo $area->id ;?>" class="hide">
+				</div>
 				<div class="clearfix"></div>
 			{RedDesignBreakDesignAreaChooseClipart}
 
@@ -502,6 +529,21 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					</button>
 				</div>
 			{RedDesignBreakDesignAreaChooseHorizontalAlign}
+
+			{RedDesignBreakDesignAreaChooseVerticalAlign}
+			<input id="verticalAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->verticalAlign; ?>" />
+			<div class="btn-group btn-group-textVerticalAlign">
+				<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="top">
+					<i class="icon-collapse-top"></i>&nbsp;
+				</button>
+				<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="middle">
+					<i class="icon-expand"></i>&nbsp;
+				</button>
+				<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="bottom">
+					<i class="icon-collapse"></i>&nbsp;
+				</button>
+			</div>
+			{RedDesignBreakDesignAreaChooseVerticalAlign}
 			<?php break; ?>
 	<?php endswitch; // End of $area->areaType switch ?>
 	<?php echo '{RedDesignBreakDesignArea' . $area->id . '}'; ?>

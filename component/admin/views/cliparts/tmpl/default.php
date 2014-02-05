@@ -14,6 +14,9 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 $saveOrderingUrl = 'index.php?option=com_reddesign&task=cliparts.saveOrderAjax&tmpl=component';
 $disableClassName = '';
 $disabledLabel = '';
+$config = ReddesignEntityConfig::getInstance();
+$clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
+$clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 if ($listOrder == 'c.ordering')
 {
@@ -25,7 +28,6 @@ else
 	$disableClassName = 'inactive tip-top';
 }
 ?>
-
 <form action="index.php?option=com_reddesign&view=cliparts" method="post" id="adminForm" name="adminForm">
 	<?php echo JText::_('COM_REDDESIGN_COMMON_FILTER'); ?>
 	<?php
@@ -118,6 +120,7 @@ else
 						<td>
 							<div class="pull-left thumbnail">
 								<object
+									id="clipart<?php echo $row->id; ?>"
 									class="thumbnailSVG"
 									data="<?php echo JURI::root() . 'media/com_reddesign/cliparts/' . $row->clipartFile; ?>"
 									type="image/svg+xml">
@@ -145,3 +148,21 @@ else
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
 	<?php echo JHtml::_('form.token'); ?>
 </form>
+<script type="text/javascript">
+	jQuery('.thumbnailSVG').each(function () {
+		document.getElementById(jQuery(this).attr('id')).addEventListener("load", function() {
+			var svgDocumentContent = this.getSVGDocument();
+
+			if (svgDocumentContent && typeof(svgDocumentContent) != "undefined")
+			{
+				var svgElementInner = jQuery(svgDocumentContent.documentElement);
+				if (typeof(svgElementInner) != "undefined")
+				{
+					jQuery(svgElementInner).attr("height", <?php echo $clipartPreviewHeight; ?>);
+					jQuery(svgElementInner).attr("width", <?php echo $clipartPreviewWidth; ?>);
+					jQuery(svgElementInner).attr("preserveAspectRatio", "xMidYMid meet");
+				}
+			}
+		});
+	});
+</script>

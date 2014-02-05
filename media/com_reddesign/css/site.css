@@ -78,3 +78,11 @@ img.background-thumbnail {
     width: 0%;
     text-align: center;
 }
+.thumbnailSVG-pointer {
+    position: absolute;
+    top: 0px;
+    left:0px;
+}
+.clipart-container {
+    position: relative;
+}

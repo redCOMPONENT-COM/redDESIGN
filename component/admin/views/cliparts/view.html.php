@@ -36,10 +36,12 @@ class ReddesignViewCliparts extends ReddesignView
 	 */
 	public function display($tpl = null)
 	{
+		$model = $this->getModel();
 		$this->items = $this->get('Items');
 		$this->state = $this->get('State');
 		$this->pagination = $this->get('Pagination');
 		$this->filterForm = $this->get('Form');
+		$this->activeFilters = $model->getActiveFilters();
 
 		$this->ordering = array();
 

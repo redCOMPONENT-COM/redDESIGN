@@ -90,6 +90,22 @@
 			   description="COM_REDDESIGN_CONFIG_MAX_SVG_FRONTEND_PREVIEW_WIDTH_DESC"
 		/>
 
+        <field name="max_clipart_preview_width"
+               type="text"
+               size="5"
+               default="80"
+               label="COM_REDDESIGN_CONFIG_MAX_CLIPART_PREVIEW_WIDTH"
+               description="COM_REDDESIGN_CONFIG_MAX_CLIPART_PREVIEW_WIDTH_DESC"
+                />
+
+        <field name="max_clipart_preview_height"
+               type="text"
+               size="5"
+               default="80"
+               label="COM_REDDESIGN_CONFIG_MAX_CLIPART_PREVIEW_HEIGHT"
+               description="COM_REDDESIGN_CONFIG_MAX_CLIPART_PREVIEW_HEIGHT_DESC"
+                />
+
 		<field name="productionFilePadding"
 			   type="text"
 			   size="5"
