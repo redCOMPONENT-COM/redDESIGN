@@ -187,7 +187,7 @@ class ReddesignModelBackgrounds extends RModelList
 				$db->qn('attr.product_id') . ' = ' . $product_id
 			)
 			->order(
-				$db->qn('prop.ordering') . ' ASC'
+				$db->qn('prop.ordering') . ' DESC'
 			);
 		$db->setQuery($query);
 
