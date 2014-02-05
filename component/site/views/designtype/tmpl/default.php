@@ -815,7 +815,6 @@ $productId = $input->getInt('pid', 0);
 
 	function loadClipartBank(areaId)
 	{
-		console.log(jQuery("#clipartBank" + areaId).html());
 		if (jQuery("#clipartBank" + areaId).html().trim() != '')
 		{
 			jQuery("#featuredCliparts" + areaId).toggle("slow");
