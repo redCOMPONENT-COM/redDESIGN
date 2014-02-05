@@ -65,27 +65,14 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 */
 	public function onPrepareProduct(&$template, &$params, $product)
 	{
-		if ($product->product_type != 'redDESIGN')
+		$input = JFactory::getApplication()->input;
+		$view = $input->get('view');
+
+		if ($product->product_type == 'redDESIGN' && $view == 'product')
 		{
-			return;
+			// Load CSS file
+			RHelperAsset::load('site.css', 'com_reddesign');
 		}
-		// Load CSS file
-		RHelperAsset::load('site.css', 'com_reddesign');
-
-		$input    = JFactory::getApplication()->input;
-		$view     = $input->get('view');
-		$document = JFactory::getDocument();
-
-		if ($view != 'product')
-		{
-			return;
-		}
-
-		// Settlement to load attribute.js after quantity_discount.js
-		unset($document->_scripts[JURI::root(true) . '/components/com_redshop/assets/js/attribute.js']);
-
-		// Adding script from Plugin as we need customization in attribute.js for property background relation.
-		$document->addScript('plugins/redshop_product/reddesign/js/attribute.js');
 	}
 
 	/**
