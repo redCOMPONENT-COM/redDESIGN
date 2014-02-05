@@ -169,6 +169,9 @@ class ReddesignControllerDesigntype extends JController
 		$productionBackground = $designTypeModel->getProductionBackground($displayedBackground->designtype_id);
 		$displayedBackground->productionBackgroundId = $productionBackground->id;
 
+		$designType = $designTypeModel->getItem($displayedBackground->designtype_id);
+		$displayedBackground->designtype_name = $designType->name;
+
 		echo json_encode($displayedBackground);
 
 		$app->close();

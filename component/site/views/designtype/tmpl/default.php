@@ -650,6 +650,7 @@ $productId = $input->getInt('pid', 0);
 				jQuery("#designtype_id").val(background.designtype_id);
 				jQuery("#background_id").val(background.id);
 				jQuery("#production_background_id").val(background.productionBackgroundId);
+				jQuery(".number_product h1").html(background.designtype_name);
 
 				var canvasWidth  = parseFloat("<?php echo $previewWidth; ?>");
 				var scalingRatio = canvasWidth / parseFloat(background.width);
