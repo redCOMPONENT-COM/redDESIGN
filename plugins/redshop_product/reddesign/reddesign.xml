@@ -10,7 +10,6 @@
 	<version>1.0.0</version>
 	<description>PLG_REDSHOP_PRODUCT_REDDESIGN_DESC</description>
 	<files>
-		<folder plugin="reddesign">js</folder>
 		<filename plugin="reddesign">reddesign.php</filename>
 	</files>
 	<languages>

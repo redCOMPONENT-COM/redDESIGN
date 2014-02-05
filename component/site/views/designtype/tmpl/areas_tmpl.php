@@ -22,6 +22,7 @@ defined('_JEXEC') or die();
 	<div class="ChooseVerticalAlignment">{redDESIGN:ChooseVerticalAlignment}</div>
 </div>
 <div class="product_ChooseColor">{redDESIGN:ChooseColor}</div>
+<div>{redDESIGN:ChooseClipartLabel}	</div>
 <div class="product_ChooseClipart">{redDESIGN:ChooseClipart}</div>
 <div class="clearfix"></div>
 {redDESIGN:AreasLoopEnd}
