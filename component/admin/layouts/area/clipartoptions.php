@@ -14,9 +14,6 @@ $area = $data['area'];
 $area->cliparts = ReddesignHelpersArea::getAreaFeaturedCliparts($area->id);
 $selectedClipartIds = JArrayHelper::getColumn($area->cliparts, 'id');
 $designType = $data['designType'];
-$config = ReddesignEntityConfig::getInstance();
-$clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
-$clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 JHtml::_('rjquery.select2', 'select');
 ?>
@@ -123,21 +120,3 @@ JHtml::_('rjquery.select2', 'select');
 	</button>
 </div>
 </div>
-<script type="text/javascript">
-	jQuery('.thumbnailSVG').each(function () {
-		document.getElementById(jQuery(this).attr('id')).addEventListener("load", function() {
-			var svgDocumentContent = this.getSVGDocument();
-
-			if (svgDocumentContent && typeof(svgDocumentContent) != "undefined")
-			{
-				var svgElementInner = jQuery(svgDocumentContent.documentElement);
-				if (typeof(svgElementInner) != "undefined")
-				{
-					jQuery(svgElementInner).attr("height", <?php echo $clipartPreviewHeight; ?>);
-					jQuery(svgElementInner).attr("width", <?php echo $clipartPreviewWidth; ?>);
-					jQuery(svgElementInner).attr("preserveAspectRatio", "xMidYMid meet");
-				}
-			}
-		});
-	});
-</script>

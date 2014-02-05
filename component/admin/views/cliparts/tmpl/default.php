@@ -150,9 +150,21 @@ else
 </form>
 <script type="text/javascript">
 	jQuery('.thumbnailSVG').each(function () {
-		document.getElementById(jQuery(this).attr('id')).addEventListener("load", function() {
-			var svgDocumentContent = this.getSVGDocument();
 
+		var svgThumbnail = document.getElementById(jQuery(this).attr('id'));
+		svgThumbnail.addEventListener("load", function() {
+			setSVGElementScale(this);
+		});
+
+		// Some elements are already loaded
+		setSVGElementScale(svgThumbnail);
+	});
+
+	function setSVGElementScale(svgDocument)
+	{
+		if (svgDocument && typeof(svgDocument) != "undefined")
+		{
+			var svgDocumentContent = svgDocument.contentDocument;
 			if (svgDocumentContent && typeof(svgDocumentContent) != "undefined")
 			{
 				var svgElementInner = jQuery(svgDocumentContent.documentElement);
@@ -163,6 +175,6 @@ else
 					jQuery(svgElementInner).attr("preserveAspectRatio", "xMidYMid meet");
 				}
 			}
-		});
-	});
+		}
+	}
 </script>

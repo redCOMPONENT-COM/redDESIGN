@@ -281,7 +281,7 @@ $this->unit = $displayData->unit;
 				'jform[verticalAlign]': areaVerticalAlignment,
 				'jform[areaCliparts]': areaCliparts
 			},
-			type: "get",
+			type: "post",
 			success: function (data) {
 				jQuery("#designAreaId").val(reddesign_area_id);
 				changeAreaType();

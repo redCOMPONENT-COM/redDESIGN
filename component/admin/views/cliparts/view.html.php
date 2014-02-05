@@ -45,9 +45,12 @@ class ReddesignViewCliparts extends ReddesignView
 
 		$this->ordering = array();
 
-		foreach ($this->items as &$item)
+		if (!empty($this->items))
 		{
-			$this->ordering[0][] = $item->id;
+			foreach ($this->items as &$item)
+			{
+				$this->ordering[0][] = $item->id;
+			}
 		}
 
 		parent::display($tpl);
