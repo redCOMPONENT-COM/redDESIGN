@@ -76,6 +76,14 @@ class ReddesignModelCliparts extends RModelList
 					->from($db->qn('#__reddesign_cliparts', 'c'))
 			->leftJoin($db->qn('#__categories', 'c1') . ' on c.categoryId = c1.id');
 
+		// Filter by Category Id
+		$categoryId = $this->getState('filter.categoryId', 0);
+
+		if ($categoryId)
+		{
+			$query->where($db->qn('c.$categoryId') . ' = ' . (int) $categoryId);
+		}
+
 		// Filter by Clipart IDs
 		$clipartIds = (array) $this->getState('filter.id', array());
 		JArrayHelper::toInteger($clipartIds);

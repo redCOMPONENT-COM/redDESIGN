@@ -26,6 +26,8 @@ if (isset($displayData))
 $imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->displayedBackground->svg_file;
 $config = ReddesignEntityConfig::getInstance();
 $previewWidth = $config->getMaxSVGPreviewSiteWidth();
+$clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
+$clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 $unit = $config->getUnit();
 $fontUnit = $config->getFontUnit();
 $sourceDpi = $config->getSourceDpi();
@@ -119,6 +121,35 @@ $productId = $input->getInt('pid', 0);
 	var previewHeight = imageHeight * scalingImageForPreviewRatio;
 	var areasContainer = [];
 
+	jQuery('.thumbnailSVG').each(function () {
+
+		var svgThumbnail = document.getElementById(jQuery(this).attr('id'));
+		svgThumbnail.addEventListener("load", function() {
+			setSVGElementScale(this);
+		});
+
+		// Some elements are already loaded
+		setSVGElementScale(svgThumbnail);
+	});
+
+	function setSVGElementScale(svgDocument)
+	{
+		if (svgDocument && typeof(svgDocument) != "undefined")
+		{
+			var svgDocumentContent = svgDocument.contentDocument;
+			if (svgDocumentContent && typeof(svgDocumentContent) != "undefined")
+			{
+				var svgElementInner = jQuery(svgDocumentContent.documentElement);
+				if (typeof(svgElementInner) != "undefined")
+				{
+					jQuery(svgElementInner).attr("height", <?php echo $clipartPreviewHeight; ?>);
+					jQuery(svgElementInner).attr("width", <?php echo $clipartPreviewWidth; ?>);
+					jQuery(svgElementInner).attr("preserveAspectRatio", "xMidYMid meet");
+				}
+			}
+		}
+	}
+
 	/**
 	 * Add click event to Customize button.
 	 */
@@ -195,29 +226,43 @@ $productId = $input->getInt('pid', 0);
 
 			jQuery(document).on("keyup", ".reddesign-form .textAreaClass", function() {
 				var id = jQuery(this).attr('id').replace('textArea_', '');
-				changeSVGTextElement(id);
+				changeSVGElement(id);
 			});
 
 			jQuery(document).on("change", ".reddesign-form .reddesign-font-selection", function() {
 				var id = jQuery(this).attr('id').replace('fontArea', '');
-				changeSVGTextElement(id);
+				changeSVGElement(id);
 			});
 
 			jQuery(document).on("change", ".reddesign-form .reddesign-font-size-selection", function() {
 				var id = jQuery(this).attr('id').replace('fontSize', '');
-				changeSVGTextElement(id);
+				changeSVGElement(id);
 			});
 
 			jQuery(document).on("click", ".reddesign-form .btn-group-textAlign button", function() {
 				var id = jQuery(this).attr('name').replace('textAlignButton', '');
 				jQuery('#textAlign' + id).val(jQuery(this).attr('value'));
-				changeSVGTextElement(id);
+				changeSVGElement(id);
 			});
 
 			jQuery(document).on("click", ".reddesign-form .btn-group-textVerticalAlign button", function() {
 				var id = jQuery(this).attr('name').replace('textVerticalAlignButton', '');
 				jQuery('#verticalAlign' + id).val(jQuery(this).attr('value'));
-				changeSVGTextElement(id);
+				changeSVGElement(id);
+			});
+
+			jQuery(document).on("click", ".reddesign-form .load-clipart-bank", function() {
+				var id = jQuery(this).attr('id').replace('loadClipartBank', '');
+				loadClipartBank(id);
+			});
+
+			jQuery(document).on("mousedown", ".reddesign-form .thumbnailSVG-pointer", function() {
+				jQuery(this).parent().find('[name^="selectedClipart"]').attr('checked', 'checked').change();
+			});
+
+			jQuery(document).on("change", ".reddesign-form .change-selected-clipart", function() {
+				var id = jQuery(this).attr('name').replace('selectedClipart', '');
+				changeSVGElement(id);
 			});
 
 			if (jQuery('.fontSizeSlider').length > 0)
@@ -226,7 +271,7 @@ $productId = $input->getInt('pid', 0);
 					.on('slide', function(ev){
 						var id = jQuery(this).attr('id').replace('fontSizeSlider', '');
 						jQuery('#fontSize' + id).val(ev.value);
-						changeSVGTextElement(id);
+						changeSVGElement(id);
 					});
 			}
 
@@ -254,7 +299,7 @@ $productId = $input->getInt('pid', 0);
 		jQuery("#Y" + areaId).val(cmyk.y);
 		jQuery("#K" + areaId).val(cmyk.k);
 
-		changeSVGTextElement(areaId);
+		changeSVGElement(areaId);
 	}
 
 	/**
@@ -300,7 +345,89 @@ $productId = $input->getInt('pid', 0);
 	}
 
 	/**
-	 * Changes value of textelement on SVG object
+	 * Changes attributes of element on SVG object
+	 *
+	 * @param   areaId  int  Area ID
+	 */
+	function changeSVGElement(areaId)
+	{
+		var area = jQuery("#areaBoxesLayer #areaSVGElement_" + areaId);
+		if (jQuery(area).is("text"))
+		{
+			changeSVGTextElement(areaId);
+		}
+		else if (jQuery(area).is("svg"))
+		{
+			changeSVGClipartElement(areaId);
+		}
+	}
+
+	/**
+	 * Changes attributes of text element on SVG object
+	 *
+	 * @param   areaId  int  Area ID
+	 */
+	function changeSVGClipartElement(areaId)
+	{
+		var horizontalAlign = jQuery('#textAlign' + areaId);
+		var verticalAlign = jQuery('#verticalAlign' + areaId);
+		var selectedClipart = jQuery('[name="selectedClipart' + areaId + '"]:checked');
+		var svgElement = rootSnapSvgObject.select("#areaBoxesLayer #areaSVGElement_" + areaId);
+
+		if (svgElement)
+		{
+			var horizontalPosition = '';
+			var verticalPosition = '';
+			if (horizontalAlign && typeof(jQuery(horizontalAlign).val()) != "undefined")
+			{
+				horizontalPosition = jQuery(horizontalAlign).val().replace('left', 'xMin').replace('center', 'xMid').replace('right', 'xMax');
+			}
+
+			if (verticalAlign && typeof(jQuery(verticalAlign).val()) != "undefined")
+			{
+				verticalPosition = jQuery(verticalAlign).val().replace('top', 'YMin').replace('middle', 'YMid').replace('bottom', 'YMax');
+			}
+
+			if (horizontalPosition == '')
+			{
+				horizontalPosition = 'xMin';
+			}
+
+			if (verticalPosition == '')
+			{
+				verticalPosition = 'YMin';
+			}
+
+			if (selectedClipart && typeof(jQuery(selectedClipart).val()) != "undefined")
+			{
+				var selectedClipartSVG = jQuery('#clipart' + areaId + '_' + jQuery(selectedClipart).val());
+				if (selectedClipartSVG && typeof(selectedClipartSVG) != "undefined")
+				{
+					var svgDocument = document.getElementById(jQuery(selectedClipartSVG).attr('id'));
+					if (svgDocument && typeof(svgDocument) != "undefined")
+					{
+						var svgDocumentContent = svgDocument.contentDocument;
+						if (svgDocumentContent && typeof(svgDocumentContent) != "undefined")
+						{
+							var svgElementInner = jQuery(svgDocumentContent.documentElement).clone();
+							if (typeof(svgElementInner) != "undefined")
+							{
+								jQuery(svgElementInner).attr("height", areasContainer[areaId]['height']);
+								jQuery(svgElementInner).attr("width", areasContainer[areaId]['width']);
+								jQuery(svgElementInner).attr("preserveAspectRatio", horizontalPosition + verticalPosition + " meet");
+
+								svgElement.clear();
+								svgElement.append(Snap.parse(svgElementInner[0].outerHTML));
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Changes attributes of text element on SVG object
 	 *
 	 * @param   areaId  int  Area ID
 	 */
@@ -316,18 +443,18 @@ $productId = $input->getInt('pid', 0);
 
 		text.css('text-align', jQuery(textAlign).val());
 
-		var textElement = rootSnapSvgObject.select("#areaBoxesLayer #areaTextElement_" + areaId);
+		var svgElement = rootSnapSvgObject.select("#areaBoxesLayer #areaSVGElement_" + areaId);
 
-		if (textElement)
+		if (svgElement)
 		{
 			if (font)
 			{
-				textElement.attr('font-family', jQuery(font).find(':selected').text());
+				svgElement.attr('font-family', jQuery(font).find(':selected').text());
 			}
 
 			if (color && typeof(jQuery(color).val()) != "undefined")
 			{
-				textElement.attr('fill', '#' + jQuery(color).val().replace('#',''));
+				svgElement.attr('fill', '#' + jQuery(color).val().replace('#',''));
 			}
 
 			if (fontSize && typeof(jQuery(fontSize).val()) != "undefined")
@@ -339,26 +466,26 @@ $productId = $input->getInt('pid', 0);
 				else
 					fontSizeValue = fontSize[0];
 
-				textElement.attr('font-size', fontSizeValue + fontUnit);
-				textElement.attr('y', parseFloat(areasContainer[areaId]['y1']) + ((parseFloat(fontSizeValue) * scalingImageForPreviewRatio)));
+				svgElement.attr('font-size', fontSizeValue + fontUnit);
+				svgElement.attr('y', parseFloat(areasContainer[areaId]['y1']) + ((parseFloat(fontSizeValue) * scalingImageForPreviewRatio)));
 			}
 
 			if (textAlign && typeof(jQuery(textAlign).val()) != "undefined")
 			{
 				var textAlignValue = jQuery(textAlign).val();
-				textElement.attr('text-anchor', textAlignValue.replace('left', 'start').replace('center', 'middle').replace('right', 'end'));
+				svgElement.attr('text-anchor', textAlignValue.replace('left', 'start').replace('center', 'middle').replace('right', 'end'));
 
 				if (textAlignValue == 'left')
 				{
-					textElement.attr('x', areasContainer[areaId]['x1']);
+					svgElement.attr('x', areasContainer[areaId]['x1']);
 				}
 				else if (textAlignValue == 'center')
 				{
-					textElement.attr('x', parseFloat(areasContainer[areaId]['x1']) + (parseFloat(areasContainer[areaId]['width']) / 2));
+					svgElement.attr('x', parseFloat(areasContainer[areaId]['x1']) + (parseFloat(areasContainer[areaId]['width']) / 2));
 				}
 				else if (textAlignValue == 'right')
 				{
-					textElement.attr('x', parseFloat(areasContainer[areaId]['x2']));
+					svgElement.attr('x', parseFloat(areasContainer[areaId]['x2']));
 				}
 			}
 
@@ -368,31 +495,31 @@ $productId = $input->getInt('pid', 0);
 
 				if (verticalAlignValue == 'top')
 				{
-					textElement.attr('y', areasContainer[areaId]['y1']);
+					svgElement.attr('y', areasContainer[areaId]['y1']);
 				}
 				else if (verticalAlignValue == 'middle')
 				{
 					var yPos = parseFloat(areasContainer[areaId]['y1']) + (parseFloat(areasContainer[areaId]['height']) / 2);
 					if (fontSizeValue)
 						yPos -= (parseFloat(fontSizeValue) / 2);
-					textElement.attr('y', yPos);
+					svgElement.attr('y', yPos);
 				}
 				else if (verticalAlignValue == 'bottom')
 				{
 					var yPos = parseFloat(areasContainer[areaId]['y1']) + (parseFloat(areasContainer[areaId]['height']));
 					if (fontSizeValue)
 						yPos -= fontSizeValue;
-					textElement.attr('y', yPos);
+					svgElement.attr('y', yPos);
 				}
 			}
 
 			if (jQuery(text).is("textarea"))
 			{
-				createSVGTextMultiline(textElement, jQuery(text).val())
+				createSVGTextMultiline(svgElement, jQuery(text).val())
 			}
 			else
 			{
-				textElement.node.textContent = jQuery(text).val();
+				svgElement.node.textContent = jQuery(text).val();
 			}
 		}
 	}
@@ -423,14 +550,9 @@ $productId = $input->getInt('pid', 0);
 
 		var background_id = jQuery("#background_id").val();
 
-		<?php foreach($this->displayedAreas as $area) :?>
-
-			var fontColor = "000000";
-
-			if (jQuery("#colorCode<?php echo $area->id; ?>").length > 0)
-			{
-				fontColor = jQuery("#colorCode<?php echo $area->id; ?>").val().replace("#", "");
-			}
+		<?php foreach($this->displayedAreas as $area) :
+			$areaType = ReddesignHelpersArea::getAreaType($area->areaType);
+		?>
 
 			var x1 = parseFloat(<?php echo $area->x1_pos; ?>) * scalingImageForPreviewRatio;
 			var y1 = parseFloat(<?php echo $area->y1_pos; ?>) * scalingImageForPreviewRatio;
@@ -446,32 +568,32 @@ $productId = $input->getInt('pid', 0);
 			areasContainer[<?php echo $area->id; ?>]['y2'] = y2;
 			areasContainer[<?php echo $area->id; ?>]['width'] = width;
 			areasContainer[<?php echo $area->id; ?>]['height'] = height;
+			areasContainer[<?php echo $area->id; ?>]['areaType'] = '<?php echo $areaType['name']; ?>';
 
-			var fontSizeValue = 12;
-			if (jQuery("#fontSize<?php echo $area->id; ?>").length > 0)
+			if ('<?php echo $areaType['name']; ?>' == 'text')
 			{
-				var fontSize = jQuery("#fontSize<?php echo $area->id; ?>").val().split(":");
-
-				if (fontSize.length > 1)
-				{
-					fontSizeValue = fontSize[1];
-				}
-				else
-				{
-					fontSizeValue = fontSize[0];
-				}
+				var svgElement = Snap.parse(
+					'<text id="areaSVGElement_<?php echo $area->id; ?>" '
+						+ ' x="' + x1 + '"'
+						+ ' y="' + y1 + '"'
+						+ '></text>'
+				);
+			}
+			else if ('<?php echo $areaType['name']; ?>' == 'clipart')
+			{
+				var svgElement = Snap.parse(
+					'<svg id="areaSVGElement_<?php echo $area->id; ?>" '
+						+ ' x="' + x1 + '"'
+						+ ' y="' + y1 + '"'
+						+ ' width="' + width + '"'
+						+ ' height="' + height + '"'
+						+ '></svg>'
+				);
 			}
 
-			var textElement = Snap.parse(
-				'<text id="areaTextElement_<?php echo $area->id; ?>" '
-					+ ' x="' + x1 + '"'
-					+ ' y="' + y1 + '"'
-					+ '></text>'
-			);
+			rootSnapSvgObject.select("#areaBoxesLayer").append(svgElement);
 
-			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
-
-			changeSVGTextElement(<?php echo $area->id; ?>);
+			changeSVGElement(<?php echo $area->id; ?>);
 
 		<?php endforeach; ?>
 	}
@@ -487,7 +609,7 @@ $productId = $input->getInt('pid', 0);
 		document.getElementById("colorCode" + id).value = colorCode;
 		jQuery("#fontColor" + id+ " div").css("backgroundColor", "#" + colorCode);
 		jQuery("#fontColor" + id).show();
-		changeSVGTextElement(id);
+		changeSVGElement(id);
 	}
 
 	/**
@@ -588,7 +710,7 @@ $productId = $input->getInt('pid', 0);
 							.on('slide', function(ev){
 								var id = jQuery(this).attr('id').replace('fontSizeSlider', '');
 								jQuery('#fontSize' + id).val(ev.value);
-								changeSVGTextElement(id);console.log(id);
+								changeSVGElement(id);console.log(id);
 							});
 					}
 				});
@@ -678,7 +800,7 @@ $productId = $input->getInt('pid', 0);
 			}
 
 			var textElement = Snap.parse(
-				'<text id="areaTextElement_' +
+				'<text id="areaSVGElement_' +
 					areas[i].id + '" ' +
 					' x="' + x1 + '"' +
 					' y="' + y1 + '"' +
@@ -687,8 +809,51 @@ $productId = $input->getInt('pid', 0);
 
 			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
 
-			changeSVGTextElement(areas[i].id);
+			changeSVGElement(areas[i].id);
 		}
+	}
+
+	function loadClipartBank(areaId)
+	{
+		if (jQuery("#clipartBank" + areaId).html().trim() != '')
+		{
+			jQuery("#featuredCliparts" + areaId).toggle("slow");
+			jQuery("#clipartBank" + areaId).toggle("slow");
+		}
+		else
+		{
+			var categoryId = jQuery("#category" + areaId).val();
+			jQuery.ajax({
+				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxLoadClipartBank",
+				data: {
+					'categoryId': categoryId,
+					'areaId': areaId
+				},
+				type: "get",
+				dataType: 'text',
+				success: function (data)
+				{
+					jQuery("#featuredCliparts" + areaId).slideUp("slow");
+
+					jQuery("#clipartBank" + areaId).show().html(data);
+					jQuery("#clipartBank" + areaId + " .flexslider2").removeClass("flexslider2").addClass("flexslider");
+					jQuery("#clipartBank" + areaId + " .flexslider").flexslider({
+						'slideshow': false,
+						'directionNav': true,
+						'minItems': 4,
+						'prevText': '',
+						'nextText': '',
+						'animation': 'slide',
+						'animationLoop': false
+					});
+				},
+				error: function (data)
+				{
+					console.log("Error: " + data);
+				}
+			});
+		}
+
 	}
 </script>
 {RedDesignBreakFormEndsAndJS}

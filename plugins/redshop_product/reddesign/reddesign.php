@@ -69,6 +69,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		{
 			return;
 		}
+		// Load CSS file
+		RHelperAsset::load('site.css', 'com_reddesign');
 
 		$input    = JFactory::getApplication()->input;
 		$view     = $input->get('view');
@@ -221,58 +223,59 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					$areasLoopTemplateInstance = $areasLoopTemplate;
 
 					// Get area specific content.
-					$areaHtml = explode('{RedDesignBreakDesignArea' . $area->id . '}', $htmlAreas);
-					$areaHtml = $areaHtml[1];
+					$areaHtml = $this->setContentOnTemplateTag('{RedDesignBreakDesignArea' . $area->id . '}', $htmlAreas);
 
 					// Get specific area title.
-					$htmlElement = explode('{RedDesignBreakDesignAreaTitle}', $areaHtml);
-					$htmlElement = $htmlElement[1];
+					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaTitle}', $areaHtml);
 					$areasLoopTemplateInstance = str_replace("{redDESIGN:AreaTitle}", $htmlElement, $areasLoopTemplateInstance);
 
 					// Get input text label.
-					$htmlElement = explode('{RedDesignBreakDesignAreaInputTextLabel}', $areaHtml);
-					$htmlElement = $htmlElement[1];
+					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaInputTextLabel}', $areaHtml);
 					$areasLoopTemplateInstance = str_replace("{redDESIGN:InputTextLabel}", $htmlElement, $areasLoopTemplateInstance);
 
 					// Get input text.
-					$htmlElement = explode('{RedDesignBreakDesignAreaInputText}', $areaHtml);
-					$htmlElement = $htmlElement[1];
+					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaInputText}', $areaHtml);
 					$areasLoopTemplateInstance = str_replace("{redDESIGN:InputText}", $htmlElement, $areasLoopTemplateInstance);
 
 					// Get choose font label.
-					$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontLabel}', $areaHtml);
-					$htmlElement = $htmlElement[1];
+					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseFontLabel}', $areaHtml);
 					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontLabel}", $htmlElement, $areasLoopTemplateInstance);
 
 					// Get choose font input.
-					$htmlElement = explode('{RedDesignBreakDesignAreaChooseFont}', $areaHtml);
-					$htmlElement = $htmlElement[1];
+					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseFont}', $areaHtml);
 					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFont}", $htmlElement, $areasLoopTemplateInstance);
 
 					// Get choose font size label.
-					$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontSizeLabel}', $areaHtml);
-					$htmlElement = $htmlElement[1];
+					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseFontSizeLabel}', $areaHtml);
 					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontSizeLabel}", $htmlElement, $areasLoopTemplateInstance);
 
 					// Get choose font size input.
-					$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontSize}', $areaHtml);
-					$htmlElement = $htmlElement[1];
+					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseFontSize}', $areaHtml);
 					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontSize}", $htmlElement, $areasLoopTemplateInstance);
 
 					// Get choose color label.
-					$htmlElement = explode('{RedDesignBreakDesignAreaChooseColorLabel}', $areaHtml);
-					$htmlElement = $htmlElement[1];
+					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseColorLabel}', $areaHtml);
 					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColorLabel}", $htmlElement, $areasLoopTemplateInstance);
 
-					// Get choose color label.
-					$htmlElement = explode('{RedDesignBreakDesignAreaChooseColor}', $areaHtml);
-					$htmlElement = $htmlElement[1];
+					// Get choose color.
+					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseColor}', $areaHtml);
 					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColor}", $htmlElement, $areasLoopTemplateInstance);
 
-					// Get choose color label.
-					$htmlElement = explode('{RedDesignBreakDesignAreaChooseColor}', $areaHtml);
-					$htmlElement = $htmlElement[1];
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColor}", $htmlElement, $areasLoopTemplateInstance);
+					// Get choose horizontal align.
+					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseHorizontalAlign}', $areaHtml);
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseHorizontalAlignment}", $htmlElement, $areasLoopTemplateInstance);
+
+					// Get choose vertical align.
+					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseVerticalAlign}', $areaHtml);
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseVerticalAlignment}", $htmlElement, $areasLoopTemplateInstance);
+
+					// Get clipart label
+					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseClipartLabel}', $areaHtml);
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseClipartLabel}", $htmlElement, $areasLoopTemplateInstance);
+
+					// Get clipart label
+					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseClipart}', $areaHtml);
+					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseClipart}", $htmlElement, $areasLoopTemplateInstance);
 
 					$areasFinshedOutput .= $areasLoopTemplateInstance;
 				}
@@ -283,14 +286,34 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$template_desc = preg_replace('#(' . $start . ')(.*)(' . $end . ')#si', '<div id="areasContainer">' . $areasFinshedOutput . '</div>', $template_desc);
 
 			// Get form end.
-			$htmlElement = explode('{RedDesignBreakFormEndsAndJS}', $html);
-			$htmlElement = $htmlElement[1];
+			$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakFormEndsAndJS}', $html);
 			$template_desc = str_replace("{redDESIGN:FormEnd}", $htmlElement, $template_desc);
 
 			$redDesignData = "<input type='hidden' name='task' value='add'><input type='hidden' id='redDesignData' name='redDesignData' value='' />";
 
 			$template_desc = str_replace("<input type='hidden' name='task' value='add'>", $redDesignData, $template_desc);
 		}
+	}
+
+	/**
+	 * Method for easier management of splitting template tags
+	 *
+	 * @param   string  $templateTag    Template tag on which we split html string
+	 * @param   string  $html           Full html string
+	 * @param   int     $arrayPosition  Position pointer in array after splitting html string
+	 *
+	 * @return  string
+	 */
+	public function setContentOnTemplateTag($templateTag, $html, $arrayPosition = 1)
+	{
+		$arrayHtml = explode($templateTag, $html);
+
+		if (!empty($arrayHtml[$arrayPosition]))
+		{
+			return $arrayHtml[$arrayPosition];
+		}
+
+		return '';
 	}
 
 	/**

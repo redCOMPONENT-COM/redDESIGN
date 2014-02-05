@@ -210,7 +210,7 @@ $this->unit = $displayData->unit;
 	function saveAreaSettings(reddesign_area_id, areaName) {
 		jQuery("#saveAreaSettings" + reddesign_area_id).button("loading");
 
-		var areaType   = jQuery("#areaType").val();
+		var areaType   = jQuery("#areaType").val(1);
 		var areaFontAlignment = jQuery("#areaFontAlignment" + reddesign_area_id).val();
 		var areaVerticalAlignment = jQuery("#areaVerticalAlignment" + reddesign_area_id).val();
 		var fontsizerDropdown = jQuery("#fontsizerDropdown" + reddesign_area_id).val();
@@ -268,16 +268,17 @@ $this->unit = $displayData->unit;
 	function saveAreaClipartSettings(reddesign_area_id, areaName) {
 		jQuery("#saveAreaClipartSettings" + reddesign_area_id).button("loading");
 
-		var areaType   = jQuery("#areaType").val();
+		var areaType   = jQuery("#areaType").val(2);
 		var areaAlignment = jQuery("#areaAlignment" + reddesign_area_id).val();
+		var areaVerticalAlignment = jQuery("#areaVerticalAlignment" + reddesign_area_id).val();
 		var areaCliparts = jQuery("#areaCliparts" + reddesign_area_id).val();
 
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxSave",
 			data: {
 				'jform[id]': reddesign_area_id,
-				'jform[areaType]': areaType,
 				'jform[textalign]': areaAlignment,
+				'jform[verticalAlign]': areaVerticalAlignment,
 				'jform[areaCliparts]': areaCliparts
 			},
 			type: "get",
