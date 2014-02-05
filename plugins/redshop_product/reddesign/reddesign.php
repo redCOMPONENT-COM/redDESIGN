@@ -393,7 +393,32 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 */
 	public function changeCartOrderItemImage(&$cart, &$product_image, $product, $i)
 	{
-		if ($product->product_type == 'redDESIGN')
+		$redDesign = false;
+
+		if (empty($product->product_type))
+		{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName('product_type'));
+			$query->from($db->quoteName('#__redshop_product'));
+			$query->where($db->quoteName('product_id') . ' = ' . $product->product_id);
+			$db->setQuery($query);
+			$productType = $db->loadResult();
+
+			if ($productType == 'redDESIGN')
+			{
+				$redDesign = true;
+			}
+		}
+		else
+		{
+			if ($product->product_type == 'redDESIGN')
+			{
+				$redDesign = true;
+			}
+		}
+
+		if ($redDesign)
 		{
 			RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
 
@@ -419,16 +444,11 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$redDesignData = json_decode($cart[$i]['redDesignData']);
 			}
 
+			$displayedBackground = $backgroundModel->getItem($redDesignData->background_id);
 			$defaultPreviewWidth = $this->params->get('defaultCartPreviewWidth', 0);
 
-			$displayedBackground = $backgroundModel->getItem($redDesignData->background_id);
-			$xml = simplexml_load_file(JURI::root() . 'media/com_reddesign/backgrounds/' . $displayedBackground->svg_file);
-			$xmlInfo = $xml->attributes();
-			$displayedBackground->width  = str_replace('px', '', $xmlInfo->width);
-			$displayedBackground->height = str_replace('px', '', $xmlInfo->height);
-
-			$scalingImageForPreviewRatio = $defaultPreviewWidth / $displayedBackground->width;
-			$previewHeight = $displayedBackground->height * $scalingImageForPreviewRatio;
+			$scalingImageForPreviewRatio = $defaultPreviewWidth / $redDesignData->previewWidth;
+			$previewHeight = $redDesignData->previewHeight * $scalingImageForPreviewRatio;
 
 			$areasModel->setState('filter.background_id', $displayedBackground->id);
 			$displayedAreas = $areasModel->getItems();
@@ -469,17 +489,27 @@ class PlgRedshop_ProductReddesign extends JPlugin
 								rootSnapSvgObject' . $i . '.add(group_' . $i . ');
 
 								jQuery("#areaBoxesLayer' . $i . ' text").each(function (index, value){
-									var fontSize = parseFloat(jQuery(value).css("font-size"));
-									fontSize = fontSize * parseFloat("' . $scalingImageForPreviewRatio . '");
-									jQuery(value).css("font-size", fontSize + "' . $fontUnit . '");
-
-									/*var xPos = parseFloat(jQuery(value).attr("x"));
+									var xPos = parseFloat(jQuery(value).attr("x"));
 									xPos = xPos * parseFloat("' . $scalingImageForPreviewRatio . '");
 									jQuery(value).attr("x", xPos);
 
 									var yPos = parseFloat(jQuery(value).attr("y"));
 									yPos = yPos * parseFloat("' . $scalingImageForPreviewRatio . '");
-									jQuery(value).attr("y", yPos);*/
+									jQuery(value).attr("y", yPos);
+
+									var fontSize = parseFloat(jQuery(value).css("font-size"));
+									fontSize = fontSize * parseFloat("' . $scalingImageForPreviewRatio . '");
+									jQuery(value).css("font-size", fontSize + "' . $fontUnit . '");
+								});
+
+								jQuery("#areaBoxesLayer' . $i . ' tspan").each(function (index, value){
+									var xPos = parseFloat(jQuery(value).attr("x"));
+									xPos = xPos * parseFloat("' . $scalingImageForPreviewRatio . '");
+									jQuery(value).attr("x", xPos);
+
+									var yPos = parseFloat(jQuery(value).attr("y"));
+									yPos = yPos * parseFloat("' . $scalingImageForPreviewRatio . '");
+									jQuery(value).attr("y", yPos);
 								});
 							}
 						});
@@ -517,6 +547,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						});
 
 						values["designtype_id"] = jQuery("#designtype_id").val();
+						values["previewWidth"] = jQuery("#svgCanvas").attr("width");
+						values["previewHeight"] = jQuery("#svgCanvas").attr("height");
 
 						var areas = rootSnapSvgObject.select("#areaBoxesLayer");
 						values["areasInnerSVG"] = encodeURIComponent(areas.innerSVG());
