@@ -24,6 +24,9 @@ if (isset($displayData))
 
 $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->item->designtype_id . '&tab=design-areas';
 
+$config = ReddesignEntityConfig::getInstance();
+$clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
+$clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 ?>
 
 <script type="text/javascript">
@@ -119,6 +122,11 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				jQuery(ele).keyup(function () {
 					onAreaValuesChange(ele);
 				});
+			});
+
+
+			jQuery('.thumbnailSVG').each(function () {
+				setSVGElementScaleElement(this);
 			});
 
 			<?php if (!empty($this->productionBackground->svg_file)) : ?>
@@ -453,6 +461,10 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			jQuery(targetRow).removeClass('opacity-40');
 			jQuery(targetRow).html(data);
 			jQuery("#areaSettingsRow" + areaId + " td select").select2({ width: 'resolve' });
+
+			jQuery(targetRow).find('.thumbnailSVG').each(function () {
+				setSVGElementScaleElement(this);
+			});
 		});
 	}
 
@@ -1075,5 +1087,34 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		{
 			jQuery("#maximumLinesAllowedContainer" + areaId).css("display", "none");
 		}
+	}
+
+	function setSVGElementScale(svgDocument)
+	{
+		if (svgDocument && typeof(svgDocument) != "undefined")
+		{
+			var svgDocumentContent = svgDocument.contentDocument;
+			if (svgDocumentContent && typeof(svgDocumentContent) != "undefined")
+			{
+				var svgElementInner = jQuery(svgDocumentContent.documentElement);
+				if (typeof(svgElementInner) != "undefined")
+				{
+					jQuery(svgElementInner).attr("height", <?php echo $clipartPreviewHeight; ?>);
+					jQuery(svgElementInner).attr("width", <?php echo $clipartPreviewWidth; ?>);
+					jQuery(svgElementInner).attr("preserveAspectRatio", "xMidYMid meet");
+				}
+			}
+		}
+	}
+
+	function setSVGElementScaleElement(svgThumbnailObject)
+	{
+		var svgThumbnail = document.getElementById(jQuery(svgThumbnailObject).attr('id'));
+		svgThumbnail.addEventListener("load", function() {
+			setSVGElementScale(svgThumbnailObject);
+		});
+
+		// Some elements are already loaded
+		setSVGElementScale(svgThumbnail);
 	}
 </script>
