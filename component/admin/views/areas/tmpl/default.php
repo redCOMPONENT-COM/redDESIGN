@@ -210,7 +210,7 @@ $this->unit = $displayData->unit;
 	function saveAreaSettings(reddesign_area_id, areaName) {
 		jQuery("#saveAreaSettings" + reddesign_area_id).button("loading");
 
-		var areaType   = jQuery("#areaType").val(1);
+		var areaType   = jQuery("#areaType").val(1).val();
 		var areaFontAlignment = jQuery("#areaFontAlignment" + reddesign_area_id).val();
 		var areaVerticalAlignment = jQuery("#areaVerticalAlignment" + reddesign_area_id).val();
 		var fontsizerDropdown = jQuery("#fontsizerDropdown" + reddesign_area_id).val();
@@ -251,7 +251,9 @@ $this->unit = $displayData->unit;
 			},
 			type: "post",
 			success: function (data) {
-				setTimeout(function () {jQuery("#saveAreaSettings" + reddesign_area_id).button("reset")}, 500);
+				jQuery("#designAreaId").val(reddesign_area_id);
+				changeAreaType();
+				jQuery("#saveAreaSettings" + reddesign_area_id).button("reset");
 			},
 			error: function (data) {
 				console.log('function saveAreaSettings() Error');
@@ -268,7 +270,7 @@ $this->unit = $displayData->unit;
 	function saveAreaClipartSettings(reddesign_area_id, areaName) {
 		jQuery("#saveAreaClipartSettings" + reddesign_area_id).button("loading");
 
-		var areaType   = jQuery("#areaType").val(2);
+		var areaType   = jQuery("#areaType").val(2).val();
 		var areaAlignment = jQuery("#areaAlignment" + reddesign_area_id).val();
 		var areaVerticalAlignment = jQuery("#areaVerticalAlignment" + reddesign_area_id).val();
 		var areaCliparts = jQuery("#areaCliparts" + reddesign_area_id).val();
@@ -285,7 +287,7 @@ $this->unit = $displayData->unit;
 			success: function (data) {
 				jQuery("#designAreaId").val(reddesign_area_id);
 				changeAreaType();
-				jQuery("#saveAreaSettings" + reddesign_area_id).button("reset")
+				jQuery("#saveAreaSettings" + reddesign_area_id).button("reset");
 			},
 			error: function (data) {
 				console.log('function saveAreaClipartSettings() Error');
