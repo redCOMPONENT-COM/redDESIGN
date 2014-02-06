@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fields name="filter">
+	<fields name="filter" addfieldpath="/libraries/reddesign/form/fields">
 		<field
 			name="search_cliparts"
 			type="text"
@@ -8,8 +8,7 @@
 			placeholder="JSEARCH_FILTER"
 			class="js-enter-submits"
 			/>
-	</fields>
-    <field
+        <field
             name="categoryId"
             type="category"
             extension="com_reddesign"
@@ -18,8 +17,9 @@
             class="select2"
             onchange="this.form.submit();"
             >
-        <option value="0">JOPTION_SELECT_CATEGORY</option>
-    </field>
+            <option value="0">JOPTION_SELECT_CATEGORY</option>
+        </field>
+	</fields>
 	<fields name="list">
 		<field
 			name="clipart_limit"
