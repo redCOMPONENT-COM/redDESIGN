@@ -165,12 +165,18 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 			jQuery(document).on("mousedown", ".modal-preview", function(e) {
 				var backgroundId = jQuery(this).attr('href').replace('#modalPreview', '');
 
-				if (typeof backgroundPreviews[backgroundId]['progress'] != 'undefined')
+				if (typeof backgroundPreviews[backgroundId]['progress'] == 'undefined')
 				{
-					e.stopPropagation();
+					loadPreviewBackground(backgroundId, this);
+				}
+				else if (backgroundPreviews[backgroundId]['progress'] == false)
+				{
 					return false;
 				}
-				loadPreviewBackground(backgroundId, this);
+				else
+				{
+					SqueezeBox.fromElement(this);
+				}
 
 				return false;
 			});
@@ -197,12 +203,13 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 						 }
 					},
 					beforeSend: function (xhr) {
-						backgroundPreviews[backgroundId]['progress'] = true;
+						backgroundPreviews[backgroundId]['progress'] = false;
 						jQuery('#backgroundRow' + backgroundId + ' .progress').show().addClass('active');
 						jQuery('#backgroundRow' + backgroundId + ' .progress .bar-success').css('width', '0%');
 					},
 					success: function (response) {
 						jQuery('#backgroundRow' + backgroundId + ' .progress').removeClass('active');
+						backgroundPreviews[backgroundId]['progress'] = true;
 						if(typeof response === 'undefined' || response == false)
 						{
 							jQuery('#backgroundRow' + backgroundId + ' .progress')

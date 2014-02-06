@@ -42,16 +42,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		// Register library prefix.
 		JLoader::registerPrefix('Reddesign', JPATH_LIBRARIES . '/reddesign');
-
-		JLoader::import('redcore.bootstrap');
-
-		JFactory::getApplication()->input->set('redcore', true);
-
-		// Load bootstrap + fontawesome
-		JHtml::_('rbootstrap.framework');
-
-		RHelperAsset::load('component.js', 'redcore');
-		RHelperAsset::load('component.min.css', 'redcore');
 	}
 
 	/**
@@ -70,8 +60,20 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		if ($product->product_type == 'redDESIGN' && $view == 'product')
 		{
+			JLoader::import('redcore.bootstrap');
+
+			RForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_reddesign/models/forms');
+			RForm::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_reddesign/models/fields');
+
+			JFactory::getApplication()->input->set('redcore', true);
+
+			// Load bootstrap + fontawesome
+			JHtml::_('rbootstrap.framework');
+
 			// Load CSS file
 			RHelperAsset::load('site.css', 'com_reddesign');
+			RHelperAsset::load('component.js', 'redcore');
+			RHelperAsset::load('component.min.css', 'redcore');
 		}
 	}
 
@@ -282,6 +284,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$redDesignData = "<input type='hidden' name='task' value='add'><input type='hidden' id='redDesignData' name='redDesignData' value='' />";
 
 			$template_desc = str_replace("<input type='hidden' name='task' value='add'>", $redDesignData, $template_desc);
+
+			$template_desc = '<div class="redcore">' . $template_desc . '</div>';
 		}
 	}
 

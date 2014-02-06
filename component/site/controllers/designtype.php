@@ -186,13 +186,28 @@ class ReddesignControllerDesigntype extends JController
 	{
 		$app = JFactory::getApplication();
 		$categoryId = $app->input->getInt('categoryId', 0);
+		$search = $app->input->getString('search', '');
 		$areaId = $app->input->getInt('areaId', 0);
 
+		/** @var ReddesignModelCliparts $clipartsModel */
 		$clipartsModel = RModel::getAdminInstance('Cliparts', array('ignore_request' => true), 'com_reddesign');
+
 		if ($categoryId > 0)
 		{
-			$clipartsModel->setState('filter.category_id', $categoryId);
+			$clipartsModel->setState('filter.categoryId', $categoryId);
 		}
+		else
+		{
+			$items = $clipartsModel->getItems();
+
+			if (!empty($items) && count($items) > 0)
+			{
+				$categoryId = $items[0]->categoryId;
+				$clipartsModel->setState('filter.categoryId', $categoryId);
+			}
+		}
+
+		$clipartsModel->setState('filter.search_cliparts', $search);
 
 		$formName = 'clipartBankForm';
 		$pagination = $clipartsModel->getPagination();
@@ -200,12 +215,15 @@ class ReddesignControllerDesigntype extends JController
 
 		echo RLayoutHelper::render('clipart.bank', array(
 				'state' => $clipartsModel->getState(),
-				'areaId' => $areaId,
 				'items' => $clipartsModel->getItems(),
 				'pagination' => $pagination,
+				'areaId' => $areaId,
+				'categoryId' => $categoryId,
+				'search' => $search,
 				'filter_form' => $clipartsModel->getForm(),
 				'activeFilters' => $clipartsModel->getActiveFilters(),
 				'formName' => $formName,
+				'clipartsModel' => $clipartsModel,
 			),
 			JPATH_ROOT . '/administrator/components/com_reddesign/layouts'
 		);

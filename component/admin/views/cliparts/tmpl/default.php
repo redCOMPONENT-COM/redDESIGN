@@ -36,7 +36,7 @@ else
 			array(
 				'view' => $this,
 				'options' => array(
-					'filterButton' => false,
+					'filterButton' => true,
 					'searchField' => 'search_cliparts',
 					'searchFieldSelector' => '#filter_search_cliparts',
 					'limitFieldSelector' => '#list_search_cliparts',

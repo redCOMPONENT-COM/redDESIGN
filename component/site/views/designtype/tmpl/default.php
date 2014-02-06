@@ -253,7 +253,7 @@ $productId = $input->getInt('pid', 0);
 
 			jQuery(document).on("click", ".reddesign-form .load-clipart-bank", function() {
 				var id = jQuery(this).attr('id').replace('loadClipartBank', '');
-				loadClipartBank(id);
+				loadClipartBank(id, false);
 			});
 
 			jQuery(document).on("mousedown", ".reddesign-form .thumbnailSVG-pointer", function() {
@@ -814,20 +814,22 @@ $productId = $input->getInt('pid', 0);
 		}
 	}
 
-	function loadClipartBank(areaId)
+	function loadClipartBank(areaId, filterApplied)
 	{
-		if (jQuery("#clipartBank" + areaId).html().trim() != '')
+		if (!filterApplied && jQuery("#clipartBank" + areaId).html().trim() != '')
 		{
 			jQuery("#featuredCliparts" + areaId).toggle("slow");
 			jQuery("#clipartBank" + areaId).toggle("slow");
 		}
 		else
 		{
-			var categoryId = jQuery("#category" + areaId).val();
+			var clipartCategoryId = jQuery("#clipartCategoryId" + areaId).val();
+			var clipartSearch = jQuery("#clipartSearch" + areaId).val();
 			jQuery.ajax({
 				url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxLoadClipartBank",
 				data: {
-					'categoryId': categoryId,
+					'categoryId': clipartCategoryId,
+					'search': clipartSearch,
 					'areaId': areaId
 				},
 				type: "get",
