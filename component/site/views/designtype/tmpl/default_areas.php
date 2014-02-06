@@ -513,39 +513,39 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 				</div>
 				<div class="clearfix"></div>
 			{RedDesignBreakDesignAreaChooseClipart}
-
-		<?php default: // Common options ?>
-			{RedDesignBreakDesignAreaChooseHorizontalAlign}
-				<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $textAlign; ?>" />
-				<div class="btn-group btn-group-textAlign">
-					<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="left">
-						<i class="icon-align-left"></i>&nbsp;
-					</button>
-					<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="center">
-						<i class="icon-align-center"></i>&nbsp;
-					</button>
-					<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="right">
-						<i class="icon-align-right"></i>&nbsp;
-					</button>
-				</div>
-			{RedDesignBreakDesignAreaChooseHorizontalAlign}
-
-			{RedDesignBreakDesignAreaChooseVerticalAlign}
-			<input id="verticalAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->verticalAlign; ?>" />
-			<div class="btn-group btn-group-textVerticalAlign">
-				<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="top">
-					<i class="icon-collapse-top"></i>&nbsp;
-				</button>
-				<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="middle">
-					<i class="icon-expand"></i>&nbsp;
-				</button>
-				<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="bottom">
-					<i class="icon-collapse"></i>&nbsp;
-				</button>
-			</div>
-			{RedDesignBreakDesignAreaChooseVerticalAlign}
-			<?php break; ?>
+		<?php break; ?>
 	<?php endswitch; // End of $area->areaType switch ?>
+
+	{RedDesignBreakDesignAreaChooseHorizontalAlign}
+		<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $textAlign; ?>" />
+		<div class="btn-group btn-group-textAlign">
+			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="left">
+				<i class="icon-align-left"></i>&nbsp;
+			</button>
+			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="center">
+				<i class="icon-align-center"></i>&nbsp;
+			</button>
+			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="right">
+				<i class="icon-align-right"></i>&nbsp;
+			</button>
+		</div>
+	{RedDesignBreakDesignAreaChooseHorizontalAlign}
+
+	{RedDesignBreakDesignAreaChooseVerticalAlign}
+	<input id="verticalAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->verticalAlign; ?>" />
+	<div class="btn-group btn-group-textVerticalAlign">
+		<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="top">
+			<i class="icon-collapse-top"></i>&nbsp;
+		</button>
+		<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="middle">
+			<i class="icon-expand"></i>&nbsp;
+		</button>
+		<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="bottom">
+			<i class="icon-collapse"></i>&nbsp;
+		</button>
+	</div>
+	{RedDesignBreakDesignAreaChooseVerticalAlign}
+
 	<?php echo '{RedDesignBreakDesignArea' . $area->id . '}'; ?>
 
 <?php endforeach; ?>

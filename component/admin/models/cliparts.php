@@ -74,14 +74,14 @@ class ReddesignModelCliparts extends RModelList
 		$query = $db->getQuery(true)
 					->select('c.*, c1.title as categoryName')
 					->from($db->qn('#__reddesign_cliparts', 'c'))
-			->leftJoin($db->qn('#__categories', 'c1') . ' on c.categoryId = c1.id');
+					->leftJoin($db->qn('#__categories', 'c1') . ' on c.categoryId = c1.id');
 
 		// Filter by Category Id
 		$categoryId = $this->getState('filter.categoryId', 0);
 
 		if ($categoryId)
 		{
-			$query->where($db->qn('c.$categoryId') . ' = ' . (int) $categoryId);
+			$query->where($db->qn('c.categoryId') . ' = ' . (int) $categoryId);
 		}
 
 		// Filter by Clipart IDs
@@ -106,7 +106,7 @@ class ReddesignModelCliparts extends RModelList
 		$orderList = $this->getState('list.ordering');
 		$directionList = $this->getState('list.direction');
 
-		$order = !empty($orderList) ? $orderList : 'c.name';
+		$order = !empty($orderList) ? $orderList : 'categoryName ASC, c.name';
 		$direction = !empty($directionList) ? $directionList : 'ASC';
 		$query->order($db->escape($order) . ' ' . $db->escape($direction));
 
