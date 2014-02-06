@@ -17,8 +17,6 @@ $search = $data['search'];
 $config = ReddesignEntityConfig::getInstance();
 $clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
 $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
-
-
 $categories = JHtml::_('category.options', 'com_reddesign');
 
 JHtml::_('rjquery.select2', 'select');
