@@ -246,7 +246,7 @@ class ReddesignControllerDesigntype extends JController
 
 		$areaId = $app->input->getInt('areaId', 0);
 		$file = $app->input->files->get('uploadClipartFile' . $areaId, array(), 'array');
-		$return->clipartOutput = '';
+		$return->clipartOutput = JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_FAILED');
 
 		if (!empty($file) && isset($file['name']) && !empty($file['type']))
 		{
