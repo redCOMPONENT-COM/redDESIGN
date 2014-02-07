@@ -559,8 +559,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						var areas = rootSnapSvgObject.select("#areaBoxesLayer");
 						values["areasInnerSVG"] = encodeURIComponent(areas.innerSVG());
 
-						values["completeSVG"] = encodeURIComponent(jQuery("#svgContainer").html());
-
 						var jsonString = JSON.stringify(values);
 
 						jQuery("#redDesignData").val(jsonString);
@@ -640,7 +638,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		$redDesignData = json_decode($orderItemMapping->redDesignData);
 
-		$svg = $redDesignData->completeSVG;
+		$svgAreas = urldecode($redDesignData->areasInnerSVG);
 		$redDesignData = $this->prepareDesignTypeData($redDesignData);
 
 		if (count($orderItemMapping) > 0)
@@ -692,9 +690,14 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					'</div>';
 			}
 
-			//echo urldecode($svg);
+			$doc = new DOMDocument;
+			$doc->load(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $redDesignData['designBackground']->svg_file);
+			$areas = $doc->createElement('g', $svgAreas);
+			$svgElements = $doc->getElementsByTagName('svg');
+			$svg = $svgElements->item(0);
+			$svg->appendChild($areas);
 
-			$doc = new DOMDocument();
+			echo $doc->saveXML();
 
 			echo $html;
 		}
