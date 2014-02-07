@@ -630,25 +630,24 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('order_item_id', 'redDesignData')));
+		$query->select($db->quoteName(array('order_item_id', 'productionSvg', 'redDesignData')));
 		$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
 		$query->where($db->quoteName('order_item_id') . ' = ' . $orderItem->order_item_id);
 		$db->setQuery($query);
 		$orderItemMapping = $db->loadObject();
 
 		$redDesignData = json_decode($orderItemMapping->redDesignData);
+		$redDesignDataPrepared = $this->prepareDesignTypeData($redDesignData);
 
-		$svgAreas = urldecode($redDesignData->areasInnerSVG);
-		$redDesignData = $this->prepareDesignTypeData($redDesignData);
-
-		if (count($orderItemMapping) > 0)
+		// Echo information.
+		if (!empty($orderItemMapping))
 		{
 			$html = '<div id="customDesignData' . $orderItem->order_item_id . '" style="margin: 15px 0 15px 0;">' .
 						'<span><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_DETAILS') . '</strong></span><br/>' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TYPE') . $redDesignData['designType']->name . '</div>' .
+						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TYPE') . $redDesignDataPrepared['designType']->name . '</div>' .
 					'</div>';
 
-			foreach ($redDesignData['designAreasCustomData'] as $customArea)
+			foreach ($redDesignDataPrepared['designAreasCustomData'] as $customArea)
 			{
 				if (strpos($customArea->colorCode, '#') !== false)
 				{
@@ -690,14 +689,89 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					'</div>';
 			}
 
-			$doc = new DOMDocument;
-			$doc->load(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $redDesignData['designBackground']->svg_file);
-			$areas = $doc->createElement('g', $svgAreas);
-			$svgElements = $doc->getElementsByTagName('svg');
-			$svg = $svgElements->item(0);
-			$svg->appendChild($areas);
+			// Create files
+			if (empty($orderItemMapping->productionSvg))
+			{
+				$doc = new DomDocument;
+				$doc->validateOnParse = true;
+				$doc->load(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $redDesignDataPrepared['designBackground']->svg_file);
 
-			echo $doc->saveXML();
+				$svgElements = $doc->getElementsByTagName('svg');
+				$svg = $svgElements->item(0);
+
+				$width = str_replace('px', '', $svg->getAttribute('width'));
+				$scalingRatio = $width / $redDesignData->previewWidth;
+
+				$fragment = $doc->createDocumentFragment();
+				$fragment->appendXML('<g id="customizedAreas">' . urldecode($redDesignData->areasInnerSVG) . '</g>');
+
+				$textNodes = $fragment->childNodes->item(0)->getElementsByTagName('text');
+
+				for ($i = 0; $i < $textNodes->length; $i++)
+				{
+					$x = $textNodes->item($i)->getAttribute('x');
+					$y = $textNodes->item($i)->getAttribute('y');
+					$fontSizeStyle = $textNodes->item($i)->getAttribute('style');
+
+					$matches = array();
+					preg_match('/font-size: (.*?)px;/s', $fontSizeStyle, $matches);
+
+					if (!empty($matches[1]))
+					{
+						$fontSize = $matches[1];
+					}
+
+					$x *= $scalingRatio;
+					$y *= $scalingRatio;
+					$newfontSize = (float) $fontSize * $scalingRatio;
+					$fontSizeStyle = str_replace($fontSize, $newfontSize, $fontSizeStyle);
+
+					$textNodes->item($i)->setAttribute('x', $x);
+					$textNodes->item($i)->setAttribute('y', $y);
+					$textNodes->item($i)->setAttribute('style', $fontSizeStyle);
+				}
+
+				$textNodes = $fragment->childNodes->item(0)->getElementsByTagName('tspan');
+
+				for ($i = 0; $i < $textNodes->length; $i++)
+				{
+					$x = $textNodes->item($i)->getAttribute('x');
+					$y = $textNodes->item($i)->getAttribute('y');
+
+					$x *= $scalingRatio;
+					$y *= $scalingRatio;
+
+					$textNodes->item($i)->setAttribute('x', $x);
+					$textNodes->item($i)->setAttribute('y', $y);
+				}
+
+				$svg->appendChild($fragment);
+
+				$uniqueFileName = 'production-file-' . $orderItem->order_id . '-' . $orderItem->order_item_id;
+
+				if ($doc->save(JPATH_SITE . '/media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg'))
+				{
+					$html .= '<div>' .
+								'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg" download>SVG</a>' .
+							'</div>';
+
+					$orderItemMapping->productionSvg = $uniqueFileName;
+					$db->updateObject('#__reddesign_orderitem_mapping', $orderItemMapping, 'order_item_id');
+				}
+				else
+				{
+					$html .= '<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CAN_NOT_CREATE_PRODUCTION_FILES') . '</div>';
+				}
+			}
+			else
+			{
+				$html .= '</br>' .
+						'<div>' .
+							'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $orderItemMapping->productionSvg . '.svg" download>' .
+								'SVG ' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
+							'</a>' .
+						'</div>';
+			}
 
 			echo $html;
 		}
