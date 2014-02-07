@@ -45,7 +45,7 @@ JHtml::_('rjquery.flexslider', '.flexslider', array(
 					type="button"
 					id="clipartSearchButton<?php echo $areaId; ?>"
 					class="btn hasTooltip"
-					onclick="loadClipartBank(<?php echo $areaId; ?>, true)"
+					onclick="loadClipartBank(<?php echo $areaId; ?>, 'clipartBank', true)"
 					title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>">
 					<i class="icon-search"></i>
 				</button>
@@ -55,7 +55,7 @@ JHtml::_('rjquery.flexslider', '.flexslider', array(
 				'select.genericlist',
 				$categories,
 				'clipartCategoryId' . $areaId,
-				'class="inputbox" id="clipartCategoryId' . $areaId . '" onchange="loadClipartBank(' . $areaId . ', true)" ',
+				'class="inputbox" id="clipartCategoryId' . $areaId . '" onchange="loadClipartBank(' . $areaId . ', \'clipartBank\', true)" ',
 				'value',
 				'text',
 				$categoryId
