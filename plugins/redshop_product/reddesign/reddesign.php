@@ -42,6 +42,16 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		// Register library prefix.
 		JLoader::registerPrefix('Reddesign', JPATH_LIBRARIES . '/reddesign');
+
+		JLoader::import('redcore.bootstrap');
+
+		JFactory::getApplication()->input->set('redcore', true);
+
+		// Load bootstrap + fontawesome
+		JHtml::_('rbootstrap.framework');
+
+		RHelperAsset::load('component.js', 'redcore');
+		RHelperAsset::load('component.min.css', 'redcore');
 	}
 
 	/**
@@ -60,15 +70,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		if ($product->product_type == 'redDESIGN' && $view == 'product')
 		{
-			JLoader::import('redcore.bootstrap');
-
 			RForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_reddesign/models/forms');
 			RForm::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_reddesign/models/fields');
-
-			JFactory::getApplication()->input->set('redcore', true);
-
-			// Load bootstrap + fontawesome
-			JHtml::_('rbootstrap.framework');
 
 			// Load CSS file
 			RHelperAsset::load('site.css', 'com_reddesign');
@@ -272,7 +275,10 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			$start = '{redDESIGN:AreasLoopStart}';
 			$end = '{redDESIGN:AreasLoopEnd}';
-			$template_desc = preg_replace('#(' . $start . ')(.*)(' . $end . ')#si', '<div id="areasContainer">' . $areasFinshedOutput . '</div>', $template_desc);
+			$template_desc = preg_replace(
+				'#(' . $start . ')(.*)(' . $end . ')#si',
+				'<div id="areasContainer">' . $areasFinshedOutput . '</div>', $template_desc
+			);
 
 			// Get form end.
 			$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakFormEndsAndJS}', $html);
@@ -385,8 +391,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 	/**
 	 * This is an event that is called when cart template replacement is started.
-	 * ToDo: Images are coming from media/assets/designtypes/forcart and they stey there forever.
-	 * ToDo: Delete them upon order complete to free server resources.
 	 *
 	 * @param   array   &$cart           Cart array.
 	 * @param   string  &$product_image  Product image string.
@@ -466,8 +470,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			if (!empty($redDesignData->areasInnerSVG))
 			{
-				$js = '
-					jQuery(document).ready(function () {
+				$js = 'jQuery(document).ready(function () {
 						rootSnapSvgObject' . $i . ' = Snap("#mainSvgImage' . $i . '");
 
 						jQuery.ajax({
@@ -541,8 +544,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		{
 			$document = JFactory::getDocument();
 
-			$js = '
-					function generateRedDesignData() {
+			$js = 'function generateRedDesignData() {
 						var values = {};
 						var inputs = jQuery("#designform :input");
 
@@ -556,6 +558,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 						var areas = rootSnapSvgObject.select("#areaBoxesLayer");
 						values["areasInnerSVG"] = encodeURIComponent(areas.innerSVG());
+
+						values["completeSVG"] = encodeURIComponent(jQuery("#svgContainer").html());
 
 						var jsonString = JSON.stringify(values);
 
@@ -603,8 +607,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			$orderItemProductionFiles = new stdClass;
 			$orderItemProductionFiles->order_item_id = $rowitem->order_item_id;
-			$orderItemProductionFiles->productionPdf = '';
-			$orderItemProductionFiles->productionEps = '';
 			$orderItemProductionFiles->redDesignData = $cart[$i]['redDesignData'];
 
 			if (empty($orderItem))
@@ -630,111 +632,71 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('order_item_id', 'productionPdf', 'productionEps', 'redDesignData')));
+		$query->select($db->quoteName(array('order_item_id', 'redDesignData')));
 		$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
 		$query->where($db->quoteName('order_item_id') . ' = ' . $orderItem->order_item_id);
 		$db->setQuery($query);
 		$orderItemMapping = $db->loadObject();
 
 		$redDesignData = json_decode($orderItemMapping->redDesignData);
+
+		$svg = $redDesignData->completeSVG;
 		$redDesignData = $this->prepareDesignTypeData($redDesignData);
 
 		if (count($orderItemMapping) > 0)
 		{
-			echo '<div id="customDesignData' . $orderItem->order_item_id . '" style="margin: 15px 0 15px 0;">' .
-					'<span><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_DETAILS') . '</strong></span><br/>';
+			$html = '<div id="customDesignData' . $orderItem->order_item_id . '" style="margin: 15px 0 15px 0;">' .
+						'<span><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_DETAILS') . '</strong></span><br/>' .
+						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TYPE') . $redDesignData['designType']->name . '</div>' .
+					'</div>';
 
-			foreach ($redDesignData['designAreas'] as $area)
+			foreach ($redDesignData['designAreasCustomData'] as $customArea)
 			{
-				// Get font name.
-				if (empty($area['fontTypeId']))
+				if (strpos($customArea->colorCode, '#') !== false)
 				{
-					$fontName = 'Arial';
+					$cmyk = '';
+
+					if (!empty($customArea->colorCode))
+					{
+						$cmykCode = $this->rgb2cmyk($this->hex2rgb($customArea->colorCode));
+						$cmyk = 'C: ' . $cmykCode['c'] . ' ' . 'M: ' . $cmykCode['m'] . ' ' . 'Y: ' . $cmykCode['y'] . ' ' . 'K: ' . $cmykCode['k'];
+					}
+
+					$fontColor = '<span style="margin-right:5px; background-color: ' . $customArea->colorCode . ';" >' .
+										'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+								'</span>' .
+								'<span>' . $cmyk . '</span>';
 				}
 				else
 				{
-					$fontModel = RModel::getAdminInstance('Font', array('ignore_request' => true), 'com_reddesign');
-					$fontName = $fontModel->getItem($area['fontTypeId']);
-					$fontName = $fontName->title;
+					$cmyk = '';
+
+					if (!empty($customArea->colorCode))
+					{
+						$cmykCode = $this->rgb2cmyk($this->hex2rgb('#' . $customArea->colorCode));
+						$cmyk = 'C: ' . $cmykCode['c'] . ' ' . 'M: ' . $cmykCode['m'] . ' ' . 'Y: ' . $cmykCode['y'] . ' ' . 'K: ' . $cmykCode['k'];
+					}
+
+					$fontColor  = '<span style="margin-right:5px; background-color:#' . $customArea->colorCode . ';" >' .
+										'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>' .
+									'<span>' . $cmyk . '</span>';
 				}
 
-				// Get text color
-				if (strpos($area['fontColor'], '#') !== false)
-				{
-					$cmykCode = $this->rgb2cmyk($this->hex2rgb($area['fontColor']));
-					$cmyk = 'C: ' . $cmykCode['c'] . ' ' . 'M: ' . $cmykCode['m'] . ' ' . 'Y: ' . $cmykCode['y'] . ' ' . 'K: ' . $cmykCode['k'];
-					$fontColor = '<span style="margin-right:5px; background-color: ' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
-					$fontColor .= '<span>' . $cmyk . '</span>';
-				}
-				else
-				{
-					$cmykCode = $this->rgb2cmyk($this->hex2rgb('#' . $area['fontColor']));
-					$cmyk = 'C: ' . $cmykCode['c'] . ' ' . 'M: ' . $cmykCode['m'] . ' ' . 'Y: ' . $cmykCode['y'] . ' ' . 'K: ' . $cmykCode['k'];
-					$fontColor  = '<span style="margin-right:5px; background-color:#' . $area['fontColor'] . ';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
-					$fontColor .= '<span>' . $cmyk . '</span>';
-				}
-
-				if (empty($area['fontSize']))
-				{
-					$area['fontSize'] = JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AUTO_FONT_SIZE');
-				}
-
-				echo '<br/>' .
-					'<div id="area' . $area['id'] . '">' .
+				$html .= '<br/>' .
+					'<div id="area' . $customArea->id . '">' .
 						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AREA') . '</div>' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT') . $area['textArea'] . '</div>' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_NAME') . $fontName . '</div>' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_SIZE') . $area['fontSize'] . '</div>' .
+						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT') . $customArea->text . '</div>' .
+						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_NAME') . $customArea->fontName . '</div>' .
+						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_SIZE') . $customArea->fontSize . '</div>' .
 						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT_COLOR') . $fontColor . '</div>' .
 					'</div>';
 			}
 
-			echo '</div>';
+			//echo urldecode($svg);
 
-			if (!empty($orderItemMapping->productionPdf))
-			{
-				echo '<div><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_PRODUCTION_FILES') . '</strong></div><br/>';
+			$doc = new DOMDocument();
 
-				$downloadFileName = 'production-file-' . $orderItem->order_id . '-' . $orderItem->order_item_id;
-
-				$productionPdf = JURI::root() . 'media/com_reddesign/backgrounds/orders/pdf/' . $orderItemMapping->productionPdf . '.pdf';
-				echo '<a href="' . $productionPdf . '" download="' . $downloadFileName . '.pdf">' .
-					JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
-					' PDF</a><br/><br/>';
-
-				$productionEps = JURI::root() . 'media/com_reddesign/backgrounds/orders/eps/' . $orderItemMapping->productionEps . '.eps';
-				echo '<a href="' . $productionEps . '" download="' . $downloadFileName . '.eps">' .
-					JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
-					' EPS</a>';
-			}
-			else
-			{
-				$button = '<button type="button" onclick="createProductionFiles(' . $orderItem->order_item_id . ',' . $orderItem->order_id . ')">'
-					. JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CREATE_PRODUCTION_FILES')
-					. '</button>';
-				echo $button;
-
-				echo '<div id="linksContainer' . $orderItem->order_item_id . '" style="margin: 15px 0 15px 0;"></div>';
-
-				$document = JFactory::getDocument();
-				$js = '
-						function createProductionFiles(orderItemId, orderId) {
-									var req = new Request.HTML({
-										method: "get",
-										url: "' . JURI::base() . 'index.php?option=com_reddesign&view=designtype&task=ajaxCustomizeDesign&format=raw",
-										data: { "orderItemId" : orderItemId, "orderId" : orderId },
-										onRequest: function(){
-											$("linksContainer" + orderItemId).set("text", "' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CREATING_PRODUCTION_FILES') . '");
-										},
-										update: $("linksContainer" + orderItemId),
-										onFailure: function(){
-											$("linksContainer" + orderItemId).set("text", "' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CAN_NOT_CREATE_PRODUCTION_FILES') . '");
-										}
-									}).send();
-					}
-				';
-				$document->addScriptDeclaration($js);
-			}
+			echo $html;
 		}
 	}
 
@@ -803,52 +765,76 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	 */
 	public function prepareDesignTypeData($redDesignData)
 	{
-		// Get design type data.
-		$designTypeModel = RModel::getAdminInstance('Designtype', array(), 'com_reddesign');
-		$designType = $designTypeModel->getItem($redDesignData['id']);
-
 		$data = array();
+		$data['designAreasDefintions'] = array();
+		$data['designAreasCustomData'] = array();
+
+		$designTypeModel = RModel::getAdminInstance('Designtype', array(), 'com_reddesign');
+		$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
+		$fontModel = RModel::getAdminInstance('Font', array('ignore_request' => true), 'com_reddesign');
+
+		$designType = $designTypeModel->getItem($redDesignData->designtype_id);
 		$data['designType'] = $designType;
 
-		// Get Background Data
-		$data['designBackground'] = $designTypeModel->getProductionBackground($redDesignData['id']);
+		$data['designBackground'] = $designTypeModel->getProductionBackground($redDesignData->designtype_id);
 
-		// Get designAreas
-		$data['designAreas'] = array();
+		$areasModel->setState('filter.background_id', $data['designBackground']->id);
+		$data['designAreasDefintions'] = $areasModel->getItems();
 
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('reddesign_area_id'));
-		$query->from($db->quoteName('#__reddesign_areas'));
-		$query->where($db->quoteName('background_id') . ' = ' . $redDesignData->production_background_id);
-		$db->setQuery($query);
-		$areaIds = $db->loadColumn();
+		$data['areasInnerSVG'] = $redDesignData->areasInnerSVG;
 
-		foreach ($areaIds as $areaId)
+		foreach ($data['designAreasDefintions'] as $designArea)
 		{
-			$area = array();
-			$area['id'] = $areaId;
+			$area = new JObject;
 
-			$key = 'fontArea' . $areaId;
-			$area['fontTypeId'] = $redDesignData->$key;
+			$area->id = $designArea->id;
 
-			$key = 'colorCode' . $areaId;
-			$area['fontColor'] = $redDesignData->$key;
-
-			$key = 'fontSize' . $areaId;
+			$key = 'textArea_' . $area->id;
 
 			if (!empty($redDesignData->$key))
 			{
-				$area['fontSize'] = $redDesignData->$key;
+				$area->text = $redDesignData->$key;
+			}
+			else
+			{
+				$area->text = '';
 			}
 
-			$key = 'textArea_' . $areaId;
-			$area['textArea'] = $redDesignData->$key;
+			$key = 'fontArea' . $area->id;
 
-			$data['designAreas'][] = $area;
+			if (!empty($redDesignData->$key))
+			{
+				$area->fontName = $fontModel->getItem($redDesignData->$key)->name;
+			}
+			else
+			{
+				$area->fontName = '';
+			}
+
+			$key = 'fontSize' . $area->id;
+
+			if (!empty($redDesignData->$key))
+			{
+				$area->fontSize = $redDesignData->$key;
+			}
+			else
+			{
+				$area->fontSize = '';
+			}
+
+			$key = 'colorCode' . $area->id;
+
+			if (!empty($redDesignData->$key))
+			{
+				$area->colorCode = $redDesignData->$key;
+			}
+			else
+			{
+				$area->colorCode = '';
+			}
+
+			$data['designAreasCustomData'][] = $area;
 		}
-
-		$data['autoSizeData'] = json_decode($redDesignData->autoSizeData);
 
 		return $data;
 	}

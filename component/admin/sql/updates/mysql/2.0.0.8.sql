@@ -1,4 +1,4 @@
-SET foreign_key_checks = 0;
+SET FOREIGN_KEY_CHECKS = 0;
 
 CREATE TABLE IF NOT EXISTS `#__reddesign_cliparts` (
   `id`                      INT(11)       NOT NULL AUTO_INCREMENT,
