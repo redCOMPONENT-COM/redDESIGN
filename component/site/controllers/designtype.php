@@ -143,7 +143,7 @@ class ReddesignControllerDesigntype extends JController
 	/**
 	 * Gets background on given property ID and sends background object via AJAX.
 	 *
-	 *  @return void
+	 * @return void
 	 */
 	public function ajaxGetBackground()
 	{
@@ -180,7 +180,7 @@ class ReddesignControllerDesigntype extends JController
 	/**
 	 * Gets clipart bank
 	 *
-	 *  @return void
+	 * @return void
 	 */
 	public function ajaxLoadClipartBank()
 	{
@@ -227,6 +227,50 @@ class ReddesignControllerDesigntype extends JController
 			),
 			JPATH_ROOT . '/administrator/components/com_reddesign/layouts'
 		);
+
+		$app->close();
+	}
+
+	/**
+	 * Reads uploaded file and outputs file in specific format for selection
+	 *
+	 * @return void
+	 */
+	public function ajaxUploadCustomClipart()
+	{
+		jimport('joomla.filesystem.file');
+		$app = JFactory::getApplication();
+		$config = ReddesignEntityConfig::getInstance();
+		$return         = new stdClass;
+		$success = false;
+
+		$areaId = $app->input->getInt('areaId', 0);
+		$file = $app->input->files->get('uploadClipartFile' . $areaId, array(), 'array');
+		$return->clipartOutput = '';
+
+		if (!empty($file) && isset($file['name']) && !empty($file['type']))
+		{
+			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'cliparts/uploaded', $config->getMaxSVGFileSize(), 'svg');
+
+			if (JFile::exists(JPATH_SITE . '/media/com_reddesign/cliparts/uploaded/' . $uploaded_file['mangled_filename']))
+			{
+				$success = true;
+			}
+		}
+
+		$return->success = $success;
+
+		if ($success)
+		{
+			$return->clipartOutput = RLayoutHelper::render('clipart.upload', array(
+					'areaId' => $areaId,
+					'file' => $uploaded_file,
+				),
+				JPATH_ROOT . '/administrator/components/com_reddesign/layouts'
+			);
+		}
+
+		echo $return->clipartOutput;
 
 		$app->close();
 	}

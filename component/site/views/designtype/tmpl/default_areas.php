@@ -541,42 +541,28 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 				<div id="clipartBank<?php echo $area->id ;?>" class="hide">
 				</div>
 				<div id="clipartUpload<?php echo $area->id ;?>" class="hide">
-					<button id="uploadClipartFile<?php echo $area->id; ?>"
-				        type="button"
-				        class="btn btn-success upload-clipart-file">
-						<span>
-							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_SELECT_FILE'); ?>
-						</span>
-					</button>
 					<div class="upload-clipart-info">
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_INFO'); ?>
 					</div>
 
-
-
-
 					<span class="btn btn-success fileinput-button">
 					    <i class="glyphicon glyphicon-plus"></i>
-					    <span><?php echo JText::_('COM_REDSHOPB_MEDIA_IMAGE_SELECT_FILE'); ?></span>
-					    <input id="<?php echo $field->id; ?>" type="file" name="<?php echo $field->name; ?>[]">
+					    <span><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_SELECT_FILE'); ?></span>
+					    <input accept="image/svg" id="uploadClipartFile<?php echo $area->id; ?>" type="file" name="uploadClipartFile<?php echo $area->id; ?>" />
 					</span>
+					<button class="btn btn-success upload-clipart-file" type="button" id="uploadClipartFileSave<?php echo $area->id; ?>">
+						<i class="icon-upload"></i> <?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD'); ?>
+					</button>
 					<br />
 					<br />
 					<div class="progress progress-striped image-progress">
 						<div class="bar bar-success" style="width: 0%"></div>
 					</div>
 
-					<div id="files" class="files"></div>
+					<div id="uploadedClipart<?php echo $area->id; ?>" class="files">
 
-
-
-
-
-					<div class="progressbar-holder" style="margin-top:20px;">
-						<div class="progress progress-striped" style="display:none;">
-							<div class="bar bar-success"></div>
-						</div>
 					</div>
+
 				</div>
 				<div class="clearfix"></div>
 			{RedDesignBreakDesignAreaChooseClipart}

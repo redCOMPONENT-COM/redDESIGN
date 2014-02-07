@@ -154,6 +154,7 @@ $productId = $input->getInt('pid', 0);
 	 * Add click event to Customize button.
 	 */
 	jQuery(document).ready(function () {
+			addUploadButtonCall();
 			rootSnapSvgObject = Snap("#mainSvgImage");
 
 			<?php if (!empty($this->displayedBackground->svg_file)) : ?>
@@ -259,6 +260,11 @@ $productId = $input->getInt('pid', 0);
 			jQuery(document).on("click", ".reddesign-form .upload-clipart-button", function() {
 				var id = jQuery(this).attr('id').replace('clipartUploadButton', '');
 				showClipartUpload(id);
+			});
+
+			jQuery(document).on("click", ".reddesign-form .upload-clipart-file", function() {
+				var id = jQuery(this).attr('id').replace('uploadClipartFileSave', '');
+				uploadCustomClipart(id);
 			});
 
 			jQuery(document).on("click", ".reddesign-form .featured-cliparts", function() {
@@ -721,7 +727,7 @@ $productId = $input->getInt('pid', 0);
 							.on('slide', function(ev){
 								var id = jQuery(this).attr('id').replace('fontSizeSlider', '');
 								jQuery('#fontSize' + id).val(ev.value);
-								changeSVGElement(id);console.log(id);
+								changeSVGElement(id);
 							});
 					}
 				});
@@ -847,7 +853,7 @@ $productId = $input->getInt('pid', 0);
 
 	function loadClipartBank(areaId, active, filterApplied)
 	{
-		if (!filterApplied && jQuery("#clipartBank" + areaId).html().trim() != '')
+		if ((!filterApplied && jQuery("#clipartBank" + areaId).html().trim() != '') || active == 'featuredCliparts')
 		{
 			toggleClipartContainers(active, areaId);
 		}
@@ -885,7 +891,73 @@ $productId = $input->getInt('pid', 0);
 				}
 			});
 		}
+	}
 
+	function uploadCustomClipart(areaId) {
+		var dataVar = {
+			'areaId' : areaId
+		};
+		var url = '<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxUploadCustomClipart';
+
+		var jQuerythis = jQuery('#uploadClipartFile' + areaId),
+			buttonData = jQuerythis.data();
+
+		jQuery('#clipartUpload' + areaId + ' .image-progress .bar').css('width','0%');
+
+		if (jQuery.isEmptyObject(buttonData) == false) {
+			jQuery('#clipartUpload' + areaId + ' .fileinput-button input').fileupload({
+				url: url,
+				dataType: 'text',
+				autoUpload: false,
+				cache: false,
+				formData: dataVar,
+				acceptFileTypes: /(\.|\/)(svg)$/i
+			}).on('fileuploadprogressall', function (e, data) {
+				jQuery(jQuerythis).prop('disabled', true);
+				var progress = parseInt(data.loaded / data.total * 100, 10);
+				jQuery('#clipartUpload' + areaId + ' .image-progress .bar').css(
+					'width',
+					progress + '%'
+				);
+			}).on('fileuploaddone', function (e, data) {
+				if (data.result)
+				{
+					jQuery('#uploadedClipart' + areaId).html(data.result);
+				}
+				jQuery(jQuerythis).prop('disabled', false);
+			}).on('fileuploadfail', function (e, data) {
+				jQuery.each(data.files, function (index, file) {
+					var error = jQuery('<span class="text-danger"/>');
+					jQuery(data.context.children()[index])
+						.append('<br>')
+						.append(error);
+				});
+			}).prop('disabled', !jQuery.support.fileInput)
+				.parent().addClass(jQuery.support.fileInput ? undefined : 'disabled');
+
+			buttonData.submit();
+		}
+		else
+		{
+			alert('<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_ERROR_SELECT_FILE', true); ?>');
+		}
+	}
+
+	function addUploadButtonCall()
+	{
+		jQuery('.fileinput-button input').fileupload({
+			autoUpload: false,
+			acceptFileTypes: /(\.|\/)(svg)$/i
+		}).on('fileuploadadd', function (e, data) {
+			var id = (jQuery(this).attr('id').replace('uploadClipartFile', ''));
+			data.context = jQuery('<div/>').appendTo('#uploadedClipart' + id);
+			jQuery.each(data.files, function (index, file) {
+				var node = jQuery('<p/>')
+					.append(jQuery('<span/>').text(file.name));
+				jQuery('#uploadClipartFile' + id).data(data);
+				node.appendTo(data.context);
+			});
+		});
 	}
 </script>
 {RedDesignBreakFormEndsAndJS}
