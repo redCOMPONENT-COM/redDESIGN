@@ -252,8 +252,18 @@ $productId = $input->getInt('pid', 0);
 			});
 
 			jQuery(document).on("click", ".reddesign-form .load-clipart-bank", function() {
-				var id = jQuery(this).attr('id').replace('loadClipartBank', '');
-				loadClipartBank(id, false);
+				var id = jQuery(this).attr('id').replace('clipartBankButton', '');
+				loadClipartBank(id, 'clipartBank', false);
+			});
+
+			jQuery(document).on("click", ".reddesign-form .upload-clipart-button", function() {
+				var id = jQuery(this).attr('id').replace('clipartUploadButton', '');
+				showClipartUpload(id);
+			});
+
+			jQuery(document).on("click", ".reddesign-form .featured-cliparts", function() {
+				var id = jQuery(this).attr('id').replace('featuredClipartsButton', '');
+				loadClipartBank(id, 'featuredCliparts', false);
 			});
 
 			jQuery(document).on("mousedown", ".reddesign-form .thumbnailSVG-pointer", function() {
@@ -814,12 +824,32 @@ $productId = $input->getInt('pid', 0);
 		}
 	}
 
-	function loadClipartBank(areaId, filterApplied)
+	function showClipartUpload(areaId)
+	{
+		toggleClipartContainers('clipartUpload', areaId);
+
+	}
+
+	function toggleClipartContainers(active, areaId)
+	{
+		jQuery("#featuredCliparts" + areaId).slideUp("slow");
+		jQuery("#clipartBank" + areaId).slideUp("slow");
+		jQuery("#clipartUpload" + areaId).slideUp("slow");
+
+		jQuery("#" + active + areaId).slideDown("slow");
+
+		jQuery("#featuredClipartsButton" + areaId).removeClass('btn-success');
+		jQuery("#clipartBankButton" + areaId).removeClass('btn-success');
+		jQuery("#clipartUploadButton" + areaId).removeClass('btn-success');
+
+		jQuery("#" + active + "Button" + areaId).addClass('btn-success');
+	}
+
+	function loadClipartBank(areaId, active, filterApplied)
 	{
 		if (!filterApplied && jQuery("#clipartBank" + areaId).html().trim() != '')
 		{
-			jQuery("#featuredCliparts" + areaId).toggle("slow");
-			jQuery("#clipartBank" + areaId).toggle("slow");
+			toggleClipartContainers(active, areaId);
 		}
 		else
 		{
@@ -836,9 +866,8 @@ $productId = $input->getInt('pid', 0);
 				dataType: 'text',
 				success: function (data)
 				{
-					jQuery("#featuredCliparts" + areaId).slideUp("slow");
-
-					jQuery("#clipartBank" + areaId).show().html(data);
+					toggleClipartContainers('clipartBank', areaId);
+					jQuery("#clipartBank" + areaId).html(data);
 					jQuery("#clipartBank" + areaId + " .flexslider2").removeClass("flexslider2").addClass("flexslider");
 					jQuery("#clipartBank" + areaId + " .flexslider").flexslider({
 						'slideshow': false,

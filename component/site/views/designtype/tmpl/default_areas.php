@@ -25,6 +25,21 @@ JHtml::_('rjquery.flexslider', '.flexslider', array(
 	'animationLoop' => false)
 );
 
+RHelperAsset::load('lib/jquery-fileupload/jquery.fileupload.css', 'com_reddesign');
+
+// The jQuery UI widget factory, can be omitted if jQuery UI is already included
+RHelperAsset::load('lib/jquery-fileupload/vendor/jquery.ui.widget.js', 'com_reddesign');
+
+// The Iframe Transport is required for browsers without support for XHR file uploads
+RHelperAsset::load('lib/jquery-fileupload/jquery.iframe-transport.js', 'com_reddesign');
+
+// The basic File Upload plugin
+RHelperAsset::load('lib/jquery-fileupload/jquery.fileupload.js', 'com_reddesign');
+
+// The File Upload processing plugin
+RHelperAsset::load('lib/jquery-fileupload/jquery.fileupload-process.js', 'com_reddesign');
+
+
 if (isset($displayData))
 {
 	$this->designType = $displayData->designType;
@@ -467,11 +482,25 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 			{RedDesignBreakDesignAreaChooseClipartLabel}
 
 			{RedDesignBreakDesignAreaChooseClipart}
-				<button id="loadClipartBank<?php echo $area->id; ?>"
+				<button id="featuredClipartsButton<?php echo $area->id; ?>"
 				        type="button"
-				        class="btn btn-success load-clipart-bank">
+				        class="btn btn-success featured-cliparts">
+						<span>
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_FEATURED'); ?>
+						</span>
+				</button>
+				<button id="clipartBankButton<?php echo $area->id; ?>"
+				        type="button"
+				        class="btn load-clipart-bank">
 					<span>
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_BANK'); ?>
+					</span>
+				</button>
+				<button id="clipartUploadButton<?php echo $area->id; ?>"
+	                 type="button"
+	                 class="btn upload-clipart-button">
+					<span>
+						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD'); ?>
 					</span>
 				</button>
 				<div class="flexslider" id="featuredCliparts<?php echo $area->id ;?>">
@@ -510,6 +539,44 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 					</ul>
 				</div>
 				<div id="clipartBank<?php echo $area->id ;?>" class="hide">
+				</div>
+				<div id="clipartUpload<?php echo $area->id ;?>" class="hide">
+					<button id="uploadClipartFile<?php echo $area->id; ?>"
+				        type="button"
+				        class="btn btn-success upload-clipart-file">
+						<span>
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_SELECT_FILE'); ?>
+						</span>
+					</button>
+					<div class="upload-clipart-info">
+						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_INFO'); ?>
+					</div>
+
+
+
+
+					<span class="btn btn-success fileinput-button">
+					    <i class="glyphicon glyphicon-plus"></i>
+					    <span><?php echo JText::_('COM_REDSHOPB_MEDIA_IMAGE_SELECT_FILE'); ?></span>
+					    <input id="<?php echo $field->id; ?>" type="file" name="<?php echo $field->name; ?>[]">
+					</span>
+					<br />
+					<br />
+					<div class="progress progress-striped image-progress">
+						<div class="bar bar-success" style="width: 0%"></div>
+					</div>
+
+					<div id="files" class="files"></div>
+
+
+
+
+
+					<div class="progressbar-holder" style="margin-top:20px;">
+						<div class="progress progress-striped" style="display:none;">
+							<div class="bar bar-success"></div>
+						</div>
+					</div>
 				</div>
 				<div class="clearfix"></div>
 			{RedDesignBreakDesignAreaChooseClipart}
