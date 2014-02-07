@@ -42,6 +42,16 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		// Register library prefix.
 		JLoader::registerPrefix('Reddesign', JPATH_LIBRARIES . '/reddesign');
+
+		JLoader::import('redcore.bootstrap');
+
+		JFactory::getApplication()->input->set('redcore', true);
+
+		// Load bootstrap + fontawesome
+		JHtml::_('rbootstrap.framework');
+
+		RHelperAsset::load('component.js', 'redcore');
+		RHelperAsset::load('component.min.css', 'redcore');
 	}
 
 	/**
@@ -60,15 +70,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		if ($product->product_type == 'redDESIGN' && $view == 'product')
 		{
-			JLoader::import('redcore.bootstrap');
-
 			RForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_reddesign/models/forms');
 			RForm::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_reddesign/models/fields');
-
-			JFactory::getApplication()->input->set('redcore', true);
-
-			// Load bootstrap + fontawesome
-			JHtml::_('rbootstrap.framework');
 
 			// Load CSS file
 			RHelperAsset::load('site.css', 'com_reddesign');
@@ -467,8 +470,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			if (!empty($redDesignData->areasInnerSVG))
 			{
-				$js = '
-					jQuery(document).ready(function () {
+				$js = 'jQuery(document).ready(function () {
 						rootSnapSvgObject' . $i . ' = Snap("#mainSvgImage' . $i . '");
 
 						jQuery.ajax({
@@ -542,8 +544,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		{
 			$document = JFactory::getDocument();
 
-			$js = '
-					function generateRedDesignData() {
+			$js = 'function generateRedDesignData() {
 						var values = {};
 						var inputs = jQuery("#designform :input");
 
@@ -557,6 +558,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 						var areas = rootSnapSvgObject.select("#areaBoxesLayer");
 						values["areasInnerSVG"] = encodeURIComponent(areas.innerSVG());
+
+						values["completeSVG"] = encodeURIComponent(jQuery("#svgContainer").html());
 
 						var jsonString = JSON.stringify(values);
 
@@ -636,6 +639,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$orderItemMapping = $db->loadObject();
 
 		$redDesignData = json_decode($orderItemMapping->redDesignData);
+
+		$svg = $redDesignData->completeSVG;
 		$redDesignData = $this->prepareDesignTypeData($redDesignData);
 
 		if (count($orderItemMapping) > 0)
@@ -686,6 +691,10 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT_COLOR') . $fontColor . '</div>' .
 					'</div>';
 			}
+
+			//echo urldecode($svg);
+
+			$doc = new DOMDocument();
 
 			echo $html;
 		}
@@ -771,6 +780,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		$areasModel->setState('filter.background_id', $data['designBackground']->id);
 		$data['designAreasDefintions'] = $areasModel->getItems();
+
+		$data['areasInnerSVG'] = $redDesignData->areasInnerSVG;
 
 		foreach ($data['designAreasDefintions'] as $designArea)
 		{
