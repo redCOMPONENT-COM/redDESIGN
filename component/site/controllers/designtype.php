@@ -39,7 +39,7 @@ class ReddesignControllerDesigntype extends JController
 		$displayData->designType = $designTypeModel->getItem($displayedBackground->designtype_id);
 		$displayData->displayedProductionBackground = $designTypeModel->getProductionBackground($displayedBackground->designtype_id);
 
-		$areasModel->setState('filter.background_id', $displayData->displayedProductionBackground->id);
+		$areasModel->setState('filter.background_id', $displayedBackground->id);
 		$displayData->displayedAreas = $areasModel->getItems();
 
 		$displayData->fonts = $fontsModel->getItems();
@@ -49,13 +49,16 @@ class ReddesignControllerDesigntype extends JController
 		if (JFile::exists(JPATH_ROOT . '/templates/' . $app->getTemplate() . '/html/com_reddesign/designtype/areas_tmpl.php'))
 		{
 			$path = JPATH_ROOT . '/templates/' . $app->getTemplate() . '/html/com_reddesign/designtype/areas_tmpl.php';
-			$layoutFile = file_get_contents($path, null, null, 256);
 		}
 		else
 		{
 			$path = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl/areas_tmpl.php';
-			$layoutFile = file_get_contents($path, null, null, 256);
 		}
+
+		ob_start();
+		include $path;
+		$layoutFile = ob_get_contents();
+		ob_end_clean();
 
 		$areasOutput = '';
 
@@ -79,57 +82,17 @@ class ReddesignControllerDesigntype extends JController
 
 				// Get area specific content.
 				$areaHtml = explode('{RedDesignBreakDesignArea' . $area->id . '}', $htmlAreas);
-				$areaHtml = $areaHtml[1];
 
-				// Get specific area title.
-				$htmlElement = explode('{RedDesignBreakDesignAreaTitle}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:AreaTitle}", $htmlElement, $areasLoopTemplateInstance);
+				if (!empty($areaHtml[1]))
+				{
+					$areaHtml = $areaHtml[1];
+				}
+				else
+				{
+					$areaHtml = '';
+				}
 
-				// Get input text label.
-				$htmlElement = explode('{RedDesignBreakDesignAreaInputTextLabel}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:InputTextLabel}", $htmlElement, $areasLoopTemplateInstance);
-
-				// Get input text.
-				$htmlElement = explode('{RedDesignBreakDesignAreaInputText}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:InputText}", $htmlElement, $areasLoopTemplateInstance);
-
-				// Get choose font label.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontLabel}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontLabel}", $htmlElement, $areasLoopTemplateInstance);
-
-				// Get choose font input.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseFont}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFont}", $htmlElement, $areasLoopTemplateInstance);
-
-				// Get choose font size label.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontSizeLabel}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontSizeLabel}", $htmlElement, $areasLoopTemplateInstance);
-
-				// Get choose font size input.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseFontSize}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontSize}", $htmlElement, $areasLoopTemplateInstance);
-
-				// Get choose color label.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseColorLabel}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColorLabel}", $htmlElement, $areasLoopTemplateInstance);
-
-				// Get choose color label.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseColor}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColor}", $htmlElement, $areasLoopTemplateInstance);
-
-				// Get choose color label.
-				$htmlElement = explode('{RedDesignBreakDesignAreaChooseColor}', $areaHtml);
-				$htmlElement = $htmlElement[1];
-				$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColor}", $htmlElement, $areasLoopTemplateInstance);
+				$areasLoopTemplateInstance = ReddesignHelpersArea::parseAreaTemplateTags($areaHtml, $areasLoopTemplateInstance);
 
 				$areasOutput .= $areasLoopTemplateInstance;
 			}
@@ -192,21 +155,18 @@ class ReddesignControllerDesigntype extends JController
 		/** @var ReddesignModelCliparts $clipartsModel */
 		$clipartsModel = RModel::getAdminInstance('Cliparts', array('ignore_request' => true), 'com_reddesign');
 
-		if ($categoryId > 0)
-		{
-			$clipartsModel->setState('filter.categoryId', $categoryId);
-		}
-		else
+		if ($categoryId == 0)
 		{
 			$items = $clipartsModel->getItems();
 
-			if (!empty($items) && count($items) > 0)
+			if (!empty($items[0]))
 			{
 				$categoryId = $items[0]->categoryId;
-				$clipartsModel->setState('filter.categoryId', $categoryId);
+				$clipartsModel = RModel::getAdminInstance('Cliparts', array('ignore_request' => true), 'com_reddesign');
 			}
 		}
 
+		$clipartsModel->setState('filter.categoryId', $categoryId);
 		$clipartsModel->setState('filter.search_cliparts', $search);
 
 		$formName = 'clipartBankForm';

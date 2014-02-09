@@ -75,16 +75,10 @@ $productId = $input->getInt('pid', 0);
 
 		<div id="svgContainer">
 			<svg id="mainSvgImage"></svg>
-			<div class="progressbar-holder" style="width: <?php echo $displayData->displayedBackground->width; ?>px; margin-top:20px;">
+			<div class="progressbar-holder" style="width: <?php echo $previewWidth; ?>px; margin-top:20px;">
 				<div class="progress progress-striped" style="display:none;">
 					<div class="bar bar-success"></div>
 				</div>
-			</div>
-		</div>
-
-		<div id="progressBar" style="display: none;">
-			<div class="progress progress-striped active">
-				<div class="bar" style="width: 100%;"></div>
 			</div>
 		</div>
 
@@ -184,7 +178,7 @@ $productId = $input->getInt('pid', 0);
 							);
 						}
 						else{
-							jQuery('#svgContainer .progressbar-holder').fadeOut(3000);
+							jQuery('#svgContainer .progress').fadeOut(3000);
 						}
 
 						jQuery("#mainSvgImage")
@@ -389,7 +383,6 @@ $productId = $input->getInt('pid', 0);
 		var verticalAlign = jQuery('#verticalAlign' + areaId);
 		var selectedClipart = jQuery('[name="selectedClipart' + areaId + '"]:checked');
 		var svgElement = rootSnapSvgObject.select("#areaBoxesLayer #areaSVGElement_" + areaId);
-
 		if (svgElement)
 		{
 			var horizontalPosition = '';
@@ -529,11 +522,11 @@ $productId = $input->getInt('pid', 0);
 				}
 			}
 
-			if (jQuery(text).is("textarea"))
+			if (jQuery(text).is("textarea") && typeof(jQuery(text).val()) != "undefined")
 			{
 				createSVGTextMultiline(svgElement, jQuery(text).val())
 			}
-			else
+			else if (typeof(jQuery(text).val()) != "undefined")
 			{
 				svgElement.node.textContent = jQuery(text).val();
 			}
@@ -559,12 +552,7 @@ $productId = $input->getInt('pid', 0);
 	 *
 	 */
 	function customize() {
-		// Add the progress bar
-		var halfBackgroundHeight =  ((jQuery("#background").height() / 2)-10);
 		jQuery("#background-container").height(jQuery("#background").height());
-		jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px").css("padding-bottom", halfBackgroundHeight + "px").show();
-
-		var background_id = jQuery("#background_id").val();
 
 		<?php foreach($this->displayedAreas as $area) :
 			$areaType = ReddesignHelpersArea::getAreaType($area->areaType);
@@ -638,8 +626,6 @@ $productId = $input->getInt('pid', 0);
 		jQuery("#mainSvgImage").empty();
 		jQuery("#areasContainer").empty();
 
-		var areas;
-
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxLoadDesigntype",
 			data: {'propertyId': propertyId},
@@ -647,12 +633,20 @@ $productId = $input->getInt('pid', 0);
 			success: function (data)
 			{
 				jQuery("#areasContainer").html(data);
+				loadBackgroundSVGandAreas(propertyId);
 			},
 			error: function (data)
 			{
 				console.log("Error: " + data);
 			}
 		});
+	}
+
+	function loadBackgroundSVGandAreas(propertyId)
+	{
+		var areas;
+		jQuery('#svgContainer .progress').show().addClass('active');
+		jQuery('#svgContainer .progress .bar-success').css('width', '0%');
 
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxGetBackground",
@@ -688,10 +682,6 @@ $productId = $input->getInt('pid', 0);
 							}
 						}
 					},
-					beforeSend: function (xhr) {
-						jQuery('#svgContainer .progress').show().addClass('active');
-						jQuery('#svgContainer .progress .bar-success').css('width', '0%');
-					},
 					success: function (response) {
 						jQuery('#svgContainer .progress').removeClass('active');
 						if(typeof response === 'undefined' || response == false){
@@ -700,7 +690,7 @@ $productId = $input->getInt('pid', 0);
 							);
 						}
 						else{
-							jQuery('#svgContainer .progressbar-holder').fadeOut(3000);
+							jQuery('#svgContainer .progress').fadeOut(3000);
 						}
 
 						jQuery("#mainSvgImage")
@@ -723,12 +713,15 @@ $productId = $input->getInt('pid', 0);
 
 						customizeJS(areas);
 
-						jQuery('.fontSizeSlider').slider()
-							.on('slide', function(ev){
-								var id = jQuery(this).attr('id').replace('fontSizeSlider', '');
-								jQuery('#fontSize' + id).val(ev.value);
-								changeSVGElement(id);
-							});
+						if (jQuery('.fontSizeSlider').length > 0)
+						{
+							jQuery('.fontSizeSlider').slider()
+								.on('slide', function(ev){
+									var id = jQuery(this).attr('id').replace('fontSizeSlider', '');
+									jQuery('#fontSize' + id).val(ev.value);
+									changeSVGElement(id);
+								});
+						}
 					}
 				});
 			},
@@ -752,8 +745,6 @@ $productId = $input->getInt('pid', 0);
 		var sentences = title.split("\n");
 		svgTextElement.node.textContent = '';
 
-		var lines = '';
-
 		for (var n = 0; n < sentences.length; n++)
 		{
 			var svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
@@ -770,22 +761,10 @@ $productId = $input->getInt('pid', 0);
 
 	function customizeJS(areas)
 	{
-		// Add the progress bar
-		var halfBackgroundHeight =  ((jQuery("#background").height() / 2)-10);
 		jQuery("#background-container").height(jQuery("#background").height());
-		jQuery("#progressBar").css("padding-top", halfBackgroundHeight + "px").css("padding-bottom", halfBackgroundHeight + "px").show();
-
-		var background_id = jQuery("#background_id").val();
 
 		for (var i=0; i<areas.length; i++)
 		{
-			var fontColor = "000000";
-
-			if (jQuery("#colorCode" + areas[i].id).length > 0)
-			{
-				fontColor = jQuery("#colorCode" + areas[i].id).val().replace("#", "");
-			}
-
 			var x1 = parseFloat(areas[i].x1_pos) * scalingImageForPreviewRatio;
 			var y1 = parseFloat(areas[i].y1_pos) * scalingImageForPreviewRatio;
 			var x2 = parseFloat(areas[i].x2_pos) * scalingImageForPreviewRatio;
@@ -801,30 +780,29 @@ $productId = $input->getInt('pid', 0);
 			areasContainer[areas[i].id]['width'] = width;
 			areasContainer[areas[i].id]['height'] = height;
 
-			var fontSizeValue = 12;
-			if (jQuery("#fontSize" + areas[i].id).length > 0)
+			if (areas[i].areaType == '1') // text
 			{
-				var fontSize = jQuery("#fontSize" + areas[i].id).val().split(":");
-
-				if (fontSize.length > 1)
-				{
-					fontSizeValue = fontSize[1];
-				}
-				else
-				{
-					fontSizeValue = fontSize[0];
-				}
+				var svgElement = Snap.parse(
+					'<text id="areaSVGElement_'
+						+ areas[i].id + '" '
+						+ ' x="' + x1 + '"'
+						+ ' y="' + y1 + '"'
+						+ '></text>'
+				);
 			}
-
-			var textElement = Snap.parse(
-				'<text id="areaSVGElement_' +
-					areas[i].id + '" ' +
-					' x="' + x1 + '"' +
-					' y="' + y1 + '"' +
-					'></text>'
-			);
-
-			rootSnapSvgObject.select("#areaBoxesLayer").append(textElement);
+			else if (areas[i].areaType == '2') //clipart
+			{
+				var svgElement = Snap.parse(
+					'<svg id="areaSVGElement_'
+						+ areas[i].id + '" '
+						+ ' x="' + x1 + '"'
+						+ ' y="' + y1 + '"'
+						+ ' width="' + width + '"'
+						+ ' height="' + height + '"'
+						+ '></svg>'
+				);
+			}
+			rootSnapSvgObject.select("#areaBoxesLayer").append(svgElement);
 
 			changeSVGElement(areas[i].id);
 		}
@@ -879,6 +857,8 @@ $productId = $input->getInt('pid', 0);
 						'slideshow': false,
 						'directionNav': true,
 						'minItems': 4,
+						'itemWidth': 95,
+						'maxItems': 4,
 						'prevText': '',
 						'nextText': '',
 						'animation': 'slide',

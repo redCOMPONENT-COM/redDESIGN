@@ -593,7 +593,6 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 				type: "post",
 				error: function (data) {
 					console.log('function addColorToList() Error');
-					console.log(data);
 				}
 			});
 		}
@@ -812,7 +811,6 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 			type: "post",
 			error: function (data) {
 				console.log('removeColorFromList() Error');
-				console.log(data);
 			}
 		});
 

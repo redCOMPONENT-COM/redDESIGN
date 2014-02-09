@@ -19,6 +19,8 @@ JHtml::_('rjquery.flexslider', '.flexslider', array(
 	'slideshow' => false,
 	'directionNav' => true,
 	'minItems' => 4,
+	'maxItems' => 4,
+	'itemWidth' => 95,
 	'prevText' => '',
 	'nextText' => '',
 	'animation' => 'slide',
@@ -538,9 +540,9 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 						endforeach; ?>
 					</ul>
 				</div>
-				<div id="clipartBank<?php echo $area->id ;?>" class="hide">
+				<div id="clipartBank<?php echo $area->id ;?>" style="display:none;">
 				</div>
-				<div id="clipartUpload<?php echo $area->id ;?>" class="hide">
+				<div id="clipartUpload<?php echo $area->id ;?>" style="display:none;">
 					<div class="upload-clipart-info">
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_INFO'); ?>
 					</div>

@@ -148,7 +148,6 @@ $this->unit = $displayData->unit;
 			},
 			error: function (data) {
 				console.log('function removeArea() Error');
-				console.log(data);
 			}
 		});
 	}
@@ -257,7 +256,6 @@ $this->unit = $displayData->unit;
 			},
 			error: function (data) {
 				console.log('function saveAreaSettings() Error');
-				console.log(data);
 			}
 		});
 	}
@@ -291,7 +289,6 @@ $this->unit = $displayData->unit;
 			},
 			error: function (data) {
 				console.log('function saveAreaClipartSettings() Error');
-				console.log(data);
 			}
 		});
 	}

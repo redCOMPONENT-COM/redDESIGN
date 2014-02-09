@@ -33,6 +33,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 	{
 		parent::__construct($subject, $config);
 
+		$this->loadLanguage('com_reddesign', JPATH_SITE);
 		$this->loadLanguage();
 
 		// Register component prefix
@@ -94,14 +95,14 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 				$html .= '<label for="designType">' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_RELATED_DESIGN_TYPES') . '</label>';
 				$html .= '<div style="padding-top: 7px" >';
 					$html .= JHtml::_(
-										'select.genericlist',
-										$designTypeOptions,
-										'relatedDesignTypes[]',
-										' multiple class="inputbox" size="9" ',
-										'value',
-										'text',
-										explode(',', $productDesignTypesMapping->related_designtype_ids)
-									);
+						'select.genericlist',
+						$designTypeOptions,
+						'relatedDesignTypes[]',
+						' multiple class="inputbox" size="9" ',
+						'value',
+						'text',
+						explode(',', $productDesignTypesMapping->related_designtype_ids)
+					);
 				$html .= '*</div>';
 			$html .= '</div>';
 

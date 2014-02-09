@@ -35,6 +35,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		$this->plugin = JPluginHelper::getPlugin('redshop_product', 'reddesign');
 
+		$this->loadLanguage('com_reddesign', JPATH_SITE);
 		$this->loadLanguage();
 
 		// Register component prefix
@@ -47,11 +48,20 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		JFactory::getApplication()->input->set('redcore', true);
 
-		// Load bootstrap + fontawesome
-		JHtml::_('rbootstrap.framework');
+		if ($this->params->get('loadBootstrapRedcore', 1) == 1)
+		{
+			// Load bootstrap + fontawesome
+			JHtml::_('rbootstrap.framework');
 
-		RHelperAsset::load('component.js', 'redcore');
-		RHelperAsset::load('component.min.css', 'redcore');
+			RHelperAsset::load('component.js', 'redcore');
+			RHelperAsset::load('component.min.css', 'redcore');
+		}
+
+		// Load the language files
+		$jlang = JFactory::getLanguage();
+		$jlang->load('plg_koparent_paymentgateway_paypal', JPATH_ADMINISTRATOR, 'en-GB', true);
+		$jlang->load('plg_koparent_paymentgateway_paypal', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		$jlang->load('plg_koparent_paymentgateway_paypal', JPATH_ADMINISTRATOR, null, true);
 	}
 
 	/**
@@ -75,8 +85,6 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			// Load CSS file
 			RHelperAsset::load('site.css', 'com_reddesign');
-			RHelperAsset::load('component.js', 'redcore');
-			RHelperAsset::load('component.min.css', 'redcore');
 		}
 	}
 
@@ -217,57 +225,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					// Get area specific content.
 					$areaHtml = $this->setContentOnTemplateTag('{RedDesignBreakDesignArea' . $area->id . '}', $htmlAreas);
 
-					// Get specific area title.
-					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaTitle}', $areaHtml);
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:AreaTitle}", $htmlElement, $areasLoopTemplateInstance);
-
-					// Get input text label.
-					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaInputTextLabel}', $areaHtml);
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:InputTextLabel}", $htmlElement, $areasLoopTemplateInstance);
-
-					// Get input text.
-					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaInputText}', $areaHtml);
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:InputText}", $htmlElement, $areasLoopTemplateInstance);
-
-					// Get choose font label.
-					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseFontLabel}', $areaHtml);
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontLabel}", $htmlElement, $areasLoopTemplateInstance);
-
-					// Get choose font input.
-					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseFont}', $areaHtml);
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFont}", $htmlElement, $areasLoopTemplateInstance);
-
-					// Get choose font size label.
-					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseFontSizeLabel}', $areaHtml);
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontSizeLabel}", $htmlElement, $areasLoopTemplateInstance);
-
-					// Get choose font size input.
-					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseFontSize}', $areaHtml);
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseFontSize}", $htmlElement, $areasLoopTemplateInstance);
-
-					// Get choose color label.
-					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseColorLabel}', $areaHtml);
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColorLabel}", $htmlElement, $areasLoopTemplateInstance);
-
-					// Get choose color.
-					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseColor}', $areaHtml);
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseColor}", $htmlElement, $areasLoopTemplateInstance);
-
-					// Get choose horizontal align.
-					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseHorizontalAlign}', $areaHtml);
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseHorizontalAlignment}", $htmlElement, $areasLoopTemplateInstance);
-
-					// Get choose vertical align.
-					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseVerticalAlign}', $areaHtml);
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseVerticalAlignment}", $htmlElement, $areasLoopTemplateInstance);
-
-					// Get clipart label
-					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseClipartLabel}', $areaHtml);
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseClipartLabel}", $htmlElement, $areasLoopTemplateInstance);
-
-					// Get clipart label
-					$htmlElement = $this->setContentOnTemplateTag('{RedDesignBreakDesignAreaChooseClipart}', $areaHtml);
-					$areasLoopTemplateInstance = str_replace("{redDESIGN:ChooseClipart}", $htmlElement, $areasLoopTemplateInstance);
+					$areasLoopTemplateInstance = ReddesignHelpersArea::parseAreaTemplateTags($areaHtml, $areasLoopTemplateInstance);
 
 					$areasFinshedOutput .= $areasLoopTemplateInstance;
 				}
