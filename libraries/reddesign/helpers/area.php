@@ -167,4 +167,66 @@ final class ReddesignHelpersArea
 
 		return $db->loadObjectList();
 	}
+
+	/**
+	 * Area tag list
+	 *
+	 * @param   array  $areaTemplateTags  List of template tags that will be merged with default one
+	 *
+	 * @return object
+	 */
+	public static function getAreaTemplateTags($areaTemplateTags = array())
+	{
+		$templateTags = array(
+			'{RedDesignBreakDesignAreaTitle}' => '{redDESIGN:AreaTitle}',
+			'{RedDesignBreakDesignAreaInputTextLabel}' => '{redDESIGN:InputTextLabel}',
+			'{RedDesignBreakDesignAreaInputText}' => '{redDESIGN:InputText}',
+			'{RedDesignBreakDesignAreaChooseFontLabel}' => '{redDESIGN:ChooseFontLabel}',
+			'{RedDesignBreakDesignAreaChooseFont}' => '{redDESIGN:ChooseFont}',
+			'{RedDesignBreakDesignAreaChooseFontSizeLabel}' => '{redDESIGN:ChooseFontSizeLabel}',
+			'{RedDesignBreakDesignAreaChooseFontSize}' => '{redDESIGN:ChooseFontSize}',
+			'{RedDesignBreakDesignAreaChooseColorLabel}' => '{redDESIGN:ChooseColorLabel}',
+			'{RedDesignBreakDesignAreaChooseColor}' => '{redDESIGN:ChooseColor}',
+			'{RedDesignBreakDesignAreaChooseHorizontalAlign}' => '{redDESIGN:ChooseHorizontalAlignment}',
+			'{RedDesignBreakDesignAreaChooseVerticalAlign}' => '{redDESIGN:ChooseVerticalAlignment}',
+			'{RedDesignBreakDesignAreaChooseClipartLabel}' => '{redDESIGN:ChooseClipartLabel}',
+			'{RedDesignBreakDesignAreaChooseClipart}' => '{redDESIGN:ChooseClipart}',
+		);
+
+		$templateTags = array_merge($templateTags, $areaTemplateTags);
+
+		return $templateTags;
+	}
+
+	/**
+	 * Parse Area HTML with Redshop Template tags
+	 *
+	 * @param   string  $areaHtml                   Area default HTML output
+	 * @param   string  $areasLoopTemplateInstance  Area Template instance which is used to display result
+	 * @param   array   $areaTemplateTags           List of template tags that will be used for parsing
+	 *
+	 * @return object
+	 */
+	public static function parseAreaTemplateTags($areaHtml = '', $areasLoopTemplateInstance = '', $areaTemplateTags = null)
+	{
+		if ($areaTemplateTags == null)
+		{
+			$areaTemplateTags = self::getAreaTemplateTags();
+		}
+
+		foreach ($areaTemplateTags as $areaTemplateTagKey => $areaTemplateTagValue)
+		{
+			$htmlElement = explode($areaTemplateTagKey, $areaHtml);
+			$parseResult = '';
+
+			if (!empty($htmlElement[1]))
+			{
+				$parseResult = $htmlElement[1];
+			}
+
+			$areasLoopTemplateInstance = str_replace($areaTemplateTagValue, $parseResult, $areasLoopTemplateInstance);
+		}
+
+		return $areasLoopTemplateInstance;
+	}
 }

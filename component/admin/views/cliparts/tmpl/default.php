@@ -9,6 +9,11 @@
 
 defined('_JEXEC') or die;
 
+JHtml::_('behavior.keepalive');
+JHtml::_('rdropdown.init');
+JHtml::_('rbootstrap.tooltip');
+JHtml::_('rjquery.chosen', 'select');
+
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 $saveOrderingUrl = 'index.php?option=com_reddesign&task=cliparts.saveOrderAjax&tmpl=component';

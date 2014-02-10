@@ -86,3 +86,9 @@ img.background-thumbnail {
 .clipart-container {
     position: relative;
 }
+.redcore .hide {
+    display: none;
+}
+.redcore .show {
+    display: block;
+}

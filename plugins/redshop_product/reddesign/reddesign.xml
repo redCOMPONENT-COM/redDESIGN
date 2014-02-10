@@ -33,6 +33,15 @@
 				type="text"
 				filter="integer"
 				default="300" />
+
+             <field name="loadBootstrapRedcore"
+                    type="radio"
+                    label="PLG_REDSHOP_PRODUCT_REDDESIGN_LOAD_BOOTSTRAP"
+                    description="PLG_REDSHOP_PRODUCT_REDDESIGN_LOAD_BOOTSTRAP_DESC"
+                    default="1">
+                 <option value="0">JNO</option>
+                 <option value="1">JYES</option>
+             </field>
 		</fieldset>
 	</fields>
 	</config>

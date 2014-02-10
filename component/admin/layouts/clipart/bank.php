@@ -24,6 +24,8 @@ JHtml::_('rjquery.flexslider', '.flexslider', array(
 		'slideshow' => false,
 		'directionNav' => true,
 		'minItems' => 4,
+		'maxItems' => 4,
+		'itemWidth' => 95,
 		'prevText' => '',
 		'nextText' => '',
 		'animation' => 'slide',
