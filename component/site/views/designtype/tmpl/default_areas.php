@@ -216,8 +216,9 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 				<?php
 					$defaultFontSizeOutput = false;
 
-					if ($this->designType->fontsizer === 'auto' || $this->designType->fontsizer === 'auto_chars'):
-						$area->defaultFontSize = round($area->height * $unitConversionRatio, 0);
+					if ($this->designType->fontsizer === 'auto' || $this->designType->fontsizer === 'auto_chars') :
+						$defaultFontSizeValue = 12;
+						$area->defaultFontSize = round($defaultFontSizeValue * $unitConversionRatio, 0);
 					endif;
 				?>
 				<?php if ($this->designType->fontsizer === 'slider') : ?>
