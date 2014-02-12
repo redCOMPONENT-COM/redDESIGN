@@ -118,7 +118,8 @@ $productId = $input->getInt('pid', 0);
 					</button>
 					<br /><br />
 					<div>
-						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_ENLARGE_DESCRIPTION'); ?>
+						<h3><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_ENLARGE_POPUP_TITLE'); ?></h3>
+						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_ENLARGE_POPUP_DESC'); ?>
 					</div>
 				</div>
 			</div>
