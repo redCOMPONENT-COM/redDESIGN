@@ -261,6 +261,8 @@ $productId = $input->getInt('pid', 0);
 
 						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
 
+						jQuery('#mainSvgImage areaBoxesLayer').attr('transform', 'scale(' + scalingImageForPreviewRatio + ')');
+
 						customize();
 					}
 				});
@@ -866,7 +868,7 @@ $productId = $input->getInt('pid', 0);
 						rootElement.setAttribute("overflow", "hidden");
 
 						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
-
+						jQuery('#mainSvgImage areaBoxesLayer').attr('transform', 'scale(' + scalingImageForPreviewRatio + ')');
 						customizeJS(areas);
 
 						if (jQuery('.fontSizeSlider').length > 0)
