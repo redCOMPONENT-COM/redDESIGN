@@ -330,15 +330,16 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 	function begginResizeRectangle(e)
 	{
+		e.preventDefault();
+
 		rootSnapSvgObject.mousemove(resizeRectangle);
 		rootSnapSvgObject.mouseup(endResizingRectangle);
 	}
 
 	function resizeRectangle(e)
 	{
-		var offset = jQuery("#areaBoxesLayer").offset();
-		var upX = e.pageX - offset.left;
-		var upY = e.pageY - offset.top;
+		var upX = e.offsetX;
+		var upY = e.offsetY;
 
 		var width = upX - mouseDownX;
 		var height = upY - mouseDownY;
@@ -924,6 +925,8 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 			areaBoxes[reddesign_area_id]['areaType'] = areaType;
 			current_area_id = reddesign_area_id;
 		}
+		mouseDownX = x1_pos * scalingImageForPreviewRatio;
+		mouseDownY = y1_pos * scalingImageForPreviewRatio;
 		selectArea(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
 		populateFieldsWithCoordinatesFromAreasList(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
 
