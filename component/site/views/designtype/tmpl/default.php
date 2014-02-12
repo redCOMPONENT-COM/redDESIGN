@@ -9,9 +9,10 @@
 
 defined('_JEXEC') or die();
 
-JHtml::_('behavior.modal');
+JHtml::_('rbootstrap.modal');
 
 RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
+
 
 if (isset($displayData))
 {
@@ -82,6 +83,47 @@ $productId = $input->getInt('pid', 0);
 			</div>
 		</div>
 
+		<button id="fullScreenButton"
+		        type="button"
+		        class="btn btn-success full-screen-popup"
+				href="#fullScreenContainer">
+			<i class="icon-fullscreen"></i>
+			<span>
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_ENLARGE'); ?>
+			</span>
+		</button>
+		<div id="fullScreenContainer" class="hide fade redcore" style="padding:0px;">
+			<div class="row-fluid">
+				<div class="span10 svg-container-element" id="fullScreenContainerSVG">
+				</div>
+				<div class="span2 right-modal-buttons">
+					<button id="fullScreenCloseButton"
+					        type="button"
+					        class="btn btn-danger btn-large full-screen-close"
+						onclick="SqueezeBox.close()">
+						<i class="icon-remove"></i>
+						<span>
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLOSE'); ?>
+						</span>
+					</button>
+					<br /><br />
+					<button id="fullScreenPrintButton"
+					        type="button"
+					        class="btn btn-info btn-large full-screen-print"
+						onclick="printSVGPreview()">
+						<i class="icon-print"></i>
+						<span>
+							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_PRINT'); ?>
+						</span>
+					</button>
+					<br /><br />
+					<div>
+						<h3><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_ENLARGE_POPUP_TITLE'); ?></h3>
+						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_ENLARGE_POPUP_DESC'); ?>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 {RedDesignBreakDesignImage}
 
@@ -115,16 +157,20 @@ $productId = $input->getInt('pid', 0);
 	var previewHeight = imageHeight * scalingImageForPreviewRatio;
 	var areasContainer = [];
 
-	jQuery('.thumbnailSVG').each(function () {
+	function thumbnailSVGLoader()
+	{
+		jQuery('.thumbnailSVG').each(function () {
 
-		var svgThumbnail = document.getElementById(jQuery(this).attr('id'));
-		svgThumbnail.addEventListener("load", function() {
-			setSVGElementScale(this);
+			var svgThumbnail = document.getElementById(jQuery(this).attr('id'));
+			svgThumbnail.addEventListener("load", function() {
+				setSVGElementScale(this);
+			});
+
+			// Some elements are already loaded
+			setSVGElementScale(svgThumbnail);
 		});
-
-		// Some elements are already loaded
-		setSVGElementScale(svgThumbnail);
-	});
+	}
+	thumbnailSVGLoader();
 
 	function setSVGElementScale(svgDocument)
 	{
@@ -142,6 +188,22 @@ $productId = $input->getInt('pid', 0);
 				}
 			}
 		}
+	}
+
+	function printSVGPreview()
+	{
+		var $container = jQuery("#fullScreenContainerSVG2");
+
+		var hiddenIFrame = jQuery('<iframe></iframe>').attr({
+			width: '1px',
+			height: '1px',
+			display: 'none'
+		}).appendTo($container.parent());
+
+		var myIframe = hiddenIFrame.get(0);
+		myIframe.contentWindow.document.body.innerHTML = $container.parent().html();
+		myIframe.contentWindow.print();
+		hiddenIFrame.remove();
 	}
 
 	/**
@@ -199,6 +261,8 @@ $productId = $input->getInt('pid', 0);
 
 						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
 
+						jQuery('#mainSvgImage areaBoxesLayer').attr('transform', 'scale(' + scalingImageForPreviewRatio + ')');
+
 						customize();
 					}
 				});
@@ -217,6 +281,85 @@ $productId = $input->getInt('pid', 0);
 					3000
 				);
 				customize();
+			});
+
+			jQuery(document).on("click", "#fullScreenButton", function () {
+				var previewSVG = jQuery("#fullScreenContainerSVG")
+					.empty()
+					.html(jQuery("#mainSvgImage").clone())
+					.find('svg:first')[0];
+
+				var boxWidth = jQuery(window).width() - 120;
+				var width = (boxWidth * 0.8290598290598291);
+				var boxHeight = jQuery(window).height() - 120;
+				var height = boxHeight;
+
+				// Calculating scale
+				var scale = 1;
+				if ((width - parseFloat(previewSVG.getAttribute('width'))) < (height - parseFloat(previewSVG.getAttribute('height'))))
+				{
+					scale = boxWidth / parseFloat(previewSVG.getAttribute('width'));
+					height = parseFloat(previewSVG.getAttribute('height')) * scale;
+					boxHeight = height;
+				}
+				else
+				{
+					scale = boxHeight / parseFloat(previewSVG.getAttribute('height'));
+					var boxWidth20 = boxWidth - width;
+					width = parseFloat(previewSVG.getAttribute('width')) * scale;
+					boxWidth = boxWidth20 + width;
+				}
+
+				// first top SVG
+				previewSVG.setAttribute("width", width);
+				previewSVG.setAttribute("height", height);
+				previewSVG.setAttribute("id", "fullScreenContainerSVG2");
+
+				// first inner SVG
+				var previewSVGInner = jQuery(previewSVG).find('svg:first')[0];
+				previewSVGInner.setAttribute("width", width);
+				previewSVGInner.setAttribute("height", height);
+
+				jQuery(previewSVG).children('g').each(function () {
+					/* @todo Second way, leave for now for test */
+					/*jQuery(this).children().each(function () {
+						jQuery(this).attr('x', ((parseFloat(jQuery(this).attr('x')) * (scale))));
+						jQuery(this).attr('y', ((parseFloat(jQuery(this).attr('y')) * (scale))));
+
+						if (typeof(jQuery(this).attr('width')) != "undefined")
+						{
+							var innerWidth = (parseFloat(jQuery(this).attr('width')) * (scale));
+							jQuery(this).attr('width', innerWidth);
+
+						}
+						if (typeof(jQuery(this).attr('height')) != "undefined")
+						{
+							var innerHeight = (parseFloat(jQuery(this).attr('height')) * (scale));
+							jQuery(this).attr('height', innerHeight);
+						}
+						var previewSVGInnerSVG = jQuery(this).find('svg:first')[0];
+						if (typeof(previewSVGInnerSVG) != "undefined")
+						{
+							previewSVGInnerSVG.setAttribute("width", innerWidth);
+							previewSVGInnerSVG.setAttribute("height", innerHeight);
+						}
+
+						if (typeof(jQuery(this).css('font-size')) != "undefined")
+						{
+							jQuery(this).css('font-size', parseFloat((jQuery(this).css('font-size').replace('px', '')) * scale) + 'px');
+						}
+					});*/
+					jQuery(this).attr('transform', 'scale(' + scale + ')');
+
+				});
+
+				var options = {
+					size: {x: boxWidth, y: boxHeight},
+					handler: 'clone',
+					clone: 'fullScreenContainer'
+				};
+
+				SqueezeBox.fromElement(this, options);
 			});
 
 			jQuery(document).on("keyup", ".reddesign-form .textAreaClass", function() {
@@ -267,7 +410,10 @@ $productId = $input->getInt('pid', 0);
 			});
 
 			jQuery(document).on("mousedown", ".reddesign-form .thumbnailSVG-pointer", function() {
-				jQuery(this).parent().find('[name^="selectedClipart"]').attr('checked', 'checked').change();
+				var id = jQuery(this).attr('name').replace('clipart', '');
+				var clipartId = jQuery(this).parent().find('.change-selected-clipart').val();
+				jQuery("#selectedClipart" + id).val(clipartId);
+				changeSVGElement(id);
 			});
 
 			jQuery(document).on("change", ".reddesign-form .change-selected-clipart", function() {
@@ -381,7 +527,7 @@ $productId = $input->getInt('pid', 0);
 	{
 		var horizontalAlign = jQuery('#textAlign' + areaId);
 		var verticalAlign = jQuery('#verticalAlign' + areaId);
-		var selectedClipart = jQuery('[name="selectedClipart' + areaId + '"]:checked');
+		var selectedClipart = jQuery('#selectedClipart' + areaId);
 		var svgElement = rootSnapSvgObject.select("#areaBoxesLayer #areaSVGElement_" + areaId);
 		if (svgElement)
 		{
@@ -409,7 +555,7 @@ $productId = $input->getInt('pid', 0);
 
 			if (selectedClipart && typeof(jQuery(selectedClipart).val()) != "undefined")
 			{
-				var selectedClipartSVG = jQuery('#clipart' + areaId + '_' + jQuery(selectedClipart).val());
+				var selectedClipartSVG = jQuery('[name=clipart' + areaId + '_' + jQuery(selectedClipart).val() + ']:first');
 				if (selectedClipartSVG && typeof(selectedClipartSVG) != "undefined")
 				{
 					var svgDocument = document.getElementById(jQuery(selectedClipartSVG).attr('id'));
@@ -629,10 +775,23 @@ $productId = $input->getInt('pid', 0);
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxLoadDesigntype",
 			data: {'propertyId': propertyId},
+			dataType: "text",
 			type: "post",
 			success: function (data)
 			{
 				jQuery("#areasContainer").html(data);
+				thumbnailSVGLoader();
+				jQuery("#areasContainer .flexslider").flexslider({
+					'slideshow': false,
+					'directionNav': true,
+					'minItems': 4,
+					'itemWidth': 95,
+					'maxItems': 4,
+					'prevText': '',
+					'nextText': '',
+					'animation': 'slide',
+					'animationLoop': false
+				});
 				loadBackgroundSVGandAreas(propertyId);
 			},
 			error: function (data)
@@ -662,9 +821,8 @@ $productId = $input->getInt('pid', 0);
 				jQuery("#production_background_id").val(background.productionBackgroundId);
 				jQuery(".number_product h1").html(background.designtype_name);
 
-				var canvasWidth  = parseFloat("<?php echo $previewWidth; ?>");
-				var scalingRatio = canvasWidth / parseFloat(background.width);
-				var canvasHeight = parseFloat(background.height) * scalingRatio;
+				scalingImageForPreviewRatio = previewWidth / parseFloat(background.width);
+				previewHeight = parseFloat(background.height) * scalingImageForPreviewRatio;
 
 				rootSnapSvgObject = Snap("#mainSvgImage");
 
@@ -699,18 +857,18 @@ $productId = $input->getInt('pid', 0);
 
 						// Set preview size at loaded file.
 						var loadedSvgFromFile = jQuery("#mainSvgImage").find("svg")[0];
-						loadedSvgFromFile.setAttribute("width", canvasWidth);
-						loadedSvgFromFile.setAttribute("height", canvasHeight);
+						loadedSvgFromFile.setAttribute("width", previewWidth);
+						loadedSvgFromFile.setAttribute("height", previewHeight);
 						loadedSvgFromFile.setAttribute("id", "svgCanvas");
 
 						// Set preview size at svg container element.
 						var rootElement = document.getElementById("mainSvgImage");
-						rootElement.setAttribute("width", canvasWidth);
-						rootElement.setAttribute("height", canvasHeight);
+						rootElement.setAttribute("width", previewWidth);
+						rootElement.setAttribute("height", previewHeight);
 						rootElement.setAttribute("overflow", "hidden");
 
 						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
-
+						jQuery('#mainSvgImage areaBoxesLayer').attr('transform', 'scale(' + scalingImageForPreviewRatio + ')');
 						customizeJS(areas);
 
 						if (jQuery('.fontSizeSlider').length > 0)
@@ -722,6 +880,7 @@ $productId = $input->getInt('pid', 0);
 									changeSVGElement(id);
 								});
 						}
+
 					}
 				});
 			},

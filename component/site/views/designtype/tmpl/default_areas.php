@@ -41,7 +41,6 @@ RHelperAsset::load('lib/jquery-fileupload/jquery.fileupload.js', 'com_reddesign'
 // The File Upload processing plugin
 RHelperAsset::load('lib/jquery-fileupload/jquery.fileupload-process.js', 'com_reddesign');
 
-
 if (isset($displayData))
 {
 	$this->designType = $displayData->designType;
@@ -59,7 +58,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 {RedDesignBreakDesignAreasTitle}
 <h4 class="page-header">
-	<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_AREAS_TITLE') ?>
+	<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_NAV_AREAS_TITLE'); ?>
 </h4>
 {RedDesignBreakDesignAreasTitle}
 
@@ -517,30 +516,29 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 								<div class="pull-left thumbnail clipart-container" stle="pointer-events: none;">
 									<div
 										class="thumbnailSVG-pointer"
-										name="clipart<?php echo $area->id; ?>_<?php echo $clipart->id; ?>"
+										name="clipart<?php echo $area->id; ?>"
 										style="width:<?php echo $clipartPreviewWidth; ?>px; height:<?php echo $clipartPreviewHeight; ?>px;"></div>
 									<object
-										id="clipart<?php echo $area->id ;?>_<?php echo $clipart->id; ?>"
+										id="clipart<?php echo $area->id ;?>_<?php echo $clipart->id ;?>"
 										name="clipart<?php echo $area->id ;?>_<?php echo $clipart->id ;?>"
 										class="thumbnailSVG"
 										data="<?php echo JURI::root() . 'media/com_reddesign/cliparts/' . $clipart->clipartFile; ?>"
 										type="image/svg+xml">
 									</object>
 									<input
-										id="selectedClipart<?php echo $area->id ;?>_<?php echo $clipart->id; ?>"
-										type="radio"
-										<?php echo empty($selected) ? 'checked="checked"' : ''; ?>
-										class="change-selected-clipart hide"
+										type="hidden"
+										class="change-selected-clipart"
 										name="selectedClipart<?php echo $area->id ?>"
 										value="<?php echo $clipart->id; ?>"
 										/>
 								</div>
 							</li>
 						<?php
-							$selected = true;
+							$selected = $clipart->id;
 						endforeach; ?>
 					</ul>
 				</div>
+				<input type="hidden" id="selectedClipart<?php echo $area->id ;?>" value="">
 				<div id="clipartBank<?php echo $area->id ;?>" style="display:none;">
 				</div>
 				<div id="clipartUpload<?php echo $area->id ;?>" style="display:none;">

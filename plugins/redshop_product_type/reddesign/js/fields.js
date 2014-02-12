@@ -975,11 +975,11 @@ function showhidearrow(n, k)
 function modalpopup(n)
 {
 
-	SqueezeBox.initialize();
+	/*SqueezeBox.initialize();
 
 	SqueezeBox.assign($$('#' + n), {
 		parse: 'rel'
-	});
+	});*/
 }
 
 function showBackgrounds(id) {
