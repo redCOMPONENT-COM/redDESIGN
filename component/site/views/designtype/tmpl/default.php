@@ -194,16 +194,16 @@ $productId = $input->getInt('pid', 0);
 	{
 		var $container = jQuery("#fullScreenContainerSVG2");
 
-		var hidden_IFrame = jQuery('<iframe></iframe>').attr({
+		var hiddenIFrame = jQuery('<iframe></iframe>').attr({
 			width: '1px',
 			height: '1px',
 			display: 'none'
 		}).appendTo($container.parent());
 
-		var myIframe = hidden_IFrame.get(0);
+		var myIframe = hiddenIFrame.get(0);
 		myIframe.contentWindow.document.body.innerHTML = $container.parent().html();
 		myIframe.contentWindow.print();
-		hidden_IFrame.remove();
+		hiddenIFrame.remove();
 	}
 
 	/**
