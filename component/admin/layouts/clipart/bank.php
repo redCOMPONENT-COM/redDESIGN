@@ -72,18 +72,18 @@ JHtml::_('rjquery.flexslider', '.flexslider', array(
 							<div class="thumbnail clipart-container">
 								<div
 									class="thumbnailSVG-pointer"
-									name="clipart<?php echo $areaId; ?>_<?php echo $clipart->id; ?>"
+									name="clipart<?php echo $areaId; ?>"
 									style="width:<?php echo $clipartPreviewWidth; ?>px; height:<?php echo $clipartPreviewHeight; ?>px;"></div>
 								<object
-									id="clipartBank<?php echo $areaId ;?>_<?php echo $clipart->id; ?>"
+									id="clipartBank<?php echo $areaId ;?>_<?php echo $clipart->id ;?>"
 									name="clipart<?php echo $areaId ;?>_<?php echo $clipart->id ;?>"
 									class="thumbnailSVG"
 									data="<?php echo JURI::root() . 'media/com_reddesign/cliparts/' . $clipart->clipartFile; ?>"
 									type="image/svg+xml">
 								</object>
 								<input
-									type="radio"
-									class="change-selected-clipart hide"
+									type="hidden"
+									class="change-selected-clipart"
 									name="selectedClipart<?php echo $areaId ?>"
 									value="<?php echo $clipart->id; ?>"
 									/><br />

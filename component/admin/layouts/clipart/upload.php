@@ -21,17 +21,17 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 		<div class="thumbnail clipart-container">
 			<div
 				class="thumbnailSVG-pointer"
-				name="clipart<?php echo $areaId; ?>_0"
+				name="clipart<?php echo $areaId; ?>"
 				style="width:<?php echo $clipartPreviewWidth; ?>px; height:<?php echo $clipartPreviewHeight; ?>px;"></div>
 			<object
-				id="clipart<?php echo $areaId ;?>_0"
+				id="clipartUpload<?php echo $areaId ;?>_0"
 				name="clipart<?php echo $areaId ;?>_0"
 				class="thumbnailSVG"
 				data="<?php echo JURI::root() . 'media/com_reddesign/cliparts/uploaded/' . $file['mangled_filename']; ?>"
 				type="image/svg+xml">
 			</object>
 			<input
-				type="radio"
+				type="hidden"
 				class="change-selected-clipart hide"
 				name="selectedClipart<?php echo $areaId ?>"
 				value="0"
@@ -43,7 +43,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 	</div>
 </div>
 <script type="text/javascript">
-	jQuery('#clipart<?php echo $areaId ;?>_0').each(function () {
+	jQuery('#clipartUpload<?php echo $areaId ;?>_0').each(function () {
 		var svgThumbnail = document.getElementById(jQuery(this).attr('id'));
 		svgThumbnail.addEventListener("load", function() {
 			setSVGElementScale(this);

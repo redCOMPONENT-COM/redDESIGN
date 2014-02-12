@@ -170,7 +170,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$displayData->designType = $designTypeModel->getItem($displayedDesignTypeId);
 			$displayData->displayedProductionBackground = $designTypeModel->getProductionBackground($displayedDesignTypeId);
 
-			$areasModel->setState('filter.background_id', $displayData->displayedProductionBackground->id);
+			$areasModel->setState('filter.background_id', $displayedBackgroundId);
 			$displayData->displayedAreas = $areasModel->getItems();
 
 			$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayData->displayedAreas);
