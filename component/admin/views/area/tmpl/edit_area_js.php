@@ -783,6 +783,15 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 			x: x + width,
 			y: y + height
 		});
+
+		var text = areaBoxes[current_area_id]['text'];
+		if (typeof(text) != "undefined")
+		{
+			text.attr({
+				x: x + 4,
+				y: y + 18
+			});
+		}
 	}
 
 	/**
@@ -929,14 +938,15 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 		mouseDownY = y1_pos * scalingImageForPreviewRatio;
 		selectArea(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
 		populateFieldsWithCoordinatesFromAreasList(x1_pos, y1_pos, x2_pos, y2_pos, width, height);
-
-		var textElement = Snap.parse(
-			'<text fill="black" font-size="14px" x="'
-				+ (parseFloat(areaBoxes[current_area_id]['rect'].attr('x')) + 4)
-				+ '" y="' + (parseFloat(areaBoxes[current_area_id]['rect'].attr('y')) + 18)
-				+ '">' + title + '</text>');
-
+		var textElement = rootSnapSvgObject
+			.text(
+				(parseFloat(areaBoxes[current_area_id]['rect'].attr('x')) + 4),
+				(parseFloat(areaBoxes[current_area_id]['rect'].attr('y')) + 18),
+				title)
+			.attr('fill', 'black')
+			.attr('font-size', '14px');
 		areaBoxes[current_area_id]['group'].append(textElement);
+		areaBoxes[current_area_id]['text'] = textElement;
 
 		jQuery("#areaDiv" + reddesign_area_id).html(title + '<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_EDITING_AREA'); ?>');
 	}
