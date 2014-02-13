@@ -131,6 +131,11 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 			<?php if (!empty($this->productionBackground->svg_file)) : ?>
 				rootSnapSvgObject = Snap("#svgForAreas");
+
+			if ('<?php echo $this->productionBackground->useCheckerboard ?>' == '1')
+			{
+				jQuery('#svgForAreas').parent().width(previewWidth).height(previewHeight).addClass('checkerboard');
+			}
 			jQuery.ajax({
 				url: "<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $this->productionBackground->svg_file; ?>",
 				dataType: "text",

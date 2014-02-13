@@ -221,11 +221,11 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 						}
 
 						if (backgroundPreviews[backgroundId]['useCheckerboard'])
-							jQuery("#bgPreviewSvg" + backgroundId).append('<?php echo ReddesignHelpersSvg::getSVGCheckerboard(600, 450); ?>');
+							jQuery("#bgPreviewSvg" + backgroundId).parent().addClass('checkerboard');
 
 						jQuery("#bgPreviewSvg" + backgroundId).append(response);
 
-						var svgLoaded = jQuery("#bgPreviewSvg" + backgroundId).find("svg")
+						jQuery("#bgPreviewSvg" + backgroundId).find("svg")
 							.attr("width", "600px")
 							.attr("height", "450px");
 
