@@ -92,7 +92,7 @@ $productId = $input->getInt('pid', 0);
 				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_ENLARGE'); ?>
 			</span>
 		</button>
-		<div id="fullScreenContainer" class="hide fade redcore" style="padding:0px;">
+		<div id="fullScreenContainer" class="redcore" style="padding:0px;">
 			<div class="row-fluid">
 				<div class="span10 svg-container-element" id="fullScreenContainerSVG">
 				</div>
@@ -259,9 +259,9 @@ $productId = $input->getInt('pid', 0);
 						rootElement.setAttribute("height", previewHeight);
 						rootElement.setAttribute("overflow", "hidden");
 
-						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
-
-						jQuery('#mainSvgImage areaBoxesLayer').attr('transform', 'scale(' + scalingImageForPreviewRatio + ')');
+						var groupObject = rootSnapSvgObject.group();
+						groupObject.node.id = "areaBoxesLayer";
+						//groupObject.node.setAttribute('transform', 'scale(' + (1 + scalingImageForPreviewRatio) + ')');
 
 						customize();
 					}
@@ -558,21 +558,40 @@ $productId = $input->getInt('pid', 0);
 				var selectedClipartSVG = jQuery('[name=clipart' + areaId + '_' + jQuery(selectedClipart).val() + ']:first');
 				if (selectedClipartSVG && typeof(selectedClipartSVG) != "undefined")
 				{
-					var svgDocument = document.getElementById(jQuery(selectedClipartSVG).attr('id'));
-					if (svgDocument && typeof(svgDocument) != "undefined")
+					console.log(selectedClipartSVG);
+					var clipartType = jQuery(selectedClipartSVG).attr('cliparttype');
+					console.log(clipartType);
+					if (typeof(clipartType) != "undefined" && clipartType != 'svg+xml')
 					{
-						var svgDocumentContent = svgDocument.contentDocument;
-						if (svgDocumentContent && typeof(svgDocumentContent) != "undefined")
+						var imageSVG =
+							'<image ' +
+							'width="' + areasContainer[areaId]['width'] + '"' +
+							'height="' + areasContainer[areaId]['height'] + '" ' +
+							'x="0" y="0" ' +
+							'xlink:href="' + jQuery(selectedClipartSVG).attr('data') +
+							'"></image>';
+						console.log(imageSVG);
+						svgElement.clear();
+						svgElement.append(Snap.parse(imageSVG));
+					}
+					else
+					{
+						var svgDocument = document.getElementById(jQuery(selectedClipartSVG).attr('id'));
+						if (svgDocument && typeof(svgDocument) != "undefined")
 						{
-							var svgElementInner = jQuery(svgDocumentContent.documentElement).clone();
-							if (typeof(svgElementInner) != "undefined")
+							var svgDocumentContent = svgDocument.contentDocument;
+							if (svgDocumentContent && typeof(svgDocumentContent) != "undefined")
 							{
-								jQuery(svgElementInner).attr("height", areasContainer[areaId]['height']);
-								jQuery(svgElementInner).attr("width", areasContainer[areaId]['width']);
-								jQuery(svgElementInner).attr("preserveAspectRatio", horizontalPosition + verticalPosition + " meet");
+								var svgElementInner = jQuery(svgDocumentContent.documentElement).clone();
+								if (typeof(svgElementInner) != "undefined")
+								{
+									jQuery(svgElementInner).attr("height", areasContainer[areaId]['height']);
+									jQuery(svgElementInner).attr("width", areasContainer[areaId]['width']);
+									jQuery(svgElementInner).attr("preserveAspectRatio", horizontalPosition + verticalPosition + " meet");
 
-								svgElement.clear();
-								svgElement.append(Snap.parse(svgElementInner[0].outerHTML));
+									svgElement.clear();
+									svgElement.append(Snap.parse(svgElementInner[0].outerHTML));
+								}
 							}
 						}
 					}
@@ -650,20 +669,23 @@ $productId = $input->getInt('pid', 0);
 
 				if (verticalAlignValue == 'top')
 				{
-					svgElement.attr('y', areasContainer[areaId]['y1']);
+					var yPos = areasContainer[areaId]['y1'];
+					if (fontSizeValue)
+						yPos += (parseFloat(fontSizeValue) * (1 + scalingImageForPreviewRatio));
+					svgElement.attr('y', yPos);
 				}
 				else if (verticalAlignValue == 'middle')
 				{
 					var yPos = parseFloat(areasContainer[areaId]['y1']) + (parseFloat(areasContainer[areaId]['height']) / 2);
 					if (fontSizeValue)
-						yPos -= (parseFloat(fontSizeValue) / 2);
+						yPos -= (parseFloat(fontSizeValue) / 2) * scalingImageForPreviewRatio;
 					svgElement.attr('y', yPos);
 				}
 				else if (verticalAlignValue == 'bottom')
 				{
 					var yPos = parseFloat(areasContainer[areaId]['y1']) + (parseFloat(areasContainer[areaId]['height']));
 					if (fontSizeValue)
-						yPos -= fontSizeValue;
+						yPos -= (parseFloat(fontSizeValue) * scalingImageForPreviewRatio);
 					svgElement.attr('y', yPos);
 				}
 			}
@@ -867,8 +889,10 @@ $productId = $input->getInt('pid', 0);
 						rootElement.setAttribute("height", previewHeight);
 						rootElement.setAttribute("overflow", "hidden");
 
-						rootSnapSvgObject.group().node.id = "areaBoxesLayer";
-						jQuery('#mainSvgImage areaBoxesLayer').attr('transform', 'scale(' + scalingImageForPreviewRatio + ')');
+						var groupObject = rootSnapSvgObject.group();
+						groupObject.node.id = "areaBoxesLayer";
+						//groupObject.node.setAttribute('transform', 'scale(' + (1 + scalingImageForPreviewRatio) + ')');
+
 						customizeJS(areas);
 
 						if (jQuery('.fontSizeSlider').length > 0)
@@ -1050,7 +1074,7 @@ $productId = $input->getInt('pid', 0);
 				autoUpload: false,
 				cache: false,
 				formData: dataVar,
-				acceptFileTypes: /(\.|\/)(svg)$/i
+				acceptFileTypes: /(\.|\/)(svg,jpg,png,gif)$/i
 			}).on('fileuploadprogressall', function (e, data) {
 				jQuery(jQuerythis).prop('disabled', true);
 				var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -1086,7 +1110,7 @@ $productId = $input->getInt('pid', 0);
 	{
 		jQuery('.fileinput-button input').fileupload({
 			autoUpload: false,
-			acceptFileTypes: /(\.|\/)(svg)$/i
+			acceptFileTypes: /(\.|\/)(svg,jpg,png,gif)$/i
 		}).on('fileuploadadd', function (e, data) {
 			var id = (jQuery(this).attr('id').replace('uploadClipartFile', ''));
 			data.context = jQuery('<div/>').appendTo('#uploadedClipart' + id);

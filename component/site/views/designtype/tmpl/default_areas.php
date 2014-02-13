@@ -549,7 +549,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 					<span class="btn btn-success fileinput-button">
 					    <i class="glyphicon glyphicon-plus"></i>
 					    <span><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_SELECT_FILE'); ?></span>
-					    <input accept="image/svg" id="uploadClipartFile<?php echo $area->id; ?>" type="file" name="uploadClipartFile<?php echo $area->id; ?>" />
+					    <input accept="image/*" id="uploadClipartFile<?php echo $area->id; ?>" type="file" name="uploadClipartFile<?php echo $area->id; ?>" />
 					</span>
 					<button class="btn btn-success upload-clipart-file" type="button" id="uploadClipartFileSave<?php echo $area->id; ?>">
 						<i class="icon-upload"></i> <?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD'); ?>

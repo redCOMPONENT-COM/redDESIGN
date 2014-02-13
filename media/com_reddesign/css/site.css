@@ -93,3 +93,6 @@ img.background-thumbnail {
 .redcore .show {
     display: block;
 }
+#fullScreenContainer{
+    display:none;
+}

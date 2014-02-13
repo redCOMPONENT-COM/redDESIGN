@@ -15,6 +15,12 @@ $file = $data['file'];
 $config = ReddesignEntityConfig::getInstance();
 $clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
 $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
+$extension = "svg+xml";
+if ($file["mime_type"] == 'application/postscript')
+{
+	$extension = str_replace(array('jpg', 'svg'), array('jpeg', 'svg+xml'), JFile::getExt($file['mangled_filename']));
+	$file["mime_type"] = 'image/' . $extension;
+}
 ?>
 <div class="row-fluid">
 	<div class="span12">
@@ -28,11 +34,12 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 				name="clipart<?php echo $areaId ;?>_0"
 				class="thumbnailSVG"
 				data="<?php echo JURI::root() . 'media/com_reddesign/cliparts/uploaded/' . $file['mangled_filename']; ?>"
-				type="image/svg+xml">
+				cliparttype="<?php echo $extension; ?>"
+				type="<?php echo $file["mime_type"]; ?>">
 			</object>
 			<input
 				type="hidden"
-				class="change-selected-clipart hide"
+				class="change-selected-clipart"
 				name="selectedClipart<?php echo $areaId ?>"
 				value="0"
 				/><br />
