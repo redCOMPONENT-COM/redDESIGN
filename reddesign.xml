@@ -83,7 +83,6 @@
 	<media destination="com_reddesign" folder="media/com_reddesign">
 		<folder>backgrounds</folder>
 		<folder>css</folder>
-		<folder>designtypes</folder>
 		<folder>fonts</folder>
 		<folder>images</folder>
 		<folder>js</folder>
