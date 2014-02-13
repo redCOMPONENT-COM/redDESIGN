@@ -55,7 +55,7 @@ $this->unit = $displayData->unit;
 			<td>
 				<?php echo $area->id; ?>
 			</td>
-			<td class="span4">
+			<td class="span4 col-md4">
 				<a href="#" onclick="selectAreaForEdit(<?php echo $area->id . ',\'' .
 					$area->name . '\',' .
 					$area->x1_pos . ',' .

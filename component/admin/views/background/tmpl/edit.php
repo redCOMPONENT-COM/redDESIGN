@@ -32,7 +32,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		<input type="hidden" name="jform[designtype_id]" id="background_designtype_id" value="<?php echo $this->item->designtype_id; ?>" />
 		<input type="hidden" name="jform[id]" id="background_id" value="" />
 
-		<div id="backgrounds-configuration" class="span12">
+		<div id="backgrounds-configuration" class="span12 col-md12">
 
 			<h3 id="backgroundTitle"><?php echo JText::_('COM_REDDESIGN_BACKGROUND_TITLE'); ?></h3>
 

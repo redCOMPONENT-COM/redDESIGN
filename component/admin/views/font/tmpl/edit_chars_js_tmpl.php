@@ -49,7 +49,7 @@ defined('_JEXEC') or die;
 				   name="height{{charId}}"
 				>
 		</div>
-		<div class="control-group character-group span3">
+		<div class="control-group character-group span3 col-md3">
 			<label for="typography{{charId}}"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY') ?></label>
 			<select id="typography{{charId}}" name="typography{{charId}}">
 				<option value="0"><?php echo JText::_('COM_REDDESIGN_SELECT_TYPOGRAPHY'); ?></option>
@@ -59,7 +59,7 @@ defined('_JEXEC') or die;
 				<option value="4"><?php echo JText::_('COM_REDDESIGN_FONT_BASELINE_HEIGHT_CAP_HEIGHT'); ?></option>
 			</select>
 		</div>
-		<div class="control-group character-group span2">
+		<div class="control-group character-group span2 col-md2">
 			<label for="typographyHeight{{charId}}">
 				<?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY_HEIGHT') ?>
 			</label>
@@ -71,8 +71,8 @@ defined('_JEXEC') or die;
 				   name="typographyHeight{{charId}}"
 			>
 		</div>
-		<div class="span2">
-			<div class="control-group character-group span6">
+		<div class="span2 col-md2">
+			<div class="control-group character-group span6 col-md6">
 				<label for="addButton{{charId}}">&nbsp;</label>
 				<button id="addButton{{charId}}"
 						type="button"
@@ -83,7 +83,7 @@ defined('_JEXEC') or die;
 					<?php echo JText::_('COM_REDDESIGN_FONT_SAVE_CHAR'); ?>
 				</button>
 			</div>
-			<div class="control-group character-group span6">
+			<div class="control-group character-group span6 col-md6">
 				<label for="removeButton{{charId}}">&nbsp;</label>
 				<button id="removeButton{{charId}}"
 						type="button"

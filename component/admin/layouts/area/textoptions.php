@@ -17,11 +17,11 @@ JHtml::_('rjquery.select2', 'select');
 
 ?>
 <div class="row-fluid">
-	<div class="span4">
+	<div class="span4 col-md4">
 		<fieldset>
 			<legend><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_LEGEND_FONT_SETTINGS'); ?></legend>
 			<div class="row-fluid">
-				<div class="span6">
+				<div class="span6 col-md6">
 
 					<?php if($designType->fontsizer != 'auto' && $designType->fontsizer != 'auto_chars') : ?>
 
@@ -77,14 +77,14 @@ JHtml::_('rjquery.select2', 'select');
 					</div>
 
 				</div>
-				<div class="offset2 span4">
+				<div class="offset2 span4 col-md4">
 
 					<?php if ($designType->fontsizer == 'dropdown_numbers' || $designType->fontsizer == 'dropdown_labels') : ?>
 
 						<div class="control-group">
 							<label for="fontsizerDropdown<?php echo $area->id; ?>">
 								<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES') ?>
-								<textarea class="span12"
+								<textarea class="span12 col-md12"
 								          style="resize: none;"
 								          id="fontsizerDropdown<?php echo $area->id; ?>"
 								          name="fontsizerDropdown<?php echo $area->id; ?>"
@@ -149,7 +149,7 @@ JHtml::_('rjquery.select2', 'select');
 		</fieldset>
 	</div>
 
-	<div class="span3">
+	<div class="span3 col-md3">
 		<fieldset>
 
 			<legend><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_LEGEND_TEXT_INPUT_SETTINGS'); ?></legend>
@@ -234,13 +234,13 @@ JHtml::_('rjquery.select2', 'select');
 		</fieldset>
 	</div>
 
-	<div class="span5">
+	<div class="span5 col-md5">
 		<fieldset>
 			<legend><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_LEGEND_TEXT_COLOR_SETTINGS'); ?></legend>
 
 			<div class="row-fluid">
-				<div class="span6">
-					<div class="span12">
+				<div class="span6 col-md6">
+					<div class="span12 col-md12">
 						<label class="checkbox inline" for="allColors<?php echo $area->id; ?>">
 							<?php
 							$allColorsHide = '';
@@ -265,14 +265,14 @@ JHtml::_('rjquery.select2', 'select');
 						</label>
 					</div>
 
-					<div id="addColorContainer<?php echo $area->id ?>" class="span12 addColorButton" <?php echo $allColorsHide; ?> >
+					<div id="addColorContainer<?php echo $area->id ?>" class="span12 col-md12 addColorButton" <?php echo $allColorsHide; ?> >
 						<button class="btn btn-mini btn-success" id="addColorButton<?php echo $area->id ?>" type="button">
 							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ADD_COLOR'); ?>
 						</button>
 					</div>
 
 					<?php $colorCodes = explode(',', $area->color_code); ?>
-					<div id="selectedColorsPalette<?php echo $area->id ?>" class="span12" <?php echo $allColorsHide; ?> >
+					<div id="selectedColorsPalette<?php echo $area->id ?>" class="span12 col-md12" <?php echo $allColorsHide; ?> >
 						<?php foreach ($colorCodes as $colorCode) : ?>
 							<?php if (!empty($colorCode) && $colorCode != 1) : ?>
 								<div class="colorDiv"
@@ -292,9 +292,9 @@ JHtml::_('rjquery.select2', 'select');
 						/>
 				</div>
 
-				<div id="colorsContainer<?php echo $area->id ?>" class="span6" <?php echo $allColorsHide; ?>>
+				<div id="colorsContainer<?php echo $area->id ?>" class="span6 col-md6" <?php echo $allColorsHide; ?>>
 
-					<div class="span9">
+					<div class="span9 col-md9">
 						<label class="control-label">
 							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_COLOR_PICKER'); ?>
 							<div id="colorPickerContainer<?php echo $area->id; ?>" class="colorPickerContainer"></div>
@@ -302,7 +302,7 @@ JHtml::_('rjquery.select2', 'select');
 
 						<label for="colorPickerSelectedColor<?php echo $area->id; ?>">
 							<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SELECTED_COLOR') ?>
-							<input class="span12 colorPickerSelectedColor"
+							<input class="span12 col-md12 colorPickerSelectedColor"
 							       type="text"
 							       value="#cfcfcf"
 							       id="colorPickerSelectedColor<?php echo $area->id; ?>"
@@ -311,10 +311,10 @@ JHtml::_('rjquery.select2', 'select');
 						</label>
 					</div>
 
-					<div class="span3 CMYKContainer">
+					<div class="span3 col-md3 CMYKContainer">
 						<div class="input-prepend">
 							<span class="add-on">C</span>
-							<input class="span8"
+							<input class="span8 col-md8"
 							       id="C<?php echo $area->id; ?>"
 							       name="C<?php echo $area->id; ?>"
 							       type="text"
@@ -324,7 +324,7 @@ JHtml::_('rjquery.select2', 'select');
 						</div>
 						<div class="input-prepend">
 							<span class="add-on">M</span>
-							<input class="span8"
+							<input class="span8 col-md8"
 							       id="M<?php echo $area->id; ?>"
 							       name="M<?php echo $area->id; ?>"
 							       type="text"
@@ -334,7 +334,7 @@ JHtml::_('rjquery.select2', 'select');
 						</div>
 						<div class="input-prepend">
 							<span class="add-on">Y</span>
-							<input class="span8"
+							<input class="span8 col-md8"
 							       id="Y<?php echo $area->id; ?>"
 							       name="Y<?php echo $area->id; ?>"
 							       type="text"
@@ -344,7 +344,7 @@ JHtml::_('rjquery.select2', 'select');
 						</div>
 						<div class="input-prepend">
 							<span class="add-on">K</span>
-							<input class="span8"
+							<input class="span8 col-md8"
 							       id="K<?php echo $area->id; ?>"
 							       name="K<?php echo $area->id; ?>"
 							       type="text"
@@ -360,7 +360,7 @@ JHtml::_('rjquery.select2', 'select');
 		</fieldset>
 	</div>
 
-	<div class="span6 offset5">
+	<div class="span6 col-md6 offset5">
 		<button id="saveAreaSettings<?php echo $area->id; ?>"
 		        type="button"
 		        class="btn btn-success"

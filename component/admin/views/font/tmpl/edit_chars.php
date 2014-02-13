@@ -18,13 +18,13 @@ echo $this->loadTemplate('chars_js_tmpl');
 echo $this->loadTemplate('chars_js');
 ?>
 
-<div id="character-settings" class="span12">
+<div id="character-settings" class="span12 col-md12">
 	<h4><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_SPECIFIC_SETTINGS'); ?></h4>
 
 	<span class="help-block"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_SPECIFIC_SETTINGS_DESC'); ?></span>
 
 	<div id="all-rows">
-		<div id="other-rows" class="span9">
+		<div id="other-rows" class="span9 col-md9">
 			<?php foreach($this->item->chars as $charSettings) : ?>
 				<?php if (!empty($charSettings)) : ?>
 					<div id="row<?php echo $charSettings->id; ?>" class="row-fluid">
@@ -64,7 +64,7 @@ echo $this->loadTemplate('chars_js');
 								   name="height<?php echo $charSettings->id; ?>"
 							>
 						</div>
-						<div class="control-group character-group span3">
+						<div class="control-group character-group span3 col-md3">
 							<label for="typography<?php echo $charSettings->id; ?>"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY') ?></label>
 							<?php
 								echo JHtml::_(
@@ -78,7 +78,7 @@ echo $this->loadTemplate('chars_js');
 								);
 							?>
 						</div>
-						<div class="control-group character-group span2">
+						<div class="control-group character-group span2 col-md2">
 							<label for="typographyHeight<?php echo $charSettings->id; ?>">
 								<?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY_HEIGHT') ?>
 							</label>
@@ -90,8 +90,8 @@ echo $this->loadTemplate('chars_js');
 								   name="typographyHeight<?php echo $charSettings->id; ?>"
 							>
 						</div>
-						<div class="span2">
-							<div class="control-group character-group span6">
+						<div class="span2 col-md2">
+							<div class="control-group character-group span6 col-md6">
 								<label for="addButton<?php echo $charSettings->id; ?>">&nbsp;</label>
 								<button id="addButton<?php echo $charSettings->id; ?>"
 										type="button"
@@ -103,7 +103,7 @@ echo $this->loadTemplate('chars_js');
 									<?php echo JText::_('COM_REDDESIGN_FONT_SAVE_CHAR'); ?>
 								</button>
 							</div>
-							<div class="control-group character-group span6">
+							<div class="control-group character-group span6 col-md6">
 								<label for="removeButton<?php echo $charSettings->id; ?>">&nbsp;</label>
 								<button id="removeButton<?php echo $charSettings->id; ?>"
 										type="button"
@@ -121,7 +121,7 @@ echo $this->loadTemplate('chars_js');
 			<?php endforeach; ?>
 		</div>
 		<div id="startRow" class="row-fluid">
-			<div class="span9">
+			<div class="span9 col-md9">
 				<div class="row-fluid">
 					<div class="control-group character-group span1">
 						<label for="fontChar"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER') ?></label>
@@ -135,15 +135,15 @@ echo $this->loadTemplate('chars_js');
 						<label for="height"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTER_HEIGHT') ?></label>
 						<input class="input-mini" type="text" value="" maxlength="15" id="height" name="height">
 					</div>
-					<div class="control-group character-group span3">
+					<div class="control-group character-group span3 col-md3">
 						<label for="typography"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY') ?></label>
 						<?php echo JHtml::_('select.genericlist', $this->typographies, 'typography', '', 'value', 'text', 0); ?>
 					</div>
-					<div class="control-group character-group span2">
+					<div class="control-group character-group span2 col-md2">
 						<label for="typographyHeight"><?php echo JText::_('COM_REDDESIGN_FONT_TYPOGRAPHY_HEIGHT') ?></label>
 						<input class="input-small" type="text" value="" maxlength="15" id="typographyHeight" name="typographyHeight">
 					</div>
-					<div class="control-group character-group span2">
+					<div class="control-group character-group span2 col-md2">
 						<label for="addButton">&nbsp;</label>
 						<button id="addButton"
 								type="button"

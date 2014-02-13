@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 
 JHtml::_('behavior.framework');
 ?>
-<div id="basic_configuration" class="span12">
+<div id="basic_configuration" class="span12 col-md12">
 	<?php if (!empty($this->item->font_file)) : ?>
 		<div class="control-group">
 			<label class="control-label ">
