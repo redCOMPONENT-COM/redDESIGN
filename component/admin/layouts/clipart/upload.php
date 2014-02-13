@@ -16,9 +16,9 @@ $config = ReddesignEntityConfig::getInstance();
 $clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
 $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 $extension = "svg+xml";
+$extension = str_replace(array('jpg', 'svg'), array('jpeg', 'svg+xml'), JFile::getExt($file['mangled_filename']));
 if ($file["mime_type"] == 'application/postscript')
 {
-	$extension = str_replace(array('jpg', 'svg'), array('jpeg', 'svg+xml'), JFile::getExt($file['mangled_filename']));
 	$file["mime_type"] = 'image/' . $extension;
 }
 ?>
