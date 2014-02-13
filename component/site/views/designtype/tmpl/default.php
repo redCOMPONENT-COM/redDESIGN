@@ -229,8 +229,8 @@ $productId = $input->getInt('pid', 0);
 						}
 					},
 					beforeSend: function (xhr) {
-						jQuery('#svgContainer .progress').show().addClass('active');
 						jQuery('#svgContainer .progress .bar-success').css('width', '0%');
+						jQuery('#svgContainer .progress').show().addClass('active');
 					},
 					success: function (response) {
 						jQuery('#svgContainer .progress').removeClass('active');
@@ -791,8 +791,6 @@ $productId = $input->getInt('pid', 0);
 	 */
 	function changeBackground(propertyId)
 	{
-		jQuery("#mainSvgImage").empty();
-		jQuery("#areasContainer").empty();
 
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxLoadDesigntype",
@@ -801,8 +799,11 @@ $productId = $input->getInt('pid', 0);
 			type: "post",
 			success: function (data)
 			{
+				jQuery("#mainSvgImage").empty();
+				jQuery("#areasContainer").empty();
 				jQuery("#areasContainer").html(data);
-				thumbnailSVGLoader();
+				jQuery('#svgContainer .progress .bar-success').css('width', '0%');
+				jQuery('#svgContainer .progress').show().addClass('active');
 				jQuery("#areasContainer .flexslider").flexslider({
 					'slideshow': false,
 					'directionNav': true,
@@ -814,6 +815,7 @@ $productId = $input->getInt('pid', 0);
 					'animation': 'slide',
 					'animationLoop': false
 				});
+				thumbnailSVGLoader();
 				loadBackgroundSVGandAreas(propertyId);
 			},
 			error: function (data)
@@ -826,8 +828,6 @@ $productId = $input->getInt('pid', 0);
 	function loadBackgroundSVGandAreas(propertyId)
 	{
 		var areas;
-		jQuery('#svgContainer .progress').show().addClass('active');
-		jQuery('#svgContainer .progress .bar-success').css('width', '0%');
 
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxGetBackground",
