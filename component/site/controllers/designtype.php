@@ -210,11 +210,45 @@ class ReddesignControllerDesigntype extends JController
 
 		if (!empty($file) && isset($file['name']) && !empty($file['type']))
 		{
-			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'cliparts/uploaded', $config->getMaxSVGFileSize(), 'svg');
+			$folderPath = JPATH_SITE . '/media/com_reddesign/cliparts/uploaded/';
+			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'cliparts/uploaded', $config->getMaxSVGFileSize(), 'svg,jpg,png,gif');
 
-			if (JFile::exists(JPATH_SITE . '/media/com_reddesign/cliparts/uploaded/' . $uploaded_file['mangled_filename']))
+			if (JFile::exists($folderPath . $uploaded_file['mangled_filename']))
 			{
-				$success = true;
+				if (JFile::getExt($uploaded_file['mangled_filename']) != 'svg')
+				{
+					$image = new JImage($folderPath . $uploaded_file['mangled_filename']);
+					$thumbs = null;
+
+					try
+					{
+						$clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
+						$clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
+						$thumbs = $image->createThumbs(array($clipartPreviewWidth . 'x' . $clipartPreviewHeight), JImage::SCALE_FIT, $folderPath);
+					}
+					catch (Exception $e)
+					{
+						$success = false;
+					}
+
+					if (is_array($thumbs))
+					{
+						/** @var JImage $image */
+						$image = $thumbs[0];
+
+						// We want just a name
+						$uploaded_file['mangled_filename'] = str_replace(JPATH_ROOT . '/media/com_reddesign/cliparts/uploaded/', '', $image->getPath());
+						$success = true;
+					}
+					else
+					{
+						$success = false;
+					}
+				}
+				else
+				{
+					$success = true;
+				}
 			}
 		}
 
