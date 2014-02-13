@@ -710,7 +710,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				if ($doc->save(JPATH_SITE . '/media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg'))
 				{
 					$html .= '<div>' .
-								'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg" download>SVG</a>' .
+								'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg" target="_blank">SVG</a>' .
 							'</div>';
 
 					$orderItemMapping->productionSvg = $uniqueFileName;
@@ -725,7 +725,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			{
 				$html .= '</br>' .
 						'<div>' .
-							'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $orderItemMapping->productionSvg . '.svg" download>' .
+							'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $orderItemMapping->productionSvg . '.svg" target="_blank">' .
 								'SVG ' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
 							'</a>' .
 						'</div>';
