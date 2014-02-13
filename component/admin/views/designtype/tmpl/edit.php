@@ -73,7 +73,7 @@ switch ($tab)
 			<?php echo $this->form->getInput('id'); ?>
 			<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken(); ?>" value="1"/>
 
-			<div id="basic_configuration" class="span12">
+			<div id="basic_configuration" class="span12 col-md12">
 				<div class="control-group">
 					<div class="control-label">
 						<?php echo $this->form->getLabel('name'); ?>
@@ -107,7 +107,7 @@ switch ($tab)
 	<?php if (!empty($this->item->id)) : ?>
 		<div class="tab-pane <?php echo $backgroundTabClass; ?>" id="backgrounds">
 			<div class="row">
-				<div class="span2 offset10">
+				<div class="span2 offset10 col-md2">
 					<input type="button" class="btn btn-primary" id="addBgBtn" value="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BACKGROUNDS_HIDE_FORM'); ?>"/>
 				</div>
 			</div>

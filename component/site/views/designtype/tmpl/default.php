@@ -62,7 +62,7 @@ $productId = $input->getInt('pid', 0);
 	<?php // Part 2 - Select Backgrounds ?>
 {RedDesignBreakBackgrounds}
 	<div class="row-fluid">
-		<div class="well span12">
+		<div class="well span12 col-md12">
 			<?php
 				echo RLayoutHelper::render('default_backgrounds', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl');
 			?>
@@ -94,9 +94,9 @@ $productId = $input->getInt('pid', 0);
 		</button>
 		<div id="fullScreenContainer" class="redcore" style="padding:0px;">
 			<div class="row-fluid">
-				<div class="span10 svg-container-element" id="fullScreenContainerSVG">
+				<div class="span10 col-md10 svg-container-element" id="fullScreenContainerSVG">
 				</div>
-				<div class="span2 right-modal-buttons">
+				<div class="span2 col-md2 right-modal-buttons">
 					<button id="fullScreenCloseButton"
 					        type="button"
 					        class="btn btn-danger btn-large full-screen-close"
@@ -130,7 +130,7 @@ $productId = $input->getInt('pid', 0);
 	<?php // Part 6 - Areas Begin ?>
 {RedDesignBreakDesignAreas}
 	<div class="row-fluid">
-		<div class="well span12">
+		<div class="well span12 col-md12">
 			<?php echo RLayoutHelper::render('default_areas', $displayData, $basePath = JPATH_ROOT . '/components/com_reddesign/views/designtype/tmpl'); ?>
 		</div>
 	</div>
@@ -229,8 +229,8 @@ $productId = $input->getInt('pid', 0);
 						}
 					},
 					beforeSend: function (xhr) {
-						jQuery('#svgContainer .progress').show().addClass('active');
 						jQuery('#svgContainer .progress .bar-success').css('width', '0%');
+						jQuery('#svgContainer .progress').show().addClass('active');
 					},
 					success: function (response) {
 						jQuery('#svgContainer .progress').removeClass('active');
@@ -791,8 +791,6 @@ $productId = $input->getInt('pid', 0);
 	 */
 	function changeBackground(propertyId)
 	{
-		jQuery("#mainSvgImage").empty();
-		jQuery("#areasContainer").empty();
 
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxLoadDesigntype",
@@ -801,8 +799,11 @@ $productId = $input->getInt('pid', 0);
 			type: "post",
 			success: function (data)
 			{
+				jQuery("#mainSvgImage").empty();
+				jQuery("#areasContainer").empty();
 				jQuery("#areasContainer").html(data);
-				thumbnailSVGLoader();
+				jQuery('#svgContainer .progress .bar-success').css('width', '0%');
+				jQuery('#svgContainer .progress').show().addClass('active');
 				jQuery("#areasContainer .flexslider").flexslider({
 					'slideshow': false,
 					'directionNav': true,
@@ -814,6 +815,7 @@ $productId = $input->getInt('pid', 0);
 					'animation': 'slide',
 					'animationLoop': false
 				});
+				thumbnailSVGLoader();
 				loadBackgroundSVGandAreas(propertyId);
 			},
 			error: function (data)
@@ -826,8 +828,6 @@ $productId = $input->getInt('pid', 0);
 	function loadBackgroundSVGandAreas(propertyId)
 	{
 		var areas;
-		jQuery('#svgContainer .progress').show().addClass('active');
-		jQuery('#svgContainer .progress .bar-success').css('width', '0%');
 
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxGetBackground",

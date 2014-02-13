@@ -11,8 +11,8 @@ defined('_JEXEC') or die();
 
 JHtml::_('behavior.framework');
 ?>
-<div id="basic_configuration" class="span12">
-	<div class="span6">
+<div id="basic_configuration" class="span12 col-md12">
+	<div class="span6 col-md6">
 		<div class="control-group">
 			<label class="control-label " for="name">
 				<?php echo $this->form->getLabel('name'); ?>
@@ -51,7 +51,7 @@ JHtml::_('behavior.framework');
 			</div>
 		</div>
 	</div>
-	<div class="span6">
+	<div class="span6 col-md6">
 		<?php if (!empty($this->item->clipartFile)) : ?>
 			<div class="control-group">
 				<h4>

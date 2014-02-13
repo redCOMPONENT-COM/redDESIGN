@@ -18,11 +18,11 @@ $designType = $data['designType'];
 JHtml::_('rjquery.select2', 'select');
 ?>
 <div class="row-fluid">
-<div class="span12">
+<div class="span12 col-md12">
 	<fieldset>
 		<legend><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_LEGEND_FONT_SETTINGS'); ?></legend>
 		<div class="row-fluid">
-			<div class="span4">
+			<div class="span4 col-md4">
 
 				<div class="control-group">
 					<label for="<?php echo 'areaFontAlignment' . $area->id; ?>" class="control-label" style="float:none;">
@@ -80,7 +80,7 @@ JHtml::_('rjquery.select2', 'select');
 				</div>
 
 			</div>
-			<div class="span7 media">
+			<div class="span7 col-md7 media">
 				<?php echo JText::_('COM_REDDESIGN_CLIPART_PREVIEW');?><br />
 				<?php foreach ($area->cliparts as $clipart) : ?>
 					<div class="pull-left thumbnail">
@@ -101,7 +101,7 @@ JHtml::_('rjquery.select2', 'select');
 	</fieldset>
 </div>
 
-<div class="span6 offset5">
+<div class="span6 col-md6 offset5">
 	<button id="saveAreaClipartSettings<?php echo $area->id; ?>"
 	        type="button"
 	        class="btn btn-success"

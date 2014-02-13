@@ -33,7 +33,7 @@ JHtml::_('rjquery.flexslider', '.flexslider', array(
 );
 ?>
 <div class="row-fluid">
-	<div class="span12">
+	<div class="span12 col-md12">
 		<legend><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_BANK'); ?></legend>
 		<div class="filters">
 			<div class="btn-wrapper input-append">
@@ -64,7 +64,7 @@ JHtml::_('rjquery.flexslider', '.flexslider', array(
 			); ?>
 
 		</div>
-		<div class="span12">
+		<div class="span12 col-md12">
 			<div class="flexslider2" id="clipartBank<?php echo $areaId ;?>">
 				<ul class="slides">
 					<?php foreach ($items as $clipart) : ?>

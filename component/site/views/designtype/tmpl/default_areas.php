@@ -373,15 +373,15 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 							});
 					</script>
 
-					<div id="colorsContainer<?php echo $area->id ?>" class="span6">
-						<div class="span9">
+					<div id="colorsContainer<?php echo $area->id ?>" class="span6 col-md6">
+						<div class="span9 col-md9">
 							<label class="control-label">
 								<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_COLOR_PICKER'); ?>
 								<div id="colorPickerContainer<?php echo $area->id; ?>" class="colorPickerContainer"></div>
 							</label>
 							<label for="colorCode<?php echo $area->id; ?>">
 								<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SELECTED_COLOR') ?>
-								<input class="span12 colorPickerSelectedColor colorCode"
+								<input class="span12 col-md12 colorPickerSelectedColor colorCode"
 									   type="text"
 									   value="#cfcfcf"
 									   id="colorCode<?php echo $area->id ?>"
@@ -389,10 +389,10 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 									/>
 							</label>
 						</div>
-						<div class="span3 CMYKContainer">
+						<div class="span3 col-md3 CMYKContainer">
 							<div class="input-prepend">
 								<span class="add-on">C</span>
-								<input class="span8"
+								<input class="span8 col-md8"
 									   id="C<?php echo $area->id; ?>"
 									   name="C<?php echo $area->id; ?>"
 									   type="text"
@@ -402,7 +402,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 							</div>
 							<div class="input-prepend">
 								<span class="add-on">M</span>
-								<input class="span8"
+								<input class="span8 col-md8"
 									   id="M<?php echo $area->id; ?>"
 									   name="M<?php echo $area->id; ?>"
 									   type="text"
@@ -412,7 +412,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 							</div>
 							<div class="input-prepend">
 								<span class="add-on">Y</span>
-								<input class="span8"
+								<input class="span8 col-md8"
 									   id="Y<?php echo $area->id; ?>"
 									   name="Y<?php echo $area->id; ?>"
 									   type="text"
@@ -422,7 +422,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 							</div>
 							<div class="input-prepend">
 								<span class="add-on">K</span>
-								<input class="span8"
+								<input class="span8 col-md8"
 									   id="K<?php echo $area->id; ?>"
 									   name="K<?php echo $area->id; ?>"
 									   type="text"

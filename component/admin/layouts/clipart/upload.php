@@ -23,7 +23,7 @@ if ($file["mime_type"] == 'application/postscript')
 }
 ?>
 <div class="row-fluid">
-	<div class="span12">
+	<div class="span12 col-md12">
 		<div class="thumbnail clipart-container">
 			<div
 				class="thumbnailSVG-pointer"
