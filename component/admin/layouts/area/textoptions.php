@@ -90,9 +90,13 @@ JHtml::_('rjquery.select2', 'select');
 								          name="fontsizerDropdown<?php echo $area->id; ?>"
 								          rows="7"
 									><?php echo $area->font_size; ?></textarea>
-																	<span class="help-block">
-																		<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC') ?>
-																	</span>
+									<span class="help-block">
+										<?php if ($designType->fontsizer == 'dropdown_numbers'):
+											echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZES_DESC');
+										else:
+											echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_ENTER_FONT_SIZE_LABELS_DESC');
+										endif; ?>
+									</span>
 							</label>
 						</div>
 
