@@ -151,8 +151,10 @@ if (isset($displayData))
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_IMG_HELP'); ?>
 					</span>
 					<div id="backgroundImageContainer">
-						<svg id="svgForAreas">
-						</svg>
+						<div>
+							<svg id="svgForAreas">
+							</svg>
+						</div>
 						<div class="progressbar-holder" style="width: <?php echo $bgBackendPreviewWidth; ?>px; margin-top:20px;">
 							<div class="progress progress-striped" style="display:none;">
 								<div class="bar bar-success"></div>

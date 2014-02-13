@@ -75,7 +75,9 @@ $productId = $input->getInt('pid', 0);
 	<div id="background-container">
 
 		<div id="svgContainer">
-			<svg id="mainSvgImage"></svg>
+			<div>
+				<svg id="mainSvgImage"></svg>
+			</div>
 			<div class="progressbar-holder" style="width: <?php echo $previewWidth; ?>px; margin-top:20px;">
 				<div class="progress progress-striped" style="display:none;">
 					<div class="bar bar-success"></div>
@@ -241,6 +243,11 @@ $productId = $input->getInt('pid', 0);
 						}
 						else{
 							jQuery('#svgContainer .progress').fadeOut(3000);
+						}
+
+						if ('<?php echo $this->displayedBackground->useCheckerboard ?>' == '1')
+						{
+							jQuery('#mainSvgImage').parent().width(previewWidth).height(previewHeight).addClass('checkerboard');
 						}
 
 						jQuery("#mainSvgImage")
@@ -873,6 +880,10 @@ $productId = $input->getInt('pid', 0);
 							jQuery('#svgContainer .progress').fadeOut(3000);
 						}
 
+						if (background.useCheckerboard == '1')
+						{
+							jQuery('#mainSvgImage').parent().width(previewWidth).height(previewHeight).addClass('checkerboard');
+						}
 						jQuery("#mainSvgImage")
 							.append('<defs><style type="text/css">' +  background.selectedFontsDeclaration + '</style></defs>')
 							.append(response);

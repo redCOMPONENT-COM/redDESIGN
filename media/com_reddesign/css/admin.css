@@ -85,3 +85,12 @@
 .clipart-container {
     position: relative;
 }
+.checkerboard{
+    background: #fff url(../backgrounds/checkboard-default.svg) repeat left top;
+    background-size: 3em, 3em;
+    -webkit-background-size: 3em, 3em;
+    -moz-background-size: 3em, 3em;
+    -o-background-size: 3em, 3em;
+    margin:0;
+    padding:0;
+}
