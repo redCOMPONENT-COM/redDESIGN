@@ -672,6 +672,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					$fontSizeStyle = $textNodes->item($i)->getAttribute('style');
 
 					$matches = array();
+					$fontSize = 12;
 					preg_match('/font-size: (.*?)px;/s', $fontSizeStyle, $matches);
 
 					if (!empty($matches[1]))
