@@ -215,10 +215,10 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 				<?php
 					$defaultFontSizeOutput = false;
 
-					if ($this->designType->fontsizer === 'auto' || $this->designType->fontsizer === 'auto_chars') :
-						$defaultFontSizeValue = 12;
-						$area->defaultFontSize = round($defaultFontSizeValue * $unitConversionRatio, 0);
-					endif;
+					if ($this->designType->fontsizer === 'auto' || $this->designType->fontsizer === 'auto_chars')
+					{
+						$area->defaultFontSize = 1;
+					}
 				?>
 				<?php if ($this->designType->fontsizer === 'slider') : ?>
 					<?php
@@ -235,7 +235,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 						   data-slider-max="<?php echo $area->maxFontSize ?>"
 						   data-slider-value="[<?php echo $area->defaultFontSize ?>]"
 					/>
-				<?php $defaultFontSizeOutput = true; ?>
+					<?php $defaultFontSizeOutput = true; ?>
 				<?php elseif ($this->designType->fontsizer == 'dropdown_numbers' || $this->designType->fontsizer == 'dropdown_labels') : ?>
 					<?php
 
@@ -538,10 +538,10 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 						endforeach; ?>
 					</ul>
 				</div>
-				<input type="hidden" id="selectedClipart<?php echo $area->id ;?>" value="">
-				<div id="clipartBank<?php echo $area->id ;?>" style="display:none;">
+				<input type="hidden" id="selectedClipart<?php echo $area->id; ?>" value="">
+				<div id="clipartBank<?php echo $area->id; ?>" style="display:none;">
 				</div>
-				<div id="clipartUpload<?php echo $area->id ;?>" style="display:none;">
+				<div id="clipartUpload<?php echo $area->id; ?>" style="display:none;">
 					<div class="upload-clipart-info">
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_INFO'); ?>
 					</div>
@@ -549,7 +549,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 					<span class="btn btn-success fileinput-button">
 					    <i class="glyphicon glyphicon-plus"></i>
 					    <span><?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_SELECT_FILE'); ?></span>
-					    <input accept="image/*" id="uploadClipartFile<?php echo $area->id; ?>" type="file" name="uploadClipartFile<?php echo $area->id; ?>" />
+					    <input accept="image/*" id="uploadClipartFile<?php echo $area->id ?>" type="file" name="uploadClipartFile<?php echo $area->id; ?>" />
 					</span>
 					<button class="btn btn-success upload-clipart-file" type="button" id="uploadClipartFileSave<?php echo $area->id; ?>">
 						<i class="icon-upload"></i> <?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD'); ?>

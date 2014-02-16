@@ -584,10 +584,10 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 		var text = jQuery("#textArea_" + areaId);
 		var font = jQuery("#fontArea" + areaId);
 		var color = jQuery("#colorCode" + areaId);
-		var fontSize = jQuery("#fontSize" + areaId);
 		var textAlign = jQuery("#textAlign" + areaId);
 		var verticalAlign = jQuery("#verticalAlign" + areaId);
 		var fontSizeValue = 12;
+		var fontSize;
 
 		text.css("text-align", jQuery(textAlign).val());
 
@@ -595,6 +595,15 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 		if (svgElement)
 		{
+			if (jQuery(text).is("textarea") && typeof(jQuery(text).val()) != "undefined")
+			{
+				createSVGTextMultiline(svgElement, jQuery(text).val())
+			}
+			else if (typeof(jQuery(text).val()) != "undefined")
+			{
+				svgElement.node.textContent = jQuery(text).val();
+			}
+
 			if (font)
 			{
 				svgElement.attr("font-family", jQuery(font).find(":selected").text());
@@ -605,87 +614,107 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 				svgElement.attr("fill", "#" + jQuery(color).val().replace("#",""));
 			}
 
-			if (fontSize && typeof(jQuery(fontSize).val()) != "undefined")
-			{
-				fontSize = jQuery(fontSize).val().split(":");
-
-				if (fontSize.length > 1)
-					fontSizeValue = fontSize[1];
-				else
-					fontSizeValue = fontSize[0];
-
-				svgElement.attr("font-size", fontSizeValue + fontUnit);
-				svgElement.attr("y", parseFloat(areasContainer[areaId]["y1"]) + ((parseFloat(fontSizeValue) * scalingImageForPreviewRatio)));
-			}
-
-			if (textAlign && typeof(jQuery(textAlign).val()) != "undefined")
-			{
-				var textAlignValue = jQuery(textAlign).val();
-				svgElement.attr("text-anchor", textAlignValue.replace("left", "start").replace("center", "middle").replace("right", "end"));
-
-				if (textAlignValue == "left")
+			<?php if ($this->designType->fontsizer == 'auto') : ?>
+				for (fontSize = 0; fontSize < 1000; fontSize++)
 				{
-					svgElement.attr("x", areasContainer[areaId]["x1"]);
-				}
-				else if (textAlignValue == "center")
-				{
+					svgElement.attr("font-size", fontSize + fontUnit);
+					svgElement.attr("text-anchor", "middle");
 					svgElement.attr("x", parseFloat(areasContainer[areaId]["x1"]) + (parseFloat(areasContainer[areaId]["width"]) / 2));
-				}
-				else if (textAlignValue == "right")
-				{
-					svgElement.attr("x", parseFloat(areasContainer[areaId]["x2"]));
-				}
-			}
+					svgElement.attr("y", parseFloat(areasContainer[areaId]["y1"]) + svgElement.node.clientHeight);
 
-			var yPos;
-
-			if (verticalAlign && typeof(jQuery(verticalAlign).val()) != "undefined")
-			{
-				var verticalAlignValue = jQuery(verticalAlign).val();
-
-				if (verticalAlignValue == "top")
-				{
-					yPos = areasContainer[areaId]["y1"];
-
-					if (fontSizeValue)
+					if (svgElement.node.clientWidth > parseFloat(areasContainer[areaId]["width"]))
 					{
-						yPos += (parseFloat(fontSizeValue) * (1 + scalingImageForPreviewRatio));
+						break;
 					}
 
-					svgElement.attr("y", yPos);
-				}
-				else if (verticalAlignValue == "middle")
-				{
-					yPos = parseFloat(areasContainer[areaId]["y1"]) + (parseFloat(areasContainer[areaId]["height"]) / 2);
-
-					if (fontSizeValue)
+					if (svgElement.node.clientHeight > parseFloat(areasContainer[areaId]["height"]))
 					{
-						yPos -= (parseFloat(fontSizeValue) / 2) * scalingImageForPreviewRatio;
+						break;
+					}
+				}
+			<?php else : ?>
+				fontSize = jQuery("#fontSize" + areaId);
+
+				if (fontSize && typeof(jQuery(fontSize).val()) != "undefined")
+				{
+					fontSize = jQuery(fontSize).val().split(":");
+
+					if (fontSize.length > 1)
+					{
+						fontSizeValue = fontSize[1];
+					}
+					else
+					{
+						fontSizeValue = fontSize[0];
 					}
 
-					svgElement.attr("y", yPos);
+					svgElement.attr("font-size", fontSizeValue + fontUnit);
+					svgElement.attr("y", parseFloat(areasContainer[areaId]["y1"]) + ((parseFloat(fontSizeValue) * scalingImageForPreviewRatio)));
 				}
-				else if (verticalAlignValue == "bottom")
+			<?php endif; ?>
+
+			<?php if ($this->designType->fontsizer != 'auto') : ?>
+				if (textAlign && typeof(jQuery(textAlign).val()) != "undefined")
 				{
-					yPos = parseFloat(areasContainer[areaId]["y1"]) + (parseFloat(areasContainer[areaId]["height"]));
+					var textAlignValue = jQuery(textAlign).val();
+					svgElement.attr("text-anchor", textAlignValue.replace("left", "start").replace("center", "middle").replace("right", "end"));
 
-					if (fontSizeValue)
+					if (textAlignValue == "left")
 					{
-						yPos -= (parseFloat(fontSizeValue) * scalingImageForPreviewRatio);
+						svgElement.attr("x", areasContainer[areaId]["x1"]);
 					}
-
-					svgElement.attr("y", yPos);
+					else if (textAlignValue == "center")
+					{
+						svgElement.attr("x", parseFloat(areasContainer[areaId]["x1"]) + (parseFloat(areasContainer[areaId]["width"]) / 2));
+					}
+					else if (textAlignValue == "right")
+					{
+						svgElement.attr("x", parseFloat(areasContainer[areaId]["x2"]));
+					}
 				}
-			}
 
-			if (jQuery(text).is("textarea") && typeof(jQuery(text).val()) != "undefined")
-			{
-				createSVGTextMultiline(svgElement, jQuery(text).val())
-			}
-			else if (typeof(jQuery(text).val()) != "undefined")
-			{
-				svgElement.node.textContent = jQuery(text).val();
-			}
+				var yPos;
+
+				if (verticalAlign && typeof(jQuery(verticalAlign).val()) != "undefined")
+				{
+					var verticalAlignValue = jQuery(verticalAlign).val();
+
+					if (verticalAlignValue == "top")
+					{
+						yPos = areasContainer[areaId]["y1"];
+
+						if (fontSizeValue)
+						{
+							yPos += (parseFloat(fontSizeValue) * (1 + scalingImageForPreviewRatio));
+						}
+
+						svgElement.attr("y", yPos);
+					}
+					else if (verticalAlignValue == "middle")
+					{
+						yPos = parseFloat(areasContainer[areaId]["y1"]) + (parseFloat(areasContainer[areaId]["height"]) / 2);
+
+						if (fontSizeValue)
+						{
+							yPos -= (parseFloat(fontSizeValue) / 2) * scalingImageForPreviewRatio;
+						}
+
+						svgElement.attr("y", yPos);
+					}
+					else if (verticalAlignValue == "bottom")
+					{
+						yPos = parseFloat(areasContainer[areaId]["y1"]) + (parseFloat(areasContainer[areaId]["height"]));
+
+						if (fontSizeValue)
+						{
+							yPos -= (parseFloat(fontSizeValue) * scalingImageForPreviewRatio);
+						}
+
+						svgElement.attr("y", yPos);
+					}
+				}
+			<?php endif; ?>
+
 		}
 	}
 
@@ -718,8 +747,8 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			var y1 = parseFloat("<?php echo $area->y1_pos; ?>") * scalingImageForPreviewRatio;
 			var x2 = parseFloat("<?php echo $area->x2_pos; ?>") * scalingImageForPreviewRatio;
 			var y2 = parseFloat("<?php echo $area->y2_pos; ?>") * scalingImageForPreviewRatio;
-			var width = x2 - x1;
-			var height = y2 - y1;
+			var width = parseFloat("<?php echo $area->width; ?>") * scalingImageForPreviewRatio;
+			var height = parseFloat("<?php echo $area->height; ?>") * scalingImageForPreviewRatio;
 			var svgElement;
 
 			areasContainer[<?php echo $area->id; ?>] = new Array();
@@ -946,8 +975,8 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			var y1 = parseFloat(areas[i].y1_pos) * scalingImageForPreviewRatio;
 			var x2 = parseFloat(areas[i].x2_pos) * scalingImageForPreviewRatio;
 			var y2 = parseFloat(areas[i].y2_pos) * scalingImageForPreviewRatio;
-			var width = x2 - x1;
-			var height = y2 - y1;
+			var width = parseFloat(areas[i].width) * scalingImageForPreviewRatio;
+			var height = parseFloat(areas[i].height) * scalingImageForPreviewRatio;
 			var svgElement;
 
 			areasContainer[areas[i].id] = new Array();
