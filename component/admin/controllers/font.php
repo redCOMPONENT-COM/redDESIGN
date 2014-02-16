@@ -52,15 +52,12 @@ class ReddesignControllerFont extends RControllerForm
 
 				if (empty($data['name']))
 				{
-					$data['name'] = $file['name'];
+					$data['name'] = str_replace('.woff', '', $file['name']);
 				}
 
 				$data['font_file'] = $uploaded_file['mangled_filename'];
 
 				$this->input->post->set('jform', $data);
-
-				// @todo We need to implement here conversion of the font to different fonts
-				//exec('php ' . JPATH_ROOT . '/libraries/reddesign/cufon/convert.php -b "Raphael.registerFont" -n "' . $data['name'] . '" ' . JPATH_ROOT . '/media/com_reddesign/fonts/' . $uploaded_file['mangled_filename'] . ' -u "U+??" > ' . JPATH_ROOT . '/media/com_reddesign/js/fonts/' . $data['name'] . '.js');
 
 				return parent::save($key, $urlVar);
 			}
