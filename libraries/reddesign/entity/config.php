@@ -214,6 +214,26 @@ final class ReddesignEntityConfig
 	}
 
 	/**
+	 * Get background thumbnail width.
+	 *
+	 * @return  int  Background thumbnail width
+	 */
+	public function getBgThumbnailWidth()
+	{
+		return $this->getInt('background_thumbnail_width');
+	}
+
+	/**
+	 * Get background thumbnail height.
+	 *
+	 * @return  int  Background thumbnail height
+	 */
+	public function getBgThumbnailHeight()
+	{
+		return $this->getInt('background_thumbnail_height');
+	}
+
+	/**
 	 * Get the max width of Clipart preview.
 	 *
 	 * @return  int  The max width of Clipart preview.
