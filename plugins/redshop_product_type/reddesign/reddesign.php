@@ -214,9 +214,9 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 											'value="' . $background->id . '"' . $checked .
 									' />';
 					$dropdownHtml .= '&nbsp;&nbsp' . $background->name . '&nbsp;&nbsp;';
-					// @todo put in object and load it with ajax or show png thumbnail
-					//$dropdownHtml .= '<img src="' . JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file .
-					//					'" alt="' . $background->name . '" style="width:100px;" />&nbsp;&nbsp;&nbsp;';
+
+					$dropdownHtml .= '<img src="' . ReddesignHelpersBackground::getThumbnail($background->svg_file) .
+										'" alt="' . $background->name . '" />&nbsp;&nbsp;&nbsp;';
 				}
 
 					$dropdownHtml .= '</div>';
@@ -268,12 +268,11 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 				// Create background attribute HTML.
 				foreach ($backgroundsOfRelatedDesignTypes as $background)
 				{
-					$dropdownHtml .= '<input type="radio" name="attribute[{gh}][property][{total_g}][redDesignBackground]" value="' .
-									$background->id . '" />';
+					$dropdownHtml .= '<input type="radio" name="attribute[{gh}][property][{total_g}][redDesignBackground]" value="' . $background->id . '" />';
 					$dropdownHtml .= '&nbsp;&nbsp;' . $background->name . '&nbsp;&nbsp;';
-					// @todo put in object and load it with ajax or show png thumbnail
-					//$dropdownHtml .= '<img src="' . JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file .
-					//	'" alt="' . $background->name . '" style="width:100px;" />&nbsp;&nbsp;&nbsp;';
+
+					$dropdownHtml .= '<img src="' . ReddesignHelpersBackground::getThumbnail($background->svg_file) .
+										'" alt="' . $background->name . '" />&nbsp;&nbsp;&nbsp;';
 				}
 			}
 

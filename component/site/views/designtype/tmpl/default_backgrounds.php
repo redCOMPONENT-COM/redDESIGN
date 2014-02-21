@@ -41,13 +41,7 @@ if (isset($displayData))
 					</div>
 					<div class="background-detail">
 						<div class="background-thumbnail-container">
-							<object type="image/svg+xml"
-							        data="<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>"
-							        width="150"
-							        height="150"
-								>
-								<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_BROWSER_NOT_SUPPORTED_FALLBACK'); ?>
-							</object>
+							<img src="<?php echo ReddesignHelpersBackground::getThumbnail($background->svg_file) ?>" alt="<?php echo $background->name; ?>" />
 						</div>
 						<div class="pull-left">
 							<h5><?php echo $background->name; ?></h5>
