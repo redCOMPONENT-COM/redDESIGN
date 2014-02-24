@@ -504,10 +504,12 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 		var verticalAlign = jQuery("#verticalAlign" + areaId);
 		var selectedClipart = jQuery("#selectedClipart" + areaId);
 		var svgElement = rootSnapSvgObject.select("#areaBoxesLayer #areaSVGElement_" + areaId);
+
 		if (svgElement)
 		{
 			var horizontalPosition = "";
 			var verticalPosition = "";
+
 			if (horizontalAlign && typeof(jQuery(horizontalAlign).val()) != "undefined")
 			{
 				horizontalPosition = jQuery(horizontalAlign).val().replace("left", "xMin").replace("center", "xMid").replace("right", "xMax");
@@ -531,6 +533,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			if (selectedClipart && typeof(jQuery(selectedClipart).val()) != "undefined")
 			{
 				var selectedClipartSVG = jQuery("[name=clipart" + areaId + "_" + jQuery(selectedClipart).val() + "]:first");
+
 				if (selectedClipartSVG && typeof(selectedClipartSVG) != "undefined")
 				{
 					var clipartType = jQuery(selectedClipartSVG).attr("cliparttype");
@@ -551,12 +554,15 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					else
 					{
 						var svgDocument = document.getElementById(jQuery(selectedClipartSVG).attr("id"));
+
 						if (svgDocument && typeof(svgDocument) != "undefined")
 						{
 							var svgDocumentContent = svgDocument.contentDocument;
+
 							if (svgDocumentContent && typeof(svgDocumentContent) != "undefined")
 							{
 								var svgElementInner = jQuery(svgDocumentContent.documentElement).clone();
+
 								if (typeof(svgElementInner) != "undefined")
 								{
 									jQuery(svgElementInner).attr("height", areasContainer[areaId]["height"]);
@@ -683,34 +689,25 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					{
 						yPos = areasContainer[areaId]["y1"];
 
-						if (fontSizeValue)
-						{
-							yPos += (parseFloat(fontSizeValue) * (1 + scalingImageForPreviewRatio));
-						}
-
 						svgElement.attr("y", yPos);
+						svgElement.attr("alignment-baseline", "hanging");
+						svgElement.attr("dominant-baseline", "hanging");
 					}
 					else if (verticalAlignValue == "middle")
 					{
-						yPos = parseFloat(areasContainer[areaId]["y1"]) + (parseFloat(areasContainer[areaId]["height"]) / 2);
-
-						if (fontSizeValue)
-						{
-							yPos -= (parseFloat(fontSizeValue) / 2) * scalingImageForPreviewRatio;
-						}
+						yPos = areasContainer[areaId]["y1"] + (parseFloat(areasContainer[areaId]["height"]) / 2);
 
 						svgElement.attr("y", yPos);
+						svgElement.attr("alignment-baseline", "middle");
+						svgElement.attr("dominant-baseline", "middle");
 					}
 					else if (verticalAlignValue == "bottom")
 					{
-						yPos = parseFloat(areasContainer[areaId]["y1"]) + (parseFloat(areasContainer[areaId]["height"]));
-
-						if (fontSizeValue)
-						{
-							yPos -= (parseFloat(fontSizeValue) * scalingImageForPreviewRatio);
-						}
+						yPos = areasContainer[areaId]["y1"] + parseFloat(areasContainer[areaId]["height"]);
 
 						svgElement.attr("y", yPos);
+						svgElement.attr("alignment-baseline", "auto");
+						svgElement.attr("dominant-baseline", "auto");
 					}
 				}
 			<?php endif; ?>
