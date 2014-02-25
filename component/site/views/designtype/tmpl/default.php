@@ -684,30 +684,88 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 				if (verticalAlign && typeof(jQuery(verticalAlign).val()) != "undefined")
 				{
 					var verticalAlignValue = jQuery(verticalAlign).val();
+					var userAgent = window.navigator.userAgent;
+					var msie = userAgent.indexOf("MSIE ");
+					var firefox = userAgent.indexOf("Firefox");
+					var bbox = svgElement.getBBox();
 
 					if (verticalAlignValue == "top")
 					{
-						yPos = areasContainer[areaId]["y1"];
+						if (msie > 0)
+						{
+							yPos = areasContainer[areaId]["y1"];
 
-						svgElement.attr("y", yPos);
-						svgElement.attr("alignment-baseline", "hanging");
-						svgElement.attr("dominant-baseline", "hanging");
+							svgElement.attr("y", yPos);
+							svgElement.attr("dy", "0.8em");
+						}
+						else
+						{
+							yPos = areasContainer[areaId]["y1"];
+
+							svgElement.attr("y", yPos);
+
+							if (firefox > 0)
+							{
+								svgElement.attr("dominant-baseline", "none");
+								svgElement.attr("dy", "0.8em");
+							}
+							else
+							{
+								svgElement.attr("alignment-baseline", "hanging");
+							}
+						}
 					}
 					else if (verticalAlignValue == "middle")
 					{
-						yPos = areasContainer[areaId]["y1"] + (parseFloat(areasContainer[areaId]["height"]) / 2);
+						if (msie > 0)
+						{
+							yPos = areasContainer[areaId]["y1"] + (parseFloat(areasContainer[areaId]["height"]) / 2);
 
-						svgElement.attr("y", yPos);
-						svgElement.attr("alignment-baseline", "middle");
-						svgElement.attr("dominant-baseline", "middle");
+							svgElement.attr("y", yPos);
+							svgElement.attr("dy", ".35em");
+						}
+						else
+						{
+							yPos = areasContainer[areaId]["y1"] + (parseFloat(areasContainer[areaId]["height"]) / 2);
+
+							svgElement.attr("y", yPos);
+
+							if (firefox > 0)
+							{
+								svgElement.attr("dy", "0");
+								svgElement.attr("dominant-baseline", "middle");
+							}
+							else
+							{
+								svgElement.attr("alignment-baseline", "middle");
+							}
+						}
 					}
 					else if (verticalAlignValue == "bottom")
 					{
-						yPos = areasContainer[areaId]["y1"] + parseFloat(areasContainer[areaId]["height"]);
+						if (msie > 0)
+						{
+							yPos = areasContainer[areaId]["y1"] + parseFloat(areasContainer[areaId]["height"]);
 
-						svgElement.attr("y", yPos);
-						svgElement.attr("alignment-baseline", "auto");
-						svgElement.attr("dominant-baseline", "auto");
+							svgElement.attr("y", yPos);
+							svgElement.attr("dy", "0");
+						}
+						else
+						{
+							yPos = areasContainer[areaId]["y1"] + parseFloat(areasContainer[areaId]["height"]);
+
+							svgElement.attr("y", yPos);
+
+							if (firefox > 0)
+							{
+								svgElement.attr("dy", "0");
+								svgElement.attr("dominant-baseline", "auto");
+							}
+							else
+							{
+								svgElement.attr("alignment-baseline", "auto");
+							}
+						}
 					}
 				}
 			<?php endif; ?>
