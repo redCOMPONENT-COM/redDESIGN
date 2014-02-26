@@ -890,6 +890,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 				});
 				thumbnailSVGLoader();
 				loadBackgroundSVGandAreas(propertyId);
+				addUploadButtonCall();
 			},
 			error: function (data)
 			{
