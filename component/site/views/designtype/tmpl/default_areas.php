@@ -49,9 +49,6 @@ if (isset($displayData))
 }
 
 $config = ReddesignEntityConfig::getInstance();
-$unit = $config->getUnit();
-$sourceDpi = $config->getSourceDpi();
-$unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourceDpi);
 $clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
 $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 ?>
@@ -162,7 +159,15 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 						$defaultFonts = array();
 						$defaultFonts[] = JHTML::_('select.option', 0, 'Arial');
 
-						echo JHTML::_('select.genericlist', $defaultFonts, 'fontArea' . $area->id, 'class="inputbox reddesign-font-selection" onChange="customize(0);"', 'value', 'text', null);
+						echo JHTML::_(
+										'select.genericlist',
+										$defaultFonts,
+										'fontArea' . $area->id,
+										'class="inputbox reddesign-font-selection" onChange="customize(0);"',
+										'value',
+										'text',
+										null
+									);
 					}
 					else
 					{
@@ -204,7 +209,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 			{RedDesignBreakDesignAreaChooseFontSizeLabel}
 				<?php // Font Size Selection ?>
-				<?php if (($this->designType->fontsizer != 'auto' && $this->designType->fontsizer != 'auto_chars') && ($area->font_size != '' || $this->designType->fontsizer == 'slider')) : ?>
+				<?php if ($this->designType->fontsizer == 'dropdown_numbers' && $this->designType->fontsizer == 'dropdown_labels') : ?>
 					<label for="<?php echo 'fontSize' . $area->id; ?>">
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CHOOSE_FONTSIZE'); ?>
 					</label>
@@ -301,7 +306,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 					<?php $defaultFontSizeOutput = true; ?>
 				<?php endif; ?>
 
-				<?php if ($defaultFontSizeOutput): ?>
+				<?php if ($defaultFontSizeOutput) : ?>
 					<input type="hidden"
 					       id="fontSize<?php echo $area->id ?>"
 					       class="reddesign-font-size-selection"
@@ -469,12 +474,19 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 						<div class="colorSelector_list" id="fontColor<?php echo $area->id ?>">
 							<div style="background-color:<?php echo $defaultColor; ?>;cursor:pointer;">&nbsp;</div>
 						</div>
-						<input type="hidden" class="colorCode<?php echo $area->id ?>" name="colorCode<?php echo $area->id ?>" value="<?php echo $defaultColorVal; ?>" id="colorCode<?php echo $area->id ?>">
+						<input type="hidden"
+						       class="colorCode<?php echo $area->id ?>"
+						       name="colorCode<?php echo $area->id ?>"
+						       value="<?php echo $defaultColorVal; ?>"
+						       id="colorCode<?php echo $area->id ?>"
+							>
 					</div>
 
 				<?php endif; ?>
 			{RedDesignBreakDesignAreaChooseColor}
-			<?php break; ?>
+			<?php
+				break;
+			?>
 
 		<?php case 2: // Clipart ?>
 			{RedDesignBreakDesignAreaChooseClipartLabel}
@@ -505,22 +517,21 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 						<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD'); ?>
 					</span>
 				</button>
-				<div class="flexslider" id="featuredCliparts<?php echo $area->id ;?>">
+				<div class="flexslider" id="featuredCliparts<?php echo $area->id; ?>">
 					<ul class="slides">
 						<?php
-						$area->cliparts = ReddesignHelpersArea::getAreaFeaturedCliparts($area->id);
-						$selected = null;
+							$area->cliparts = ReddesignHelpersArea::getAreaFeaturedCliparts($area->id);
 						?>
-						<?php foreach ($area->cliparts as $clipart) :?>
+						<?php foreach ($area->cliparts as $clipart) : ?>
 							<li>
 								<div class="pull-left thumbnail clipart-container" stle="pointer-events: none;">
-									<div
-										class="thumbnailSVG-pointer"
-										name="clipart<?php echo $area->id; ?>"
-										style="width:<?php echo $clipartPreviewWidth; ?>px; height:<?php echo $clipartPreviewHeight; ?>px;"></div>
+									<div class="thumbnailSVG-pointer"
+										 name="clipart<?php echo $area->id; ?>"
+										 style="width:<?php echo $clipartPreviewWidth ?>px; height:<?php echo $clipartPreviewHeight; ?>px;">
+									</div>
 									<object
-										id="clipart<?php echo $area->id ;?>_<?php echo $clipart->id ;?>"
-										name="clipart<?php echo $area->id ;?>_<?php echo $clipart->id ;?>"
+										id="clipart<?php echo $area->id ?>_<?php echo $clipart->id;?>"
+										name="clipart<?php echo $area->id ?>_<?php echo $clipart->id;?>"
 										class="thumbnailSVG"
 										data="<?php echo JURI::root() . 'media/com_reddesign/cliparts/' . $clipart->clipartFile; ?>"
 										type="image/svg+xml">
@@ -533,9 +544,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 										/>
 								</div>
 							</li>
-						<?php
-							$selected = $clipart->id;
-						endforeach; ?>
+						<?php endforeach; ?>
 					</ul>
 				</div>
 				<input type="hidden" id="selectedClipart<?php echo $area->id; ?>" value="">
@@ -557,7 +566,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 					<br />
 					<br />
 					<div class="progress progress-striped image-progress">
-						<div class="bar bar-success" style="width: 0%"></div>
+						<div class="bar bar-success" style="width: 0"></div>
 					</div>
 
 					<div id="uploadedClipart<?php echo $area->id; ?>" class="files">
@@ -567,8 +576,10 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 				</div>
 				<div class="clearfix"></div>
 			{RedDesignBreakDesignAreaChooseClipart}
-		<?php break; ?>
-	<?php endswitch; // End of $area->areaType switch ?>
+		<?php
+			break;
+		?>
+	<?php endswitch; ?>
 
 	{RedDesignBreakDesignAreaChooseHorizontalAlign}
 		<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $textAlign; ?>" />
@@ -602,4 +613,4 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 	<?php echo '{RedDesignBreakDesignArea' . $area->id . '}'; ?>
 
-<?php endforeach; ?>
+<?php endforeach;

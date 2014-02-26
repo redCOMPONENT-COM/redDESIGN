@@ -687,7 +687,6 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					var userAgent = window.navigator.userAgent;
 					var msie = userAgent.indexOf("MSIE ");
 					var firefox = userAgent.indexOf("Firefox");
-					var bbox = svgElement.getBBox();
 
 					if (verticalAlignValue == "top")
 					{
@@ -866,7 +865,6 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 	 */
 	function changeBackground(propertyId)
 	{
-
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxLoadDesigntype",
 			data: {'propertyId': propertyId},
@@ -892,6 +890,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 				});
 				thumbnailSVGLoader();
 				loadBackgroundSVGandAreas(propertyId);
+				addUploadButtonCall();
 			},
 			error: function (data)
 			{
@@ -1141,8 +1140,8 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 		};
 		var url = '<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxUploadCustomClipart';
 
-		var jQuerythis = jQuery('#uploadClipartFile' + areaId),
-			buttonData = jQuerythis.data();
+		var inputFileNode = jQuery('#uploadClipartFile' + areaId);
+		var buttonData = inputFileNode.data();
 
 		jQuery('#clipartUpload' + areaId + ' .image-progress .bar').css('width','0%');
 
@@ -1155,7 +1154,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 				formData: dataVar,
 				acceptFileTypes: /(\.|\/)(svg,jpg,png,gif)$/i
 			}).on('fileuploadprogressall', function (e, data) {
-				jQuery(jQuerythis).prop('disabled', true);
+				jQuery(inputFileNode).prop('disabled', true);
 				var progress = parseInt(data.loaded / data.total * 100, 10);
 				jQuery('#clipartUpload' + areaId + ' .image-progress .bar').css(
 					'width',
@@ -1166,7 +1165,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 				{
 					jQuery('#uploadedClipart' + areaId).html(data.result);
 				}
-				jQuery(jQuerythis).prop('disabled', false);
+				jQuery(inputFileNode).prop('disabled', false);
 			}).on('fileuploadfail', function (e, data) {
 				jQuery.each(data.files, function (index, file) {
 					var error = jQuery('<span class="text-danger"/>');
