@@ -123,14 +123,14 @@ class ReddesignControllerDesigntype extends JController
 		$displayedBackground->width  = str_replace('px', '', $xmlInfo->width);
 		$displayedBackground->height = str_replace('px', '', $xmlInfo->height);
 
-		$areasModel->setState('filter.background_id', $displayedBackground->id);
+		$productionBackground = $designTypeModel->getProductionBackground($displayedBackground->designtype_id);
+		$displayedBackground->productionBackgroundId = $productionBackground->id;
+
+		$areasModel->setState('filter.background_id', $productionBackground->id);
 		$displayedBackground->areas = $areasModel->getItems();
 
 		$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayedBackground->areas);
 		$displayedBackground->selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
-
-		$productionBackground = $designTypeModel->getProductionBackground($displayedBackground->designtype_id);
-		$displayedBackground->productionBackgroundId = $productionBackground->id;
 
 		$designType = $designTypeModel->getItem($displayedBackground->designtype_id);
 		$displayedBackground->designtype_name = $designType->name;
