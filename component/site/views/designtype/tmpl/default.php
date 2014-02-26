@@ -687,7 +687,6 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					var userAgent = window.navigator.userAgent;
 					var msie = userAgent.indexOf("MSIE ");
 					var firefox = userAgent.indexOf("Firefox");
-					var bbox = svgElement.getBBox();
 
 					if (verticalAlignValue == "top")
 					{

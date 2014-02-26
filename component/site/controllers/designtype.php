@@ -39,7 +39,7 @@ class ReddesignControllerDesigntype extends JController
 		$displayData->designType = $designTypeModel->getItem($displayedBackground->designtype_id);
 		$displayData->displayedProductionBackground = $designTypeModel->getProductionBackground($displayedBackground->designtype_id);
 
-		$areasModel->setState('filter.background_id', $displayedBackground->id);
+		$areasModel->setState('filter.background_id', $displayData->displayedProductionBackground->id);
 		$displayData->displayedAreas = $areasModel->getItems();
 
 		$displayData->fonts = $fontsModel->getItems();
