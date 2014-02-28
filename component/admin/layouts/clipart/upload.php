@@ -57,6 +57,7 @@ if ($file["mime_type"] == 'application/postscript')
 		svgThumbnail.addEventListener("load", function() {
 			setSVGElementScale(this);
 		});
+
 		// Some elements are already loaded
 		setSVGElementScale(svgThumbnail);
 	});
