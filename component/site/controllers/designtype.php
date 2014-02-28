@@ -201,12 +201,11 @@ class ReddesignControllerDesigntype extends JController
 		jimport('joomla.filesystem.file');
 		$app = JFactory::getApplication();
 		$config = ReddesignEntityConfig::getInstance();
-		$return         = new stdClass;
-		$success = false;
+		$return  = '';
+		$uploaded_file = '';
 
 		$areaId = $app->input->getInt('areaId', 0);
 		$file = $app->input->files->get('uploadClipartFile' . $areaId, array(), 'array');
-		$return->clipartOutput = JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_FAILED');
 
 		if (!empty($file) && isset($file['name']) && !empty($file['type']))
 		{
@@ -228,7 +227,7 @@ class ReddesignControllerDesigntype extends JController
 					}
 					catch (Exception $e)
 					{
-						$success = false;
+						$return = JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_FAILED_TO_CREATE_THUMBNAILS') . ' ' . $e->getMessage();
 					}
 
 					if (is_array($thumbs))
@@ -238,33 +237,35 @@ class ReddesignControllerDesigntype extends JController
 
 						// We want just a name
 						$uploaded_file['mangled_filename'] = str_replace(JPATH_ROOT . '/media/com_reddesign/cliparts/uploaded/', '', $image->getPath());
-						$success = true;
 					}
 					else
 					{
-						$success = false;
+						$return = JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_THUMBNAILS_IS_NOT_ARRAY');
 					}
-				}
-				else
-				{
-					$success = true;
+
+					// Check DPI
+					$imagickImg = new Imagick($folderPath . $uploaded_file['mangled_filename']);
+					$imageResolution = $imagickImg->getImageResolution();
+					$minimumDpi = $config->getMinimumUploadDpi();
+
+					if ($imageResolution['x'] < $minimumDpi || $imageResolution['y'] < $minimumDpi)
+					{
+						$return = 'tooSmallDpi';
+					}
 				}
 			}
 		}
 
-		$return->success = $success;
-
-		if ($success)
+		if (empty($return))
 		{
-			$return->clipartOutput = RLayoutHelper::render('clipart.upload', array(
-					'areaId' => $areaId,
-					'file' => $uploaded_file,
-				),
+			$return = RLayoutHelper::render(
+				'clipart.upload',
+				array('areaId' => $areaId, 'file' => $uploaded_file),
 				JPATH_ROOT . '/administrator/components/com_reddesign/layouts'
 			);
 		}
 
-		echo $return->clipartOutput;
+		echo $return;
 
 		$app->close();
 	}

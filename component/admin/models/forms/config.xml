@@ -106,21 +106,30 @@
 		       description="COM_REDDESIGN_CONFIG_BACKGROUND_THUMBNAIL_HEIGHT_DESC"
 			/>
 
-        <field name="max_clipart_preview_width"
-               type="text"
-               size="5"
-               default="80"
-               label="COM_REDDESIGN_CONFIG_MAX_CLIPART_PREVIEW_WIDTH"
-               description="COM_REDDESIGN_CONFIG_MAX_CLIPART_PREVIEW_WIDTH_DESC"
-                />
+		<field name="max_clipart_preview_width"
+			   type="text"
+			   size="5"
+			   default="80"
+			   label="COM_REDDESIGN_CONFIG_MAX_CLIPART_PREVIEW_WIDTH"
+			   description="COM_REDDESIGN_CONFIG_MAX_CLIPART_PREVIEW_WIDTH_DESC"
+			   />
 
-        <field name="max_clipart_preview_height"
-               type="text"
-               size="5"
-               default="80"
-               label="COM_REDDESIGN_CONFIG_MAX_CLIPART_PREVIEW_HEIGHT"
-               description="COM_REDDESIGN_CONFIG_MAX_CLIPART_PREVIEW_HEIGHT_DESC"
-                />
+		<field name="max_clipart_preview_height"
+			   type="text"
+			   size="5"
+			   default="80"
+			   label="COM_REDDESIGN_CONFIG_MAX_CLIPART_PREVIEW_HEIGHT"
+			   description="COM_REDDESIGN_CONFIG_MAX_CLIPART_PREVIEW_HEIGHT_DESC"
+			   />
+
+		<field name="minimum_upload_dpi"
+		       id="minimum_upload_dpi"
+		       type="text"
+		       label="COM_REDDESIGN_CONFIG_MINIMUM_UPLOAD_IMAGE_DPI"
+		       description="COM_REDDESIGN_CONFIG_MINIMUM_UPLOAD_IMAGE_DPI_DESC"
+		       maxlength="7"
+		       default="72"
+			/>
 
 		<field name="productionFilePadding"
 			   type="text"

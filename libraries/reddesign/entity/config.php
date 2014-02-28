@@ -254,6 +254,16 @@ final class ReddesignEntityConfig
 	}
 
 	/**
+	 * Get DPI resolution of source SVG files.
+	 *
+	 * @return  int  SVG DPI.
+	 */
+	public function getMinimumUploadDpi()
+	{
+		return $this->getInt('minimum_upload_dpi');
+	}
+
+	/**
 	 * Get the padding of production file.
 	 *
 	 * @return  int  The padding of production file.
