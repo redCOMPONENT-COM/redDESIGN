@@ -78,7 +78,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 				break;
 		}
 
-		if ($this->designType->fontsizer == 'auto' || $this->designType->fontsizer == 'auto_chars')
+		if ($this->designType->fontsizer == 'auto')
 		{
 			$textAlign = 'center';
 		}
@@ -220,7 +220,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 				<?php
 					$defaultFontSizeOutput = false;
 
-					if ($this->designType->fontsizer === 'auto' || $this->designType->fontsizer === 'auto_chars')
+					if ($this->designType->fontsizer === 'auto')
 					{
 						$area->defaultFontSize = 1;
 					}

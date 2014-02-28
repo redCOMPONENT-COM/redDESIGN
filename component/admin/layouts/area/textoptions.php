@@ -23,7 +23,7 @@ JHtml::_('rjquery.select2', 'select');
 			<div class="row-fluid">
 				<div class="span6 col-md6">
 
-					<?php if($designType->fontsizer != 'auto' && $designType->fontsizer != 'auto_chars') : ?>
+					<?php if($designType->fontsizer != 'auto') : ?>
 
 						<div class="control-group">
 							<label for="<?php echo 'areaFontAlignment' . $area->id; ?>">
