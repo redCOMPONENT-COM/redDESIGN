@@ -494,7 +494,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 	}
 
 	/**
-	 * Changes attributes of text element on SVG object
+	 * Changes attributes of clipart element on SVG object
 	 *
 	 * @param   areaId  int  Area ID
 	 */
@@ -504,6 +504,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 		var verticalAlign = jQuery("#verticalAlign" + areaId);
 		var selectedClipart = jQuery("#selectedClipart" + areaId);
 		var svgElement = rootSnapSvgObject.select("#areaBoxesLayer #areaSVGElement_" + areaId);
+		var insertedElement;
 
 		if (svgElement)
 		{
@@ -549,7 +550,12 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 							'"></image>';
 
 						svgElement.clear();
+
 						svgElement.append(Snap.parse(imageSVG));
+						insertedElement = svgElement.select("image");
+						insertedElement.click(removeSnapElement);
+						insertedElement.mouseover(mouseIsIn);
+						insertedElement.mouseout(mouseIsOut);
 					}
 					else
 					{
@@ -571,6 +577,11 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 									svgElement.clear();
 									svgElement.append(Snap.parse(svgElementInner[0].outerHTML));
+									//svgElement.select("svg").click(removeSnapElement);
+									insertedElement = svgElement.select("svg");
+									insertedElement.click(removeSnapElement);
+									insertedElement.mouseover(mouseIsIn);
+									insertedElement.mouseout(mouseIsOut);
 								}
 							}
 						}
@@ -578,6 +589,26 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 				}
 			}
 		}
+	}
+
+	/**
+	 * Removes element linked to the event invoked.
+	 *
+	 * @param   e  object  Handler
+	 */
+	function removeSnapElement(e)
+	{
+		this.remove();
+	}
+
+	function mouseIsIn(e)
+	{
+		this.attr("cursor", "crosshair");
+	}
+
+	function mouseIsOut(e)
+	{
+		this.attr("cursor", "auto");
 	}
 
 	/**
