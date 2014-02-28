@@ -138,6 +138,14 @@ JHtml::_('rjquery.chosen', 'select');
 			</div>
 			<div class="control-group">
 				<div class="control-label">
+					<?php echo $this->form->getLabel('minimum_upload_dpi'); ?>
+				</div>
+				<div class="controls">
+					<?php echo $this->form->getInput('minimum_upload_dpi'); ?>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="control-label">
 					<?php echo $this->form->getLabel('productionFilePadding'); ?>
 				</div>
 				<div class="controls">
