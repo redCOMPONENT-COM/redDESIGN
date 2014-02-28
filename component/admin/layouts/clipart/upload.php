@@ -15,8 +15,9 @@ $file = $data['file'];
 $config = ReddesignEntityConfig::getInstance();
 $clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
 $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
-$extension = "svg+xml";
+
 $extension = str_replace(array('jpg', 'svg'), array('jpeg', 'svg+xml'), JFile::getExt($file['mangled_filename']));
+
 if ($file["mime_type"] == 'application/postscript')
 {
 	$file["mime_type"] = 'image/' . $extension;
@@ -28,10 +29,10 @@ if ($file["mime_type"] == 'application/postscript')
 			<div
 				class="thumbnailSVG-pointer"
 				name="clipart<?php echo $areaId; ?>"
-				style="width:<?php echo $clipartPreviewWidth; ?>px; height:<?php echo $clipartPreviewHeight; ?>px;"></div>
+				style="width:<?php echo $clipartPreviewWidth ?>px; height:<?php echo $clipartPreviewHeight; ?>px;"></div>
 			<object
-				id="clipartUpload<?php echo $areaId ;?>_0"
-				name="clipart<?php echo $areaId ;?>_0"
+				id="clipartUpload<?php echo $areaId;?>_0"
+				name="clipart<?php echo $areaId;?>_0"
 				class="thumbnailSVG"
 				data="<?php echo JURI::root() . 'media/com_reddesign/cliparts/uploaded/' . $file['mangled_filename']; ?>"
 				cliparttype="<?php echo $extension; ?>"
@@ -43,14 +44,15 @@ if ($file["mime_type"] == 'application/postscript')
 				name="selectedClipart<?php echo $areaId ?>"
 				value="0"
 				/><br />
-			<?php echo (string) $file['original_filename'] ;?>
+			<?php echo (string) $file['original_filename'];?>
 		</div>
 
 		<div class="clearfix"></div>
 	</div>
 </div>
+
 <script type="text/javascript">
-	jQuery('#clipartUpload<?php echo $areaId ;?>_0').each(function () {
+	jQuery('#clipartUpload<?php echo $areaId;?>_0').each(function () {
 		var svgThumbnail = document.getElementById(jQuery(this).attr('id'));
 		svgThumbnail.addEventListener("load", function() {
 			setSVGElementScale(this);
