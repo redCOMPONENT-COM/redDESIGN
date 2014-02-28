@@ -56,43 +56,4 @@ JHtml::_('behavior.framework');
 		</div>
 	</div>
 
-	<div class="control-group">
-		<label class="control-label" for="default_width">
-			<?php echo $this->form->getLabel('default_width'); ?>
-		</label>
-
-		<div class="controls">
-			<?php echo $this->form->getInput('default_width'); ?>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<label class="control-label" for="default_height">
-			<?php echo $this->form->getLabel('default_height'); ?>
-		</label>
-
-		<div class="controls">
-			<?php echo $this->form->getInput('default_height'); ?>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<label class="control-label" for="default_caps_height">
-			<?php echo $this->form->getLabel('default_caps_height'); ?>
-		</label>
-
-		<div class="controls">
-			<?php echo $this->form->getInput('default_caps_height'); ?>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<label class="control-label" for="default_baseline_height">
-			<?php echo $this->form->getLabel('default_baseline_height'); ?>
-		</label>
-
-		<div class="controls">
-			<?php echo $this->form->getInput('default_baseline_height'); ?>
-		</div>
-	</div>
 </div>

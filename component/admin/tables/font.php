@@ -81,69 +81,6 @@ class ReddesignTableFont extends RTable
 	public $font_file = '';
 
 	/**
-	 * @var  float
-	 */
-	public $default_width = 1.0;
-
-	/**
-	 * @var  float
-	 */
-	public $default_height = 1.0;
-
-	/**
-	 * @var  float
-	 */
-	public $default_caps_height = 1.0;
-
-	/**
-	 * @var  float
-	 */
-	public $default_baseline_height = 1.0;
-
-	/**
-	 * Method to perform sanity checks on the JTable instance properties to ensure
-	 * they are safe to store in the database.  Child classes should override this
-	 * method to make sure the data they are storing in the database is safe and
-	 * as expected before storage.
-	 *
-	 * @return  boolean  True if the instance is sane and able to be stored in the database.
-	 */
-	public function check()
-	{
-		$app = JFactory::getApplication();
-
-		if (empty($this->default_width))
-		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_EMPTY_DEFAULT_WIDTH'), 'error');
-
-			return false;
-		}
-
-		if (empty($this->default_height))
-		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_EMPTY_DEFAULT_HEIGHT'), 'error');
-
-			return false;
-		}
-
-		if (empty($this->default_caps_height))
-		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_EMPTY_DEFAULT_CAPS_HEIGHT'), 'error');
-
-			return false;
-		}
-
-		if (empty($this->default_baseline_height))
-		{
-			$app->enqueueMessage(JText::_('COM_REDDESIGN_FONT_ERROR_EMPTY_DEFAULT_BASELINE_HEIGHT'), 'error');
-
-			return false;
-		}
-
-		return parent::check();
-	}
-
-	/**
 	 * Removes font related files after erasing the font in database.
 	 * Called after delete().
 	 *

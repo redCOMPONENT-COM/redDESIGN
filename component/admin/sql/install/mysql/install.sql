@@ -82,10 +82,6 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
   `checked_out`             INT(11)       DEFAULT NULL,
   `checked_out_time`        DATETIME      NOT NULL DEFAULT '0000-00-00 00:00:00',
   `font_file`               VARCHAR(255)  NOT NULL,
-  `default_width`           DOUBLE(6, 5)  NOT NULL,
-  `default_height`          DOUBLE(6, 5)  NOT NULL,
-  `default_caps_height`     DOUBLE(6, 5)  NOT NULL,
-  `default_baseline_height` DOUBLE(6, 5)  NOT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
