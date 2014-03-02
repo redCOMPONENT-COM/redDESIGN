@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_designtypes` (
   `modified_date`    DATETIME      NOT NULL DEFAULT '0000-00-00 00:00:00',
   `checked_out`      INT(11)       DEFAULT NULL,
   `checked_out_time` DATETIME      NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `fontsizer`        ENUM('auto', 'auto_chars', 'slider', 'dropdown_numbers', 'dropdown_labels'),
+  `fontsizer`        ENUM('auto', 'slider', 'dropdown_numbers', 'dropdown_labels'),
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
@@ -82,32 +82,7 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_fonts` (
   `checked_out`             INT(11)       DEFAULT NULL,
   `checked_out_time`        DATETIME      NOT NULL DEFAULT '0000-00-00 00:00:00',
   `font_file`               VARCHAR(255)  NOT NULL,
-  `default_width`           DOUBLE(6, 5)  NOT NULL,
-  `default_height`          DOUBLE(6, 5)  NOT NULL,
-  `default_caps_height`     DOUBLE(6, 5)  NOT NULL,
-  `default_baseline_height` DOUBLE(6, 5)  NOT NULL,
   PRIMARY KEY (`id`)
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
-  DEFAULT COLLATE = utf8_general_ci;
-
---
--- Table structure for table `#__reddesign_chars`
---
-CREATE TABLE IF NOT EXISTS `#__reddesign_chars` (
-  `id`                INT(11)      NOT NULL AUTO_INCREMENT,
-  `font_char`         VARCHAR(10)  NOT NULL,
-  `width`             DOUBLE(5, 5) NOT NULL,
-  `height`            DOUBLE(5, 5) NOT NULL,
-  `typography`        INT(11)      NOT NULL DEFAULT '1',
-  `typography_height` DOUBLE(5, 5) NOT NULL,
-  `font_id`           INT(11)      NOT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`font_id`)
-    REFERENCES `#__reddesign_fonts` (`id`)
-      ON DELETE CASCADE
-      ON UPDATE NO ACTION
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8

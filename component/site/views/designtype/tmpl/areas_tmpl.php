@@ -16,8 +16,8 @@ defined('_JEXEC') or die();
 {redDESIGN:AreasLoopStart}
 <div class="row">{redDESIGN:AreaTitle}</div>
 <div class="row">
-	<div class="product_InputText col-md-6">{redDESIGN:InputTextLabel} {redDESIGN:InputText}</div>
-	<div class="product_ChooseFont col-md-6">{redDESIGN:ChooseFontLabel} {redDESIGN:ChooseFont}</div>
+	<div class="product_InputText col-xs-6">{redDESIGN:InputTextLabel} {redDESIGN:InputText}</div>
+	<div class="product_ChooseFont col-xs-6">{redDESIGN:ChooseFontLabel} {redDESIGN:ChooseFont}</div>
 </div>
 <div class="product_ChooseFontSize">
 	<div class="ChooseFontSize">{redDESIGN:ChooseFont}</div>

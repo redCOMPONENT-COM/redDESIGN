@@ -31,7 +31,6 @@
 			class="chosen input-xxlarge"
 			default="1">
 			<option value="auto">COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO</option>
-			<option value="auto_chars">COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_AUTO_CHARS</option>
 			<option value="slider">COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_SLIDER</option>
 			<option value="dropdown_numbers">COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_NUMBERS</option>
 			<option value="dropdown_labels">COM_REDDESIGN_DESIGNTYPE_FIELD_FONT_SIZE_CONTROLS_DROPDOWN_LABELS</option>

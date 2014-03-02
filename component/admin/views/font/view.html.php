@@ -91,15 +91,6 @@ class ReddesignViewFont extends ReddesignView
 			}
 		}
 
-		// Typography options for the chars tab.
-		$this->typographies = array(
-			JHTML::_('select.option', '0', JText::_('COM_REDDESIGN_SELECT_TYPOGRAPHY')),
-			JHTML::_('select.option', '1', JText::_('COM_REDDESIGN_FONT_X_HEIGHT')),
-			JHTML::_('select.option', '2', JText::_('COM_REDDESIGN_FONT_CAP_HEIGHT')),
-			JHTML::_('select.option', '3', JText::_('COM_REDDESIGN_FONT_BASELINE')),
-			JHTML::_('select.option', '4', JText::_('COM_REDDESIGN_FONT_BASELINE_HEIGHT_CAP_HEIGHT'))
-		);
-
 		parent::display($tpl);
 	}
 

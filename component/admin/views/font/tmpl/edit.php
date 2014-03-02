@@ -21,25 +21,11 @@ $action = JRoute::_('index.php?option=com_reddesign&view=font');
 		<li class="active">
 			<a href="#general" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_COMMON_GENERAL'); ?></a>
 		</li>
-		<?php // @Todo: while we decide what to do with chars I'm hiding it ?>
-		<?php //if (!empty($this->item->id)) ?>
-		<?php if (false) : ?>
-			<li>
-				<a href="#chars" data-toggle="tab"><?php echo JText::_('COM_REDDESIGN_FONT_CHARACTERS'); ?></a>
-			</li>
-		<?php endif; ?>
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="general">
 			<?php echo $this->loadTemplate('general') ?>
 		</div>
-		<?php // @Todo: while we decide what to do with chars I'm hiding it ?>
-		<?php //if (!empty($this->item->id)) ?>
-		<?php if (false) : ?>
-			<div class="tab-pane" id="chars">
-				<?php echo $this->loadTemplate('chars') ?>
-			</div>
-		<?php endif; ?>
 	</div>
 
 	<input type="hidden" name="option" value="com_reddesign">
