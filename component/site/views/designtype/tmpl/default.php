@@ -623,6 +623,11 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 		var color = jQuery("#colorCode" + areaId);
 		var textAlign = jQuery("#textAlign" + areaId);
 		var verticalAlign = jQuery("#verticalAlign" + areaId);
+
+		var userAgent = window.navigator.userAgent;
+		var msie = userAgent.indexOf("MSIE ");
+		var firefox = userAgent.indexOf("Firefox");
+
 		var fontSizeValue = 12;
 		var fontSize;
 
@@ -638,7 +643,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			}
 			else if (typeof(jQuery(text).val()) != "undefined")
 			{
-				svgElement.node.textContent = jQuery(text).val();
+				svgElement.attr("text", jQuery(text).val());
 			}
 
 			if (font)
@@ -652,23 +657,54 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			}
 
 			<?php if ($this->designType->fontsizer == 'auto') : ?>
-				for (fontSize = 0; fontSize < 1000; fontSize++)
+				fontSize = 1;
+				var areaWidth = parseFloat(areasContainer[areaId]["width"]);
+				var areaHeight = parseFloat(areasContainer[areaId]["height"]);
+				var scale;
+				var textBBox;
+
+				svgElement.attr("font-size", fontSize + fontUnit);
+
+				while (fontSize < parseFloat(areasContainer[areaId]["height"]))
 				{
+					fontSize++;
 					svgElement.attr("font-size", fontSize + fontUnit);
-					svgElement.attr("text-anchor", "middle");
-					svgElement.attr("x", parseFloat(areasContainer[areaId]["x1"]) + (parseFloat(areasContainer[areaId]["width"]) / 2));
-					svgElement.attr("y", parseFloat(areasContainer[areaId]["y1"]) + svgElement.node.clientHeight);
-
-					if (svgElement.node.clientWidth > parseFloat(areasContainer[areaId]["width"]))
-					{
-						break;
-					}
-
-					if (svgElement.node.clientHeight > parseFloat(areasContainer[areaId]["height"]))
-					{
-						break;
-					}
 				}
+
+				svgElement.attr("text-anchor", "middle");
+				svgElement.attr("x", parseFloat(areasContainer[areaId]["x1"]) + (areaWidth / 2));
+
+				var verticalAlginY;
+
+				if (firefox > 0)
+				{
+					verticalAlginY = areasContainer[areaId]["y1"] + (areaHeight / 2);
+
+					svgElement.attr("y", verticalAlginY);
+					svgElement.attr("dominant-baseline", "middle");
+				}
+				else
+				{
+					verticalAlginY = areasContainer[areaId]["y1"] + (areaHeight / 2);
+
+					svgElement.attr("y", verticalAlginY);
+					svgElement.attr("dy", ".35em");
+				}
+
+				var textHoldingBox = document.getElementById("areaSVGElement_" + areaId);
+				textBBox = textHoldingBox.getBBox();
+
+				if (textBBox.width > areaWidth)
+				{
+					scale = areaWidth / textBBox.width;
+					svgElement.transform("s" + scale.toString());
+				}
+				else if (textBBox.width < areaWidth)
+				{
+					scale = areaHeight / textBBox.height;
+					svgElement.transform("s" + scale.toString());
+				}
+
 			<?php else : ?>
 				fontSize = jQuery("#fontSize" + areaId);
 
@@ -715,9 +751,6 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 				if (verticalAlign && typeof(jQuery(verticalAlign).val()) != "undefined")
 				{
 					var verticalAlignValue = jQuery(verticalAlign).val();
-					var userAgent = window.navigator.userAgent;
-					var msie = userAgent.indexOf("MSIE ");
-					var firefox = userAgent.indexOf("Firefox");
 
 					if (verticalAlignValue == "top")
 					{
