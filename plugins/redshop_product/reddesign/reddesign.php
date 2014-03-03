@@ -390,6 +390,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true), 'com_reddesign');
 			$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
+			$designTypeModel = RModel::getAdminInstance('Designtype', array('ignore_request' => true), 'com_reddesign');
 
 			$db = JFactory::getDbo();
 			$document = JFactory::getDocument();
@@ -411,23 +412,15 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			}
 
 			// If background_id is null, get the Production Background of Design Type
-			if (!$redDesignData->background_id)
+			if (empty($redDesignData->background_id))
 			{
-				$query = $db->getQuery(true);
-				$query->select('b.id')
-					->from($db->quoteName('#__reddesign_backgrounds', 'b'))
-					->where($db->quoteName('b.designtype_id') . ' = ' . $db->quote($redDesignData->designtype_id))
-					->where($db->quoteName('b.isProductionBg') . ' = ' . $db->quote(1));
-				$db->setQuery($query);
-				$result = $db->loadObject();
-
-				if ($result)
-				{
-					$redDesignData->background_id = $result->id;
-				}
+				$displayedBackground = $designTypeModel->getProductionBackground($redDesignData->designtype_id);
+			}
+			else
+			{
+				$displayedBackground = $backgroundModel->getItem($redDesignData->background_id);
 			}
 
-			$displayedBackground = $backgroundModel->getItem($redDesignData->background_id);
 			$defaultPreviewWidth = $this->params->get('defaultCartPreviewWidth', 0);
 
 			$scalingImageForPreviewRatio = $defaultPreviewWidth / $redDesignData->previewWidth;
@@ -445,6 +438,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			if (!empty($redDesignData->areasInnerSVG))
 			{
+				$areasInnerSVG = str_replace("'", "\'", urldecode($redDesignData->areasInnerSVG));
+
 				$js = 'jQuery(document).ready(function () {
 						rootSnapSvgObject' . $i . ' = Snap("#mainSvgImage' . $i . '");
 
@@ -467,7 +462,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 								rootElement.setAttribute("height", parseFloat("' . $previewHeight . '"));
 								rootElement.setAttribute("overflow", "hidden");
 
-								var group_' . $i . ' = Snap.parse(\'<g id="areaBoxesLayer' . $i . '">' . str_replace("'", "\'", urldecode($redDesignData->areasInnerSVG)) . '</g>\');
+								var group_' . $i . ' = Snap.parse(\'<g id="areaBoxesLayer' . $i . '">' . $areasInnerSVG . '</g>\');
 								rootSnapSvgObject' . $i . '.add(group_' . $i . ');
 
 								jQuery("#areaBoxesLayer' . $i . ' text").each(function (index, value){
