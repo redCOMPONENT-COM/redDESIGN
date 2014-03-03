@@ -343,8 +343,9 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 	function resizeRectangle(e)
 	{
-		var upX = e.offsetX;
-		var upY = e.offsetY;
+		var offset = jQuery("#svgForAreas").offset();
+		var upX = e.pageX - offset.left;
+		var upY = e.pageY - offset.top;
 
 		var width = upX - mouseDownX;
 		var height = upY - mouseDownY;
