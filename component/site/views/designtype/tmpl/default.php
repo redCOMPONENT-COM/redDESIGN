@@ -1275,13 +1275,15 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 				if (data.result)
 				{
-					if (data.result == "tooSmallDpi")
+					var returnedData = jQuery.parseJSON(data.result);
+
+					if (returnedData.message == "")
 					{
-						alert("<?php echo JText::sprintf('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_DPI_TO_SMALL', $config->getMinimumUploadDpi());?>");
+						jQuery("#uploadedClipart" + areaId).html(returnedData.result);
 					}
 					else
 					{
-						jQuery("#uploadedClipart" + areaId).html(data.result);
+						alert(returnedData.message);
 					}
 				}
 

@@ -201,7 +201,9 @@ class ReddesignControllerDesigntype extends JController
 		jimport('joomla.filesystem.file');
 		$app = JFactory::getApplication();
 		$config = ReddesignEntityConfig::getInstance();
-		$return  = '';
+		$return = new JObject;
+		$return->result = '';
+		$return->message = '';
 		$uploaded_file = '';
 
 		$areaId = $app->input->getInt('areaId', 0);
@@ -227,7 +229,7 @@ class ReddesignControllerDesigntype extends JController
 					}
 					catch (Exception $e)
 					{
-						$return = JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_FAILED_TO_CREATE_THUMBNAILS') . ' ' . $e->getMessage();
+						$return->message = JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_FAILED_TO_CREATE_THUMBNAILS') . ' ' . $e->getMessage();
 					}
 
 					if (is_array($thumbs))
@@ -240,7 +242,7 @@ class ReddesignControllerDesigntype extends JController
 					}
 					else
 					{
-						$return = JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_THUMBNAILS_IS_NOT_ARRAY');
+						$return->message = JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_THUMBNAILS_IS_NOT_ARRAY');
 					}
 
 					// Check DPI
@@ -250,22 +252,36 @@ class ReddesignControllerDesigntype extends JController
 
 					if ($imageResolution['x'] < $minimumDpi || $imageResolution['y'] < $minimumDpi)
 					{
-						$return = 'tooSmallDpi';
+						$areaModel = RModel::getAdminInstance('Area', array('ignore_request' => true), 'com_reddesign');
+						$area = $areaModel->getItem($areaId);
+						$unit = $config->getUnit();
+						$sourceDpi = $config->getSourceDpi();
+						$unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourceDpi);
+						$areaWidth = round($area->width * $unitConversionRatio, 0);
+						$areaHeight = round($area->height * $unitConversionRatio, 0);
+
+						$return->result = 'tooSmallDpi';
+						$return->message = JText::sprintf(
+															'COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_DPI_TO_SMALL',
+															$areaWidth,
+															$areaHeight,
+															$config->getMinimumUploadDpi()
+											);
 					}
 				}
 			}
 		}
 
-		if (empty($return))
+		if (empty($return->message))
 		{
-			$return = RLayoutHelper::render(
+			$return->result = RLayoutHelper::render(
 				'clipart.upload',
 				array('areaId' => $areaId, 'file' => $uploaded_file),
 				JPATH_ROOT . '/administrator/components/com_reddesign/layouts'
 			);
 		}
 
-		echo $return;
+		echo json_encode($return);
 
 		$app->close();
 	}
