@@ -613,7 +613,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 	function mouseIsIn(e)
 	{
-		this.attr("cursor", "crosshair");
+		this.attr("cursor", "pointer");
 	}
 
 	function mouseIsOut(e)
