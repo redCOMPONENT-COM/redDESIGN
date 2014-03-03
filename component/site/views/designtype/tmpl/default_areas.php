@@ -230,6 +230,21 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 						// Case 1: using slider selector for font size.
 						RHelperAsset::load('bootstrap-slider.js', 'com_reddesign');
 						RHelperAsset::load('slider.css', 'com_reddesign');
+
+						if (empty($area->defaultFontSize) || $area->defaultFontSize == 0)
+						{
+							$area->defaultFontSize = 15;
+						}
+
+						if (empty($area->minFontSize) || $area->minFontSize == 0)
+						{
+							$area->minFontSize = 5;
+						}
+
+						if (empty($area->maxFontSize) || $area->maxFontSize == 0)
+						{
+							$area->maxFontSize = 555;
+						}
 					?>
 					<input type="hidden"
 						   id="fontSizeSlider<?php echo $area->id ?>"
