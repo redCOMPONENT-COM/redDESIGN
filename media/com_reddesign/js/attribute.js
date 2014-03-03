@@ -2732,7 +2732,7 @@ function submitAjaxCartdetail(frmCartName, product_id, relatedprd_id, giftcard_i
     params = params + "&acc_property_data=" + frm.acc_property_data.value;
     params = params + "&acc_subproperty_data=" + frm.acc_subproperty_data.value;
     params = params + "&accessory_price=" + frm.accessory_price.value;
-    params = params + "&redDesignData=" + frm.redDesignData.value;
+    params = params + "&redDesignData=" + encodeURIComponent(frm.redDesignData.value);
     if (document.getElementById("wrapper_check") && document.getElementById("wrapper_check").checked) {
         params = params + "&sel_wrapper_id=" + frm.sel_wrapper_id.value;
     }
