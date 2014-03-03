@@ -514,6 +514,23 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		{
 			$document = JFactory::getDocument();
 
+			// Load override redSHOP attribute.js
+			$headerstuff = $document->getHeadData();
+			$scripts = $headerstuff['scripts'];
+
+			foreach ($scripts as $path => $val)
+			{
+				if (strpos($path, 'com_redshop/assets/js/attribute.js') !== false)
+				{
+					unset($scripts[$path]);
+				}
+			}
+
+			$headerstuff['scripts'] = $scripts;
+			$document->setHeadData($headerstuff);
+
+			$document->addScript('media/com_reddesign/js/attribute.js');
+
 			$js = 'function generateRedDesignData() {
 						var values = {};
 						var inputs = jQuery("#designform :input");
