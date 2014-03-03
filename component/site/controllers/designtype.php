@@ -212,7 +212,17 @@ class ReddesignControllerDesigntype extends JController
 		if (!empty($file) && isset($file['name']) && !empty($file['type']))
 		{
 			$folderPath = JPATH_SITE . '/media/com_reddesign/cliparts/uploaded/';
-			$uploaded_file = ReddesignHelpersFile::uploadFile($file, 'cliparts/uploaded', $config->getMaxSVGFileSize(), 'svg,jpg,png,gif');
+
+			$allowedExtensions = 'svg,jpg,jpeg,png,gif,SVG,JPG,JPEG,PNG,GIF';
+			$allowedMimeTypes = 'image/svg+xml,image/jpeg,image/jpg,image/jp_,application/jpg,application/x-jpg,image/pjpeg,image/pipeg,image/vnd.swiftview-jpeg,image/png,application/png,application/x-png,image/x-xbitmap,image/gif,image/x-xbitmap,image/gi_';
+
+			$uploaded_file = ReddesignHelpersFile::uploadFile(
+								$file,
+								'cliparts/uploaded',
+								$config->getMaxSVGFileSize(),
+								$allowedExtensions,
+								$allowedMimeTypes
+							);
 
 			if (JFile::exists($folderPath . $uploaded_file['mangled_filename']))
 			{

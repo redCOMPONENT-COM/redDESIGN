@@ -22,6 +22,11 @@ if ($file["mime_type"] == 'application/postscript')
 {
 	$file["mime_type"] = 'image/' . $extension;
 }
+
+if (empty($file) || empty($file["mime_type"]) || empty($file['original_filename']))
+{
+	die(JText::_('COM_REDDESIGN_ERROR_UPLOADING_IMAGE_IN_FRONTEND'));
+}
 ?>
 <div class="row-fluid">
 	<div class="span12 col-md12">
