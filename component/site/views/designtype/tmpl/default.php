@@ -483,13 +483,14 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 	function changeSVGElement(areaId)
 	{
 		var area = jQuery("#areaBoxesLayer #areaSVGElement_" + areaId);
-		if (jQuery(area).is("text"))
-		{
-			changeSVGTextElement(areaId);
-		}
-		else if (jQuery(area).is("svg"))
+
+		if (jQuery(area).is("svg"))
 		{
 			changeSVGClipartElement(areaId);
+		}
+		else
+		{
+			changeSVGTextElement(areaId);
 		}
 	}
 
@@ -619,27 +620,61 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 	function changeSVGTextElement(areaId)
 	{
 		var text = jQuery("#textArea_" + areaId);
+		var isTextarea = jQuery(text).is("textarea");
 		var font = jQuery("#fontArea" + areaId);
 		var color = jQuery("#colorCode" + areaId);
 		var textAlign = jQuery("#textAlign" + areaId);
+		var textAlignValue = jQuery(textAlign).val();
 		var verticalAlign = jQuery("#verticalAlign" + areaId);
 
 		var userAgent = window.navigator.userAgent;
-		var msie = userAgent.indexOf("MSIE ");
 		var firefox = userAgent.indexOf("Firefox");
+		var msie = userAgent.indexOf("MSIE ");
 
+		var areaX1 = parseFloat(areasContainer[areaId]["x1"]);
+		var areaY1 = parseFloat(areasContainer[areaId]["y1"]);
+		var areaX2 = parseFloat(areasContainer[areaId]["x2"]);
+		var areaWidth = parseFloat(areasContainer[areaId]["width"]);
+		var areaHeight = parseFloat(areasContainer[areaId]["height"]);
 		var fontSizeValue = 12;
 		var fontSize;
+		var txt;
 
 		text.css("text-align", jQuery(textAlign).val());
 
-		var svgElement = rootSnapSvgObject.select("#areaBoxesLayer #areaSVGElement_" + areaId);
+		var svgElement = rootSnapSvgObject.select("#areaSVGElement_" + areaId);
 
 		if (svgElement)
 		{
-			if (jQuery(text).is("textarea") && typeof(jQuery(text).val()) != "undefined")
+			if (isTextarea && typeof(jQuery(text).val()) != "undefined")
 			{
-				createSVGTextMultiline(svgElement, jQuery(text).val())
+				var content = jQuery(text).val();
+				var x;
+				var y;
+				svgElement.remove();
+
+				if (textAlignValue == "left")
+				{
+					x = areaX1;
+				}
+				else if (textAlignValue == "center")
+				{
+					x = areaX1 + (areaWidth / 2);
+				}
+				else if (textAlignValue == "right")
+				{
+					x = areaX2;
+				}
+
+				txt = content.split("\n");
+				svgElement = rootSnapSvgObject.text(x, areaY1, txt);
+				svgElement.node.id = "areaSVGElement_" + areaId;
+				svgElement.selectAll("tspan:nth-child(n+2)").attr({
+					dy: "1.2em",
+					x: x
+				});
+
+				rootSnapSvgObject.append(svgElement);
 			}
 			else if (typeof(jQuery(text).val()) != "undefined")
 			{
@@ -658,34 +693,32 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 			<?php if ($this->designType->fontsizer == 'auto') : ?>
 				fontSize = 1;
-				var areaWidth = parseFloat(areasContainer[areaId]["width"]);
-				var areaHeight = parseFloat(areasContainer[areaId]["height"]);
 				var scale;
 				var textBBox;
 
 				svgElement.attr("font-size", fontSize + fontUnit);
 
-				while (fontSize < parseFloat(areasContainer[areaId]["height"]))
+				while (fontSize < areaHeight)
 				{
 					fontSize++;
 					svgElement.attr("font-size", fontSize + fontUnit);
 				}
 
 				svgElement.attr("text-anchor", "middle");
-				svgElement.attr("x", parseFloat(areasContainer[areaId]["x1"]) + (areaWidth / 2));
+				svgElement.attr("x", areaX1 + (areaWidth / 2));
 
 				var verticalAlginY;
 
 				if (firefox > 0)
 				{
-					verticalAlginY = areasContainer[areaId]["y1"] + (areaHeight / 2);
+					verticalAlginY = areaY1 + (areaHeight / 2);
 
 					svgElement.attr("y", verticalAlginY);
 					svgElement.attr("dominant-baseline", "middle");
 				}
 				else
 				{
-					verticalAlginY = areasContainer[areaId]["y1"] + (areaHeight / 2);
+					verticalAlginY = areaY1 + (areaHeight / 2);
 
 					svgElement.attr("y", verticalAlginY);
 					svgElement.attr("dy", ".35em");
@@ -704,7 +737,6 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					scale = areaHeight / textBBox.height;
 					svgElement.transform("s" + scale.toString());
 				}
-
 			<?php else : ?>
 				fontSize = jQuery("#fontSize" + areaId);
 
@@ -722,31 +754,28 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					}
 
 					svgElement.attr("font-size", fontSizeValue + fontUnit);
-					svgElement.attr("y", parseFloat(areasContainer[areaId]["y1"]) + ((parseFloat(fontSizeValue) * scalingImageForPreviewRatio)));
+					svgElement.attr("y", areaY1 + ((parseFloat(fontSizeValue) * scalingImageForPreviewRatio)));
 				}
 			<?php endif; ?>
 
 			<?php if ($this->designType->fontsizer != 'auto') : ?>
-				if (textAlign && typeof(jQuery(textAlign).val()) != "undefined")
-				{
-					var textAlignValue = jQuery(textAlign).val();
-					svgElement.attr("text-anchor", textAlignValue.replace("left", "start").replace("center", "middle").replace("right", "end"));
+				svgElement.attr("text-anchor", textAlignValue.replace("left", "start").replace("center", "middle").replace("right", "end"));
 
-					if (textAlignValue == "left")
-					{
-						svgElement.attr("x", areasContainer[areaId]["x1"]);
-					}
-					else if (textAlignValue == "center")
-					{
-						svgElement.attr("x", parseFloat(areasContainer[areaId]["x1"]) + (parseFloat(areasContainer[areaId]["width"]) / 2));
-					}
-					else if (textAlignValue == "right")
-					{
-						svgElement.attr("x", parseFloat(areasContainer[areaId]["x2"]));
-					}
+				if (textAlignValue == "left")
+				{
+					svgElement.attr("x", areaX1);
+				}
+				else if (textAlignValue == "center")
+				{
+					svgElement.attr("x", areaX1 + (areaWidth / 2));
+				}
+				else if (textAlignValue == "right")
+				{
+					svgElement.attr("x", areaX2);
 				}
 
 				var yPos;
+				var rowHeight;
 
 				if (verticalAlign && typeof(jQuery(verticalAlign).val()) != "undefined")
 				{
@@ -754,71 +783,65 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 					if (verticalAlignValue == "top")
 					{
-						if (msie > 0)
+						if (firefox > 0)
 						{
-							yPos = areasContainer[areaId]["y1"];
-
-							svgElement.attr("y", yPos);
+							svgElement.attr("dominant-baseline", "none");
 							svgElement.attr("dy", "0.8em");
 						}
 						else
 						{
-							yPos = areasContainer[areaId]["y1"];
-
-							svgElement.attr("y", yPos);
-
-							if (firefox > 0)
-							{
-								svgElement.attr("dominant-baseline", "none");
-								svgElement.attr("dy", "0.8em");
-							}
-							else
-							{
-								svgElement.attr("alignment-baseline", "hanging");
-							}
+							svgElement.attr("y", areaY1);
+							svgElement.attr("dy", "0.8em");
 						}
 					}
 					else if (verticalAlignValue == "middle")
 					{
-						if (msie > 0)
-						{
-							yPos = areasContainer[areaId]["y1"] + (parseFloat(areasContainer[areaId]["height"]) / 2);
+						yPos = areaY1 + (areaHeight / 2);
 
+						if (isTextarea)
+						{
+							rowHeight = svgElement.getBBox().h / txt.length;
+
+							yPos -= (svgElement.getBBox().h / 2) - (rowHeight / 2);
 							svgElement.attr("y", yPos);
-							svgElement.attr("dy", ".35em");
+
+							if (msie > 0)
+							{
+								svgElement.attr("dy", ".65em");
+							}
+							else
+							{
+								svgElement.attr("dy", ".35em");
+							}
 						}
 						else
 						{
-							yPos = areasContainer[areaId]["y1"] + (parseFloat(areasContainer[areaId]["height"]) / 2);
-
-							svgElement.attr("y", yPos);
-
 							if (firefox > 0)
 							{
-								svgElement.attr("dy", "0");
+								svgElement.attr("y", yPos);
 								svgElement.attr("dominant-baseline", "middle");
 							}
 							else
 							{
-								svgElement.attr("alignment-baseline", "middle");
+								svgElement.attr("y", yPos);
+								svgElement.attr("dy", ".35em");
 							}
 						}
 					}
 					else if (verticalAlignValue == "bottom")
 					{
-						if (msie > 0)
+						yPos = areaY1 + areaHeight;
+
+						if (isTextarea)
 						{
-							yPos = areasContainer[areaId]["y1"] + parseFloat(areasContainer[areaId]["height"]);
+							rowHeight = svgElement.getBBox().h / txt.length;
+							yPos -= (svgElement.getBBox().h - rowHeight);
 
 							svgElement.attr("y", yPos);
 							svgElement.attr("dy", "0");
 						}
 						else
 						{
-							yPos = areasContainer[areaId]["y1"] + parseFloat(areasContainer[areaId]["height"]);
-
-							svgElement.attr("y", yPos);
-
 							if (firefox > 0)
 							{
 								svgElement.attr("dy", "0");
@@ -826,13 +849,13 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 							}
 							else
 							{
-								svgElement.attr("alignment-baseline", "auto");
+								svgElement.attr("y", yPos);
+								svgElement.attr("dy", "0");
 							}
 						}
 					}
 				}
 			<?php endif; ?>
-
 		}
 	}
 
@@ -877,8 +900,6 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			areasContainer[<?php echo $area->id; ?>]['width'] = width;
 			areasContainer[<?php echo $area->id; ?>]['height'] = height;
 			areasContainer[<?php echo $area->id ?>]['areaType'] = '<?php echo $areaType['name']; ?>';
-
-
 
 			if ('<?php echo $areaType['name']; ?>' == 'text')
 			{
@@ -1054,33 +1075,6 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 				console.log("Error: " + data);
 			}
 		});
-	}
-
-	/**
-	 * Split text in multiline order by adding tspan elements
-	 *
-	 */
-	function createSVGTextMultiline(svgTextElement, title)
-	{
-		var x = svgTextElement.attr("x");
-		var y = parseFloat(svgTextElement.attr("y"));
-		var lineHeight = 16;
-
-		var sentences = title.split("\n");
-		svgTextElement.node.textContent = "";
-
-		for (var n = 0; n < sentences.length; n++)
-		{
-			var svgTSpan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
-			svgTSpan.setAttributeNS(null, "x", x);
-			svgTSpan.setAttributeNS(null, "y", y);
-
-			var tSpanTextNode = document.createTextNode(sentences[n]);
-			svgTSpan.appendChild(tSpanTextNode);
-			svgTextElement.append(svgTSpan);
-
-			y += lineHeight;
-		}
 	}
 
 	function customizeJS(areas)
