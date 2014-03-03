@@ -504,85 +504,94 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 		var horizontalAlign = jQuery("#textAlign" + areaId);
 		var verticalAlign = jQuery("#verticalAlign" + areaId);
 		var selectedClipart = jQuery("#selectedClipart" + areaId);
-		var svgElement = rootSnapSvgObject.select("#areaBoxesLayer #areaSVGElement_" + areaId);
+		var svgElement = rootSnapSvgObject.select("#areaSVGElement_" + areaId);
 		var insertedElement;
 
 		if (svgElement)
 		{
-			var horizontalPosition = "";
-			var verticalPosition = "";
+			var addedSvgImage = rootSnapSvgObject.select("#addedSvgImage" + areaId);
 
-			if (horizontalAlign && typeof(jQuery(horizontalAlign).val()) != "undefined")
+			if (addedSvgImage)
 			{
-				horizontalPosition = jQuery(horizontalAlign).val().replace("left", "xMin").replace("center", "xMid").replace("right", "xMax");
+				addedSvgImage.remove();
 			}
-
-			if (verticalAlign && typeof(jQuery(verticalAlign).val()) != "undefined")
+			else
 			{
-				verticalPosition = jQuery(verticalAlign).val().replace("top", "YMin").replace("middle", "YMid").replace("bottom", "YMax");
-			}
+				var horizontalPosition = "";
+				var verticalPosition = "";
 
-			if (horizontalPosition == "")
-			{
-				horizontalPosition = "xMin";
-			}
-
-			if (verticalPosition == "")
-			{
-				verticalPosition = "YMin";
-			}
-
-			if (selectedClipart && typeof(jQuery(selectedClipart).val()) != "undefined")
-			{
-				var selectedClipartSVG = jQuery("[name=clipart" + areaId + "_" + jQuery(selectedClipart).val() + "]:first");
-
-				if (selectedClipartSVG && typeof(selectedClipartSVG) != "undefined")
+				if (horizontalAlign && typeof(jQuery(horizontalAlign).val()) != "undefined")
 				{
-					var clipartType = jQuery(selectedClipartSVG).attr("cliparttype");
+					horizontalPosition = jQuery(horizontalAlign).val().replace("left", "xMin").replace("center", "xMid").replace("right", "xMax");
+				}
 
-					if (typeof(clipartType) != "undefined" && clipartType != "svg+xml")
+				if (verticalAlign && typeof(jQuery(verticalAlign).val()) != "undefined")
+				{
+					verticalPosition = jQuery(verticalAlign).val().replace("top", "YMin").replace("middle", "YMid").replace("bottom", "YMax");
+				}
+
+				if (horizontalPosition == "")
+				{
+					horizontalPosition = "xMin";
+				}
+
+				if (verticalPosition == "")
+				{
+					verticalPosition = "YMin";
+				}
+
+				if (selectedClipart && typeof(jQuery(selectedClipart).val()) != "undefined")
+				{
+					var selectedClipartSVG = jQuery("[name=clipart" + areaId + "_" + jQuery(selectedClipart).val() + "]:first");
+
+					if (selectedClipartSVG && typeof(selectedClipartSVG) != "undefined")
 					{
-						var imageSVG =
-							'<image ' +
-							'width="' + areasContainer[areaId]['width'] + '"' +
-							'height="' + areasContainer[areaId]['height'] + '" ' +
-							'x="0" y="0" ' +
-							'xlink:href="' + jQuery(selectedClipartSVG).attr('data') +
-							'"></image>';
+						var clipartType = jQuery(selectedClipartSVG).attr("cliparttype");
 
-						svgElement.clear();
-
-						svgElement.append(Snap.parse(imageSVG));
-						insertedElement = svgElement.select("image");
-						insertedElement.click(removeSnapElement);
-						insertedElement.mouseover(mouseIsIn);
-						insertedElement.mouseout(mouseIsOut);
-					}
-					else
-					{
-						var svgDocument = document.getElementById(jQuery(selectedClipartSVG).attr("id"));
-
-						if (svgDocument && typeof(svgDocument) != "undefined")
+						if (typeof(clipartType) != "undefined" && clipartType != "svg+xml")
 						{
-							var svgDocumentContent = svgDocument.contentDocument;
+							var imageSVG = '<image ' +
+												'id="addedSvgImage' + areaId + '" ' +
+												'width="' + areasContainer[areaId]['width'] + '" ' +
+												'height="' + areasContainer[areaId]['height'] + '" ' +
+												'x="0" y="0" ' +
+												'xlink:href="' + jQuery(selectedClipartSVG).attr('data') +
+												'"></image>';
 
-							if (svgDocumentContent && typeof(svgDocumentContent) != "undefined")
+							svgElement.clear();
+
+							svgElement.append(Snap.parse(imageSVG));
+							insertedElement = svgElement.select("image");
+							insertedElement.click(removeSnapElement);
+							insertedElement.mouseover(mouseIsIn);
+							insertedElement.mouseout(mouseIsOut);
+						}
+						else
+						{
+							var svgDocument = document.getElementById(jQuery(selectedClipartSVG).attr("id"));
+
+							if (svgDocument && typeof(svgDocument) != "undefined")
 							{
-								var svgElementInner = jQuery(svgDocumentContent.documentElement).clone();
+								var svgDocumentContent = svgDocument.contentDocument;
 
-								if (typeof(svgElementInner) != "undefined")
+								if (svgDocumentContent && typeof(svgDocumentContent) != "undefined")
 								{
-									jQuery(svgElementInner).attr("height", areasContainer[areaId]["height"]);
-									jQuery(svgElementInner).attr("width", areasContainer[areaId]["width"]);
-									jQuery(svgElementInner).attr("preserveAspectRatio", horizontalPosition + verticalPosition + " meet");
+									var svgElementInner = jQuery(svgDocumentContent.documentElement).clone();
 
-									svgElement.clear();
-									svgElement.append(Snap.parse(svgElementInner[0].outerHTML));
-									//svgElement.select("svg").click(removeSnapElement);
-									insertedElement = svgElement.select("svg");
-									insertedElement.click(removeSnapElement);
-									insertedElement.mouseover(mouseIsIn);
-									insertedElement.mouseout(mouseIsOut);
+									if (typeof(svgElementInner) != "undefined")
+									{
+										jQuery(svgElementInner).attr("height", areasContainer[areaId]["height"]);
+										jQuery(svgElementInner).attr("width", areasContainer[areaId]["width"]);
+										jQuery(svgElementInner).attr("preserveAspectRatio", horizontalPosition + verticalPosition + " meet");
+
+										svgElement.clear();
+										svgElement.append(Snap.parse(svgElementInner[0].outerHTML));
+										insertedElement = svgElement.select("svg");
+										insertedElement.node.id = "addedSvgImage" + areaId;
+										insertedElement.click(removeSnapElement);
+										insertedElement.mouseover(mouseIsIn);
+										insertedElement.mouseout(mouseIsOut);
+									}
 								}
 							}
 						}
