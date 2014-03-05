@@ -79,13 +79,7 @@ class ReddesignModelAreas extends RModelList
 			$query->where($db->qn('a.background_id') . ' = ' . $db->quote($backgroundId));
 		}
 
-		// Ordering
-		$orderList = $this->getState('list.ordering');
-		$directionList = $this->getState('list.direction');
-
-		$order = !empty($orderList) ? $orderList : 'a.name';
-		$direction = !empty($directionList) ? $directionList : 'ASC';
-		$query->order($db->escape($order) . ' ' . $db->escape($direction));
+		$query->order($db->escape('a.ordering') . ' ' . $db->escape('ASC'));
 
 		return $query;
 	}

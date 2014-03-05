@@ -16,29 +16,35 @@ $this->designtype_id =	$displayData->item->designtype_id;
 $this->unitConversionRatio = $displayData->unitConversionRatio;
 $this->unit = $displayData->unit;
 
+$return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->item->designtype_id . '&tab=design-areas';
 ?>
 
 
 <table id="designAreaList" class="table table-striped">
-<thead>
-<tr>
-	<th>
-		<?php echo JText::_('ID'); ?>
-	</th>
-	<th>
-		<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_NAME'); ?>
-	</th>
-	<th>
-		<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_PROPERTIES'); ?>
-	</th>
-	<th>
-		<?php echo JText::_('COM_REDDESIGN_COMMON_SETTINGS'); ?>
-	</th>
-	<th>
-		<?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?>
-	</th>
-</tr>
-</thead>
+	<thead>
+		<tr>
+			<th>
+				<?php echo JText::_('ID'); ?>
+			</th>
+			<th>
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_NAME'); ?>
+			</th>
+			<th>
+				<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_AREA_PROPERTIES'); ?>
+			</th>
+			<th>
+				<?php echo JText::_('COM_REDDESIGN_COMMON_SETTINGS'); ?>
+			</th>
+			<th>
+				<?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?>
+			</th>
+			<th>
+				<button type="button" class="btn btn-success btn-mini" onclick="saveOrder();">
+					<span><?php echo JText::_('COM_REDDESIGN_COMMON_SAVE_ORDER'); ?></span>
+				</button>
+			</th>
+		</tr>
+	</thead>
 <tbody id="areasTBody">
 <?php if ($count = count($this->areas)) : ?>
 	<?php
@@ -94,6 +100,10 @@ $this->unit = $displayData->unit;
 					<span><?php echo JText::_('COM_REDDESIGN_COMMON_REMOVE'); ?></span>
 				</button>
 			</td>
+			<td>
+				<input type="text" name="areasOrder[]" class="input-mini" value="<?php echo $area->ordering; ?>" />
+				<input type="hidden"  name="areasCid[]" value="<?php echo $area->id; ?>" />
+			</td>
 		</tr>
 
 		<tr id="areaSettingsRow<?php echo $area->id ?>" class="<?php echo 'row' . $m; ?> hide areaSettingsRow">
@@ -139,7 +149,6 @@ $this->unit = $displayData->unit;
 				{
 					jQuery("#areaRow" + reddesign_area_id).remove();
 					jQuery("#areaSettingsRow" + reddesign_area_id).remove();
-					updateImageAreas();
 				}
 				else
 				{
@@ -153,32 +162,36 @@ $this->unit = $displayData->unit;
 	}
 
 	/**
-	 * @Todo: this function should update the SVG with the existing areas
-	 * is for example called when afterRemoving an area you need to refresh all areas (see removeArea)
+	 * Saves ordering.
 	 */
-	function updateImageAreas() {
-		/*
-		 var json;
+	function saveOrder() {
+		var areasCid = new Array();
+		jQuery("input[name^='areasCid']").each(function() {areasCid.push(jQuery(this).val());});
 
-		 jQuery("#backgroundImageContainer div").remove();
+		var areasOrder = new Array();
+		jQuery("input[name^='areasOrder']").each(function() {areasOrder.push(jQuery(this).val());});
 
-		 jQuery.ajax({
-		 data: {
-		 background_id: <?php echo $this->productionBackground->id; ?>
-		 },
-		 url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxGetAreas",
-		 success: function (data) {
-		 json = jQuery.parseJSON(data);
-		 jQuery.each( json, function( key, value ) {
-		 drawArea(value.reddesign_area_id, value.title, value.x1_pos, value.y1_pos, value.width, value.height)
-		 });
-		 },
-		 error: function (data) {
-		 console.log('UpdateImageAreas function Error');
-		 console.log(data);
-		 }
-		 });
-		 */
+		jQuery.ajax({
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=areas.saveOrderAjax&tmpl=component",
+			data: {
+				cid: areasCid,
+				order: areasOrder
+			},
+			type: "post",
+			success: function (data) {
+				if (data == 1)
+				{
+					window.location.href = "<?php echo $return_url; ?>";
+				}
+				else
+				{
+					console.log('function saveOrder() Error');
+				}
+			},
+			error: function (data) {
+				console.log('function saveOrder() Error');
+			}
+		});
 	}
 
 	/**
