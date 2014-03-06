@@ -467,6 +467,53 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 		}).done(function (data) {
 			jQuery(targetRow).removeClass('opacity-40');
 			jQuery(targetRow).html(data);
+
+			if (jQuery("#colorPickerContainer" + areaId)[0])
+			{
+				var colorPickerLoad = jQuery.farbtastic("#colorPickerContainer" + areaId);
+				colorPickerLoad.linkTo("#colorPickerSelectedColor" + areaId);
+			}
+
+			jQuery(document).on("keyup", "#C" + areaId, function() {
+				var newColor = getNewHexColor(parseInt(areaId));
+				colorPicker<?php echo $area->id ?>.setColor(newColor);
+			});
+
+			jQuery(document).on("keyup", "#M" + areaId, function() {
+				var newColor = getNewHexColor(parseInt(areaId));
+				colorPicker<?php echo $area->id ?>.setColor(newColor);
+			});
+
+			jQuery(document).on("keyup", "#Y" + areaId, function() {
+				var newColor = getNewHexColor(parseInt(areaId));
+				colorPicker<?php echo $area->id ?>.setColor(newColor);
+			});
+
+			jQuery(document).on("keyup", "#K" + areaId, function() {
+				var newColor = getNewHexColor(parseInt(areaId));
+				colorPicker<?php echo $area->id ?>.setColor(newColor);
+			});
+
+			jQuery(document).on("keyup", "#colorPickerSelectedColor" + areaId, function() {
+				var hex = jQuery("#colorPickerSelectedColor" + areaId).val();
+				loadCMYKValues(hex, parseInt(areaId));
+			});
+
+			jQuery(document).on("mouseup", "#colorPickerContainer" + areaId, function() {
+				var hex = jQuery("#colorPickerSelectedColor" + areaId).val();
+				loadCMYKValues(hex, parseInt(areaId));
+			});
+
+			jQuery("#allColors" + areaId).click(function () {
+				jQuery("#colorsContainer" + areaId).toggle(!this.checked);
+				jQuery("#addColorContainer" + areaId).toggle(!this.checked);
+				jQuery("#selectedColorsPalette" + areaId).toggle(!this.checked);
+			});
+
+			jQuery("#addColorButton" + areaId).click(function () {
+				addColorToList(parseInt(areaId))
+			});
+
 			jQuery("#areaSettingsRow" + areaId + " td select").select2({ width: 'resolve' });
 
 			jQuery(targetRow).find('.thumbnailSVG').each(function () {

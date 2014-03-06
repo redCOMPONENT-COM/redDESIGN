@@ -107,7 +107,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 		</tr>
 
 		<tr id="areaSettingsRow<?php echo $area->id ?>" class="<?php echo 'row' . $m; ?> hide areaSettingsRow">
-			<td colspan="5">
+			<td colspan="6">
 				<?php
 				$areaType = ReddesignHelpersArea::getAreaType($area->areaType);
 				echo RLayoutHelper::render('area.' . $areaType['name'] . 'options', array(
