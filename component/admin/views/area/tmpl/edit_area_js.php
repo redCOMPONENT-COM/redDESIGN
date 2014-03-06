@@ -476,22 +476,22 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 			jQuery(document).on("keyup", "#C" + areaId, function() {
 				var newColor = getNewHexColor(parseInt(areaId));
-				colorPicker<?php echo $area->id ?>.setColor(newColor);
+				colorPickerLoad.setColor(newColor);
 			});
 
 			jQuery(document).on("keyup", "#M" + areaId, function() {
 				var newColor = getNewHexColor(parseInt(areaId));
-				colorPicker<?php echo $area->id ?>.setColor(newColor);
+				colorPickerLoad.setColor(newColor);
 			});
 
 			jQuery(document).on("keyup", "#Y" + areaId, function() {
 				var newColor = getNewHexColor(parseInt(areaId));
-				colorPicker<?php echo $area->id ?>.setColor(newColor);
+				colorPickerLoad.setColor(newColor);
 			});
 
 			jQuery(document).on("keyup", "#K" + areaId, function() {
 				var newColor = getNewHexColor(parseInt(areaId));
-				colorPicker<?php echo $area->id ?>.setColor(newColor);
+				colorPickerLoad.setColor(newColor);
 			});
 
 			jQuery(document).on("keyup", "#colorPickerSelectedColor" + areaId, function() {
