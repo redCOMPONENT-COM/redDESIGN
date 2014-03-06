@@ -385,6 +385,13 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			});
 
 			jQuery(document).on("mousedown", ".reddesign-form .thumbnailSVG-pointer", function() {
+				if(jQuery(this).hasClass("delete")) {
+					jQuery(this).removeClass("delete");
+				}
+				else {
+					jQuery(this).addClass("delete");
+				}
+
 				var id = jQuery(this).attr("name").replace("clipart", "");
 				var clipartId = jQuery(this).parent().find(".change-selected-clipart").val();
 				jQuery("#selectedClipart" + id).val(clipartId);
@@ -1274,12 +1281,9 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 				acceptFileTypes: /(\.|\/)(svg,jpg,png,gif)$/i
 			}).on("fileuploadprogressall", function (e, data) {
 				jQuery(inputFileNode).prop("disabled", true);
-				var progress = parseInt(data.loaded / data.total * 100, 10);
 
-				jQuery("#clipartUpload" + areaId + " .image-progress .bar").css(
-					"width",
-					progress + "%"
-				);
+				var progress = parseInt(data.loaded / data.total * 100, 10);
+				jQuery("#clipartUpload" + areaId + " .image-progress .bar").css("width", progress + "%");
 			}).on("fileuploaddone", function (e, data) {
 
 				if (data.result)
@@ -1289,9 +1293,12 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					if (returnedData.message == "")
 					{
 						jQuery("#uploadedClipart" + areaId).html(returnedData.result);
+						jQuery("#fileNameUpload" + areaId).remove();
 					}
 					else
 					{
+						jQuery("#fileNameUpload" + areaId).remove();
+						jQuery("#clipartUpload" + areaId + " .image-progress .bar").css("width", "0");
 						alert(returnedData.message);
 					}
 				}
@@ -1324,9 +1331,9 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 		}).on("fileuploadadd", function (e, data) {
 			var id = (jQuery(this).attr("id").replace("uploadClipartFile", ""));
 			data.context = jQuery("<div/>").appendTo("#uploadedClipart" + id);
+
 			jQuery.each(data.files, function (index, file) {
-				var node = jQuery("<p/>")
-					.append(jQuery("<span/>").text(file.name));
+				var node = jQuery("<p/>").append("<span id='fileNameUpload" + id + "'>" + file.name + "</span>");
 				jQuery("#uploadClipartFile" + id).data(data);
 				node.appendTo(data.context);
 			});

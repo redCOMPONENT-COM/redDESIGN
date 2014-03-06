@@ -617,7 +617,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('order_item_id', 'productionSvg', 'redDesignData')));
+		$query->select($db->quoteName(array('order_item_id', 'redDesignData', 'productionSvg')));
 		$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
 		$query->where($db->quoteName('order_item_id') . ' = ' . $orderItem->order_item_id);
 		$db->setQuery($query);

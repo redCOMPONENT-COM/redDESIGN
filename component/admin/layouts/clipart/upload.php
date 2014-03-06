@@ -41,7 +41,9 @@ if (empty($file) || empty($file["mime_type"]) || empty($file['original_filename'
 				class="thumbnailSVG"
 				data="<?php echo JURI::root() . 'media/com_reddesign/cliparts/uploaded/' . $file['mangled_filename']; ?>"
 				cliparttype="<?php echo $extension; ?>"
-				type="<?php echo $file["mime_type"]; ?>">
+				type="<?php echo $file["mime_type"]; ?>"
+				width="<?php echo $clipartPreviewWidth ?>px"
+				max-height="<?php echo $clipartPreviewHeight; ?>px">
 			</object>
 			<input
 				type="hidden"

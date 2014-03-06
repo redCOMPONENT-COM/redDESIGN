@@ -218,7 +218,7 @@ class ReddesignControllerDesigntype extends JController
 
 			$uploaded_file = ReddesignHelpersFile::uploadFile(
 								$file,
-								'cliparts/uploaded',
+								'cliparts/uploaded/',
 								$config->getMaxSVGFileSize(),
 								$allowedExtensions,
 								$allowedMimeTypes
@@ -228,55 +228,18 @@ class ReddesignControllerDesigntype extends JController
 			{
 				if (JFile::getExt($uploaded_file['mangled_filename']) != 'svg')
 				{
-					$image = new JImage($folderPath . $uploaded_file['mangled_filename']);
-					$thumbs = null;
-
-					try
-					{
-						$clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
-						$clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
-						$thumbs = $image->createThumbs(array($clipartPreviewWidth . 'x' . $clipartPreviewHeight), JImage::SCALE_FIT, $folderPath);
-					}
-					catch (Exception $e)
-					{
-						$return->message = JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_FAILED_TO_CREATE_THUMBNAILS') . ' ' . $e->getMessage();
-					}
-
-					if (is_array($thumbs))
-					{
-						/** @var JImage $image */
-						$image = $thumbs[0];
-
-						// We want just a name
-						$uploaded_file['mangled_filename'] = str_replace(JPATH_ROOT . '/media/com_reddesign/cliparts/uploaded/', '', $image->getPath());
-					}
-					else
-					{
-						$return->message = JText::_('COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_THUMBNAILS_IS_NOT_ARRAY');
-					}
-
 					// Check DPI
-					$imagickImg = new Imagick($folderPath . $uploaded_file['mangled_filename']);
-					$imageResolution = $imagickImg->getImageResolution();
+					$imageResolution = $this->getDpi($folderPath . $uploaded_file['mangled_filename']);
 					$minimumDpi = $config->getMinimumUploadDpi();
 
 					if ($imageResolution['x'] < $minimumDpi || $imageResolution['y'] < $minimumDpi)
 					{
-						$areaModel = RModel::getAdminInstance('Area', array('ignore_request' => true), 'com_reddesign');
-						$area = $areaModel->getItem($areaId);
-						$unit = $config->getUnit();
-						$sourceDpi = $config->getSourceDpi();
-						$unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourceDpi);
-						$areaWidth = round($area->width * $unitConversionRatio, 0);
-						$areaHeight = round($area->height * $unitConversionRatio, 0);
-
 						$return->result = 'tooSmallDpi';
 						$return->message = JText::sprintf(
-															'COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_DPI_TO_SMALL',
-															$areaWidth,
-															$areaHeight,
-															$config->getMinimumUploadDpi()
-											);
+							'COM_REDDESIGN_DESIGNTYPE_CLIPART_UPLOAD_DPI_TO_SMALL',
+							$imageResolution['x'],
+							$config->getMinimumUploadDpi()
+						);
 					}
 				}
 			}
@@ -294,5 +257,25 @@ class ReddesignControllerDesigntype extends JController
 		echo json_encode($return);
 
 		$app->close();
+	}
+
+	/**
+	 * Gets image DPI.
+	 *
+	 * @param   string  $filename  Name of an image.
+	 *
+	 * @return array
+	 */
+	private function getDpi($filename)
+	{
+		$a = fopen($filename, 'r');
+		$string = fread($a, 20);
+		fclose($a);
+
+		$data = bin2hex(substr($string, 14, 4));
+		$x = substr($data, 0, 4);
+		$y = substr($data, 0, 4);
+
+		return array('x' => hexdec($x), 'y' => hexdec($y));
 	}
 }

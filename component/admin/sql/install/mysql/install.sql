@@ -150,8 +150,9 @@ CREATE TABLE IF NOT EXISTS `#__reddesign_property_background_mapping` (
 -- Table structure for table `#__reddesign_orderitem_mapping`
 --
 CREATE TABLE IF NOT EXISTS `#__reddesign_orderitem_mapping` (
-  `order_item_id`  INT(11)      NOT NULL,
-  `redDesignData`  TEXT         NOT NULL,
+  `order_item_id` INT(11)      NOT NULL,
+  `redDesignData` LONGTEXT     NOT NULL,
+  `productionSvg` VARCHAR(255),
   PRIMARY KEY (`order_item_id`)
 )
   ENGINE = InnoDB
