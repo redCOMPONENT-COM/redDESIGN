@@ -1389,16 +1389,16 @@ function setPropertyImage(product_id, propertyObj) {
             var propNameObj = document.getElementsByName(propertyObj + "[]");
             for (var p = 0; p < propNameObj.length; p++) {
                 var borderstyle = "";
-//				var borderpadding = "";
+//              var borderpadding = "";
                 selValue = propNameObj[p].value;
                 if (propNameObj[p].checked) {
                     borderstyle = "1px solid";
-//					borderpadding = "7px";
+//                  borderpadding = "7px";
                 }
                 if (document.getElementById(propertyObj + "_propimg_" + selValue)) {
 
                     document.getElementById(propertyObj + "_propimg_" + selValue).style.border = borderstyle;
-//					document.getElementById(propertyObj+"_propimg_"+selValue).style.padding = borderpadding;
+//                  document.getElementById(propertyObj+"_propimg_"+selValue).style.padding = borderpadding;
                 }
             }
         } else {
@@ -1406,17 +1406,17 @@ function setPropertyImage(product_id, propertyObj) {
             for (var p = 0; p < propName.length; p++) {
 
                 var borderstyle = "";
-//				var borderpadding = "";
+//              var borderpadding = "";
                 selValue = propName[p].value;
 
                 if (propName[propName.selectedIndex].value == selValue) {
                     borderstyle = "1px solid";
-//					borderpadding = "7px";
+//                  borderpadding = "7px";
                 }
                 if (document.getElementById(propertyObj + "_propimg_" + selValue)) {
 
                     document.getElementById(propertyObj + "_propimg_" + selValue).style.border = borderstyle;
-//					document.getElementById(propertyObj+"_propimg_"+selValue).style.padding = borderpadding;
+//                  document.getElementById(propertyObj+"_propimg_"+selValue).style.padding = borderpadding;
                 }
             }
 
@@ -1432,26 +1432,26 @@ function setSubpropertyImage(product_id, subpropertyObj, selValue) {
             var subpropNameObj = document.getElementsByName(subpropertyObj + "[]");
             for (var p = 0; p < subpropNameObj.length; p++) {
                 var borderstyle = "";
-//				var borderpadding = "";
+//              var borderpadding = "";
                 selValue = subpropNameObj[p].value;
                 if (subpropNameObj[p].checked) {
                     borderstyle = "1px solid";
-//					borderpadding = "7px";
+//                  borderpadding = "7px";
                 }
                 if (document.getElementById(subpropertyObj + "_subpropimg_" + selValue)) {
                     document.getElementById(subpropertyObj + "_subpropimg_" + selValue).style.border = borderstyle;
-//					document.getElementById(subpropertyObj+"_subpropimg_"+selValue).style.padding = borderpadding;
+//                  document.getElementById(subpropertyObj+"_subpropimg_"+selValue).style.padding = borderpadding;
                 }
             }
         } else {
             for (var p = 0; p < subpropName.length; p++) {
 
                 var borderstyle = "";
-//				var borderpadding = "";
+//              var borderpadding = "";
                 selValue = subpropName[p].value;
                 if (subpropName[subpropName.selectedIndex].value == selValue) {
                     borderstyle = "1px solid";
-//					borderpadding = "7px";
+//                  borderpadding = "7px";
                 }
                 if (document.getElementById(subpropertyObj + "_subpropimg_" + selValue)) {
                     document.getElementById(subpropertyObj + "_subpropimg_" + selValue).style.border = borderstyle;
@@ -1558,9 +1558,9 @@ function displayAdditionalImage(product_id, accessory_id, relatedprd_id, selecte
                 //if(arrResponse[4]!="")
                 //{
                 //if(PRODUCT_ADDIMG_IS_LIGHTBOX==1)
-                //	document.getElementById('a_main_image'+product_id).innerHTML=arrResponse[4];
-                //	else
-                //	document.getElementById('a_main_image'+product_id).src=arrResponse[4];
+                //  document.getElementById('a_main_image'+product_id).innerHTML=arrResponse[4];
+                //  else
+                //  document.getElementById('a_main_image'+product_id).src=arrResponse[4];
                 //}
                 if (arrResponse[4] != "") {
                     document.getElementById('a_main_image' + product_id).innerHTML = arrResponse[4];
@@ -1581,7 +1581,7 @@ function displayAdditionalImage(product_id, accessory_id, relatedprd_id, selecte
             if (document.getElementById('hidden_attribute_cartimage' + product_id)) {
                 document.getElementById('hidden_attribute_cartimage' + product_id).value = arrResponse[12];
             }
-//			alert(arrResponse[6]);
+//          alert(arrResponse[6]);
             if (document.getElementById('stockImage' + product_id) && arrResponse[5] != "") {
                 document.getElementById('stockImage' + product_id).src = arrResponse[5];
             }
@@ -1933,7 +1933,7 @@ function displayAddtocartForm(frmCartName, product_id, relatedprd_id, giftcard_i
     }
 
     if (product_id == 0 || product_id == "") {
-//		alert("Product ID is missing");
+//      alert("Product ID is missing");
         return false;
     }
 
@@ -1951,7 +1951,7 @@ function displayAddtocartForm(frmCartName, product_id, relatedprd_id, giftcard_i
                 fieldNamefrmId = reverseString(elem[i].id);
                 fieldNamefrmId = reverseString(fieldNamefrmId.substr(fieldNamefrmId.indexOf("_") + 1));
                 for (var j = 0; j < elements.length; j++) {
-//					if(elem[i].name == elements[j].name)
+//                  if(elem[i].name == elements[j].name)
                     if (fieldNamefrmId == elements[j].name) {
                         var strval = elements[j].value;
 
@@ -2012,8 +2012,8 @@ function displayAddtocartForm(frmCartName, product_id, relatedprd_id, giftcard_i
             if (document.getElementById(calName).value != "") {
                 cal_fieldNamefrmId = reverseString(calName);
                 cal_fieldNamefrmId = reverseString(cal_fieldNamefrmId.substr(cal_fieldNamefrmId.indexOf("_") + 1));
-                //			if(document.getElementById(cal_fieldNamefrmId))
-                //			document.getElementById(cal_fieldNamefrmId).value = document.getElementById(calName).value;
+                //          if(document.getElementById(cal_fieldNamefrmId))
+                //          document.getElementById(cal_fieldNamefrmId).value = document.getElementById(calName).value;
                 var frm_name = String(frmCartName);
                 var elements = document.getElementById(frm_name).elements;
                 var cfieldName = String(cal_fieldNamefrmId + '_' + product_id);
@@ -2049,51 +2049,51 @@ function setAddtocartForm(frmCartName, product_id) {
 
     if (document.getElementById('Itemid')) {
         frm.Itemid.value = document.getElementById('Itemid').value;
-//		alert("Itemid= " + frm.Itemid.value);
+//      alert("Itemid= " + frm.Itemid.value);
     }
     if (document.getElementById('attribute_data')) {
         frm.attribute_data.value = document.getElementById('attribute_data').value;
-//		alert("attribute_data= " + frm.attribute_data.value);
+//      alert("attribute_data= " + frm.attribute_data.value);
     }
     if (document.getElementById('property_data')) {
         frm.property_data.value = document.getElementById('property_data').value;
-//		alert("property_data= " + frm.property_data.value);
+//      alert("property_data= " + frm.property_data.value);
     }
     if (document.getElementById('subproperty_data')) {
         frm.subproperty_data.value = document.getElementById('subproperty_data').value;
-//		alert("subproperty_data= " + frm.subproperty_data.value);
+//      alert("subproperty_data= " + frm.subproperty_data.value);
     }
     if (document.getElementById('accessory_data')) {
         frm.accessory_data.value = document.getElementById('accessory_data').value;
-//		alert("accessory_data= " + frm.accessory_data.value);
+//      alert("accessory_data= " + frm.accessory_data.value);
     }
     if (document.getElementById('acc_quantity_data')) {
         frm.acc_quantity_data.value = document.getElementById('acc_quantity_data').value;
-//		alert("acc_quantity_data= " + frm.acc_quantity_data.value);
+//      alert("acc_quantity_data= " + frm.acc_quantity_data.value);
     }
     if (document.getElementById('acc_attribute_data')) {
         frm.acc_attribute_data.value = document.getElementById('acc_attribute_data').value;
-//		alert("acc_attribute_data= " + frm.acc_attribute_data.value);
+//      alert("acc_attribute_data= " + frm.acc_attribute_data.value);
     }
     if (document.getElementById('acc_property_data')) {
         frm.acc_property_data.value = document.getElementById('acc_property_data').value;
-//		alert("acc_property_data= " + frm.acc_property_data.value);
+//      alert("acc_property_data= " + frm.acc_property_data.value);
     }
     if (document.getElementById('acc_subproperty_data')) {
         frm.acc_subproperty_data.value = document.getElementById('acc_subproperty_data').value;
-//		alert("acc_subproperty_data= " + frm.acc_subproperty_data.value);
+//      alert("acc_subproperty_data= " + frm.acc_subproperty_data.value);
     }
     if (document.getElementById('accessory_price')) {
         frm.accessory_price.value = document.getElementById('accessory_price').value;
-//		alert("accessory_price= " + frm.accessory_price.value);
+//      alert("accessory_price= " + frm.accessory_price.value);
     }
     if (document.getElementById('requiedAttribute')) {
         frm.requiedAttribute.value = document.getElementById('requiedAttribute').value;
-//		alert("requiedAttribute= " + frm.requiedAttribute.value);
+//      alert("requiedAttribute= " + frm.requiedAttribute.value);
     }
     if (document.getElementById('requiedProperty')) {
         frm.requiedProperty.value = document.getElementById('requiedProperty').value;
-//		alert("requiedProperty= " + frm.requiedProperty.value);
+//      alert("requiedProperty= " + frm.requiedProperty.value);
     }
 
     var product_quantity = 1;
@@ -2201,7 +2201,7 @@ function checkAddtocartValidation(frmCartName, product_id, relatedprd_id, giftca
 
 
     if (product_id == 0 || product_id == "") {
-//		alert("Product ID is missing");
+//      alert("Product ID is missing");
         return false;
     }
     var prop_id_cart = "";
@@ -2249,7 +2249,7 @@ function checkAddtocartValidation(frmCartName, product_id, relatedprd_id, giftca
          * And nextra = number of extra fields
          */
         var ntotal = parseInt(totAttribute) + parseInt(totAccessory) + parseInt(totUserfield);
-//		alert(parseInt(totAttribute) + " = "+ parseInt(totAccessory) + " = " + parseInt(totUserfield));
+//      alert(parseInt(totAttribute) + " = "+ parseInt(totAccessory) + " = " + parseInt(totUserfield));
         // submit form from product detail page
         /*
          * ntotal = count total attribute + extra fields
@@ -2272,7 +2272,7 @@ function checkAddtocartValidation(frmCartName, product_id, relatedprd_id, giftca
 
 function displayAjaxCartdetail(frmCartName, product_id, relatedprd_id, giftcard_id, totAttribute, totAccessory, totUserfield) {
     if (product_id == 0 || product_id == "") {
-//		alert("Product ID is missing");
+//      alert("Product ID is missing");
         return false;
     }
     var layout = "";
@@ -2300,13 +2300,13 @@ function displayAjaxCartdetail(frmCartName, product_id, relatedprd_id, giftcard_
     for (var ex = 0; ex < extrafields.length; ex++) {
 
         if (!extrafields[ex].value && extrafields[ex].type == 'text') {
-            extrafieldNames += extrafields[ex].id; 	// make Id as Name
+            extrafieldNames += extrafields[ex].id;  // make Id as Name
             if ((extrafields.length - 1) != ex) {
                 extrafieldNames += ',';
             }
         }
         else if (!extrafields[ex].value && extrafields[ex].type == 'select-one') {
-            extrafieldNames += extrafields[ex].id; 	// make Id as Name
+            extrafieldNames += extrafields[ex].id;  // make Id as Name
             if ((extrafields.length - 1) != ex) {
                 extrafieldNames += ',';
             }
@@ -2314,7 +2314,7 @@ function displayAjaxCartdetail(frmCartName, product_id, relatedprd_id, giftcard_
         else if (!extrafields[ex].value && extrafields[ex].type == 'hidden') {
             imgfieldNamefrmId = reverseString(extrafields[ex].id);
             imgfieldNamefrmId = reverseString(imgfieldNamefrmId.substr(imgfieldNamefrmId.indexOf("_") + 1));
-            extrafieldNames += imgfieldNamefrmId; 	// make Id as Name
+            extrafieldNames += imgfieldNamefrmId;   // make Id as Name
             if ((extrafields.length - 1) != ex) {
                 extrafieldNames += ',';
             }
@@ -2435,11 +2435,11 @@ function displayAjaxCartdetail(frmCartName, product_id, relatedprd_id, giftcard_
             totAccessory = 0;
         }
     }
-//	if(requiedAccessory!="")
-//	{
-//		totAccessory = 0;
-//	}
-//	alert("totAttribute=" + totAttribute + "totAccessory=" + totAccessory + "totUserfield=" + totUserfield);
+//  if(requiedAccessory!="")
+//  {
+//      totAccessory = 0;
+//  }
+//  alert("totAttribute=" + totAttribute + "totAccessory=" + totAccessory + "totUserfield=" + totUserfield);
 
     var ntotal = parseInt(totAttribute) + parseInt(totAccessory) + parseInt(totUserfield);
     var othertotal = parseInt(totAttribute) + parseInt(totUserfield);
@@ -2651,8 +2651,8 @@ function submitAjaxCartdetail(frmCartName, product_id, relatedprd_id, giftcard_i
             imgfieldNamefrmId = reverseString(extrafields[ex].id);
             imgfieldNamefrmId = reverseString(imgfieldNamefrmId.substr(imgfieldNamefrmId.indexOf("_") + 1));
 
-            extrafieldName = imgfieldNamefrmId; 	// make Id as Name
-            extrafieldVal = extrafields[ex].value;	// get extra field value
+            extrafieldName = imgfieldNamefrmId;     // make Id as Name
+            extrafieldVal = extrafields[ex].value;  // get extra field value
             extrafieldpost += "&" + extrafieldName + "=" + extrafieldVal;
             extrafieldVal = "";
         }
@@ -2667,8 +2667,8 @@ function submitAjaxCartdetail(frmCartName, product_id, relatedprd_id, giftcard_i
             }
 
 
-            extrafieldName = extrafields[ex].id; 	// make Id as Name
-            extrafieldVal = encodeURIComponent(extrafields[ex].value);	// get extra field value
+            extrafieldName = extrafields[ex].id;    // make Id as Name
+            extrafieldVal = encodeURIComponent(extrafields[ex].value);  // get extra field value
             extrafieldpost += "&" + extrafieldName + "=" + extrafieldVal;
         }
     }
@@ -2723,7 +2723,7 @@ function submitAjaxCartdetail(frmCartName, product_id, relatedprd_id, giftcard_i
     params = params + "&attribute_data=" + frm.attribute_data.value;
     params = params + "&property_data=" + frm.property_data.value;
     params = params + "&subproperty_data=" + frm.subproperty_data.value;
-//	params = params + "&attribute_price="+frm.attribute_price.value;
+//  params = params + "&attribute_price="+frm.attribute_price.value;
     params = params + "&requiedAttribute=" + frm.requiedAttribute.value;
     params = params + "&requiedProperty=" + frm.requiedProperty.value;
     params = params + "&accessory_data=" + frm.accessory_data.value;
@@ -2896,7 +2896,7 @@ function checkAddtocartwishlistValidation(frmCartName, product_id, relatedprd_id
 
 
     if (product_id == 0 || product_id == "") {
-//		alert("Product ID is missing");
+//      alert("Product ID is missing");
         return false;
     }
     var prop_id_cart = "";
@@ -2937,7 +2937,7 @@ function checkAddtocartwishlistValidation(frmCartName, product_id, relatedprd_id
             return false;
         }
         return true;
-        //		document.getElementById(frmCartName).submit();
+        //      document.getElementById(frmCartName).submit();
 
     } else {
         /*
@@ -2945,8 +2945,8 @@ function checkAddtocartwishlistValidation(frmCartName, product_id, relatedprd_id
          * Where natt = number of total attribute
          * And nextra = number of extra fields
          */
-//		var ntotal = parseInt(totAttribute) + parseInt(totAccessory) + parseInt(totUserfield);
-//		alert(parseInt(totAttribute) + " = "+ parseInt(totAccessory) + " = " + parseInt(totUserfield));
+//      var ntotal = parseInt(totAttribute) + parseInt(totAccessory) + parseInt(totUserfield);
+//      alert(parseInt(totAttribute) + " = "+ parseInt(totAccessory) + " = " + parseInt(totUserfield));
         // submit form from product detail page
         /*
          * ntotal = count total attribute + extra fields
@@ -2976,7 +2976,7 @@ function productalladdprice(my) {
     mainpro_id.length = mainpro_id.length - 1;
 
 
-    for (var i = 0; i < mainpro_id.length; i++) {	//alert(i);
+    for (var i = 0; i < mainpro_id.length; i++) {   //alert(i);
 
         if (mainpro_id[i] != "") {
 
@@ -2998,9 +2998,9 @@ function productalladdprice(my) {
                     //for(var j=0;j<=i;j++)
                     //{
 //
-//							return	submitAjaxwishlistCartdetail('addtocart_prd_'+mainpro_id[j],mainpro_id[j], 0, 0,totatt[j],0,totcount_no_user_field[j]);
-//						//alert('addtocart_prd_'+mainpro_id[j]);
-//						}
+//                          return  submitAjaxwishlistCartdetail('addtocart_prd_'+mainpro_id[j],mainpro_id[j], 0, 0,totatt[j],0,totcount_no_user_field[j]);
+//                      //alert('addtocart_prd_'+mainpro_id[j]);
+//                      }
 
 
                 }
@@ -3151,14 +3151,14 @@ function submitAjaxwishlistCartdetail(frmCartName, product_id, relatedprd_id, gi
             imgfieldNamefrmId = reverseString(extrafields[ex].id);
             imgfieldNamefrmId = reverseString(imgfieldNamefrmId.substr(imgfieldNamefrmId.indexOf("_") + 1));
 
-            extrafieldName = imgfieldNamefrmId; 	// make Id as Name
-            extrafieldVal = extrafields[ex].value;	// get extra field value
+            extrafieldName = imgfieldNamefrmId;     // make Id as Name
+            extrafieldVal = extrafields[ex].value;  // get extra field value
             extrafieldpost += "&" + extrafieldName + "=" + extrafieldVal;
             extrafieldVal = "";
         } else if (extrafields[ex].type == 'text') {
 
-            extrafieldName = extrafields[ex].id; 	// make Id as Name
-            extrafieldVal = extrafields[ex].value;	// get extra field value
+            extrafieldName = extrafields[ex].id;    // make Id as Name
+            extrafieldVal = extrafields[ex].value;  // get extra field value
             extrafieldpost += "&" + extrafieldName + "=" + extrafieldVal;
 
         }
@@ -3173,8 +3173,8 @@ function submitAjaxwishlistCartdetail(frmCartName, product_id, relatedprd_id, gi
             }
 
 
-            extrafieldName = extrafields[ex].id; 	// make Id as Name
-            extrafieldVal = extrafields[ex].value;	// get extra field value
+            extrafieldName = extrafields[ex].id;    // make Id as Name
+            extrafieldVal = extrafields[ex].value;  // get extra field value
             extrafieldpost += "&" + extrafieldName + "=" + extrafieldVal;
         }
     }
@@ -3235,7 +3235,7 @@ function submitAjaxwishlistCartdetail(frmCartName, product_id, relatedprd_id, gi
     params = params + "&attribute_data=" + frm.attribute_data.value;
     params = params + "&property_data=" + frm.property_data.value;
     params = params + "&subproperty_data=" + frm.subproperty_data.value;
-//	params = params + "&attribute_price="+frm.attribute_price.value;
+//  params = params + "&attribute_price="+frm.attribute_price.value;
     params = params + "&requiedAttribute=" + frm.requiedAttribute.value;
     params = params + "&requiedProperty=" + frm.requiedProperty.value;
     params = params + "&accessory_data=" + frm.accessory_data.value;
@@ -3350,13 +3350,13 @@ function submitAjaxwishlistCartdetail(frmCartName, product_id, relatedprd_id, gi
 
             //d++;
             //for(var d=0;d<frmCartName.length;i++)
-            //{	//alert(i);
+            //{ //alert(i);
             //alert(mainpro_id[i]);
-            //	if(frmCartName[i]!="")
-            //	{
+            //  if(frmCartName[i]!="")
+            //  {
 
-            //		submitAjaxwishlistCartdetail('addtocart_prd_'+frmCartName[d],frmCartName[d], 0, 0,product_id[d],0,relatedprd_id[d]);
-            //	}
+            //      submitAjaxwishlistCartdetail('addtocart_prd_'+frmCartName[d],frmCartName[d], 0, 0,product_id[d],0,relatedprd_id[d]);
+            //  }
             //}
 
             // cart module
@@ -3480,14 +3480,14 @@ function addmywishlist(frmCartName, product_id, myitemid) {
             imgfieldNamefrmId = reverseString(extrafields[ex].id);
             imgfieldNamefrmId = reverseString(imgfieldNamefrmId.substr(imgfieldNamefrmId.indexOf("_") + 1));
 
-            extrafieldName = imgfieldNamefrmId; 	// make Id as Name
-            extrafieldVal = extrafields[ex].value;	// get extra field value
+            extrafieldName = imgfieldNamefrmId;     // make Id as Name
+            extrafieldVal = extrafields[ex].value;  // get extra field value
             extrafieldpost += "&" + extrafieldName + "=" + extrafieldVal;
             extrafieldVal = "";
         } else if (extrafields[ex].type == 'text') {
 
-            extrafieldName = extrafields[ex].id; 	// make Id as Name
-            extrafieldVal = extrafields[ex].value;	// get extra field value
+            extrafieldName = extrafields[ex].id;    // make Id as Name
+            extrafieldVal = extrafields[ex].value;  // get extra field value
             extrafieldpost += "&" + extrafieldName + "=" + extrafieldVal;
 
         }
@@ -3502,8 +3502,8 @@ function addmywishlist(frmCartName, product_id, myitemid) {
             }
 
 
-            extrafieldName = extrafields[ex].id; 	// make Id as Name
-            extrafieldVal = extrafields[ex].value;	// get extra field value
+            extrafieldName = extrafields[ex].id;    // make Id as Name
+            extrafieldVal = extrafields[ex].value;  // get extra field value
             extrafieldpost += "&" + extrafieldName + "=" + extrafieldVal;
         }
 

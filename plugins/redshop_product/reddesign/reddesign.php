@@ -439,6 +439,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			if (!empty($redDesignData->areasInnerSVG))
 			{
 				$areasInnerSVG = str_replace("'", "\'", urldecode($redDesignData->areasInnerSVG));
+				$areasInnerSVG = str_replace("\n", "", urldecode($areasInnerSVG));
 
 				$js = 'jQuery(document).ready(function () {
 						rootSnapSvgObject' . $i . ' = Snap("#mainSvgImage' . $i . '");
