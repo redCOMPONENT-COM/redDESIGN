@@ -851,16 +851,8 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 					if (verticalAlignValue == "top")
 					{
-						if (firefox > 0)
-						{
-							svgElement.attr("dominant-baseline", "none");
-							svgElement.attr("dy", "0.8em");
-						}
-						else
-						{
-							svgElement.attr("y", areaY1);
-							svgElement.attr("dy", "0.8em");
-						}
+						svgElement.attr("y", areaY1);
+						svgElement.attr("dy", "0.7em");
 					}
 					else if (verticalAlignValue == "middle")
 					{
@@ -884,16 +876,8 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 						}
 						else
 						{
-							if (firefox > 0)
-							{
-								svgElement.attr("y", yPos);
-								svgElement.attr("dominant-baseline", "middle");
-							}
-							else
-							{
-								svgElement.attr("y", yPos);
-								svgElement.attr("dy", ".35em");
-							}
+							svgElement.attr("y", yPos);
+							svgElement.attr("dy", ".35em");
 						}
 					}
 					else if (verticalAlignValue == "bottom")
@@ -910,16 +894,8 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 						}
 						else
 						{
-							if (firefox > 0)
-							{
-								svgElement.attr("dy", "0");
-								svgElement.attr("dominant-baseline", "auto");
-							}
-							else
-							{
-								svgElement.attr("y", yPos);
-								svgElement.attr("dy", "0");
-							}
+							svgElement.attr("y", yPos);
+							svgElement.attr("dy", "0");
 						}
 					}
 				}
