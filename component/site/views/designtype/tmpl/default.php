@@ -867,7 +867,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 							if (msie > 0)
 							{
-								svgElement.attr("dy", ".65em");
+								svgElement.attr("dy", ".45em");
 							}
 							else
 							{
