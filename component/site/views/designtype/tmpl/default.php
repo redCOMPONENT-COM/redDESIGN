@@ -384,16 +384,37 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 				loadClipartBank(id, "featuredCliparts", false);
 			});
 
+			window.globalVar = 1;
 			jQuery(document).on("mousedown", ".reddesign-form .thumbnailSVG-pointer", function() {
-				if(jQuery(this).hasClass("delete")) {
-					jQuery(this).removeClass("delete");
+				if(jQuery(this).parent().parent().parent().hasClass("clickedArea")){
+					
+					if(jQuery(this).hasClass("delete")) {
+						jQuery(this).removeClass("delete");
+					}
+					else {
+						// jQuery(".thumbnailSVG-pointer").removeClass("delete");
+						jQuery(this).parent().parent().parent().find('.thumbnailSVG-pointer').removeClass("delete");
+						jQuery(this).addClass("delete");
+					}
 				}
 				else {
-					jQuery(this).addClass("delete");
-				}
+					if(jQuery(this).hasClass("delete")) {
+						jQuery(this).removeClass("delete");
+					}
+					else {
+						// jQuery(".thumbnailSVG-pointer").removeClass("delete");
+						jQuery(this).parent().parent().parent().find('.thumbnailSVG-pointer').removeClass("delete");
+						jQuery(this).addClass("delete");
+						jQuery(this).parent().parent().parent().addClass("clickedArea clickArea_" + window.globalVar);
+						window.globalVar = window.globalVar + 1;
+					}
+				};
 
 				var id = jQuery(this).attr("name").replace("clipart", "");
 				var clipartId = jQuery(this).parent().find(".change-selected-clipart").val();
+
+				// Store old value
+				jQuery("#selectedClipart" + id).attr("rel", jQuery("#selectedClipart" + id).val());
 				jQuery("#selectedClipart" + id).val(clipartId);
 				changeSVGElement(id);
 			});
@@ -513,14 +534,16 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 		var selectedClipart = jQuery("#selectedClipart" + areaId);
 		var svgElement = rootSnapSvgObject.select("#areaSVGElement_" + areaId);
 		var insertedElement;
+		var oldSvgElementValue = jQuery("#selectedClipart" + areaId).attr("rel");
 
 		if (svgElement)
 		{
 			var addedSvgImage = rootSnapSvgObject.select("#addedSvgImage" + areaId);
 
-			if (addedSvgImage)
+			if ((addedSvgImage) && (selectedClipart.val() == oldSvgElementValue))
 			{
 				addedSvgImage.remove();
+				jQuery("#selectedClipart" + areaId).attr("rel", "0");
 			}
 			else
 			{
@@ -603,6 +626,8 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 							}
 						}
 					}
+
+					jQuery("#selectedClipart" + areaId).attr("rel", selectedClipart.val());
 				}
 			}
 		}
