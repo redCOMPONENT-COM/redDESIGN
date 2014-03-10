@@ -748,17 +748,25 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					fontSize = 1;
 					svgElement.attr("font-size", fontSize + fontUnit);
 
-					while (fontSize < areaHeight)
+					textHoldingBox = document.getElementById("areaSVGElement_" + areaId);
+					textBBox = textHoldingBox.getBBox();
+
+					while (textBBox.width < areaWidth && textBBox.height < areaHeight)
 					{
 						fontSize++;
 						svgElement.attr("font-size", fontSize + fontUnit);
+
+						textHoldingBox = document.getElementById("areaSVGElement_" + areaId);
+						textBBox = textHoldingBox.getBBox();
 					}
 
 					svgElement.attr("text-anchor", "middle");
 
-					rowHeight = svgElement.getBBox().h / txt.length;
+					textHoldingBox = document.getElementById("areaSVGElement_" + areaId);
+					textBBox = textHoldingBox.getBBox();
+					rowHeight = textBBox.height / txt.length;
 					yPos = areaY1 + (areaHeight / 2);
-					yPos -= (svgElement.getBBox().h / 2) - (rowHeight / 2);
+					yPos -= (textBBox.height / 2) - (rowHeight / 2);
 					svgElement.attr("y", yPos);
 
 					if (msie > 0)
@@ -768,20 +776,6 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					else
 					{
 						svgElement.attr("dy", ".35em");
-					}
-
-					textHoldingBox = document.getElementById("areaSVGElement_" + areaId);
-					textBBox = textHoldingBox.getBBox();
-
-					if (textBBox.width > areaWidth)
-					{
-						scale = areaWidth / textBBox.width;
-						svgElement.transform("s" + scale.toString());
-					}
-					else if (textBBox.width < areaWidth)
-					{
-						scale = areaHeight / textBBox.height;
-						svgElement.transform("s" + scale.toString());
 					}
 				}
 				else
