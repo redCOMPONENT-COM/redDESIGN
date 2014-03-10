@@ -745,18 +745,16 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			<?php if ($this->designType->fontsizer == 'auto') : ?>
 				if (isTextarea)
 				{
-					fontSize = 1;
-					svgElement.attr("font-size", fontSize + fontUnit);
-
+					fontSize = 0;
 					textHoldingBox = document.getElementById("areaSVGElement_" + areaId);
 					textBBox = textHoldingBox.getBBox();
 
 					while (textBBox.width < areaWidth && textBBox.height < areaHeight)
 					{
 						fontSize++;
-						svgElement.attr("font-size", fontSize + fontUnit);
-
 						textHoldingBox = document.getElementById("areaSVGElement_" + areaId);
+						textHoldingBox.setAttribute("font-size", fontSize.toString() + fontUnit);
+
 						textBBox = textHoldingBox.getBBox();
 					}
 
