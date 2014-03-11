@@ -478,16 +478,37 @@ class PlgRedshop_ProductReddesign extends JPlugin
 									var fontSize = parseFloat(jQuery(value).css("font-size"));
 									fontSize = fontSize * parseFloat("' . $scalingImageForPreviewRatio . '");
 									jQuery(value).css("font-size", fontSize + "' . $fontUnit . '");
+
+									var transformMatrix = jQuery("#" + this.id).attr("transform");
+
+									if (typeof transformMatrix !== "undefined")
+									{
+										transformMatrix = transformMatrix.replace("matrix(", "");
+										transformMatrix = transformMatrix.replace(")", "");
+
+										var vectorCoordinates = transformMatrix.split(",");
+
+										var xTransl = parseFloat(vectorCoordinates[4]) * parseFloat("' . $scalingImageForPreviewRatio . '");
+										var yTransl = parseFloat(vectorCoordinates[5]) * parseFloat("' . $scalingImageForPreviewRatio . '");
+
+										var newMatrix = "matrix(" +
+														vectorCoordinates[0] + "," +
+														vectorCoordinates[1] + "," +
+														vectorCoordinates[2] + "," +
+														vectorCoordinates[3] + "," +
+														xTransl + "," +
+														yTransl + ")";
+										jQuery("#" + this.id).attr("transform", newMatrix);
+									}
 								});
 
 								jQuery("#areaBoxesLayer' . $i . ' tspan").each(function (index, value){
-									var xPos = parseFloat(jQuery(value).attr("x"));
-									xPos = xPos * parseFloat("' . $scalingImageForPreviewRatio . '");
-									jQuery(value).attr("x", xPos);
-
-									var yPos = parseFloat(jQuery(value).attr("y"));
-									yPos = yPos * parseFloat("' . $scalingImageForPreviewRatio . '");
-									jQuery(value).attr("y", yPos);
+									if (index > 0)
+									{
+										var xPos = parseFloat(jQuery(value).attr("x"));
+										xPos = xPos * parseFloat("' . $scalingImageForPreviewRatio . '");
+										jQuery(value).attr("x", xPos);
+									}
 								});
 							}
 						});
@@ -541,8 +562,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						});
 
 						values["designtype_id"] = jQuery("#designtype_id").val();
-						values["previewWidth"] = jQuery("#svgCanvas").attr("width");
-						values["previewHeight"] = jQuery("#svgCanvas").attr("height");
+						values["previewWidth"] = rootSnapSvgObject.attr("width");
+						values["previewHeight"] = rootSnapSvgObject.attr("height");
 
 						var areas = rootSnapSvgObject.select("#areaBoxesLayer");
 						values["areasInnerSVG"] = encodeURIComponent(areas.innerSVG());
@@ -687,6 +708,13 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$svgElements = $doc->getElementsByTagName('svg');
 				$svg = $svgElements->item(0);
 
+				// Add font definitions.
+				$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($redDesignDataPrepared['designAreasDefintions']);
+				$selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
+				$fragment = $doc->createDocumentFragment();
+				$fragment->appendXML('<defs><style type="text/css">' . $selectedFontsDeclaration . '</style></defs>');
+				$svg->appendChild($fragment);
+
 				$width = str_replace('px', '', $svg->getAttribute('width'));
 				$scalingRatio = $width / $redDesignData->previewWidth;
 
@@ -702,36 +730,59 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					$fontSizeStyle = $textNodes->item($i)->getAttribute('style');
 
 					$matches = array();
-					$fontSize = 12;
 					preg_match('/font-size: (.*?)px;/s', $fontSizeStyle, $matches);
+
+					$x *= $scalingRatio;
+					$y *= $scalingRatio;
+					$textNodes->item($i)->setAttribute('x', $x);
+					$textNodes->item($i)->setAttribute('y', $y);
 
 					if (!empty($matches[1]))
 					{
 						$fontSize = $matches[1];
+						$newfontSize = (float) $fontSize * $scalingRatio;
+						$fontSizeStyle = str_replace($fontSize, $newfontSize, $fontSizeStyle);
+						$textNodes->item($i)->setAttribute('style', $fontSizeStyle);
+					}
+					else
+					{
+						$fontSize = str_replace('px', '', $textNodes->item($i)->getAttribute('font-size'));
+						$newfontSize = (float) $fontSize * $scalingRatio;
+						$textNodes->item($i)->setAttribute('font-size', $newfontSize);
 					}
 
-					$x *= $scalingRatio;
-					$y *= $scalingRatio;
-					$newfontSize = (float) $fontSize * $scalingRatio;
-					$fontSizeStyle = str_replace($fontSize, $newfontSize, $fontSizeStyle);
+					// Fix transform matrix
+					$transformMatrix = $textNodes->item($i)->getAttribute('transform');
 
-					$textNodes->item($i)->setAttribute('x', $x);
-					$textNodes->item($i)->setAttribute('y', $y);
-					$textNodes->item($i)->setAttribute('style', $fontSizeStyle);
+					if (!empty($transformMatrix))
+					{
+						$transformMatrix = str_replace('matrix(', '', $transformMatrix);
+						$transformMatrix = str_replace(')', '', $transformMatrix);
+
+						$vectorCoordinates = explode(',', $transformMatrix);
+						$xTransl = (float) $vectorCoordinates[4] * $scalingRatio;
+						$yTransl = (float) $vectorCoordinates[5] * $scalingRatio;
+
+						$newMatrix = 'matrix(' .
+										$vectorCoordinates[0] . ',' .
+										$vectorCoordinates[1] . ',' .
+										$vectorCoordinates[2] . ',' .
+										$vectorCoordinates[3] . ',' .
+										$xTransl . ',' .
+										$yTransl .
+									')';
+
+						$textNodes->item($i)->setAttribute('transform', $newMatrix);
+					}
 				}
 
 				$textNodes = $fragment->childNodes->item(0)->getElementsByTagName('tspan');
 
-				for ($i = 0; $i < $textNodes->length; $i++)
+				for ($i = 1; $i < $textNodes->length; $i++)
 				{
 					$x = $textNodes->item($i)->getAttribute('x');
-					$y = $textNodes->item($i)->getAttribute('y');
-
 					$x *= $scalingRatio;
-					$y *= $scalingRatio;
-
 					$textNodes->item($i)->setAttribute('x', $x);
-					$textNodes->item($i)->setAttribute('y', $y);
 				}
 
 				$svg->appendChild($fragment);
@@ -741,7 +792,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				if ($doc->save(JPATH_SITE . '/media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg'))
 				{
 					$html .= '<div>' .
-								'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg" target="_blank">SVG</a>' .
+								'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg" target="_blank">SVG ' .
+									JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
+								'</a>' .
 							'</div>';
 
 					$orderItemMapping->productionSvg = $uniqueFileName;

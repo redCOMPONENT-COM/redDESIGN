@@ -725,7 +725,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					x: x
 				});
 
-				rootSnapSvgObject.append(svgElement);
+				rootSnapSvgObject.select("#areaBoxesLayer").append(svgElement);
 			}
 			else if (typeof(jQuery(text).val()) != "undefined")
 			{
@@ -745,18 +745,16 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			<?php if ($this->designType->fontsizer == 'auto') : ?>
 				if (isTextarea)
 				{
-					fontSize = 1;
-					svgElement.attr("font-size", fontSize + fontUnit);
-
+					fontSize = 0;
 					textHoldingBox = document.getElementById("areaSVGElement_" + areaId);
 					textBBox = textHoldingBox.getBBox();
 
 					while (textBBox.width < areaWidth && textBBox.height < areaHeight)
 					{
 						fontSize++;
-						svgElement.attr("font-size", fontSize + fontUnit);
-
 						textHoldingBox = document.getElementById("areaSVGElement_" + areaId);
+						textHoldingBox.setAttribute("font-size", fontSize.toString() + fontUnit);
+
 						textBBox = textHoldingBox.getBBox();
 					}
 
@@ -944,7 +942,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 		jQuery("#background-container").height(jQuery("#background").height());
 
 		<?php foreach($this->displayedAreas as $area) :
-			$areaType = ReddesignHelpersArea::getAreaType($area->areaType);
+				$areaType = ReddesignHelpersArea::getAreaType($area->areaType)
 		?>
 
 			var x1 = parseFloat("<?php echo $area->x1_pos; ?>") * scalingImageForPreviewRatio;
@@ -954,29 +952,30 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			var width = parseFloat("<?php echo $area->width; ?>") * scalingImageForPreviewRatio;
 			var height = parseFloat("<?php echo $area->height; ?>") * scalingImageForPreviewRatio;
 			var svgElement;
+			var areaIdIndex = parseInt("<?php echo $area->id; ?>");
 
-			areasContainer[<?php echo $area->id; ?>] = new Array();
-			areasContainer[<?php echo $area->id; ?>]['x1'] = x1;
-			areasContainer[<?php echo $area->id; ?>]['y1'] = y1;
-			areasContainer[<?php echo $area->id; ?>]['x2'] = x2;
-			areasContainer[<?php echo $area->id; ?>]['y2'] = y2;
-			areasContainer[<?php echo $area->id; ?>]['width'] = width;
-			areasContainer[<?php echo $area->id; ?>]['height'] = height;
-			areasContainer[<?php echo $area->id ?>]['areaType'] = '<?php echo $areaType['name']; ?>';
+			areasContainer[areaIdIndex] = new Array();
+			areasContainer[areaIdIndex]['x1'] = x1;
+			areasContainer[areaIdIndex]['y1'] = y1;
+			areasContainer[areaIdIndex]['x2'] = x2;
+			areasContainer[areaIdIndex]['y2'] = y2;
+			areasContainer[areaIdIndex]['width'] = width;
+			areasContainer[areaIdIndex]['height'] = height;
+			areasContainer[areaIdIndex]['areaType'] = '<?php echo $areaType['name']; ?>';
 
-			if ('<?php echo $areaType['name']; ?>' == 'text')
+			if (areasContainer[areaIdIndex]['areaType'] == 'text')
 			{
 				svgElement = Snap.parse(
-					'<text id="areaSVGElement_<?php echo $area->id; ?>" '
+					'<text id="areaSVGElement_' + areaIdIndex + '" '
 						+ ' x="' + x1 + '"'
 						+ ' y="' + y1 + '"'
 						+ '></text>'
 				);
 			}
-			else if ('<?php echo $areaType['name']; ?>' == 'clipart')
+			else if (areasContainer[<?php echo $area->id ?>]['areaType'] == 'clipart')
 			{
 				svgElement = Snap.parse(
-					'<svg id="areaSVGElement_<?php echo $area->id; ?>" '
+					'<svg id="areaSVGElement_' + areaIdIndex + '" '
 						+ ' x="' + x1 + '"'
 						+ ' y="' + y1 + '"'
 						+ ' width="' + width + '"'
@@ -987,7 +986,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 			rootSnapSvgObject.select("#areaBoxesLayer").append(svgElement);
 
-			changeSVGElement(parseInt("<?php echo $area->id; ?>"));
+			changeSVGElement(areaIdIndex);
 
 		<?php endforeach; ?>
 	}
