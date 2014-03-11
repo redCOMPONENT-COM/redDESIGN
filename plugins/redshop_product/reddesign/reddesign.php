@@ -541,8 +541,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						});
 
 						values["designtype_id"] = jQuery("#designtype_id").val();
-						values["previewWidth"] = jQuery("#svgCanvas").attr("width");
-						values["previewHeight"] = jQuery("#svgCanvas").attr("height");
+						values["previewWidth"] = rootSnapSvgObject.attr("width");
+						values["previewHeight"] = rootSnapSvgObject.attr("height");
 
 						var areas = rootSnapSvgObject.select("#areaBoxesLayer");
 						values["areasInnerSVG"] = encodeURIComponent(areas.innerSVG());
