@@ -729,16 +729,11 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 				$textNodes = $fragment->childNodes->item(0)->getElementsByTagName('tspan');
 
-				for ($i = 0; $i < $textNodes->length; $i++)
+				for ($i = 1; $i < $textNodes->length; $i++)
 				{
 					$x = $textNodes->item($i)->getAttribute('x');
-					$y = $textNodes->item($i)->getAttribute('y');
-
 					$x *= $scalingRatio;
-					$y *= $scalingRatio;
-
 					$textNodes->item($i)->setAttribute('x', $x);
-					$textNodes->item($i)->setAttribute('y', $y);
 				}
 
 				$svg->appendChild($fragment);
