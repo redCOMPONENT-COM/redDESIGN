@@ -478,16 +478,37 @@ class PlgRedshop_ProductReddesign extends JPlugin
 									var fontSize = parseFloat(jQuery(value).css("font-size"));
 									fontSize = fontSize * parseFloat("' . $scalingImageForPreviewRatio . '");
 									jQuery(value).css("font-size", fontSize + "' . $fontUnit . '");
+
+									var transformMatrix = jQuery("#" + this.id).attr("transform");
+
+									if (typeof transformMatrix !== "undefined")
+									{
+										transformMatrix = transformMatrix.replace("matrix(", "");
+										transformMatrix = transformMatrix.replace(")", "");
+
+										var vectorCoordinates = transformMatrix.split(",");
+
+										var xTransl = parseFloat(vectorCoordinates[4]) * parseFloat("' . $scalingImageForPreviewRatio . '");
+										var yTransl = parseFloat(vectorCoordinates[5]) * parseFloat("' . $scalingImageForPreviewRatio . '");
+
+										var newMatrix = "matrix(" +
+														vectorCoordinates[0] + "," +
+														vectorCoordinates[1] + "," +
+														vectorCoordinates[2] + "," +
+														vectorCoordinates[3] + "," +
+														xTransl + "," +
+														yTransl + ")";
+										jQuery("#" + this.id).attr("transform", newMatrix);
+									}
 								});
 
 								jQuery("#areaBoxesLayer' . $i . ' tspan").each(function (index, value){
-									var xPos = parseFloat(jQuery(value).attr("x"));
-									xPos = xPos * parseFloat("' . $scalingImageForPreviewRatio . '");
-									jQuery(value).attr("x", xPos);
-
-									var yPos = parseFloat(jQuery(value).attr("y"));
-									yPos = yPos * parseFloat("' . $scalingImageForPreviewRatio . '");
-									jQuery(value).attr("y", yPos);
+									if (index > 0)
+									{
+										var xPos = parseFloat(jQuery(value).attr("x"));
+										xPos = xPos * parseFloat("' . $scalingImageForPreviewRatio . '");
+										jQuery(value).attr("x", xPos);
+									}
 								});
 							}
 						});
