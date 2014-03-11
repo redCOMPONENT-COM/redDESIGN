@@ -687,6 +687,13 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$svgElements = $doc->getElementsByTagName('svg');
 				$svg = $svgElements->item(0);
 
+				// Add font definitions.
+				$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($redDesignDataPrepared['designAreasDefintions']);
+				$selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
+				$fragment = $doc->createDocumentFragment();
+				$fragment->appendXML('<defs><style type="text/css">' . $selectedFontsDeclaration . '</style></defs>');
+				$svg->appendChild($fragment);
+
 				$width = str_replace('px', '', $svg->getAttribute('width'));
 				$scalingRatio = $width / $redDesignData->previewWidth;
 
