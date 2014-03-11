@@ -730,22 +730,50 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					$fontSizeStyle = $textNodes->item($i)->getAttribute('style');
 
 					$matches = array();
-					$fontSize = 12;
 					preg_match('/font-size: (.*?)px;/s', $fontSizeStyle, $matches);
+
+					$x *= $scalingRatio;
+					$y *= $scalingRatio;
+					$textNodes->item($i)->setAttribute('x', $x);
+					$textNodes->item($i)->setAttribute('y', $y);
 
 					if (!empty($matches[1]))
 					{
 						$fontSize = $matches[1];
+						$newfontSize = (float) $fontSize * $scalingRatio;
+						$fontSizeStyle = str_replace($fontSize, $newfontSize, $fontSizeStyle);
+						$textNodes->item($i)->setAttribute('style', $fontSizeStyle);
+					}
+					else
+					{
+						$fontSize = str_replace('px', '', $textNodes->item($i)->getAttribute('font-size'));
+						$newfontSize = (float) $fontSize * $scalingRatio;
+						$textNodes->item($i)->setAttribute('font-size', $newfontSize);
 					}
 
-					$x *= $scalingRatio;
-					$y *= $scalingRatio;
-					$newfontSize = (float) $fontSize * $scalingRatio;
-					$fontSizeStyle = str_replace($fontSize, $newfontSize, $fontSizeStyle);
+					// Fix transform matrix
+					$transformMatrix = $textNodes->item($i)->getAttribute('transform');
 
-					$textNodes->item($i)->setAttribute('x', $x);
-					$textNodes->item($i)->setAttribute('y', $y);
-					$textNodes->item($i)->setAttribute('style', $fontSizeStyle);
+					if (!empty($transformMatrix))
+					{
+						$transformMatrix = str_replace('matrix(', '', $transformMatrix);
+						$transformMatrix = str_replace(')', '', $transformMatrix);
+
+						$vectorCoordinates = explode(',', $transformMatrix);
+						$xTransl = (float) $vectorCoordinates[4] * $scalingRatio;
+						$yTransl = (float) $vectorCoordinates[5] * $scalingRatio;
+
+						$newMatrix = 'matrix(' .
+										$vectorCoordinates[0] . ',' .
+										$vectorCoordinates[1] . ',' .
+										$vectorCoordinates[2] . ',' .
+										$vectorCoordinates[3] . ',' .
+										$xTransl . ',' .
+										$yTransl .
+									')';
+
+						$textNodes->item($i)->setAttribute('transform', $newMatrix);
+					}
 				}
 
 				$textNodes = $fragment->childNodes->item(0)->getElementsByTagName('tspan');
@@ -764,7 +792,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				if ($doc->save(JPATH_SITE . '/media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg'))
 				{
 					$html .= '<div>' .
-								'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg" target="_blank">SVG</a>' .
+								'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg" target="_blank">SVG ' .
+									JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
+								'</a>' .
 							'</div>';
 
 					$orderItemMapping->productionSvg = $uniqueFileName;
