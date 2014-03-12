@@ -803,6 +803,25 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					$textNodes->item($i)->setAttribute('x', $x);
 				}
 
+				$clipartNodes = $fragment->childNodes->item(0)->getElementsByTagName('svg');
+
+				for ($i = 0; $i < $clipartNodes->length; $i++)
+				{
+					$x      = $clipartNodes->item($i)->getAttribute('x');
+					$y      = $clipartNodes->item($i)->getAttribute('y');
+					$width  = $clipartNodes->item($i)->getAttribute('width');
+					$height = $clipartNodes->item($i)->getAttribute('height');
+
+					$x      *= $scalingRatio;
+					$y      *= $scalingRatio;
+					$width  *= $scalingRatio;
+					$height *= $scalingRatio;
+					$clipartNodes->item($i)->setAttribute('x', $x);
+					$clipartNodes->item($i)->setAttribute('y', $y);
+					$clipartNodes->item($i)->setAttribute('width', $width);
+					$clipartNodes->item($i)->setAttribute('height', $height);
+				}
+
 				$svg->appendChild($fragment);
 
 				$uniqueFileName = 'production-file-' . $orderItem->order_id . '-' . $orderItem->order_item_id;

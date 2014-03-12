@@ -355,7 +355,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			jQuery(document).on("click", ".reddesign-form .btn-group-textAlign button", function() {
 				var id = jQuery(this).attr("name").replace("textAlignButton", "");
 				jQuery("#textAlign" + id).val(jQuery(this).attr("value"));
-				changeSVGElement(id);
+				changeSVGElement(id, 1);
 			});
 
 			jQuery(document).on("click", ".reddesign-form .btn-group-textVerticalAlign button", function() {
@@ -506,15 +506,16 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 	/**
 	 * Changes attributes of element on SVG object
 	 *
-	 * @param   areaId  int  Area ID
+	 * @param   areaId             int  Area ID
+	 * @param   isAlignmentButton  int  Tells if caller of the function is alignment button.
 	 */
-	function changeSVGElement(areaId)
+	function changeSVGElement(areaId, isAlignmentButton = 0)
 	{
 		var area = jQuery("#areaBoxesLayer #areaSVGElement_" + areaId);
 
 		if (jQuery(area).is("svg"))
 		{
-			changeSVGClipartElement(areaId);
+			changeSVGClipartElement(areaId, isAlignmentButton);
 		}
 		else
 		{
@@ -525,12 +526,11 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 	/**
 	 * Changes attributes of clipart element on SVG object
 	 *
-	 * @param   areaId  int  Area ID
+	 * @param   areaId             int  Area ID
+	 * @param   isAlignmentButton  int  Tells if caller of the function is alignment button.
 	 */
-	function changeSVGClipartElement(areaId)
+	function changeSVGClipartElement(areaId, isAlignmentButton)
 	{
-		var horizontalAlign = jQuery("#textAlign" + areaId);
-		var verticalAlign = jQuery("#verticalAlign" + areaId);
 		var selectedClipart = jQuery("#selectedClipart" + areaId);
 		var svgElement = rootSnapSvgObject.select("#areaSVGElement_" + areaId);
 		var insertedElement;
@@ -540,34 +540,19 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 		{
 			var addedSvgImage = rootSnapSvgObject.select("#addedSvgImage" + areaId);
 
-			if ((addedSvgImage) && (selectedClipart.val() == oldSvgElementValue))
+			if ((addedSvgImage) && (selectedClipart.val() == oldSvgElementValue) && isAlignmentButton == 0)
 			{
 				addedSvgImage.remove();
 				jQuery("#selectedClipart" + areaId).attr("rel", "0");
 			}
 			else
 			{
-				var horizontalPosition = "";
-				var verticalPosition = "";
-
-				if (horizontalAlign && typeof(jQuery(horizontalAlign).val()) != "undefined")
-				{
-					horizontalPosition = jQuery(horizontalAlign).val().replace("left", "xMin").replace("center", "xMid").replace("right", "xMax");
-				}
-
-				if (verticalAlign && typeof(jQuery(verticalAlign).val()) != "undefined")
-				{
-					verticalPosition = jQuery(verticalAlign).val().replace("top", "YMin").replace("middle", "YMid").replace("bottom", "YMax");
-				}
+				var horizontalPosition = jQuery("#textAlign" + areaId).val().replace("left", "xMin").replace("center", "xMid").replace("right", "xMax");
+				var verticalPosition = "YMid";
 
 				if (horizontalPosition == "")
 				{
 					horizontalPosition = "xMin";
-				}
-
-				if (verticalPosition == "")
-				{
-					verticalPosition = "YMin";
 				}
 
 				if (selectedClipart && typeof(jQuery(selectedClipart).val()) != "undefined")
@@ -700,9 +685,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 				<?php if ($this->designType->fontsizer == 'auto') : ?>
 					x = areaX1 + (areaWidth / 2);
-				<?php endif; ?>
-
-				<?php if ($this->designType->fontsizer != 'auto') : ?>
+				<?php else : ?>
 					if (textAlignValue == "left")
 					{
 						x = areaX1;
