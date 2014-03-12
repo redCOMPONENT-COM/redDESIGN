@@ -597,7 +597,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 	<?php endswitch; ?>
 
 	{RedDesignBreakDesignAreaChooseHorizontalAlign}
-	<?php if ($this->designType->fontsizer != 'auto') : ?>
+	<?php if ($this->designType->fontsizer != 'auto' || $area->areaType == 2) : ?>
 		<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $textAlign; ?>" />
 		<div class="btn-group btn-group-textAlign">
 			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="left">
