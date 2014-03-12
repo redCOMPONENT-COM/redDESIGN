@@ -510,6 +510,24 @@ class PlgRedshop_ProductReddesign extends JPlugin
 										jQuery(value).attr("x", xPos);
 									}
 								});
+
+								jQuery("#areaBoxesLayer' . $i . ' svg").each(function (index, value){
+									var xPos = parseFloat(jQuery(value).attr("x"));
+									xPos = xPos * parseFloat("' . $scalingImageForPreviewRatio . '");
+									jQuery(value).attr("x", xPos);
+
+									var yPos = parseFloat(jQuery(value).attr("y"));
+									yPos = yPos * parseFloat("' . $scalingImageForPreviewRatio . '");
+									jQuery(value).attr("y", yPos);
+
+									var width = parseFloat(jQuery(value).attr("width"));
+									width = width * parseFloat("' . $scalingImageForPreviewRatio . '");
+									jQuery(value).attr("width", width);
+
+									var height = parseFloat(jQuery(value).attr("height"));
+									height = height * parseFloat("' . $scalingImageForPreviewRatio . '");
+									jQuery(value).attr("height", height);
+								});
 							}
 						});
     				});
