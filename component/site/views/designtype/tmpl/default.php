@@ -509,8 +509,13 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 	 * @param   areaId             int  Area ID
 	 * @param   isAlignmentButton  int  Tells if caller of the function is alignment button.
 	 */
-	function changeSVGElement(areaId, isAlignmentButton = 0)
+	function changeSVGElement(areaId, isAlignmentButton)
 	{
+		if(typeof(isAlignmentButton) === 'undefined')
+		{
+			isAlignmentButton = 0;
+		}
+
 		var area = jQuery("#areaBoxesLayer #areaSVGElement_" + areaId);
 
 		if (jQuery(area).is("svg"))
