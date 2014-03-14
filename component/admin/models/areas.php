@@ -148,6 +148,7 @@ class ReddesignModelAreas extends RModelList
 	protected function canEditState($record)
 	{
 		$user = JFactory::getUser();
+
 		return $user->authorise('core.edit.state', $this->option);
 	}
 }
