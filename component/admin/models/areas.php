@@ -83,4 +83,71 @@ class ReddesignModelAreas extends RModelList
 
 		return $query;
 	}
+
+	/**
+	 * Saves the manually set order of records.
+	 *
+	 * @param   array    $pks    An array of primary key ids.
+	 * @param   integer  $order  +1 or -1
+	 *
+	 * @return  mixed
+	 *
+	 * @since   11.1
+	 */
+	public function saveorder($pks = null, $order = null)
+	{
+		// Initialise variables.
+		$table = RTable::getAdminInstance('Area');
+		$conditions = array();
+
+		if (empty($pks))
+		{
+			return JError::raiseWarning(500, JText::_($this->text_prefix . '_ERROR_NO_ITEMS_SELECTED'));
+		}
+
+		// Update ordering values
+		foreach ($pks as $i => $pk)
+		{
+			$table->load((int) $pk);
+
+			// Access checks.
+			if (!$this->canEditState($table))
+			{
+				// Prune items that you can't change.
+				unset($pks[$i]);
+				JError::raiseWarning(403, JText::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'));
+			}
+			elseif ($table->ordering != $order[$i])
+			{
+				$table->ordering = $order[$i];
+
+				if (!$table->store())
+				{
+					$this->setError($table->getError());
+
+					return false;
+				}
+			}
+		}
+
+		// Clear the component's cache
+		$this->cleanCache();
+
+		return true;
+	}
+
+	/**
+	 * Method to test whether a record can be deleted.
+	 *
+	 * @param   object  $record  A record object.
+	 *
+	 * @return  boolean  True if allowed to change the state of the record. Defaults to the permission for the component.
+	 *
+	 * @since   11.1
+	 */
+	protected function canEditState($record)
+	{
+		$user = JFactory::getUser();
+		return $user->authorise('core.edit.state', $this->option);
+	}
 }
