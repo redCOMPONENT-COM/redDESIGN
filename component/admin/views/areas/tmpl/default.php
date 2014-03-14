@@ -63,14 +63,15 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 			</td>
 			<td class="span4 col-md4">
 				<a href="#" onclick="selectAreaForEdit(<?php echo $area->id . ',\'' .
-					$area->name . '\',' .
-					$area->x1_pos . ',' .
-					$area->y1_pos . ',' .
-					$area->x2_pos . ',' .
-					$area->y2_pos . ',' .
-					$area->width . ',' .
-					$area->height . ',' .
-					$area->areaType; ?>);">
+										$area->name . '\',' .
+										$area->x1_pos . ',' .
+										$area->y1_pos . ',' .
+										$area->x2_pos . ',' .
+										$area->y2_pos . ',' .
+										$area->width . ',' .
+										$area->height . ',' .
+										$area->areaType; ?>
+					);">
 					<strong><?php echo $area->name; ?></strong>
 				</a>
 			</td>
@@ -101,6 +102,22 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				</button>
 			</td>
 			<td>
+				<?php if ($i != 0) : ?>
+					<button class="btn btn-success fileinput-button btn-mini"
+					        type="button"
+					        onclick="orderUp(<?php echo $area->id ?>, <?php echo $area->ordering; ?>);">
+						<i class="icon-arrow-up"></i>
+					</button>
+				<?php endif; ?>
+
+				<?php if ($i != (count($this->areas) - 1)) : ?>
+					<button class="btn btn-success fileinput-button btn-mini"
+					        type="button"
+					        onclick="orderDown(<?php echo $area->id ?>, <?php echo $area->ordering; ?>);">
+						<i class="icon-arrow-down"></i>
+					</button>
+				<?php endif; ?>
+
 				<input type="text" name="areasOrder[]" class="input-mini" value="<?php echo $area->ordering; ?>" />
 				<input type="hidden"  name="areasCid[]" value="<?php echo $area->id; ?>" />
 			</td>
