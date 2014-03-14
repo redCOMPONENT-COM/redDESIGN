@@ -15,7 +15,6 @@ $this->areas = $displayData->items;
 $this->designtype_id =	$displayData->item->designtype_id;
 $this->unitConversionRatio = $displayData->unitConversionRatio;
 $this->unit = $displayData->unit;
-$this->areasPagination = $displayData->areasPagination;
 
 $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layout=edit&id=' . $this->item->designtype_id . '&tab=design-areas';
 ?>
