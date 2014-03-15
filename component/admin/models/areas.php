@@ -88,17 +88,16 @@ class ReddesignModelAreas extends RModelList
 	 * Saves the manually set order of records.
 	 *
 	 * @param   array    $pks    An array of primary key ids.
-	 * @param   integer  $order  +1 or -1
+	 * @param   integer  $order  Order.
 	 *
 	 * @return  mixed
 	 *
 	 * @since   11.1
 	 */
-	public function saveorder($pks = null, $order = null)
+	public function saveOrder($pks = null, $order = null)
 	{
 		// Initialise variables.
 		$table = RTable::getAdminInstance('Area');
-		$conditions = array();
 
 		if (empty($pks))
 		{
@@ -111,7 +110,7 @@ class ReddesignModelAreas extends RModelList
 			$table->load((int) $pk);
 
 			// Access checks.
-			if (!$this->canEditState($table))
+			if (!$this->canEditState())
 			{
 				// Prune items that you can't change.
 				unset($pks[$i]);
@@ -137,15 +136,62 @@ class ReddesignModelAreas extends RModelList
 	}
 
 	/**
-	 * Method to test whether a record can be deleted.
+	 * Saves order on arrow up click.
 	 *
-	 * @param   object  $record  A record object.
+	 * @param   int    $areaId         Clicker area ID.
+	 * @param   int    $previousOrder  Previous order value at clicked area.
+	 * @param   array  $pks            An array of primary key ids.
+	 *
+	 * @return  mixed
+	 *
+	 * @since   11.1
+	 */
+	public function orderUp($areaId, $previousOrder, $pks)
+	{
+		if (empty($pks))
+		{
+			return JError::raiseWarning(500, JText::_($this->text_prefix . '_ERROR_NO_ITEMS_SELECTED'));
+		}
+
+		$clickedAreaKey = array_search($areaId, $pks);
+
+		$areaToMoveDown = RTable::getAdminInstance('Area');
+		$areaToMoveDown->load($pks[--$clickedAreaKey]);
+		$clickedAreaNewOrder = $areaToMoveDown->ordering;
+		$areaToMoveDown->ordering = $previousOrder;
+
+		if (!$areaToMoveDown->store())
+		{
+			$this->setError($areaToMoveDown->getError());
+
+			return false;
+		}
+
+		$clickedArea = RTable::getAdminInstance('Area');
+		$clickedArea->load($areaId);
+		$clickedArea->ordering = $clickedAreaNewOrder;
+
+		if (!$clickedArea->store())
+		{
+			$this->setError($clickedArea->getError());
+
+			return false;
+		}
+
+		// Clear the component's cache
+		$this->cleanCache();
+
+		return true;
+	}
+
+	/**
+	 * Method to test whether a record can be deleted.
 	 *
 	 * @return  boolean  True if allowed to change the state of the record. Defaults to the permission for the component.
 	 *
 	 * @since   11.1
 	 */
-	protected function canEditState($record)
+	protected function canEditState()
 	{
 		$user = JFactory::getUser();
 
