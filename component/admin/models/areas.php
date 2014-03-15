@@ -185,6 +185,55 @@ class ReddesignModelAreas extends RModelList
 	}
 
 	/**
+	 * Saves order on arrow down click.
+	 *
+	 * @param   int    $areaId         Clicker area ID.
+	 * @param   int    $previousOrder  Previous order value at clicked area.
+	 * @param   array  $pks            An array of primary key ids.
+	 *
+	 * @return  mixed
+	 *
+	 * @since   11.1
+	 */
+	public function orderDown($areaId, $previousOrder, $pks)
+	{
+		if (empty($pks))
+		{
+			return JError::raiseWarning(500, JText::_($this->text_prefix . '_ERROR_NO_ITEMS_SELECTED'));
+		}
+
+		$clickedAreaKey = array_search($areaId, $pks);
+
+		$areaToMoveUp = RTable::getAdminInstance('Area');
+		$areaToMoveUp->load($pks[++$clickedAreaKey]);
+		$clickedAreaNewOrder = $areaToMoveUp->ordering;
+		$areaToMoveUp->ordering = $previousOrder;
+
+		if (!$areaToMoveUp->store())
+		{
+			$this->setError($areaToMoveUp->getError());
+
+			return false;
+		}
+
+		$clickedArea = RTable::getAdminInstance('Area');
+		$clickedArea->load($areaId);
+		$clickedArea->ordering = $clickedAreaNewOrder;
+
+		if (!$clickedArea->store())
+		{
+			$this->setError($clickedArea->getError());
+
+			return false;
+		}
+
+		// Clear the component's cache
+		$this->cleanCache();
+
+		return true;
+	}
+
+	/**
 	 * Method to test whether a record can be deleted.
 	 *
 	 * @return  boolean  True if allowed to change the state of the record. Defaults to the permission for the component.
