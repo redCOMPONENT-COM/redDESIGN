@@ -604,8 +604,22 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 										jQuery(svgElementInner).attr("width", areasContainer[areaId]["width"]);
 										jQuery(svgElementInner).attr("preserveAspectRatio", horizontalPosition + verticalPosition + " meet");
 
+										var userAgent = window.navigator.userAgent;
+										var msie = userAgent.indexOf("MSIE ");
+										var innerCode;
+
+										if (msie > 0)
+										{
+											innerCode = XMLSerializer().serializeToString(svgElementInner[0]);
+											innerCode =Snap.parse(innerCode);
+										}
+										else
+										{
+											innerCode = Snap.parse(svgElementInner[0].outerHTML);
+										}
+
 										svgElement.clear();
-										svgElement.append(Snap.parse(svgElementInner[0].outerHTML));
+										svgElement.append(innerCode);
 										insertedElement = svgElement.select("svg");
 										insertedElement.node.id = "addedSvgImage" + areaId;
 										insertedElement.click(removeSnapElement);
