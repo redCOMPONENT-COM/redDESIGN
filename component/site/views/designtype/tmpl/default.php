@@ -611,7 +611,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 										if (msie > 0)
 										{
 											innerCode = XMLSerializer().serializeToString(svgElementInner[0]);
-											innerCode =Snap.parse(innerCode);
+											innerCode = Snap.parse(innerCode);
 										}
 										else
 										{
