@@ -80,6 +80,7 @@ class ReddesignModelAreas extends RModelList
 		}
 
 		$query->order($db->escape('a.ordering') . ' ' . $db->escape('ASC'));
+		$query->order($db->escape('a.name') . ' ' . $db->escape('ASC'));
 
 		return $query;
 	}
