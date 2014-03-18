@@ -146,7 +146,6 @@ class ReddesignTableDesigntype extends RTable
 		{
 			if ($task == 'save2copy')
 			{
-				$app   = JFactory::getApplication();
 				$newId = $this->id;
 
 				/** @var ReddesignModelBackgrounds $modelBackgrounds */
@@ -183,7 +182,7 @@ class ReddesignTableDesigntype extends RTable
 
 					/** @var ReddesignModelAreas $areasModel */
 					$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true));
-					$areasModel->setState('background_id', $background->id);
+					$areasModel->setState('filter.background_id', $background->id);
 					$areas = $areasModel->getItems();
 
 					if (!empty($areas))
