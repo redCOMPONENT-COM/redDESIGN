@@ -80,6 +80,7 @@ class ReddesignModelAreas extends RModelList
 		}
 
 		$query->order($db->escape('a.ordering') . ' ' . $db->escape('ASC'));
+		$query->order($db->escape('a.name') . ' ' . $db->escape('ASC'));
 
 		return $query;
 	}
@@ -138,80 +139,69 @@ class ReddesignModelAreas extends RModelList
 	/**
 	 * Saves order on arrow up click.
 	 *
-	 * @param   int    $areaId         Clicker area ID.
-	 * @param   int    $previousOrder  Previous order value at clicked area.
-	 * @param   array  $pks            An array of primary key ids.
+	 * @param   int      $areaId         Clicker area ID.
+	 * @param   int      $previousOrder  Previous order value at clicked area.
+	 * @param   array    $pks            An array of primary key ids.
+	 * @param   integer  $order          Order.
+	 * @param   integer  $isUp           Ordering it up or down?
 	 *
 	 * @return  mixed
 	 *
 	 * @since   11.1
 	 */
-	public function orderUp($areaId, $previousOrder, $pks)
+	public function orderUpDown($areaId, $previousOrder, $pks, $order, $isUp)
 	{
+		$table = RTable::getAdminInstance('Area');
+
 		if (empty($pks))
 		{
 			return JError::raiseWarning(500, JText::_($this->text_prefix . '_ERROR_NO_ITEMS_SELECTED'));
 		}
 
-		$clickedAreaKey = array_search($areaId, $pks);
-
-		$areaToMoveDown = RTable::getAdminInstance('Area');
-		$areaToMoveDown->load($pks[--$clickedAreaKey]);
-		$clickedAreaNewOrder = $areaToMoveDown->ordering;
-		$areaToMoveDown->ordering = $previousOrder;
-
-		if (!$areaToMoveDown->store())
+		// Update ordering values
+		foreach ($pks as $i => $pk)
 		{
-			$this->setError($areaToMoveDown->getError());
+			$table->load((int) $pk);
 
-			return false;
-		}
+			// Access checks.
+			if (!$this->canEditState())
+			{
+				// Prune items that you can't change.
+				unset($pks[$i]);
+				JError::raiseWarning(403, JText::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'));
+			}
+			elseif ($table->ordering != $order[$i])
+			{
+				$table->ordering = $order[$i];
 
-		$clickedArea = RTable::getAdminInstance('Area');
-		$clickedArea->load($areaId);
-		$clickedArea->ordering = $clickedAreaNewOrder;
+				if (!$table->store())
+				{
+					$this->setError($table->getError());
 
-		if (!$clickedArea->store())
-		{
-			$this->setError($clickedArea->getError());
-
-			return false;
-		}
-
-		// Clear the component's cache
-		$this->cleanCache();
-
-		return true;
-	}
-
-	/**
-	 * Saves order on arrow down click.
-	 *
-	 * @param   int    $areaId         Clicker area ID.
-	 * @param   int    $previousOrder  Previous order value at clicked area.
-	 * @param   array  $pks            An array of primary key ids.
-	 *
-	 * @return  mixed
-	 *
-	 * @since   11.1
-	 */
-	public function orderDown($areaId, $previousOrder, $pks)
-	{
-		if (empty($pks))
-		{
-			return JError::raiseWarning(500, JText::_($this->text_prefix . '_ERROR_NO_ITEMS_SELECTED'));
+					return false;
+				}
+			}
 		}
 
 		$clickedAreaKey = array_search($areaId, $pks);
 
-		$areaToMoveUp = RTable::getAdminInstance('Area');
-		$areaToMoveUp->load($pks[++$clickedAreaKey]);
-		$clickedAreaNewOrder = $areaToMoveUp->ordering;
-		$areaToMoveUp->ordering = $previousOrder;
+		$areaToMove = RTable::getAdminInstance('Area');
 
-		if (!$areaToMoveUp->store())
+		if ($isUp)
 		{
-			$this->setError($areaToMoveUp->getError());
+			$areaToMove->load($pks[--$clickedAreaKey]);
+		}
+		else
+		{
+			$areaToMove->load($pks[++$clickedAreaKey]);
+		}
+
+		$clickedAreaNewOrder = $areaToMove->ordering;
+		$areaToMove->ordering = $previousOrder;
+
+		if (!$areaToMove->store())
+		{
+			$this->setError($areaToMove->getError());
 
 			return false;
 		}

@@ -558,7 +558,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 			reddesign_area_id = '';
 		}
 
-		var productionBackground = <?php echo (!empty($this->productionBackground->id) ? $this->productionBackground->id : 0); ?>;
+		var productionBackground = parseInt("<?php echo (!empty($this->productionBackground->id) ? $this->productionBackground->id : 0); ?>");
 
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=area.ajaxSave",

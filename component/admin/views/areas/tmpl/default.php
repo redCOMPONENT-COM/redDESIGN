@@ -105,7 +105,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				<?php if ($i != 0) : ?>
 					<button class="btn btn-success fileinput-button btn-mini"
 					        type="button"
-					        onclick="orderUp(<?php echo $area->id ?>, <?php echo $area->ordering; ?>);">
+					        onclick="orderUpDown(<?php echo $area->id ?>, <?php echo $area->ordering; ?>, 1);">
 						<i class="icon-arrow-up"></i>
 					</button>
 				<?php endif; ?>
@@ -113,7 +113,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 				<?php if ($i != (count($this->areas) - 1)) : ?>
 					<button class="btn btn-success fileinput-button btn-mini"
 					        type="button"
-					        onclick="orderDown(<?php echo $area->id ?>, <?php echo $area->ordering; ?>);">
+					        onclick="orderUpDown(<?php echo $area->id ?>, <?php echo $area->ordering; ?>, 0);">
 						<i class="icon-arrow-down"></i>
 					</button>
 				<?php endif; ?>
@@ -217,52 +217,22 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	 * @param   areaId         int  Clickec Area Id.
 	 * @param   previousOrder  int  Clickec Area previous order.
 	 */
-	function orderUp(areaId, previousOrder)
+	function orderUpDown(areaId, previousOrder, isUp)
 	{
 		var areasCid = new Array();
 		jQuery("input[name^='areasCid']").each(function() {areasCid.push(jQuery(this).val());});
 
+		var areasOrder = new Array();
+		jQuery("input[name^='areasOrder']").each(function() {areasOrder.push(jQuery(this).val());});
+
 		jQuery.ajax({
-			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=areas.orderUpAjax&tmpl=component",
+			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=areas.orderUpDownAjax&tmpl=component",
 			data: {
 				areaId: areaId,
 				previousOrder: previousOrder,
-				cid: areasCid
-			},
-			type: "post",
-			success: function (data) {
-				if (data == 1)
-				{
-					window.location.href = "<?php echo $return_url; ?>";
-				}
-				else
-				{
-					console.log('function saveOrder() Error');
-				}
-			},
-			error: function (data) {
-				console.log('function saveOrder() Error');
-			}
-		});
-	}
-
-	/**
-	 * Moves an area down in the order on arrow down click.
-	 *
-	 * @param   areaId         int  Clickec Area Id.
-	 * @param   previousOrder  int  Clickec Area previous order.
-	 */
-	function orderDown(areaId, previousOrder)
-	{
-		var areasCid = new Array();
-		jQuery("input[name^='areasCid']").each(function() {areasCid.push(jQuery(this).val());});
-
-		jQuery.ajax({
-			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=areas.orderDownAjax&tmpl=component",
-			data: {
-				areaId: areaId,
-				previousOrder: previousOrder,
-				cid: areasCid
+				cid: areasCid,
+				order: areasOrder,
+				isUp: isUp
 			},
 			type: "post",
 			success: function (data) {
