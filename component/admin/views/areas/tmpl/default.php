@@ -138,7 +138,7 @@ $return_url = JURI::base() . 'index.php?option=com_reddesign&view=designtype&lay
 	<?php endforeach; ?>
 <?php else : ?>
 	<tr id="noAreaMessage">
-		<td colspan="5">
+		<td colspan="6">
 			<?php echo JText::_('COM_REDDESIGN_COMMON_NORECORDS') ?>
 		</td>
 	</tr>
