@@ -45,7 +45,16 @@ class ReddesignModelArea extends RModelAdmin
 			$areasModel->setState('filter.background_id', $data['background_id']);
 			$displayedAreas = $areasModel->getItems();
 			$newOrderingValue = end($displayedAreas);
-			$newOrderingValue = $newOrderingValue->ordering;
+
+			if (empty($newOrderingValue))
+			{
+				$newOrderingValue = 1;
+			}
+			else
+			{
+				$newOrderingValue = $newOrderingValue->ordering;
+			}
+
 			$newOrderingValue++;
 			$data['ordering'] = $newOrderingValue;
 		}
