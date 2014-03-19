@@ -26,6 +26,7 @@ if (isset($displayData))
 
 $imageUrl = JURI::base() . 'media/com_reddesign/backgrounds/' . $this->displayedBackground->svg_file;
 $config = ReddesignEntityConfig::getInstance();
+$preserveData = $config->getPreserveDataBetweenDesignTypes();
 $previewWidth = $config->getMaxSVGPreviewSiteWidth();
 $clipartPreviewWidth = $config->getMaxClipartPreviewWidth();
 $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
@@ -1014,6 +1015,19 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 	 */
 	function changeBackground(propertyId)
 	{
+		<?php if ($preserveData) : ?>
+			var textInputsBeforeLoad = jQuery(".textAreaClass");
+			var fontSelectionsBeforeLoad = jQuery(".reddesign-font-selection");
+
+			<?php if ($this->designType->fontsizer != 'auto') : ?>
+				var fontSizesBeforeLoad = jQuery(".reddesign-font-size-selection");
+				var horizontalAlignsBeforeLoad = jQuery(".horizontal-text-alignment");
+				var verticalAlignsBeforeLoad = jQuery(".vertical-text-alignment");
+			<?php endif; ?>
+
+			var colorCodeBeforeLoad = jQuery(".color-code");
+		<?php endif; ?>
+
 		jQuery.ajax({
 			url: "<?php echo JURI::base(); ?>index.php?option=com_reddesign&task=designtype.ajaxLoadDesigntype",
 			data: {'propertyId': propertyId},
@@ -1037,6 +1051,39 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 					'animation': 'slide',
 					'animationLoop': false
 				});
+
+				<?php if ($preserveData) : ?>
+
+					jQuery.each(textInputsBeforeLoad, function(index, value) {
+						jQuery("#" + textInputsBeforeLoad[index].id).val(value.value);
+					});
+
+					jQuery.each(fontSelectionsBeforeLoad, function(index, value) {
+						jQuery("#" + fontSelectionsBeforeLoad[index].id).val(value.value);
+					});
+
+					<?php if ($this->designType->fontsizer != 'auto') : ?>
+
+						jQuery.each(fontSizesBeforeLoad, function(index, value) {
+							jQuery("#" + fontSizesBeforeLoad[index].id).val(value.value);
+						});
+
+						jQuery.each(horizontalAlignsBeforeLoad, function(index, value) {
+							jQuery("#" + horizontalAlignsBeforeLoad[index].id).val(value.value);
+						});
+
+						jQuery.each(verticalAlignsBeforeLoad, function(index, value) {
+							jQuery("#" + verticalAlignsBeforeLoad[index].id).val(value.value);
+						});
+
+					<?php endif; ?>
+
+					jQuery.each(colorCodeBeforeLoad, function(index, value) {
+						jQuery("#" + colorCodeBeforeLoad[index].id).val(value.value);
+					});
+
+				<?php endif; ?>
+
 				thumbnailSVGLoader();
 				loadBackgroundSVGandAreas(propertyId);
 				addUploadButtonCall();

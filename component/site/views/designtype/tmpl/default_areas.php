@@ -342,7 +342,12 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 			{RedDesignBreakDesignAreaChooseColor}
 				<?php if (empty($area->color_code)) : ?>
-					<input type="hidden" name="colorCode<?php echo $area->id ?>" value="#000000" id="colorCode<?php echo $area->id ?>">
+					<input id="colorCode<?php echo $area->id ?>"
+					       name="colorCode<?php echo $area->id ?>"
+					       class="color-code"
+					       type="hidden"
+					       value="#000000"
+						>
 				<?php elseif ($area->color_code == 1) : ?>
 
 					<script type="text/javascript">
@@ -401,11 +406,11 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 							</label>
 							<label for="colorCode<?php echo $area->id; ?>">
 								<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SELECTED_COLOR') ?>
-								<input class="span12 col-md12 colorPickerSelectedColor colorCode"
+								<input id="colorCode<?php echo $area->id ?>"
+									   name="colorCode<?php echo $area->id; ?>"
+									   class="span12 col-md12 colorPickerSelectedColor colorCode color-code"
 									   type="text"
 									   value="#cfcfcf"
-									   id="colorCode<?php echo $area->id ?>"
-									   name="colorCode<?php echo $area->id; ?>"
 									/>
 							</label>
 						</div>
@@ -489,11 +494,11 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 						<div class="colorSelector_list" id="fontColor<?php echo $area->id ?>">
 							<div style="background-color:<?php echo $defaultColor; ?>;cursor:pointer;">&nbsp;</div>
 						</div>
-						<input type="hidden"
-						       class="colorCode<?php echo $area->id ?>"
+						<input id="colorCode<?php echo $area->id ?>"
 						       name="colorCode<?php echo $area->id ?>"
+						       class="colorCode<?php echo $area->id ?> color-code"
+						       type="hidden"
 						       value="<?php echo $defaultColorVal; ?>"
-						       id="colorCode<?php echo $area->id ?>"
 							>
 					</div>
 
@@ -598,7 +603,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 	{RedDesignBreakDesignAreaChooseHorizontalAlign}
 	<?php if ($this->designType->fontsizer != 'auto' || $area->areaType == 2) : ?>
-		<input id="textAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $textAlign; ?>" />
+		<input id="textAlign<?php echo $area->id ?>" class="horizontal-text-alignment" type="hidden" value="<?php echo $textAlign; ?>" />
 		<div class="btn-group btn-group-textAlign">
 			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="left">
 				<i class="icon-align-left"></i>&nbsp;
@@ -615,7 +620,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 	{RedDesignBreakDesignAreaChooseVerticalAlign}
 	<?php if ($this->designType->fontsizer != 'auto') : ?>
-		<input id="verticalAlign<?php echo $area->id ?>" type="hidden" value="<?php echo $area->verticalAlign; ?>" />
+		<input id="verticalAlign<?php echo $area->id ?>" class="vertical-text-alignment" type="hidden" value="<?php echo $area->verticalAlign; ?>" />
 		<div class="btn-group btn-group-textVerticalAlign">
 			<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="top">
 				<i class="icon-collapse-top"></i>&nbsp;

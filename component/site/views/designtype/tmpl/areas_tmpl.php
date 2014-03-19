@@ -20,7 +20,6 @@ defined('_JEXEC') or die();
 	<div class="product_ChooseFont col-xs-6">{redDESIGN:ChooseFontLabel} {redDESIGN:ChooseFont}</div>
 </div>
 <div class="product_ChooseFontSize">
-	<div class="ChooseFontSize">{redDESIGN:ChooseFont}</div>
 	<div class="ChooseFontSize">{redDESIGN:ChooseFontSizeLabel} {redDESIGN:ChooseFontSize}</div>
 	<div class="ChooseHorizontalAlignment">{redDESIGN:ChooseHorizontalAlignment}</div>
 	<div class="ChooseVerticalAlignment">{redDESIGN:ChooseVerticalAlignment}</div>

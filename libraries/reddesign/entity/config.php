@@ -144,6 +144,26 @@ final class ReddesignEntityConfig
 	}
 
 	/**
+	 * Get preserveDataBetweenDesignTypes config.
+	 *
+	 * @return  int  The padding of production file.
+	 */
+	public function getPreserveDataBetweenDesignTypes()
+	{
+		return $this->getBool('preserveDataBetweenDesignTypes');
+	}
+
+	/**
+	 * Get showAssignFontsToAllAreas config.
+	 *
+	 * @return  int  The padding of production file.
+	 */
+	public function getShowAssignFontsToAllAreas()
+	{
+		return $this->getBool('showAssignFontsToAllAreas');
+	}
+
+	/**
 	 * Get the unit.
 	 *
 	 * @return  string  The unit
@@ -271,15 +291,5 @@ final class ReddesignEntityConfig
 	public function getPaddingProductionFile()
 	{
 		return $this->getInt('productionFilePadding');
-	}
-
-	/**
-	 * Get the padding of production file.
-	 *
-	 * @return  int  The padding of production file.
-	 */
-	public function getShowAssignFontsToAllAreas()
-	{
-		return $this->getBool('showAssignFontsToAllAreas');
 	}
 }
