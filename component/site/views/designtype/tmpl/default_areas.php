@@ -399,61 +399,67 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 					</script>
 
 					<div id="colorsContainer<?php echo $area->id ?>" class="span6 col-md6">
-						<div class="span9 col-md9">
-							<label class="control-label">
-								<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_COLOR_PICKER'); ?>
-								<div id="colorPickerContainer<?php echo $area->id; ?>" class="colorPickerContainer"></div>
-							</label>
-							<label for="colorCode<?php echo $area->id; ?>">
-								<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SELECTED_COLOR') ?>
-								<input id="colorCode<?php echo $area->id ?>"
-									   name="colorCode<?php echo $area->id; ?>"
-									   class="span12 col-md12 colorPickerSelectedColor colorCode color-code"
-									   type="text"
-									   value="#cfcfcf"
-									/>
-							</label>
-						</div>
-						<div class="span3 col-md3 CMYKContainer">
-							<div class="input-prepend">
-								<span class="add-on">C</span>
-								<input class="span8 col-md8"
-									   id="C<?php echo $area->id; ?>"
-									   name="C<?php echo $area->id; ?>"
-									   type="text"
-									   value="10"
-									   placeholder="C"
-									>
+						<div class="row">
+							<div class="col-md-6 CMYKContainer">
+								<div class="row">
+									<label class="active-color" for="colorCode<?php echo $area->id; ?>">
+										<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SELECTED_COLOR') ?><img src="/images/colorwheel.png" class="colorwheel" />
+										<input class="span12 col-md12 colorPickerSelectedColor colorCode"
+											   type="text"
+											   value="#cfcfcf"
+											   id="colorCode<?php echo $area->id ?>"
+											   name="colorCode<?php echo $area->id; ?>"
+											/>
+									</label>
+									<div class="cmyk-inputs">
+										<div class="input-prepend col-md-6">
+											<span class="add-on">C</span>
+											<input class="span8"
+												   id="C<?php echo $area->id; ?>"
+												   name="C<?php echo $area->id; ?>"
+												   type="text"
+												   value="10"
+												   placeholder="C"
+												>
+										</div>
+										<div class="input-prepend col-md-6">
+											<span class="add-on">M</span>
+											<input class="span8"
+												   id="M<?php echo $area->id; ?>"
+												   name="M<?php echo $area->id; ?>"
+												   type="text"
+												   value="10"
+												   placeholder="M"
+												>
+										</div>
+										<div class="input-prepend col-md-6">
+											<span class="add-on">Y</span>
+											<input class="span8"
+												   id="Y<?php echo $area->id; ?>"
+												   name="Y<?php echo $area->id; ?>"
+												   type="text"
+												   value="10"
+												   placeholder="Y"
+												>
+										</div>
+										<div class="input-prepend col-md-6">
+											<span class="add-on">K</span>
+											<input class="span8"
+												   id="K<?php echo $area->id; ?>"
+												   name="K<?php echo $area->id; ?>"
+												   type="text"
+												   value="10"
+												   placeholder="K"
+												>
+										</div>
+									</div>
+								</div>
 							</div>
-							<div class="input-prepend">
-								<span class="add-on">M</span>
-								<input class="span8 col-md8"
-									   id="M<?php echo $area->id; ?>"
-									   name="M<?php echo $area->id; ?>"
-									   type="text"
-									   value="10"
-									   placeholder="M"
-									>
-							</div>
-							<div class="input-prepend">
-								<span class="add-on">Y</span>
-								<input class="span8 col-md8"
-									   id="Y<?php echo $area->id; ?>"
-									   name="Y<?php echo $area->id; ?>"
-									   type="text"
-									   value="10"
-									   placeholder="Y"
-									>
-							</div>
-							<div class="input-prepend">
-								<span class="add-on">K</span>
-								<input class="span8 col-md8"
-									   id="K<?php echo $area->id; ?>"
-									   name="K<?php echo $area->id; ?>"
-									   type="text"
-									   value="10"
-									   placeholder="K"
-									>
+							<div class="col-md-6 color-wheel">
+								<label class="control-label">
+									<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_COLOR_PICKER'); ?>
+									<div id="colorPickerContainer<?php echo $area->id; ?>" class="colorPickerContainer"></div>
+								</label>
 							</div>
 						</div>
 					</div>
