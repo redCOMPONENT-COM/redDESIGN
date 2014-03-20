@@ -1017,15 +1017,21 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 	{
 		<?php if ($preserveData) : ?>
 			var textInputsBeforeLoad = jQuery(".textAreaClass");
+			var textInputsAfterLoad;
 			var fontSelectionsBeforeLoad = jQuery(".reddesign-font-selection");
+			var fontSelectionsAfterLoad;
 
 			<?php if ($this->designType->fontsizer != 'auto') : ?>
 				var fontSizesBeforeLoad = jQuery(".reddesign-font-size-selection");
+				var fontSizesAfterLoad;
 				var horizontalAlignsBeforeLoad = jQuery(".horizontal-text-alignment");
+				var horizontalAlignsAfterLoad;
 				var verticalAlignsBeforeLoad = jQuery(".vertical-text-alignment");
+				var verticalAlignsAfterLoad;
 			<?php endif; ?>
 
 			var colorCodeBeforeLoad = jQuery(".color-code");
+			var colorCodeAfterLoad;
 		<?php endif; ?>
 
 		jQuery.ajax({
@@ -1054,32 +1060,38 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 				<?php if ($preserveData) : ?>
 
+					textInputsAfterLoad = jQuery(".textAreaClass");
 					jQuery.each(textInputsBeforeLoad, function(index, value) {
-						jQuery("#" + textInputsBeforeLoad[index].id).val(value.value);
+						jQuery("#" + textInputsAfterLoad[index].id).val(value.value);
 					});
 
+					fontSelectionsAfterLoad = jQuery(".reddesign-font-selection");
 					jQuery.each(fontSelectionsBeforeLoad, function(index, value) {
-						jQuery("#" + fontSelectionsBeforeLoad[index].id).val(value.value);
+						jQuery("#" + fontSelectionsAfterLoad[index].id).val(value.value);
 					});
 
 					<?php if ($this->designType->fontsizer != 'auto') : ?>
 
+						fontSizesAfterLoad = jQuery(".reddesign-font-size-selection");
 						jQuery.each(fontSizesBeforeLoad, function(index, value) {
-							jQuery("#" + fontSizesBeforeLoad[index].id).val(value.value);
+							jQuery("#" + fontSizesAfterLoad[index].id).val(value.value);
 						});
 
+						horizontalAlignsAfterLoad = jQuery(".horizontal-text-alignment");
 						jQuery.each(horizontalAlignsBeforeLoad, function(index, value) {
-							jQuery("#" + horizontalAlignsBeforeLoad[index].id).val(value.value);
+							jQuery("#" + horizontalAlignsAfterLoad[index].id).val(value.value);
 						});
 
+						verticalAlignsAfterLoad = jQuery(".vertical-text-alignment");
 						jQuery.each(verticalAlignsBeforeLoad, function(index, value) {
-							jQuery("#" + verticalAlignsBeforeLoad[index].id).val(value.value);
+							jQuery("#" + verticalAlignsAfterLoad[index].id).val(value.value);
 						});
 
 					<?php endif; ?>
 
-					jQuery.each(colorCodeBeforeLoad, function(index, value) {
-						jQuery("#" + colorCodeBeforeLoad[index].id).val(value.value);
+					colorCodeAfterLoad = jQuery(".color-code");
+					jQuery.each(colorCodeAfterLoad, function(index, value) {
+						jQuery("#" + colorCodeAfterLoad[index].id).val(value.value);
 					});
 
 				<?php endif; ?>
