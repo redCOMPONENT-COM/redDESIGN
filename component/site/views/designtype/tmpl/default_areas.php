@@ -404,12 +404,12 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 								<div class="row">
 									<label class="active-color" for="colorCode<?php echo $area->id; ?>">
 										<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SELECTED_COLOR') ?><img src="/images/colorwheel.png" class="colorwheel" />
-										<input class="span12 col-md12 colorPickerSelectedColor colorCode"
-											   type="text"
-											   value="#cfcfcf"
-											   id="colorCode<?php echo $area->id ?>"
-											   name="colorCode<?php echo $area->id; ?>"
-											/>
+										<input id="colorCode<?php echo $area->id ?>"
+										       name="colorCode<?php echo $area->id; ?>"
+										       class="span12 col-md12 colorPickerSelectedColor colorCode color-code"
+										       type="text"
+										       value="#cfcfcf"
+										/>
 									</label>
 									<div class="cmyk-inputs">
 										<div class="input-prepend col-md-6">
