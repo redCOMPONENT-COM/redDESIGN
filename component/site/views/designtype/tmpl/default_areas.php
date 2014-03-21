@@ -121,21 +121,21 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 			{RedDesignBreakDesignAreaInputText}
 				<?php if ($area->input_field_type == 1) : ?>
-					<textarea name="textArea_<?php echo $area->id; ?>"
+					<textarea id="textArea_<?php echo $area->id; ?>"
+							  name="textArea<?php echo $area->name; ?>"
 							  class="textAreaClass"
 							  style="text-align: <?php echo $textAlign; ?>;"
 							  placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
-							  id="textArea_<?php echo $area->id; ?>"
 							  required="required"
 							  <?php echo $maxChar; ?>
 							  <?php echo $maxLine ?>><?php echo $area->default_text; ?></textarea>
 				<?php else : ?>
-					<input type="text"
-						   name="textArea_<?php echo $area->id; ?>"
+					<input id="textArea_<?php echo $area->id; ?>"
+						   name="textArea<?php echo $area->name; ?>"
 						   class="textAreaClass"
+						   type="text"
 						   style="text-align: <?php echo $textAlign; ?>;"
 						   placeholder="<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_AREAS_TYPE_TEXT'); ?>"
-						   id="textArea_<?php echo $area->id; ?>"
 						   value="<?php echo $area->default_text; ?>"
 						   <?php echo $maxChar; ?>
 						   required="required"
@@ -159,15 +159,16 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 						$defaultFonts = array();
 						$defaultFonts[] = JHTML::_('select.option', 0, 'Arial');
 
-						echo JHTML::_(
-										'select.genericlist',
-										$defaultFonts,
-										'fontArea' . $area->id,
-										'class="inputbox reddesign-font-selection" onChange="customize(0);"',
-										'value',
-										'text',
-										null
-									);
+						echo JHtml::_(
+							'select.genericlist',
+							$defaultFonts,
+							'fontArea' . $area->name,
+							'class="inputbox reddesign-font-selection" onChange="customize(0);"',
+							'value',
+							'text',
+							null,
+							'fontArea' . $area->id
+						);
 					}
 					else
 					{
@@ -194,13 +195,15 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 								}
 							}
 
-							echo JHTML::_('select.genericlist',
+							echo JHtml::_(
+								'select.genericlist',
 								$options,
-								'fontArea' . $area->id,
+								'fontArea' . $area->name,
 								'class="inputbox reddesign-font-selection"',
 								'value',
 								'text',
-								$firstFontSelected
+								$firstFontSelected,
+								'fontArea' . $area->id
 							);
 						}
 					}
@@ -246,14 +249,14 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 							$area->maxFontSize = 555;
 						}
 					?>
-					<input type="hidden"
-						   id="fontSizeSlider<?php echo $area->id ?>"
+					<input id="fontSizeSlider<?php echo $area->id; ?>"
 						   class="fontSizeSlider reddesign-font-size-selection"
-						   name="fontSizeSlider<?php echo $area->id ?>"
-						   value="<?php echo $area->defaultFontSize ?>"
-						   data-slider-min="<?php echo $area->minFontSize ?>"
-						   data-slider-max="<?php echo $area->maxFontSize ?>"
-						   data-slider-value="[<?php echo $area->defaultFontSize ?>]"
+						   name="fontSizeSlider<?php echo $area->name; ?>"
+						   value="<?php echo $area->defaultFontSize; ?>"
+						   type="hidden"
+						   data-slider-min="<?php echo $area->minFontSize; ?>"
+						   data-slider-max="<?php echo $area->maxFontSize; ?>"
+						   data-slider-value="[<?php echo $area->defaultFontSize; ?>]"
 					/>
 					<?php $defaultFontSizeOutput = true; ?>
 				<?php elseif ($this->designType->fontsizer == 'dropdown_numbers' || $this->designType->fontsizer == 'dropdown_labels') : ?>
@@ -305,11 +308,12 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 							echo JHTML::_(
 								'select.genericlist',
 								$sizeOptions,
-								'fontSize' . $area->id,
+								'fontSize' . $area->name,
 								'class="inputbox reddesign-font-size-selection"',
 								'value',
 								'text',
-								$firstElement
+								$firstElement,
+								'fontSize' . $area->id
 							);
 						}
 						else
@@ -322,10 +326,10 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 				<?php endif; ?>
 
 				<?php if ($defaultFontSizeOutput) : ?>
-					<input type="hidden"
-					       id="fontSize<?php echo $area->id ?>"
+					<input id="fontSize<?php echo $area->id; ?>"
+					       name="fontSize<?php echo $area->name; ?>"
 					       class="reddesign-font-size-selection"
-					       name="fontSize<?php echo $area->id ?>"
+					       type="hidden"
 					       value="<?php echo (isset($area->defaultFontSize) && $area->defaultFontSize > 0) ? $area->defaultFontSize : 12; ?>"
 						/>
 				<?php endif; ?>
@@ -342,8 +346,8 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 			{RedDesignBreakDesignAreaChooseColor}
 				<?php if (empty($area->color_code)) : ?>
-					<input id="colorCode<?php echo $area->id ?>"
-					       name="colorCode<?php echo $area->id ?>"
+					<input id="colorCode<?php echo $area->id; ?>"
+					       name="colorCode<?php echo $area->name; ?>"
 					       class="color-code"
 					       type="hidden"
 					       value="#000000"
@@ -405,7 +409,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 									<label class="active-color" for="colorCode<?php echo $area->id; ?>">
 										<?php echo JText::_('COM_REDDESIGN_DESIGNTYPE_DESIGN_AREAS_SELECTED_COLOR') ?><img src="/images/colorwheel.png" class="colorwheel" />
 										<input id="colorCode<?php echo $area->id ?>"
-										       name="colorCode<?php echo $area->id; ?>"
+										       name="colorCode<?php echo $area->name; ?>"
 										       class="span12 col-md12 colorPickerSelectedColor colorCode color-code"
 										       type="text"
 										       value="#cfcfcf"
@@ -500,9 +504,9 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 						<div class="colorSelector_list" id="fontColor<?php echo $area->id ?>">
 							<div style="background-color:<?php echo $defaultColor; ?>;cursor:pointer;">&nbsp;</div>
 						</div>
-						<input id="colorCode<?php echo $area->id ?>"
-						       name="colorCode<?php echo $area->id ?>"
-						       class="colorCode<?php echo $area->id ?> color-code"
+						<input id="colorCode<?php echo $area->id; ?>"
+						       name="colorCode<?php echo $area->name; ?>"
+						       class="colorCode<?php echo $area->id; ?> color-code"
 						       type="hidden"
 						       value="<?php echo $defaultColorVal; ?>"
 							>
@@ -619,7 +623,12 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 				$horizontalAlignClass = 'horizontal-text-alignment-cliparts';
 			}
 		?>
-		<input id="textAlign<?php echo $area->id ?>" class="<?php echo $horizontalAlignClass ?>" type="hidden" value="<?php echo $textAlign; ?>" />
+		<input id="textAlign<?php echo $area->id; ?>"
+		       name="textAlign<?php echo $area->name; ?>"
+		       class="<?php echo $horizontalAlignClass; ?>"
+		       type="hidden"
+		       value="<?php echo $textAlign; ?>"
+			/>
 		<div class="btn-group btn-group-textAlign">
 			<button class="btn" type="button" name="textAlignButton<?php echo $area->id ?>" value="left">
 				<i class="icon-align-left"></i>&nbsp;
@@ -636,7 +645,12 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 
 	{RedDesignBreakDesignAreaChooseVerticalAlign}
 	<?php if ($this->designType->fontsizer != 'auto') : ?>
-		<input id="verticalAlign<?php echo $area->id ?>" class="vertical-text-alignment" type="hidden" value="<?php echo $area->verticalAlign; ?>" />
+		<input id="verticalAlign<?php echo $area->id; ?>"
+		       name="verticalAlign<?php echo $area->name; ?>"
+		       class="vertical-text-alignment"
+		       type="hidden"
+		       value="<?php echo $area->verticalAlign; ?>"
+			/>
 		<div class="btn-group btn-group-textVerticalAlign">
 			<button class="btn" type="button" name="textVerticalAlignButton<?php echo $area->id ?>" value="top">
 				<i class="icon-collapse-top"></i>&nbsp;

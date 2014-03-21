@@ -1017,21 +1017,15 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 	{
 		<?php if ($preserveData) : ?>
 			var textInputsBeforeLoad = jQuery(".textAreaClass");
-			var textInputsAfterLoad;
 			var fontSelectionsBeforeLoad = jQuery(".reddesign-font-selection");
-			var fontSelectionsAfterLoad;
 
 			<?php if ($this->designType->fontsizer != 'auto') : ?>
 				var fontSizesBeforeLoad = jQuery(".reddesign-font-size-selection");
-				var fontSizesAfterLoad;
 				var horizontalAlignsBeforeLoad = jQuery(".horizontal-text-alignment");
-				var horizontalAlignsAfterLoad;
 				var verticalAlignsBeforeLoad = jQuery(".vertical-text-alignment");
-				var verticalAlignsAfterLoad;
 			<?php endif; ?>
 
 			var colorCodeBeforeLoad = jQuery(".color-code");
-			var colorCodeAfterLoad;
 		<?php endif; ?>
 
 		jQuery.ajax({
@@ -1060,55 +1054,61 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 				<?php if ($preserveData) : ?>
 
-					textInputsAfterLoad = jQuery(".textAreaClass");
 					jQuery.each(textInputsBeforeLoad, function(index, value) {
-						if(typeof textInputsAfterLoad[index] !== 'undefined')
+						var textBoxElement = jQuery("[name='" + textInputsBeforeLoad[index].name + "']");
+
+						if(typeof textBoxElement !== 'undefined')
 						{
-							jQuery("#" + textInputsAfterLoad[index].id).val(value.value);
+							textBoxElement.val(value.value);
 						}
 					});
 
-					fontSelectionsAfterLoad = jQuery(".reddesign-font-selection");
 					jQuery.each(fontSelectionsBeforeLoad, function(index, value) {
-						if(typeof fontSelectionsAfterLoad[index] !== 'undefined')
+						var fontSelectionElement = jQuery("[name='" + fontSelectionsBeforeLoad[index].name + "']");
+
+						if(typeof fontSelectionElement !== 'undefined')
 						{
-							jQuery("#" + fontSelectionsAfterLoad[index].id).val(value.value);
+							fontSelectionElement.val(value.value);
 						}
 					});
 
 					<?php if ($this->designType->fontsizer != 'auto') : ?>
 
-						fontSizesAfterLoad = jQuery(".reddesign-font-size-selection");
 						jQuery.each(fontSizesBeforeLoad, function(index, value) {
-							if(typeof fontSizesAfterLoad[index] !== 'undefined')
+							var fontSizeElement = jQuery("[name='" + fontSizesBeforeLoad[index].name + "']");
+
+							if(typeof fontSizeElement !== 'undefined')
 							{
-								jQuery("#" + fontSizesAfterLoad[index].id).val(value.value);
+								fontSizeElement.val(value.value);
 							}
 						});
 
-						horizontalAlignsAfterLoad = jQuery(".horizontal-text-alignment");
 						jQuery.each(horizontalAlignsBeforeLoad, function(index, value) {
-							if(typeof horizontalAlignsAfterLoad[index] !== 'undefined')
+							var horizontalAlignElement = jQuery("[name='" + horizontalAlignsBeforeLoad[index].name + "']");
+
+							if(typeof horizontalAlignElement !== 'undefined')
 							{
-								jQuery("#" + horizontalAlignsAfterLoad[index].id).val(value.value);
+								horizontalAlignElement.val(value.value);
 							}
 						});
 
-						verticalAlignsAfterLoad = jQuery(".vertical-text-alignment");
 						jQuery.each(verticalAlignsBeforeLoad, function(index, value) {
-							if(typeof verticalAlignsAfterLoad[index] !== 'undefined')
+							var verticalAlignElement = jQuery("[name='" + verticalAlignsBeforeLoad[index].name + "']");
+
+							if(typeof verticalAlignElement !== 'undefined')
 							{
-								jQuery("#" + verticalAlignsAfterLoad[index].id).val(value.value);
+								verticalAlignElement.val(value.value);
 							}
 						});
 
 					<?php endif; ?>
 
-					colorCodeAfterLoad = jQuery(".color-code");
 					jQuery.each(colorCodeBeforeLoad, function(index, value) {
-						if(typeof colorCodeAfterLoad[index] !== 'undefined')
+						var colorCodeElement = jQuery("[name='" + colorCodeBeforeLoad[index].name + "']");
+
+						if(typeof colorCodeElement !== 'undefined')
 						{
-							jQuery("#" + colorCodeAfterLoad[index].id).val(value.value);
+							colorCodeElement.val(value.value);
 						}
 					});
 
