@@ -386,7 +386,165 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 		if ($redDesign)
 		{
-			RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
+			$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true), 'com_reddesign');
+			$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
+			$designTypeModel = RModel::getAdminInstance('Designtype', array('ignore_request' => true), 'com_reddesign');
+			$db = JFactory::getDbo();
+
+			if (!empty($product->order_item_id))
+			{
+				$query = $db->getQuery(true);
+				$query->select($db->quoteName('redDesignData'));
+				$query->from($db->quoteName('#__reddesign_orderitem_mapping'));
+				$query->where($db->quoteName('order_item_id') . ' = ' . (int) $product->order_item_id);
+				$db->setQuery($query);
+				$redDesignData = json_decode($db->loadResult());
+			}
+			else
+			{
+				$redDesignData = json_decode($cart[$i]['redDesignData']);
+			}
+
+			// If background_id is null, get the Production Background of Design Type
+			if (empty($redDesignData->background_id))
+			{
+				$displayedBackground = $designTypeModel->getProductionBackground($redDesignData->designtype_id);
+			}
+			else
+			{
+				$displayedBackground = $backgroundModel->getItem($redDesignData->background_id);
+			}
+
+			$areasModel->setState('filter.background_id', $displayedBackground->id);
+			$displayedAreas = $areasModel->getItems();
+
+			$doc = new DomDocument;
+			$doc->validateOnParse = true;
+			$doc->load(JPATH_SITE . '/media/com_reddesign/backgrounds/' . $displayedBackground->svg_file);
+
+			$svgElements = $doc->getElementsByTagName('svg');
+			$svg = $svgElements->item(0);
+
+			// Add font definitions.
+			$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayedAreas);
+			$selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
+			$fragment = $doc->createDocumentFragment();
+			$fragment->appendXML('<defs><style type="text/css">' . $selectedFontsDeclaration . '</style></defs>');
+			$svg->appendChild($fragment);
+
+			$width = str_replace('px', '', $svg->getAttribute('width'));
+			$scalingRatio = $width / $redDesignData->previewWidth;
+
+			$defaultPreviewWidth = $this->params->get('defaultCartPreviewWidth', 0);
+			$scalingImageForPreviewRatio = $defaultPreviewWidth / $redDesignData->previewWidth;
+			$previewHeight = $redDesignData->previewHeight * $scalingImageForPreviewRatio;
+			$svg->setAttribute('width', $defaultPreviewWidth . 'px');
+			$svg->setAttribute('height', $previewHeight . 'px');
+
+			$fragment = $doc->createDocumentFragment();
+			$fragment->appendXML('<g id="customizedAreas">' . urldecode($redDesignData->areasInnerSVG) . '</g>');
+
+			$textNodes = $fragment->childNodes->item(0)->getElementsByTagName('text');
+
+			for ($i = 0; $i < $textNodes->length; $i++)
+			{
+				$x = $textNodes->item($i)->getAttribute('x');
+				$y = $textNodes->item($i)->getAttribute('y');
+				$fontSizeStyle = $textNodes->item($i)->getAttribute('style');
+
+				$matches = array();
+				preg_match('/font-size: (.*?)px;/s', $fontSizeStyle, $matches);
+
+				$x *= $scalingRatio;
+				$y *= $scalingRatio;
+				$textNodes->item($i)->setAttribute('x', $x);
+				$textNodes->item($i)->setAttribute('y', $y);
+
+				if (!empty($matches[1]))
+				{
+					$fontSize = $matches[1];
+					$newfontSize = (float) $fontSize * $scalingRatio;
+					$fontSizeStyle = str_replace($fontSize, $newfontSize, $fontSizeStyle);
+					$textNodes->item($i)->setAttribute('style', $fontSizeStyle);
+				}
+				else
+				{
+					$fontSize = str_replace('px', '', $textNodes->item($i)->getAttribute('font-size'));
+					$newfontSize = (float) $fontSize * $scalingRatio;
+					$textNodes->item($i)->setAttribute('font-size', $newfontSize);
+				}
+
+				// Fix transform matrix
+				$transformMatrix = $textNodes->item($i)->getAttribute('transform');
+
+				if (!empty($transformMatrix))
+				{
+					$transformMatrix = str_replace('matrix(', '', $transformMatrix);
+					$transformMatrix = str_replace(')', '', $transformMatrix);
+
+					$vectorCoordinates = explode(',', $transformMatrix);
+					$xTransl = (float) $vectorCoordinates[4] * $scalingRatio;
+					$yTransl = (float) $vectorCoordinates[5] * $scalingRatio;
+
+					$newMatrix = 'matrix(' .
+						$vectorCoordinates[0] . ',' .
+						$vectorCoordinates[1] . ',' .
+						$vectorCoordinates[2] . ',' .
+						$vectorCoordinates[3] . ',' .
+						$xTransl . ',' .
+						$yTransl .
+						')';
+
+					$textNodes->item($i)->setAttribute('transform', $newMatrix);
+				}
+			}
+
+			$textNodes = $fragment->childNodes->item(0)->getElementsByTagName('tspan');
+
+			for ($i = 1; $i < $textNodes->length; $i++)
+			{
+				$x = $textNodes->item($i)->getAttribute('x');
+				$x *= $scalingRatio;
+				$textNodes->item($i)->setAttribute('x', $x);
+			}
+
+			$clipartNodes = $fragment->childNodes->item(0)->getElementsByTagName('svg');
+
+			for ($i = 0; $i < $clipartNodes->length; $i++)
+			{
+				$x      = $clipartNodes->item($i)->getAttribute('x');
+				$y      = $clipartNodes->item($i)->getAttribute('y');
+				$width  = $clipartNodes->item($i)->getAttribute('width');
+				$height = $clipartNodes->item($i)->getAttribute('height');
+
+				$x      *= $scalingRatio;
+				$y      *= $scalingRatio;
+				$width  *= $scalingRatio;
+				$height *= $scalingRatio;
+				$clipartNodes->item($i)->setAttribute('x', $x);
+				$clipartNodes->item($i)->setAttribute('y', $y);
+				$clipartNodes->item($i)->setAttribute('width', $width);
+				$clipartNodes->item($i)->setAttribute('height', $height);
+			}
+
+			$svg->appendChild($fragment);
+
+			$uniqueFileName = ReddesignHelpersFile::getUniqueName($displayedBackground->svg_file);
+
+			if ($doc->save(JPATH_SITE . '/media/com_reddesign/backgrounds/cart/' . $uniqueFileName . '.svg'))
+			{
+				$product_image = '<div id="product_image_' . $i . '" >' .
+									'<img id="mainSvgImage' . $i . '" src="' . JURI::base() . '/media/com_reddesign/backgrounds/cart/' . $uniqueFileName . '.svg">' .
+								'</div>';
+			}
+			else
+			{
+				$product_image = '<div id="product_image_' . $i . '" >' .
+									JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CAN_NOT_CREATE_CART_THUMBNAILS') .
+								'</div>';
+			}
+
+			/*RHelperAsset::load('snap.svg-min.js', 'com_reddesign');
 
 			$backgroundModel = RModel::getAdminInstance('Background', array('ignore_request' => true), 'com_reddesign');
 			$areasModel = RModel::getAdminInstance('Areas', array('ignore_request' => true), 'com_reddesign');
@@ -534,7 +692,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				';
 
 				$document->addScriptDeclaration($js);
-			}
+			}*/
 		}
 	}
 
