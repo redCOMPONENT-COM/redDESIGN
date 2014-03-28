@@ -25,14 +25,14 @@
 				description="PLG_REDSHOP_PRODUCT_REDDESIGN_DEFAULT_CART_PREVIEW_WIDTH_DESCRIPTION"
 				type="text"
 				filter="integer"
-				default="300" />
+				default="600" />
 			<field
 				name="defaultCartPreviewHeight"
 				label="PLG_REDSHOP_PRODUCT_REDDESIGN_DEFAULT_CART_PREVIEW_HEIGHT"
 				description="PLG_REDSHOP_PRODUCT_REDDESIGN_DEFAULT_CART_PREVIEW_HEIGHT_DESCRIPTION"
 				type="text"
 				filter="integer"
-				default="300" />
+				default="450" />
 
              <field name="loadBootstrapRedcore"
                     type="radio"
