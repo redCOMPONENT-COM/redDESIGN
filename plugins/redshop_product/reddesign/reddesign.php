@@ -421,10 +421,21 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$displayedBackground = $backgroundModel->getItem($redDesignData->background_id);
 			}
 
-			$defaultPreviewWidth = $this->params->get('defaultCartPreviewWidth', 0);
+			$defaultPreviewWidth = $this->params->get('defaultCartPreviewWidth', 600);
+			$defaultPreviewHeight = $this->params->get('defaultCartPreviewHeight', 450);
 
-			$scalingImageForPreviewRatio = $defaultPreviewWidth / $redDesignData->previewWidth;
-			$previewHeight = $redDesignData->previewHeight * $scalingImageForPreviewRatio;
+			if ($redDesignData->previewWidth > $redDesignData->previewHeight)
+			{
+				$previewWidth = $defaultPreviewWidth;
+				$scalingImageForPreviewRatio = $defaultPreviewWidth / $redDesignData->previewWidth;
+				$previewHeight = $redDesignData->previewHeight * $scalingImageForPreviewRatio;
+			}
+			else
+			{
+				$previewHeight = $defaultPreviewHeight;
+				$scalingImageForPreviewRatio = $defaultPreviewHeight / $redDesignData->previewHeight;
+				$previewWidth = $redDesignData->previewWidth * $scalingImageForPreviewRatio;
+			}
 
 			$areasModel->setState('filter.background_id', $displayedBackground->id);
 			$displayedAreas = $areasModel->getItems();
@@ -433,33 +444,118 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
 
 			$product_image = '<div id="product_image_' . $i . '" >' .
-								'<svg id="mainSvgImage' . $i . '"></svg>' .
+								'<div class="pull-left">' .
+									'<a id="modalPreviewTrigger' . $i . '" class="modal-preview" href="#modalPreview' . $i . '">' .
+										'<img id="itemDummyImage' . $i . '" alt="itemDummyImage" src="' . JURI::base() . 'media/com_reddesign/images/dummy.jpg" />' .
+									'</a>' .
+								'</div>' .
+								'<div class="progressbar-holder progressbar-table">' .
+									'<div class="progress progress-striped" style="display:none;">' .
+										'<div class="bar bar-success"></div>' .
+									'</div>' .
+								'</div>' .
+								'<div style="height: 100%;width: 100%;left: -2000px;position: absolute;">' .
+									'<div id="modalPreview' . $i . '">' .
+										'<svg id="previewSvg' . $i . '" width="' . $previewWidth . 'px" height="' . $previewHeight . 'px"></svg>' .
+									'</div>' .
+								'</div>' .
 							'</div>';
 
 			if (!empty($redDesignData->areasInnerSVG))
 			{
+				/*
+					When we have some heavy cliparts added the limit is reached and then we get 500 error
+					"PHP regular expression limit reached (pcre.backtrack_limit)"
+					That's why limit has to be increased. This can make problems on servers.
+				*/
+				ini_set('pcre.backtrack_limit', 10000000);
+				ini_set('pcre.recursion_limit', 10000000);
+
 				$areasInnerSVG = str_replace("'", "\'", urldecode($redDesignData->areasInnerSVG));
 				$areasInnerSVG = str_replace("\n", "", urldecode($areasInnerSVG));
+				$useCheckerboard = ($displayedBackground->useCheckerboard) ? 'true' : 'false';
 
-				$js = 'jQuery(document).ready(function () {
-						rootSnapSvgObject' . $i . ' = Snap("#mainSvgImage' . $i . '");
+				$js = ' var backgroundPreviews' . $i . ' = [];
+						backgroundPreviews' . $i . '["svgUrl"] = "' .
+							JURI::root() . 'media/com_reddesign/backgrounds/' . $displayedBackground->svg_file . '";
+						backgroundPreviews' . $i . '["useCheckerboard"] = "' . $useCheckerboard . '";
 
-						jQuery.ajax({
-							url: "' . JURI::base() . 'media/com_reddesign/backgrounds/' . $displayedBackground->svg_file . '",
-							dataType: "text",
-							cache: true,
-							success: function (response) {
-								jQuery("#mainSvgImage' . $i . '")
+						jQuery(document).ready(function () {
+							jQuery(document).on("mousedown", "#modalPreviewTrigger' . $i . '", function(e) {
+								if (typeof backgroundPreviews' . $i . '["progress"] === "undefined")
+								{
+									loadPreviewBackground(this);
+								}
+								else if (backgroundPreviews' . $i . '["progress"] == false)
+								{
+									return false;
+								}
+								else
+								{
+									SqueezeBox.fromElement(this);
+								}
+
+								return false;
+							});
+
+							function loadPreviewBackground(modalButton)
+						{
+							if (typeof backgroundPreviews' . $i . ' === "undefined")
+							{
+								return false;
+							}
+
+							jQuery.ajax({
+								url: backgroundPreviews' . $i . '["svgUrl"],
+								dataType: "text",
+								cache: true,
+								xhrFields: {
+									onprogress: function (e) {
+										if (e.lengthComputable) {
+											var loadedPercentage = parseInt(e.loaded / e.total * 100);
+											jQuery("#product_image_' . $i . '" + " .progress .bar-success")
+												.css("width", "" + (loadedPercentage) + "%")
+												.html(loadedPercentage + "% ' . JText::_('COM_REDDESIGN_COMMON_PROGRESS_LOADED', true) . '");
+										}
+									}
+								},
+								beforeSend: function (xhr) {
+									backgroundPreviews' . $i . '["progress"] = false;
+									jQuery("#product_image_' . $i . '" + " .progress").show().addClass("active");
+									jQuery("#product_image_' . $i . '" + " .progress .bar-success").css("width", "0%");
+								},
+								success: function (response) {
+									jQuery("#product_image_' . $i . '" + " .progress").removeClass("active");
+									backgroundPreviews' . $i . '["progress"] = true;
+
+									if(typeof response === "undefined" || response == false)
+									{
+										jQuery("#product_image_' . $i . '" + " .progress")
+										.append(\'<div class="bar bar-danger" style="width: \' + (100 - parseInt(jQuery(\'#product_image_' . $i . '\' + \' .progress .bar-success\').css(\'width\'))) + \'%;"></div>\');
+									}
+									else
+									{
+										jQuery("#product_image_' . $i . '" + " .progressbar-holder .progress .bar-success").css("width", "100%");
+									}
+
+									if (backgroundPreviews' . $i . '["useCheckerboard"])
+									{
+										jQuery("#previewSvg' . $i . '").parent().addClass("checkerboard");
+									}
+
+									rootSnapSvgObject' . $i . ' = Snap("#previewSvg' . $i . '");
+
+									jQuery("#previewSvg' . $i . '")
 										.append(\'<defs><style type="text/css">' . $selectedFontsDeclaration . '</style></defs>\')
 										.append(response);
 
-								var loadedSvgFromFile = jQuery("#mainSvgImage' . $i . '").find("svg")[0];
-								loadedSvgFromFile.setAttribute("width", parseFloat("' . $defaultPreviewWidth . '"));
+								var loadedSvgFromFile = jQuery("#previewSvg' . $i . '").find("svg")[0];
+								loadedSvgFromFile.setAttribute("width", parseFloat("' . $previewWidth . '"));
 								loadedSvgFromFile.setAttribute("height", parseFloat("' . $previewHeight . '"));
-								loadedSvgFromFile.setAttribute("id", "mainSvgImageCanvas' . $i . '");
+								loadedSvgFromFile.setAttribute("id", "previewSvgCanvas' . $i . '");
 
-								var rootElement = document.getElementById("mainSvgImage' . $i . '");
-								rootElement.setAttribute("width", parseFloat("' . $defaultPreviewWidth . '"));
+								var rootElement = document.getElementById("previewSvg' . $i . '");
+								rootElement.setAttribute("width", parseFloat("' . $previewWidth . '"));
 								rootElement.setAttribute("height", parseFloat("' . $previewHeight . '"));
 								rootElement.setAttribute("overflow", "hidden");
 
@@ -528,8 +624,11 @@ class PlgRedshop_ProductReddesign extends JPlugin
 									height = height * parseFloat("' . $scalingImageForPreviewRatio . '");
 									jQuery(value).attr("height", height);
 								});
-							}
-						});
+
+									SqueezeBox.fromElement(modalButton);
+								}
+							});
+						}
     				});
 				';
 
