@@ -387,29 +387,32 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 
 			window.globalVar = 1;
 			jQuery(document).on("mousedown", ".reddesign-form .thumbnailSVG-pointer", function() {
-				if(jQuery(this).parent().parent().parent().hasClass("clickedArea")){
-					
-					if(jQuery(this).hasClass("delete")) {
+				if(jQuery(this).parent().parent().parent().hasClass("clickedArea"))
+				{
+					if(jQuery(this).hasClass("delete"))
+					{
 						jQuery(this).removeClass("delete");
 					}
-					else {
-						// jQuery(".thumbnailSVG-pointer").removeClass("delete");
+					else
+					{
 						jQuery(this).parent().parent().parent().find('.thumbnailSVG-pointer').removeClass("delete");
 						jQuery(this).addClass("delete");
 					}
 				}
-				else {
-					if(jQuery(this).hasClass("delete")) {
+				else
+				{
+					if(jQuery(this).hasClass("delete"))
+					{
 						jQuery(this).removeClass("delete");
 					}
-					else {
-						// jQuery(".thumbnailSVG-pointer").removeClass("delete");
+					else
+					{
 						jQuery(this).parent().parent().parent().find('.thumbnailSVG-pointer').removeClass("delete");
 						jQuery(this).addClass("delete");
 						jQuery(this).parent().parent().parent().addClass("clickedArea clickArea_" + window.globalVar);
 						window.globalVar = window.globalVar + 1;
 					}
-				};
+				}
 
 				var id = jQuery(this).attr("name").replace("clipart", "");
 				var clipartId = jQuery(this).parent().find(".change-selected-clipart").val();
@@ -553,8 +556,14 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			}
 			else
 			{
-				var horizontalPosition = jQuery("#textAlign" + areaId).val().replace("left", "xMin").replace("center", "xMid").replace("right", "xMax");
+				var horizontalPosition = "";
 				var verticalPosition = "YMid";
+				var textAlignElemVal = jQuery("#textAlign" + areaId).val();
+
+				if (typeof(textAlignElemVal) !== "undefined")
+				{
+					horizontalPosition = textAlignElemVal.replace("left", "xMin").replace("center", "xMid").replace("right", "xMax");
+				}
 
 				if (horizontalPosition == "")
 				{
@@ -609,7 +618,7 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 										var msie = userAgent.indexOf("MSIE ");
 										var innerCode;
 
-										if (msie > 0)
+										if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv[ :]?11\./))
 										{
 											innerCode = XMLSerializer().serializeToString(svgElementInner[0]);
 											innerCode = Snap.parse(innerCode);
