@@ -443,23 +443,25 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayedAreas);
 			$selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
 
+			$oldProductImageLayout = $product_image;
 			$product_image = '<div id="product_image_' . $i . '" >' .
-								'<div class="pull-left">' .
-									'<a id="modalPreviewTrigger' . $i . '" class="modal-preview" href="#modalPreview' . $i . '">' .
-										'<img id="itemDummyImage' . $i . '" alt="itemDummyImage" src="' . JURI::base() . 'media/com_reddesign/images/dummy.jpg" />' .
-									'</a>' .
-								'</div>' .
-								'<div class="progressbar-holder progressbar-table">' .
-									'<div class="progress progress-striped" style="display:none;">' .
-										'<div class="bar bar-success"></div>' .
-									'</div>' .
-								'</div>' .
-								'<div style="height: 100%;width: 100%;left: -2000px;position: absolute;">' .
-									'<div id="modalPreview' . $i . '">' .
-										'<svg id="previewSvg' . $i . '" width="' . $previewWidth . 'px" height="' . $previewHeight . 'px"></svg>' .
-									'</div>' .
-								'</div>' .
-							'</div>';
+				'<div class="pull-left">' .
+				$oldProductImageLayout .
+				'<a id="modalPreviewTrigger' . $i . '" class="btn btn-small modal-preview" href="#modalPreview' . $i . '">' .
+				JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_PREVIEW') .
+				'</a>' .
+				'</div>' .
+				'<div class="progressbar-holder progressbar-table">' .
+				'<div class="progress progress-striped" style="display:none;">' .
+				'<div class="bar bar-success"></div>' .
+				'</div>' .
+				'</div>' .
+				'<div style="height: 100%;width: 100%;left: -2000px;position: absolute;">' .
+				'<div id="modalPreview' . $i . '">' .
+				'<svg id="previewSvg' . $i . '" width="' . $previewWidth . 'px" height="' . $previewHeight . 'px"></svg>' .
+				'</div>' .
+				'</div>' .
+				'</div>';
 
 			if (!empty($redDesignData->areasInnerSVG))
 			{
@@ -477,7 +479,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 				$js = ' var backgroundPreviews' . $i . ' = [];
 						backgroundPreviews' . $i . '["svgUrl"] = "' .
-							JURI::root() . 'media/com_reddesign/backgrounds/' . $displayedBackground->svg_file . '";
+					JURI::root() . 'media/com_reddesign/backgrounds/' . $displayedBackground->svg_file . '";
 						backgroundPreviews' . $i . '["useCheckerboard"] = "' . $useCheckerboard . '";
 
 						jQuery(document).ready(function () {
@@ -769,9 +771,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 		if (!empty($orderItemMapping))
 		{
 			$html = '<div id="customDesignData' . $orderItem->order_item_id . '" style="margin: 15px 0 15px 0;">' .
-						'<span><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_DETAILS') . '</strong></span><br/>' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TYPE') . $redDesignDataPrepared['designType']->name . '</div>' .
-					'</div>';
+				'<span><strong>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_DETAILS') . '</strong></span><br/>' .
+				'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TYPE') . $redDesignDataPrepared['designType']->name . '</div>' .
+				'</div>';
 
 			foreach ($redDesignDataPrepared['designAreasCustomData'] as $customArea)
 			{
@@ -786,9 +788,9 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					}
 
 					$fontColor = '<span style="margin-right:5px; background-color: ' . $customArea->colorCode . ';" >' .
-										'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
-								'</span>' .
-								'<span>' . $cmyk . '</span>';
+						'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+						'</span>' .
+						'<span>' . $cmyk . '</span>';
 				}
 				else
 				{
@@ -801,17 +803,17 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					}
 
 					$fontColor  = '<span style="margin-right:5px; background-color:#' . $customArea->colorCode . ';" >' .
-										'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>' .
-									'<span>' . $cmyk . '</span>';
+						'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>' .
+						'<span>' . $cmyk . '</span>';
 				}
 
 				$html .= '<br/>' .
 					'<div id="area' . $customArea->id . '">' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AREA') . '</div>' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT') . $customArea->text . '</div>' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_NAME') . $customArea->fontName . '</div>' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_SIZE') . $customArea->fontSize . '</div>' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT_COLOR') . $fontColor . '</div>' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AREA') . '</div>' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT') . $customArea->text . '</div>' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_NAME') . $customArea->fontName . '</div>' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_SIZE') . $customArea->fontSize . '</div>' .
+					'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT_COLOR') . $fontColor . '</div>' .
 					'</div>';
 			}
 
@@ -881,13 +883,13 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						$yTransl = (float) $vectorCoordinates[5] * $scalingRatio;
 
 						$newMatrix = 'matrix(' .
-										$vectorCoordinates[0] . ',' .
-										$vectorCoordinates[1] . ',' .
-										$vectorCoordinates[2] . ',' .
-										$vectorCoordinates[3] . ',' .
-										$xTransl . ',' .
-										$yTransl .
-									')';
+							$vectorCoordinates[0] . ',' .
+							$vectorCoordinates[1] . ',' .
+							$vectorCoordinates[2] . ',' .
+							$vectorCoordinates[3] . ',' .
+							$xTransl . ',' .
+							$yTransl .
+							')';
 
 						$textNodes->item($i)->setAttribute('transform', $newMatrix);
 					}
@@ -928,10 +930,10 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				if ($doc->save(JPATH_SITE . '/media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg'))
 				{
 					$html .= '<div>' .
-								'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg" target="_blank">SVG ' .
-									JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
-								'</a>' .
-							'</div>';
+						'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $uniqueFileName . '.svg" target="_blank">SVG ' .
+						JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
+						'</a>' .
+						'</div>';
 
 					$orderItemMapping->productionSvg = $uniqueFileName;
 					$db->updateObject('#__reddesign_orderitem_mapping', $orderItemMapping, 'order_item_id');
@@ -944,11 +946,11 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			else
 			{
 				$html .= '</br>' .
-						'<div>' .
-							'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $orderItemMapping->productionSvg . '.svg" target="_blank">' .
-								'SVG ' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
-							'</a>' .
-						'</div>';
+					'<div>' .
+					'<a href="' . JURI::root() . 'media/com_reddesign/backgrounds/orders' . $orderItemMapping->productionSvg . '.svg" target="_blank">' .
+					'SVG ' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_DOWNLOAD') .
+					'</a>' .
+					'</div>';
 			}
 
 			echo $html;
