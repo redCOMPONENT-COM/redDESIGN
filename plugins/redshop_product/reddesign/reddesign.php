@@ -445,23 +445,23 @@ class PlgRedshop_ProductReddesign extends JPlugin
 
 			$oldProductImageLayout = $product_image;
 			$product_image = '<div id="product_image_' . $i . '" >' .
-				'<div class="pull-left">' .
-				$oldProductImageLayout .
-				'<a id="modalPreviewTrigger' . $i . '" class="btn btn-small modal-preview" href="#modalPreview' . $i . '">' .
-				JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_PREVIEW') .
-				'</a>' .
-				'</div>' .
-				'<div class="progressbar-holder progressbar-table">' .
-				'<div class="progress progress-striped" style="display:none;">' .
-				'<div class="bar bar-success"></div>' .
-				'</div>' .
-				'</div>' .
-				'<div style="height: 100%;width: 100%;left: -2000px;position: absolute;">' .
-				'<div id="modalPreview' . $i . '">' .
-				'<svg id="previewSvg' . $i . '" width="' . $previewWidth . 'px" height="' . $previewHeight . 'px"></svg>' .
-				'</div>' .
-				'</div>' .
-				'</div>';
+								'<div class="pull-left">' .
+									$oldProductImageLayout .
+									'<a id="modalPreviewTrigger' . $i . '" class="btn btn-small modal-preview" href="#modalPreview' . $i . '">' .
+										JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_PREVIEW') .
+									'</a>' .
+								'</div>' .
+								'<div class="progressbar-holder progressbar-table">' .
+									'<div class="progress progress-striped" style="display:none;">' .
+										'<div class="bar bar-success"></div>' .
+									'</div>' .
+								'</div>' .
+								'<div style="height: 100%;width: 100%;left: -2000px;position: absolute;">' .
+									'<div id="modalPreview' . $i . '">' .
+										'<svg id="previewSvg' . $i . '" width="' . $previewWidth . 'px" height="' . $previewHeight . 'px"></svg>' .
+									'</div>' .
+								'</div>' .
+							'</div>';
 
 			if (!empty($redDesignData->areasInnerSVG))
 			{
