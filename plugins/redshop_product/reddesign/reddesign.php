@@ -443,10 +443,12 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayedAreas);
 			$selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
 
+			$oldProductImageLayout = $product_image;
 			$product_image = '<div id="product_image_' . $i . '" >' .
 								'<div class="pull-left">' .
-									'<a id="modalPreviewTrigger' . $i . '" class="modal-preview" href="#modalPreview' . $i . '">' .
-										'<img id="itemDummyImage' . $i . '" alt="itemDummyImage" src="' . JURI::base() . 'media/com_reddesign/images/dummy.jpg" />' .
+									$oldProductImageLayout .
+									'<a id="modalPreviewTrigger' . $i . '" class="btn btn-small modal-preview" href="#modalPreview' . $i . '">' .
+										JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_PREVIEW') .
 									'</a>' .
 								'</div>' .
 								'<div class="progressbar-holder progressbar-table">' .
@@ -476,8 +478,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$useCheckerboard = ($displayedBackground->useCheckerboard) ? 'true' : 'false';
 
 				$js = ' var backgroundPreviews' . $i . ' = [];
-						backgroundPreviews' . $i . '["svgUrl"] = "' .
-							JURI::root() . 'media/com_reddesign/backgrounds/' . $displayedBackground->svg_file . '";
+						backgroundPreviews' . $i . '["svgUrl"] = "' . JURI::root() . 'media/com_reddesign/backgrounds/' . $displayedBackground->svg_file . '";
 						backgroundPreviews' . $i . '["useCheckerboard"] = "' . $useCheckerboard . '";
 
 						jQuery(document).ready(function () {
@@ -786,7 +787,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					}
 
 					$fontColor = '<span style="margin-right:5px; background-color: ' . $customArea->colorCode . ';" >' .
-										'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+									'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
 								'</span>' .
 								'<span>' . $cmyk . '</span>';
 				}
@@ -801,18 +802,18 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					}
 
 					$fontColor  = '<span style="margin-right:5px; background-color:#' . $customArea->colorCode . ';" >' .
-										'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>' .
-									'<span>' . $cmyk . '</span>';
+									'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>' .
+								'<span>' . $cmyk . '</span>';
 				}
 
 				$html .= '<br/>' .
-					'<div id="area' . $customArea->id . '">' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AREA') . '</div>' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT') . $customArea->text . '</div>' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_NAME') . $customArea->fontName . '</div>' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_SIZE') . $customArea->fontSize . '</div>' .
-						'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT_COLOR') . $fontColor . '</div>' .
-					'</div>';
+						'<div id="area' . $customArea->id . '">' .
+							'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_AREA') . '</div>' .
+							'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT') . $customArea->text . '</div>' .
+							'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_NAME') . $customArea->fontName . '</div>' .
+							'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_FONT_SIZE') . $customArea->fontSize . '</div>' .
+							'<div>' . JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_CUSTOMIZED_DESIGN_TEXT_COLOR') . $fontColor . '</div>' .
+						'</div>';
 			}
 
 			// Create files
@@ -881,13 +882,13 @@ class PlgRedshop_ProductReddesign extends JPlugin
 						$yTransl = (float) $vectorCoordinates[5] * $scalingRatio;
 
 						$newMatrix = 'matrix(' .
-										$vectorCoordinates[0] . ',' .
-										$vectorCoordinates[1] . ',' .
-										$vectorCoordinates[2] . ',' .
-										$vectorCoordinates[3] . ',' .
-										$xTransl . ',' .
-										$yTransl .
-									')';
+							$vectorCoordinates[0] . ',' .
+							$vectorCoordinates[1] . ',' .
+							$vectorCoordinates[2] . ',' .
+							$vectorCoordinates[3] . ',' .
+							$xTransl . ',' .
+							$yTransl .
+						')';
 
 						$textNodes->item($i)->setAttribute('transform', $newMatrix);
 					}
