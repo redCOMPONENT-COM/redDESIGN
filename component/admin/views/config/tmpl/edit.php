@@ -90,6 +90,14 @@ JHtml::_('rjquery.chosen', 'select');
 		<div class="tab-pane" id="images">
 			<div class="control-group">
 				<div class="control-label">
+					<?php echo $this->form->getLabel('cartThumbnailsSource'); ?>
+				</div>
+				<div class="controls">
+					<?php echo $this->form->getInput('cartThumbnailsSource'); ?>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="control-label">
 					<?php echo $this->form->getLabel('max_svg_file_size'); ?>
 				</div>
 				<div class="controls">
