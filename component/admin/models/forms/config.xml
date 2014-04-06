@@ -75,6 +75,16 @@
 			  label="COM_REDDESIGN_CONFIG_IMAGES_CONFIGURATION"
 			  description="COM_REDDESIGN_CONFIG_IMAGES_CONFIGURATION_DESC"
 	>
+		<field name="cartThumbnailsSource"
+			   type="list"
+			   default="0"
+			   label="COM_REDDESIGN_CONFIG_CART_THUMBNAILS_SOURCE"
+			   description="COM_REDDESIGN_CONFIG_CART_THUMBNAILS_SOURCE_DESC"
+			>
+			<option value="0">COM_REDDESIGN_CONFIG_CART_THUMBNAILS_SOURCE_REDSHOP_PRODUCT_IMAGES</option>
+			<option value="1">COM_REDDESIGN_CONFIG_CART_THUMBNAILS_SOURCE_BACKGROUNDS</option>
+		</field>
+
 		<field name="max_svg_file_size"
 			   type="text"
 			   size="5"

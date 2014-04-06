@@ -208,6 +208,16 @@ final class ReddesignEntityConfig
 	 *
 	 * @return  int  The max SVG file size.
 	 */
+	public function getCartThumbnailsSource()
+	{
+		return $this->getBool('cartThumbnailsSource');
+	}
+
+	/**
+	 * Get the max SVG file size.
+	 *
+	 * @return  int  The max SVG file size.
+	 */
 	public function getMaxSVGFileSize()
 	{
 		return $this->getInt('max_svg_file_size');

@@ -396,6 +396,7 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$document = JFactory::getDocument();
 			$config = ReddesignEntityConfig::getInstance();
 			$fontUnit = $config->getFontUnit();
+			$cartThumbnailSource = $config->getCartThumbnailsSource();
 
 			if (!empty($product->order_item_id))
 			{
@@ -443,10 +444,20 @@ class PlgRedshop_ProductReddesign extends JPlugin
 			$selectedFonts = ReddesignHelpersFont::getSelectedFontsFromArea($displayedAreas);
 			$selectedFontsDeclaration = ReddesignHelpersFont::getFontStyleDeclaration($selectedFonts);
 
-			$oldProductImageLayout = $product_image;
+			if ($cartThumbnailSource)
+			{
+				$cartThumbnailLayout = '<img src="' .
+					JURI::root() . 'media/com_reddesign/backgrounds/' . substr($displayedBackground->svg_file, 0, -4) . '.png' .
+					'" alt="productThumbnail" />';
+			}
+			else
+			{
+				$cartThumbnailLayout = $product_image;
+			}
+
 			$product_image = '<div id="product_image_' . $i . '" >' .
 								'<div class="pull-left">' .
-									$oldProductImageLayout .
+									$cartThumbnailLayout .
 									'<a id="modalPreviewTrigger' . $i . '" class="btn btn-small modal-preview" href="#modalPreview' . $i . '">' .
 										JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_PREVIEW') .
 									'</a>' .
