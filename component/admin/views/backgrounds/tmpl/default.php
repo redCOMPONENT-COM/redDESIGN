@@ -90,6 +90,12 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 								<a class="btn btn-mini modal-preview" href="#modalPreview<?php echo $background->id; ?>">
 									<?php echo JText::_('COM_REDDESIGN_COMMON_PREVIEW'); ?>
 								</a>
+								<a class="btn btn-mini"
+								   href="<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>"
+								   download="<?php echo 'background-' . $background->svg_file; ?>"
+									>
+									<?php echo JText::_('COM_REDDESIGN_COMMON_DOWNLOAD'); ?>
+								</a>
 							</div>
 							<div class="progressbar-holder progressbar-table">
 								<div class="progress progress-striped" style="display:none;">
