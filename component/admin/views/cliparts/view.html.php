@@ -93,12 +93,12 @@ class ReddesignViewCliparts extends ReddesignView
 			$delete = RToolbarBuilder::createDeleteButton('cliparts.delete');
 			$thirdGroup->addButton($delete);
 
-			$categories = RToolbarBuilder::createStandardButton(
-				'cliparts.categories',
+			$categories = ReddesignToolbarBuilder::createCategoriesButton(
+				'index.php?option=com_categories&view=categories&extension=com_reddesign',
 				JText::_('COM_REDDESIGN_CLIPART_CATEGORIES_LABEL'),
-				'',
 				'icon-sitemap',
-				false
+				'',
+				'{handler: \'iframe\', size: {x: 1024, y: 768}}'
 			);
 
 			$fourthGroup->addButton($categories);
