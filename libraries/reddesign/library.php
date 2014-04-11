@@ -18,3 +18,9 @@ JLoader::import('redcore.bootstrap');
 
 // Register library prefix
 RLoader::registerPrefix('Reddesign', JPATH_REDDESIGN_LIBRARY);
+
+// Make available the redDESIGN fields
+JFormHelper::addFieldPath(JPATH_REDDESIGN_LIBRARY . '/form/fields');
+
+// Make available the redDESIGN form rules
+JFormHelper::addRulePath(JPATH_REDDESIGN_LIBRARY . '/form/rules');
