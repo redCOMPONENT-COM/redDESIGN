@@ -12,6 +12,7 @@
 	<files>
 		<filename plugin="reddesign">reddesign.php</filename>
 		<folder plugin="reddesign">js</folder>
+		<folder plugin="reddesign">css</folder>
 	</files>
 	<languages>
 		<language tag="en-GB">language/en-GB/en-GB.plg_redshop_product_type_reddesign.ini</language>

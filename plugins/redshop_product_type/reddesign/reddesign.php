@@ -90,21 +90,42 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 				$designTypeOptions[] = JHtml::_('select.option', $designType->id, $designType->name);
 			}
 
-			// Create multiple select list of related design types
-			$html = '<div>';
-				$html .= '<label for="designType">' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_RELATED_DESIGN_TYPES') . '</label>';
-				$html .= '<div style="padding-top: 7px" >';
-					$html .= JHtml::_(
-						'select.genericlist',
-						$designTypeOptions,
-						'relatedDesignTypes[]',
-						' multiple class="inputbox" size="9" ',
-						'value',
-						'text',
-						explode(',', $productDesignTypesMapping->related_designtype_ids)
-					);
-				$html .= '*</div>';
-			$html .= '</div>';
+			$html = JHtml::_(
+				'select.genericlist',
+				$designTypeOptions,
+				'relatedDesignTypes[]',
+				' multiple class="inputbox" size="9" ',
+				'value',
+				'text',
+				explode(',', $productDesignTypesMapping->related_designtype_ids),
+				'relatedDesignTypes'
+			);
+
+			$js = 'jQuery(function () {
+						jQuery("#relatedDesignTypes")
+								.bootstrapDualListbox({
+									bootstrap2Compatible: true,
+									moveAllLabel: "MOVE ALL",
+									removeAllLabel: "REMOVE ALL",
+									moveSelectedLabel: "MOVE SELECTED",
+									removeSelectedLabel: "REMOVE SELECTED",
+									filterPlaceHolder: "FILTER",
+									filterSelected: "2",
+									filterNonSelected: "1",
+									moveOnSelect: false,
+									preserveSelectionOnMove: "all",
+									helperSelectNamePostfix: "_myhelper",
+									selectedListLabel: "Selected elements",
+									nonSelectedListLabel: "Unselected elements"
+								})
+					});';
+
+			// Add jQuery dual select boxes plugin
+			$document = JFactory::getDocument();
+			$document->addStyleSheet(JURI::root() . 'plugins/redshop_product_type/reddesign/css/bootstrap.min.css');
+			$document->addStyleSheet(JURI::root() . 'plugins/redshop_product_type/reddesign/css/bootstrap-duallistbox.min.css');
+			$document->addScript(JURI::root() . 'plugins/redshop_product_type/reddesign/js/jquery.bootstrap-duallistbox.min.js');
+			$document->addScriptDeclaration($js);
 
 			echo $html;
 		}
