@@ -4,7 +4,8 @@ redDESIGN is a redCOMPONENT extension for Joomla and redSHOP. redDESIGN allows y
 
 The web user will be able to add text in serveral fonts to a base design.
 
-The 2.0 version was created for Exakt.dk customer incorporating the SVG (vectorial graphings) technology
+The 2.0 version was created for Exakt.dk customer incorporating the SVG (vectorial graphings) technology.
+
 
 ## Status
 
