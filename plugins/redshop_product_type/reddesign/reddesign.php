@@ -83,11 +83,13 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 			$productDesignTypesMapping = $designTypesModel->getProductDesignTypesMapping($product_data->product_id);
 
 			$designTypeOptions = array();
-			$designTypeOptions[] = JHtml::_('select.option', '0', JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_SELECT'));
 
 			foreach ($designTypes as $designType)
 			{
-				$designTypeOptions[] = JHtml::_('select.option', $designType->id, $designType->name);
+				$designTypeOptions[] = JHtml::_('select.option',
+					$designType->id,
+					$designType->name . ' - (' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_FONT_SIZE_TYPE') . strtoupper($designType->fontsizer) . ')'
+				);
 			}
 
 			$html = JHtml::_(
@@ -105,26 +107,33 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 						jQuery("#relatedDesignTypes")
 								.bootstrapDualListbox({
 									bootstrap2Compatible: true,
-									moveAllLabel: "MOVE ALL",
-									removeAllLabel: "REMOVE ALL",
-									moveSelectedLabel: "MOVE SELECTED",
-									removeSelectedLabel: "REMOVE SELECTED",
-									filterPlaceHolder: "FILTER",
+									moveAllLabel: "' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_MOVE_ALL') . '",
+									removeAllLabel: "' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_REMOVE_ALL') . '",
+									moveSelectedLabel: "' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_MOVE_SELECTED') . '",
+									removeSelectedLabel: "' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_REMOVE_SELECTED') . '",
+									filterPlaceHolder: "' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_FILTER') . '",
 									filterSelected: "2",
 									filterNonSelected: "1",
 									moveOnSelect: false,
 									preserveSelectionOnMove: "all",
-									helperSelectNamePostfix: "_myhelper",
-									selectedListLabel: "Selected elements",
-									nonSelectedListLabel: "Unselected elements"
-								})
+									helperSelectNamePostfix: "DualListBox",
+									selectedListLabel: "' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_SELECTED_LABEL') . '",
+									nonSelectedListLabel: "' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_UNSELECTED_LABEL') . '",
+									infotext: "' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_SHOWING_ALL') . '",
+									infotextfiltered: "' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_FILTERED') . '",
+									infotextempty: "' . JText::_('PLG_REDSHOP_PRODUCT_TYPE_REDDESIGN_EMPTY') . '"
+								});
+
+						jQuery(".moveall").html(">>");
+						jQuery(".move").html(">");
+						jQuery(".removeall").html("<<");
+						jQuery(".remove").html("<");
 					});';
 
 			// Add jQuery dual select boxes plugin
 			$document = JFactory::getDocument();
-			$document->addStyleSheet(JURI::root() . 'plugins/redshop_product_type/reddesign/css/bootstrap.min.css');
 			$document->addStyleSheet(JURI::root() . 'plugins/redshop_product_type/reddesign/css/bootstrap-duallistbox.min.css');
-			$document->addScript(JURI::root() . 'plugins/redshop_product_type/reddesign/js/jquery.bootstrap-duallistbox.min.js');
+			$document->addScript(JURI::root() . 'plugins/redshop_product_type/reddesign/js/jquery.bootstrap-duallistbox.js');
 			$document->addScriptDeclaration($js);
 
 			echo $html;
