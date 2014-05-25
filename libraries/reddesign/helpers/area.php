@@ -161,7 +161,8 @@ final class ReddesignHelpersArea
 			->from($db->qn('#__reddesign_area_clipart_xref', 'ac'))
 			->leftJoin($db->qn('#__reddesign_cliparts', 'c') . ' ON c.id = ac.clipartId')
 			->leftJoin($db->qn('#__categories', 'c1') . ' on c.categoryId = c1.id')
-			->where('c.state = 1 AND ac.areaId = ' . (int) $areaId);
+			->where('c.state = 1 AND ac.areaId = ' . (int) $areaId)
+			->order('c.name ASC');
 
 		$db->setQuery($query);
 
