@@ -17,13 +17,12 @@
 			   maxlength="255"
 			   size="32"
 			/>
-		<field id="clipartFile"
-			   name="clipartFile"
-			   type="FileUploader"
-			   label="COM_REDDESIGN_CLIPART_FIELD_FILE"
-			   description="COM_REDDESIGN_CLIPART_FIELD_FILE_DESC"
-			   labelclass="control-label"
-			   loadFileProcessingLib="true"
+		<field
+			name="clipartFile"
+			type="file"
+			label="COM_REDDESIGN_CLIPART_FIELD_FILE"
+			description="COM_REDDESIGN_CLIPART_FIELD_FILE_DESC"
+			accept="image/*"
 			/>
 		<field name="categoryId"
 			   type="category"

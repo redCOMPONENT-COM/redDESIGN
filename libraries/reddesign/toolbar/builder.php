@@ -29,7 +29,7 @@ final class ReddesignToolbarBuilder
 	 *
 	 * @return  ReddesignToolbarButtonLightbox  The button.
 	 */
-	public static function createCategoriesButton($url, $text, $iconClass, $class = '', $rel = '')
+	public static function createLightboxButton($url, $text, $iconClass, $class = '', $rel = '')
 	{
 		return new ReddesignToolbarButtonLightbox($url, $text, $iconClass, $class, $rel);
 	}
