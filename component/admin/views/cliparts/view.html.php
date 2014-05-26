@@ -81,6 +81,7 @@ class ReddesignViewCliparts extends ReddesignView
 		$secondGroup = new RToolbarButtonGroup;
 		$thirdGroup = new RToolbarButtonGroup;
 		$fourthGroup = new RToolbarButtonGroup;
+		$fifthGroup = new RToolbarButtonGroup;
 
 		if ($user->authorise('core.admin', 'com_reddesign.panel'))
 		{
@@ -93,22 +94,31 @@ class ReddesignViewCliparts extends ReddesignView
 			$delete = RToolbarBuilder::createDeleteButton('cliparts.delete');
 			$thirdGroup->addButton($delete);
 
-			$categories = ReddesignToolbarBuilder::createCategoriesButton(
+			$categories = ReddesignToolbarBuilder::createLightboxButton(
 				'index.php?option=com_categories&view=categories&extension=com_reddesign',
 				JText::_('COM_REDDESIGN_CLIPART_CATEGORIES_LABEL'),
 				'icon-sitemap',
 				'',
 				'{handler: \'iframe\', size: {x: 1024, y: 768}}'
 			);
-
 			$fourthGroup->addButton($categories);
+
+			$massUpload = ReddesignToolbarBuilder::createLightboxButton(
+				'index.php?option=com_reddesign&view=clipartsupload',
+				JText::_('COM_REDDESIGN_CLIPART_MASS_UPLOAD_LABEL'),
+				'icon-upload',
+				'',
+				'{handler: \'iframe\', size: {x: 1024, y: 768}}'
+			);
+			$fifthGroup->addButton($massUpload);
 		}
 
 		$toolbar = new RToolbar;
 		$toolbar->addGroup($firstGroup)
 			->addGroup($secondGroup)
 			->addGroup($thirdGroup)
-			->addGroup($fourthGroup);
+			->addGroup($fourthGroup)
+			->addGroup($fifthGroup);
 
 		return $toolbar;
 	}
