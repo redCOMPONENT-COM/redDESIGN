@@ -214,6 +214,23 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			addUploadButtonCall();
 			rootSnapSvgObject = Snap("#mainSvgImage");
 
+			jQuery(".colorPickerSelectedColor").click(function(){
+				jQuery(".color-wheel").hide();
+				jQuery(".cmyk-inputs").hide();
+
+				if(jQuery(this).parent().parent().parent().parent().parent().parent().parent().hasClass("wheel-clicked")) {
+					jQuery(this).parent().parent().parent().parent().find(".color-wheel").hide();
+					jQuery(this).parent().parent().parent().parent().find(".cmyk-inputs").hide();
+					jQuery(this).parent().parent().parent().parent().parent().parent().parent().removeClass("wheel-clicked")
+				}
+				else {
+					jQuery("#areasContainer li").removeClass("wheel-clicked")
+					jQuery(this).parent().parent().parent().parent().find(".color-wheel").show();
+					jQuery(this).parent().parent().parent().parent().find(".cmyk-inputs").show();
+					jQuery(this).parent().parent().parent().parent().parent().parent().parent().addClass("wheel-clicked");
+				}
+			});
+
 			<?php if (!empty($this->displayedBackground->svg_file)) : ?>
 				jQuery.ajax({
 					url: "<?php echo $imageUrl; ?>",
@@ -1126,6 +1143,23 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 				thumbnailSVGLoader();
 				loadBackgroundSVGandAreas(propertyId);
 				addUploadButtonCall();
+
+				jQuery(".colorPickerSelectedColor").click(function(){
+					jQuery(".color-wheel").hide();
+					jQuery(".cmyk-inputs").hide();
+
+					if(jQuery(this).parent().parent().parent().parent().parent().parent().parent().hasClass("wheel-clicked")) {
+						jQuery(this).parent().parent().parent().parent().find(".color-wheel").hide();
+						jQuery(this).parent().parent().parent().parent().find(".cmyk-inputs").hide();
+						jQuery(this).parent().parent().parent().parent().parent().parent().parent().removeClass("wheel-clicked")
+					}
+					else {
+						jQuery("#areasContainer li").removeClass("wheel-clicked")
+						jQuery(this).parent().parent().parent().parent().find(".color-wheel").show();
+						jQuery(this).parent().parent().parent().parent().find(".cmyk-inputs").show();
+						jQuery(this).parent().parent().parent().parent().parent().parent().parent().addClass("wheel-clicked");
+					}
+				});
 			},
 			error: function (data)
 			{
