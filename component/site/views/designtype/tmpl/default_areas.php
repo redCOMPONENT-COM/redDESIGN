@@ -402,7 +402,7 @@ $clipartPreviewHeight = $config->getMaxClipartPreviewHeight();
 							});
 					</script>
 
-					<div id="colorsContainer<?php echo $area->id ?>" class="span6 col-md6">
+					<div id="colorsContainer<?php echo $area->id ?>" class="col-md6 col-md-12">
 						<div class="row">
 							<div class="col-md-6 CMYKContainer">
 								<div class="row">

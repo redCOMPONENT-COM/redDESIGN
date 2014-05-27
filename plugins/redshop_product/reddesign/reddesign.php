@@ -933,6 +933,34 @@ class PlgRedshop_ProductReddesign extends JPlugin
 					$clipartNodes->item($i)->setAttribute('height', $height);
 				}
 
+				$imageNodes = $fragment->childNodes->item(0)->getElementsByTagName('image');
+
+				for ($i = 0; $i < $imageNodes->length; $i++)
+				{
+					$x      = $imageNodes->item($i)->getAttribute('x');
+					$y      = $imageNodes->item($i)->getAttribute('y');
+					$width  = $imageNodes->item($i)->getAttribute('width');
+					$height = $imageNodes->item($i)->getAttribute('height');
+
+					$x      *= $scalingRatio;
+					$y      *= $scalingRatio;
+					$width  *= $scalingRatio;
+					$height *= $scalingRatio;
+					$imageNodes->item($i)->setAttribute('x', $x);
+					$imageNodes->item($i)->setAttribute('y', $y);
+					$imageNodes->item($i)->setAttribute('width', $width);
+					$imageNodes->item($i)->setAttribute('height', $height);
+
+					$imageNodeHref = $imageNodes->item($i)->getAttribute('xlink:href');
+
+					if (empty($imageNodeHref))
+					{
+						$imageNodeHref = $imageNodes->item($i)->getAttribute('href');
+						$imageNodes->item($i)->setAttribute('xlink:href', $imageNodeHref);
+						$imageNodes->item($i)->removeAttribute('href');
+					}
+				}
+
 				$svg->appendChild($fragment);
 
 				$uniqueFileName = 'production-file-' . $orderItem->order_id . '-' . $orderItem->order_item_id;
