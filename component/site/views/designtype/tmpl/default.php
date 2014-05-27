@@ -214,9 +214,6 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 			addUploadButtonCall();
 			rootSnapSvgObject = Snap("#mainSvgImage");
 
-			jQuery(".color-wheel").hide();
-			jQuery(".cmyk-inputs").hide();
-
 			jQuery(".colorPickerSelectedColor").click(function(){
 				jQuery(".color-wheel").hide();
 				jQuery(".cmyk-inputs").hide();
