@@ -92,7 +92,7 @@ $returnUrl = JURI::base() . 'index.php?option=com_reddesign&view=designtype&layo
 								</a>
 								<a class="btn btn-mini"
 								   href="<?php echo JURI::root() . 'media/com_reddesign/backgrounds/' . $background->svg_file; ?>"
-								   download="<?php echo 'background-' . $background->svg_file; ?>"
+								   download="<?php echo $background->name; ?>"
 									>
 									<?php echo JText::_('COM_REDDESIGN_COMMON_DOWNLOAD'); ?>
 								</a>
