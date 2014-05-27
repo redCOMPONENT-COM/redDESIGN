@@ -640,6 +640,16 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 											innerCode = XMLSerializer().serializeToString(svgElementInner[0]);
 											innerCode = Snap.parse(innerCode);
 										}
+										else if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1)
+										{
+											var element = svgElementInner[0].getElementsByTagName("script");
+											for (index = element.length - 1; index >= 0; index--) {
+												element[index].parentNode.removeChild(element[index]);
+											}
+
+											innerCode = (new XMLSerializer()).serializeToString(svgElementInner[0]);
+											innerCode = Snap.parse(innerCode);
+										}
 										else
 										{
 											innerCode = Snap.parse(svgElementInner[0].outerHTML);
