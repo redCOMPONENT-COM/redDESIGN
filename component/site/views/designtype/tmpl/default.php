@@ -643,7 +643,9 @@ $unitConversionRatio = ReddesignHelpersSvg::getUnitConversionRatio($unit, $sourc
 										else if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1)
 										{
 											var element = svgElementInner[0].getElementsByTagName("script");
-											for (index = element.length - 1; index >= 0; index--) {
+
+											for (index = element.length - 1; index >= 0; index--)
+											{
 												element[index].parentNode.removeChild(element[index]);
 											}
 
