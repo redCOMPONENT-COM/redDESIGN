@@ -360,6 +360,8 @@ class PlgRedshop_ProductReddesign extends JPlugin
 	public function changeCartOrderItemImage(&$cart, &$product_image, $product, $i)
 	{
 		$redDesign = false;
+		$input = JFactory::getApplication()->input;
+		$view = $input->getString('view', '');
 
 		if (empty($product->product_type))
 		{
@@ -455,26 +457,37 @@ class PlgRedshop_ProductReddesign extends JPlugin
 				$cartThumbnailLayout = $product_image;
 			}
 
-			$product_image = '<div id="product_image_' . $i . '" >' .
-								'<div class="pull-left">' .
-									$cartThumbnailLayout .
-									'<a id="modalPreviewTrigger' . $i . '" class="btn btn-small modal-preview" href="#modalPreview' . $i . '">' .
-										JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_PREVIEW') .
-									'</a>' .
-								'</div>' .
-								'<div class="progressbar-holder progressbar-table">' .
-									'<div class="progress progress-striped" style="display:none;">' .
-										'<div class="bar bar-success"></div>' .
+			if ($view == 'cart' || $view == 'checkout' || $view == 'order_detail')
+			{
+				$product_image = '<div id="product_image_' . $i . '" >' .
+									'<div class="pull-left">' .
+										$cartThumbnailLayout .
+										'<a id="modalPreviewTrigger' . $i . '" class="btn btn-small modal-preview" href="#modalPreview' . $i . '">' .
+											JText::_('PLG_REDSHOP_PRODUCT_REDDESIGN_PREVIEW') .
+										'</a>' .
 									'</div>' .
-								'</div>' .
-								'<div style="height: 100%;width: 100%;left: -2000px;position: absolute;">' .
-									'<div id="modalPreview' . $i . '">' .
-										'<svg id="previewSvg' . $i . '" width="' . $previewWidth . 'px" height="' . $previewHeight . 'px"></svg>' .
+									'<div class="progressbar-holder progressbar-table">' .
+										'<div class="progress progress-striped" style="display:none;">' .
+											'<div class="bar bar-success"></div>' .
+										'</div>' .
 									'</div>' .
-								'</div>' .
-							'</div>';
+									'<div style="height: 100%;width: 100%;left: -2000px;position: absolute;">' .
+										'<div id="modalPreview' . $i . '">' .
+											'<svg id="previewSvg' . $i . '" width="' . $previewWidth . 'px" height="' . $previewHeight . 'px"></svg>' .
+										'</div>' .
+									'</div>' .
+								'</div>';
+			}
+			else
+			{
+				$product_image = '<div id="product_image_' . $i . '" >' .
+									'<div class="pull-left">' .
+										$cartThumbnailLayout .
+									'</div>' .
+								'</div>';
+			}
 
-			if (!empty($redDesignData->areasInnerSVG))
+			if (!empty($redDesignData->areasInnerSVG) && ($view == 'cart' || $view == 'checkout' || $view == 'order_detail'))
 			{
 				/*
 					When we have some heavy cliparts added the limit is reached and then we get 500 error
