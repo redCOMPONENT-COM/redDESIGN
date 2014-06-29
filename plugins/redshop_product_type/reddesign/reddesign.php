@@ -49,7 +49,7 @@ class PlgRedshop_Product_TypeReddesign extends JPlugin
 		// Load bootstrap + fontawesome
 		JHtml::_('rbootstrap.framework');
 
-		RHelperAsset::load('component.js', 'redcore');
+		RHelperAsset::load('component.min.js', 'redcore');
 		RHelperAsset::load('component.min.css', 'redcore');
 	}
 
