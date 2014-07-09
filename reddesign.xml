@@ -93,4 +93,11 @@
 		<plugin group="redshop_product"		 name="reddesign" published="published" />
 		<plugin group="redshop_product_type" name="reddesign" published="published" />
 	</plugins>
+
+	<!-- Minimum requirements for extension -->
+	<requirements>
+		<extensions>
+			<extension>Imagick</extension>
+		</extensions>
+	</requirements>
 </extension>
